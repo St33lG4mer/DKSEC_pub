@@ -21,6 +21,8 @@ The approved direction is a cinematic attack replay command center:
 
 The experience should be exciting, but not misleading. If real experiment output is not ready, the site must label values as sample, draft, or in-progress snapshots.
 
+Working public slug/subdomain placeholder: `sigma-vs-elastic`.
+
 ## Audience
 
 Primary audience:
@@ -92,7 +94,8 @@ The hero must leave a hint of the next section visible on normal desktop and mob
 Short explanation of the project:
 
 - A local SOCLAB executes a controlled Windows-focused attack chain.
-- Logs are enriched from endpoint, network, proxy, and firewall sources.
+- Logs are enriched from endpoint, shell, network, proxy, and firewall sources.
+- PowerShell and Bash activity are tracked across the lab: near-complete telemetry on the Windows victim and broad telemetry on the Linux attacker.
 - Translated Sigma rules and Elastic prebuilt rules are applied in Elasticsearch.
 - The experiment compares which rules fire, overlap, miss, or need tuning.
 
@@ -104,7 +107,7 @@ Interactive or diagram-like section showing:
 - Linux attacker
 - OPNsense firewall/proxy
 - Squid proxy
-- Sysmon and endpoint telemetry
+- Sysmon, endpoint telemetry, shell history/activity, and process execution
 - Elasticsearch/SIEM collection
 
 This section should explain the system without exposing sensitive infrastructure details.
@@ -194,6 +197,7 @@ Fields:
 - `techniqueName`
 - `safeActionLabel`
 - `telemetrySources`
+- `shellTelemetry`
 - `expectedDetections`
 - `sigmaHits`
 - `elasticHits`
@@ -299,7 +303,7 @@ CodeRabbit:
 Preferred deployment:
 
 - Cloudflare Pages connected to the repo or a future split-out repo.
-- Subdomain such as `sigma-vs-elastic.kaspergissel.dk` or `detections.kaspergissel.dk`.
+- Working subdomain placeholder: `sigma-vs-elastic.kaspergissel.dk`.
 
 Alternative:
 
