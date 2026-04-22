@@ -637,6 +637,16 @@ def refresh_kibana_rules(kibana_url: str, user: str, password: str) -> list[dict
 
 def fetch_alerts_24h(es_host: str, user: str, password: str) -> dict:
     """Query .alerts-security.alerts-default for last 24h. File-cached 5 min."""
+    if not es_host:
+        return {
+            "total": 0,
+            "by_severity": {},
+            "sigma":   {"total": 0, "by_severity": {}, "top_rules": []},
+            "elastic": {"total": 0, "by_severity": {}, "top_rules": []},
+            "timeline": [],
+            "error": "No Elasticsearch host configured.",
+        }
+
     if ALERTS_CACHE_FILE.exists():
         age = time.time() - ALERTS_CACHE_FILE.stat().st_mtime
         if age < ALERTS_CACHE_TTL:
