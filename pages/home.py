@@ -54,7 +54,7 @@ with st.spinner("Fetching live alerts…"):
     alerts = fetch_alerts_24h(es_host, es_user, es_pass)
 
 if alerts["error"]:
-    st.warning(f"⚠️ Could not reach Elasticsearch — showing zeros.\n`{alerts['error'][:180]}`")
+    st.info("ℹ️ Elasticsearch not connected — alert counts show zero.")
 
 # ── Pre-compute all derived values ────────────────────────────────────────
 sigma_stems   = complete_sigma_stems()

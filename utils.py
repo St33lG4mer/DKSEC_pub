@@ -747,7 +747,12 @@ def fetch_alerts_24h(es_host: str, user: str, password: str) -> dict:
         ALERTS_CACHE_FILE.write_text(json.dumps(result), encoding="utf-8")
         return result
     except Exception as exc:
-        return {**_empty, "error": str(exc)}
+        # Sanitize: don't leak host/URL details into the UI
+        short = type(exc).__name__
+        status = getattr(getattr(exc, "response", None), "status_code", None)
+        if status:
+            short = f"HTTP {status}"
+        return {**_empty, "error": f"Elasticsearch unreachable ({short})."}
 
 
 # ---------------------------------------------------------------------------
