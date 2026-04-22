@@ -10,6 +10,9 @@ eql_validation_failures.json
 scan_output.txt
 .grep_step1.txt
 
+# Streamlit local secrets (credentials — never commit)
+.streamlit/secrets.toml
+
 # Runtime / editor
 __pycache__/
 *.pyc

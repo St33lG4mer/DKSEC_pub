@@ -227,10 +227,33 @@ def alert_donut_html(total: int, by_severity: dict) -> str:
 # Config / Auth
 # ---------------------------------------------------------------------------
 
+_CONFIG_DEFAULTS = {
+    "kibana": {"url": ""},
+    "elasticsearch": {"host": "", "user": "", "password": ""},
+}
+
+
 @st.cache_data
 def load_config() -> dict:
-    with open(BASE_DIR / "config.yaml", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+    # 1. Streamlit Cloud secrets (set via the app's Secrets UI)
+    try:
+        secrets = st.secrets
+        if "kibana" in secrets or "elasticsearch" in secrets:
+            return {
+                "kibana": dict(secrets.get("kibana", {})),
+                "elasticsearch": dict(secrets.get("elasticsearch", {})),
+            }
+    except Exception:
+        pass
+
+    # 2. Local config.yaml
+    cfg_path = BASE_DIR / "config.yaml"
+    if cfg_path.exists():
+        with open(cfg_path, encoding="utf-8") as f:
+            return yaml.safe_load(f)
+
+    # 3. No config — return safe defaults so the app can still render
+    return _CONFIG_DEFAULTS
 
 
 def kibana_headers(user: str, password: str) -> dict:
