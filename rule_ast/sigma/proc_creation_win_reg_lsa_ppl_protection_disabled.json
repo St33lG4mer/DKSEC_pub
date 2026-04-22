@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_reg_lsa_ppl_protection_disabled",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_reg_lsa_ppl_protection_disabled.eql",
+  "raw_query": "any where (process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and (process.command_line:\"*SYSTEM\\\\CurrentControlSet\\\\Control\\\\Lsa*\" and (process.command_line:\"* add *\" and process.command_line:\"* /d 0*\" and process.command_line:\"* /v RunAsPPL *\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "lsa",
+        "add",
+        "d 0",
+        "v runasppl"
+      ],
+      "raw_values": [
+        "*SYSTEM\\\\CurrentControlSet\\\\Control\\\\Lsa*",
+        "* add *",
+        "* /d 0*",
+        "* /v RunAsPPL *"
+      ]
+    }
+  ]
+}

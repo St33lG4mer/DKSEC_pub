@@ -1,0 +1,1 @@
+any where (process.executable:"*\\dllhost.exe" and (process.command_line like~ ("dllhost.exe", "dllhost"))) and ?process.command_line != null

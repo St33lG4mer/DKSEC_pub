@@ -1,0 +1,21 @@
+{
+  "source": "elastic",
+  "name": "Potential HTTP Downgrade Attack",
+  "slug": "defense_evasion_potential_http_downgrade_attack",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Web",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Nginx",
+    "Data Source: Apache",
+    "Data Source: Apache Tomcat",
+    "Data Source: Traefik",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/defense_evasion_potential_http_downgrade_attack.toml",
+  "raw_query": "http.version:*\n",
+  "conditions": []
+}

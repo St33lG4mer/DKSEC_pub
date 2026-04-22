@@ -1,0 +1,112 @@
+{
+  "source": "elastic",
+  "name": "ROT Encoded Python Script Execution",
+  "slug": "defense_evasion_encoding_rot13_python_script",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/defense_evasion_encoding_rot13_python_script.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=1m\n [process where host.os.type in (\"windows\", \"macos\") and event.type == \"start\" and process.name : \"python*\" and\n  not (\n    process.args : (\"*gcloud.py\", \"*conda-script.py\", \"*compileall.py\", \"*.lmstudio*\") or\n    process.parent.args : (\"*gcloud.py\", \"*conda-script.py\", \"*compileall.py\", \"*.lmstudio*\")\n  )]\n [file where host.os.type in (\"windows\", \"macos\") and\n  event.action != \"deletion\" and process.name : \"python*\" and file.name : \"rot_??.cpython-*.pyc*\"]\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "gcloud.py",
+        "conda-script.py",
+        "compileall.py",
+        ".lmstudio"
+      ],
+      "raw_values": [
+        "*gcloud.py",
+        "*conda-script.py",
+        "*compileall.py",
+        "*.lmstudio*"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "gcloud.py",
+        "conda-script.py",
+        "compileall.py",
+        ".lmstudio"
+      ],
+      "raw_values": [
+        "*gcloud.py",
+        "*conda-script.py",
+        "*compileall.py",
+        "*.lmstudio*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "windows",
+        "macos"
+      ],
+      "raw_values": [
+        "windows",
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "rot_??.cpython-*.pyc"
+      ],
+      "raw_values": [
+        "rot_??.cpython-*.pyc*"
+      ]
+    }
+  ]
+}

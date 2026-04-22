@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mssql_sqlps_susp_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mssql_sqlps_susp_execution.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\sqlps.exe\" or ((process.executable:\"*\\\\sqlps.exe\" or process.pe.original_file_name:\"sqlps.exe\") and (not process.parent.executable:\"*\\\\sqlagent.exe\"))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sqlps.exe",
+        "sqlagent.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlps.exe",
+        "*\\\\sqlagent.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqlps.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlps.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sqlps.exe"
+      ],
+      "raw_values": [
+        "sqlps.exe"
+      ]
+    }
+  ]
+}

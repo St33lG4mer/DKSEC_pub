@@ -1,0 +1,73 @@
+{
+  "source": "elastic",
+  "name": "Trap Signals Execution",
+  "slug": "privilege_escalation_trap_execution",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/privilege_escalation_trap_execution.toml",
+  "raw_query": "process where event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"executed\", \"process_started\") and\nprocess.name == \"trap\" and process.args : \"SIG*\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "trap"
+      ],
+      "raw_values": [
+        "trap"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "sig"
+      ],
+      "raw_values": [
+        "SIG*"
+      ]
+    }
+  ]
+}

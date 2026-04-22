@@ -1,0 +1,60 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_github_self_hosted_runner",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_github_self_hosted_runner.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\Runner.Worker.exe\" or process.pe.original_file_name:\"Runner.Worker.dll\") and process.command_line:\"*spawnclient*\") or ((process.executable:\"*\\\\Runner.Listener.exe\" or process.pe.original_file_name:\"Runner.Listener.dll\") and (process.command_line like~ (\"*run*\", \"*configure*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "run",
+        "configure"
+      ],
+      "raw_values": [
+        "*run*",
+        "*configure*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "runner.worker.exe",
+        "runner.listener.exe"
+      ],
+      "raw_values": [
+        "*\\\\Runner.Worker.exe",
+        "*\\\\Runner.Listener.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "runner.worker.dll",
+        "runner.listener.dll"
+      ],
+      "raw_values": [
+        "Runner.Worker.dll",
+        "Runner.Listener.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "spawnclient"
+      ],
+      "raw_values": [
+        "*spawnclient*"
+      ]
+    }
+  ]
+}

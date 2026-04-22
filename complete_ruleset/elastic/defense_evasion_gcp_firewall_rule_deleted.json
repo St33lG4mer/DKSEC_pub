@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "GCP Firewall Rule Deletion",
+  "slug": "defense_evasion_gcp_firewall_rule_deleted",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: GCP",
+    "Data Source: Google Cloud Platform",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/gcp/defense_evasion_gcp_firewall_rule_deleted.toml",
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:(*.compute.firewalls.delete or google.appengine.*.Firewall.Delete*Rule)\n",
+  "conditions": []
+}

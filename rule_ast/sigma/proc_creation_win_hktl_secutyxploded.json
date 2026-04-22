@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_secutyxploded",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_secutyxploded.eql",
+  "raw_query": "any where process.pe.company:\"SecurityXploded\" or process.executable:\"*PasswordDump.exe\" or process.pe.original_file_name:\"*PasswordDump.exe\"",
+  "conditions": [
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "securityxploded"
+      ],
+      "raw_values": [
+        "SecurityXploded"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "passworddump.exe"
+      ],
+      "raw_values": [
+        "*PasswordDump.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "passworddump.exe"
+      ],
+      "raw_values": [
+        "*PasswordDump.exe"
+      ]
+    }
+  ]
+}

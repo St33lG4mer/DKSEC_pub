@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_hijacking_firwall_snap_in",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_hijacking_firwall_snap_in.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\mmc.exe\" and process.parent.command_line:\"*WF.msc*\") and (not process.executable:\"*\\\\WerFault.exe\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "mmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mmc.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "wf.msc"
+      ],
+      "raw_values": [
+        "*WF.msc*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*\\\\WerFault.exe"
+      ]
+    }
+  ]
+}

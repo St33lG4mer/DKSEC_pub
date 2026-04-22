@@ -1,0 +1,58 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_hide_services_via_set_service",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_hide_services_via_set_service.eql",
+  "raw_query": "any where (process.executable:\"*\\\\pwsh.exe\" or process.pe.original_file_name:\"pwsh.dll\") and (process.command_line:\"*Set-Service *\" and process.command_line:\"*DCLCWPDTSD*\") and (process.command_line like~ (\"*-SecurityDescriptorSddl *\", \"*-sd *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-securitydescriptorsddl",
+        "-sd"
+      ],
+      "raw_values": [
+        "*-SecurityDescriptorSddl *",
+        "*-sd *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "set-service",
+        "dclcwpdtsd"
+      ],
+      "raw_values": [
+        "*Set-Service *",
+        "*DCLCWPDTSD*"
+      ]
+    }
+  ]
+}

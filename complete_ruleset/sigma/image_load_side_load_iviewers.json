@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_iviewers",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_iviewers.eql",
+  "raw_query": "any where file.path:\"*\\\\iviewers.dll\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\Windows Kits\\\\*\", \"C:\\\\Program Files\\\\Windows Kits\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "iviewers.dll"
+      ],
+      "raw_values": [
+        "*\\\\iviewers.dll"
+      ]
+    }
+  ]
+}

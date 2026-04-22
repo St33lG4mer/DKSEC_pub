@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_execution_via_pe_metadata",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_execution_via_pe_metadata.eql",
+  "raw_query": "any where process.pe.company:\"Cube0x0\"",
+  "conditions": [
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "cube0x0"
+      ],
+      "raw_values": [
+        "Cube0x0"
+      ]
+    }
+  ]
+}

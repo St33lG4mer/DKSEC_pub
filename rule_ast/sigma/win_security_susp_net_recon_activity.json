@@ -1,0 +1,80 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_net_recon_activity",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_net_recon_activity.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4661\" and winlog.event_data.AccessMask:\"0x2d\" and (winlog.event_data.ObjectType like~ (\"SAM_USER\", \"SAM_GROUP\")) and winlog.event_data.ObjectName:\"S-1-5-21-*\" and (winlog.event_data.ObjectName like~ (\"*-500\", \"*-512\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": "like~",
+      "values": [
+        "sam_user",
+        "sam_group"
+      ],
+      "raw_values": [
+        "SAM_USER",
+        "SAM_GROUP"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        "-500",
+        "-512"
+      ],
+      "raw_values": [
+        "*-500",
+        "*-512"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4661"
+      ],
+      "raw_values": [
+        "4661"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x2d"
+      ],
+      "raw_values": [
+        "0x2d"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "s-1-5-21-"
+      ],
+      "raw_values": [
+        "S-1-5-21-*"
+      ]
+    }
+  ]
+}

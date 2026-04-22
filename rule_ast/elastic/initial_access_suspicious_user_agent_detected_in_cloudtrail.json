@@ -1,0 +1,43 @@
+{
+  "source": "elastic",
+  "name": "AWS Suspicious User Agent Fingerprint",
+  "slug": "initial_access_suspicious_user_agent_detected_in_cloudtrail",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS CloudTrail",
+    "Tactic: Initial Access",
+    "Use Case: Cloud Threat Detection",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/initial_access_suspicious_user_agent_detected_in_cloudtrail.toml",
+  "raw_query": "any where data_stream.dataset == \"aws.cloudtrail\"\n  and event.outcome == \"success\"\n  and (\n    (\n      stringContains(user_agent.original, \"distrib#kali\")\n      or stringContains(user_agent.original, \"+kali\")\n      or stringContains(user_agent.original, \"kali-amd64\")\n      or stringContains(user_agent.original, \"kali-arm64\")\n    ) or (\n      stringContains(user_agent.original, \"TruffleHog\")\n      or stringContains(user_agent.original, \"trufflehog\")\n    )\n  )\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "Application Added to Google Workspace Domain",
+  "slug": "persistence_application_added_to_google_workspace_domain",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Google Workspace",
+    "Use Case: Configuration Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/google_workspace/persistence_application_added_to_google_workspace_domain.toml",
+  "raw_query": "data_stream.dataset:google_workspace.admin and event.provider:admin and event.category:iam and event.action:ADD_APPLICATION\n",
+  "conditions": []
+}

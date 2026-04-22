@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_cve_2023_27363_foxit_rce",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/Exploits/CVE-2023-27363/file_event_win_cve_2023_27363_foxit_rce.eql",
+  "raw_query": "any where process.executable:\"*\\\\FoxitPDFReader.exe\" and file.path:\"*\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*\" and file.path:\"*.hta\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "foxitpdfreader.exe"
+      ],
+      "raw_values": [
+        "*\\\\FoxitPDFReader.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".hta"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*",
+        "*.hta"
+      ]
+    }
+  ]
+}

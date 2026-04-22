@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_registry_new_network_provider",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_registry_new_network_provider.eql",
+  "raw_query": "any where process.command_line:\"*\\\\System\\\\CurrentControlSet\\\\Services\\\\*\" and process.command_line:\"*\\\\NetworkProvider*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "networkprovider"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Services\\\\*",
+        "*\\\\NetworkProvider*"
+      ]
+    }
+  ]
+}

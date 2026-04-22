@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_mavinject",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_mavinject.eql",
+  "raw_query": "any where (process.pe.original_file_name like~ (\"mavinject32.exe\", \"mavinject64.exe\")) and (not (process.executable like~ (\"*\\\\mavinject32.exe\", \"*\\\\mavinject64.exe\")))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "mavinject32.exe",
+        "mavinject64.exe"
+      ],
+      "raw_values": [
+        "mavinject32.exe",
+        "mavinject64.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mavinject32.exe",
+        "mavinject64.exe"
+      ],
+      "raw_values": [
+        "*\\\\mavinject32.exe",
+        "*\\\\mavinject64.exe"
+      ]
+    }
+  ]
+}

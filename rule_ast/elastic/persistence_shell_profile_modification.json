@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "Bash Shell Profile Modification",
+  "slug": "persistence_shell_profile_modification",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/persistence_shell_profile_modification.toml",
+  "raw_query": "event.category:file and host.os.type:(linux or macos) and event.type:change and not event.action:(\"rename\" or \"extended_attributes_delete\") and\n  file.name:(\".bash_profile\" or \".profile\" or \".bashrc\" or \".zshenv\" or \".zshrc\") and file.path:(/home/* or /Users/*) and \n  process.name:(* and not (sudo or vim or zsh or env or nano or bash or Terminal or xpcproxy or login or cat or cp or\n  launchctl or java or dnf or tailwatchd or ldconfig or yum or semodule or cpanellogd or dockerd or authselect or chmod or\n  dnf-automatic or git or dpkg or platform-python)) and\n  not process.executable:(/Applications/* or /private/var/folders/* or /usr/local/* or /opt/saltstack/salt/bin/*)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "rename",
+        "extended_attributes_delete"
+      ],
+      "raw_values": [
+        "rename",
+        "extended_attributes_delete"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        ".bash_profile",
+        ".profile",
+        ".bashrc",
+        ".zshenv",
+        ".zshrc"
+      ],
+      "raw_values": [
+        ".bash_profile",
+        ".profile",
+        ".bashrc",
+        ".zshenv",
+        ".zshrc"
+      ]
+    }
+  ]
+}

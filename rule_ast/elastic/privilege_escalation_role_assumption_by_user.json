@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "AWS STS Role Assumption by User",
+  "slug": "privilege_escalation_role_assumption_by_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS STS",
+    "Resources: Investigation Guide",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Privilege Escalation",
+    "Tactic: Lateral Movement"
+  ],
+  "elastic_path": "rules/integrations/aws/privilege_escalation_role_assumption_by_user.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"sts.amazonaws.com\"\n    and event.action: \"AssumeRole\"\n    and event.outcome: \"success\"\n    and aws.cloudtrail.user_identity.type: \"IAMUser\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "sts.amazonaws.com"
+      ],
+      "raw_values": [
+        "sts.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "assumerole"
+      ],
+      "raw_values": [
+        "AssumeRole"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": ":",
+      "values": [
+        "iamuser"
+      ],
+      "raw_values": [
+        "IAMUser"
+      ]
+    }
+  ]
+}

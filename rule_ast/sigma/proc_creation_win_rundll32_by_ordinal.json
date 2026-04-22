@@ -1,0 +1,80 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_by_ordinal",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_rundll32_by_ordinal.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and (process.command_line like~ (\"*,#*\", \"*, #*\", \"*.dll #*\", \"*.ocx #*\"))) and (not ((process.command_line:\"*EDGEHTML.dll*\" and process.command_line:\"*#141*\") or ((process.parent.executable like~ (\"*\\\\Msbuild\\\\Current\\\\Bin\\\\*\", \"*\\\\VC\\\\Tools\\\\MSVC\\\\*\", \"*\\\\Tracker.exe*\")) and (process.command_line like~ (\"*\\\\FileTracker32.dll,#1*\", \"*\\\\FileTracker32.dll\\\",#1*\", \"*\\\\FileTracker64.dll,#1*\", \"*\\\\FileTracker64.dll\\\",#1*\")))))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ", #",
+        ".dll #",
+        ".ocx #",
+        "filetracker32.dll,#1",
+        ",#1"
+      ],
+      "raw_values": [
+        "*,#*",
+        "*, #*",
+        "*.dll #*",
+        "*.ocx #*",
+        "*\\\\FileTracker32.dll,#1*",
+        "*\\\\FileTracker32.dll\\",
+        ", ",
+        ",#1*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "tracker.exe"
+      ],
+      "raw_values": [
+        "*\\\\Msbuild\\\\Current\\\\Bin\\\\*",
+        "*\\\\VC\\\\Tools\\\\MSVC\\\\*",
+        "*\\\\Tracker.exe*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "edgehtml.dll",
+        "#141"
+      ],
+      "raw_values": [
+        "*EDGEHTML.dll*",
+        "*#141*"
+      ]
+    }
+  ]
+}

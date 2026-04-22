@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_runonce_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_runonce_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\runonce.exe\" or process.pe.description:\"Run Once Wrapper\") and (process.command_line like~ (\"*/AlternateShellStartup*\", \"*/r\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "alternateshellstartup"
+      ],
+      "raw_values": [
+        "*/AlternateShellStartup*",
+        "*/r"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "runonce.exe"
+      ],
+      "raw_values": [
+        "*\\\\runonce.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "run once wrapper"
+      ],
+      "raw_values": [
+        "Run Once Wrapper"
+      ]
+    }
+  ]
+}

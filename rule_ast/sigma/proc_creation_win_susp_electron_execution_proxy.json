@@ -1,0 +1,89 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_electron_execution_proxy",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_electron_execution_proxy.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\chrome.exe\", \"*\\\\code.exe\", \"*\\\\discord.exe\", \"*\\\\GitHubDesktop.exe\", \"*\\\\keybase.exe\", \"*\\\\msedge_proxy.exe\", \"*\\\\msedge.exe\", \"*\\\\msedgewebview2.exe\", \"*\\\\msteams.exe\", \"*\\\\slack.exe\", \"*\\\\Teams.exe\")) or (process.pe.original_file_name like~ (\"chrome.exe\", \"code.exe\", \"discord.exe\", \"GitHubDesktop.exe\", \"keybase.exe\", \"msedge_proxy.exe\", \"msedge.exe\", \"msedgewebview2.exe\", \"msteams.exe\", \"slack.exe\", \"Teams.exe\"))) and (process.command_line like~ (\"*--browser-subprocess-path*\", \"*--gpu-launcher*\", \"*--renderer-cmd-prefix*\", \"*--utility-cmd-prefix*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "chrome.exe",
+        "code.exe",
+        "discord.exe",
+        "githubdesktop.exe",
+        "keybase.exe",
+        "msedge_proxy.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "msteams.exe",
+        "slack.exe",
+        "teams.exe"
+      ],
+      "raw_values": [
+        "*\\\\chrome.exe",
+        "*\\\\code.exe",
+        "*\\\\discord.exe",
+        "*\\\\GitHubDesktop.exe",
+        "*\\\\keybase.exe",
+        "*\\\\msedge_proxy.exe",
+        "*\\\\msedge.exe",
+        "*\\\\msedgewebview2.exe",
+        "*\\\\msteams.exe",
+        "*\\\\slack.exe",
+        "*\\\\Teams.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "chrome.exe",
+        "code.exe",
+        "discord.exe",
+        "githubdesktop.exe",
+        "keybase.exe",
+        "msedge_proxy.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "msteams.exe",
+        "slack.exe",
+        "teams.exe"
+      ],
+      "raw_values": [
+        "chrome.exe",
+        "code.exe",
+        "discord.exe",
+        "GitHubDesktop.exe",
+        "keybase.exe",
+        "msedge_proxy.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "msteams.exe",
+        "slack.exe",
+        "Teams.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--browser-subprocess-path",
+        "--gpu-launcher",
+        "--renderer-cmd-prefix",
+        "--utility-cmd-prefix"
+      ],
+      "raw_values": [
+        "*--browser-subprocess-path*",
+        "*--gpu-launcher*",
+        "*--renderer-cmd-prefix*",
+        "*--utility-cmd-prefix*"
+      ]
+    }
+  ]
+}

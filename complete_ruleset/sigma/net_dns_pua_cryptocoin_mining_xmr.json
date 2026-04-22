@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "net_dns_pua_cryptocoin_mining_xmr",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/network/dns/net_dns_pua_cryptocoin_mining_xmr.eql",
+  "raw_query": "any where query like~ (\"*pool.minexmr.com*\", \"*fr.minexmr.com*\", \"*de.minexmr.com*\", \"*sg.minexmr.com*\", \"*ca.minexmr.com*\", \"*us-west.minexmr.com*\", \"*pool.supportxmr.com*\", \"*mine.c3pool.com*\", \"*xmr-eu1.nanopool.org*\", \"*xmr-eu2.nanopool.org*\", \"*xmr-us-east1.nanopool.org*\", \"*xmr-us-west1.nanopool.org*\", \"*xmr-asia1.nanopool.org*\", \"*xmr-jp1.nanopool.org*\", \"*xmr-au1.nanopool.org*\", \"*xmr.2miners.com*\", \"*xmr.hashcity.org*\", \"*xmr.f2pool.com*\", \"*xmrpool.eu*\", \"*pool.hashvault.pro*\")",
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": "like~",
+      "values": [
+        "pool.minexmr.com",
+        "fr.minexmr.com",
+        "de.minexmr.com",
+        "sg.minexmr.com",
+        "ca.minexmr.com",
+        "us-west.minexmr.com",
+        "pool.supportxmr.com",
+        "mine.c3pool.com",
+        "xmr-eu1.nanopool.org",
+        "xmr-eu2.nanopool.org",
+        "xmr-us-east1.nanopool.org",
+        "xmr-us-west1.nanopool.org",
+        "xmr-asia1.nanopool.org",
+        "xmr-jp1.nanopool.org",
+        "xmr-au1.nanopool.org",
+        "xmr.2miners.com",
+        "xmr.hashcity.org",
+        "xmr.f2pool.com",
+        "xmrpool.eu",
+        "pool.hashvault.pro"
+      ],
+      "raw_values": [
+        "*pool.minexmr.com*",
+        "*fr.minexmr.com*",
+        "*de.minexmr.com*",
+        "*sg.minexmr.com*",
+        "*ca.minexmr.com*",
+        "*us-west.minexmr.com*",
+        "*pool.supportxmr.com*",
+        "*mine.c3pool.com*",
+        "*xmr-eu1.nanopool.org*",
+        "*xmr-eu2.nanopool.org*",
+        "*xmr-us-east1.nanopool.org*",
+        "*xmr-us-west1.nanopool.org*",
+        "*xmr-asia1.nanopool.org*",
+        "*xmr-jp1.nanopool.org*",
+        "*xmr-au1.nanopool.org*",
+        "*xmr.2miners.com*",
+        "*xmr.hashcity.org*",
+        "*xmr.f2pool.com*",
+        "*xmrpool.eu*",
+        "*pool.hashvault.pro*"
+      ]
+    }
+  ]
+}

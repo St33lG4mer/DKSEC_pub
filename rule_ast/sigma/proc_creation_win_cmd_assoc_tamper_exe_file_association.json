@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_assoc_tamper_exe_file_association",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_assoc_tamper_exe_file_association.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and (process.command_line:\"*assoc *\" and process.command_line:\"*exefile*\")) and (not process.command_line:\"*.exe=exefile*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "assoc",
+        "exefile",
+        ".exe=exefile"
+      ],
+      "raw_values": [
+        "*assoc *",
+        "*exefile*",
+        "*.exe=exefile*"
+      ]
+    }
+  ]
+}

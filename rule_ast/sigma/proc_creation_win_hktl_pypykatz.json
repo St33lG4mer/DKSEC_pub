@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_pypykatz",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_pypykatz.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\pypykatz.exe\", \"*\\\\python.exe\")) and (process.command_line:\"*live*\" and process.command_line:\"*registry*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "pypykatz.exe",
+        "python.exe"
+      ],
+      "raw_values": [
+        "*\\\\pypykatz.exe",
+        "*\\\\python.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "live",
+        "registry"
+      ],
+      "raw_values": [
+        "*live*",
+        "*registry*"
+      ]
+    }
+  ]
+}

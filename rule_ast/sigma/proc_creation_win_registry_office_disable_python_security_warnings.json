@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_registry_office_disable_python_security_warnings",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_registry_office_disable_python_security_warnings.eql",
+  "raw_query": "any where (process.command_line:\"*\\\\Microsoft\\\\Office\\\\*\" and process.command_line:\"*\\\\Excel\\\\Security*\" and process.command_line:\"*PythonFunctionWarnings*\") and process.command_line:\"* 0*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "security",
+        "pythonfunctionwarnings"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Excel\\\\Security*",
+        "*PythonFunctionWarnings*",
+        "* 0*"
+      ]
+    }
+  ]
+}

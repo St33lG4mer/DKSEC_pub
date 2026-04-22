@@ -1,0 +1,31 @@
+{
+  "source": "elastic",
+  "name": "Potential PowerShell Obfuscation via Special Character Overuse",
+  "slug": "defense_evasion_posh_obfuscation_whitespace_special_proportion",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: PowerShell Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_posh_obfuscation_whitespace_special_proportion.toml",
+  "raw_query": "from logs-windows.powershell_operational* metadata _id, _version, _index\n| where event.code == \"4104\"\n\n// filter for scripts with low unique symbol counts, which can indicate special character obfuscation\n| where powershell.file.script_block_unique_symbols < 50\n\n// replace repeated spaces used for formatting after a new line with a single space to reduce FPs\n| eval Esql.script_block_tmp = replace(powershell.file.script_block_text, \"\"\"\\n\\s+\"\"\", \"\\n \")\n\n// Look for scripts with more than 1000 chars\n| eval Esql.script_block_length = length(Esql.script_block_tmp)\n| where Esql.script_block_length > 1000\n\n// replace the patterns we are looking for with the \ud83d\udd25 emoji to enable counting them\n// The emoji is used because it's unlikely to appear in scripts and has a consistent character length of 1\n| eval Esql.script_block_tmp = replace(\n    Esql.script_block_tmp,\n    \"\"\"[\\s\\$\\{\\}\\+\\@\\=\\(\\)\\^\\\\\\\"~\\[\\]\\?\\./%#\\`\\'\\;\\-\\!\\*]\"\"\",\n    \"\ud83d\udd25\"\n)\n\n// count how many patterns were detected by calculating the number of \ud83d\udd25 characters inserted\n| eval Esql.script_block_count = Esql.script_block_length - length(replace(Esql.script_block_tmp, \"\ud83d\udd25\", \"\"))\n\n// Calculate the ratio of special characters to total length\n| eval Esql.script_block_ratio = Esql.script_block_count::double / Esql.script_block_length::double\n\n// keep the fields relevant to the query, although this is not needed as the alert is populated using _id\n| keep\n    Esql.script_block_count,\n    Esql.script_block_length,\n    Esql.script_block_ratio,\n    Esql.script_block_tmp,\n    powershell.file.*,\n    file.path,\n    powershell.sequence,\n    powershell.total,\n    _id,\n    _version,\n    _index,\n    host.name,\n    host.id,\n    agent.id,\n    user.id\n\n// Filter for scripts with high whitespace and special character ratio\n| where Esql.script_block_ratio >= 0.75\n",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "4104"
+      ],
+      "raw_values": [
+        "4104"
+      ]
+    }
+  ]
+}

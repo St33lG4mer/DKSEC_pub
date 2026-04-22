@@ -1,0 +1,83 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wscript_cscript_susp_child_processes",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wscript_cscript_susp_child_processes.eql",
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\wscript.exe\", \"*\\\\cscript.exe\")) and (process.executable:\"*\\\\rundll32.exe\" or ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and ((process.command_line:\"*mshta*\" and process.command_line:\"*http*\") or (process.command_line like~ (\"*rundll32*\", \"*regsvr32*\", \"*msiexec*\"))))) and (not (process.executable:\"*\\\\rundll32.exe\" and (process.command_line like~ (\"*UpdatePerUserSystemParameters*\", \"*PrintUIEntry*\", \"*ClearMyTracksByProcess*\"))))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "wscript.exe",
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "rundll32",
+        "regsvr32",
+        "msiexec",
+        "updateperusersystemparameters",
+        "printuientry",
+        "clearmytracksbyprocess"
+      ],
+      "raw_values": [
+        "*rundll32*",
+        "*regsvr32*",
+        "*msiexec*",
+        "*UpdatePerUserSystemParameters*",
+        "*PrintUIEntry*",
+        "*ClearMyTracksByProcess*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "mshta",
+        "http"
+      ],
+      "raw_values": [
+        "*mshta*",
+        "*http*"
+      ]
+    }
+  ]
+}

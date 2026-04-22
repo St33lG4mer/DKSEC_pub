@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_ntdsutil_susp_usage",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_ntdsutil_susp_usage.eql",
+  "raw_query": "any where (process.executable:\"*\\\\ntdsutil.exe\" or process.pe.original_file_name:\"ntdsutil.exe\") and ((process.command_line:\"*snapshot*\" and process.command_line:\"*mount *\") or (process.command_line:\"*ac*\" and process.command_line:\"* i*\" and process.command_line:\"* ntds*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ntdsutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\ntdsutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ntdsutil.exe"
+      ],
+      "raw_values": [
+        "ntdsutil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "snapshot",
+        "mount",
+        "ntds"
+      ],
+      "raw_values": [
+        "*snapshot*",
+        "*mount *",
+        "*ac*",
+        "* i*",
+        "* ntds*"
+      ]
+    }
+  ]
+}

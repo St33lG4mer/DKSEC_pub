@@ -1,0 +1,104 @@
+{
+  "source": "elastic",
+  "name": "Suspicious WMI Event Subscription Created",
+  "slug": "persistence_sysmon_wmi_event_subscription",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Sysmon",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_sysmon_wmi_event_subscription.toml",
+  "raw_query": "any where host.os.type == \"windows\" and\n (\n   (data_stream.dataset == \"windows.sysmon_operational\" and event.code == \"21\" and\n    ?winlog.event_data.Operation : \"Created\" and ?winlog.event_data.Consumer : (\"*subscription:CommandLineEventConsumer*\", \"*subscription:ActiveScriptEventConsumer*\")) or\n\n   (data_stream.dataset == \"endpoint.events.api\" and event.provider == \"Microsoft-Windows-WMI-Activity\" and ?process.Ext.api.name == \"IWbemServices::PutInstance\" and\n    ?process.Ext.api.parameters.consumer_type in (\"ActiveScriptEventConsumer\", \"CommandLineEventConsumer\"))\n )\n",
+  "conditions": [
+    {
+      "field": "winlog.event_data.consumer",
+      "raw_field": "winlog.event_data.Consumer",
+      "operator": ":",
+      "values": [
+        "subscription:commandlineeventconsumer",
+        "subscription:activescripteventconsumer"
+      ],
+      "raw_values": [
+        "*subscription:CommandLineEventConsumer*",
+        "*subscription:ActiveScriptEventConsumer*"
+      ]
+    },
+    {
+      "field": "process.ext.api.parameters.consumer_type",
+      "raw_field": "process.Ext.api.parameters.consumer_type",
+      "operator": "in",
+      "values": [
+        "activescripteventconsumer",
+        "commandlineeventconsumer"
+      ],
+      "raw_values": [
+        "ActiveScriptEventConsumer",
+        "CommandLineEventConsumer"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "windows.sysmon_operational",
+        "endpoint.events.api"
+      ],
+      "raw_values": [
+        "windows.sysmon_operational",
+        "endpoint.events.api"
+      ]
+    },
+    {
+      "field": "winlog.event_data.operation",
+      "raw_field": "winlog.event_data.Operation",
+      "operator": ":",
+      "values": [
+        "created"
+      ],
+      "raw_values": [
+        "Created"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "microsoft-windows-wmi-activity"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-WMI-Activity"
+      ]
+    },
+    {
+      "field": "process.ext.api.name",
+      "raw_field": "process.Ext.api.name",
+      "operator": "==",
+      "values": [
+        "iwbemservices::putinstance"
+      ],
+      "raw_values": [
+        "IWbemServices::PutInstance"
+      ]
+    }
+  ]
+}

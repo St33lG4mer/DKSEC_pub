@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Entra ID Privileged Identity Management (PIM) Role Modified",
+  "slug": "persistence_entra_id_privileged_identity_management_role_modified",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Identity and Access Audit",
+    "Resources: Investigation Guide",
+    "Tactic: Persistence"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_entra_id_privileged_identity_management_role_modified.toml",
+  "raw_query": "data_stream.dataset:azure.auditlogs and azure.auditlogs.operation_name:\"Update role setting in PIM\" and event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "update role setting in pim"
+      ],
+      "raw_values": [
+        "Update role setting in PIM"
+      ]
+    }
+  ]
+}

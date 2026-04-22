@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_sysinternals_debugview",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_sysinternals_debugview.eql",
+  "raw_query": "any where process.pe.product:\"Sysinternals DebugView\" and (not (process.pe.original_file_name:\"Dbgview.exe\" and process.executable:\"*\\\\Dbgview.exe\"))",
+  "conditions": [
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sysinternals debugview"
+      ],
+      "raw_values": [
+        "Sysinternals DebugView"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dbgview.exe"
+      ],
+      "raw_values": [
+        "Dbgview.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dbgview.exe"
+      ],
+      "raw_values": [
+        "*\\\\Dbgview.exe"
+      ]
+    }
+  ]
+}

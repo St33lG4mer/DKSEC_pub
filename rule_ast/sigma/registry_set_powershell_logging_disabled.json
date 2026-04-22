@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "registry_set_powershell_logging_disabled",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_powershell_logging_disabled.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\Microsoft\\\\Windows\\\\PowerShell\\\\*\", \"*\\\\Microsoft\\\\PowerShellCore\\\\*\")) and (registry.path like~ (\"*\\\\ModuleLogging\\\\EnableModuleLogging\", \"*\\\\ScriptBlockLogging\\\\EnableScriptBlockLogging\", \"*\\\\ScriptBlockLogging\\\\EnableScriptBlockInvocationLogging\", \"*\\\\Transcription\\\\EnableTranscripting\", \"*\\\\Transcription\\\\EnableInvocationHeader\", \"*\\\\EnableScripts\")) and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\powershell\\\\",
+        "\\\\microsoft\\\\powershellcore\\\\",
+        "\\\\modulelogging\\\\enablemodulelogging",
+        "\\\\scriptblocklogging\\\\enablescriptblocklogging",
+        "\\\\scriptblocklogging\\\\enablescriptblockinvocationlogging",
+        "\\\\transcription\\\\enabletranscripting",
+        "\\\\transcription\\\\enableinvocationheader",
+        "\\\\enablescripts"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\PowerShell\\\\*",
+        "*\\\\Microsoft\\\\PowerShellCore\\\\*",
+        "*\\\\ModuleLogging\\\\EnableModuleLogging",
+        "*\\\\ScriptBlockLogging\\\\EnableScriptBlockLogging",
+        "*\\\\ScriptBlockLogging\\\\EnableScriptBlockInvocationLogging",
+        "*\\\\Transcription\\\\EnableTranscripting",
+        "*\\\\Transcription\\\\EnableInvocationHeader",
+        "*\\\\EnableScripts"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ]
+}

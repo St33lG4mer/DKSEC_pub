@@ -1,0 +1,78 @@
+{
+  "source": "elastic",
+  "name": "PowerShell Suspicious Script with Clipboard Retrieval Capabilities",
+  "slug": "collection_posh_clipboard_capture",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Data Source: PowerShell Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/collection_posh_clipboard_capture.toml",
+  "raw_query": "event.category:process and host.os.type:windows and\n(\n  (\n    powershell.file.script_block_text : (\n      \"Windows.Clipboard\" or\n      \"Windows.Forms.Clipboard\" or\n      \"Windows.Forms.TextBox\"\n    ) and\n    powershell.file.script_block_text : (\n      \"]::GetText\" or\n      \".Paste()\"\n    )\n  ) or\n  powershell.file.script_block_text : \"Get-Clipboard\"\n) and\n  not powershell.file.script_block_text : (\n    \"sentinelbreakpoints\" and \"Set-PSBreakpoint\" and \"PowerSploitIndicators\"\n  ) and\n  not user.id : \"S-1-5-18\" and\n  not (\n    file.path : *WindowsPowerShell\\\\Modules\\\\*.ps1 and\n    file.name : (\"Convert-ExcelRangeToImage.ps1\" or \"Read-Clipboard.ps1\")\n  ) and\n  not powershell.file.script_block_text : (\n    \"Set-Alias -Name \\\"gcb\\\" -Value \\\"Get-Clipboard\\\"\" or\n    \"[Windows.Clipboard]::SetText($colorizedText\" or\n    \"EEFCB906-B326-4E99-9F54-8B4BB6EF3C6D\"\n  )\n",
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "windows.clipboard",
+        "windows.forms.clipboard",
+        "windows.forms.textbox",
+        "]::gettext",
+        "sentinelbreakpoints",
+        "set-psbreakpoint",
+        "powersploitindicators",
+        "set-alias -name \\",
+        "-value \\",
+        "[windows.clipboard]::settext($colorizedtext",
+        "eefcb906-b326-4e99-9f54-8b4bb6ef3c6d",
+        "get-clipboard"
+      ],
+      "raw_values": [
+        "Windows.Clipboard",
+        "Windows.Forms.Clipboard",
+        "Windows.Forms.TextBox",
+        "]::GetText",
+        "sentinelbreakpoints",
+        "Set-PSBreakpoint",
+        "PowerSploitIndicators",
+        "Set-Alias -Name \\",
+        " -Value \\",
+        "",
+        "[Windows.Clipboard]::SetText($colorizedText",
+        "EEFCB906-B326-4E99-9F54-8B4BB6EF3C6D",
+        "Get-Clipboard"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "convert-excelrangetoimage.ps1",
+        "read-clipboard.ps1"
+      ],
+      "raw_values": [
+        "Convert-ExcelRangeToImage.ps1",
+        "Read-Clipboard.ps1"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ]
+}

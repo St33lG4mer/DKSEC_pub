@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_jwt_token_search",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_jwt_token_search.eql",
+  "raw_query": "any where (process.command_line like~ (\"*find *\", \"*find.exe*\", \"*findstr*\", \"*select-string *\", \"*strings*\")) and (process.command_line like~ (\"*eyJ0eXAiOi*\", \"*eyJhbGciOi*\", \"* eyJ0eX*\", \"* \\\"eyJ0eX\\\"*\", \"* 'eyJ0eX'*\", \"* eyJhbG*\", \"* \\\"eyJhbG\\\"*\", \"* 'eyJhbG'*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "find",
+        "find.exe",
+        "findstr",
+        "select-string",
+        "strings",
+        "eyj0exaioi",
+        "eyjhbgcioi",
+        "eyj0ex",
+        "'eyj0ex'",
+        "eyjhbg",
+        "'eyjhbg'"
+      ],
+      "raw_values": [
+        "*find *",
+        "*find.exe*",
+        "*findstr*",
+        "*select-string *",
+        "*strings*",
+        "*eyJ0eXAiOi*",
+        "*eyJhbGciOi*",
+        "* eyJ0eX*",
+        "* \\",
+        "*",
+        "* 'eyJ0eX'*",
+        "* eyJhbG*",
+        "* 'eyJhbG'*"
+      ]
+    }
+  ]
+}

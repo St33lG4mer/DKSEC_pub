@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "Unusual Process Network Connection",
+  "slug": "defense_evasion_unusual_process_network_connection",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_unusual_process_network_connection.toml",
+  "raw_query": "sequence by process.entity_id\n  [process where host.os.type == \"windows\" and (process.name : \"Microsoft.Workflow.Compiler.exe\" or\n                  process.name : \"bginfo.exe\" or\n                  process.name : \"cdb.exe\" or\n                  process.name : \"cmstp.exe\" or\n                  process.name : \"csi.exe\" or\n                  process.name : \"dnx.exe\" or\n                  process.name : \"fsi.exe\" or\n                  process.name : \"ieexec.exe\" or\n                  process.name : \"iexpress.exe\" or\n                  process.name : \"odbcconf.exe\" or\n                  process.name : \"rcsi.exe\" or\n                  process.name : \"xwizard.exe\") and\n     event.type == \"start\"]\n  [network where host.os.type == \"windows\" and (process.name : \"Microsoft.Workflow.Compiler.exe\" or\n                  process.name : \"bginfo.exe\" or\n                  process.name : \"cdb.exe\" or\n                  process.name : \"cmstp.exe\" or\n                  process.name : \"csi.exe\" or\n                  process.name : \"dnx.exe\" or\n                  process.name : \"fsi.exe\" or\n                  process.name : \"ieexec.exe\" or\n                  process.name : \"iexpress.exe\" or\n                  process.name : \"odbcconf.exe\" or\n                  process.name : \"rcsi.exe\" or\n                  process.name : \"xwizard.exe\")]\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "microsoft.workflow.compiler.exe",
+        "bginfo.exe",
+        "cdb.exe",
+        "cmstp.exe",
+        "csi.exe",
+        "dnx.exe",
+        "fsi.exe",
+        "ieexec.exe",
+        "iexpress.exe",
+        "odbcconf.exe",
+        "rcsi.exe",
+        "xwizard.exe"
+      ],
+      "raw_values": [
+        "Microsoft.Workflow.Compiler.exe",
+        "bginfo.exe",
+        "cdb.exe",
+        "cmstp.exe",
+        "csi.exe",
+        "dnx.exe",
+        "fsi.exe",
+        "ieexec.exe",
+        "iexpress.exe",
+        "odbcconf.exe",
+        "rcsi.exe",
+        "xwizard.exe"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

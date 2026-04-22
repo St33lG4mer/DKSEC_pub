@@ -1,0 +1,23 @@
+{
+  "source": "elastic",
+  "name": "Process Backgrounded by Unusual Parent",
+  "slug": "execution_process_backgrounded_by_unusual_parent",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Persistence",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_process_backgrounded_by_unusual_parent.toml",
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and\nevent.action:(ProcessRollup2 or exec or exec_event or start) and\nprocess.name:(bash or csh or dash or fish or ksh or sh or tcsh or zsh) and\nprocess.args:(-c and *&) and\nnot process.parent.name:(sshd or make or su or ds_agent or fortitraylauncher or zeek or asterisk or vncserver or cron or crond)\n",
+  "conditions": []
+}

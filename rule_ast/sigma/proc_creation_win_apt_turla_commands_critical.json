@@ -1,0 +1,24 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_turla_commands_critical",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2014/TA/Turla/proc_creation_win_apt_turla_commands_critical.eql",
+  "raw_query": "any where process.command_line like~ (\"net use \\\\\\\\%DomainController%\\\\C$ \\\"P@ssw0rd\\\" *\", \"dir c:\\\\*.doc* /s\", \"dir %TEMP%\\\\*.exe\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "net use \\\\\\\\%DomainController%\\\\C$ \\",
+        " *",
+        "dir c:\\\\*.doc* /s",
+        "dir %TEMP%\\\\*.exe"
+      ]
+    }
+  ]
+}

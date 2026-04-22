@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_export_certificate",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_export_certificate.eql",
+  "raw_query": "any where process.command_line like~ (\"*Export-PfxCertificate *\", \"*Export-Certificate *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "export-pfxcertificate",
+        "export-certificate"
+      ],
+      "raw_values": [
+        "*Export-PfxCertificate *",
+        "*Export-Certificate *"
+      ]
+    }
+  ]
+}

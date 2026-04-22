@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "Unusual SSHD Child Process",
+  "slug": "persistence_unusual_sshd_child_process",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/linux/persistence_unusual_sshd_child_process.toml",
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:(exec or ProcessRollup2) and\nprocess.parent.name:sshd and process.args_count:2 and process.parent.args:\"-D\" and\nnot (\n  process.command_line:(-bash or -zsh or -sh) or\n  process.name:(ractrans or exectask or tty or tput or ferny-askpass or id or ip) or\n  process.executable:/var/tmp/foreman-ssh-cmd*/script\n)\n",
+  "conditions": []
+}

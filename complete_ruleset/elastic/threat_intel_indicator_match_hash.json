@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Threat Intel Hash Indicator Match",
+  "slug": "threat_intel_indicator_match_hash",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "OS: Windows",
+    "Data Source: Elastic Endgame",
+    "Rule Type: Threat Match",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/threat_intel/threat_intel_indicator_match_hash.toml",
+  "raw_query": "file.hash.*:* or process.hash.*:* or dll.hash.*:*\n",
+  "conditions": []
+}

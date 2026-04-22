@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_ditsnap",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_ditsnap.eql",
+  "raw_query": "any where process.executable:\"*\\\\ditsnap.exe\" or process.command_line:\"*ditsnap.exe*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ditsnap.exe"
+      ],
+      "raw_values": [
+        "*\\\\ditsnap.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ditsnap.exe"
+      ],
+      "raw_values": [
+        "*ditsnap.exe*"
+      ]
+    }
+  ]
+}

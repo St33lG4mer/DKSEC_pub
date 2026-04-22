@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_domain_vscode_tunnel_connection",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_domain_vscode_tunnel_connection.eql",
+  "raw_query": "any where network.direction:\"true\" and destination.domain:\"*.tunnels.api.visualstudio.com\"",
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        ".tunnels.api.visualstudio.com"
+      ],
+      "raw_values": [
+        "*.tunnels.api.visualstudio.com"
+      ]
+    }
+  ]
+}

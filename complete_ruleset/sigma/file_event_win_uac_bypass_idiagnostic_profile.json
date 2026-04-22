@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_uac_bypass_idiagnostic_profile",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_uac_bypass_idiagnostic_profile.eql",
+  "raw_query": "any where process.executable:\"*\\\\DllHost.exe\" and file.path:\"C:\\\\Windows\\\\System32\\\\*\" and file.path:\"*.dll\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\DllHost.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\*",
+        "*.dll"
+      ]
+    }
+  ]
+}

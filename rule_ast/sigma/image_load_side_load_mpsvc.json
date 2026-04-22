@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_mpsvc",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_mpsvc.eql",
+  "raw_query": "any where file.path:\"*\\\\MpSvc.dll\" and (not (file.path like~ (\"C:\\\\Program Files\\\\Windows Defender\\\\*\", \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mpsvc.dll"
+      ],
+      "raw_values": [
+        "*\\\\MpSvc.dll"
+      ]
+    }
+  ]
+}

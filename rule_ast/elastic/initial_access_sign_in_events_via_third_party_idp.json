@@ -1,0 +1,86 @@
+{
+  "source": "elastic",
+  "name": "Okta Sign-In Events via Third-Party IdP",
+  "slug": "initial_access_sign_in_events_via_third_party_idp",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Identity",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access",
+    "Data Source: Okta",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/initial_access_sign_in_events_via_third_party_idp.toml",
+  "raw_query": "data_stream.dataset: \"okta.system\"\n    and okta.authentication_context.issuer.id: (* and not \"Okta\")\n    and (\n        event.action: (\n            \"user.authentication.auth_via_IDP\"\n            or \"user.authentication.auth_via_inbound_SAML\"\n            or \"user.authentication.auth_via_social\"\n        )\n        or (\n            event.action: \"user.authentication.auth_via_IDP\"\n            and okta.outcome.result: \"FAILURE\"\n            and okta.outcome.reason: (\n                \"A SAML assert with the same ID has already been processed by Okta for a previous request\"\n                or \"Unable to match transformed username\"\n                or \"Unable to resolve IdP endpoint\"\n                or \"Unable to validate SAML Response\"\n                or \"Unable to validate incoming SAML Assertion\"\n            )\n        )\n    )\n",
+  "conditions": [
+    {
+      "field": "okta.authentication_context.issuer.id",
+      "raw_field": "okta.authentication_context.issuer.id",
+      "operator": ":",
+      "values": [
+        "okta"
+      ],
+      "raw_values": [
+        "Okta"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "user.authentication.auth_via_idp",
+        "user.authentication.auth_via_inbound_saml",
+        "user.authentication.auth_via_social"
+      ],
+      "raw_values": [
+        "user.authentication.auth_via_IDP",
+        "user.authentication.auth_via_inbound_SAML",
+        "user.authentication.auth_via_social"
+      ]
+    },
+    {
+      "field": "okta.outcome.reason",
+      "raw_field": "okta.outcome.reason",
+      "operator": ":",
+      "values": [
+        "a saml assert with the same id has already been processed by okta for a previous request",
+        "unable to match transformed username",
+        "unable to resolve idp endpoint",
+        "unable to validate saml response",
+        "unable to validate incoming saml assertion"
+      ],
+      "raw_values": [
+        "A SAML assert with the same ID has already been processed by Okta for a previous request",
+        "Unable to match transformed username",
+        "Unable to resolve IdP endpoint",
+        "Unable to validate SAML Response",
+        "Unable to validate incoming SAML Assertion"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "okta.outcome.result",
+      "raw_field": "okta.outcome.result",
+      "operator": ":",
+      "values": [
+        "failure"
+      ],
+      "raw_values": [
+        "FAILURE"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "source": "elastic",
+  "name": "Sudoers File Activity",
+  "slug": "privilege_escalation_sudoers_file_mod",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/privilege_escalation_sudoers_file_mod.toml",
+  "raw_query": "file where host.os.type in (\"linux\", \"macos\") and event.type in (\"creation\", \"change\") and\nfile.path like (\"/etc/sudoers*\", \"/private/etc/sudoers*\") and not (\n  process.name like (\"dpkg\", \"platform-python*\", \"puppet\", \"yum\", \"dnf\", \"python*\") or\n  process.executable in (\n    \"/opt/chef/embedded/bin/ruby\", \"/opt/puppetlabs/puppet/bin/ruby\", \"/usr/bin/dockerd\",\n    \"/usr/bin/podman\", \"/opt/teleport/system/bin/teleport\", \"/usr/sbin/dockerd\",\n    \"/usr/local/bin/dockerd\", \"/usr/local/bin/teleport\", \"./usr/bin/podman\", \"/dev/fd/5\",\n    \"/usr/bin/rpm\", \"/usr/bin/microdnf\", \"/opt/morpheus-node/embedded/bin/chef-client\",\n    \"/opt/puppetlabs/puppet/bin/ruby\", \"/usr/bin/salt-minion\"\n  ) or\n  process.executable like (\"./snap/snapd/*/usr/lib/snapd/snap-update-ns\", \"/opt/teleport/*/bin/teleport\")\n)\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "sudoers"
+      ],
+      "raw_values": [
+        "/etc/sudoers*",
+        "/private/etc/sudoers*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "dpkg",
+        "platform-python",
+        "puppet",
+        "yum",
+        "dnf",
+        "python",
+        "snap-update-ns",
+        "teleport"
+      ],
+      "raw_values": [
+        "dpkg",
+        "platform-python*",
+        "puppet",
+        "yum",
+        "dnf",
+        "python*",
+        "./snap/snapd/*/usr/lib/snapd/snap-update-ns",
+        "/opt/teleport/*/bin/teleport"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "linux",
+        "macos"
+      ],
+      "raw_values": [
+        "linux",
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "creation",
+        "change"
+      ],
+      "raw_values": [
+        "creation",
+        "change"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "ruby",
+        "dockerd",
+        "podman",
+        "teleport",
+        "rpm",
+        "microdnf",
+        "chef-client",
+        "salt-minion"
+      ],
+      "raw_values": [
+        "/opt/chef/embedded/bin/ruby",
+        "/opt/puppetlabs/puppet/bin/ruby",
+        "/usr/bin/dockerd",
+        "/usr/bin/podman",
+        "/opt/teleport/system/bin/teleport",
+        "/usr/sbin/dockerd",
+        "/usr/local/bin/dockerd",
+        "/usr/local/bin/teleport",
+        "./usr/bin/podman",
+        "/dev/fd/5",
+        "/usr/bin/rpm",
+        "/usr/bin/microdnf",
+        "/opt/morpheus-node/embedded/bin/chef-client",
+        "/usr/bin/salt-minion"
+      ]
+    }
+  ]
+}

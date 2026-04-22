@@ -1,0 +1,88 @@
+{
+  "source": "elastic",
+  "name": "Potential Linux Hack Tool Launched",
+  "slug": "execution_potential_hack_tool_executed",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_potential_hack_tool_executed.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name in~ (\n  // exploitation frameworks\n  \"crackmapexec\", \"msfconsole\", \"msfvenom\", \"sliver-client\", \"sliver-server\", \"havoc\",\n  // network scanners (nmap left out to reduce noise)\n  \"zenmap\", \"nuclei\", \"netdiscover\", \"legion\",\n  // web enumeration\n  \"gobuster\", \"dirbuster\", \"dirb\", \"wfuzz\", \"ffuf\", \"whatweb\", \"eyewitness\",\n  // web vulnerability scanning\n  \"wpscan\", \"joomscan\", \"droopescan\", \"nikto\",\n  // exploitation tools\n  \"sqlmap\", \"commix\", \"yersinia\",\n  // cracking and brute forcing\n  \"john\", \"hashcat\", \"hydra\", \"ncrack\", \"cewl\", \"fcrackzip\", \"rainbowcrack\",\n  // host and network\n  \"linenum.sh\", \"linpeas.sh\", \"pspy32\", \"pspy32s\", \"pspy64\", \"pspy64s\", \"binwalk\", \"evil-winrm\",\n  \"linux-exploit-suggester-2.pl\", \"linux-exploit-suggester.sh\", \"panix.sh\"\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "crackmapexec",
+        "msfconsole",
+        "msfvenom",
+        "sliver-client",
+        "sliver-server",
+        "havoc"
+      ],
+      "raw_values": [
+        "crackmapexec",
+        "msfconsole",
+        "msfvenom",
+        "sliver-client",
+        "sliver-server",
+        "havoc"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

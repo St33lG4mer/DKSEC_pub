@@ -1,0 +1,90 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_winpeas",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_winpeas.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"winPEAS.exe\" or (process.executable like~ (\"*\\\\winPEASany_ofs.exe\", \"*\\\\winPEASany.exe\", \"*\\\\winPEASx64_ofs.exe\", \"*\\\\winPEASx64.exe\", \"*\\\\winPEASx86_ofs.exe\", \"*\\\\winPEASx86.exe\"))) or (process.command_line like~ (\"* applicationsinfo*\", \"* browserinfo*\", \"* eventsinfo*\", \"* fileanalysis*\", \"* filesinfo*\", \"* processinfo*\", \"* servicesinfo*\", \"* windowscreds*\")) or process.command_line:\"*https://github.com/carlospolop/PEASS-ng/releases/latest/download/*\" or (process.parent.command_line:\"* -linpeas\" or process.command_line:\"* -linpeas\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "winpeasany_ofs.exe",
+        "winpeasany.exe",
+        "winpeasx64_ofs.exe",
+        "winpeasx64.exe",
+        "winpeasx86_ofs.exe",
+        "winpeasx86.exe"
+      ],
+      "raw_values": [
+        "*\\\\winPEASany_ofs.exe",
+        "*\\\\winPEASany.exe",
+        "*\\\\winPEASx64_ofs.exe",
+        "*\\\\winPEASx64.exe",
+        "*\\\\winPEASx86_ofs.exe",
+        "*\\\\winPEASx86.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "applicationsinfo",
+        "browserinfo",
+        "eventsinfo",
+        "fileanalysis",
+        "filesinfo",
+        "processinfo",
+        "servicesinfo",
+        "windowscreds"
+      ],
+      "raw_values": [
+        "* applicationsinfo*",
+        "* browserinfo*",
+        "* eventsinfo*",
+        "* fileanalysis*",
+        "* filesinfo*",
+        "* processinfo*",
+        "* servicesinfo*",
+        "* windowscreds*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "winpeas.exe"
+      ],
+      "raw_values": [
+        "winPEAS.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-linpeas"
+      ],
+      "raw_values": [
+        "*https://github.com/carlospolop/PEASS-ng/releases/latest/download/*",
+        "* -linpeas"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "-linpeas"
+      ],
+      "raw_values": [
+        "* -linpeas"
+      ]
+    }
+  ]
+}

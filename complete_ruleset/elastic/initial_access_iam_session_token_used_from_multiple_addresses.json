@@ -1,0 +1,144 @@
+{
+  "source": "elastic",
+  "name": "AWS Access Token Used from Multiple Addresses",
+  "slug": "initial_access_iam_session_token_used_from_multiple_addresses",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS IAM",
+    "Data Source: AWS CloudTrail",
+    "Tactic: Initial Access",
+    "Use Case: Identity and Access Audit",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/initial_access_iam_session_token_used_from_multiple_addresses.toml",
+  "raw_query": "from logs-aws.cloudtrail* metadata _id, _version, _index\n| where data_stream.dataset == \"aws.cloudtrail\"\n  and aws.cloudtrail.user_identity.arn is not null\n  and aws.cloudtrail.user_identity.type == \"IAMUser\"\n  and source.ip is not null\n  and aws.cloudtrail.user_identity.access_key_id is not null\n  and not aws.cloudtrail.session_credential_from_console == \"true\"\n  and not (\n    user_agent.original like \"*Terraform*\" or\n    user_agent.original like \"*Ansible*\" or\n    user_agent.original like \"*Pulumi*\"\n  )\n  and `source.as.organization.name` != \"AMAZON-AES\"\n  and not ((\n    `source.as.organization.name` == \"AMAZON-02\" and aws.cloudtrail.event_category == \"Data\"))\n  and event.provider not in (\n    \"health.amazonaws.com\", \"monitoring.amazonaws.com\", \"notifications.amazonaws.com\",\n    \"ce.amazonaws.com\", \"cost-optimization-hub.amazonaws.com\",\n    \"servicecatalog-appregistry.amazonaws.com\", \"securityhub.amazonaws.com\", \n    \"account.amazonaws.com\", \"budgets.amazonaws.com\", \"freetier.amazonaws.com\", \"support.amazonaws.com\",\n    \"support-console.amazonaws.com\"\n  )\n\n| eval\n  Esql.time_window_date_trunc = date_trunc(30 minutes, @timestamp),\n  Esql.aws_cloudtrail_user_identity_arn = aws.cloudtrail.user_identity.arn,\n  Esql.aws_cloudtrail_user_identity_access_key_id = aws.cloudtrail.user_identity.access_key_id,\n  Esql.source_ip = source.ip,\n  Esql.user_agent_original = user_agent.original,\n  Esql.source_ip_string = to_string(source.ip),\n  Esql.source_ip_user_agent_pair = concat(Esql.source_ip_string, \" - \", user_agent.original),\n  Esql.source_ip_city_pair = concat(Esql.source_ip_string, \" - \", source.geo.city_name),\n  Esql.source_geo_city_name = source.geo.city_name,\n  Esql.source_network_org_name = `source.as.organization.name`,\n  Esql.source_ip_network_pair = concat(Esql.source_ip_string, \"-\", `source.as.organization.name`),\n  Esql.event_timestamp = @timestamp,\n  Esql.data_stream_namespace = data_stream.namespace\n\n| stats\n  Esql.event_action_values = values(event.action),\n  Esql.event_provider_count_distinct = count_distinct(event.provider),\n  Esql.event_provider_values = values(event.provider),\n  Esql.aws_cloudtrail_user_identity_access_key_id_values = values(Esql.aws_cloudtrail_user_identity_access_key_id),\n  Esql.aws_cloudtrail_user_identity_arn_values = values(Esql.aws_cloudtrail_user_identity_arn),\n  Esql.source_ip_values = values(Esql.source_ip),\n  Esql.user_agent_original_values = values(Esql.user_agent_original),\n  Esql.source_ip_user_agent_pair_values = values(Esql.source_ip_user_agent_pair),\n  Esql.source_geo_city_name_values = values(Esql.source_geo_city_name),\n  Esql.source_ip_city_pair_values = values(Esql.source_ip_city_pair),\n  Esql.source_network_org_name_values = values(Esql.source_network_org_name),\n  Esql.source_ip_network_pair_values = values(Esql.source_ip_network_pair),\n  Esql.source_ip_count_distinct = count_distinct(Esql.source_ip),\n  Esql.user_agent_original_count_distinct = count_distinct(Esql.user_agent_original),\n  Esql.source_geo_city_name_count_distinct = count_distinct(Esql.source_geo_city_name),\n  Esql.source_network_org_name_count_distinct = count_distinct(Esql.source_network_org_name),\n  Esql.data_stream_namespace_values = values(Esql.data_stream_namespace),\n  Esql.timestamp_first_seen = min(Esql.event_timestamp),\n  Esql.timestamp_last_seen = max(Esql.event_timestamp),\n  Esql.event_count = count()\n  by Esql.time_window_date_trunc, Esql.aws_cloudtrail_user_identity_access_key_id\n\n| eval\n  Esql.activity_type = case(\n    Esql.source_ip_count_distinct >= 2 and Esql.source_network_org_name_count_distinct >= 2 and Esql.source_geo_city_name_count_distinct >= 2 and Esql.user_agent_original_count_distinct >= 2, \"multiple_ip_network_city_user_agent\",\n    Esql.source_ip_count_distinct >= 2 and Esql.source_network_org_name_count_distinct >= 2 and Esql.source_geo_city_name_count_distinct >= 2, \"multiple_ip_network_city\",\n    Esql.source_ip_count_distinct >= 2 and Esql.source_geo_city_name_count_distinct >= 2, \"multiple_ip_and_city\",\n    Esql.source_ip_count_distinct >= 2 and Esql.source_network_org_name_count_distinct >= 2, \"multiple_ip_and_network\",\n    Esql.source_ip_count_distinct >= 2 and Esql.user_agent_original_count_distinct >= 2, \"multiple_ip_and_user_agent\",\n    \"normal_activity\"\n  ),\n  Esql.activity_fidelity_score = case(\n    Esql.activity_type == \"multiple_ip_network_city_user_agent\", \"high\",\n    Esql.activity_type == \"multiple_ip_network_city\", \"high\",\n    Esql.activity_type == \"multiple_ip_and_city\", \"medium\",\n    Esql.activity_type == \"multiple_ip_and_network\", \"medium\",\n    Esql.activity_type == \"multiple_ip_and_user_agent\", \"low\"\n  )\n\n| keep\n  Esql.time_window_date_trunc,\n  Esql.activity_type,\n  Esql.activity_fidelity_score,\n  Esql.event_count,\n  Esql.timestamp_first_seen,\n  Esql.timestamp_last_seen,\n  Esql.aws_cloudtrail_user_identity_arn_values,\n  Esql.aws_cloudtrail_user_identity_access_key_id_values,\n  Esql.event_provider_count_distinct,\n  Esql.event_action_values,\n  Esql.event_provider_values,\n  Esql.source_ip_values,\n  Esql.user_agent_original_values,\n  Esql.source_ip_user_agent_pair_values,\n  Esql.source_geo_city_name_values,\n  Esql.source_ip_city_pair_values,\n  Esql.source_network_org_name_values,\n  Esql.source_ip_network_pair_values,\n  Esql.source_ip_count_distinct,\n  Esql.user_agent_original_count_distinct,\n  Esql.source_geo_city_name_count_distinct,\n  Esql.source_network_org_name_count_distinct,\n  Esql.data_stream_namespace_values\n\n| where Esql.activity_fidelity_score == \"high\" and Esql.event_provider_count_distinct > 1\n\n// this rule only alerts for \"high\" fidelity cases, to broaden the rule scope to include all activity\n// change the final condition to \n// | where Esql.activity_type != \"normal_activity\" and Esql.event_provider_count_distinct > 1\n\n",
+  "conditions": [
+    {
+      "field": "not",
+      "raw_field": "not",
+      "operator": "in",
+      "values": [
+        "health.amazonaws.com",
+        "monitoring.amazonaws.com",
+        "notifications.amazonaws.com",
+        "ce.amazonaws.com",
+        "cost-optimization-hub.amazonaws.com",
+        "servicecatalog-appregistry.amazonaws.com",
+        "securityhub.amazonaws.com",
+        "account.amazonaws.com",
+        "budgets.amazonaws.com",
+        "freetier.amazonaws.com",
+        "support.amazonaws.com",
+        "support-console.amazonaws.com"
+      ],
+      "raw_values": [
+        "health.amazonaws.com",
+        "monitoring.amazonaws.com",
+        "notifications.amazonaws.com",
+        "ce.amazonaws.com",
+        "cost-optimization-hub.amazonaws.com",
+        "servicecatalog-appregistry.amazonaws.com",
+        "securityhub.amazonaws.com",
+        "account.amazonaws.com",
+        "budgets.amazonaws.com",
+        "freetier.amazonaws.com",
+        "support.amazonaws.com",
+        "support-console.amazonaws.com"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": "==",
+      "values": [
+        "iamuser"
+      ],
+      "raw_values": [
+        "IAMUser"
+      ]
+    },
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": "like",
+      "values": [
+        "terraform",
+        "ansible",
+        "pulumi"
+      ],
+      "raw_values": [
+        "*Terraform*",
+        "*Ansible*",
+        "*Pulumi*"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.event_category",
+      "raw_field": "aws.cloudtrail.event_category",
+      "operator": "==",
+      "values": [
+        "data"
+      ],
+      "raw_values": [
+        "Data"
+      ]
+    },
+    {
+      "field": "esql.activity_type",
+      "raw_field": "Esql.activity_type",
+      "operator": "==",
+      "values": [
+        "multiple_ip_network_city_user_agent",
+        "multiple_ip_network_city",
+        "multiple_ip_and_city",
+        "multiple_ip_and_network",
+        "multiple_ip_and_user_agent"
+      ],
+      "raw_values": [
+        "multiple_ip_network_city_user_agent",
+        "multiple_ip_network_city",
+        "multiple_ip_and_city",
+        "multiple_ip_and_network",
+        "multiple_ip_and_user_agent"
+      ]
+    },
+    {
+      "field": "esql.activity_fidelity_score",
+      "raw_field": "Esql.activity_fidelity_score",
+      "operator": "==",
+      "values": [
+        "high"
+      ],
+      "raw_values": [
+        "high"
+      ]
+    },
+    {
+      "field": "esql.activity_type",
+      "raw_field": "Esql.activity_type",
+      "operator": "!=",
+      "values": [
+        "normal_activity"
+      ],
+      "raw_values": [
+        "normal_activity"
+      ]
+    }
+  ]
+}

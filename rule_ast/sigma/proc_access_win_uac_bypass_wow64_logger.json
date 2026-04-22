@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_access_win_uac_bypass_wow64_logger",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_access/proc_access_win_uac_bypass_wow64_logger.eql",
+  "raw_query": "any where process.executable:\"*:\\\\Windows\\\\SysWOW64\\\\*\" and winlog.event_data.GrantedAccess:\"0x1fffff\" and winlog.event_data.CallTrace:\"UNKNOWN(0000000000000000)|UNKNOWN(0000000000000000)|*\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x1fffff"
+      ],
+      "raw_values": [
+        "0x1fffff"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "unknown(0000000000000000)|unknown(0000000000000000)|"
+      ],
+      "raw_values": [
+        "UNKNOWN(0000000000000000)|UNKNOWN(0000000000000000)|*"
+      ]
+    }
+  ]
+}

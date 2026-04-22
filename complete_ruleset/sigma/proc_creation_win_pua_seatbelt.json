@@ -1,0 +1,101 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_seatbelt",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_seatbelt.eql",
+  "raw_query": "any where (process.executable:\"*\\\\Seatbelt.exe\" or process.pe.original_file_name:\"Seatbelt.exe\" or process.pe.description:\"Seatbelt\" or (process.command_line like~ (\"* DpapiMasterKeys*\", \"* InterestingProcesses*\", \"* InterestingFiles*\", \"* CertificateThumbprints*\", \"* ChromiumBookmarks*\", \"* ChromiumHistory*\", \"* ChromiumPresence*\", \"* CloudCredentials*\", \"* CredEnum*\", \"* CredGuard*\", \"* FirefoxHistory*\", \"* ProcessCreationEvents*\"))) or ((process.command_line like~ (\"* -group=misc*\", \"* -group=remote*\", \"* -group=chromium*\", \"* -group=slack*\", \"* -group=system*\", \"* -group=user*\", \"* -group=all*\")) and process.command_line:\"* -outputfile=*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "dpapimasterkeys",
+        "interestingprocesses",
+        "interestingfiles",
+        "certificatethumbprints",
+        "chromiumbookmarks",
+        "chromiumhistory",
+        "chromiumpresence",
+        "cloudcredentials",
+        "credenum",
+        "credguard",
+        "firefoxhistory",
+        "processcreationevents",
+        "-group=misc",
+        "-group=remote",
+        "-group=chromium",
+        "-group=slack",
+        "-group=system",
+        "-group=user",
+        "-group=all"
+      ],
+      "raw_values": [
+        "* DpapiMasterKeys*",
+        "* InterestingProcesses*",
+        "* InterestingFiles*",
+        "* CertificateThumbprints*",
+        "* ChromiumBookmarks*",
+        "* ChromiumHistory*",
+        "* ChromiumPresence*",
+        "* CloudCredentials*",
+        "* CredEnum*",
+        "* CredGuard*",
+        "* FirefoxHistory*",
+        "* ProcessCreationEvents*",
+        "* -group=misc*",
+        "* -group=remote*",
+        "* -group=chromium*",
+        "* -group=slack*",
+        "* -group=system*",
+        "* -group=user*",
+        "* -group=all*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "seatbelt.exe"
+      ],
+      "raw_values": [
+        "*\\\\Seatbelt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "seatbelt.exe"
+      ],
+      "raw_values": [
+        "Seatbelt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "seatbelt"
+      ],
+      "raw_values": [
+        "Seatbelt"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-outputfile="
+      ],
+      "raw_values": [
+        "* -outputfile=*"
+      ]
+    }
+  ]
+}

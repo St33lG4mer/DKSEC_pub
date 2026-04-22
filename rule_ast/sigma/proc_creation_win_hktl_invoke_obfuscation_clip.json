@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_invoke_obfuscation_clip",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_invoke_obfuscation_clip.eql",
+  "raw_query": "any where (process.command_line:\"*cmd*\" and process.command_line:\"*&&*\" and process.command_line:\"*clipboard]::*\" and process.command_line:\"*-f*\") and (process.command_line like~ (\"*/c*\", \"*/r*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "cmd",
+        "clipboard]::"
+      ],
+      "raw_values": [
+        "*cmd*",
+        "*&&*",
+        "*clipboard]::*",
+        "*-f*"
+      ]
+    }
+  ]
+}

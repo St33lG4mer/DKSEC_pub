@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_eventvwr_recentviews",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_eventvwr_recentviews.eql",
+  "raw_query": "any where (process.command_line like~ (\"*\\\\Event Viewer\\\\RecentViews*\", \"*\\\\EventV~1\\\\RecentViews*\")) and process.command_line:\"*>*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "recentviews"
+      ],
+      "raw_values": [
+        "*\\\\Event Viewer\\\\RecentViews*",
+        "*\\\\EventV~1\\\\RecentViews*"
+      ]
+    }
+  ]
+}

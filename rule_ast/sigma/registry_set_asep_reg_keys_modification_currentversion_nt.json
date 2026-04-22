@@ -1,0 +1,149 @@
+{
+  "source": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_currentversion_nt",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_currentversion_nt.eql",
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion*\" and (registry.path like~ (\"*\\\\Winlogon\\\\VmApplet*\", \"*\\\\Winlogon\\\\Userinit*\", \"*\\\\Winlogon\\\\Taskman*\", \"*\\\\Winlogon\\\\Shell*\", \"*\\\\Winlogon\\\\GpExtensions*\", \"*\\\\Winlogon\\\\AppSetup*\", \"*\\\\Winlogon\\\\AlternateShells\\\\AvailableShells*\", \"*\\\\Windows\\\\IconServiceLib*\", \"*\\\\Windows\\\\Appinit_Dlls*\", \"*\\\\Image File Execution Options*\", \"*\\\\Font Drivers*\", \"*\\\\Drivers32*\", \"*\\\\Windows\\\\Run*\", \"*\\\\Windows\\\\Load*\"))) and (not (winlog.event_data.Details:\"(Empty)\" or (?winlog.event_data.Details == null) or process.executable:\"C:\\\\Windows\\\\System32\\\\poqexec.exe\" or (registry.path:\"*\\\\Image File Execution Options\\\\*\" and (registry.path like~ (\"*\\\\DisableExceptionChainValidation\", \"*\\\\MitigationOptions\"))) or (process.executable:\"C:\\\\Windows\\\\system32\\\\svchost.exe\" and (registry.path like~ (\"*\\\\Winlogon\\\\GPExtensions\\\\{827D319E-6EAC-11D2-A4EA-00C04F79F83A}\\\\PreviousPolicyAreas*\", \"*\\\\Winlogon\\\\GPExtensions\\\\{827D319E-6EAC-11D2-A4EA-00C04F79F83A}\\\\MaxNoGPOListChangesInterval*\")) and (winlog.event_data.Details like~ (\"DWORD (0x00000001)\", \"DWORD (0x00000009)\", \"DWORD (0x000003c0)\"))) or (process.executable:\"C:\\\\Windows\\\\System32\\\\RuntimeBroker.exe\" and registry.path:\"*\\\\runtimebroker.exe\\\\Microsoft.Windows.ShellExperienceHost*\"))) and (not ((process.executable:\"C:\\\\Program Files (x86)\\\\Microsoft\\\\Temp\\\\*\" and process.executable:\"*\\\\MicrosoftEdgeUpdate.exe\") or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Avira\\\\Antivirus\\\\avguard.exe*\", \"C:\\\\Program Files\\\\Avira\\\\Antivirus\\\\avguard.exe*\")) and registry.path:\"*SOFTWARE\\\\WOW6432Node\\\\Avira\\\\Antivirus\\\\Overwrite_Keys\\\\HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\*\" and (registry.path like~ (\"*\\\\userinit\\\\UseAsDefault\", \"*\\\\shell\\\\UseAsDefault\")) and (winlog.event_data.Details like~ (\"explorer.exe\", \"C:\\\\Windows\\\\system32\\\\userinit.exe,\"))) or ((registry.path like~ (\"*\\\\ClickToRunStore\\\\HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\*\", \"*\\\\ClickToRun\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\*\")) or (process.executable like~ (\"C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\"))) or ((process.executable like~ (\"C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*\", \"C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\Updates\\\\*\")) and process.executable:\"*\\\\OfficeClickToRun.exe\") or (process.executable:\"C:\\\\Windows\\\\Microsoft.NET\\\\Framework*\" and process.executable:\"*\\\\ngen.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\StandaloneUpdater\\\\OneDriveSetup.exe\" and registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\Delete Cached Update Binary\" and winlog.event_data.Details:\"C:\\\\Windows\\\\system32\\\\cmd.exe /q /c del /q \\\"C:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\Update\\\\OneDriveSetup.exe\\\"\")))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\winlogon\\\\vmapplet",
+        "\\\\winlogon\\\\userinit",
+        "\\\\winlogon\\\\taskman",
+        "\\\\winlogon\\\\shell",
+        "\\\\winlogon\\\\gpextensions",
+        "\\\\winlogon\\\\appsetup",
+        "\\\\winlogon\\\\alternateshells\\\\availableshells",
+        "\\\\windows\\\\iconservicelib",
+        "\\\\windows\\\\appinit_dlls",
+        "\\\\image file execution options",
+        "\\\\font drivers",
+        "\\\\drivers32",
+        "\\\\windows\\\\run",
+        "\\\\windows\\\\load",
+        "\\\\disableexceptionchainvalidation",
+        "\\\\mitigationoptions",
+        "\\\\winlogon\\\\gpextensions\\\\{827d319e-6eac-11d2-a4ea-00c04f79f83a}\\\\previouspolicyareas",
+        "\\\\winlogon\\\\gpextensions\\\\{827d319e-6eac-11d2-a4ea-00c04f79f83a}\\\\maxnogpolistchangesinterval",
+        "\\\\userinit\\\\useasdefault",
+        "\\\\shell\\\\useasdefault",
+        "\\\\clicktorunstore\\\\hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\",
+        "\\\\clicktorun\\\\registry\\\\machine\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Winlogon\\\\VmApplet*",
+        "*\\\\Winlogon\\\\Userinit*",
+        "*\\\\Winlogon\\\\Taskman*",
+        "*\\\\Winlogon\\\\Shell*",
+        "*\\\\Winlogon\\\\GpExtensions*",
+        "*\\\\Winlogon\\\\AppSetup*",
+        "*\\\\Winlogon\\\\AlternateShells\\\\AvailableShells*",
+        "*\\\\Windows\\\\IconServiceLib*",
+        "*\\\\Windows\\\\Appinit_Dlls*",
+        "*\\\\Image File Execution Options*",
+        "*\\\\Font Drivers*",
+        "*\\\\Drivers32*",
+        "*\\\\Windows\\\\Run*",
+        "*\\\\Windows\\\\Load*",
+        "*\\\\DisableExceptionChainValidation",
+        "*\\\\MitigationOptions",
+        "*\\\\Winlogon\\\\GPExtensions\\\\{827D319E-6EAC-11D2-A4EA-00C04F79F83A}\\\\PreviousPolicyAreas*",
+        "*\\\\Winlogon\\\\GPExtensions\\\\{827D319E-6EAC-11D2-A4EA-00C04F79F83A}\\\\MaxNoGPOListChangesInterval*",
+        "*\\\\userinit\\\\UseAsDefault",
+        "*\\\\shell\\\\UseAsDefault",
+        "*\\\\ClickToRunStore\\\\HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\*",
+        "*\\\\ClickToRun\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "c:\\\\windows\\\\system32\\\\userinit.exe,"
+      ],
+      "raw_values": [
+        "explorer.exe",
+        "C:\\\\Windows\\\\system32\\\\userinit.exe,"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "integrator.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe",
+        "C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*",
+        "C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\Updates\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion",
+        "\\\\image file execution options\\\\",
+        "\\\\runtimebroker.exe\\\\microsoft.windows.shellexperiencehost",
+        "software\\\\wow6432node\\\\avira\\\\antivirus\\\\overwrite_keys\\\\hkey_local_machine\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\",
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\runonce\\\\delete cached update binary"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion*",
+        "*\\\\Image File Execution Options\\\\*",
+        "*\\\\runtimebroker.exe\\\\Microsoft.Windows.ShellExperienceHost*",
+        "*SOFTWARE\\\\WOW6432Node\\\\Avira\\\\Antivirus\\\\Overwrite_Keys\\\\HKEY_LOCAL_MACHINE\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\*",
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\Delete Cached Update Binary"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)",
+        "c:\\\\windows\\\\system32\\\\cmd.exe /q /c del /q \\",
+        "\\\\appdata\\\\local\\\\microsoft\\\\onedrive\\\\update\\\\onedrivesetup.exe\\"
+      ],
+      "raw_values": [
+        "(Empty)",
+        "C:\\\\Windows\\\\system32\\\\cmd.exe /q /c del /q \\",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\Update\\\\OneDriveSetup.exe\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "poqexec.exe",
+        "svchost.exe",
+        "runtimebroker.exe",
+        "microsoftedgeupdate.exe",
+        "officeclicktorun.exe",
+        "framework",
+        "ngen.exe",
+        "onedrivesetup.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\poqexec.exe",
+        "C:\\\\Windows\\\\system32\\\\svchost.exe",
+        "C:\\\\Windows\\\\System32\\\\RuntimeBroker.exe",
+        "C:\\\\Program Files (x86)\\\\Microsoft\\\\Temp\\\\*",
+        "*\\\\MicrosoftEdgeUpdate.exe",
+        "*\\\\OfficeClickToRun.exe",
+        "C:\\\\Windows\\\\Microsoft.NET\\\\Framework*",
+        "*\\\\ngen.exe",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\StandaloneUpdater\\\\OneDriveSetup.exe"
+      ]
+    }
+  ]
+}

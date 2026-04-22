@@ -1,0 +1,40 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_globalflags",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_globalflags.eql",
+  "raw_query": "any where (registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\*\" and registry.path:\"*\\\\Image File Execution Options\\\\*\" and registry.path:\"*\\\\GlobalFlag*\") or ((registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\*\" and registry.path:\"*\\\\SilentProcessExit\\\\*\") and (registry.path like~ (\"*\\\\ReportingMode*\", \"*\\\\MonitorProcess*\")))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\reportingmode",
+        "\\\\monitorprocess"
+      ],
+      "raw_values": [
+        "*\\\\ReportingMode*",
+        "*\\\\MonitorProcess*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\",
+        "\\\\image file execution options\\\\",
+        "\\\\globalflag",
+        "\\\\silentprocessexit\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\*",
+        "*\\\\Image File Execution Options\\\\*",
+        "*\\\\GlobalFlag*",
+        "*\\\\SilentProcessExit\\\\*"
+      ]
+    }
+  ]
+}

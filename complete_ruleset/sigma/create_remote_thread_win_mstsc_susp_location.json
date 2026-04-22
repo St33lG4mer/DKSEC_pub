@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "create_remote_thread_win_mstsc_susp_location",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/create_remote_thread/create_remote_thread_win_mstsc_susp_location.eql",
+  "raw_query": "any where winlog.event_data.TargetImage:\"*\\\\mstsc.exe\" and (process.executable like~ (\"*:\\\\Temp\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\PerfLogs\\\\*\", \"*:\\\\Windows\\\\Tasks\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\mstsc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mstsc.exe"
+      ]
+    }
+  ]
+}

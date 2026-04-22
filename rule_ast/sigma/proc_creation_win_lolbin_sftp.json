@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_sftp",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_sftp.eql",
+  "raw_query": "any where process.executable:\"*\\\\sftp.exe\" and (process.command_line like~ (\"* -D ..*\", \"* -D C:\\\\*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-d .."
+      ],
+      "raw_values": [
+        "* -D ..*",
+        "* -D C:\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sftp.exe"
+      ],
+      "raw_values": [
+        "*\\\\sftp.exe"
+      ]
+    }
+  ]
+}

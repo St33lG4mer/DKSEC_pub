@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "create_remote_thread_win_hktl_cobaltstrike",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/create_remote_thread/create_remote_thread_win_hktl_cobaltstrike.eql",
+  "raw_query": "any where winlog.event_data.StartAddress like~ (\"*0B80\", \"*0C7C\", \"*0C88\")",
+  "conditions": [
+    {
+      "field": "winlog.event_data.startaddress",
+      "raw_field": "winlog.event_data.StartAddress",
+      "operator": "like~",
+      "values": [
+        "0b80",
+        "0c7c",
+        "0c88"
+      ],
+      "raw_values": [
+        "*0B80",
+        "*0C7C",
+        "*0C88"
+      ]
+    }
+  ]
+}

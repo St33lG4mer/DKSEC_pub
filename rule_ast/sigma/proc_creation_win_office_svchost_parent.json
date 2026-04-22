@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_office_svchost_parent",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_office_svchost_parent.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\svchost.exe\" and (process.executable like~ (\"*\\\\eqnedt32.exe\", \"*\\\\excel.exe\", \"*\\\\msaccess.exe\", \"*\\\\mspub.exe\", \"*\\\\powerpnt.exe\", \"*\\\\visio.exe\", \"*\\\\winword.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "eqnedt32.exe",
+        "excel.exe",
+        "msaccess.exe",
+        "mspub.exe",
+        "powerpnt.exe",
+        "visio.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\eqnedt32.exe",
+        "*\\\\excel.exe",
+        "*\\\\msaccess.exe",
+        "*\\\\mspub.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\visio.exe",
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    }
+  ]
+}

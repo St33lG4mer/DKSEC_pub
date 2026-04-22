@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_sharp_ldap_monitor",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_sharp_ldap_monitor.eql",
+  "raw_query": "any where (process.executable:\"*\\\\SharpLDAPmonitor.exe\" or process.pe.original_file_name:\"SharpLDAPmonitor.exe\") or (process.command_line:\"*/user:*\" and process.command_line:\"*/pass:*\" and process.command_line:\"*/dcip:*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sharpldapmonitor.exe"
+      ],
+      "raw_values": [
+        "*\\\\SharpLDAPmonitor.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sharpldapmonitor.exe"
+      ],
+      "raw_values": [
+        "SharpLDAPmonitor.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "user:",
+        "pass:",
+        "dcip:"
+      ],
+      "raw_values": [
+        "*/user:*",
+        "*/pass:*",
+        "*/dcip:*"
+      ]
+    }
+  ]
+}

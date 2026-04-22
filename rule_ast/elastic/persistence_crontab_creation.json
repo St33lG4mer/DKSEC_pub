@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "Suspicious CronTab Creation or Modification",
+  "slug": "persistence_crontab_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_crontab_creation.toml",
+  "raw_query": "file where host.os.type == \"macos\" and event.type != \"deletion\" and process.name != null and\n  file.path like \"/private/var/at/tabs/*\" and not process.executable == \"/usr/bin/crontab\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "==",
+      "values": [
+        "crontab"
+      ],
+      "raw_values": [
+        "/usr/bin/crontab"
+      ]
+    }
+  ]
+}

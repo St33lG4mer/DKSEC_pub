@@ -1,0 +1,72 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_sharpmove",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_sharpmove.eql",
+  "raw_query": "any where (process.executable:\"*\\\\SharpMove.exe\" or process.pe.original_file_name:\"SharpMove.exe\") or (process.command_line:\"*computername=*\" and (process.command_line like~ (\"*action=create*\", \"*action=dcom*\", \"*action=executevbs*\", \"*action=hijackdcom*\", \"*action=modschtask*\", \"*action=modsvc*\", \"*action=query*\", \"*action=scm*\", \"*action=startservice*\", \"*action=taskscheduler*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "action=create",
+        "action=dcom",
+        "action=executevbs",
+        "action=hijackdcom",
+        "action=modschtask",
+        "action=modsvc",
+        "action=query",
+        "action=scm",
+        "action=startservice",
+        "action=taskscheduler"
+      ],
+      "raw_values": [
+        "*action=create*",
+        "*action=dcom*",
+        "*action=executevbs*",
+        "*action=hijackdcom*",
+        "*action=modschtask*",
+        "*action=modsvc*",
+        "*action=query*",
+        "*action=scm*",
+        "*action=startservice*",
+        "*action=taskscheduler*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sharpmove.exe"
+      ],
+      "raw_values": [
+        "*\\\\SharpMove.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sharpmove.exe"
+      ],
+      "raw_values": [
+        "SharpMove.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "computername="
+      ],
+      "raw_values": [
+        "*computername=*"
+      ]
+    }
+  ]
+}

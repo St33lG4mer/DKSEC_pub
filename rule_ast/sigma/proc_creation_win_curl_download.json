@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_curl_download",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_curl_download.eql",
+  "raw_query": "any where (process.executable:\"*\\\\curl.exe\" or process.pe.product:\"The curl executable\") and (process.command_line like~ (\"* -O*\", \"*--remote-name*\", \"*--output*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--remote-name",
+        "--output"
+      ],
+      "raw_values": [
+        "* -O*",
+        "*--remote-name*",
+        "*--output*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "the curl executable"
+      ],
+      "raw_values": [
+        "The curl executable"
+      ]
+    }
+  ]
+}

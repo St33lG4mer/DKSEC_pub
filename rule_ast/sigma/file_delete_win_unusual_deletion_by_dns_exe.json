@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "file_delete_win_unusual_deletion_by_dns_exe",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_delete/file_delete_win_unusual_deletion_by_dns_exe.eql",
+  "raw_query": "any where process.executable:\"*\\\\dns.exe\" and (not file.path:\"*\\\\dns.log\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dns.exe"
+      ],
+      "raw_values": [
+        "*\\\\dns.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "dns.log"
+      ],
+      "raw_values": [
+        "*\\\\dns.log"
+      ]
+    }
+  ]
+}

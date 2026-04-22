@@ -1,0 +1,103 @@
+{
+  "source": "elastic",
+  "name": "Remote Scheduled Task Creation",
+  "slug": "lateral_movement_scheduled_task_target",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/windows/lateral_movement_scheduled_task_target.toml",
+  "raw_query": "/* Task Scheduler service incoming connection followed by TaskCache registry modification  */\n\nsequence by host.id, process.entity_id with maxspan = 1m\n   [network where host.os.type == \"windows\" and process.name : \"svchost.exe\" and\n   network.direction : (\"incoming\", \"ingress\") and source.port >= 49152 and destination.port >= 49152 and\n   source.ip != \"127.0.0.1\" and source.ip != \"::1\" and source.ip != null\n   ]\n   [registry where host.os.type == \"windows\" and event.type == \"change\" and registry.value : \"Actions\" and\n    registry.path : \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tasks\\\\*\\\\Actions\"]\n",
+  "conditions": [
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": ":",
+      "values": [
+        "incoming",
+        "ingress"
+      ],
+      "raw_values": [
+        "incoming",
+        "ingress"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "svchost.exe"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1",
+        "::1"
+      ],
+      "raw_values": [
+        "127.0.0.1",
+        "::1"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "actions"
+      ],
+      "raw_values": [
+        "Actions"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tasks\\\\*\\\\actions"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tasks\\\\*\\\\Actions"
+      ]
+    }
+  ]
+}

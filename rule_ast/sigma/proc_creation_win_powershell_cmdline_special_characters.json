@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_cmdline_special_characters",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_cmdline_special_characters.eql",
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"SigmaRegularExpression(regexp=SigmaString(['\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\{']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\^.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\^.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\^.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\^.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\^']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['`.', <SpecialChars.WILDCARD_MULTI: 1>, '`.', <SpecialChars.WILDCARD_MULTI: 1>, '`.', <SpecialChars.WILDCARD_MULTI: 1>, '`.', <SpecialChars.WILDCARD_MULTI: 1>, '`']), flags=set())\"))) and (not (process.parent.executable:\"C:\\\\Program Files\\\\Amazon\\\\SSM\\\\ssm-document-worker.exe\" or (process.command_line like~ (\"*new EventSource(\\\"Microsoft.Windows.Sense.Client.Management\\\"*\", \"*public static extern bool InstallELAMCertificateInfo(SafeFileHandle handle);*\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "ssm-document-worker.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Amazon\\\\SSM\\\\ssm-document-worker.exe"
+      ]
+    }
+  ]
+}

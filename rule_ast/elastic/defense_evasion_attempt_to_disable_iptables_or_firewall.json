@@ -1,0 +1,156 @@
+{
+  "source": "elastic",
+  "name": "Attempt to Disable IPTables or Firewall",
+  "slug": "defense_evasion_attempt_to_disable_iptables_or_firewall",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_attempt_to_disable_iptables_or_firewall.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\") and\n(\n   /* disable FW */\n  (\n    (process.name == \"ufw\" and process.args == \"disable\") or\n    (process.name == \"iptables\" and process.args in (\"-F\", \"--flush\", \"-X\", \"--delete-chain\") and process.args_count == 2) or\n    (process.name in (\"iptables\", \"ip6tables\") and process.parent.args == \"force-stop\")\n  ) or\n\n   /* stop FW service */\n  (\n    (\n      (process.name == \"service\" and process.args == \"stop\") or\n      (process.name == \"chkconfig\" and process.args == \"off\") or\n      (process.name == \"update-rc.d\" and process.args in (\"remove\", \"disable\")) or\n      (process.name == \"systemctl\" and process.args in (\"disable\", \"stop\", \"kill\", \"mask\"))\n    ) and\n    process.args in (\"firewalld\", \"ip6tables\", \"iptables\", \"firewalld.service\", \"ip6tables.service\", \"iptables.service\")\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--flush",
+        "--delete-chain",
+        "remove",
+        "disable",
+        "stop",
+        "kill",
+        "mask",
+        "firewalld",
+        "ip6tables",
+        "iptables",
+        "firewalld.service",
+        "ip6tables.service",
+        "iptables.service"
+      ],
+      "raw_values": [
+        "-F",
+        "--flush",
+        "-X",
+        "--delete-chain",
+        "remove",
+        "disable",
+        "stop",
+        "kill",
+        "mask",
+        "firewalld",
+        "ip6tables",
+        "iptables",
+        "firewalld.service",
+        "ip6tables.service",
+        "iptables.service"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "iptables",
+        "ip6tables"
+      ],
+      "raw_values": [
+        "iptables",
+        "ip6tables"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "ufw",
+        "iptables",
+        "service",
+        "chkconfig",
+        "update-rc.d",
+        "systemctl"
+      ],
+      "raw_values": [
+        "ufw",
+        "iptables",
+        "service",
+        "chkconfig",
+        "update-rc.d",
+        "systemctl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "disable",
+        "stop",
+        "off"
+      ],
+      "raw_values": [
+        "disable",
+        "stop",
+        "off"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "force-stop"
+      ],
+      "raw_values": [
+        "force-stop"
+      ]
+    }
+  ]
+}

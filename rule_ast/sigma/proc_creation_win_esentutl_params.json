@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_esentutl_params",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_esentutl_params.eql",
+  "raw_query": "any where process.command_line:\"*esentutl*\" and process.command_line:\"* /p*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "esentutl"
+      ],
+      "raw_values": [
+        "*esentutl*",
+        "* /p*"
+      ]
+    }
+  ]
+}

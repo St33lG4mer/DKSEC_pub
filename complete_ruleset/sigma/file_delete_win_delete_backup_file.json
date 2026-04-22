@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "file_delete_win_delete_backup_file",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_delete/file_delete_win_delete_backup_file.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wt.exe\", \"*\\\\rundll32.exe\", \"*\\\\regsvr32.exe\")) and (file.path like~ (\"*.VHD\", \"*.bac\", \"*.bak\", \"*.wbcat\", \"*.bkf\", \"*.set\", \"*.win\", \"*.dsk\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wt.exe",
+        "rundll32.exe",
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wt.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".vhd",
+        ".bac",
+        ".bak",
+        ".wbcat",
+        ".bkf",
+        ".set",
+        ".win",
+        ".dsk"
+      ],
+      "raw_values": [
+        "*.VHD",
+        "*.bac",
+        "*.bak",
+        "*.wbcat",
+        "*.bkf",
+        "*.set",
+        "*.win",
+        "*.dsk"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_event_apt_pandemic",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2017/TA/Pandemic/registry_event_apt_pandemic.eql",
+  "raw_query": "any where registry.path:\"*\\\\SYSTEM\\\\CurrentControlSet\\\\services\\\\null\\\\Instance*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\services\\\\null\\\\instance"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\CurrentControlSet\\\\services\\\\null\\\\Instance*"
+      ]
+    }
+  ]
+}

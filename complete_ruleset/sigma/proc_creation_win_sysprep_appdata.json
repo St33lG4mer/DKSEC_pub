@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysprep_appdata",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysprep_appdata.eql",
+  "raw_query": "any where process.executable:\"*\\\\sysprep.exe\" and process.command_line:\"*\\\\AppData\\\\*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sysprep.exe"
+      ],
+      "raw_values": [
+        "*\\\\sysprep.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "registry_set_odbc_driver_registered",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_odbc_driver_registered.eql",
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\ODBC\\\\ODBCINST.INI\\\\*\" and registry.path:\"*\\\\Driver\") and (not (registry.path:\"*\\\\SQL Server\\\\*\" and winlog.event_data.Details:\"%WINDIR%\\\\System32\\\\SQLSRV32.dll\")) and (not ((registry.path:\"*\\\\Microsoft Access *\" and winlog.event_data.Details:\"C:\\\\Progra*\" and winlog.event_data.Details:\"*\\\\ACEODBC.DLL\") or (registry.path:\"*\\\\Microsoft Excel Driver*\" and winlog.event_data.Details:\"C:\\\\Progra*\" and winlog.event_data.Details:\"*\\\\ACEODBC.DLL\")))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\odbc\\\\odbcinst.ini\\\\",
+        "\\\\driver",
+        "\\\\sql server\\\\",
+        "\\\\microsoft access",
+        "\\\\microsoft excel driver"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\ODBC\\\\ODBCINST.INI\\\\*",
+        "*\\\\Driver",
+        "*\\\\SQL Server\\\\*",
+        "*\\\\Microsoft Access *",
+        "*\\\\Microsoft Excel Driver*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "%windir%\\\\system32\\\\sqlsrv32.dll",
+        "c:\\\\progra",
+        "\\\\aceodbc.dll"
+      ],
+      "raw_values": [
+        "%WINDIR%\\\\System32\\\\SQLSRV32.dll",
+        "C:\\\\Progra*",
+        "*\\\\ACEODBC.DLL"
+      ]
+    }
+  ]
+}

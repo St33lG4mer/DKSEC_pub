@@ -1,0 +1,65 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_folder_combos",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_folder_combos.eql",
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe\" or process.pe.original_file_name:\"schtasks.exe\") and process.command_line:\"* /create *\" and (process.command_line like~ (\"*powershell*\", \"*pwsh*\", \"*cmd /c *\", \"*cmd /k *\", \"*cmd /r *\", \"*cmd.exe /c *\", \"*cmd.exe /k *\", \"*cmd.exe /r *\")) and (process.command_line like~ (\"*C:\\\\ProgramData\\\\*\", \"*%ProgramData%*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "powershell",
+        "pwsh",
+        "%programdata%"
+      ],
+      "raw_values": [
+        "*powershell*",
+        "*pwsh*",
+        "*cmd /c *",
+        "*cmd /k *",
+        "*cmd /r *",
+        "*cmd.exe /c *",
+        "*cmd.exe /k *",
+        "*cmd.exe /r *",
+        "*C:\\\\ProgramData\\\\*",
+        "*%ProgramData%*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "* /create *"
+      ]
+    }
+  ]
+}

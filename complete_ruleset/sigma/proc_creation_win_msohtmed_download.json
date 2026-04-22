@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msohtmed_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msohtmed_download.eql",
+  "raw_query": "any where (process.executable:\"*\\\\MSOHTMED.exe\" or process.pe.original_file_name:\"MsoHtmEd.exe\") and (process.command_line like~ (\"*ftp://*\", \"*http://*\", \"*https://*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msohtmed.exe"
+      ],
+      "raw_values": [
+        "*\\\\MSOHTMED.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msohtmed.exe"
+      ],
+      "raw_values": [
+        "MsoHtmEd.exe"
+      ]
+    }
+  ]
+}

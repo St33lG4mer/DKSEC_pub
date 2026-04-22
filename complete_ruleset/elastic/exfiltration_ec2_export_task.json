@@ -1,0 +1,70 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Export Task",
+  "slug": "exfiltration_ec2_export_task",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Asset Visibility",
+    "Tactic: Exfiltration",
+    "Tactic: Collection",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/exfiltration_ec2_export_task.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" and \n    event.provider: \"ec2.amazonaws.com\" and \n    event.action: (\"CreateInstanceExportTask\" or \"ExportImage\" or \"CreateStoreImageTask\") and \n    event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "createinstanceexporttask",
+        "exportimage",
+        "createstoreimagetask"
+      ],
+      "raw_values": [
+        "CreateInstanceExportTask",
+        "ExportImage",
+        "CreateStoreImageTask"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_susp_shellexec_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_susp_shellexec_execution.eql",
+  "raw_query": "any where process.command_line:\"*ShellExec_RunDLL*\" and (process.command_line like~ (\"*\\\\Desktop\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*comspec*\", \"*iex*\", \"*Invoke-*\", \"*msiexec*\", \"*odbcconf*\", \"*regsvr32*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "comspec",
+        "iex",
+        "invoke-",
+        "msiexec",
+        "odbcconf",
+        "regsvr32"
+      ],
+      "raw_values": [
+        "*\\\\Desktop\\\\*",
+        "*\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*comspec*",
+        "*iex*",
+        "*Invoke-*",
+        "*msiexec*",
+        "*odbcconf*",
+        "*regsvr32*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shellexec_rundll"
+      ],
+      "raw_values": [
+        "*ShellExec_RunDLL*"
+      ]
+    }
+  ]
+}

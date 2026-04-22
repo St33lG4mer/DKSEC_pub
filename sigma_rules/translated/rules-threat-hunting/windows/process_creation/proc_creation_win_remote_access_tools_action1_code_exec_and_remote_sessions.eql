@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\action1_agent.exe" and process.executable:"*\\Windows\\Action1\\package_downloads\\*") or ((process.parent.executable like~ ("*\\cmd.exe", "*\\powershell.exe")) and (process.parent.command_line like~ ("*\\Action1\\scripts\\Run_Command_*", "*\\Action1\\scripts\\Run_PowerShell_*"))) or process.executable:"*\\agent1_remote.exe"

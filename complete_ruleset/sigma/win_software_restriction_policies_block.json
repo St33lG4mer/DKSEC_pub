@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "win_software_restriction_policies_block",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/application/microsoft_windows_software_restriction_policies/win_software_restriction_policies_block.eql",
+  "raw_query": "any where winlog.channel:\"Application\" and (winlog.provider_name:\"Microsoft-Windows-SoftwareRestrictionPolicies\" and (event.code like~ (\"865\", \"866\", \"867\", \"868\", \"882\")))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "865",
+        "866",
+        "867",
+        "868",
+        "882"
+      ],
+      "raw_values": [
+        "865",
+        "866",
+        "867",
+        "868",
+        "882"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "application"
+      ],
+      "raw_values": [
+        "Application"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-softwarerestrictionpolicies"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-SoftwareRestrictionPolicies"
+      ]
+    }
+  ]
+}

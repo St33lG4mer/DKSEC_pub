@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "registry_set_office_outlook_security_settings",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_office_outlook_security_settings.eql",
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\" and registry.path:\"*\\\\Outlook\\\\Security\\\\*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\office\\\\",
+        "\\\\outlook\\\\security\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Outlook\\\\Security\\\\*"
+      ]
+    }
+  ]
+}

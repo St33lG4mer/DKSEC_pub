@@ -1,0 +1,27 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_exfil_and_tunneling_tool_execution",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_exfil_and_tunneling_tool_execution.eql",
+  "raw_query": "any where process.executable like~ (\"*\\\\httptunnel.exe\", \"*\\\\plink.exe\", \"*\\\\socat.exe\", \"*\\\\stunnel.exe\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "httptunnel.exe",
+        "plink.exe",
+        "socat.exe",
+        "stunnel.exe"
+      ],
+      "raw_values": [
+        "*\\\\httptunnel.exe",
+        "*\\\\plink.exe",
+        "*\\\\socat.exe",
+        "*\\\\stunnel.exe"
+      ]
+    }
+  ]
+}

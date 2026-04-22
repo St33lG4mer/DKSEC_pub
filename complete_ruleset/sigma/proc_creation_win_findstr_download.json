@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_findstr_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_findstr_download.eql",
+  "raw_query": "any where (process.command_line:\"*findstr*\" or process.executable:\"*findstr.exe\" or process.pe.original_file_name:\"FINDSTR.EXE\") and (process.command_line like~ (\"* -v *\", \"* /v *\", \"* \u2013v *\", \"* \u2014v *\", \"* \u2015v *\") and process.command_line like~ (\"* -l *\", \"* /l *\", \"* \u2013l *\", \"* \u2014l *\", \"* \u2015l *\") and process.command_line:\"*\\\\\\\\*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "findstr"
+      ],
+      "raw_values": [
+        "*findstr*",
+        "*\\\\\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "*findstr.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "FINDSTR.EXE"
+      ]
+    }
+  ]
+}

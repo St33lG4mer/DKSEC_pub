@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_icmluautil",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_icmluautil.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\dllhost.exe\" and (process.parent.command_line like~ (\"*/Processid:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}*\", \"*/Processid:{D2E7041B-2927-42FB-8E9F-7CE93B6DC937}*\"))) and (not (process.executable:\"*\\\\WerFault.exe\" or process.pe.original_file_name:\"WerFault.exe\"))",
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "processid:{3e5fc7f9-9a51-4367-9063-a120244fbec7}",
+        "processid:{d2e7041b-2927-42fb-8e9f-7ce93b6dc937}"
+      ],
+      "raw_values": [
+        "*/Processid:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}*",
+        "*/Processid:{D2E7041B-2927-42FB-8E9F-7CE93B6DC937}*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\dllhost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*\\\\WerFault.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "WerFault.exe"
+      ]
+    }
+  ]
+}

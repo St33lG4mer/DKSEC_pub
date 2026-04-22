@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "win_system_kdcsvc_tgs_no_suitable_encryption_key_found",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/microsoft_windows_kerberos_key_distribution_center/win_system_kdcsvc_tgs_no_suitable_encryption_key_found.eql",
+  "raw_query": "any where winlog.channel:\"System\" and ((winlog.provider_name like~ (\"Kerberos-Key-Distribution-Center\", \"Microsoft-Windows-Kerberos-Key-Distribution-Center\")) and (event.code like~ (\"16\", \"27\")))",
+  "conditions": [
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": "like~",
+      "values": [
+        "kerberos-key-distribution-center",
+        "microsoft-windows-kerberos-key-distribution-center"
+      ],
+      "raw_values": [
+        "Kerberos-Key-Distribution-Center",
+        "Microsoft-Windows-Kerberos-Key-Distribution-Center"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    }
+  ]
+}

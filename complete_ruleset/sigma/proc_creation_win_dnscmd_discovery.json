@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_dnscmd_discovery",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_dnscmd_discovery.eql",
+  "raw_query": "any where process.executable:\"*\\\\dnscmd.exe\" and (process.command_line like~ (\"*/enumrecords*\", \"*/enumzones*\", \"*/ZonePrint*\", \"*/info*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "enumrecords",
+        "enumzones",
+        "zoneprint",
+        "info"
+      ],
+      "raw_values": [
+        "*/enumrecords*",
+        "*/enumzones*",
+        "*/ZonePrint*",
+        "*/info*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dnscmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\dnscmd.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_cl_invocation",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_cl_invocation.eql",
+  "raw_query": "any where process.command_line:\"*SyncInvoke *\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "syncinvoke"
+      ],
+      "raw_values": [
+        "*SyncInvoke *"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "source": "sigma",
+  "name": "registry_set_vbs_payload_stored",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_vbs_payload_stored.eql",
+  "raw_query": "any where (registry.path:\"*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion*\" and (winlog.event_data.Details like~ (\"*vbscript:*\", \"*jscript:*\", \"*mshtml,*\", \"*RunHTMLApplication*\", \"*Execute(*\", \"*CreateObject*\", \"*window.close*\"))) and (not (registry.path:\"*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\" or (process.executable:\"*\\\\msiexec.exe\" and registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Installer\\\\UserData\\\\*\" and (winlog.event_data.Details like~ (\"*\\\\Microsoft.NET\\\\Primary Interop Assemblies\\\\Microsoft.mshtml.dll*\", \"*<\\\\Microsoft.mshtml,fileVersion=*\", \"*_mshtml_dll_*\", \"*<\\\\Microsoft.mshtml,culture=*\")))))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "vbscript:",
+        "jscript:",
+        "mshtml,",
+        "runhtmlapplication",
+        "execute(",
+        "createobject",
+        "window.close",
+        "\\\\microsoft.net\\\\primary interop assemblies\\\\microsoft.mshtml.dll",
+        "<\\\\microsoft.mshtml,fileversion=",
+        "_mshtml_dll_",
+        "<\\\\microsoft.mshtml,culture="
+      ],
+      "raw_values": [
+        "*vbscript:*",
+        "*jscript:*",
+        "*mshtml,*",
+        "*RunHTMLApplication*",
+        "*Execute(*",
+        "*CreateObject*",
+        "*window.close*",
+        "*\\\\Microsoft.NET\\\\Primary Interop Assemblies\\\\Microsoft.mshtml.dll*",
+        "*<\\\\Microsoft.mshtml,fileVersion=*",
+        "*_mshtml_dll_*",
+        "*<\\\\Microsoft.mshtml,culture=*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\run",
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\installer\\\\userdata\\\\"
+      ],
+      "raw_values": [
+        "*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion*",
+        "*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Installer\\\\UserData\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    }
+  ]
+}

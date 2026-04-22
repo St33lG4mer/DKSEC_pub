@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_regsvr32_flags_anomaly",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_regsvr32_flags_anomaly.eql",
+  "raw_query": "any where (process.executable:\"*\\\\regsvr32.exe\" and process.command_line like~ (\"* -i:*\", \"* /i:*\", \"* \u2013i:*\", \"* \u2014i:*\", \"* \u2015i:*\")) and (not process.command_line like~ (\"* -n *\", \"* /n *\", \"* \u2013n *\", \"* \u2014n *\", \"* \u2015n *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-i:",
+        "\u2013i:",
+        "\u2014i:",
+        "\u2015i:"
+      ],
+      "raw_values": [
+        "* -i:*",
+        "* /i:*",
+        "* \u2013i:*",
+        "* \u2014i:*",
+        "* \u2015i:*",
+        "* -n *",
+        "* /n *",
+        "* \u2013n *",
+        "* \u2014n *",
+        "* \u2015n *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    }
+  ]
+}

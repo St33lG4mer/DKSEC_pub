@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "GCP Pub/Sub Subscription Deletion",
+  "slug": "defense_evasion_gcp_pub_sub_subscription_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: GCP",
+    "Data Source: Google Cloud Platform",
+    "Use Case: Log Auditing",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/gcp/defense_evasion_gcp_pub_sub_subscription_deletion.toml",
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.pubsub.v*.Subscriber.DeleteSubscription and event.outcome:success\n",
+  "conditions": []
+}

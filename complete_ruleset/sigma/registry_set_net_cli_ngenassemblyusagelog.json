@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_set_net_cli_ngenassemblyusagelog",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_net_cli_ngenassemblyusagelog.eql",
+  "raw_query": "any where registry.path:\"*SOFTWARE\\\\Microsoft\\\\.NETFramework\\\\NGenAssemblyUsageLog\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\microsoft\\\\.netframework\\\\ngenassemblyusagelog"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\.NETFramework\\\\NGenAssemblyUsageLog"
+      ]
+    }
+  ]
+}

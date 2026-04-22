@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_remote_access_tools_screenconnect_remote_file",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_remote_access_tools_screenconnect_remote_file.eql",
+  "raw_query": "any where process.executable:\"*\\\\ScreenConnect.WindowsClient.exe\" and file.path:\"*\\\\Documents\\\\ConnectWiseControl\\\\Temp\\\\*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "screenconnect.windowsclient.exe"
+      ],
+      "raw_values": [
+        "*\\\\ScreenConnect.WindowsClient.exe"
+      ]
+    }
+  ]
+}

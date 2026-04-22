@@ -1,0 +1,35 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_powershell_startup_shortcuts",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_powershell_startup_shortcuts.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and file.path:\"*\\\\start menu\\\\programs\\\\startup\\\\*\" and file.path:\"*.lnk\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".lnk"
+      ],
+      "raw_values": [
+        "*\\\\start menu\\\\programs\\\\startup\\\\*",
+        "*.lnk"
+      ]
+    }
+  ]
+}

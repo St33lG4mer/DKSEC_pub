@@ -1,0 +1,67 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wscript_cscript_uncommon_extension_exec",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wscript_cscript_uncommon_extension_exec.eql",
+  "raw_query": "any where ((process.pe.original_file_name like~ (\"wscript.exe\", \"cscript.exe\")) or (process.executable like~ (\"*\\\\wscript.exe\", \"*\\\\cscript.exe\"))) and (process.command_line like~ (\"*.csv*\", \"*.dat*\", \"*.doc*\", \"*.gif*\", \"*.jpeg*\", \"*.jpg*\", \"*.png*\", \"*.ppt*\", \"*.txt*\", \"*.xls*\", \"*.xml*\"))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "wscript.exe",
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "wscript.exe",
+        "cscript.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wscript.exe",
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".csv",
+        ".dat",
+        ".doc",
+        ".gif",
+        ".jpeg",
+        ".jpg",
+        ".png",
+        ".ppt",
+        ".txt",
+        ".xls",
+        ".xml"
+      ],
+      "raw_values": [
+        "*.csv*",
+        "*.dat*",
+        "*.doc*",
+        "*.gif*",
+        "*.jpeg*",
+        "*.jpg*",
+        "*.png*",
+        "*.ppt*",
+        "*.txt*",
+        "*.xls*",
+        "*.xml*"
+      ]
+    }
+  ]
+}

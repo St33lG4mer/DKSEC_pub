@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_jsschhlp",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_jsschhlp.eql",
+  "raw_query": "any where file.path:\"*\\\\JSESPR.dll\" and (not file.path:\"C:\\\\Program Files\\\\Common Files\\\\Justsystem\\\\JsSchHlp\\\\*\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "jsespr.dll"
+      ],
+      "raw_values": [
+        "*\\\\JSESPR.dll",
+        "C:\\\\Program Files\\\\Common Files\\\\Justsystem\\\\JsSchHlp\\\\*"
+      ]
+    }
+  ]
+}

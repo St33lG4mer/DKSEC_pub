@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "win_defender_asr_psexec_wmi",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/windefend/win_defender_asr_psexec_wmi.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Defender/Operational\" and (event.code:\"1121\" and (process.executable like~ (\"*\\\\wmiprvse.exe\", \"*\\\\psexesvc.exe\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wmiprvse.exe",
+        "psexesvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\wmiprvse.exe",
+        "*\\\\psexesvc.exe"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows defender/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Defender/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "1121"
+      ],
+      "raw_values": [
+        "1121"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_remote_desktop_tunneling",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_remote_desktop_tunneling.eql",
+  "raw_query": "any where process.command_line:\"*:3389*\" and (process.command_line like~ (\"* -L *\", \"* -P *\", \"* -R *\", \"* -pw *\", \"* -ssh *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-pw",
+        "-ssh"
+      ],
+      "raw_values": [
+        "* -L *",
+        "* -P *",
+        "* -R *",
+        "* -pw *",
+        "* -ssh *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ":3389"
+      ],
+      "raw_values": [
+        "*:3389*"
+      ]
+    }
+  ]
+}

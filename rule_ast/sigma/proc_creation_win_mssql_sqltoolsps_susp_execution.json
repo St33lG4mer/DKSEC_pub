@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mssql_sqltoolsps_susp_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mssql_sqltoolsps_susp_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\sqltoolsps.exe\" or process.parent.executable:\"*\\\\sqltoolsps.exe\" or process.pe.original_file_name:\"\\\\sqltoolsps.exe\") and (not process.parent.executable:\"*\\\\smss.exe\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqltoolsps.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqltoolsps.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sqltoolsps.exe",
+        "smss.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqltoolsps.exe",
+        "*\\\\smss.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\sqltoolsps.exe"
+      ],
+      "raw_values": [
+        "\\\\sqltoolsps.exe"
+      ]
+    }
+  ]
+}

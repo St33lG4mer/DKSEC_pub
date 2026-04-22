@@ -1,0 +1,64 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Serial Console Access Enabled",
+  "slug": "defense_evasion_ec2_serial_console_access_enabled",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/defense_evasion_ec2_serial_console_access_enabled.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ec2.amazonaws.com\"\n    and event.action: \"EnableSerialConsoleAccess\"\n    and event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "enableserialconsoleaccess"
+      ],
+      "raw_values": [
+        "EnableSerialConsoleAccess"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

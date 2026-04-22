@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_dfsvc_child_processes",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_dfsvc_child_processes.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\dfsvc.exe\" and process.executable:\"*\\\\AppData\\\\Local\\\\Apps\\\\2.0\\\\\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dfsvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\dfsvc.exe"
+      ]
+    }
+  ]
+}

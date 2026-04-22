@@ -1,0 +1,79 @@
+{
+  "source": "elastic",
+  "name": "System File Ownership Change",
+  "slug": "defense_evasion_modify_ownership_os_files",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Persistence",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_modify_ownership_os_files.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (\n   (process.name : \"icacls.exe\" and process.args : \"/reset\") or\n   (process.name : \"takeown.exe\" and process.args : \"/f\") or\n   (process.name : \"icacls.exe\" and process.args : \"/grant\" and process.args : \"Everyone:F\")\n   ) and\n   process.command_line : \"*.exe *C:\\\\Windows\\\\*\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "icacls.exe",
+        "takeown.exe"
+      ],
+      "raw_values": [
+        "icacls.exe",
+        "takeown.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "reset",
+        "grant",
+        "everyone:f"
+      ],
+      "raw_values": [
+        "/reset",
+        "/f",
+        "/grant",
+        "Everyone:F",
+        "*.exe *C:\\\\Windows\\\\*"
+      ]
+    }
+  ]
+}

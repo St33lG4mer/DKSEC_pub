@@ -1,0 +1,16 @@
+{
+  "source": "elastic",
+  "name": "Multiple Alerts in Different ATT&CK Tactics on a Single Host",
+  "slug": "multiple_alerts_different_tactics_host",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/multiple_alerts_different_tactics_host.toml",
+  "raw_query": "signal.rule.name:* and kibana.alert.rule.threat.tactic.id:*\n",
+  "conditions": []
+}

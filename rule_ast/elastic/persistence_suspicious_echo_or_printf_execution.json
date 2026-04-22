@@ -1,0 +1,152 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Echo or Printf Execution Detected via Defend for Containers",
+  "slug": "persistence_suspicious_echo_or_printf_execution",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Execution",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/persistence_suspicious_echo_or_printf_execution.toml",
+  "raw_query": "process where event.type == \"start\" and event.action == \"exec\" and process.interactive == true and\nprocess.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and\nprocess.args in (\"-lc\", \"-c\", \"-cl\") and process.args like (\"*echo *\", \"*printf *\") and\nprocess.args like (\n  \"*/etc/cron*\", \"*/etc/rc.local*\", \"*/dev/tcp/*\", \"*/etc/init.d*\", \"*/etc/update-motd.d*\",\n  \"*/etc/ld.so*\", \"*/etc/sudoers*\", \"*base64 *\", \"*base32 *\", \"*base16 *\", \"*/etc/profile*\",\n  \"*/dev/shm/*\", \"*/etc/ssh*\", \"*/home/*/.ssh/*\", \"*/root/.ssh*\" , \"*~/.ssh/*\", \"*xxd *\",\n  \"*/etc/shadow*\", \"* /tmp/*\", \"* /var/tmp/*\", \"* /dev/shm/* \", \"* ~/*\", \"* /home/*\",\n  \"* /run/*\", \"* /var/run/*\", \"*|*sh\", \"*|*python*\", \"*|*php*\", \"*|*perl*\", \"*|*busybox*\",\n  \"*/var/www/*\", \"*>*\", \"*;*\", \"*chmod *\", \"*rm *\", \"*openssl enc*\"\n) and container.id like \"?*\"\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "echo",
+        "printf",
+        "cron",
+        "rc.local",
+        "init.d",
+        "update-motd.d",
+        "ld.so",
+        "sudoers",
+        "base64",
+        "base32",
+        "base16",
+        "profile",
+        "ssh",
+        ".ssh",
+        "xxd",
+        "shadow",
+        "|*sh",
+        "|*python",
+        "|*php",
+        "|*perl",
+        "|*busybox",
+        "chmod",
+        "openssl enc"
+      ],
+      "raw_values": [
+        "*echo *",
+        "*printf *",
+        "*/etc/cron*",
+        "*/etc/rc.local*",
+        "*/dev/tcp/*",
+        "*/etc/init.d*",
+        "*/etc/update-motd.d*",
+        "*/etc/ld.so*",
+        "*/etc/sudoers*",
+        "*base64 *",
+        "*base32 *",
+        "*base16 *",
+        "*/etc/profile*",
+        "*/dev/shm/*",
+        "*/etc/ssh*",
+        "*/home/*/.ssh/*",
+        "*/root/.ssh*",
+        "*~/.ssh/*",
+        "*xxd *",
+        "*/etc/shadow*",
+        "* /tmp/*",
+        "* /var/tmp/*",
+        "* /dev/shm/* ",
+        "* ~/*",
+        "* /home/*",
+        "* /run/*",
+        "* /var/run/*",
+        "*|*sh",
+        "*|*python*",
+        "*|*php*",
+        "*|*perl*",
+        "*|*busybox*",
+        "*/var/www/*",
+        "*>*",
+        "*;*",
+        "*chmod *",
+        "*rm *",
+        "*openssl enc*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "-lc",
+        "-cl"
+      ],
+      "raw_values": [
+        "-lc",
+        "-c",
+        "-cl"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ]
+}

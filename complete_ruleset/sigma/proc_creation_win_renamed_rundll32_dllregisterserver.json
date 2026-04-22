@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_rundll32_dllregisterserver",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_rundll32_dllregisterserver.eql",
+  "raw_query": "any where process.command_line:\"*DllRegisterServer*\" and (not process.executable:\"*\\\\rundll32.exe\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dllregisterserver"
+      ],
+      "raw_values": [
+        "*DllRegisterServer*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ]
+}

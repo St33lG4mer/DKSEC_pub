@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sdbinst_susp_extension",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sdbinst_susp_extension.eql",
+  "raw_query": "any where (process.executable:\"*\\\\sdbinst.exe\" or process.pe.original_file_name:\"sdbinst.exe\") and (not (process.command_line:\"*.sdb*\" or ((process.command_line like~ (\"* -c\", \"* -f\", \"* -mm\", \"* -t\")) or process.command_line:\"* -m -bg*\") or (?process.command_line == null) or process.command_line==\"\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-mm"
+      ],
+      "raw_values": [
+        "* -c",
+        "* -f",
+        "* -mm",
+        "* -t"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sdbinst.exe"
+      ],
+      "raw_values": [
+        "*\\\\sdbinst.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sdbinst.exe"
+      ],
+      "raw_values": [
+        "sdbinst.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".sdb",
+        "-m -bg"
+      ],
+      "raw_values": [
+        "*.sdb*",
+        "* -m -bg*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_set_disable_windows_firewall",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_disable_windows_firewall.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\WindowsFirewall\\\\StandardProfile\\\\EnableFirewall\", \"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\WindowsFirewall\\\\DomainProfile\\\\EnableFirewall\")) and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\policies\\\\microsoft\\\\windowsfirewall\\\\standardprofile\\\\enablefirewall",
+        "\\\\software\\\\policies\\\\microsoft\\\\windowsfirewall\\\\domainprofile\\\\enablefirewall"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\WindowsFirewall\\\\StandardProfile\\\\EnableFirewall",
+        "*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\WindowsFirewall\\\\DomainProfile\\\\EnableFirewall"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ]
+}

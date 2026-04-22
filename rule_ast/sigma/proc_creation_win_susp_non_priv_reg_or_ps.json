@@ -1,0 +1,62 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_non_priv_reg_or_ps",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_non_priv_reg_or_ps.eql",
+  "raw_query": "any where ((process.command_line:\"*reg *\" and process.command_line:\"*add*\") or (process.command_line like~ (\"*powershell*\", \"*set-itemproperty*\", \"* sp *\", \"*new-itemproperty*\"))) and ((winlog.event_data.IntegrityLevel like~ (\"Medium\", \"S-1-16-8192\")) and (process.command_line:\"*ControlSet*\" and process.command_line:\"*Services*\") and (process.command_line like~ (\"*ImagePath*\", \"*FailureCommand*\", \"*ServiceDLL*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "powershell",
+        "set-itemproperty",
+        "new-itemproperty",
+        "imagepath",
+        "failurecommand",
+        "servicedll"
+      ],
+      "raw_values": [
+        "*powershell*",
+        "*set-itemproperty*",
+        "* sp *",
+        "*new-itemproperty*",
+        "*ImagePath*",
+        "*FailureCommand*",
+        "*ServiceDLL*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "medium",
+        "s-1-16-8192"
+      ],
+      "raw_values": [
+        "Medium",
+        "S-1-16-8192"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "reg",
+        "add",
+        "controlset",
+        "services"
+      ],
+      "raw_values": [
+        "*reg *",
+        "*add*",
+        "*ControlSet*",
+        "*Services*"
+      ]
+    }
+  ]
+}

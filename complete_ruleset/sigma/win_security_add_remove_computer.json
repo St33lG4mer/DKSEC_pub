@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "win_security_add_remove_computer",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_add_remove_computer.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code like~ (\"4741\", \"4743\"))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4741",
+        "4743"
+      ],
+      "raw_values": [
+        "4741",
+        "4743"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ]
+}

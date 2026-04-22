@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_perl_inline_command_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_perl_inline_command_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\perl.exe\" or process.pe.original_file_name:\"perl.exe\") and process.command_line:\"* -e*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "perl.exe"
+      ],
+      "raw_values": [
+        "*\\\\perl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "perl.exe"
+      ],
+      "raw_values": [
+        "perl.exe"
+      ]
+    }
+  ]
+}

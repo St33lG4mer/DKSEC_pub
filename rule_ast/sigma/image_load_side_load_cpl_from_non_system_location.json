@@ -1,0 +1,29 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_cpl_from_non_system_location",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_cpl_from_non_system_location.eql",
+  "raw_query": "any where (file.path like~ (\"*\\\\appwiz.cpl\", \"*\\\\bthprops.cpl\", \"*\\\\hdwwiz.cpl\")) and (not (file.path like~ (\"C:\\\\Windows\\\\Prefetch\\\\*\", \"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "appwiz.cpl",
+        "bthprops.cpl",
+        "hdwwiz.cpl"
+      ],
+      "raw_values": [
+        "*\\\\appwiz.cpl",
+        "*\\\\bthprops.cpl",
+        "*\\\\hdwwiz.cpl",
+        "C:\\\\Windows\\\\Prefetch\\\\*",
+        "C:\\\\Windows\\\\System32\\\\*",
+        "C:\\\\Windows\\\\SysWOW64\\\\*",
+        "C:\\\\Windows\\\\WinSxS\\\\*"
+      ]
+    }
+  ]
+}

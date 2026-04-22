@@ -1,0 +1,27 @@
+{
+  "source": "elastic",
+  "name": "Web Application Suspicious Activity: sqlmap User Agent",
+  "slug": "apm_sqlmap_user_agent",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: APM",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/apm/apm_sqlmap_user_agent.toml",
+  "raw_query": "user_agent.original:\"sqlmap/1.3.11#stable (http://sqlmap.org)\"\n",
+  "conditions": [
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": ":",
+      "values": [
+        "sqlmap/1.3.11#stable (http://sqlmap.org)"
+      ],
+      "raw_values": [
+        "sqlmap/1.3.11#stable (http://sqlmap.org)"
+      ]
+    }
+  ]
+}

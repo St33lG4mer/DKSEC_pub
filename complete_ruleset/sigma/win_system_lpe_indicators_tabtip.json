@@ -1,0 +1,76 @@
+{
+  "source": "sigma",
+  "name": "win_system_lpe_indicators_tabtip",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/microsoft_windows_distributed_com/win_system_lpe_indicators_tabtip.eql",
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Microsoft-Windows-DistributedCOM\" and event.code:\"10001\" and winlog.event_data.param1:\"C:\\\\Program Files\\\\Common Files\\\\microsoft shared\\\\ink\\\\TabTip.exe\" and winlog.event_data.param2:\"2147943140\" and winlog.event_data.param3:\"{054AAE20-4BEA-4347-8A35-64A533254A9D}\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-distributedcom"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-DistributedCOM"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "10001"
+      ],
+      "raw_values": [
+        "10001"
+      ]
+    },
+    {
+      "field": "winlog.event_data.param1",
+      "raw_field": "winlog.event_data.param1",
+      "operator": ":",
+      "values": [
+        "c:\\\\program files\\\\common files\\\\microsoft shared\\\\ink\\\\tabtip.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Common Files\\\\microsoft shared\\\\ink\\\\TabTip.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.param2",
+      "raw_field": "winlog.event_data.param2",
+      "operator": ":",
+      "values": [
+        "2147943140"
+      ],
+      "raw_values": [
+        "2147943140"
+      ]
+    },
+    {
+      "field": "winlog.event_data.param3",
+      "raw_field": "winlog.event_data.param3",
+      "operator": ":",
+      "values": [
+        "{054aae20-4bea-4347-8a35-64a533254a9d}"
+      ],
+      "raw_values": [
+        "{054AAE20-4BEA-4347-8A35-64A533254A9D}"
+      ]
+    }
+  ]
+}

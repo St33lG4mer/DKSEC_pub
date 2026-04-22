@@ -1,0 +1,24 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_mailboxexport_share",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_mailboxexport_share.eql",
+  "raw_query": "any where process.command_line:\"*New-MailboxExportRequest*\" and process.command_line:\"* -Mailbox *\" and process.command_line:\"* -FilePath \\\\\\\\*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "new-mailboxexportrequest",
+        "-mailbox"
+      ],
+      "raw_values": [
+        "*New-MailboxExportRequest*",
+        "* -Mailbox *",
+        "* -FilePath \\\\\\\\*"
+      ]
+    }
+  ]
+}

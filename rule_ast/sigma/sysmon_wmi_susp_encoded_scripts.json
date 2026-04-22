@@ -1,0 +1,37 @@
+{
+  "source": "sigma",
+  "name": "sysmon_wmi_susp_encoded_scripts",
+  "subtree": "rules",
+  "category": "wmi",
+  "sigma_path": "rules/windows/wmi_event/sysmon_wmi_susp_encoded_scripts.eql",
+  "raw_query": "any where process.executable like~ (\"*V3JpdGVQcm9jZXNzTWVtb3J5*\", \"*dyaXRlUHJvY2Vzc01lbW9ye*\", \"*Xcml0ZVByb2Nlc3NNZW1vcn*\") or process.executable like~ (\"*VGhpcyBwcm9ncmFtIGNhbm5vdCBiZSBydW4gaW4gRE9TIG1vZG*\", \"*RoaXMgcHJvZ3JhbSBjYW5ub3QgYmUgcnVuIGluIERPUyBtb2Rl*\", \"*UaGlzIHByb2dyYW0gY2Fubm90IGJlIHJ1biBpbiBET1MgbW9kZ*\") or process.executable like~ (\"*VGhpcyBwcm9ncmFtIG11c3QgYmUgcnVuIHVuZGVyIFdpbjMy*\", \"*RoaXMgcHJvZ3JhbSBtdXN0IGJlIHJ1biB1bmRlciBXaW4zM*\", \"*UaGlzIHByb2dyYW0gbXVzdCBiZSBydW4gdW5kZXIgV2luMz*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "v3jpdgvqcm9jzxnztwvtb3j5",
+        "dyaxrluhjvy2vzc01lbw9ye",
+        "xcml0zvbyb2nlc3nnzw1vcn",
+        "vghpcybwcm9ncmftignhbm5vdcbizsbydw4gaw4gre9tig1vzg",
+        "roaxmgchjvz3jhbsbjyw5ub3qgymugcnvuigluierpuybtb2rl",
+        "uaglzihbyb2dyyw0gy2fubm90igjlihj1bibpbibet1mgbw9kz",
+        "vghpcybwcm9ncmftig11c3qgymugcnvuihvuzgvyifdpbjmy",
+        "roaxmgchjvz3jhbsbtdxn0igjlihj1bib1bmrlcibxaw4zm",
+        "uaglzihbyb2dyyw0gbxvzdcbizsbydw4gdw5kzxigv2lumz"
+      ],
+      "raw_values": [
+        "*V3JpdGVQcm9jZXNzTWVtb3J5*",
+        "*dyaXRlUHJvY2Vzc01lbW9ye*",
+        "*Xcml0ZVByb2Nlc3NNZW1vcn*",
+        "*VGhpcyBwcm9ncmFtIGNhbm5vdCBiZSBydW4gaW4gRE9TIG1vZG*",
+        "*RoaXMgcHJvZ3JhbSBjYW5ub3QgYmUgcnVuIGluIERPUyBtb2Rl*",
+        "*UaGlzIHByb2dyYW0gY2Fubm90IGJlIHJ1biBpbiBET1MgbW9kZ*",
+        "*VGhpcyBwcm9ncmFtIG11c3QgYmUgcnVuIHVuZGVyIFdpbjMy*",
+        "*RoaXMgcHJvZ3JhbSBtdXN0IGJlIHJ1biB1bmRlciBXaW4zM*",
+        "*UaGlzIHByb2dyYW0gbXVzdCBiZSBydW4gdW5kZXIgV2luMz*"
+      ]
+    }
+  ]
+}

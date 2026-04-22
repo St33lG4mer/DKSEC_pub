@@ -1,0 +1,28 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_werfault_dll_hijacking",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_werfault_dll_hijacking.eql",
+  "raw_query": "any where (file.path like~ (\"*\\\\WerFault.exe\", \"*\\\\wer.dll\")) and (not (file.path like~ (\"C:\\\\Windows\\\\SoftwareDistribution\\\\*\", \"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\", \"C:\\\\Windows\\\\UUS\\\\arm64\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "werfault.exe",
+        "wer.dll"
+      ],
+      "raw_values": [
+        "*\\\\WerFault.exe",
+        "*\\\\wer.dll",
+        "C:\\\\Windows\\\\SoftwareDistribution\\\\*",
+        "C:\\\\Windows\\\\System32\\\\*",
+        "C:\\\\Windows\\\\SysWOW64\\\\*",
+        "C:\\\\Windows\\\\WinSxS\\\\*",
+        "C:\\\\Windows\\\\UUS\\\\arm64\\\\*"
+      ]
+    }
+  ]
+}

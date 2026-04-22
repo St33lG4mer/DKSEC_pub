@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_etw_modification_cmdline",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_etw_modification_cmdline.eql",
+  "raw_query": "any where process.command_line like~ (\"*COMPlus_ETWEnabled*\", \"*COMPlus_ETWFlags*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "complus_etwenabled",
+        "complus_etwflags"
+      ],
+      "raw_values": [
+        "*COMPlus_ETWEnabled*",
+        "*COMPlus_ETWFlags*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "source": "sigma",
+  "name": "create_remote_thread_win_susp_uncommon_target_image",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/create_remote_thread/create_remote_thread_win_susp_uncommon_target_image.eql",
+  "raw_query": "any where (winlog.event_data.TargetImage like~ (\"*\\\\calc.exe\", \"*\\\\calculator.exe\", \"*\\\\mspaint.exe\", \"*\\\\notepad.exe\", \"*\\\\ping.exe\", \"*\\\\sethc.exe\", \"*\\\\spoolsv.exe\", \"*\\\\wordpad.exe\", \"*\\\\write.exe\")) and (not (process.executable:\"C:\\\\Windows\\\\System32\\\\csrss.exe\" or ((process.executable like~ (\"C:\\\\Windows\\\\System32\\\\explorer.exe\", \"C:\\\\Windows\\\\System32\\\\OpenWith.exe\")) and winlog.event_data.TargetImage:\"C:\\\\Windows\\\\System32\\\\notepad.exe\") or (process.executable:\"C:\\\\Windows\\\\System32\\\\AtBroker.exe\" and winlog.event_data.TargetImage:\"C:\\\\Windows\\\\System32\\\\Sethc.exe\"))) and (not (winlog.event_data.StartFunction:\"EtwpNotificationThread\" or process.executable:\"*unknown process*\" or (process.executable:\"C:\\\\Program Files\\\\VMware\\\\VMware Tools\\\\vmtoolsd.exe\" and winlog.event_data.StartFunction:\"GetCommandLineW\" and (winlog.event_data.TargetImage like~ (\"C:\\\\Windows\\\\System32\\\\notepad.exe\", \"C:\\\\Windows\\\\System32\\\\spoolsv.exe\"))) or (process.executable:\"C:\\\\Program Files\\\\Xerox\\\\XeroxPrintExperience\\\\CommonFiles\\\\XeroxPrintJobEventManagerService.exe\" and winlog.event_data.StartFunction:\"LoadLibraryW\" and winlog.event_data.TargetImage:\"C:\\\\Windows\\\\System32\\\\spoolsv.exe\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": "like~",
+      "values": [
+        "\\\\calc.exe",
+        "\\\\calculator.exe",
+        "\\\\mspaint.exe",
+        "\\\\notepad.exe",
+        "\\\\ping.exe",
+        "\\\\sethc.exe",
+        "\\\\spoolsv.exe",
+        "\\\\wordpad.exe",
+        "\\\\write.exe",
+        "c:\\\\windows\\\\system32\\\\notepad.exe",
+        "c:\\\\windows\\\\system32\\\\spoolsv.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe",
+        "*\\\\calculator.exe",
+        "*\\\\mspaint.exe",
+        "*\\\\notepad.exe",
+        "*\\\\ping.exe",
+        "*\\\\sethc.exe",
+        "*\\\\spoolsv.exe",
+        "*\\\\wordpad.exe",
+        "*\\\\write.exe",
+        "C:\\\\Windows\\\\System32\\\\notepad.exe",
+        "C:\\\\Windows\\\\System32\\\\spoolsv.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "openwith.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\explorer.exe",
+        "C:\\\\Windows\\\\System32\\\\OpenWith.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csrss.exe",
+        "atbroker.exe",
+        "unknown process",
+        "vmtoolsd.exe",
+        "xeroxprintjobeventmanagerservice.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\csrss.exe",
+        "C:\\\\Windows\\\\System32\\\\AtBroker.exe",
+        "*unknown process*",
+        "C:\\\\Program Files\\\\VMware\\\\VMware Tools\\\\vmtoolsd.exe",
+        "C:\\\\Program Files\\\\Xerox\\\\XeroxPrintExperience\\\\CommonFiles\\\\XeroxPrintJobEventManagerService.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\notepad.exe",
+        "c:\\\\windows\\\\system32\\\\sethc.exe",
+        "c:\\\\windows\\\\system32\\\\spoolsv.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\notepad.exe",
+        "C:\\\\Windows\\\\System32\\\\Sethc.exe",
+        "C:\\\\Windows\\\\System32\\\\spoolsv.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.startfunction",
+      "raw_field": "winlog.event_data.StartFunction",
+      "operator": ":",
+      "values": [
+        "etwpnotificationthread",
+        "getcommandlinew",
+        "loadlibraryw"
+      ],
+      "raw_values": [
+        "EtwpNotificationThread",
+        "GetCommandLineW",
+        "LoadLibraryW"
+      ]
+    }
+  ]
+}

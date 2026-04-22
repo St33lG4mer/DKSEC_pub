@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_susp_colorcpl",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_susp_colorcpl.eql",
+  "raw_query": "any where process.executable:\"*\\\\colorcpl.exe\" and (not (file.path like~ (\"*.icm\", \"*.gmmp\", \"*.cdmp\", \"*.camp\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".icm",
+        ".gmmp",
+        ".cdmp",
+        ".camp"
+      ],
+      "raw_values": [
+        "*.icm",
+        "*.gmmp",
+        "*.cdmp",
+        "*.camp"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "colorcpl.exe"
+      ],
+      "raw_values": [
+        "*\\\\colorcpl.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_python",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_python.eql",
+  "raw_query": "any where (network.direction:\"true\" and (process.executable:\"*\\\\python*\" and process.executable:\"*.exe*\")) and (not ((destination.ip==\"127.0.0.1\" and source.ip==\"127.0.0.1\") or (winlog.event_data.CommandLine:\"*pip.exe*\" and winlog.event_data.CommandLine:\"*install*\"))) and (not ((process.parent.executable:\"C:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\conda.exe\" and (winlog.event_data.CommandLine:\"*:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\conda-script.py*\" and winlog.event_data.CommandLine:\"*update*\")) or (process.parent.executable:\"C:\\\\ProgramData\\\\Anaconda3\\\\python.exe\" and winlog.event_data.CommandLine:\"*C:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\jupyter-notebook-script.py*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "python",
+        ".exe"
+      ],
+      "raw_values": [
+        "*\\\\python*",
+        "*.exe*"
+      ]
+    },
+    {
+      "field": "destination.ip",
+      "raw_field": "destination.ip",
+      "operator": "==",
+      "values": [
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "127.0.0.1"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "==",
+      "values": [
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "127.0.0.1"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "winlog.event_data.CommandLine",
+      "operator": ":",
+      "values": [
+        "pip.exe",
+        "install",
+        "conda-script.py",
+        "update",
+        "jupyter-notebook-script.py"
+      ],
+      "raw_values": [
+        "*pip.exe*",
+        "*install*",
+        "*:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\conda-script.py*",
+        "*update*",
+        "*C:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\jupyter-notebook-script.py*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "conda.exe",
+        "python.exe"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\Anaconda3\\\\Scripts\\\\conda.exe",
+        "C:\\\\ProgramData\\\\Anaconda3\\\\python.exe"
+      ]
+    }
+  ]
+}

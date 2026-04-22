@@ -1,0 +1,132 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Curl from macOS Application",
+  "slug": "command_and_control_suspicious_curl_from_macos_application",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/command_and_control_suspicious_curl_from_macos_application.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and \n  process.name in (\"curl\", \"nscurl\") and \n  process.args in (\"-o\", \"--output\", \"--download\", \"-dl\", \"-dir\", \"--directory\") and\n  process.args regex~ \"\"\"http.*:\\/\\/[0-9]{2,3}.[0-9]{2,3}.[0-9]{2,3}.[0-9]{2,3}\\/.*\"\"\" and \n  process.parent.name like~ (\"bash\", \"sh\", \"zsh\", \"osascript\", \"tclsh*\", \"python*\") and\n  process.Ext.effective_parent.executable like \"/Applications/*\" and\n  process.args_count <= 10 and \n  not process.args like \"/Applications/*\" and\n  not process.Ext.effective_parent.executable in (\"/Applications/iTerm.app/Contents/MacOS/iTerm2\",\n                                                   \"/Applications/Visual Studio Code.app/Contents/MacOS/Electron\", \n                                                   \"/Applications/Warp.app/Contents/MacOS/stable\")\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like~",
+      "values": [
+        "bash",
+        "zsh",
+        "osascript",
+        "tclsh",
+        "python"
+      ],
+      "raw_values": [
+        "bash",
+        "sh",
+        "zsh",
+        "osascript",
+        "tclsh*",
+        "python*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "nscurl"
+      ],
+      "raw_values": [
+        "curl",
+        "nscurl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--output",
+        "--download",
+        "-dl",
+        "-dir",
+        "--directory"
+      ],
+      "raw_values": [
+        "-o",
+        "--output",
+        "--download",
+        "-dl",
+        "-dir",
+        "--directory"
+      ]
+    },
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": "in",
+      "values": [
+        "/applications/iterm.app/contents/macos/iterm2",
+        "/applications/visual studio code.app/contents/macos/electron",
+        "/applications/warp.app/contents/macos/stable"
+      ],
+      "raw_values": [
+        "/Applications/iTerm.app/Contents/MacOS/iTerm2",
+        "/Applications/Visual Studio Code.app/Contents/MacOS/Electron",
+        "/Applications/Warp.app/Contents/MacOS/stable"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": "like",
+      "values": [
+        "/applications/"
+      ],
+      "raw_values": [
+        "/Applications/*"
+      ]
+    }
+  ]
+}

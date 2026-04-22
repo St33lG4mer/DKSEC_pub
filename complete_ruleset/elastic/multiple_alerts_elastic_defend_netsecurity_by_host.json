@@ -1,0 +1,145 @@
+{
+  "source": "elastic",
+  "name": "Elastic Defend and Network Security Alerts Correlation",
+  "slug": "multiple_alerts_elastic_defend_netsecurity_by_host",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Fortinet",
+    "Data Source: PAN-OS"
+  ],
+  "elastic_path": "rules/cross-platform/multiple_alerts_elastic_defend_netsecurity_by_host.toml",
+  "raw_query": "FROM logs-* metadata _id\n| WHERE\n        // Elastic Defend Alerts\n        (event.module == \"endpoint\" and data_stream.dataset == \"endpoint.alerts\") or\n\n        // PANW suspicious events\n        (data_stream.dataset == \"panw.panos\" and\n         event.action in (\"virus_detected\", \"wildfire_virus_detected\", \"c2_communication\", \"spyware_detected\", \"large_upload\", \"denied\", \"exploit_detected\")) or\n\n        // Fortigate suspicious events\n        (data_stream.dataset == \"fortinet_fortigate.log\" and\n         (event.action in (\"outbreak-prevention\", \"infected\", \"blocked\") or message like \"backdoor*\" or message like \"Proxy*\" or message like \"anomaly*\" or message like \"P2P*\" or message like \"misc*\" or message like \"DNS.Over.HTTPS\" or message like \"Remote.Access\")) or\n\n        // Suricata\n        (data_stream.dataset == \"suricata.eve\" and message in (\"Command and Control Traffic\", \"Potentially Bad Traffic\", \"A Network Trojan was detected\", \"Detection of a Network Scan\", \"Domain Observed Used for C2 Detected\", \"Malware Command and Control Activity Detected\"))\n\n// extract source.ip from PANW or Fortigate events and host.ip from Elastic Defend alert\n|eval fw_alert_source_ip = CASE(data_stream.dataset in (\"panw.panos\", \"fortinet_fortigate.log\"), source.ip, null),\n      elastic_defend_alert_host_ip = CASE(event.module == \"endpoint\" and data_stream.dataset == \"endpoint.alerts\", host.ip, null)\n| eval Esql.source_ip = COALESCE(fw_alert_source_ip, elastic_defend_alert_host_ip)\n| where Esql.source_ip is not null\n\n// group by host_source_ip shared between FG/PANW and Elastic Defend\n| stats Esql.alerts_count = COUNT(*),\n        Esql.event_module_distinct_count = COUNT_DISTINCT(event.module),\n        Esql.message_values_distinct_count = COUNT_DISTINCT(message),\n        Esql.event_module_values = VALUES(event.module),\n        Esql.message_values = VALUES(message),\n        Esql.event_action_values = VALUES(event.action),\n        Esql.process_executable_values = VALUES(process.executable),\n        Esql.process_hash_sha256_values = VALUES(process.hash.sha256),\n        Esql.process_cmdline_values = VALUES(process.command_line),\n        Esql.file_path_values = VALUES(file.path),\n        Esql.file_hash_sha256_values = VALUES(file.hash.sha256),\n        Esql.host_id_values = VALUES(host.id),\n        Esql.user_name_values = VALUES(user.name),\n        Esql.destination_ip_values = VALUES(destination.ip)\n        by Esql.source_ip\n| where Esql.event_module_distinct_count >= 2 AND Esql.message_values_distinct_count >= 2\n| eval concat_module_values = MV_CONCAT(Esql.event_module_values, \",\")\n// Make sure an endpoint alert is present along one of the network ones\n| where concat_module_values like \"*endpoint*\"\n\n// Move single values to their corresponding ECS fields for alerts exclusion\n| eval source.ip = mv_min(Esql.source_ip),\n       host.id = mv_min(Esql.host_id_values),\n       user.name = mv_min(Esql.user_name_values)\n\n| keep source.ip, host.id, user.name, Esql.*\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "virus_detected",
+        "wildfire_virus_detected",
+        "c2_communication",
+        "spyware_detected",
+        "large_upload",
+        "denied",
+        "exploit_detected",
+        "outbreak-prevention",
+        "infected",
+        "blocked"
+      ],
+      "raw_values": [
+        "virus_detected",
+        "wildfire_virus_detected",
+        "c2_communication",
+        "spyware_detected",
+        "large_upload",
+        "denied",
+        "exploit_detected",
+        "outbreak-prevention",
+        "infected",
+        "blocked"
+      ]
+    },
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": "in",
+      "values": [
+        "command and control traffic",
+        "potentially bad traffic",
+        "a network trojan was detected",
+        "detection of a network scan",
+        "domain observed used for c2 detected",
+        "malware command and control activity detected"
+      ],
+      "raw_values": [
+        "Command and Control Traffic",
+        "Potentially Bad Traffic",
+        "A Network Trojan was detected",
+        "Detection of a Network Scan",
+        "Domain Observed Used for C2 Detected",
+        "Malware Command and Control Activity Detected"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "in",
+      "values": [
+        "panw.panos",
+        "fortinet_fortigate.log"
+      ],
+      "raw_values": [
+        "panw.panos",
+        "fortinet_fortigate.log"
+      ]
+    },
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "endpoint"
+      ],
+      "raw_values": [
+        "endpoint"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "endpoint.alerts",
+        "panw.panos",
+        "fortinet_fortigate.log",
+        "suricata.eve"
+      ],
+      "raw_values": [
+        "endpoint.alerts",
+        "panw.panos",
+        "fortinet_fortigate.log",
+        "suricata.eve"
+      ]
+    },
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": "like",
+      "values": [
+        "backdoor",
+        "proxy",
+        "anomaly",
+        "p2p",
+        "misc",
+        "dns.over.https",
+        "remote.access"
+      ],
+      "raw_values": [
+        "backdoor*",
+        "Proxy*",
+        "anomaly*",
+        "P2P*",
+        "misc*",
+        "DNS.Over.HTTPS",
+        "Remote.Access"
+      ]
+    },
+    {
+      "field": "concat_module_values",
+      "raw_field": "concat_module_values",
+      "operator": "like",
+      "values": [
+        "endpoint"
+      ],
+      "raw_values": [
+        "*endpoint*"
+      ]
+    }
+  ]
+}

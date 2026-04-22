@@ -1,0 +1,40 @@
+{
+  "source": "elastic",
+  "name": "Multiple Rare Elastic Defend Behavior Rules by Host",
+  "slug": "multiple_elastic_defend_behavior_rules_same_host_prevalence",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 99,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/cross-platform/multiple_elastic_defend_behavior_rules_same_host_prevalence.toml",
+  "raw_query": "from logs-endpoint.alerts-* metadata _id\n| where data_stream.dataset == \"endpoint.alerts\" and event.code == \"behavior\"\n| INLINE STATS hosts = COUNT_DISTINCT(host.id) BY rule.name\n// excludes rules triggering on multiple hosts to reduce potential FPs\n| where hosts == 1\n| stats Esql.rule_name_count_distinct = COUNT_DISTINCT(rule.name),\n        Esql.rule_name_values = VALUES(rule.name),\n        Esql.process_executable_values = VALUES(process.executable),\n        Esql.process_parent_executable_values = VALUES(process.parent.executable),\n        Esql.process_command_line_values = VALUES(process.command_line),\n\t\tEsql.process_parent_command_line_values = VALUES(process.parent.command_line),\n        Esql.process_hash_sha256_values = VALUES(process.hash.sha256), \n\t\tEsql.file_path_values = VALUES(file.path),\n        Esql.dll_path_values = VALUES(dll.path),\n        Esql.dll_hash_sha256_values = VALUES(dll.hash.sha256), \n\t\tEsql.user_name_values = VALUES(user.name) by host.id\n// at least 2 unique rules\n| where Esql.rule_name_count_distinct >= 2\n// populate fields to use in rule exceptions\n| eval process.hash.sha256 = MV_FIRST(Esql.process_hash_sha256_values),\n       process.executable = MV_FIRST(Esql.process_executable_values),\n       process.parent.executable = MV_FIRST(Esql.process_parent_executable_values),\n       process.command_line = MV_FIRST(Esql.process_command_line_values),\n       user.name = MV_FIRST(Esql.user_name_values)\n| Keep host.id, user.name, process.executable, process.parent.executable, process.hash.sha256, process.command_line, Esql.*\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "endpoint.alerts"
+      ],
+      "raw_values": [
+        "endpoint.alerts"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "behavior"
+      ],
+      "raw_values": [
+        "behavior"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "source": "elastic",
+  "name": "Potential Reverse Shell via UDP",
+  "slug": "execution_shell_via_udp_cli_utility_linux",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Auditd Manager",
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_shell_via_udp_cli_utility_linux.toml",
+  "raw_query": "sample by host.id, process.pid, process.parent.pid\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"executed\" and process.name : (\n    \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"perl\", \"python*\", \"nc\", \"ncat\", \"netcat\", \"php*\",\n    \"ruby\", \"openssl\", \"awk\", \"telnet\", \"lua*\", \"socat\"\n    ) and\n    not process.args in (\"/var/www/MISP/app/Console/cake\", \"/var/www/MISP/app\", \"/usr/local/bin/wp\")]\n  [process where host.os.type == \"linux\" and auditd.data.syscall == \"socket\" and process.name : (\n    \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"perl\", \"python*\", \"nc\", \"ncat\", \"netcat\", \"php*\",\n    \"ruby\", \"openssl\", \"awk\", \"telnet\", \"lua*\", \"socat\"\n    ) and auditd.data.a1 == \"2\"]\n  [network where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"connected-to\" and\n   process.name : (\n    \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"perl\", \"python*\", \"nc\", \"ncat\", \"netcat\", \"php*\",\n    \"ruby\", \"openssl\", \"awk\", \"telnet\", \"lua*\", \"socat\"\n    ) and network.direction == \"egress\" and destination.ip != null and\n   not cidrmatch(destination.ip, \"127.0.0.0/8\", \"169.254.0.0/16\", \"224.0.0.0/4\", \"::1\")]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "perl",
+        "python",
+        "ncat",
+        "netcat",
+        "php",
+        "ruby",
+        "openssl",
+        "awk",
+        "telnet",
+        "lua",
+        "socat"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "perl",
+        "python*",
+        "nc",
+        "ncat",
+        "netcat",
+        "php*",
+        "ruby",
+        "openssl",
+        "awk",
+        "telnet",
+        "lua*",
+        "socat"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "cake",
+        "app"
+      ],
+      "raw_values": [
+        "/var/www/MISP/app/Console/cake",
+        "/var/www/MISP/app",
+        "/usr/local/bin/wp"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "executed",
+        "connected-to"
+      ],
+      "raw_values": [
+        "executed",
+        "connected-to"
+      ]
+    },
+    {
+      "field": "auditd.data.syscall",
+      "raw_field": "auditd.data.syscall",
+      "operator": "==",
+      "values": [
+        "socket"
+      ],
+      "raw_values": [
+        "socket"
+      ]
+    },
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": "==",
+      "values": [
+        "egress"
+      ],
+      "raw_values": [
+        "egress"
+      ]
+    }
+  ]
+}

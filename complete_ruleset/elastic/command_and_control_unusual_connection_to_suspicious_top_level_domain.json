@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "Unusual Network Connection to Suspicious Top Level Domain",
+  "slug": "command_and_control_unusual_connection_to_suspicious_top_level_domain",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/command_and_control_unusual_connection_to_suspicious_top_level_domain.toml",
+  "raw_query": "event.category : \"network\" and host.os.type : \"macos\" and event.type : \"start\" and\ndestination.domain : (*.team or *.lol or *.kr or *.ke or *.nu or *.space or \n                          *.capital or *.in or *.cfd or *.online or *.ru or \n                          *.info or *.top or *.buzz or *.xyz or *.rest or \n                          *.ml or *.cf or *.gq or *.ga or *.onion or \n                          *.network or *.monster or *.marketing or *.cyou or \n                          *.quest or *.cc or *.bar or *.click or *.cam or \n                          *.surf or *.tk or *.shop or *.club or *.icu or \n                          *.pw or *.ws or *.hair or *.mom or \n                          *.beauty or *.boats or *.fun or *.life or \n                          *.store)\n",
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "network"
+      ],
+      "raw_values": [
+        "network"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

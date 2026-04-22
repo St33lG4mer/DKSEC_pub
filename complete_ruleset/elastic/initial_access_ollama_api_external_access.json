@@ -1,0 +1,60 @@
+{
+  "source": "elastic",
+  "name": "Ollama API Accessed from External Network",
+  "slug": "initial_access_ollama_api_external_access",
+  "category": "network",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: macOS",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide",
+    "Domain: LLM",
+    "Mitre Atlas: T0040",
+    "Mitre Atlas: T0044"
+  ],
+  "elastic_path": "rules/cross-platform/initial_access_ollama_api_external_access.toml",
+  "raw_query": "network where event.action == \"connection_accepted\" and\n  process.name in (\"ollama\", \"ollama.exe\") and\n  destination.port == 11434 and\n  source.ip != null and source.ip != \"0.0.0.0\" and\n  not cidrmatch(source.ip, \n    \"10.0.0.0/8\", \n    \"127.0.0.0/8\", \n    \"169.254.0.0/16\", \n    \"172.16.0.0/12\", \n    \"192.168.0.0/16\",\n    \"100.64.0.0/10\",\n    \"::1\",\n    \"fe80::/10\",\n    \"fc00::/7\",\n    \"ff00::/8\"\n  )\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "ollama",
+        "ollama.exe"
+      ],
+      "raw_values": [
+        "ollama",
+        "ollama.exe"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "connection_accepted"
+      ],
+      "raw_values": [
+        "connection_accepted"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "0.0.0.0"
+      ],
+      "raw_values": [
+        "0.0.0.0"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_shell_chrome_api",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_shell_chrome_api.eql",
+  "raw_query": "any where file.path:\"*\\\\ShellChromeAPI.dll\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "shellchromeapi.dll"
+      ],
+      "raw_values": [
+        "*\\\\ShellChromeAPI.dll"
+      ]
+    }
+  ]
+}

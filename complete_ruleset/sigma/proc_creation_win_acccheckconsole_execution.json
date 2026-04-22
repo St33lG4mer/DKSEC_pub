@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_acccheckconsole_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_acccheckconsole_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\AccCheckConsole.exe\" or process.pe.original_file_name:\"AccCheckConsole.exe\") and (process.command_line like~ (\"* -hwnd*\", \"* -process *\", \"* -window *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-hwnd",
+        "-process",
+        "-window"
+      ],
+      "raw_values": [
+        "* -hwnd*",
+        "* -process *",
+        "* -window *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "acccheckconsole.exe"
+      ],
+      "raw_values": [
+        "*\\\\AccCheckConsole.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "acccheckconsole.exe"
+      ],
+      "raw_values": [
+        "AccCheckConsole.exe"
+      ]
+    }
+  ]
+}

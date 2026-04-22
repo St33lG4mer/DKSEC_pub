@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_guid_task_name",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_guid_task_name.eql",
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe\" and process.command_line:\"*/Create *\") and (process.command_line like~ (\"*/TN \\\"{*\", \"*/TN '{*\", \"*/TN {*\")) and (process.command_line like~ (\"*}\\\"*\", \"*}'*\", \"*} *\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "*/Create *"
+      ]
+    }
+  ]
+}

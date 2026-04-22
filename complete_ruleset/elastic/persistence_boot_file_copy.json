@@ -1,0 +1,196 @@
+{
+  "source": "elastic",
+  "name": "Boot File Copy",
+  "slug": "persistence_boot_file_copy",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_boot_file_copy.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"start\") and\nprocess.name in (\"cp\", \"mv\") and process.parent.executable != null and process.args like~ \"/boot/*\" and not (\n  process.parent.name in (\"update-initramfs\", \"dracut\", \"grub-mkconfig\", \"shim-install\", \"sudo\", \"activate-theme\", \"update-grub-gfxpayload\", \"grub-pc.postinst\") or\n  process.parent.executable like~ (\"/usr/lib/kernel/install.d/*\", \"/tmp/newroot/*\", \"/var/lib/dpkg/info/*\") or\n  process.parent.args like~ (\"/usr/bin/mkinitcpio\", \"/var/tmp/rpm-tmp.*\", \"/var/lib/dpkg/info/*\") or\n  process.parent.executable in (\n    \"/var/lib/aws-replication-agent/migration_scripts/suse_to_aws.bash\", \"/usr/sbin/flash-kernel\", \"/usr/sbin/weak-modules\",\n    \"/etc/cron.hourly/check_mau\", \"/usr/bin/update-microcode-initrd\", \"/bin/run-parts\", \"/usr/sbin/mkinitramfs\", \"/usr/sbin/grub2-mkconfig\",\n    \"/usr/bin/supermin5\", \"/sbin/weak-modules\", \"/usr/sbin/nv-update-initrd\", \"/usr/libexec/platform-python\", \"/bin/kernel-install\",\n    \"/usr/bin/oracle-database-preinstall-19c-verify\", \"/usr/libexec/grubby/prune_debug\"\n  ) or\n  process.command_line == \"/bin/cp /usr/local/ASR/Vx/scripts/vCon//Configuration.info /boot/\" or\n  ?process.working_directory in (\"/var/lib/aws-replication-agent\", \"/opt/sentinelone/bin\", \"/tmp/MobilityAgentAutoUpgrade/package\") or\n  (\n    process.name == \"cp\" and\n    process.parent.args in (\n      \"/etc/kernel/postrm.d/zz-proxmox-boot\", \"/etc/kernel/postinst.d/zz-proxmox-boot\", \"/usr/lib/kernel/install.d/20-grub.install\",\n      \"/usr/bin/dracut\", \"/bin/dracut\", \"/usr/sbin/shim-install\", \"/sbin/dracut\", \"/opt/McAfee/ens/esp/scripts/modversion-check.sh\",\n      \"//opt/McAfee/ens/esp/scripts//modversion-check.sh\", \"/usr/sbin/update-grub-legacy-ec2\", \"/usr/bin/foreman-generate-bootloaders\",\n      \"/usr/share/grub2/themes/SLE/activate-theme\", \"/usr/sbin/dracut\", \"/usr/sbin/flash-kernel\", \"/usr/lib/kernel/install.d/20-grubby.install\"\n    ) \n  ) or\n  (process.name == \"mv\" and process.args == \"-f\" and process.parent.args == \"/usr/sbin/update-initramfs\") or\n  (\n    process.name == \"mv\" and\n    process.parent.args in (\n      \"/usr/sbin/flash-kernel\", \"/usr/bin/update-microcode-initrd\", \"/usr/sbin/update-grub-gfxpayload\",\n      \"/usr/sbin/weak-modules\", \"/usr/bin/dracut\"\n    )\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "like~",
+      "values": [
+        "/usr/bin/mkinitcpio",
+        "/var/tmp/rpm-tmp.",
+        "/var/lib/dpkg/info/"
+      ],
+      "raw_values": [
+        "/usr/bin/mkinitcpio",
+        "/var/tmp/rpm-tmp.*",
+        "/var/lib/dpkg/info/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "update-initramfs",
+        "dracut",
+        "grub-mkconfig",
+        "shim-install",
+        "sudo",
+        "activate-theme",
+        "update-grub-gfxpayload",
+        "grub-pc.postinst",
+        "suse_to_aws.bash",
+        "flash-kernel",
+        "weak-modules",
+        "check_mau",
+        "update-microcode-initrd",
+        "run-parts",
+        "mkinitramfs",
+        "grub2-mkconfig",
+        "supermin5",
+        "nv-update-initrd",
+        "platform-python",
+        "kernel-install",
+        "oracle-database-preinstall-19c-verify",
+        "prune_debug"
+      ],
+      "raw_values": [
+        "update-initramfs",
+        "dracut",
+        "grub-mkconfig",
+        "shim-install",
+        "sudo",
+        "activate-theme",
+        "update-grub-gfxpayload",
+        "grub-pc.postinst",
+        "/var/lib/aws-replication-agent/migration_scripts/suse_to_aws.bash",
+        "/usr/sbin/flash-kernel",
+        "/usr/sbin/weak-modules",
+        "/etc/cron.hourly/check_mau",
+        "/usr/bin/update-microcode-initrd",
+        "/bin/run-parts",
+        "/usr/sbin/mkinitramfs",
+        "/usr/sbin/grub2-mkconfig",
+        "/usr/bin/supermin5",
+        "/sbin/weak-modules",
+        "/usr/sbin/nv-update-initrd",
+        "/usr/libexec/platform-python",
+        "/bin/kernel-install",
+        "/usr/bin/oracle-database-preinstall-19c-verify",
+        "/usr/libexec/grubby/prune_debug"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "in",
+      "values": [
+        "/var/lib/aws-replication-agent",
+        "/opt/sentinelone/bin",
+        "/tmp/mobilityagentautoupgrade/package"
+      ],
+      "raw_values": [
+        "/var/lib/aws-replication-agent",
+        "/opt/sentinelone/bin",
+        "/tmp/MobilityAgentAutoUpgrade/package"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/etc/kernel/postrm.d/zz-proxmox-boot",
+        "/etc/kernel/postinst.d/zz-proxmox-boot",
+        "/usr/lib/kernel/install.d/20-grub.install",
+        "/usr/bin/dracut",
+        "/bin/dracut",
+        "/usr/sbin/shim-install",
+        "/sbin/dracut",
+        "/opt/mcafee/ens/esp/scripts/modversion-check.sh",
+        "//opt/mcafee/ens/esp/scripts//modversion-check.sh",
+        "/usr/sbin/update-grub-legacy-ec2",
+        "/usr/bin/foreman-generate-bootloaders",
+        "/usr/share/grub2/themes/sle/activate-theme",
+        "/usr/sbin/dracut",
+        "/usr/sbin/flash-kernel",
+        "/usr/lib/kernel/install.d/20-grubby.install",
+        "/usr/bin/update-microcode-initrd",
+        "/usr/sbin/update-grub-gfxpayload",
+        "/usr/sbin/weak-modules"
+      ],
+      "raw_values": [
+        "/etc/kernel/postrm.d/zz-proxmox-boot",
+        "/etc/kernel/postinst.d/zz-proxmox-boot",
+        "/usr/lib/kernel/install.d/20-grub.install",
+        "/usr/bin/dracut",
+        "/bin/dracut",
+        "/usr/sbin/shim-install",
+        "/sbin/dracut",
+        "/opt/McAfee/ens/esp/scripts/modversion-check.sh",
+        "//opt/McAfee/ens/esp/scripts//modversion-check.sh",
+        "/usr/sbin/update-grub-legacy-ec2",
+        "/usr/bin/foreman-generate-bootloaders",
+        "/usr/share/grub2/themes/SLE/activate-theme",
+        "/usr/sbin/dracut",
+        "/usr/sbin/flash-kernel",
+        "/usr/lib/kernel/install.d/20-grubby.install",
+        "/usr/bin/update-microcode-initrd",
+        "/usr/sbin/update-grub-gfxpayload",
+        "/usr/sbin/weak-modules"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "/usr/sbin/update-initramfs"
+      ],
+      "raw_values": [
+        "/usr/sbin/update-initramfs"
+      ]
+    }
+  ]
+}

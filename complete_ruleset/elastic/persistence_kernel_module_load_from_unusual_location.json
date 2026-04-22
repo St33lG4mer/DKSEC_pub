@@ -1,0 +1,194 @@
+{
+  "source": "elastic",
+  "name": "Kernel Module Load from Unusual Location",
+  "slug": "persistence_kernel_module_load_from_unusual_location",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Threat: Rootkit",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_kernel_module_load_from_unusual_location.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  (process.name == \"kmod\" and process.args == \"insmod\" and process.args like~ \"*.ko*\") or\n  (process.name == \"kmod\" and process.args == \"modprobe\" and not process.args in (\"-r\", \"--remove\")) or\n  (process.name == \"insmod\" and process.args like~ \"*.ko*\") or\n  (process.name == \"modprobe\" and not process.args in (\"-r\", \"--remove\"))\n) and (\n  process.working_directory like (\n    \"/tmp*\", \"/var/tmp*\", \"/dev/shm*\", \"/run*\", \"/var/run*\", \"/home*/*\", \"/root*\",\n    \"/var/www*\", \"/boot*\", \"/srv*\", \"/mnt*\", \"/media*\"\n  ) or\n  process.parent.working_directory like (\n    \"/tmp*\", \"/var/tmp*\", \"/dev/shm*\", \"/run*\", \"/var/run*\", \"/home*/*\", \"/root*\",\n    \"/var/www*\", \"/boot*\", \"/srv*\", \"/mnt*\", \"/media*\"\n  ) or\n  process.args like (\n    \"/tmp/*\", \"/var/tmp/*\", \"/dev/shm/*\", \"/run/*\", \"/var/run/*\", \"/home/*/*\", \"/root/*\",\n    \"/var/www/*\", \"/boot/*\", \"/srv/*\", \"/mnt/*\", \"/media/*\", \"./*\"\n  )\n) and\nnot (\n  process.parent.executable == \"/usr/bin/podman\" or\n  process.working_directory like \"/tmp/newroot\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/tmp",
+        "/var/tmp",
+        "/dev/shm",
+        "/run",
+        "/var/run",
+        "/home*/",
+        "/root",
+        "/var/www",
+        "/boot",
+        "/srv",
+        "/mnt",
+        "/media"
+      ],
+      "raw_values": [
+        "/tmp*",
+        "/var/tmp*",
+        "/dev/shm*",
+        "/run*",
+        "/var/run*",
+        "/home*/*",
+        "/root*",
+        "/var/www*",
+        "/boot*",
+        "/srv*",
+        "/mnt*",
+        "/media*"
+      ]
+    },
+    {
+      "field": "process.parent.working_directory",
+      "raw_field": "process.parent.working_directory",
+      "operator": ":",
+      "values": [
+        "/tmp",
+        "/var/tmp",
+        "/dev/shm",
+        "/run",
+        "/var/run",
+        "/home*/",
+        "/root",
+        "/var/www",
+        "/boot",
+        "/srv",
+        "/mnt",
+        "/media"
+      ],
+      "raw_values": [
+        "/tmp*",
+        "/var/tmp*",
+        "/dev/shm*",
+        "/run*",
+        "/var/run*",
+        "/home*/*",
+        "/root*",
+        "/var/www*",
+        "/boot*",
+        "/srv*",
+        "/mnt*",
+        "/media*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--remove"
+      ],
+      "raw_values": [
+        "-r",
+        "--remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "kmod",
+        "insmod",
+        "modprobe"
+      ],
+      "raw_values": [
+        "kmod",
+        "insmod",
+        "modprobe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "insmod",
+        "modprobe"
+      ],
+      "raw_values": [
+        "insmod",
+        "modprobe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        ".ko"
+      ],
+      "raw_values": [
+        "*.ko*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "podman"
+      ],
+      "raw_values": [
+        "/usr/bin/podman"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "like",
+      "values": [
+        "/tmp/newroot"
+      ],
+      "raw_values": [
+        "/tmp/newroot"
+      ]
+    }
+  ]
+}

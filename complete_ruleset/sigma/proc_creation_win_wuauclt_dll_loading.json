@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wuauclt_dll_loading",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wuauclt_dll_loading.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\wuauclt.exe\" or process.pe.original_file_name:\"wuauclt.exe\") and (process.command_line:\"*UpdateDeploymentProvider*\" and process.command_line:\"*RunHandlerComServer*\")) and (not (process.command_line:\"* /UpdateDeploymentProvider UpdateDeploymentProvider.dll *\" or process.command_line:\"* wuaueng.dll *\" or (process.command_line like~ (\"*:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\updatedeploy.dll /ClassId*\", \"*:\\\\Windows\\\\UUS\\\\amd64\\\\UpdateDeploy.dll /ClassId*\")) or (process.command_line:\"*:\\\\Windows\\\\WinSxS\\\\*\" and process.command_line:\"*\\\\UpdateDeploy.dll /ClassId *\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "classid"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\updatedeploy.dll /ClassId*",
+        "*:\\\\Windows\\\\UUS\\\\amd64\\\\UpdateDeploy.dll /ClassId*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wuauclt.exe"
+      ],
+      "raw_values": [
+        "*\\\\wuauclt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wuauclt.exe"
+      ],
+      "raw_values": [
+        "wuauclt.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "updatedeploymentprovider",
+        "runhandlercomserver",
+        "updatedeploymentprovider updatedeploymentprovider.dll",
+        "wuaueng.dll",
+        "classid"
+      ],
+      "raw_values": [
+        "*UpdateDeploymentProvider*",
+        "*RunHandlerComServer*",
+        "* /UpdateDeploymentProvider UpdateDeploymentProvider.dll *",
+        "* wuaueng.dll *",
+        "*:\\\\Windows\\\\WinSxS\\\\*",
+        "*\\\\UpdateDeploy.dll /ClassId *"
+      ]
+    }
+  ]
+}

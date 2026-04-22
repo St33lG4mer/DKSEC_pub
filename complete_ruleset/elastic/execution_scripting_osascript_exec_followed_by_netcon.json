@@ -1,0 +1,54 @@
+{
+  "source": "elastic",
+  "name": "Apple Script Execution followed by Network Connection",
+  "slug": "execution_scripting_osascript_exec_followed_by_netcon",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/execution_scripting_osascript_exec_followed_by_netcon.toml",
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=30s\n [process where host.os.type == \"macos\" and event.type == \"start\" and process.name == \"osascript\"]\n [network where host.os.type == \"macos\" and event.type == \"start\" and process.name == \"osascript\" and\n   not cidrmatch(destination.ip, \n       \"240.0.0.0/4\", \"233.252.0.0/24\", \"224.0.0.0/4\", \"198.19.0.0/16\", \"192.18.0.0/15\", \n       \"192.0.0.0/24\", \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\", \n       \"192.0.2.0/24\", \"192.31.196.0/24\", \"192.52.193.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\", \n       \"100.64.0.0/10\", \"192.175.48.0/24\", \"198.18.0.0/15\", \"198.51.100.0/24\", \"203.0.113.0/24\",\n       \"::1\", \"FE80::/10\", \"FF00::/8\")]\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "osascript"
+      ],
+      "raw_values": [
+        "osascript"
+      ]
+    }
+  ]
+}

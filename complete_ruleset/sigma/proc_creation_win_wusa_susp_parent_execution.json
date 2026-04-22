@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wusa_susp_parent_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wusa_susp_parent_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\wusa.exe\" and ((process.parent.executable like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\Appdata\\\\Local\\\\Temp\\\\*\", \"*\\\\Temporary Internet*\")) or ((process.parent.executable:\"*:\\\\Users\\\\*\" and process.parent.executable:\"*\\\\Favorites\\\\*\") or (process.parent.executable:\"*:\\\\Users\\\\*\" and process.parent.executable:\"*\\\\Favourites\\\\*\") or (process.parent.executable:\"*:\\\\Users\\\\*\" and process.parent.executable:\"*\\\\Contacts\\\\*\") or (process.parent.executable:\"*:\\\\Users\\\\*\" and process.parent.executable:\"*\\\\Pictures\\\\*\"))) and (not process.command_line:\"*.msu*\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "temporary internet"
+      ],
+      "raw_values": [
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\Appdata\\\\Local\\\\Temp\\\\*",
+        "*\\\\Temporary Internet*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wusa.exe"
+      ],
+      "raw_values": [
+        "*\\\\wusa.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".msu"
+      ],
+      "raw_values": [
+        "*.msu*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "source": "elastic",
+  "name": "Entra ID User Sign-in with Unusual Client",
+  "slug": "initial_access_entra_id_rare_app_id_for_principal_auth",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Data Source: Azure",
+    "Data Source: Entra ID",
+    "Data Source: Entra ID Sign-in",
+    "Use Case: Identity and Access Audit",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/initial_access_entra_id_rare_app_id_for_principal_auth.toml",
+  "raw_query": "data_stream.dataset: \"azure.signinlogs\" and event.category: \"authentication\"\n    and azure.signinlogs.properties.is_interactive: false\n    and azure.signinlogs.properties.user_type: \"Member\"\n    and not azure.signinlogs.properties.client_app_used: \"Browser\"\n    and not source.as.organization.name: \"MICROSOFT-CORP-MSN-AS-BLOCK\"\n    and not azure.signinlogs.properties.app_id: (\n        \"1b3c667f-cde3-4090-b60b-3d2abd0117f0\" or\n        \"26a7ee05-5602-4d76-a7ba-eae8b7b67941\" or\n        \"4b0964e4-58f1-47f4-a552-e2e1fc56dcd7\" or\n        \"ecd6b820-32c2-49b6-98a6-444530e5a77a\" or\n        \"268761a2-03f3-40df-8a8b-c3db24145b6b\" or\n        \"fc0f3af4-6835-4174-b806-f7db311fd2f3\" or\n        \"de50c81f-5f80-4771-b66b-cebd28ccdfc1\" or\n        \"ab9b8c07-8f02-4f72-87fa-80105867a763\" or\n        \"6f7e0f60-9401-4f5b-98e2-cf15bd5fd5e3\" or\n        \"d7b530a4-7680-4c23-a8bf-c52c121d2e87\" or\n        \"52c2e0b5-c7b6-4d11-a89c-21e42bcec444\" or\n        \"38aa3b87-a06d-4817-b275-7a316988d93b\" or\n        \"27922004-5251-4030-b22d-91ecd9a37ea4\" or\n        \"9ba1a5c7-f17a-4de9-a1f1-6178c8d51223\" or\n        \"cab96880-db5b-4e15-90a7-f3f1d62ffe39\" or\n        \"3a4d129e-7f50-4e0d-a7fd-033add0a29f4\" or\n        \"29d9ed98-a469-4536-ade2-f981bc1d605e\" or\n        \"c0ab8ce9-e9a0-42e7-b064-33d422df41f1\" or\n        \"9ea1ad79-fdb6-4f9a-8bc3-2b70f96e34c7\" or\n        \"4813382a-8fa7-425e-ab75-3b753aab3abb\" or\n        \"08e18876-6177-487e-b8b5-cf950c1e598c\" or\n        \"0ec893e0-5785-4de6-99da-4ed124e5296c\" or\n        \"d3590ed6-52b3-4102-aeff-aad2292ab01c\" or\n        \"0dc2408a-bbc0-4238-871e-13b372f0200f\" or\n        \"4813382a-8fa7-425e-ab75-3b753aab3abb\" or\n        \"af124e86-4e96-495a-b70a-90f90ab96707\" or\n        \"e9c51622-460d-4d3d-952d-966a5b1da34c\" or\n        \"ecd6b820-32c2-49b6-98a6-444530e5a77a\" or\n        \"f44b1140-bc5e-48c6-8dc0-5cf5a53c0e34\" or\n        \"e2ef5054-0287-4db6-afa3-013d96881fd3\"\n    )\n",
+  "conditions": [
+    {
+      "field": "azure.signinlogs.properties.app_id",
+      "raw_field": "azure.signinlogs.properties.app_id",
+      "operator": ":",
+      "values": [
+        "1b3c667f-cde3-4090-b60b-3d2abd0117f0",
+        "26a7ee05-5602-4d76-a7ba-eae8b7b67941",
+        "4b0964e4-58f1-47f4-a552-e2e1fc56dcd7",
+        "ecd6b820-32c2-49b6-98a6-444530e5a77a",
+        "268761a2-03f3-40df-8a8b-c3db24145b6b",
+        "fc0f3af4-6835-4174-b806-f7db311fd2f3",
+        "de50c81f-5f80-4771-b66b-cebd28ccdfc1",
+        "ab9b8c07-8f02-4f72-87fa-80105867a763",
+        "6f7e0f60-9401-4f5b-98e2-cf15bd5fd5e3",
+        "d7b530a4-7680-4c23-a8bf-c52c121d2e87",
+        "52c2e0b5-c7b6-4d11-a89c-21e42bcec444",
+        "38aa3b87-a06d-4817-b275-7a316988d93b",
+        "27922004-5251-4030-b22d-91ecd9a37ea4",
+        "9ba1a5c7-f17a-4de9-a1f1-6178c8d51223",
+        "cab96880-db5b-4e15-90a7-f3f1d62ffe39",
+        "3a4d129e-7f50-4e0d-a7fd-033add0a29f4",
+        "29d9ed98-a469-4536-ade2-f981bc1d605e",
+        "c0ab8ce9-e9a0-42e7-b064-33d422df41f1",
+        "9ea1ad79-fdb6-4f9a-8bc3-2b70f96e34c7",
+        "4813382a-8fa7-425e-ab75-3b753aab3abb",
+        "08e18876-6177-487e-b8b5-cf950c1e598c",
+        "0ec893e0-5785-4de6-99da-4ed124e5296c",
+        "d3590ed6-52b3-4102-aeff-aad2292ab01c",
+        "0dc2408a-bbc0-4238-871e-13b372f0200f",
+        "af124e86-4e96-495a-b70a-90f90ab96707",
+        "e9c51622-460d-4d3d-952d-966a5b1da34c",
+        "f44b1140-bc5e-48c6-8dc0-5cf5a53c0e34",
+        "e2ef5054-0287-4db6-afa3-013d96881fd3"
+      ],
+      "raw_values": [
+        "1b3c667f-cde3-4090-b60b-3d2abd0117f0",
+        "26a7ee05-5602-4d76-a7ba-eae8b7b67941",
+        "4b0964e4-58f1-47f4-a552-e2e1fc56dcd7",
+        "ecd6b820-32c2-49b6-98a6-444530e5a77a",
+        "268761a2-03f3-40df-8a8b-c3db24145b6b",
+        "fc0f3af4-6835-4174-b806-f7db311fd2f3",
+        "de50c81f-5f80-4771-b66b-cebd28ccdfc1",
+        "ab9b8c07-8f02-4f72-87fa-80105867a763",
+        "6f7e0f60-9401-4f5b-98e2-cf15bd5fd5e3",
+        "d7b530a4-7680-4c23-a8bf-c52c121d2e87",
+        "52c2e0b5-c7b6-4d11-a89c-21e42bcec444",
+        "38aa3b87-a06d-4817-b275-7a316988d93b",
+        "27922004-5251-4030-b22d-91ecd9a37ea4",
+        "9ba1a5c7-f17a-4de9-a1f1-6178c8d51223",
+        "cab96880-db5b-4e15-90a7-f3f1d62ffe39",
+        "3a4d129e-7f50-4e0d-a7fd-033add0a29f4",
+        "29d9ed98-a469-4536-ade2-f981bc1d605e",
+        "c0ab8ce9-e9a0-42e7-b064-33d422df41f1",
+        "9ea1ad79-fdb6-4f9a-8bc3-2b70f96e34c7",
+        "4813382a-8fa7-425e-ab75-3b753aab3abb",
+        "08e18876-6177-487e-b8b5-cf950c1e598c",
+        "0ec893e0-5785-4de6-99da-4ed124e5296c",
+        "d3590ed6-52b3-4102-aeff-aad2292ab01c",
+        "0dc2408a-bbc0-4238-871e-13b372f0200f",
+        "af124e86-4e96-495a-b70a-90f90ab96707",
+        "e9c51622-460d-4d3d-952d-966a5b1da34c",
+        "f44b1140-bc5e-48c6-8dc0-5cf5a53c0e34",
+        "e2ef5054-0287-4db6-afa3-013d96881fd3"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.signinlogs"
+      ],
+      "raw_values": [
+        "azure.signinlogs"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "authentication"
+      ],
+      "raw_values": [
+        "authentication"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.user_type",
+      "raw_field": "azure.signinlogs.properties.user_type",
+      "operator": ":",
+      "values": [
+        "member"
+      ],
+      "raw_values": [
+        "Member"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.client_app_used",
+      "raw_field": "azure.signinlogs.properties.client_app_used",
+      "operator": ":",
+      "values": [
+        "browser"
+      ],
+      "raw_values": [
+        "Browser"
+      ]
+    },
+    {
+      "field": "source.as.organization.name",
+      "raw_field": "source.as.organization.name",
+      "operator": ":",
+      "values": [
+        "microsoft-corp-msn-as-block"
+      ],
+      "raw_values": [
+        "MICROSOFT-CORP-MSN-AS-BLOCK"
+      ]
+    }
+  ]
+}

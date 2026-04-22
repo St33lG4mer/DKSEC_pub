@@ -1,0 +1,68 @@
+{
+  "source": "elastic",
+  "name": "M365 Exchange Inbox Phishing Evasion Rule Created",
+  "slug": "defense_evasion_exchange_new_inbox_rule_delete_or_move",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: SaaS",
+    "Domain: Email",
+    "Data Source: Microsoft 365",
+    "Data Source: Microsoft 365 Audit Logs",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/defense_evasion_exchange_new_inbox_rule_delete_or_move.toml",
+  "raw_query": "data_stream.dataset: \"o365.audit\" and\n    event.action: (\"New-InboxRule\" or \"Set-InboxRule\") and event.outcome: \"success\" and\n    (\n     o365.audit.Parameters.BodyContainsWords: \"\\u0000\" or \n     o365.audit.Parameters.WithinSizeRangeMinimum <= 1023 or \n     o365.audit.Parameters.SubjectContainsWords: (\n        *phish* or\n        *hack* or\n        *alert* or\n        *malware* or\n        *security* or\n        *invoice* or\n        *payment* or\n        *wire* or\n        *transfer* or\n        *fraud* or\n        *reset* or\n        *unusual* or\n        *protection* or\n        *login* or\n        *suspicious*\n      )\n    ) and (\n    o365.audit.Parameters.DeleteMessage: True or\n    o365.audit.Parameters.MoveToFolder: (\n        *Deleted* or\n        *Junk* or\n        *RSS* or \n        *Calendar*\n    )\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "new-inboxrule",
+        "set-inboxrule"
+      ],
+      "raw_values": [
+        "New-InboxRule",
+        "Set-InboxRule"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "o365.audit.parameters.bodycontainswords",
+      "raw_field": "o365.audit.Parameters.BodyContainsWords",
+      "operator": ":",
+      "values": [
+        "\\u0000"
+      ],
+      "raw_values": [
+        "\\u0000"
+      ]
+    }
+  ]
+}

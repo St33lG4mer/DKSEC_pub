@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_sharpup",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_sharpup.eql",
+  "raw_query": "any where process.executable:\"*\\\\SharpUp.exe\" or process.pe.description:\"SharpUp\" or (process.command_line like~ (\"*HijackablePaths*\", \"*UnquotedServicePath*\", \"*ProcessDLLHijack*\", \"*ModifiableServiceBinaries*\", \"*ModifiableScheduledTask*\", \"*DomainGPPPassword*\", \"*CachedGPPPassword*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "hijackablepaths",
+        "unquotedservicepath",
+        "processdllhijack",
+        "modifiableservicebinaries",
+        "modifiablescheduledtask",
+        "domaingpppassword",
+        "cachedgpppassword"
+      ],
+      "raw_values": [
+        "*HijackablePaths*",
+        "*UnquotedServicePath*",
+        "*ProcessDLLHijack*",
+        "*ModifiableServiceBinaries*",
+        "*ModifiableScheduledTask*",
+        "*DomainGPPPassword*",
+        "*CachedGPPPassword*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sharpup.exe"
+      ],
+      "raw_values": [
+        "*\\\\SharpUp.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "sharpup"
+      ],
+      "raw_values": [
+        "SharpUp"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "source": "sigma",
+  "name": "registry_set_ime_suspicious_paths",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_ime_suspicious_paths.eql",
+  "raw_query": "any where (registry.path:\"*\\\\Control\\\\Keyboard Layouts\\\\*\" and registry.path:\"*Ime File*\") and ((winlog.event_data.Details like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*\\\\Temporary Internet*\")) or ((winlog.event_data.Details:\"*:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\Favorites\\\\*\") or (winlog.event_data.Details:\"*:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\Favourites\\\\*\") or (winlog.event_data.Details:\"*:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\Contacts\\\\*\")))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        ":\\\\perflogs\\\\",
+        ":\\\\users\\\\public\\\\",
+        ":\\\\windows\\\\temp\\\\",
+        "\\\\appdata\\\\local\\\\temp\\\\",
+        "\\\\appdata\\\\roaming\\\\",
+        "\\\\temporary internet"
+      ],
+      "raw_values": [
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*\\\\Temporary Internet*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\control\\\\keyboard layouts\\\\",
+        "ime file"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\Keyboard Layouts\\\\*",
+        "*Ime File*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        ":\\\\users\\\\",
+        "\\\\favorites\\\\",
+        "\\\\favourites\\\\",
+        "\\\\contacts\\\\"
+      ],
+      "raw_values": [
+        "*:\\\\Users\\\\*",
+        "*\\\\Favorites\\\\*",
+        "*\\\\Favourites\\\\*",
+        "*\\\\Contacts\\\\*"
+      ]
+    }
+  ]
+}

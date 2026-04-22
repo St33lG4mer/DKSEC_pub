@@ -1,0 +1,37 @@
+{
+  "source": "elastic",
+  "name": "File Creation in /var/log via Suspicious Process",
+  "slug": "defense_evasion_var_log_file_creation_by_unsual_process",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Execution",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_var_log_file_creation_by_unsual_process.toml",
+  "raw_query": "event.category:file and host.os.type:linux and event.action:(creation or file_create_event or file_rename_event or rename) and\n(process.executable:(/tmp/* or /var/tmp/* or /dev/shm/* or ./* or /boot/*) or process.name:.*) and\nfile.path:/var/log/* and not file.extension:* and\nnot process.executable:(\"./usr/bin/podman\" or \"./install\" or /tmp/vmis.*/install/vmware-installer/vmis-launcher or /tmp/ubuntu-release-upgrader-*)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "podman",
+        "install"
+      ],
+      "raw_values": [
+        "./usr/bin/podman",
+        "./install"
+      ]
+    }
+  ]
+}

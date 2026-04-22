@@ -1,0 +1,57 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Path Invocation from Command Line",
+  "slug": "execution_unusual_path_invocation_from_command_line",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_unusual_path_invocation_from_command_line.toml",
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:exec and\nprocess.name:(bash or csh or dash or fish or ksh or sh or tcsh or zsh) and process.args:-c and\nprocess.command_line:*PATH=* and\nnot (\n  process.command_line:(*_PATH=* or *PYTHONPATH=* or sh*/run/motd.dynamic.new) or\n  process.parent.executable:(\n    \"/opt/puppetlabs/puppet/bin/puppet\" or /var/lib/docker/overlay2/* or /vz/root/*/dovecot or\n    \"/usr/libexec/dovecot/auth\" or /home/*/.local/share/containers/* or /vz/root/*/dovecot/auth or\n    \"/usr/local/bin/ansible-playbook\" or \"/opt/puppetlabs/puppet/bin/ruby\" or /tmp/CVU_19_resource_*/exectask or\n    \"/opt/ds_agent/ds_agent\" or \"/usr/lib/systemd/systemd\" or \"/opt/TrendMicro/vls_agent/vls_agent\" or\n    \"/opt/Tanium/TaniumClient/TaniumCX\"\n  ) or\n  process.parent.command_line:\"runc init\" or\n  process.parent.name:(gmake or sshd or sudo or make or ninja or ninja-build or steam or sshd-session)\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "puppet",
+        "auth",
+        "ansible-playbook",
+        "ruby",
+        "ds_agent",
+        "systemd",
+        "vls_agent",
+        "taniumcx"
+      ],
+      "raw_values": [
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/libexec/dovecot/auth",
+        "/usr/local/bin/ansible-playbook",
+        "/opt/puppetlabs/puppet/bin/ruby",
+        "/opt/ds_agent/ds_agent",
+        "/usr/lib/systemd/systemd",
+        "/opt/TrendMicro/vls_agent/vls_agent",
+        "/opt/Tanium/TaniumClient/TaniumCX"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    }
+  ]
+}

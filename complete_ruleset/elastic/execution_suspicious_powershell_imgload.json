@@ -1,0 +1,91 @@
+{
+  "source": "elastic",
+  "name": "Suspicious PowerShell Engine ImageLoad",
+  "slug": "execution_suspicious_powershell_imgload",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/windows/execution_suspicious_powershell_imgload.toml",
+  "raw_query": "host.os.type:windows and event.category:library and\n  dll.name:(\"System.Management.Automation.dll\" or \"System.Management.Automation.ni.dll\") and\n  not (\n    process.code_signature.subject_name:(\n      \"Microsoft Corporation\" or\n      \"Microsoft Dynamic Code Publisher\" or\n      \"Microsoft Windows\"\n    ) and process.code_signature.trusted:true and not process.name.caseless:\"regsvr32.exe\"\n  ) and\n  not (\n    process.executable:(C\\:\\\\Program*Files*\\(x86\\)\\\\*.exe or C\\:\\\\Program*Files\\\\*.exe) and\n    process.code_signature.trusted:true\n  ) and\n  not (\n    process.executable: C\\:\\\\Windows\\\\Lenovo\\\\*.exe and process.code_signature.subject_name:\"Lenovo\" and\n    process.code_signature.trusted:true\n  ) and\n  not (\n    process.executable: C\\:\\\\Windows\\\\AdminArsenal\\\\PDQInventory-Scanner\\\\service-*\\\\exec\\\\PDQInventoryScanner.exe and\n    process.code_signature.subject_name:\"PDQ.com Corporation\" and\n    process.code_signature.trusted:true\n  ) and\n  not (\n    process.name: (_is*.exe or \"DellInstaller_x64.exe\") and\n    process.code_signature.subject_name:(\"Dell Technologies Inc.\" or \"Dell Inc\" or \"Dell Inc.\") and\n    process.code_signature.trusted:true\n  ) and\n  not (\n    process.executable: C\\:\\\\ProgramData\\\\chocolatey\\\\* and\n    process.code_signature.subject_name:(\"Chocolatey Software, Inc.\" or \"Chocolatey Software, Inc\") and\n    process.code_signature.trusted:true\n  ) and\n  not (\n    process.name: \"Docker Desktop Installer.exe\" and\n    process.code_signature.subject_name:\"Docker Inc\" and\n    process.code_signature.trusted:true\n  ) and\n  not process.executable : (\n    \"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" or\n    \"C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\"\n  )\n",
+  "conditions": [
+    {
+      "field": "dll.name",
+      "raw_field": "dll.name",
+      "operator": ":",
+      "values": [
+        "system.management.automation.dll",
+        "system.management.automation.ni.dll"
+      ],
+      "raw_values": [
+        "System.Management.Automation.dll",
+        "System.Management.Automation.ni.dll"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": ":",
+      "values": [
+        "microsoft corporation",
+        "microsoft dynamic code publisher",
+        "microsoft windows",
+        "dell technologies inc.",
+        "dell inc",
+        "dell inc.",
+        "chocolatey software, inc.",
+        "chocolatey software, inc",
+        "lenovo",
+        "pdq.com corporation",
+        "docker inc"
+      ],
+      "raw_values": [
+        "Microsoft Corporation",
+        "Microsoft Dynamic Code Publisher",
+        "Microsoft Windows",
+        "Dell Technologies Inc.",
+        "Dell Inc",
+        "Dell Inc.",
+        "Chocolatey Software, Inc.",
+        "Chocolatey Software, Inc",
+        "Lenovo",
+        "PDQ.com Corporation",
+        "Docker Inc"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "dellinstaller_x64.exe",
+        "powershell.exe",
+        "docker desktop installer.exe"
+      ],
+      "raw_values": [
+        "DellInstaller_x64.exe",
+        "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+        "Docker Desktop Installer.exe"
+      ]
+    },
+    {
+      "field": "process.name.caseless",
+      "raw_field": "process.name.caseless",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "regsvr32.exe"
+      ]
+    }
+  ]
+}

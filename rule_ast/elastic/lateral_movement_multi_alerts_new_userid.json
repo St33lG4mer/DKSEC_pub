@@ -1,0 +1,41 @@
+{
+  "source": "elastic",
+  "name": "Lateral Movement Alerts from a Newly Observed User",
+  "slug": "lateral_movement_multi_alerts_new_userid",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Tactic: Lateral Movement",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/lateral_movement_multi_alerts_new_userid.toml",
+  "raw_query": "FROM .alerts-security.* METADATA _index\n\n// Lateral Movement related rules\n| where kibana.alert.rule.threat.tactic.name is not null and user.id is not null and \n        (to_string(user.id) like \"S-1-5-21*\" or to_string(user.id) like \"S-1-12-*\") and\n        host.id is not null and KQL(\"\"\"kibana.alert.rule.threat.tactic.name : \"Lateral Movement\" \"\"\") and\n        not KQL(\"\"\"kibana.alert.rule.tags : \"Rule Type: Higher-Order Rule\" \"\"\")\n\n// aggregate stats by user.id\n| stats  Esql.first_time_seen = MIN(@timestamp),\n         Esql.alerts_count = count(*),\n         Esql.unique_rules_count = COUNT_DISTINCT(kibana.alert.rule.name),\n         Esql.unique_count_host_id = COUNT_DISTINCT(host.id),\n         Esql.rule_name_values = VALUES(kibana.alert.rule.name),\n         Esql.host_id_values = VALUES(host.id),\n         Esql.host_ip_values = VALUES(host.ip),\n         Esql.source_ip_values = VALUES(source.ip),\n         Esql.process_cmd_line = VALUES(process.command_line),\n         Esql.tactic_name_values = VALUES(kibana.alert.rule.threat.tactic.name) by user.id, user.name\n\n// at least 2 unique lateral movement detection rules from same user.id and that was first seen in last 5 days\n| eval Esql.date_diff = DATE_DIFF(\"minute\", Esql.first_time_seen, now())\n| where Esql.unique_rules_count >= 2 and\n        // matches are within 10m of the rule execution time to avoid alert duplicates\n        Esql.date_diff <= 10\n| eval source.ip = MV_FIRST(Esql.source_ip_values),  host.id = MV_FIRST(Esql.host_id_values) \n| KEEP Esql.*, user.id, user.name, host.id, source.ip\n",
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.threat.tactic.name",
+      "raw_field": "kibana.alert.rule.threat.tactic.name",
+      "operator": ":",
+      "values": [
+        "lateral movement"
+      ],
+      "raw_values": [
+        "Lateral Movement"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.tags",
+      "raw_field": "kibana.alert.rule.tags",
+      "operator": ":",
+      "values": [
+        "rule type: higher-order rule"
+      ],
+      "raw_values": [
+        "Rule Type: Higher-Order Rule"
+      ]
+    }
+  ]
+}

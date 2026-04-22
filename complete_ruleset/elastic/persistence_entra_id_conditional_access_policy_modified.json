@@ -1,0 +1,55 @@
+{
+  "source": "elastic",
+  "name": "Entra ID Conditional Access Policy (CAP) Modified",
+  "slug": "persistence_entra_id_conditional_access_policy_modified",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Data Source: Microsoft Entra ID Audit Logs",
+    "Use Case: Identity and Access Audit",
+    "Use Case: Configuration Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_entra_id_conditional_access_policy_modified.toml",
+  "raw_query": "data_stream.dataset: \"azure.auditlogs\"\n    and event.action:\"Update conditional access policy\"\n    and event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.auditlogs"
+      ],
+      "raw_values": [
+        "azure.auditlogs"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "update conditional access policy"
+      ],
+      "raw_values": [
+        "Update conditional access policy"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

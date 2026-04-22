@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "registry_set_disable_macroruntimescanscope",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_disable_macroruntimescanscope.eql",
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\*\" and registry.path:\"*\\\\Microsoft\\\\Office\\\\*\" and registry.path:\"*\\\\Common\\\\Security*\") and registry.path:\"*\\\\MacroRuntimeScanScope\" and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\",
+        "\\\\microsoft\\\\office\\\\",
+        "\\\\common\\\\security",
+        "\\\\macroruntimescanscope"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\*",
+        "*\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Common\\\\Security*",
+        "*\\\\MacroRuntimeScanScope"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ]
+}

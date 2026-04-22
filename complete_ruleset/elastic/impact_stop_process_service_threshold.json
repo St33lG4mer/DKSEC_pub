@@ -1,0 +1,41 @@
+{
+  "source": "elastic",
+  "name": "High Number of Process and/or Service Terminations",
+  "slug": "impact_stop_process_service_threshold",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Windows Security Event Logs"
+  ],
+  "elastic_path": "rules/windows/impact_stop_process_service_threshold.toml",
+  "raw_query": "event.category:process and host.os.type:windows and event.type:start and process.name:(net.exe or sc.exe or taskkill.exe) and\n process.args:(stop or pause or delete or \"/PID\" or \"/IM\" or \"/T\" or \"/F\" or \"/t\" or \"/f\" or \"/im\" or \"/pid\") and\n not process.parent.name:(osquerybeat.exe or agentbeat.exe)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "pid"
+      ],
+      "raw_values": [
+        "/PID",
+        "/IM",
+        "/T",
+        "/F",
+        "/t",
+        "/f",
+        "/im",
+        "/pid"
+      ]
+    }
+  ]
+}

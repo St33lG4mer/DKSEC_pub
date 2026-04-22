@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "GCP Logging Sink Deletion",
+  "slug": "defense_evasion_gcp_logging_sink_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: GCP",
+    "Data Source: Google Cloud Platform",
+    "Use Case: Log Auditing",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/gcp/defense_evasion_gcp_logging_sink_deletion.toml",
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.logging.v*.ConfigServiceV*.DeleteSink and event.outcome:success\n",
+  "conditions": []
+}

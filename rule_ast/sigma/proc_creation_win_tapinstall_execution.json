@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_tapinstall_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_tapinstall_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\tapinstall.exe\" and (not ((process.executable like~ (\"*:\\\\Program Files\\\\Avast Software\\\\SecureLine VPN\\\\*\", \"*:\\\\Program Files (x86)\\\\Avast Software\\\\SecureLine VPN\\\\*\")) or process.executable:\"*:\\\\Program Files\\\\OpenVPN Connect\\\\drivers\\\\tap\\\\*\" or process.executable:\"*:\\\\Program Files (x86)\\\\Proton Technologies\\\\ProtonVPNTap\\\\installer\\\\*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tapinstall.exe"
+      ],
+      "raw_values": [
+        "*\\\\tapinstall.exe",
+        "*:\\\\Program Files\\\\OpenVPN Connect\\\\drivers\\\\tap\\\\*",
+        "*:\\\\Program Files (x86)\\\\Proton Technologies\\\\ProtonVPNTap\\\\installer\\\\*"
+      ]
+    }
+  ]
+}

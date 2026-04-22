@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "registry_set_enable_anonymous_connection",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_set_enable_anonymous_connection.eql",
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\WBEM\\\\CIMOM\\\\AllowAnonymousCallback*\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\wbem\\\\cimom\\\\allowanonymouscallback"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\WBEM\\\\CIMOM\\\\AllowAnonymousCallback*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ]
+}

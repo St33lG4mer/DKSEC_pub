@@ -1,0 +1,40 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_advancedrun",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_advancedrun.eql",
+  "raw_query": "any where process.pe.original_file_name:\"AdvancedRun.exe\" or (process.command_line:\"* /EXEFilename *\" and process.command_line:\"* /Run*\") or (process.command_line:\"* /WindowState 0*\" and process.command_line:\"* /RunAs *\" and process.command_line:\"* /CommandLine *\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "advancedrun.exe"
+      ],
+      "raw_values": [
+        "AdvancedRun.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "exefilename",
+        "run",
+        "windowstate 0",
+        "runas",
+        "commandline"
+      ],
+      "raw_values": [
+        "* /EXEFilename *",
+        "* /Run*",
+        "* /WindowState 0*",
+        "* /RunAs *",
+        "* /CommandLine *"
+      ]
+    }
+  ]
+}

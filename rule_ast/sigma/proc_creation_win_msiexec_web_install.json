@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msiexec_web_install",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msiexec_web_install.eql",
+  "raw_query": "any where process.command_line:\"* msiexec*\" and process.command_line:\"*://*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "msiexec"
+      ],
+      "raw_values": [
+        "* msiexec*",
+        "*://*"
+      ]
+    }
+  ]
+}

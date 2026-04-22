@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_sysvol_access",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_sysvol_access.eql",
+  "raw_query": "any where process.command_line:\"*\\\\SYSVOL\\\\*\" and process.command_line:\"*\\\\policies\\\\*\"",
+  "conditions": []
+}

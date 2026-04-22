@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "AWS CloudWatch Log Stream Deletion",
+  "slug": "impact_cloudwatch_log_stream_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: Amazon CloudWatch",
+    "Use Case: Log Auditing",
+    "Tactic: Defense Evasion",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/impact_cloudwatch_log_stream_deletion.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" \n  and event.provider: \"logs.amazonaws.com\" \n  and event.action: \"DeleteLogStream\" \n  and event.outcome: \"success\"\n  and source.ip: * \n  and not user_agent.original : \"AWS Internal\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "logs.amazonaws.com"
+      ],
+      "raw_values": [
+        "logs.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "deletelogstream"
+      ],
+      "raw_values": [
+        "DeleteLogStream"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": ":",
+      "values": [
+        "aws internal"
+      ],
+      "raw_values": [
+        "AWS Internal"
+      ]
+    }
+  ]
+}

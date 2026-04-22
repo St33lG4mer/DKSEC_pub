@@ -1,0 +1,32 @@
+{
+  "source": "elastic",
+  "name": "M365 Exchange Anti-Phish Rule Modification",
+  "slug": "defense_evasion_exchange_anti_phish_rule_modification",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/defense_evasion_exchange_anti_phish_rule_modification.toml",
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:(\"Remove-AntiPhishRule\" or \"Disable-AntiPhishRule\") and event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "remove-antiphishrule",
+        "disable-antiphishrule"
+      ],
+      "raw_values": [
+        "Remove-AntiPhishRule",
+        "Disable-AntiPhishRule"
+      ]
+    }
+  ]
+}

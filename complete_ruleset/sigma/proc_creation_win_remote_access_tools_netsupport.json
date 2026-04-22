@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_remote_access_tools_netsupport",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_netsupport.eql",
+  "raw_query": "any where process.pe.description:\"NetSupport Client Configurator\" or process.pe.product:\"NetSupport Remote Control\" or process.pe.company:\"NetSupport Ltd\" or process.pe.original_file_name:\"PCICFGUI.EXE\"",
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "netsupport client configurator"
+      ],
+      "raw_values": [
+        "NetSupport Client Configurator"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "netsupport remote control"
+      ],
+      "raw_values": [
+        "NetSupport Remote Control"
+      ]
+    },
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "netsupport ltd"
+      ],
+      "raw_values": [
+        "NetSupport Ltd"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "pcicfgui.exe"
+      ],
+      "raw_values": [
+        "PCICFGUI.EXE"
+      ]
+    }
+  ]
+}

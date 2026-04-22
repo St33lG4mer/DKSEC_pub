@@ -1,0 +1,29 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_inline_base64_mz_header",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_inline_base64_mz_header.eql",
+  "raw_query": "any where process.command_line like~ (\"*TVqQAAMAAAAEAAAA*\", \"*TVpQAAIAAAAEAA8A*\", \"*TVqAAAEAAAAEABAA*\", \"*TVoAAAAAAAAAAAAA*\", \"*TVpTAQEAAAAEAAAA*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "tvqqaamaaaaeaaaa",
+        "tvpqaaiaaaaeaa8a",
+        "tvqaaaeaaaaeabaa",
+        "tvoaaaaaaaaaaaaa",
+        "tvptaqeaaaaeaaaa"
+      ],
+      "raw_values": [
+        "*TVqQAAMAAAAEAAAA*",
+        "*TVpQAAIAAAAEAA8A*",
+        "*TVqAAAEAAAAEABAA*",
+        "*TVoAAAAAAAAAAAAA*",
+        "*TVpTAQEAAAAEAAAA*"
+      ]
+    }
+  ]
+}

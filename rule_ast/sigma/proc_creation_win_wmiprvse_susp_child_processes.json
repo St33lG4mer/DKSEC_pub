@@ -1,0 +1,86 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wmiprvse_susp_child_processes",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wmiprvse_susp_child_processes.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\wbem\\\\WmiPrvSE.exe\" and ((process.executable like~ (\"*\\\\certutil.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\msiexec.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\verclsid.exe\", \"*\\\\wscript.exe\")) or (process.executable:\"*\\\\cmd.exe\" and (process.command_line like~ (\"*cscript*\", \"*mshta*\", \"*powershell*\", \"*pwsh*\", \"*regsvr32*\", \"*rundll32*\", \"*wscript*\")))) and (not (process.executable:\"*\\\\WerFault.exe\" or process.executable:\"*\\\\WmiPrvSE.exe\" or (process.executable:\"*\\\\msiexec.exe\" and process.command_line:\"*/i *\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "certutil.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "msiexec.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "verclsid.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\msiexec.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\verclsid.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "cscript",
+        "mshta",
+        "powershell",
+        "pwsh",
+        "regsvr32",
+        "rundll32",
+        "wscript"
+      ],
+      "raw_values": [
+        "*cscript*",
+        "*mshta*",
+        "*powershell*",
+        "*pwsh*",
+        "*regsvr32*",
+        "*rundll32*",
+        "*wscript*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe"
+      ],
+      "raw_values": [
+        "*\\\\wbem\\\\WmiPrvSE.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "werfault.exe",
+        "wmiprvse.exe",
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\WerFault.exe",
+        "*\\\\WmiPrvSE.exe",
+        "*\\\\msiexec.exe"
+      ]
+    }
+  ]
+}

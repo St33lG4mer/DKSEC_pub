@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "AWS VPC Flow Logs Deletion",
+  "slug": "defense_evasion_ec2_flow_log_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Log Auditing",
+    "Resources: Investigation Guide",
+    "Tactic: Defense Evasion"
+  ],
+  "elastic_path": "rules/integrations/aws/defense_evasion_ec2_flow_log_deletion.toml",
+  "raw_query": "data_stream.dataset:aws.cloudtrail and event.provider:ec2.amazonaws.com and event.action:DeleteFlowLogs and event.outcome:success\n",
+  "conditions": []
+}

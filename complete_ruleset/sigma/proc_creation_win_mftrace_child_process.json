@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mftrace_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mftrace_child_process.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\mftrace.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "mftrace.exe"
+      ],
+      "raw_values": [
+        "*\\\\mftrace.exe"
+      ]
+    }
+  ]
+}

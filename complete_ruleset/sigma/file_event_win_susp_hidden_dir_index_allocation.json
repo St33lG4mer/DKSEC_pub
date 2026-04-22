@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_susp_hidden_dir_index_allocation",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_susp_hidden_dir_index_allocation.eql",
+  "raw_query": "any where file.path:\"*::$index_allocation*\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "::$index_allocation"
+      ],
+      "raw_values": [
+        "*::$index_allocation*"
+      ]
+    }
+  ]
+}

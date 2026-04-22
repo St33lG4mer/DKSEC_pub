@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "registry_set_servicedll_hijack",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_servicedll_hijack.eql",
+  "raw_query": "any where ((registry.path:\"*\\\\System\\\\*\" and registry.path:\"*ControlSet*\" and registry.path:\"*\\\\Services\\\\*\") and registry.path:\"*\\\\Parameters\\\\ServiceDll\") and (not (winlog.event_data.Details:\"C:\\\\Windows\\\\system32\\\\spool\\\\drivers\\\\x64\\\\3\\\\PrintConfig.dll\" or (process.executable:\"C:\\\\Windows\\\\system32\\\\lsass.exe\" and registry.path:\"*\\\\Services\\\\NTDS\\\\Parameters\\\\ServiceDll\" and winlog.event_data.Details:\"%%systemroot%%\\\\system32\\\\ntdsa.dll\") or process.executable:\"C:\\\\Windows\\\\System32\\\\poqexec.exe\")) and (not (process.executable:\"*\\\\regsvr32.exe\" and winlog.event_data.Details:\"C:\\\\Windows\\\\System32\\\\STAgent.dll\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\",
+        "controlset",
+        "\\\\services\\\\",
+        "\\\\parameters\\\\servicedll",
+        "\\\\services\\\\ntds\\\\parameters\\\\servicedll"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\*",
+        "*ControlSet*",
+        "*\\\\Services\\\\*",
+        "*\\\\Parameters\\\\ServiceDll",
+        "*\\\\Services\\\\NTDS\\\\Parameters\\\\ServiceDll"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\spool\\\\drivers\\\\x64\\\\3\\\\printconfig.dll",
+        "%%systemroot%%\\\\system32\\\\ntdsa.dll",
+        "c:\\\\windows\\\\system32\\\\stagent.dll"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\spool\\\\drivers\\\\x64\\\\3\\\\PrintConfig.dll",
+        "%%systemroot%%\\\\system32\\\\ntdsa.dll",
+        "C:\\\\Windows\\\\System32\\\\STAgent.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "lsass.exe",
+        "poqexec.exe",
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\lsass.exe",
+        "C:\\\\Windows\\\\System32\\\\poqexec.exe",
+        "*\\\\regsvr32.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "source": "elastic",
+  "name": "Suspicious SIP Check by macOS Application",
+  "slug": "discovery_suspicious_sip_check",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/discovery_suspicious_sip_check.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and\n  process.command_line like \"*csrutil*status*\" and\n  process.command_line like \"*enabled*\" and\n  (process.parent.executable like \"/*.app/*\" or\n   process.parent.executable like \"/Applications/*.app/*\" or\n   process.parent.executable like \"/Volumes/*.app/*\") and\n  not process.parent.executable == \"/Library/Application Support/Mosyle/MosyleMDM.app/Contents/MacOS/MosyleMDM\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like",
+      "values": [
+        "csrutil*status",
+        "enabled"
+      ],
+      "raw_values": [
+        "*csrutil*status*",
+        "*enabled*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "mosylemdm"
+      ],
+      "raw_values": [
+        "/Library/Application Support/Mosyle/MosyleMDM.app/Contents/MacOS/MosyleMDM"
+      ]
+    }
+  ]
+}

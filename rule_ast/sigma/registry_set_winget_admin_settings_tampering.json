@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_set_winget_admin_settings_tampering",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_winget_admin_settings_tampering.eql",
+  "raw_query": "any where process.executable:\"*\\\\winget.exe\" and registry.path:\"\\\\REGISTRY\\\\A\\\\*\" and registry.path:\"*\\\\LocalState\\\\admin_settings\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winget.exe"
+      ],
+      "raw_values": [
+        "*\\\\winget.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\registry\\\\a\\\\",
+        "\\\\localstate\\\\admin_settings"
+      ],
+      "raw_values": [
+        "\\\\REGISTRY\\\\A\\\\*",
+        "*\\\\LocalState\\\\admin_settings"
+      ]
+    }
+  ]
+}

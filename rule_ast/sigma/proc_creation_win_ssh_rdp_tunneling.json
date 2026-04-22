@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_ssh_rdp_tunneling",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_ssh_rdp_tunneling.eql",
+  "raw_query": "any where process.executable:\"*\\\\ssh.exe\" and process.command_line:\"*:3389*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ssh.exe"
+      ],
+      "raw_values": [
+        "*\\\\ssh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ":3389"
+      ],
+      "raw_values": [
+        "*:3389*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rdrleakdiag_process_dumping",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rdrleakdiag_process_dumping.eql",
+  "raw_query": "any where (process.executable:\"*\\\\rdrleakdiag.exe\" or process.pe.original_file_name:\"RdrLeakDiag.exe\") and (process.command_line like~ (\"*-memdmp*\", \"*/memdmp*\", \"*\u2013memdmp*\", \"*\u2014memdmp*\", \"*\u2015memdmp*\") or process.command_line like~ (\"*fullmemdmp*\")) and (process.command_line like~ (\"* -o *\", \"* /o *\", \"* \u2013o *\", \"* \u2014o *\", \"* \u2015o *\") or process.command_line like~ (\"* -p *\", \"* /p *\", \"* \u2013p *\", \"* \u2014p *\", \"* \u2015p *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-memdmp",
+        "memdmp",
+        "\u2013memdmp",
+        "\u2014memdmp",
+        "\u2015memdmp",
+        "fullmemdmp"
+      ],
+      "raw_values": [
+        "*-memdmp*",
+        "*/memdmp*",
+        "*\u2013memdmp*",
+        "*\u2014memdmp*",
+        "*\u2015memdmp*",
+        "*fullmemdmp*",
+        "* -o *",
+        "* /o *",
+        "* \u2013o *",
+        "* \u2014o *",
+        "* \u2015o *",
+        "* -p *",
+        "* /p *",
+        "* \u2013p *",
+        "* \u2014p *",
+        "* \u2015p *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rdrleakdiag.exe"
+      ],
+      "raw_values": [
+        "*\\\\rdrleakdiag.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rdrleakdiag.exe"
+      ],
+      "raw_values": [
+        "RdrLeakDiag.exe"
+      ]
+    }
+  ]
+}

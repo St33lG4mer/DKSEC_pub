@@ -1,0 +1,137 @@
+{
+  "source": "elastic",
+  "name": "Potential Suspicious File Edit",
+  "slug": "persistence_suspicious_file_opened_through_editor",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_suspicious_file_opened_through_editor.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"creation\", \"file_create_event\") and file.extension == \"swp\" and\nfile.path : (\n  /* common interesting files and locations */\n  \"/etc/.shadow.swp\", \"/etc/.shadow-.swp\", \"/etc/.shadow~.swp\", \"/etc/.gshadow.swp\", \"/etc/.gshadow-.swp\",\n  \"/etc/.passwd.swp\", \"/etc/.pwd.db.swp\", \"/etc/.master.passwd.swp\", \"/etc/.spwd.db.swp\", \"/etc/security/.opasswd.swp\",\n  \"/etc/.environment.swp\", \"/etc/.profile.swp\", \"/etc/sudoers.d/.*.swp\", \"/etc/ld.so.conf.d/.*.swp\",\n  \"/etc/init.d/.*.swp\", \"/etc/.rc.local.swp\", \"/etc/rc*.d/.*.swp\", \"/dev/shm/.*.swp\", \"/etc/update-motd.d/.*.swp\",\n  \"/usr/lib/update-notifier/.*.swp\",\n\n  /* service, timer, want, socket and lock files */\n  \"/etc/systemd/system/.*.swp\", \"/usr/local/lib/systemd/system/.*.swp\", \"/lib/systemd/system/.*.swp\",\n  \"/usr/lib/systemd/system/.*.swp\",\"/home/*/.config/systemd/user/.*.swp\", \"/run/.*.swp\", \"/var/run/.*.swp/\",\n\n  /* profile and shell configuration files */\n  \"/home/*.profile.swp\", \"/home/*.bash_profile.swp\", \"/home/*.bash_login.swp\", \"/home/*.bashrc.swp\", \"/home/*.bash_logout.swp\",\n  \"/home/*.zshrc.swp\", \"/home/*.zlogin.swp\", \"/home/*.tcshrc.swp\", \"/home/*.kshrc.swp\", \"/home/*.config.fish.swp\",\n  \"/root/*.profile.swp\", \"/root/*.bash_profile.swp\", \"/root/*.bash_login.swp\", \"/root/*.bashrc.swp\", \"/root/*.bash_logout.swp\",\n  \"/root/*.zshrc.swp\", \"/root/*.zlogin.swp\", \"/root/*.tcshrc.swp\", \"/root/*.kshrc.swp\", \"/root/*.config.fish.swp\"\n)\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".shadow.swp",
+        ".shadow-.swp",
+        ".shadow~.swp",
+        ".gshadow.swp",
+        ".gshadow-.swp",
+        ".passwd.swp",
+        ".pwd.db.swp",
+        ".master.passwd.swp",
+        ".spwd.db.swp",
+        ".opasswd.swp",
+        ".environment.swp",
+        ".profile.swp",
+        ".*.swp",
+        ".rc.local.swp",
+        ".bash_profile.swp",
+        ".bash_login.swp",
+        ".bashrc.swp",
+        ".bash_logout.swp",
+        ".zshrc.swp",
+        ".zlogin.swp",
+        ".tcshrc.swp",
+        ".kshrc.swp",
+        ".config.fish.swp"
+      ],
+      "raw_values": [
+        "/etc/.shadow.swp",
+        "/etc/.shadow-.swp",
+        "/etc/.shadow~.swp",
+        "/etc/.gshadow.swp",
+        "/etc/.gshadow-.swp",
+        "/etc/.passwd.swp",
+        "/etc/.pwd.db.swp",
+        "/etc/.master.passwd.swp",
+        "/etc/.spwd.db.swp",
+        "/etc/security/.opasswd.swp",
+        "/etc/.environment.swp",
+        "/etc/.profile.swp",
+        "/etc/sudoers.d/.*.swp",
+        "/etc/ld.so.conf.d/.*.swp",
+        "/etc/init.d/.*.swp",
+        "/etc/.rc.local.swp",
+        "/etc/rc*.d/.*.swp",
+        "/dev/shm/.*.swp",
+        "/etc/update-motd.d/.*.swp",
+        "/usr/lib/update-notifier/.*.swp",
+        "/etc/systemd/system/.*.swp",
+        "/usr/local/lib/systemd/system/.*.swp",
+        "/lib/systemd/system/.*.swp",
+        "/usr/lib/systemd/system/.*.swp",
+        "/home/*/.config/systemd/user/.*.swp",
+        "/run/.*.swp",
+        "/var/run/.*.swp/",
+        "/home/*.profile.swp",
+        "/home/*.bash_profile.swp",
+        "/home/*.bash_login.swp",
+        "/home/*.bashrc.swp",
+        "/home/*.bash_logout.swp",
+        "/home/*.zshrc.swp",
+        "/home/*.zlogin.swp",
+        "/home/*.tcshrc.swp",
+        "/home/*.kshrc.swp",
+        "/home/*.config.fish.swp",
+        "/root/*.profile.swp",
+        "/root/*.bash_profile.swp",
+        "/root/*.bash_login.swp",
+        "/root/*.bashrc.swp",
+        "/root/*.bash_logout.swp",
+        "/root/*.zshrc.swp",
+        "/root/*.zlogin.swp",
+        "/root/*.tcshrc.swp",
+        "/root/*.kshrc.swp",
+        "/root/*.config.fish.swp"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "creation",
+        "file_create_event"
+      ],
+      "raw_values": [
+        "creation",
+        "file_create_event"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "==",
+      "values": [
+        "swp"
+      ],
+      "raw_values": [
+        "swp"
+      ]
+    }
+  ]
+}

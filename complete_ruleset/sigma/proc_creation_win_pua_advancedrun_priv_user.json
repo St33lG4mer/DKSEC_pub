@@ -1,0 +1,35 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_advancedrun_priv_user",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_advancedrun_priv_user.eql",
+  "raw_query": "any where (process.command_line like~ (\"*/EXEFilename*\", \"*/CommandLine*\")) and ((process.command_line like~ (\"* /RunAs 8 *\", \"* /RunAs 4 *\", \"* /RunAs 10 *\", \"* /RunAs 11 *\")) or (process.command_line like~ (\"*/RunAs 8\", \"*/RunAs 4\", \"*/RunAs 10\", \"*/RunAs 11\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "exefilename",
+        "commandline",
+        "runas 8",
+        "runas 4",
+        "runas 10",
+        "runas 11"
+      ],
+      "raw_values": [
+        "*/EXEFilename*",
+        "*/CommandLine*",
+        "* /RunAs 8 *",
+        "* /RunAs 4 *",
+        "* /RunAs 10 *",
+        "* /RunAs 11 *",
+        "*/RunAs 8",
+        "*/RunAs 4",
+        "*/RunAs 10",
+        "*/RunAs 11"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Dynamic Linker Discovery via od",
+  "slug": "discovery_dynamic_linker_via_od",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/discovery_dynamic_linker_via_od.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\")\n and process.name == \"od\" and process.args in (\n  \"/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2\", \"/etc/ld.so.preload\", \"/lib64/ld-linux-x86-64.so.2\",\n  \"/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2\", \"/usr/lib64/ld-linux-x86-64.so.2\"\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "ld-linux-x86-64.so.2",
+        "ld.so.preload"
+      ],
+      "raw_values": [
+        "/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "/etc/ld.so.preload",
+        "/lib64/ld-linux-x86-64.so.2",
+        "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+        "/usr/lib64/ld-linux-x86-64.so.2"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

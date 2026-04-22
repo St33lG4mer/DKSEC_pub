@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mshta_inline_vbscript",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mshta_inline_vbscript.eql",
+  "raw_query": "any where process.command_line:\"*Wscript.*\" and process.command_line:\"*.Shell*\" and process.command_line:\"*.Run*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "wscript.",
+        ".shell",
+        ".run"
+      ],
+      "raw_values": [
+        "*Wscript.*",
+        "*.Shell*",
+        "*.Run*"
+      ]
+    }
+  ]
+}

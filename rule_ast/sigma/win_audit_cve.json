@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "win_audit_cve",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/application/microsoft-windows_audit_cve/win_audit_cve.eql",
+  "raw_query": "any where winlog.channel:\"Application\" and ((winlog.provider_name like~ (\"Microsoft-Windows-Audit-CVE\", \"Audit-CVE\")) and event.code:\"1\")",
+  "conditions": [
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": "like~",
+      "values": [
+        "microsoft-windows-audit-cve",
+        "audit-cve"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Audit-CVE",
+        "Audit-CVE"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "application"
+      ],
+      "raw_values": [
+        "Application"
+      ]
+    }
+  ]
+}

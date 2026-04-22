@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_remote_access_tools_screenconnect_child_proc",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_remote_access_tools_screenconnect_child_proc.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\ScreenConnect.ClientService.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "screenconnect.clientservice.exe"
+      ],
+      "raw_values": [
+        "*\\\\ScreenConnect.ClientService.exe"
+      ]
+    }
+  ]
+}

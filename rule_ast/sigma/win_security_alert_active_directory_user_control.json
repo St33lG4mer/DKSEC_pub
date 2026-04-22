@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_security_alert_active_directory_user_control",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_alert_active_directory_user_control.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4704\" and winlog.event_data.PrivilegeList:\"*SeEnableDelegationPrivilege*\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4704"
+      ],
+      "raw_values": [
+        "4704"
+      ]
+    },
+    {
+      "field": "winlog.event_data.privilegelist",
+      "raw_field": "winlog.event_data.PrivilegeList",
+      "operator": ":",
+      "values": [
+        "seenabledelegationprivilege"
+      ],
+      "raw_values": [
+        "*SeEnableDelegationPrivilege*"
+      ]
+    }
+  ]
+}

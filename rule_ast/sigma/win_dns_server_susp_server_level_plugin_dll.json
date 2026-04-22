@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "win_dns_server_susp_server_level_plugin_dll",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/dns_server/win_dns_server_susp_server_level_plugin_dll.eql",
+  "raw_query": "any where winlog.channel:\"DNS Server\" and (event.code like~ (\"150\", \"770\", \"771\"))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "150",
+        "770",
+        "771"
+      ],
+      "raw_values": [
+        "150",
+        "770",
+        "771"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "dns server"
+      ],
+      "raw_values": [
+        "DNS Server"
+      ]
+    }
+  ]
+}

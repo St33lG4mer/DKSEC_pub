@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "Entra ID OAuth ROPC Grant Login Detected",
+  "slug": "initial_access_entra_id_unusual_ropc_login_attempt",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Data Source: Microsoft Entra ID Sign-In Logs",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/initial_access_entra_id_unusual_ropc_login_attempt.toml",
+  "raw_query": "data_stream.dataset: \"azure.signinlogs\" and\n    azure.signinlogs.properties.authentication_protocol: \"ropc\" and\n    azure.signinlogs.properties.authentication_requirement: \"singleFactorAuthentication\" and\n    azure.signinlogs.properties.user_type: \"Member\" and\n    event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.signinlogs"
+      ],
+      "raw_values": [
+        "azure.signinlogs"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.authentication_protocol",
+      "raw_field": "azure.signinlogs.properties.authentication_protocol",
+      "operator": ":",
+      "values": [
+        "ropc"
+      ],
+      "raw_values": [
+        "ropc"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.authentication_requirement",
+      "raw_field": "azure.signinlogs.properties.authentication_requirement",
+      "operator": ":",
+      "values": [
+        "singlefactorauthentication"
+      ],
+      "raw_values": [
+        "singleFactorAuthentication"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.user_type",
+      "raw_field": "azure.signinlogs.properties.user_type",
+      "operator": ":",
+      "values": [
+        "member"
+      ],
+      "raw_values": [
+        "Member"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "source": "elastic",
+  "name": "Hosts File Modified",
+  "slug": "impact_hosts_file_modified",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: Windows",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/cross-platform/impact_hosts_file_modified.toml",
+  "raw_query": "any where process.executable != null and\n\n  /* file events for creation; file change events are not captured by some of the included sources for linux and so may\n     miss this, which is the purpose of the process + command line args logic below */\n  (\n   event.category == \"file\" and event.type in (\"change\", \"creation\") and event.action != \"rename\" and\n     file.path : (\"/private/etc/hosts\", \"/etc/hosts\", \"?:\\\\Windows\\\\System32\\\\drivers\\\\etc\\\\hosts\") and \n     not process.name in (\"dockerd\", \"rootlesskit\", \"podman\", \"crio\") and\n     not process.executable : (\"C:\\\\Program Files\\\\Fortinet\\\\FortiClient\\\\FCDBLog.exe\",\n                               \"C:\\\\Program Files\\\\Fortinet\\\\FortiClient\\\\FortiWF.exe\",\n                               \"C:\\\\Program Files\\\\Fortinet\\\\FortiClient\\\\fmon.exe\",\n                               \"C:\\\\Program Files\\\\Seqrite\\\\Seqrite\\\\SCANNER.EXE\",\n                               \"C:\\\\Windows\\\\System32\\\\SearchProtocolHost.exe\",\n                               \"C:\\\\Windows\\\\Temp\\\\*.ins\\\\inst.exe\",\n                               \"C:\\\\Windows\\\\System32\\\\svchost.exe\",\n                               \"C:\\\\Program Files\\\\NordVPN\\\\nordvpn-service.exe\",\n                               \"C:\\\\Program Files\\\\Tailscale\\\\tailscaled.exe\",\n                               \"C:\\\\Program Files\\\\Docker\\\\Docker\\\\com.docker.service\",\n                               \"C:\\\\Program Files\\\\Docker\\\\Docker\\\\InstallerCli.exe\",\n                               \"C:\\\\Program Files\\\\Quick Heal\\\\Quick Heal AntiVirus Pro\\\\scanner.exe\",\n                               \"C:\\\\Program Files (x86)\\\\Quick Heal AntiVirus Pro\\\\SCANNER.EXE\",\n                               \"C:\\\\Program Files\\\\Quick Heal\\\\Quick Heal Internet Security\\\\scanner.exe\",\n                               \"C:\\\\Program Files (x86)\\\\Cisco\\\\Cisco AnyConnect Secure Mobility Client\\\\vpnagent.exe\",\n                               \"/Applications/Parallels Desktop.app/Contents/MacOS/prl_naptd\",\n                               \"/opt/IBM/InformationServer/Server/DSEngine/bin/uvsh\",\n                               \"/usr/local/demisto/server\", \n                               \"/usr/local/bin/defender\")\n  )\n  or\n\n  /* process events for change targeting linux only */\n  (\n   event.category == \"process\" and event.type in (\"start\") and\n     process.name in (\"nano\", \"vim\", \"vi\", \"emacs\", \"echo\", \"sed\") and\n     (process.args : (\"/etc/hosts\") or (process.working_directory == \"/etc\" and process.args == \"hosts\")) and \n     not process.parent.name in (\"dhclient-script\", \"google_set_hostname\") and\n     not process.command_line == \"sed -i /Added by Google/d /etc/hosts\"\n  )\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "hosts"
+      ],
+      "raw_values": [
+        "/private/etc/hosts",
+        "/etc/hosts",
+        "?:\\\\Windows\\\\System32\\\\drivers\\\\etc\\\\hosts"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "fcdblog.exe",
+        "fortiwf.exe",
+        "fmon.exe",
+        "scanner.exe",
+        "searchprotocolhost.exe",
+        "inst.exe",
+        "svchost.exe",
+        "nordvpn-service.exe",
+        "tailscaled.exe",
+        "com.docker.service",
+        "installercli.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Fortinet\\\\FortiClient\\\\FCDBLog.exe",
+        "C:\\\\Program Files\\\\Fortinet\\\\FortiClient\\\\FortiWF.exe",
+        "C:\\\\Program Files\\\\Fortinet\\\\FortiClient\\\\fmon.exe",
+        "C:\\\\Program Files\\\\Seqrite\\\\Seqrite\\\\SCANNER.EXE",
+        "C:\\\\Windows\\\\System32\\\\SearchProtocolHost.exe",
+        "C:\\\\Windows\\\\Temp\\\\*.ins\\\\inst.exe",
+        "C:\\\\Windows\\\\System32\\\\svchost.exe",
+        "C:\\\\Program Files\\\\NordVPN\\\\nordvpn-service.exe",
+        "C:\\\\Program Files\\\\Tailscale\\\\tailscaled.exe",
+        "C:\\\\Program Files\\\\Docker\\\\Docker\\\\com.docker.service",
+        "C:\\\\Program Files\\\\Docker\\\\Docker\\\\InstallerCli.exe",
+        "C:\\\\Program Files\\\\Quick Heal\\\\Quick Heal AntiVirus Pro\\\\scanner.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "hosts"
+      ],
+      "raw_values": [
+        "/etc/hosts"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "change",
+        "creation",
+        "start"
+      ],
+      "raw_values": [
+        "change",
+        "creation",
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dockerd",
+        "rootlesskit",
+        "podman",
+        "crio",
+        "nano",
+        "vim",
+        "emacs",
+        "echo",
+        "sed"
+      ],
+      "raw_values": [
+        "dockerd",
+        "rootlesskit",
+        "podman",
+        "crio",
+        "nano",
+        "vim",
+        "vi",
+        "emacs",
+        "echo",
+        "sed"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "dhclient-script",
+        "google_set_hostname"
+      ],
+      "raw_values": [
+        "dhclient-script",
+        "google_set_hostname"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "file",
+        "process"
+      ],
+      "raw_values": [
+        "file",
+        "process"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "rename"
+      ],
+      "raw_values": [
+        "rename"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "==",
+      "values": [
+        "/etc"
+      ],
+      "raw_values": [
+        "/etc"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "hosts"
+      ],
+      "raw_values": [
+        "hosts",
+        "sed -i /Added by Google/d /etc/hosts"
+      ]
+    }
+  ]
+}

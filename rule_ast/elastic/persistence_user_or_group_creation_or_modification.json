@@ -1,0 +1,70 @@
+{
+  "source": "elastic",
+  "name": "User or Group Creation/Modification",
+  "slug": "persistence_user_or_group_creation_or_modification",
+  "category": "iam",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Auditd Manager",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_user_or_group_creation_or_modification.toml",
+  "raw_query": "iam where host.os.type == \"linux\" and event.type in (\"creation\", \"change\") and auditd.result == \"success\" and\nevent.action in (\"changed-password\", \"added-user-account\", \"added-group-account-to\") and process.name != null\n",
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "creation",
+        "change"
+      ],
+      "raw_values": [
+        "creation",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "changed-password",
+        "added-user-account",
+        "added-group-account-to"
+      ],
+      "raw_values": [
+        "changed-password",
+        "added-user-account",
+        "added-group-account-to"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "auditd.result",
+      "raw_field": "auditd.result",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

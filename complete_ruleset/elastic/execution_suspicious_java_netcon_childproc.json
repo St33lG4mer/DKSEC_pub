@@ -1,0 +1,108 @@
+{
+  "source": "elastic",
+  "name": "Potential JAVA/JNDI Exploitation Attempt",
+  "slug": "execution_suspicious_java_netcon_childproc",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Use Case: Vulnerability",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/execution_suspicious_java_netcon_childproc.toml",
+  "raw_query": "sequence by host.id with maxspan=1m\n [network where event.action == \"connection_attempted\" and\n  process.name : \"java\" and\n  /*\n     outbound connection attempt to\n     LDAP, RMI or DNS standard ports\n     by JAVA process\n   */\n  destination.port in (1389, 389, 1099, 53, 5353)] by process.pid\n [process where event.type == \"start\" and\n\n  /* Suspicious JAVA child process */\n  process.parent.name : \"java\" and\n   process.name : (\"sh\",\n                   \"bash\",\n                   \"dash\",\n                   \"ksh\",\n                   \"tcsh\",\n                   \"zsh\",\n                   \"curl\",\n                   \"perl*\",\n                   \"python*\",\n                   \"ruby*\",\n                   \"php*\",\n                   \"wget\") and\n    not process.command_line like~ (\n      \"bash -c ulimit -u\",\n      \"bash /opt/flutter/bin/flutter*\",\n      \"bash -c echo $$\",\n      \"/bin/bash /opt/python3/bin/jira*\",\n      \"/bin/sh -c env LC_ALL=C /usr/sbin/lpc status*\"\n    )] by process.parent.pid\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "ksh",
+        "tcsh",
+        "zsh",
+        "curl",
+        "perl",
+        "python",
+        "ruby",
+        "php",
+        "wget",
+        "java"
+      ],
+      "raw_values": [
+        "sh",
+        "bash",
+        "dash",
+        "ksh",
+        "tcsh",
+        "zsh",
+        "curl",
+        "perl*",
+        "python*",
+        "ruby*",
+        "php*",
+        "wget",
+        "java"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "bash -c ulimit -u",
+        "flutter",
+        "bash -c echo $$",
+        "jira",
+        "lpc status"
+      ],
+      "raw_values": [
+        "bash -c ulimit -u",
+        "bash /opt/flutter/bin/flutter*",
+        "bash -c echo $$",
+        "/bin/bash /opt/python3/bin/jira*",
+        "/bin/sh -c env LC_ALL=C /usr/sbin/lpc status*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "java"
+      ],
+      "raw_values": [
+        "java"
+      ]
+    }
+  ]
+}

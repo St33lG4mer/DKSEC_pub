@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Activity Reported by Okta User",
+  "slug": "initial_access_suspicious_activity_reported_by_okta_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Identity and Access Audit",
+    "Data Source: Okta",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/initial_access_suspicious_activity_reported_by_okta_user.toml",
+  "raw_query": "data_stream.dataset:okta.system and event.action:user.account.report_suspicious_activity_by_enduser\n",
+  "conditions": []
+}

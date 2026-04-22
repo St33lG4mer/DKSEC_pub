@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_regedit_trustedinstaller",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_regedit_trustedinstaller.eql",
+  "raw_query": "any where process.executable:\"*\\\\regedit.exe\" and (process.parent.executable like~ (\"*\\\\TrustedInstaller.exe\", \"*\\\\ProcessHacker.exe\"))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "trustedinstaller.exe",
+        "processhacker.exe"
+      ],
+      "raw_values": [
+        "*\\\\TrustedInstaller.exe",
+        "*\\\\ProcessHacker.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\regedit.exe"
+      ]
+    }
+  ]
+}

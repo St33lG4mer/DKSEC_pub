@@ -1,0 +1,218 @@
+{
+  "source": "elastic",
+  "name": "Remote File Download via PowerShell",
+  "slug": "command_and_control_remote_file_copy_powershell",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/windows/command_and_control_remote_file_copy_powershell.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=30s\n[network where host.os.type == \"windows\" and \n  process.name : (\"powershell.exe\", \"pwsh.exe\", \"powershell_ise.exe\") and\n  network.protocol == \"dns\" and\n  not dns.question.name : (\n        \"*.microsoft.com\", \"*.azureedge.net\", \"*.powershellgallery.com\", \"*.windowsupdate.com\",\n        \"metadata.google.internal\", \"dist.nuget.org\", \"artifacts.elastic.co\", \"*.digicert.com\",\n        \"*.chocolatey.org\", \"outlook.office365.com\", \"cdn.oneget.org\", \"ci.dot.net\",\n        \"packages.icinga.com\", \"login.microsoftonline.com\", \"*.gov\", \"*.azure.com\", \"*.python.org\",\n        \"dl.google.com\", \"sensor.cloud.tenable.com\", \"*.azurefd.net\", \"*.office.net\", \"*.anac*\",\n        \"aka.ms\", \"dot.net\", \"*.visualstudio.com\", \"*.local\") and\n  not user.id == \"S-1-5-18\" and\n  /* Filter out NetBIOS/LLMNR-style names (e.g. host, localhost, etc.) */\n  dns.question.name regex \"\"\".*\\.[a-zA-Z]{2,5}\"\"\"]\n[file where host.os.type == \"windows\" and event.type == \"creation\" and\n  process.name : \"powershell.exe\" and \n  (file.extension : (\"exe\", \"dll\", \"ps1\", \"bat\", \"cmd\", \"vbs\", \"vbe\", \"js\", \"jse\", \"wsh\", \"wsf\", \"sct\", \"hta\", \"cpl\", \"scr\", \"pif\", \"com\") or file.Ext.header_bytes : \"4d5a*\") and\n  not file.name : \"__PSScriptPolicy*.ps1\" and\n  not file.path : (\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\????????.dll\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\*\\\\????????.dll\",\n        \"?:\\\\Windows\\\\TEMP\\\\ansible-tmp-*\\\\AnsiballZ*.ps1\"\n  ) and\n  not user.id == \"S-1-5-18\"]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        ".microsoft.com",
+        ".azureedge.net",
+        ".powershellgallery.com",
+        ".windowsupdate.com",
+        "metadata.google.internal",
+        "dist.nuget.org",
+        "artifacts.elastic.co",
+        ".digicert.com",
+        ".chocolatey.org",
+        "outlook.office365.com",
+        "cdn.oneget.org",
+        "ci.dot.net",
+        "packages.icinga.com",
+        "login.microsoftonline.com",
+        ".gov",
+        ".azure.com",
+        ".python.org",
+        "dl.google.com",
+        "sensor.cloud.tenable.com",
+        ".azurefd.net",
+        ".office.net",
+        ".anac",
+        "aka.ms",
+        "dot.net",
+        ".visualstudio.com",
+        ".local"
+      ],
+      "raw_values": [
+        "*.microsoft.com",
+        "*.azureedge.net",
+        "*.powershellgallery.com",
+        "*.windowsupdate.com",
+        "metadata.google.internal",
+        "dist.nuget.org",
+        "artifacts.elastic.co",
+        "*.digicert.com",
+        "*.chocolatey.org",
+        "outlook.office365.com",
+        "cdn.oneget.org",
+        "ci.dot.net",
+        "packages.icinga.com",
+        "login.microsoftonline.com",
+        "*.gov",
+        "*.azure.com",
+        "*.python.org",
+        "dl.google.com",
+        "sensor.cloud.tenable.com",
+        "*.azurefd.net",
+        "*.office.net",
+        "*.anac*",
+        "aka.ms",
+        "dot.net",
+        "*.visualstudio.com",
+        "*.local"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "exe",
+        "dll",
+        "ps1",
+        "bat",
+        "cmd",
+        "vbs",
+        "vbe",
+        "jse",
+        "wsh",
+        "wsf",
+        "sct",
+        "hta",
+        "cpl",
+        "scr",
+        "pif",
+        "com"
+      ],
+      "raw_values": [
+        "exe",
+        "dll",
+        "ps1",
+        "bat",
+        "cmd",
+        "vbs",
+        "vbe",
+        "js",
+        "jse",
+        "wsh",
+        "wsf",
+        "sct",
+        "hta",
+        "cpl",
+        "scr",
+        "pif",
+        "com"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll",
+        "ansiballz*.ps1"
+      ],
+      "raw_values": [
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\????????.dll",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\*\\\\????????.dll",
+        "?:\\\\Windows\\\\TEMP\\\\ansible-tmp-*\\\\AnsiballZ*.ps1"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "network.protocol",
+      "raw_field": "network.protocol",
+      "operator": "==",
+      "values": [
+        "dns"
+      ],
+      "raw_values": [
+        "dns"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "==",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "file.ext.header_bytes",
+      "raw_field": "file.Ext.header_bytes",
+      "operator": ":",
+      "values": [
+        "4d5a"
+      ],
+      "raw_values": [
+        "4d5a*"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "__psscriptpolicy*.ps1"
+      ],
+      "raw_values": [
+        "__PSScriptPolicy*.ps1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_net_user_default_accounts_manipulation",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_net_user_default_accounts_manipulation.eql",
+  "raw_query": "any where (((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) or (process.pe.original_file_name like~ (\"net.exe\", \"net1.exe\"))) and process.command_line:\"* user *\" and (process.command_line like~ (\"* J\u00e4rjestelm\u00e4nvalvoja *\", \"* Rendszergazda *\", \"* \u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440 *\", \"* Administrateur *\", \"* Administrador *\", \"* Administrat\u00f6r *\", \"* Administrator *\", \"* guest *\", \"* DefaultAccount *\", \"* \\\"J\u00e4rjestelm\u00e4nvalvoja\\\" *\", \"* \\\"Rendszergazda\\\" *\", \"* \\\"\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440\\\" *\", \"* \\\"Administrateur\\\" *\", \"* \\\"Administrador\\\" *\", \"* \\\"Administrat\u00f6r\\\" *\", \"* \\\"Administrator\\\" *\", \"* \\\"guest\\\" *\", \"* \\\"DefaultAccount\\\" *\", \"* 'J\u00e4rjestelm\u00e4nvalvoja' *\", \"* 'Rendszergazda' *\", \"* '\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440' *\", \"* 'Administrateur' *\", \"* 'Administrador' *\", \"* 'Administrat\u00f6r' *\", \"* 'Administrator' *\", \"* 'guest' *\", \"* 'DefaultAccount' *\"))) and (not (process.command_line:\"*guest*\" and process.command_line:\"*/active no*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "*\\\\net.exe",
+        "*\\\\net1.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "net.exe",
+        "net1.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "j\u00e4rjestelm\u00e4nvalvoja",
+        "rendszergazda",
+        "\u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440",
+        "administrateur",
+        "administrador",
+        "administrat\u00f6r",
+        "administrator",
+        "guest",
+        "defaultaccount",
+        "'j\u00e4rjestelm\u00e4nvalvoja'",
+        "'rendszergazda'",
+        "'\u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440'",
+        "'administrateur'",
+        "'administrador'",
+        "'administrat\u00f6r'",
+        "'administrator'",
+        "'guest'",
+        "'defaultaccount'"
+      ],
+      "raw_values": [
+        "* J\u00e4rjestelm\u00e4nvalvoja *",
+        "* Rendszergazda *",
+        "* \u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440 *",
+        "* Administrateur *",
+        "* Administrador *",
+        "* Administrat\u00f6r *",
+        "* Administrator *",
+        "* guest *",
+        "* DefaultAccount *",
+        "* \\",
+        " *",
+        "* 'J\u00e4rjestelm\u00e4nvalvoja' *",
+        "* 'Rendszergazda' *",
+        "* '\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440' *",
+        "* 'Administrateur' *",
+        "* 'Administrador' *",
+        "* 'Administrat\u00f6r' *",
+        "* 'Administrator' *",
+        "* 'guest' *",
+        "* 'DefaultAccount' *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "user",
+        "guest",
+        "active no"
+      ],
+      "raw_values": [
+        "* user *",
+        "*guest*",
+        "*/active no*"
+      ]
+    }
+  ]
+}

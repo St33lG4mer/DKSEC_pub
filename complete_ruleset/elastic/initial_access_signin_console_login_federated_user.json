@@ -1,0 +1,76 @@
+{
+  "source": "elastic",
+  "name": "AWS Sign-In Console Login with Federated User",
+  "slug": "initial_access_signin_console_login_federated_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS",
+    "Data Source: AWS Sign-In",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/initial_access_signin_console_login_federated_user.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" and \n    event.provider: \"signin.amazonaws.com\" and \n    event.action : \"ConsoleLogin\" and \n    aws.cloudtrail.user_identity.type: \"FederatedUser\" and\n    event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "signin.amazonaws.com"
+      ],
+      "raw_values": [
+        "signin.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "consolelogin"
+      ],
+      "raw_values": [
+        "ConsoleLogin"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": ":",
+      "values": [
+        "federateduser"
+      ],
+      "raw_values": [
+        "FederatedUser"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

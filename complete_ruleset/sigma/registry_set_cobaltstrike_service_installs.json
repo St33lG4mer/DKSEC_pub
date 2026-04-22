@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "registry_set_cobaltstrike_service_installs",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_cobaltstrike_service_installs.eql",
+  "raw_query": "any where (registry.path:\"*\\\\System\\\\CurrentControlSet\\\\Services*\" or (registry.path:\"*\\\\System\\\\ControlSet*\" and registry.path:\"*\\\\Services*\")) and ((winlog.event_data.Details:\"*ADMIN$*\" and winlog.event_data.Details:\"*.exe*\") or (winlog.event_data.Details:\"*%COMSPEC%*\" and winlog.event_data.Details:\"*start*\" and winlog.event_data.Details:\"*powershell*\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\services",
+        "\\\\system\\\\controlset",
+        "\\\\services"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Services*",
+        "*\\\\System\\\\ControlSet*",
+        "*\\\\Services*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "admin$",
+        ".exe",
+        "%comspec%",
+        "start",
+        "powershell"
+      ],
+      "raw_values": [
+        "*ADMIN$*",
+        "*.exe*",
+        "*%COMSPEC%*",
+        "*start*",
+        "*powershell*"
+      ]
+    }
+  ]
+}

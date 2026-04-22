@@ -1,0 +1,83 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_powershell_drop_binary_or_script",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_powershell_drop_binary_or_script.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\pwsh.exe\")) and (file.path like~ (\"*.bat\", \"*.chm\", \"*.cmd\", \"*.com\", \"*.dll\", \"*.exe\", \"*.hta\", \"*.jar\", \"*.js\", \"*.ocx\", \"*.scr\", \"*.sys\", \"*.vbe\", \"*.vbs\", \"*.wsf\"))) and (not ((file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and (file.path like~ (\"*.dll\", \"*.exe\"))) or ((file.path like~ (\"C:\\\\Windows\\\\Temp\\\\*\", \"C:\\\\Windows\\\\SystemTemp\\\\*\")) and (file.path like~ (\"*.dll\", \"*.exe\"))) or (file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\WindowsPowerShell\\\\Modules\\\\*\" and file.path:\"*.dll\") or (file.path:\"C:\\\\Program Files\\\\PackageManagement\\\\ProviderAssemblies\\\\nuget\\\\*\" and file.path:\"*\\\\Microsoft.PackageManagement.NuGetProvider.dll\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".chm",
+        ".cmd",
+        ".com",
+        ".dll",
+        ".exe",
+        ".hta",
+        ".jar",
+        ".js",
+        ".ocx",
+        ".scr",
+        ".sys",
+        ".vbe",
+        ".vbs",
+        ".wsf"
+      ],
+      "raw_values": [
+        "*.bat",
+        "*.chm",
+        "*.cmd",
+        "*.com",
+        "*.dll",
+        "*.exe",
+        "*.hta",
+        "*.jar",
+        "*.js",
+        "*.ocx",
+        "*.scr",
+        "*.sys",
+        "*.vbe",
+        "*.vbs",
+        "*.wsf",
+        "C:\\\\Windows\\\\Temp\\\\*",
+        "C:\\\\Windows\\\\SystemTemp\\\\*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll",
+        "microsoft.packagemanagement.nugetprovider.dll"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\WindowsPowerShell\\\\Modules\\\\*",
+        "*.dll",
+        "C:\\\\Program Files\\\\PackageManagement\\\\ProviderAssemblies\\\\nuget\\\\*",
+        "*\\\\Microsoft.PackageManagement.NuGetProvider.dll"
+      ]
+    }
+  ]
+}

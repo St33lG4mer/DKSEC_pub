@@ -1,0 +1,69 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_susp_execution_with_image_extension",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_susp_execution_with_image_extension.eql",
+  "raw_query": "any where (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.exe\") and (process.command_line like~ (\"*.bmp*\", \"*.cr2*\", \"*.eps*\", \"*.gif*\", \"*.ico*\", \"*.jpeg*\", \"*.jpg*\", \"*.nef*\", \"*.orf*\", \"*.png*\", \"*.raw*\", \"*.sr2*\", \"*.tif*\", \"*.tiff*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".bmp",
+        ".cr2",
+        ".eps",
+        ".gif",
+        ".ico",
+        ".jpeg",
+        ".jpg",
+        ".nef",
+        ".orf",
+        ".png",
+        ".raw",
+        ".sr2",
+        ".tif",
+        ".tiff"
+      ],
+      "raw_values": [
+        "*.bmp*",
+        "*.cr2*",
+        "*.eps*",
+        "*.gif*",
+        "*.ico*",
+        "*.jpeg*",
+        "*.jpg*",
+        "*.nef*",
+        "*.orf*",
+        "*.png*",
+        "*.raw*",
+        "*.sr2*",
+        "*.tif*",
+        "*.tiff*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.exe"
+      ]
+    }
+  ]
+}

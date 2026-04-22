@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_office_outlook_execution_from_temp",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_office_outlook_execution_from_temp.eql",
+  "raw_query": "any where process.executable:\"*\\\\Temporary Internet Files\\\\Content.Outlook\\\\*\"",
+  "conditions": []
+}

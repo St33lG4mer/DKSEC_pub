@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_edrsilencer",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_edrsilencer.eql",
+  "raw_query": "any where process.executable:\"*\\\\EDRSilencer.exe\" or process.pe.original_file_name:\"EDRSilencer.exe\" or process.pe.description:\"*EDRSilencer*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "edrsilencer.exe"
+      ],
+      "raw_values": [
+        "*\\\\EDRSilencer.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "edrsilencer.exe"
+      ],
+      "raw_values": [
+        "EDRSilencer.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "edrsilencer"
+      ],
+      "raw_values": [
+        "*EDRSilencer*"
+      ]
+    }
+  ]
+}

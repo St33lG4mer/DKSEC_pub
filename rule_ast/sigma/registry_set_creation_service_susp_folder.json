@@ -1,0 +1,68 @@
+{
+  "source": "sigma",
+  "name": "registry_set_creation_service_susp_folder",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_creation_service_susp_folder.eql",
+  "raw_query": "any where ((registry.path:\"HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\*\" and registry.path:\"*\\\\Start\" and (process.executable like~ (\"*\\\\Users\\\\Public\\\\*\", \"*\\\\Perflogs\\\\*\", \"*\\\\ADMIN$\\\\*\", \"*\\\\Temp\\\\*\")) and (winlog.event_data.Details like~ (\"DWORD (0x00000000)\", \"DWORD (0x00000001)\", \"DWORD (0x00000002)\"))) or (registry.path:\"HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\*\" and registry.path:\"*\\\\ImagePath\" and (winlog.event_data.Details like~ (\"*\\\\Users\\\\Public\\\\*\", \"*\\\\Perflogs\\\\*\", \"*\\\\ADMIN$\\\\*\", \"*\\\\Temp\\\\*\")))) and (not ((process.executable:\"*\\\\Common Files\\\\*\" and process.executable:\"*\\\\Temp\\\\*\") or (registry.path:\"*\\\\CurrentControlSet\\\\Services\\\\MBAMInstallerService\\\\ImagePath\" and winlog.event_data.Details:\"*\\\\AppData\\\\Local\\\\Temp\\\\MBAMInstallerService.exe\\\"\" and process.executable:\"C:\\\\Windows\\\\system32\\\\services.exe\")))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "\\\\users\\\\public\\\\",
+        "\\\\perflogs\\\\",
+        "\\\\admin$\\\\",
+        "\\\\temp\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\Perflogs\\\\*",
+        "*\\\\ADMIN$\\\\*",
+        "*\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\system\\\\currentcontrolset\\\\services\\\\",
+        "\\\\start",
+        "\\\\imagepath",
+        "\\\\currentcontrolset\\\\services\\\\mbaminstallerservice\\\\imagepath"
+      ],
+      "raw_values": [
+        "HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\*",
+        "*\\\\Start",
+        "*\\\\ImagePath",
+        "*\\\\CurrentControlSet\\\\Services\\\\MBAMInstallerService\\\\ImagePath"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "services.exe"
+      ],
+      "raw_values": [
+        "*\\\\Common Files\\\\*",
+        "*\\\\Temp\\\\*",
+        "C:\\\\Windows\\\\system32\\\\services.exe"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "\\\\appdata\\\\local\\\\temp\\\\mbaminstallerservice.exe\\"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\MBAMInstallerService.exe\\"
+      ]
+    }
+  ]
+}

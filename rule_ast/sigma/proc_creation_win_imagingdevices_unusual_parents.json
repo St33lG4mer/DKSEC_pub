@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_imagingdevices_unusual_parents",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_imagingdevices_unusual_parents.eql",
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\WmiPrvSE.exe\", \"*\\\\svchost.exe\", \"*\\\\dllhost.exe\")) and process.executable:\"*\\\\ImagingDevices.exe\") or process.parent.executable:\"*\\\\ImagingDevices.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "wmiprvse.exe",
+        "svchost.exe",
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\WmiPrvSE.exe",
+        "*\\\\svchost.exe",
+        "*\\\\dllhost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "imagingdevices.exe"
+      ],
+      "raw_values": [
+        "*\\\\ImagingDevices.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "imagingdevices.exe"
+      ],
+      "raw_values": [
+        "*\\\\ImagingDevices.exe"
+      ]
+    }
+  ]
+}

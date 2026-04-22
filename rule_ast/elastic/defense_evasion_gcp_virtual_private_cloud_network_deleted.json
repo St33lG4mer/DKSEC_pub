@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "GCP Virtual Private Cloud Network Deletion",
+  "slug": "defense_evasion_gcp_virtual_private_cloud_network_deleted",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: GCP",
+    "Data Source: Google Cloud Platform",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/gcp/defense_evasion_gcp_virtual_private_cloud_network_deleted.toml",
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:v*.compute.networks.delete and event.outcome:success\n",
+  "conditions": []
+}

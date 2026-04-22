@@ -1,0 +1,95 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_windows_terminal_susp_children",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_windows_terminal_susp_children.eql",
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\WindowsTerminal.exe\", \"*\\\\wt.exe\")) and ((process.executable like~ (\"*\\\\rundll32.exe\", \"*\\\\regsvr32.exe\", \"*\\\\certutil.exe\", \"*\\\\cscript.exe\", \"*\\\\wscript.exe\", \"*\\\\csc.exe\")) or (process.executable like~ (\"*C:\\\\Users\\\\Public\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Windows\\\\TEMP\\\\*\")) or (process.command_line like~ (\"* iex *\", \"* icm*\", \"*Invoke-*\", \"*Import-Module *\", \"*ipmo *\", \"*DownloadString(*\", \"* /c *\", \"* /k *\", \"* /r *\")))) and (not ((process.command_line:\"*Import-Module*\" and process.command_line:\"*Microsoft.VisualStudio.DevShell.dll*\" and process.command_line:\"*Enter-VsDevShell*\") or (process.command_line:\"*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.WindowsTerminal_*\" and process.command_line:\"*\\\\LocalState\\\\settings.json*\") or (process.command_line:\"*C:\\\\Program Files\\\\Microsoft Visual Studio\\\\*\" and process.command_line:\"*\\\\Common7\\\\Tools\\\\VsDevCmd.bat*\")))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "windowsterminal.exe",
+        "wt.exe"
+      ],
+      "raw_values": [
+        "*\\\\WindowsTerminal.exe",
+        "*\\\\wt.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rundll32.exe",
+        "regsvr32.exe",
+        "certutil.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "csc.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\certutil.exe",
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe",
+        "*\\\\csc.exe",
+        "*C:\\\\Users\\\\Public\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Windows\\\\TEMP\\\\*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "iex",
+        "icm",
+        "invoke-",
+        "import-module",
+        "ipmo",
+        "downloadstring("
+      ],
+      "raw_values": [
+        "* iex *",
+        "* icm*",
+        "*Invoke-*",
+        "*Import-Module *",
+        "*ipmo *",
+        "*DownloadString(*",
+        "* /c *",
+        "* /k *",
+        "* /r *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "import-module",
+        "microsoft.visualstudio.devshell.dll",
+        "enter-vsdevshell",
+        "microsoft.windowsterminal_",
+        "settings.json",
+        "vsdevcmd.bat"
+      ],
+      "raw_values": [
+        "*Import-Module*",
+        "*Microsoft.VisualStudio.DevShell.dll*",
+        "*Enter-VsDevShell*",
+        "*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.WindowsTerminal_*",
+        "*\\\\LocalState\\\\settings.json*",
+        "*C:\\\\Program Files\\\\Microsoft Visual Studio\\\\*",
+        "*\\\\Common7\\\\Tools\\\\VsDevCmd.bat*"
+      ]
+    }
+  ]
+}

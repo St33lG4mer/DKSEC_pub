@@ -1,0 +1,1 @@
+any where process.command_line:"*setup0.exe -p*" or (process.command_line:"*setup.exe*" and (process.command_line like~ ("*-x:0", "*-x:1", "*-x:2")))

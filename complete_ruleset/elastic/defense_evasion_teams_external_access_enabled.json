@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Deprecated - M365 Teams External Access Enabled",
+  "slug": "defense_evasion_teams_external_access_enabled",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/defense_evasion_teams_external_access_enabled.toml",
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:(SkypeForBusiness or MicrosoftTeams) and\nevent.category:web and event.action:\"Set-CsTenantFederationConfiguration\" and\no365.audit.Parameters.AllowFederatedUsers:True and event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "set-cstenantfederationconfiguration"
+      ],
+      "raw_values": [
+        "Set-CsTenantFederationConfiguration"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_copy_system_dir",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_copy_system_dir.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\cmd.exe\" and process.command_line:\"*copy *\") or ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.command_line like~ (\"*copy-item*\", \"* copy *\", \"*cpi *\", \"* cp *\"))) or ((process.executable like~ (\"*\\\\robocopy.exe\", \"*\\\\xcopy.exe\")) or (process.pe.original_file_name like~ (\"robocopy.exe\", \"XCOPY.EXE\")))) and process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['\\\\s[\\\\'\\\"]', <SpecialChars.WILDCARD_SINGLE: 2>, 'C:\\\\\\\\Windows\\\\\\\\(System32|SysWOW64|WinSxS)']), flags={<SigmaRegularExpressionFlag.IGNORECASE: 1>})\" and (not (process.executable:\"*\\\\cmd.exe\" and (process.command_line:\"*/c copy*\" and process.command_line:\"*\\\\Temp\\\\*\" and process.command_line:\"*\\\\avira_system_speedup.exe*\") and (process.command_line like~ (\"*C:\\\\Program Files\\\\Avira\\\\*\", \"*C:\\\\Program Files (x86)\\\\Avira\\\\*\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "robocopy.exe",
+        "xcopy.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\robocopy.exe",
+        "*\\\\xcopy.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "copy-item",
+        "copy",
+        "cpi"
+      ],
+      "raw_values": [
+        "*copy-item*",
+        "* copy *",
+        "*cpi *",
+        "* cp *",
+        "*C:\\\\Program Files\\\\Avira\\\\*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "robocopy.exe",
+        "xcopy.exe"
+      ],
+      "raw_values": [
+        "robocopy.exe",
+        "XCOPY.EXE"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "copy",
+        "c copy",
+        "avira_system_speedup.exe"
+      ],
+      "raw_values": [
+        "*copy *",
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\s[\\\\'\\",
+        "*/c copy*",
+        "*\\\\Temp\\\\*",
+        "*\\\\avira_system_speedup.exe*"
+      ]
+    }
+  ]
+}

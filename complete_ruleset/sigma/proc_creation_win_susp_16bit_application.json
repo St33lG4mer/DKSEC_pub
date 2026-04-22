@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_16bit_application",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_16bit_application.eql",
+  "raw_query": "any where process.executable like~ (\"*\\\\ntvdm.exe\", \"*\\\\csrstub.exe\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "ntvdm.exe",
+        "csrstub.exe"
+      ],
+      "raw_values": [
+        "*\\\\ntvdm.exe",
+        "*\\\\csrstub.exe"
+      ]
+    }
+  ]
+}

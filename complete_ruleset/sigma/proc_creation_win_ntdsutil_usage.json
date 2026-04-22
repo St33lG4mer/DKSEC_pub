@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_ntdsutil_usage",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_ntdsutil_usage.eql",
+  "raw_query": "any where process.executable:\"*\\\\ntdsutil.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ntdsutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\ntdsutil.exe"
+      ]
+    }
+  ]
+}

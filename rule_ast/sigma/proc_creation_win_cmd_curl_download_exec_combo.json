@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_curl_download_exec_combo",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_curl_download_exec_combo.eql",
+  "raw_query": "any where process.command_line like~ (\"* -c *\", \"* /c *\", \"* \u2013c *\", \"* \u2014c *\", \"* \u2015c *\") and (process.command_line:\"*curl *\" and process.command_line:\"*http*\" and process.command_line:\"*-o*\" and process.command_line:\"*&*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "curl",
+        "http"
+      ],
+      "raw_values": [
+        "*curl *",
+        "*http*",
+        "*-o*",
+        "*&*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "win_dns_client_mal_cobaltstrike",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/dns_client/win_dns_client_mal_cobaltstrike.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-DNS Client Events/Operational\" and (event.code:\"3008\" and ((dns.question.name like~ (\"aaa.stage.*\", \"post.1*\")) or dns.question.name:\"*.stage.123456.*\"))",
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        "aaa.stage.",
+        "post.1"
+      ],
+      "raw_values": [
+        "aaa.stage.*",
+        "post.1*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-dns client events/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-DNS Client Events/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "3008"
+      ],
+      "raw_values": [
+        "3008"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        ".stage.123456."
+      ],
+      "raw_values": [
+        "*.stage.123456.*"
+      ]
+    }
+  ]
+}

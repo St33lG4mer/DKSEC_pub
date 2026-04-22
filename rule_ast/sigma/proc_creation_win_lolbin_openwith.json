@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_openwith",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_openwith.eql",
+  "raw_query": "any where process.executable:\"*\\\\OpenWith.exe\" and process.command_line:\"*/c*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "openwith.exe"
+      ],
+      "raw_values": [
+        "*\\\\OpenWith.exe"
+      ]
+    }
+  ]
+}

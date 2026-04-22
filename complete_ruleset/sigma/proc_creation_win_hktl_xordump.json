@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_xordump",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_xordump.eql",
+  "raw_query": "any where process.executable:\"*\\\\xordump.exe\" or (process.command_line like~ (\"* -process lsass.exe *\", \"* -m comsvcs *\", \"* -m dbghelp *\", \"* -m dbgcore *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-process lsass.exe",
+        "-m comsvcs",
+        "-m dbghelp",
+        "-m dbgcore"
+      ],
+      "raw_values": [
+        "* -process lsass.exe *",
+        "* -m comsvcs *",
+        "* -m dbghelp *",
+        "* -m dbgcore *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "xordump.exe"
+      ],
+      "raw_values": [
+        "*\\\\xordump.exe"
+      ]
+    }
+  ]
+}

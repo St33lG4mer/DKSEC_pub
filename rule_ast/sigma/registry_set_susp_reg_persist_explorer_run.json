@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "registry_set_susp_reg_persist_explorer_run",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_susp_reg_persist_explorer_run.eql",
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\" and (winlog.event_data.Details like~ (\"*:\\\\$Recycle.bin\\\\*\", \"*:\\\\ProgramData\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Users\\\\Default\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\"))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        ":\\\\$recycle.bin\\\\",
+        ":\\\\programdata\\\\",
+        ":\\\\temp\\\\",
+        ":\\\\users\\\\default\\\\",
+        ":\\\\users\\\\public\\\\",
+        ":\\\\windows\\\\temp\\\\",
+        "\\\\appdata\\\\local\\\\temp\\\\"
+      ],
+      "raw_values": [
+        "*:\\\\$Recycle.bin\\\\*",
+        "*:\\\\ProgramData\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Users\\\\Default\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_mustang_panda_indicators",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/Mustang-Panda-Australia-Campaign/proc_creation_win_apt_mustang_panda_indicators.eql",
+  "raw_query": "any where (process.command_line:\"*copy SolidPDFCreator.dll*\" and process.command_line:\"*C:\\\\Users\\\\Public\\\\Libraries\\\\PhotoTvRHD\\\\SolidPDFCreator.dll*\") or (process.command_line:\"*reg *\" and process.command_line:\"*\\\\Windows\\\\CurrentVersion\\\\Run*\" and process.command_line:\"*SolidPDF*\" and process.command_line:\"*C:\\\\Users\\\\Public\\\\Libraries\\\\PhotoTvRHD\\\\*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "copy solidpdfcreator.dll",
+        "solidpdfcreator.dll",
+        "reg",
+        "run",
+        "solidpdf"
+      ],
+      "raw_values": [
+        "*copy SolidPDFCreator.dll*",
+        "*C:\\\\Users\\\\Public\\\\Libraries\\\\PhotoTvRHD\\\\SolidPDFCreator.dll*",
+        "*reg *",
+        "*\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*SolidPDF*",
+        "*C:\\\\Users\\\\Public\\\\Libraries\\\\PhotoTvRHD\\\\*"
+      ]
+    }
+  ]
+}

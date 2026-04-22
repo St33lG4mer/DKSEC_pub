@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_mpnotify",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_mpnotify.eql",
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\mpnotify*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\mpnotify"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\mpnotify*"
+      ]
+    }
+  ]
+}

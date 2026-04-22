@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "Successful SSH Authentication from Unusual IP Address",
+  "slug": "initial_access_successful_ssh_authentication_by_unusual_ip",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/initial_access_successful_ssh_authentication_by_unusual_ip.toml",
+  "raw_query": "event.category:authentication and host.os.type:linux and event.action:ssh_login and event.outcome:success\n",
+  "conditions": []
+}

@@ -1,0 +1,67 @@
+{
+  "source": "sigma",
+  "name": "win_security_possible_dc_shadow",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_possible_dc_shadow.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4742\" and winlog.event_data.ServicePrincipalNames:\"*GC/*\") or (event.code:\"5136\" and winlog.event_data.AttributeLDAPDisplayName:\"servicePrincipalName\" and winlog.event_data.AttributeValue:\"GC/*\"))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4742",
+        "5136"
+      ],
+      "raw_values": [
+        "4742",
+        "5136"
+      ]
+    },
+    {
+      "field": "winlog.event_data.serviceprincipalnames",
+      "raw_field": "winlog.event_data.ServicePrincipalNames",
+      "operator": ":",
+      "values": [
+        "gc/"
+      ],
+      "raw_values": [
+        "*GC/*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": ":",
+      "values": [
+        "serviceprincipalname"
+      ],
+      "raw_values": [
+        "servicePrincipalName"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributevalue",
+      "raw_field": "winlog.event_data.AttributeValue",
+      "operator": ":",
+      "values": [
+        "gc/"
+      ],
+      "raw_values": [
+        "GC/*"
+      ]
+    }
+  ]
+}

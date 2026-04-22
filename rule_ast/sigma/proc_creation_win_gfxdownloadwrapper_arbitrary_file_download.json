@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_gfxdownloadwrapper_arbitrary_file_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_gfxdownloadwrapper_arbitrary_file_download.eql",
+  "raw_query": "any where (process.executable:\"*\\\\GfxDownloadWrapper.exe\" and (process.command_line like~ (\"*http://*\", \"*https://*\"))) and (not process.command_line:\"*https://gameplayapi.intel.com/*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gfxdownloadwrapper.exe"
+      ],
+      "raw_values": [
+        "*\\\\GfxDownloadWrapper.exe"
+      ]
+    }
+  ]
+}

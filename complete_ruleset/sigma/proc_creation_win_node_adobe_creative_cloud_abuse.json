@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_node_adobe_creative_cloud_abuse",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_node_adobe_creative_cloud_abuse.eql",
+  "raw_query": "any where process.executable:\"*\\\\Adobe Creative Cloud Experience\\\\libs\\\\node.exe\" and (not process.command_line:\"*Adobe Creative Cloud Experience\\\\js*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "node.exe"
+      ],
+      "raw_values": [
+        "*\\\\Adobe Creative Cloud Experience\\\\libs\\\\node.exe"
+      ]
+    }
+  ]
+}

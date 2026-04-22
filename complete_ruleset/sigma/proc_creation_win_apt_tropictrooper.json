@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_tropictrooper",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2018/TA/TropicTrooper/proc_creation_win_apt_tropictrooper.eql",
+  "raw_query": "any where process.command_line:\"*abCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCc*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "abccccccccccccccccccccccccccccccccccccccccccccccc"
+      ],
+      "raw_values": [
+        "*abCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCc*"
+      ]
+    }
+  ]
+}

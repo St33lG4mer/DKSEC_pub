@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Pod Created With HostNetwork",
+  "slug": "privilege_escalation_pod_created_with_hostnetwork",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/privilege_escalation_pod_created_with_hostnetwork.toml",
+  "raw_query": "data_stream.dataset:kubernetes.audit_logs and kubernetes.audit.annotations.authorization_k8s_io/decision:allow and\nkubernetes.audit.objectRef.resource:pods and kubernetes.audit.verb:(create or patch or update) and\nkubernetes.audit.requestObject.spec.hostNetwork:true and\nnot (\n  kubernetes.audit.requestObject.spec.containers.image:(\n    *eks/observability/aws-for-fluent-bit* or *eks/observability/cloudwatch-agent* or *elastic-agent* or *quay/tigera* or *tigera/operator* or\n    docker.io/bitnami/node-exporter* or docker.io/rancher/mirrored-calico-operator* or quay.io/calico/node* or quay.io/cephcsi/cephcsi* or\n    quay.io/frrouting/frr* or quay.io/metallb/speaker* or quay.io/prometheus/node-exporter* or rancher/system-agent* or\n    registry.crowdstrike.com/falcon-sensor* or registry.k8s.io/sig-storage/csi-node-driver-registrar*\n  ) or\n  kubernetes.audit.objectRef.namespace:(\n    calico or calico-system or cilium or elastic or ingress-nginx or kube-system or noname-security-posture or openebs or sysdig-agent\n  )\n)\n",
+  "conditions": []
+}

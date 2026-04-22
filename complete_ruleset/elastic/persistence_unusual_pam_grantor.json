@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "Authentication via Unusual PAM Grantor",
+  "slug": "persistence_unusual_pam_grantor",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Credential Access",
+    "Tactic: Persistence",
+    "Data Source: Auditd Manager",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_unusual_pam_grantor.toml",
+  "raw_query": "event.category:authentication and host.os.type:linux and event.action:authenticated and event.outcome:success and\nauditd.data.grantors:(* and not (pam_rootok or *pam_cap* or *pam_permit*))\n",
+  "conditions": []
+}

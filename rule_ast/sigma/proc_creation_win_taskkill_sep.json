@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_taskkill_sep",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_taskkill_sep.eql",
+  "raw_query": "any where process.command_line:\"*taskkill*\" and process.command_line:\"* /F *\" and process.command_line:\"* /IM *\" and process.command_line:\"*ccSvcHst.exe*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "taskkill",
+        "ccsvchst.exe"
+      ],
+      "raw_values": [
+        "*taskkill*",
+        "* /F *",
+        "* /IM *",
+        "*ccSvcHst.exe*"
+      ]
+    }
+  ]
+}

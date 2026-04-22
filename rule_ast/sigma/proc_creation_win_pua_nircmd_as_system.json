@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_nircmd_as_system",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_nircmd_as_system.eql",
+  "raw_query": "any where process.command_line:\"* runassystem *\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "runassystem"
+      ],
+      "raw_values": [
+        "* runassystem *"
+      ]
+    }
+  ]
+}

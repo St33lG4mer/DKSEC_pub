@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_empiremonkey",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2019/TA/EmpireMonkey/proc_creation_win_apt_empiremonkey.eql",
+  "raw_query": "any where process.command_line:\"*/e:jscript*\" and process.command_line:\"*\\\\Local\\\\Temp\\\\Errors.bat*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "e:jscript",
+        "errors.bat"
+      ],
+      "raw_values": [
+        "*/e:jscript*",
+        "*\\\\Local\\\\Temp\\\\Errors.bat*"
+      ]
+    }
+  ]
+}

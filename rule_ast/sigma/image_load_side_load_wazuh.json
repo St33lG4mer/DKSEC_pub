@@ -1,0 +1,37 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_wazuh",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_wazuh.eql",
+  "raw_query": "any where (file.path like~ (\"*\\\\libwazuhshared.dll\", \"*\\\\libwinpthread-1.dll\")) and (not (file.path like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\"))) and (not ((file.path like~ (\"*\\\\AppData\\\\Local\\\\*\", \"*\\\\ProgramData\\\\*\")) and file.path:\"*\\\\mingw64\\\\bin\\\\libwinpthread-1.dll\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "libwazuhshared.dll",
+        "libwinpthread-1.dll"
+      ],
+      "raw_values": [
+        "*\\\\libwazuhshared.dll",
+        "*\\\\libwinpthread-1.dll",
+        "C:\\\\Program Files\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\ProgramData\\\\*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "libwinpthread-1.dll"
+      ],
+      "raw_values": [
+        "*\\\\mingw64\\\\bin\\\\libwinpthread-1.dll"
+      ]
+    }
+  ]
+}

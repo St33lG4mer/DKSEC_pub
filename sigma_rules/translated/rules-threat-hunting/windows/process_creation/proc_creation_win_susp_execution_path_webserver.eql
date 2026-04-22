@@ -1,0 +1,1 @@
+any where (process.executable like~ ("*\\wwwroot\\*", "*\\wmpub\\*", "*\\htdocs\\*")) and (not ((process.executable like~ ("*bin\\*", "*\\Tools\\*", "*\\SMSComponent\\*")) and process.parent.executable:"*\\services.exe"))

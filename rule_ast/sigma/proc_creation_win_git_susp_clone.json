@@ -1,0 +1,73 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_git_susp_clone",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_git_susp_clone.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\git.exe\", \"*\\\\git-remote-https.exe\")) or process.pe.original_file_name:\"git.exe\") and (process.command_line like~ (\"* clone *\", \"*git-remote-https *\")) and (process.command_line like~ (\"*exploit*\", \"*Vulns*\", \"*vulnerability*\", \"*RemoteCodeExecution*\", \"*Invoke-*\", \"*CVE-*\", \"*poc-*\", \"*ProofOfConcept*\", \"*proxyshell*\", \"*log4shell*\", \"*eternalblue*\", \"*eternal-blue*\", \"*MS17-*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "git.exe",
+        "git-remote-https.exe"
+      ],
+      "raw_values": [
+        "*\\\\git.exe",
+        "*\\\\git-remote-https.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "clone",
+        "git-remote-https",
+        "exploit",
+        "vulns",
+        "vulnerability",
+        "remotecodeexecution",
+        "invoke-",
+        "cve-",
+        "poc-",
+        "proofofconcept",
+        "proxyshell",
+        "log4shell",
+        "eternalblue",
+        "eternal-blue",
+        "ms17-"
+      ],
+      "raw_values": [
+        "* clone *",
+        "*git-remote-https *",
+        "*exploit*",
+        "*Vulns*",
+        "*vulnerability*",
+        "*RemoteCodeExecution*",
+        "*Invoke-*",
+        "*CVE-*",
+        "*poc-*",
+        "*ProofOfConcept*",
+        "*proxyshell*",
+        "*log4shell*",
+        "*eternalblue*",
+        "*eternal-blue*",
+        "*MS17-*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "git.exe"
+      ],
+      "raw_values": [
+        "git.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_hashcat",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_hashcat.eql",
+  "raw_query": "any where process.executable:\"*\\\\hashcat.exe\" or (process.command_line:\"*-a *\" and process.command_line:\"*-m 1000 *\" and process.command_line:\"*-r *\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "hashcat.exe"
+      ],
+      "raw_values": [
+        "*\\\\hashcat.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-m 1000"
+      ],
+      "raw_values": [
+        "*-a *",
+        "*-m 1000 *",
+        "*-r *"
+      ]
+    }
+  ]
+}

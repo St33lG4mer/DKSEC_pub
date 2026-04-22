@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "dns_query_win_teamviewer_domain_query_by_uncommon_app",
+  "subtree": "rules",
+  "category": "dns",
+  "sigma_path": "rules/windows/dns_query/dns_query_win_teamviewer_domain_query_by_uncommon_app.eql",
+  "raw_query": "any where (dns.question.name like~ (\"taf.teamviewer.com\", \"udp.ping.teamviewer.com\")) and (not process.executable:\"*TeamViewer*\")",
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        "taf.teamviewer.com",
+        "udp.ping.teamviewer.com"
+      ],
+      "raw_values": [
+        "taf.teamviewer.com",
+        "udp.ping.teamviewer.com"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "teamviewer"
+      ],
+      "raw_values": [
+        "*TeamViewer*"
+      ]
+    }
+  ]
+}

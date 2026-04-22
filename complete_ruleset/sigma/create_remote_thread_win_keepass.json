@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "create_remote_thread_win_keepass",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/create_remote_thread/create_remote_thread_win_keepass.eql",
+  "raw_query": "any where winlog.event_data.TargetImage:\"*\\\\KeePass.exe\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\keepass.exe"
+      ],
+      "raw_values": [
+        "*\\\\KeePass.exe"
+      ]
+    }
+  ]
+}

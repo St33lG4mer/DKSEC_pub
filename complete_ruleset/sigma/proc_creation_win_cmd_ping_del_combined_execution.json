@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_ping_del_combined_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_ping_del_combined_execution.eql",
+  "raw_query": "any where process.command_line like~ (\"* -n *\", \"* /n *\", \"* \u2013n *\", \"* \u2014n *\", \"* \u2015n *\") and process.command_line:\"*Nul*\" and (process.command_line like~ (\"* -f *\", \"* /f *\", \"* \u2013f *\", \"* \u2014f *\", \"* \u2015f *\") or process.command_line like~ (\"* -q *\", \"* /q *\", \"* \u2013q *\", \"* \u2014q *\", \"* \u2015q *\")) and (process.command_line:\"*ping*\" and process.command_line:\"*del *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "nul",
+        "ping",
+        "del"
+      ],
+      "raw_values": [
+        "*Nul*",
+        "*ping*",
+        "*del *"
+      ]
+    }
+  ]
+}

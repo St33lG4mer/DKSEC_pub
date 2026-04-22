@@ -1,0 +1,68 @@
+{
+  "source": "sigma",
+  "name": "registry_set_runmru_susp_command_execution",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_runmru_susp_command_execution.eql",
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\RunMRU*\" and (((winlog.event_data.Details like~ (\"*powershell*\", \"*pwsh*\")) and (winlog.event_data.Details like~ (\"* -e *\", \"* -ec *\", \"* -en *\", \"* -enc *\", \"* -enco*\", \"*ftp*\", \"*Hidden*\", \"*http*\", \"*iex*\", \"*Invoke-*\"))) or (winlog.event_data.Details:\"*wmic*\" and (winlog.event_data.Details like~ (\"*shadowcopy*\", \"*process call create*\"))))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "powershell",
+        "pwsh",
+        "-ec",
+        "-en",
+        "-enc",
+        "-enco",
+        "ftp",
+        "hidden",
+        "http",
+        "iex",
+        "invoke-",
+        "shadowcopy",
+        "process call create"
+      ],
+      "raw_values": [
+        "*powershell*",
+        "*pwsh*",
+        "* -e *",
+        "* -ec *",
+        "* -en *",
+        "* -enc *",
+        "* -enco*",
+        "*ftp*",
+        "*Hidden*",
+        "*http*",
+        "*iex*",
+        "*Invoke-*",
+        "*shadowcopy*",
+        "*process call create*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\runmru"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\RunMRU*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "wmic"
+      ],
+      "raw_values": [
+        "*wmic*"
+      ]
+    }
+  ]
+}

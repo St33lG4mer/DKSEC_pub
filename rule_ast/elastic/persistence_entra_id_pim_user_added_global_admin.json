@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Entra ID Global Administrator Role Assigned (PIM User)",
+  "slug": "persistence_entra_id_pim_user_added_global_admin",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_entra_id_pim_user_added_global_admin.toml",
+  "raw_query": "data_stream.dataset:azure.auditlogs and azure.auditlogs.properties.category:RoleManagement and\n    azure.auditlogs.operation_name:(\"Add eligible member to role in PIM completed (permanent)\" or\n                                    \"Add member to role in PIM completed (timebound)\") and\n    azure.auditlogs.properties.target_resources.*.display_name:\"Global Administrator\" and\n    event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": ".display_name",
+      "raw_field": ".display_name",
+      "operator": ":",
+      "values": [
+        "global administrator"
+      ],
+      "raw_values": [
+        "Global Administrator"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_event_viewer_events_asp",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_event_viewer_events_asp.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Event Viewer\\\\MicrosoftRedirectionProgram*\", \"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Event Viewer\\\\MicrosoftRedirectionURL*\")) and (not ((process.executable:\"*C:\\\\WINDOWS\\\\system32\\\\svchost.exe\" and registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Event Viewer\\\\MicrosoftRedirectionProgram\" and winlog.event_data.Details:\"%%SystemRoot%%\\\\PCHealth\\\\HelpCtr\\\\Binaries\\\\HelpCtr.exe\") or (process.executable:\"*C:\\\\WINDOWS\\\\system32\\\\svchost.exe\" and registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Event Viewer\\\\MicrosoftRedirectionProgramCommandLineParameters\" and winlog.event_data.Details:\"-url hcp://services/centers/support?topic=%%s\") or winlog.event_data.Details:\"http://go.microsoft.com/fwlink/events.asp\" or winlog.event_data.Details:\"(Empty)\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\event viewer\\\\microsoftredirectionprogram",
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\event viewer\\\\microsoftredirectionurl"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Event Viewer\\\\MicrosoftRedirectionProgram*",
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Event Viewer\\\\MicrosoftRedirectionURL*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\WINDOWS\\\\system32\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\event viewer\\\\microsoftredirectionprogram",
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\event viewer\\\\microsoftredirectionprogramcommandlineparameters"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Event Viewer\\\\MicrosoftRedirectionProgram",
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Event Viewer\\\\MicrosoftRedirectionProgramCommandLineParameters"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "%%systemroot%%\\\\pchealth\\\\helpctr\\\\binaries\\\\helpctr.exe",
+        "-url hcp://services/centers/support?topic=%%s",
+        "http://go.microsoft.com/fwlink/events.asp",
+        "(empty)"
+      ],
+      "raw_values": [
+        "%%SystemRoot%%\\\\PCHealth\\\\HelpCtr\\\\Binaries\\\\HelpCtr.exe",
+        "-url hcp://services/centers/support?topic=%%s",
+        "http://go.microsoft.com/fwlink/events.asp",
+        "(Empty)"
+      ]
+    }
+  ]
+}

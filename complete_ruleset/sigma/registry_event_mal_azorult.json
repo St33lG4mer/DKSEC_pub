@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "registry_event_mal_azorult",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_event_mal_azorult.eql",
+  "raw_query": "any where (event.code like~ (\"12\", \"13\")) and registry.path:\"*SYSTEM\\\\*\" and registry.path:\"*\\\\services\\\\localNETService\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "system\\\\",
+        "\\\\services\\\\localnetservice"
+      ],
+      "raw_values": [
+        "*SYSTEM\\\\*",
+        "*\\\\services\\\\localNETService"
+      ]
+    }
+  ]
+}

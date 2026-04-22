@@ -1,0 +1,183 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Windows Command Shell Arguments",
+  "slug": "execution_windows_cmd_shell_susp_args",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Elastic Endgame",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/execution_windows_cmd_shell_susp_args.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : \"cmd.exe\" and\n  (\n    process.command_line : (\n        \"*).Run(*\", \"*GetObject*\", \"* curl*regsvr32*\", \"*echo*wscript*\", \"*echo*ZONE.identifier*\",\n        \"*ActiveXObject*\", \"*dir /s /b *echo*\", \"*unescape(*\",  \"*findstr*TVNDRgAAAA*\", \"*findstr*passw*\", \"*start*\\\\\\\\*\\\\DavWWWRoot\\\\*\",\n        \"* explorer*%CD%*\", \"*%cd%\\\\*.js*\", \"*attrib*%CD%*\", \"*/?cMD<*\", \"*/AutoIt3ExecuteScript*..*\", \"*&cls&cls&cls&cls&cls&*\",\n        \"*&#*;&#*;&#*;&#*;*\", \"* &&s^eT*\", \"*& ChrW(*\", \"*&explorer /root*\", \"*start __ & __\\\\*\", \"*findstr /V /L *forfiles*\",\n        \"*=wscri& set *\", \"*http*!COmpUternaME!*\", \"*start *.pdf * start /min cmd.exe /c *\\\\\\\\*\", \"*pip install*System.Net.WebClient*\",\n        \"*Invoke-WebReques*Start-Process*\", \"*-command (Invoke-webrequest*\", \"*copy /b *\\\\\\\\* ping *-n*\", \"*echo*.ToCharArray*\"\n    ) or\n\n    (process.args : \"echo\" and process.parent.name : (\"wscript.exe\", \"mshta.exe\")) or\n    \n    process.args : (\"1>?:\\\\*.vbs\", \"1>?:\\\\*.js\") or\n\n    (process.args : \"explorer.exe\" and process.args : \"type\" and process.args : \">\" and process.args : \"start\") or\n\n    (\n      process.parent.name : \"explorer.exe\" and\n      process.command_line : (\n        \"*&&S^eT *\",\n        \"*&& set *&& set *&& set *&& set *&& set *&& call*\",\n        \"**\\\\u00??\\\\u00??\\\\u00??\\\\u00??\\\\u00??\\\\u00??\\\\u00??\\\\u00??*\"\n      )\n    ) or\n\n    (process.parent.name : \"explorer.exe\" and process.args : \"copy\" and process.args : \"&&\" and process.args : \"\\\\\\\\*@*\\\\*\")\n  ) and\n\n  /* false positives */\n  not (process.args : \"%TEMP%\\\\Spiceworks\\\\*\" and process.parent.name : \"wmiprvse.exe\") and\n  not ?process.parent.executable : (\n        \"?:\\\\Perl64\\\\bin\\\\perl.exe\",\n        \"?:\\\\Program Files\\\\nodejs\\\\node.exe\",\n        \"?:\\\\Program Files\\\\HP\\\\RS\\\\pgsql\\\\bin\\\\pg_dumpall.exe\",\n        \"?:\\\\Program Files (x86)\\\\PRTG Network Monitor\\\\64 bit\\\\PRTG Server.exe\",\n        \"?:\\\\Program Files (x86)\\\\Spiceworks\\\\bin\\\\spiceworks-finder.exe\",\n        \"?:\\\\Program Files (x86)\\\\Zuercher Suite\\\\production\\\\leds\\\\leds.exe\",\n        \"?:\\\\Program Files\\\\Tripwire\\\\Agent\\\\Plugins\\\\twexec\\\\twexec.exe\",\n        \"D:\\\\Agents\\\\?\\\\_work\\\\_tasks\\\\*\\\\SonarScanner.MSBuild.exe\",\n        \"?:\\\\Program Files\\\\Microsoft VS Code\\\\Code.exe\",\n        \"?:\\\\programmiweb\\\\NetBeans-*\\\\netbeans\\\\bin\\\\netbeans64.exe\",\n        \"?:\\\\Program Files (x86)\\\\Public Safety Suite Professional\\\\production\\\\leds\\\\leds.exe\",\n        \"?:\\\\Program Files (x86)\\\\Tier2Tickets\\\\button_gui.exe\",\n        \"?:\\\\Program Files\\\\NetBeans-*\\\\netbeans\\\\bin\\\\netbeans*.exe\",\n        \"?:\\\\Program Files (x86)\\\\Public Safety Suite Professional\\\\production\\\\leds\\\\leds.exe\",\n        \"?:\\\\Program Files (x86)\\\\Tier2Tickets\\\\button_gui.exe\",\n        \"?:\\\\Program Files (x86)\\\\Helpdesk Button\\\\button_gui.exe\",\n        \"?:\\\\VTSPortable\\\\VTS\\\\jre\\\\bin\\\\javaw.exe\",\n        \"?:\\\\Program Files\\\\Bot Framework Composer\\\\Bot Framework Composer.exe\",\n        \"?:\\\\Program Files\\\\KMSYS Worldwide\\\\eQuate\\\\*\\\\SessionMgr.exe\",\n        \"?:\\\\Program Files (x86)\\\\Craneware\\\\Pricing Analyzer\\\\Craneware.Pricing.Shell.exe\",\n        \"?:\\\\Program Files (x86)\\\\jumpcloud-agent-app\\\\jumpcloud-agent-app.exe\",\n        \"?:\\\\Program Files\\\\PostgreSQL\\\\*\\\\bin\\\\pg_dumpall.exe\",\n        \"?:\\\\Program Files (x86)\\\\Vim\\\\vim*\\\\vimrun.exe\") and\n  not (\n        /* Crowdstrike doesn't populate process.parent.executable */\n        data_stream.dataset == \"crowdstrike.fdr\" and\n        process.parent.name : (\n          \"perl.exe\", \"node.exe\", \"pg_dumpall.exe\", \"PRTG Server.exe\", \"spiceworks-finder.exe\", \"leds.exe\", \"twexec.exe\",\n          \"SonarScanner.MSBuild.exe\", \"Code.exe\", \"netbeans64.exe\", \"javaw.exe\", \"Bot Framework Composer.exe\", \"SessionMgr.exe\",\n          \"Craneware.Pricing.Shell.exe\", \"jumpcloud-agent-app.exe\", \"vimrun.exe\"\n        )\n      ) and\n  not (process.args :  \"?:\\\\Program Files\\\\Citrix\\\\Secure Access Client\\\\nsauto.exe\" and process.parent.name : \"userinit.exe\") and\n  not process.args : (\n        \"?:\\\\Program Files (x86)\\\\PCMatic\\\\PCPitstopScheduleService.exe\",\n        \"?:\\\\Program Files (x86)\\\\AllesTechnologyAgent\\\\*\",\n        \"https://auth.axis.com/oauth2/oauth-authorize*\"\n  ) and\n  not process.command_line : (\n    \"\\\"cmd\\\" /c %NETBEANS_MAVEN_COMMAND_LINE%\",\n    \"?:\\\\Windows\\\\system32\\\\cmd.exe /q /d /s /c \\\"npm.cmd ^\\\"install^\\\" ^\\\"--no-bin-links^\\\" ^\\\"--production^\\\"\\\"\"\n  ) and\n  not (process.name : \"cmd.exe\" and process.args : \"%TEMP%\\\\Spiceworks\\\\*\" and process.args : \"http*/dataloader/persist_netstat_data\") and\n  not (process.args == \"echo\" and process.args == \"GEQ\" and process.args == \"1073741824\")\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "wscript.exe",
+        "mshta.exe",
+        "perl.exe",
+        "node.exe",
+        "pg_dumpall.exe",
+        "prtg server.exe",
+        "spiceworks-finder.exe",
+        "leds.exe",
+        "twexec.exe",
+        "sonarscanner.msbuild.exe",
+        "code.exe",
+        "netbeans64.exe",
+        "javaw.exe",
+        "bot framework composer.exe",
+        "sessionmgr.exe",
+        "craneware.pricing.shell.exe",
+        "jumpcloud-agent-app.exe",
+        "vimrun.exe",
+        "explorer.exe",
+        "wmiprvse.exe",
+        "userinit.exe"
+      ],
+      "raw_values": [
+        "wscript.exe",
+        "mshta.exe",
+        "?:\\\\Perl64\\\\bin\\\\perl.exe",
+        "?:\\\\Program Files\\\\nodejs\\\\node.exe",
+        "?:\\\\Program Files\\\\HP\\\\RS\\\\pgsql\\\\bin\\\\pg_dumpall.exe",
+        "perl.exe",
+        "node.exe",
+        "pg_dumpall.exe",
+        "PRTG Server.exe",
+        "spiceworks-finder.exe",
+        "leds.exe",
+        "twexec.exe",
+        "SonarScanner.MSBuild.exe",
+        "Code.exe",
+        "netbeans64.exe",
+        "javaw.exe",
+        "Bot Framework Composer.exe",
+        "SessionMgr.exe",
+        "Craneware.Pricing.Shell.exe",
+        "jumpcloud-agent-app.exe",
+        "vimrun.exe",
+        "explorer.exe",
+        "wmiprvse.exe",
+        "userinit.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ".vbs",
+        ".js",
+        "&&s^et",
+        "&& set *&& set *&& set *&& set *&& set *&& call",
+        "u00",
+        "c %netbeans_maven_command_line%",
+        "echo",
+        "explorer.exe",
+        "type",
+        "start",
+        "copy",
+        "nsauto.exe",
+        "persist_netstat_data"
+      ],
+      "raw_values": [
+        "1>?:\\\\*.vbs",
+        "1>?:\\\\*.js",
+        "*&&S^eT *",
+        "*&& set *&& set *&& set *&& set *&& set *&& call*",
+        "**\\\\u00??\\\\u00??\\\\u00??\\\\u00??\\\\u00??\\\\u00??\\\\u00??\\\\u00??*",
+        "\\",
+        " /c %NETBEANS_MAVEN_COMMAND_LINE%",
+        "?:\\\\Windows\\\\system32\\\\cmd.exe /q /d /s /c \\",
+        "install^\\",
+        "--no-bin-links^\\",
+        "--production^\\",
+        "",
+        "echo",
+        "explorer.exe",
+        "type",
+        ">",
+        "start",
+        "copy",
+        "&&",
+        "\\\\\\\\*@*\\\\*",
+        "%TEMP%\\\\Spiceworks\\\\*",
+        "?:\\\\Program Files\\\\Citrix\\\\Secure Access Client\\\\nsauto.exe",
+        "http*/dataloader/persist_netstat_data"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "cmd.exe"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "crowdstrike.fdr"
+      ],
+      "raw_values": [
+        "crowdstrike.fdr"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "echo",
+        "geq",
+        "1073741824"
+      ],
+      "raw_values": [
+        "echo",
+        "GEQ",
+        "1073741824"
+      ]
+    }
+  ]
+}

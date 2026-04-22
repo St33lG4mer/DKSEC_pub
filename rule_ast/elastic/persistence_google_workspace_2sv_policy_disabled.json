@@ -1,0 +1,41 @@
+{
+  "source": "elastic",
+  "name": "Google Workspace 2SV Policy Disabled",
+  "slug": "persistence_google_workspace_2sv_policy_disabled",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Google Workspace",
+    "Use Case: Configuration Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/google_workspace/persistence_google_workspace_2sv_policy_disabled.toml",
+  "raw_query": "data_stream.dataset:\"google_workspace.login\" and event.action:\"2sv_disable\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "google_workspace.login"
+      ],
+      "raw_values": [
+        "google_workspace.login"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "2sv_disable"
+      ],
+      "raw_values": [
+        "2sv_disable"
+      ]
+    }
+  ]
+}

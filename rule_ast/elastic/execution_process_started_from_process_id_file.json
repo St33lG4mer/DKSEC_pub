@@ -1,0 +1,46 @@
+{
+  "source": "elastic",
+  "name": "Process Started from Process ID (PID) File",
+  "slug": "execution_process_started_from_process_id_file",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Threat: BPFDoor",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_process_started_from_process_id_file.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and user.id == \"0\" and\n  process.executable regex~ \"\"\"/var/run/\\w+\\.(pid|lock|reboot)\"\"\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

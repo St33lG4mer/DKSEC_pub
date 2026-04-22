@@ -1,0 +1,27 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_inline_vbs",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_inline_vbs.eql",
+  "raw_query": "any where process.command_line:\"*rundll32.exe*\" and process.command_line:\"*Execute*\" and process.command_line:\"*RegRead*\" and process.command_line:\"*window.close*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rundll32.exe",
+        "execute",
+        "regread",
+        "window.close"
+      ],
+      "raw_values": [
+        "*rundll32.exe*",
+        "*Execute*",
+        "*RegRead*",
+        "*window.close*"
+      ]
+    }
+  ]
+}

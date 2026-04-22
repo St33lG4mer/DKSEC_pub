@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_muddywater_activity",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2018/TA/MuddyWater/proc_creation_win_apt_muddywater_activity.eql",
+  "raw_query": "any where (process.command_line:\"*vbscript:Close(Execute(\\\"CreateObject(*\" and process.command_line:\"*powershell*\" and process.command_line:\"*-w 1 -exec Bypass*\" and process.command_line:\"*\\\\ProgramData\\\\*\") or (process.command_line:\"*Win32_OperatingSystem*\" and process.command_line:\"*Win32_NetworkAdapterConfiguration*\" and process.command_line:\"*root\\\\SecurityCenter2*\" and process.command_line:\"*[System.Net.DNS]*\") or (process.command_line:\"*[Convert]::ToBase64String*\" and process.command_line:\"*[System.Text.Encoding]::UTF8.GetString]*\" and process.command_line:\"*GetResponse().GetResponseStream()*\" and process.command_line:\"*[System.Net.HttpWebRequest]::Create(*\" and process.command_line:\"*-bxor *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "powershell",
+        "-w 1 -exec bypass",
+        "win32_operatingsystem",
+        "win32_networkadapterconfiguration",
+        "securitycenter2",
+        "[system.net.dns]",
+        "[convert]::tobase64string",
+        "[system.text.encoding]::utf8.getstring]",
+        "getresponse().getresponsestream()",
+        "[system.net.httpwebrequest]::create(",
+        "-bxor"
+      ],
+      "raw_values": [
+        "*vbscript:Close(Execute(\\",
+        "*powershell*",
+        "*-w 1 -exec Bypass*",
+        "*\\\\ProgramData\\\\*",
+        "*Win32_OperatingSystem*",
+        "*Win32_NetworkAdapterConfiguration*",
+        "*root\\\\SecurityCenter2*",
+        "*[System.Net.DNS]*",
+        "*[Convert]::ToBase64String*",
+        "*[System.Text.Encoding]::UTF8.GetString]*",
+        "*GetResponse().GetResponseStream()*",
+        "*[System.Net.HttpWebRequest]::Create(*",
+        "*-bxor *"
+      ]
+    }
+  ]
+}

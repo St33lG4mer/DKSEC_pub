@@ -1,0 +1,83 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_net_cli_artefact",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_net_cli_artefact.eql",
+  "raw_query": "any where (file.path like~ (\"*\\\\UsageLogs\\\\cmstp.exe.log\", \"*\\\\UsageLogs\\\\cscript.exe.log\", \"*\\\\UsageLogs\\\\mshta.exe.log\", \"*\\\\UsageLogs\\\\msxsl.exe.log\", \"*\\\\UsageLogs\\\\regsvr32.exe.log\", \"*\\\\UsageLogs\\\\rundll32.exe.log\", \"*\\\\UsageLogs\\\\svchost.exe.log\", \"*\\\\UsageLogs\\\\wscript.exe.log\", \"*\\\\UsageLogs\\\\wmic.exe.log\")) and (not (process.parent.executable:\"*\\\\MsiExec.exe\" and process.parent.command_line:\"* -Embedding*\" and process.executable:\"*\\\\rundll32.exe\" and (winlog.event_data.CommandLine:\"*Temp*\" and winlog.event_data.CommandLine:\"*zzzzInvokeManagedCustomActionOutOfProc*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "cmstp.exe.log",
+        "cscript.exe.log",
+        "mshta.exe.log",
+        "msxsl.exe.log",
+        "regsvr32.exe.log",
+        "rundll32.exe.log",
+        "svchost.exe.log",
+        "wscript.exe.log",
+        "wmic.exe.log"
+      ],
+      "raw_values": [
+        "*\\\\UsageLogs\\\\cmstp.exe.log",
+        "*\\\\UsageLogs\\\\cscript.exe.log",
+        "*\\\\UsageLogs\\\\mshta.exe.log",
+        "*\\\\UsageLogs\\\\msxsl.exe.log",
+        "*\\\\UsageLogs\\\\regsvr32.exe.log",
+        "*\\\\UsageLogs\\\\rundll32.exe.log",
+        "*\\\\UsageLogs\\\\svchost.exe.log",
+        "*\\\\UsageLogs\\\\wscript.exe.log",
+        "*\\\\UsageLogs\\\\wmic.exe.log"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\MsiExec.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "-embedding"
+      ],
+      "raw_values": [
+        "* -Embedding*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "winlog.event_data.CommandLine",
+      "operator": ":",
+      "values": [
+        "temp",
+        "zzzzinvokemanagedcustomactionoutofproc"
+      ],
+      "raw_values": [
+        "*Temp*",
+        "*zzzzInvokeManagedCustomActionOutOfProc*"
+      ]
+    }
+  ]
+}

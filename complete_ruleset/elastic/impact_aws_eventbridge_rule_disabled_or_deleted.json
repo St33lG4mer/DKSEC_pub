@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "AWS EventBridge Rule Disabled or Deleted",
+  "slug": "impact_aws_eventbridge_rule_disabled_or_deleted",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EventBridge",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/impact_aws_eventbridge_rule_disabled_or_deleted.toml",
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: events.amazonaws.com \n    and event.action: (DeleteRule or DisableRule) \n    and event.outcome: success\n",
+  "conditions": []
+}

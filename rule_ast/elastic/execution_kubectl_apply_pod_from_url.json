@@ -1,0 +1,103 @@
+{
+  "source": "elastic",
+  "name": "Kubectl Apply Pod from URL",
+  "slug": "execution_kubectl_apply_pod_from_url",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Auditd Manager",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Data Source: Elastic Defend for Containers",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_kubectl_apply_pod_from_url.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"process_started\", \"executed\") and\nprocess.name == \"kubectl\" and process.args == \"apply\" and\nprocess.args like (\"http://*\", \"https://*\") and\nnot process.args like~ (\"*download.elastic.co*\", \"*github.com/kubernetes-sigs/*\")\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "download.elastic.co"
+      ],
+      "raw_values": [
+        "*download.elastic.co*",
+        "*github.com/kubernetes-sigs/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "process_started",
+        "executed"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "process_started",
+        "executed"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "kubectl"
+      ],
+      "raw_values": [
+        "kubectl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "apply"
+      ],
+      "raw_values": [
+        "apply"
+      ]
+    }
+  ]
+}

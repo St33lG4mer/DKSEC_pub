@@ -1,0 +1,72 @@
+{
+  "source": "elastic",
+  "name": "Potential Meterpreter Reverse Shell",
+  "slug": "execution_shell_via_meterpreter_linux",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Data Source: Auditd Manager",
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_shell_via_meterpreter_linux.toml",
+  "raw_query": "sample by host.id, process.pid, user.id\n  [file where host.os.type == \"linux\" and auditd.data.syscall == \"open\" and auditd.data.a2 == \"1b6\" and file.path == \"/etc/machine-id\"]\n  [file where host.os.type == \"linux\" and auditd.data.syscall == \"open\" and auditd.data.a2 == \"1b6\" and file.path == \"/etc/passwd\"]\n  [file where host.os.type == \"linux\" and auditd.data.syscall == \"open\" and auditd.data.a2 == \"1b6\" and file.path == \"/proc/net/route\"]\n  [file where host.os.type == \"linux\" and auditd.data.syscall == \"open\" and auditd.data.a2 == \"1b6\" and file.path == \"/proc/net/ipv6_route\"]\n  [file where host.os.type == \"linux\" and auditd.data.syscall == \"open\" and auditd.data.a2 == \"1b6\" and file.path == \"/proc/net/if_inet6\"]\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "auditd.data.syscall",
+      "raw_field": "auditd.data.syscall",
+      "operator": "==",
+      "values": [
+        "open"
+      ],
+      "raw_values": [
+        "open"
+      ]
+    },
+    {
+      "field": "auditd.data.a2",
+      "raw_field": "auditd.data.a2",
+      "operator": "==",
+      "values": [
+        "1b6"
+      ],
+      "raw_values": [
+        "1b6"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "==",
+      "values": [
+        "machine-id",
+        "passwd",
+        "route",
+        "ipv6_route",
+        "if_inet6"
+      ],
+      "raw_values": [
+        "/etc/machine-id",
+        "/etc/passwd",
+        "/proc/net/route",
+        "/proc/net/ipv6_route",
+        "/proc/net/if_inet6"
+      ]
+    }
+  ]
+}

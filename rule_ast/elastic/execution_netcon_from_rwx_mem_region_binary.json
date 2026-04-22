@@ -1,0 +1,84 @@
+{
+  "source": "elastic",
+  "name": "Network Connection from Binary with RWX Memory Region",
+  "slug": "execution_netcon_from_rwx_mem_region_binary",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_netcon_from_rwx_mem_region_binary.toml",
+  "raw_query": "sample by host.id, process.pid, process.name\n  /* auditd.data.a2 == \"7\" translates to RWX memory region protection (PROT_READ | PROT_WRITE | PROT_EXEC) */\n  [process where host.os.type == \"linux\" and auditd.data.syscall == \"mprotect\" and auditd.data.a2 == \"7\" and\n   not process.name in (\"httpd\", \"java\", \"node\", \"code\", \"apache2\")]\n  [network where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"connection_attempted\" and\n   not cidrmatch(destination.ip, \"127.0.0.0/8\", \"169.254.0.0/16\", \"224.0.0.0/4\", \"::1\")]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "httpd",
+        "java",
+        "node",
+        "code",
+        "apache2"
+      ],
+      "raw_values": [
+        "httpd",
+        "java",
+        "node",
+        "code",
+        "apache2"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "auditd.data.syscall",
+      "raw_field": "auditd.data.syscall",
+      "operator": "==",
+      "values": [
+        "mprotect"
+      ],
+      "raw_values": [
+        "mprotect"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "connection_attempted"
+      ]
+    }
+  ]
+}

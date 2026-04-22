@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_svchost_masqueraded_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_svchost_masqueraded_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\svchost.exe\" and (not ((process.executable like~ (\"C:\\\\Windows\\\\System32\\\\svchost.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\svchost.exe\")) or process.pe.original_file_name:\"svchost.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\svchost.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "svchost.exe"
+      ]
+    }
+  ]
+}

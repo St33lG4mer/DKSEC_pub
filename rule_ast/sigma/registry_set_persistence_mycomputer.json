@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_mycomputer",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_mycomputer.eql",
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\MyComputer*\" and registry.path:\"*(Default)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\mycomputer",
+        "(default)"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\MyComputer*",
+        "*(Default)"
+      ]
+    }
+  ]
+}

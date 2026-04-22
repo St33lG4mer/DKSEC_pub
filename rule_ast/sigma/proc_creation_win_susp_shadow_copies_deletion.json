@@ -1,0 +1,108 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_shadow_copies_deletion",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_shadow_copies_deletion.eql",
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wmic.exe\", \"*\\\\vssadmin.exe\", \"*\\\\diskshadow.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\", \"wmic.exe\", \"VSSADMIN.EXE\", \"diskshadow.exe\"))) and (process.command_line:\"*shadow*\" and process.command_line:\"*delete*\")) or ((process.executable:\"*\\\\wbadmin.exe\" or process.pe.original_file_name:\"WBADMIN.EXE\") and (process.command_line:\"*delete*\" and process.command_line:\"*catalog*\" and process.command_line:\"*quiet*\")) or ((process.executable:\"*\\\\vssadmin.exe\" or process.pe.original_file_name:\"VSSADMIN.EXE\") and ((process.command_line:\"*resize*\" and process.command_line:\"*shadowstorage*\") and (process.command_line like~ (\"*unbounded*\", \"*/MaxSize=*\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "wmic.exe",
+        "vssadmin.exe",
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wmic.exe",
+        "*\\\\vssadmin.exe",
+        "*\\\\diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll",
+        "wmic.exe",
+        "vssadmin.exe",
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll",
+        "wmic.exe",
+        "VSSADMIN.EXE",
+        "diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "unbounded",
+        "maxsize="
+      ],
+      "raw_values": [
+        "*unbounded*",
+        "*/MaxSize=*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shadow",
+        "delete",
+        "catalog",
+        "quiet",
+        "resize",
+        "shadowstorage"
+      ],
+      "raw_values": [
+        "*shadow*",
+        "*delete*",
+        "*catalog*",
+        "*quiet*",
+        "*resize*",
+        "*shadowstorage*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wbadmin.exe",
+        "vssadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\wbadmin.exe",
+        "*\\\\vssadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wbadmin.exe",
+        "vssadmin.exe"
+      ],
+      "raw_values": [
+        "WBADMIN.EXE",
+        "VSSADMIN.EXE"
+      ]
+    }
+  ]
+}

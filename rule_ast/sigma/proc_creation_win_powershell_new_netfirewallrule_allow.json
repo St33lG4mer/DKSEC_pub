@@ -1,0 +1,53 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_new_netfirewallrule_allow",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_powershell_new_netfirewallrule_allow.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\powershell_ise.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line:\"*New-NetFirewallRule *\" and process.command_line:\"* -Action *\" and process.command_line:\"*allow*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\powershell_ise.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "new-netfirewallrule",
+        "-action",
+        "allow"
+      ],
+      "raw_values": [
+        "*New-NetFirewallRule *",
+        "* -Action *",
+        "*allow*"
+      ]
+    }
+  ]
+}

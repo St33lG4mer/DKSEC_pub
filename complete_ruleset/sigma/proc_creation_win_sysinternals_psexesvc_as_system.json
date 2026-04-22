@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_psexesvc_as_system",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_psexesvc_as_system.eql",
+  "raw_query": "any where process.parent.executable:\"C:\\\\Windows\\\\PSEXESVC.exe\" and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\"))",
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "psexesvc.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\PSEXESVC.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Azure Event Hub Authorization Rule Created or Updated",
+  "slug": "persistence_event_hub_created_or_updated",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Log Auditing",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_event_hub_created_or_updated.toml",
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.EVENTHUB/NAMESPACES/AUTHORIZATIONRULES/WRITE\" and event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.eventhub/namespaces/authorizationrules/write"
+      ],
+      "raw_values": [
+        "MICROSOFT.EVENTHUB/NAMESPACES/AUTHORIZATIONRULES/WRITE"
+      ]
+    }
+  ]
+}

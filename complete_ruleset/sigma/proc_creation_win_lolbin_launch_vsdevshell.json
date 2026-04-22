@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_launch_vsdevshell",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_launch_vsdevshell.eql",
+  "raw_query": "any where process.command_line:\"*Launch-VsDevShell.ps1*\" and (process.command_line like~ (\"*VsWherePath *\", \"*VsInstallationPath *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "vswherepath",
+        "vsinstallationpath"
+      ],
+      "raw_values": [
+        "*VsWherePath *",
+        "*VsInstallationPath *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "launch-vsdevshell.ps1"
+      ],
+      "raw_values": [
+        "*Launch-VsDevShell.ps1*"
+      ]
+    }
+  ]
+}

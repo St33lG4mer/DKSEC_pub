@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_vivaldi_elf",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_vivaldi_elf.eql",
+  "raw_query": "any where file.path:\"*\\\\vivaldi_elf.dll\" and (not (process.executable:\"*\\\\Vivaldi\\\\Application\\\\vivaldi.exe\" and file.path:\"*\\\\Vivaldi\\\\Application\\\\*\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "vivaldi_elf.dll"
+      ],
+      "raw_values": [
+        "*\\\\vivaldi_elf.dll",
+        "*\\\\Vivaldi\\\\Application\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vivaldi.exe"
+      ],
+      "raw_values": [
+        "*\\\\Vivaldi\\\\Application\\\\vivaldi.exe"
+      ]
+    }
+  ]
+}

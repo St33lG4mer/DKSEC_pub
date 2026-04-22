@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_chrome_frame_helper",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_chrome_frame_helper.eql",
+  "raw_query": "any where file.path:\"*\\\\chrome_frame_helper.dll\" and (not (file.path like~ (\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\*\", \"C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\*\"))) and (not file.path:\"*\\\\AppData\\\\local\\\\Google\\\\Chrome\\\\Application\\\\*\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "chrome_frame_helper.dll"
+      ],
+      "raw_values": [
+        "*\\\\chrome_frame_helper.dll",
+        "*\\\\AppData\\\\local\\\\Google\\\\Chrome\\\\Application\\\\*"
+      ]
+    }
+  ]
+}

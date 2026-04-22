@@ -1,0 +1,35 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_apt10_cloud_hopper",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2017/TA/APT10/proc_creation_win_apt_apt10_cloud_hopper.eql",
+  "raw_query": "any where (process.executable:\"*\\\\cscript.exe\" and process.command_line:\"*.vbs /shell *\") or (process.command_line:\"*csvde -f C:\\\\windows\\\\web\\\\*\" and process.command_line:\"*.log*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shell",
+        ".log"
+      ],
+      "raw_values": [
+        "*.vbs /shell *",
+        "*csvde -f C:\\\\windows\\\\web\\\\*",
+        "*.log*"
+      ]
+    }
+  ]
+}

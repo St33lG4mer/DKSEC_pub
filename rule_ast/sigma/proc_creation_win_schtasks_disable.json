@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_disable",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_disable.eql",
+  "raw_query": "any where process.executable:\"*\\\\schtasks.exe\" and (process.command_line:\"*/Change*\" and process.command_line:\"*/TN*\" and process.command_line:\"*/disable*\") and (process.command_line like~ (\"*\\\\Windows\\\\BitLocker*\", \"*\\\\Windows\\\\ExploitGuard*\", \"*\\\\Windows\\\\ExploitGuard\\\\ExploitGuard MDM policy Refresh*\", \"*\\\\Windows\\\\SystemRestore\\\\SR*\", \"*\\\\Windows\\\\UpdateOrchestrator\\\\*\", \"*\\\\Windows\\\\Windows Defender\\\\*\", \"*\\\\Windows\\\\WindowsBackup\\\\*\", \"*\\\\Windows\\\\WindowsUpdate\\\\*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "bitlocker",
+        "exploitguard",
+        "exploitguard mdm policy refresh"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\BitLocker*",
+        "*\\\\Windows\\\\ExploitGuard*",
+        "*\\\\Windows\\\\ExploitGuard\\\\ExploitGuard MDM policy Refresh*",
+        "*\\\\Windows\\\\SystemRestore\\\\SR*",
+        "*\\\\Windows\\\\UpdateOrchestrator\\\\*",
+        "*\\\\Windows\\\\Windows Defender\\\\*",
+        "*\\\\Windows\\\\WindowsBackup\\\\*",
+        "*\\\\Windows\\\\WindowsUpdate\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "change",
+        "disable"
+      ],
+      "raw_values": [
+        "*/Change*",
+        "*/TN*",
+        "*/disable*"
+      ]
+    }
+  ]
+}

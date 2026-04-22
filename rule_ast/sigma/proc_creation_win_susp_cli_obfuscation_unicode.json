@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_cli_obfuscation_unicode",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_cli_obfuscation_unicode.eql",
+  "raw_query": "any where process.command_line like~ (\"*\u02e3*\", \"*\u02ea*\", \"*\u02e2*\", \"*\u2215*\", \"*\u2044*\", \"*\u2015*\", \"*\u2014*\", \"*\u00a0*\", \"*\u00af*\", \"*\u00ae*\", \"*\u00b6*\")",
+  "conditions": []
+}

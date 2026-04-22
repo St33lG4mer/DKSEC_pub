@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_plink_susp_tunneling",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_plink_susp_tunneling.eql",
+  "raw_query": "any where (process.executable:\"*\\\\plink.exe\" and process.command_line:\"*:127.0.0.1:3389*\") or ((process.executable:\"*\\\\plink.exe\" and process.command_line:\"*:3389*\") and (process.command_line like~ (\"* -P 443*\", \"* -P 22*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-p 443",
+        "-p 22"
+      ],
+      "raw_values": [
+        "* -P 443*",
+        "* -P 22*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "plink.exe"
+      ],
+      "raw_values": [
+        "*\\\\plink.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ":127.0.0.1:3389",
+        ":3389"
+      ],
+      "raw_values": [
+        "*:127.0.0.1:3389*",
+        "*:3389*"
+      ]
+    }
+  ]
+}

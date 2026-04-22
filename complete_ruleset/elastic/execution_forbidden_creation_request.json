@@ -1,0 +1,52 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Forbidden Creation Request",
+  "slug": "execution_forbidden_creation_request",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/execution_forbidden_creation_request.toml",
+  "raw_query": "any where data_stream.dataset == \"kubernetes.audit_logs\" and kubernetes.audit.verb == \"create\" and\nkubernetes.audit.stage == \"ResponseComplete\" and `kubernetes.audit.annotations.authorization_k8s_io/decision` == \"forbid\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": "==",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "create"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": "==",
+      "values": [
+        "responsecomplete"
+      ],
+      "raw_values": [
+        "ResponseComplete"
+      ]
+    }
+  ]
+}

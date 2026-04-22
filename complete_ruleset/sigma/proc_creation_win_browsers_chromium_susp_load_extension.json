@@ -1,0 +1,65 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_browsers_chromium_susp_load_extension",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_browsers_chromium_susp_load_extension.eql",
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wscript.exe\")) and (process.executable like~ (\"*\\\\brave.exe\", \"*\\\\chrome.exe\", \"*\\\\msedge.exe\", \"*\\\\opera.exe\", \"*\\\\vivaldi.exe\")) and process.command_line:\"*--load-extension=*\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "brave.exe",
+        "chrome.exe",
+        "msedge.exe",
+        "opera.exe",
+        "vivaldi.exe"
+      ],
+      "raw_values": [
+        "*\\\\brave.exe",
+        "*\\\\chrome.exe",
+        "*\\\\msedge.exe",
+        "*\\\\opera.exe",
+        "*\\\\vivaldi.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--load-extension="
+      ],
+      "raw_values": [
+        "*--load-extension=*"
+      ]
+    }
+  ]
+}

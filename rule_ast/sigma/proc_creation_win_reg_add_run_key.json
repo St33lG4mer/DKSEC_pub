@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_reg_add_run_key",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_reg_add_run_key.eql",
+  "raw_query": "any where process.executable:\"*\\\\reg.exe\" and (process.command_line:\"*reg*\" and process.command_line:\"* add *\") and (process.command_line like~ (\"*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\", \"*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\", \"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "run"
+      ],
+      "raw_values": [
+        "*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "reg",
+        "add"
+      ],
+      "raw_values": [
+        "*reg*",
+        "* add *"
+      ]
+    }
+  ]
+}

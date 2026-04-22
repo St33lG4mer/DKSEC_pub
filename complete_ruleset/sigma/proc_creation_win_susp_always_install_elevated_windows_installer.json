@@ -1,0 +1,65 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_always_install_elevated_windows_installer",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_always_install_elevated_windows_installer.eql",
+  "raw_query": "any where (((process.executable:\"*\\\\Windows\\\\Installer\\\\*\" and process.executable:\"*msi*\") and process.executable:\"*tmp\") or (process.executable:\"*\\\\msiexec.exe\" and (winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\")))) and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) and (not (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\services.exe\" or (process.command_line:\"*\\\\system32\\\\msiexec.exe /V\" or process.parent.command_line:\"*\\\\system32\\\\msiexec.exe /V\") or process.parent.executable:\"C:\\\\ProgramData\\\\Sophos\\\\*\" or process.parent.executable:\"C:\\\\ProgramData\\\\Avira\\\\*\" or (process.parent.executable like~ (\"C:\\\\Program Files\\\\Avast Software\\\\*\", \"C:\\\\Program Files (x86)\\\\Avast Software\\\\*\")) or (process.parent.executable like~ (\"C:\\\\Program Files\\\\Google\\\\Update\\\\*\", \"C:\\\\Program Files (x86)\\\\Google\\\\Update\\\\*\"))))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msi",
+        "tmp",
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\Installer\\\\*",
+        "*msi*",
+        "*tmp",
+        "*\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "services.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\services.exe",
+        "C:\\\\ProgramData\\\\Sophos\\\\*",
+        "C:\\\\ProgramData\\\\Avira\\\\*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_susp_download_patterns",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_susp_download_patterns.eql",
+  "raw_query": "any where process.command_line like~ (\"*IEX ((New-Object Net.WebClient).DownloadString*\", \"*IEX (New-Object Net.WebClient).DownloadString*\", \"*IEX((New-Object Net.WebClient).DownloadString*\", \"*IEX(New-Object Net.WebClient).DownloadString*\", \"* -command (New-Object System.Net.WebClient).DownloadFile(*\", \"* -c (New-Object System.Net.WebClient).DownloadFile(*\")",
+  "conditions": []
+}

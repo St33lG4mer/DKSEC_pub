@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_diantz_ads",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_diantz_ads.eql",
+  "raw_query": "any where (process.command_line:\"*diantz.exe*\" and process.command_line:\"*.cab*\") and process.command_line:\"SigmaRegularExpression(regexp=SigmaString([':[^\\\\\\\\]']), flags=set())\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "diantz.exe",
+        ".cab",
+        "]']), flags=set())"
+      ],
+      "raw_values": [
+        "*diantz.exe*",
+        "*.cab*",
+        "SigmaRegularExpression(regexp=SigmaString([':[^\\\\\\\\]']), flags=set())"
+      ]
+    }
+  ]
+}

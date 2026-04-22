@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "registry_set_change_rdp_port",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_change_rdp_port.eql",
+  "raw_query": "any where registry.path:\"*\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\PortNumber\" and (not winlog.event_data.Details:\"DWORD (0x00000d3d)\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\control\\\\terminal server\\\\winstations\\\\rdp-tcp\\\\portnumber"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\PortNumber"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000d3d)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000d3d)"
+      ]
+    }
+  ]
+}

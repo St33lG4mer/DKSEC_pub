@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "win_system_susp_dhcp_config_failed",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/microsoft_windows_dhcp_server/win_system_susp_dhcp_config_failed.eql",
+  "raw_query": "any where winlog.channel:\"System\" and ((event.code like~ (\"1031\", \"1032\", \"1034\")) and winlog.provider_name:\"Microsoft-Windows-DHCP-Server\")",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "1031",
+        "1032",
+        "1034"
+      ],
+      "raw_values": [
+        "1031",
+        "1032",
+        "1034"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-dhcp-server"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-DHCP-Server"
+      ]
+    }
+  ]
+}

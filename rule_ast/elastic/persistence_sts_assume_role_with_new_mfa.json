@@ -1,0 +1,22 @@
+{
+  "source": "elastic",
+  "name": "AWS STS AssumeRole with New MFA Device",
+  "slug": "persistence_sts_assume_role_with_new_mfa",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS STS",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Privilege Escalation",
+    "Tactic: Persistence",
+    "Tactic: Lateral Movement",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/persistence_sts_assume_role_with_new_mfa.toml",
+  "raw_query": "data_stream.dataset:aws.cloudtrail\n    and event.provider:sts.amazonaws.com\n    and event.action:(AssumeRole or AssumeRoleWithSAML or AssumeRoleWithWebIdentity)\n    and event.outcome:success\n    and aws.cloudtrail.flattened.request_parameters.serialNumber:*\n",
+  "conditions": []
+}

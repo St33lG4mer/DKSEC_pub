@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_redirection_susp_folder",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_redirection_susp_folder.eql",
+  "raw_query": "any where (process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and ((process.command_line like~ (\"*>?%APPDATA%\\\\*\", \"*>?%TEMP%\\\\*\", \"*>?%TMP%\\\\*\", \"*>?%USERPROFILE%\\\\*\", \"*>?C:\\\\ProgramData\\\\*\", \"*>?C:\\\\Temp\\\\*\", \"*>?C:\\\\Users\\\\Public\\\\*\", \"*>?C:\\\\Windows\\\\Temp\\\\*\")) or ((process.command_line like~ (\"* >*\", \"*\\\">*\", \"*'>*\")) and (process.command_line:\"*C:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    }
+  ]
+}

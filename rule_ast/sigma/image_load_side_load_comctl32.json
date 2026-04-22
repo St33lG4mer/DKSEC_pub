@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_comctl32",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_comctl32.eql",
+  "raw_query": "any where (file.path like~ (\"C:\\\\Windows\\\\System32\\\\logonUI.exe.local\\\\*\", \"C:\\\\Windows\\\\System32\\\\werFault.exe.local\\\\*\", \"C:\\\\Windows\\\\System32\\\\consent.exe.local\\\\*\", \"C:\\\\Windows\\\\System32\\\\narrator.exe.local\\\\*\", \"C:\\\\windows\\\\system32\\\\wermgr.exe.local\\\\*\")) and file.path:\"*\\\\comctl32.dll\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "comctl32.dll"
+      ],
+      "raw_values": [
+        "*\\\\comctl32.dll"
+      ]
+    }
+  ]
+}

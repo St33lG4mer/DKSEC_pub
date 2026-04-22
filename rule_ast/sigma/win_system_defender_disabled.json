@@ -1,0 +1,69 @@
+{
+  "source": "sigma",
+  "name": "win_system_defender_disabled",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/service_control_manager/win_system_defender_disabled.eql",
+  "raw_query": "any where winlog.channel:\"System\" and (event.code:\"7036\" and winlog.provider_name:\"Service Control Manager\" and (winlog.event_data.param1 like~ (\"Windows Defender Antivirus Service\", \"Service antivirus Microsoft Defender\")) and (winlog.event_data.param2 like~ (\"stopped\", \"arr\u00eat\u00e9\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.param1",
+      "raw_field": "winlog.event_data.param1",
+      "operator": "like~",
+      "values": [
+        "windows defender antivirus service",
+        "service antivirus microsoft defender"
+      ],
+      "raw_values": [
+        "Windows Defender Antivirus Service",
+        "Service antivirus Microsoft Defender"
+      ]
+    },
+    {
+      "field": "winlog.event_data.param2",
+      "raw_field": "winlog.event_data.param2",
+      "operator": "like~",
+      "values": [
+        "stopped",
+        "arr\u00eat\u00e9"
+      ],
+      "raw_values": [
+        "stopped",
+        "arr\u00eat\u00e9"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7036"
+      ],
+      "raw_values": [
+        "7036"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    }
+  ]
+}

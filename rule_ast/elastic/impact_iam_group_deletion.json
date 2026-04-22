@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "AWS IAM Group Deletion",
+  "slug": "impact_iam_group_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS IAM",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/impact_iam_group_deletion.toml",
+  "raw_query": "data_stream.dataset: aws.cloudtrail and \n    event.provider: iam.amazonaws.com and \n    event.action: DeleteGroup and \n    event.outcome: success\n",
+  "conditions": []
+}

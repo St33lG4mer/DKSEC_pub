@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_purplesharp_indicators",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_purplesharp_indicators.eql",
+  "raw_query": "any where (process.executable:\"*\\\\purplesharp*\" or process.pe.original_file_name:\"PurpleSharp.exe\") or (process.command_line like~ (\"*xyz123456.exe*\", \"*PurpleSharp*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "xyz123456.exe",
+        "purplesharp"
+      ],
+      "raw_values": [
+        "*xyz123456.exe*",
+        "*PurpleSharp*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "purplesharp"
+      ],
+      "raw_values": [
+        "*\\\\purplesharp*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "purplesharp.exe"
+      ],
+      "raw_values": [
+        "PurpleSharp.exe"
+      ]
+    }
+  ]
+}

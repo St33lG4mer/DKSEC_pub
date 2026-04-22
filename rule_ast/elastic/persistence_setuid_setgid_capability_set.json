@@ -1,0 +1,108 @@
+{
+  "source": "elastic",
+  "name": "Setcap setuid/setgid Capability Set",
+  "slug": "persistence_setuid_setgid_capability_set",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_setuid_setgid_capability_set.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and \nprocess.name == \"setcap\" and process.args : \"cap_set?id+ep\" and not (\n  process.parent.name in (\"jem\", \"vzctl\") or\n  process.args like \"/usr/bin/new?idmap\"\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "jem",
+        "vzctl"
+      ],
+      "raw_values": [
+        "jem",
+        "vzctl"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "setcap"
+      ],
+      "raw_values": [
+        "setcap"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "cap_set?id+ep"
+      ],
+      "raw_values": [
+        "cap_set?id+ep"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "new?idmap"
+      ],
+      "raw_values": [
+        "/usr/bin/new?idmap"
+      ]
+    }
+  ]
+}

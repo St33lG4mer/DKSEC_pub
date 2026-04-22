@@ -1,0 +1,70 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_invoke_webrequest_direct_ip",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_invoke_webrequest_direct_ip.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"powershell_ise.EXE\", \"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"*curl *\", \"*Invoke-RestMethod*\", \"*Invoke-WebRequest*\", \"* irm *\", \"*iwr *\", \"*wget *\")) and (process.command_line like~ (\"*://1*\", \"*://2*\", \"*://3*\", \"*://4*\", \"*://5*\", \"*://6*\", \"*://7*\", \"*://8*\", \"*://9*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "powershell_ise.EXE",
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "curl",
+        "invoke-restmethod",
+        "invoke-webrequest",
+        "irm",
+        "iwr",
+        "wget"
+      ],
+      "raw_values": [
+        "*curl *",
+        "*Invoke-RestMethod*",
+        "*Invoke-WebRequest*",
+        "* irm *",
+        "*iwr *",
+        "*wget *",
+        "*://1*",
+        "*://2*",
+        "*://3*",
+        "*://4*",
+        "*://5*",
+        "*://6*",
+        "*://7*",
+        "*://8*",
+        "*://9*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_set_rpcrt4_etw_tamper",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_rpcrt4_etw_tamper.eql",
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\Rpc\\\\ExtErrorInformation\" and (winlog.event_data.Details like~ (\"DWORD (0x00000000)\", \"DWORD (0x00000002)\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\rpc\\\\exterrorinformation"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\Rpc\\\\ExtErrorInformation"
+      ]
+    }
+  ]
+}

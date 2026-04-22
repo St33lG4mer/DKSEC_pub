@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_aruba_networks_virtual_intranet_access",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_aruba_networks_virtual_intranet_access.eql",
+  "raw_query": "any where (process.executable:\"*\\\\arubanetsvc.exe\" and (file.path like~ (\"*\\\\wtsapi32.dll\", \"*\\\\msvcr100.dll\", \"*\\\\msvcp100.dll\", \"*\\\\dbghelp.dll\", \"*\\\\dbgcore.dll\", \"*\\\\wininet.dll\", \"*\\\\iphlpapi.dll\", \"*\\\\version.dll\", \"*\\\\cryptsp.dll\", \"*\\\\cryptbase.dll\", \"*\\\\wldp.dll\", \"*\\\\profapi.dll\", \"*\\\\sspicli.dll\", \"*\\\\winsta.dll\", \"*\\\\dpapi.dll\"))) and (not (file.path like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "wtsapi32.dll",
+        "msvcr100.dll",
+        "msvcp100.dll",
+        "dbghelp.dll",
+        "dbgcore.dll",
+        "wininet.dll",
+        "iphlpapi.dll",
+        "version.dll",
+        "cryptsp.dll",
+        "cryptbase.dll",
+        "wldp.dll",
+        "profapi.dll",
+        "sspicli.dll",
+        "winsta.dll",
+        "dpapi.dll"
+      ],
+      "raw_values": [
+        "*\\\\wtsapi32.dll",
+        "*\\\\msvcr100.dll",
+        "*\\\\msvcp100.dll",
+        "*\\\\dbghelp.dll",
+        "*\\\\dbgcore.dll",
+        "*\\\\wininet.dll",
+        "*\\\\iphlpapi.dll",
+        "*\\\\version.dll",
+        "*\\\\cryptsp.dll",
+        "*\\\\cryptbase.dll",
+        "*\\\\wldp.dll",
+        "*\\\\profapi.dll",
+        "*\\\\sspicli.dll",
+        "*\\\\winsta.dll",
+        "*\\\\dpapi.dll",
+        "C:\\\\Windows\\\\System32\\\\*",
+        "C:\\\\Windows\\\\SysWOW64\\\\*",
+        "C:\\\\Windows\\\\WinSxS\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "arubanetsvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\arubanetsvc.exe"
+      ]
+    }
+  ]
+}

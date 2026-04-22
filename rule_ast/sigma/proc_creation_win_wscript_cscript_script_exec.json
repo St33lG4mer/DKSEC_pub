@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wscript_cscript_script_exec",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_wscript_cscript_script_exec.eql",
+  "raw_query": "any where ((process.pe.original_file_name like~ (\"wscript.exe\", \"cscript.exe\")) or (process.executable like~ (\"*\\\\wscript.exe\", \"*\\\\cscript.exe\"))) and (process.command_line like~ (\"*.js*\", \"*.jse*\", \"*.vba*\", \"*.vbe*\", \"*.vbs*\", \"*.wsf*\"))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "wscript.exe",
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "wscript.exe",
+        "cscript.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wscript.exe",
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".js",
+        ".jse",
+        ".vba",
+        ".vbe",
+        ".vbs",
+        ".wsf"
+      ],
+      "raw_values": [
+        "*.js*",
+        "*.jse*",
+        "*.vba*",
+        "*.vbe*",
+        "*.vbs*",
+        "*.wsf*"
+      ]
+    }
+  ]
+}

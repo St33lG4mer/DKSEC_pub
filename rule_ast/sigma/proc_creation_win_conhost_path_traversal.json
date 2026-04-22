@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_conhost_path_traversal",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_conhost_path_traversal.eql",
+  "raw_query": "any where process.parent.command_line:\"*conhost*\" and process.command_line:\"*/../../*\"",
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "conhost"
+      ],
+      "raw_values": [
+        "*conhost*"
+      ]
+    }
+  ]
+}

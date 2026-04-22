@@ -1,0 +1,151 @@
+{
+  "source": "elastic",
+  "name": "GRUB Configuration Generation through Built-in Utilities",
+  "slug": "persistence_grub_makeconfig",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_grub_makeconfig.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\nprocess.parent.executable != null and process.name in (\"grub-mkconfig\", \"grub2-mkconfig\", \"update-grub\") and not (\n  process.parent.name in (\"run-parts\", \"sudo\", \"update-grub\", \"pacman\", \"dockerd\", \"dnf\", \"rpm\", \"yum\") or\n  process.parent.executable like (\n    \"/var/lib/dpkg/info/*\", \"/usr/lib/bootloader/grub2-efi/config\", \"/tmp/newroot/*\", \"/usr/lib/kernel/install.d/*\",\n    \"/run/user/*/.bubblewrap/*/timeout\"\n  ) or\n  process.parent.executable in (\n    \"/usr/bin/timeout\", \"/usr/sbin/nvidia-boot-update\", \"/usr/lib/oci-linux-config/misc_updates.sh\",\n    \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/sbin/selinux-activate\", \"/usr/lib/skylight/stop-workspace\",\n    \"/var/lib/aws-replication-agent/install_agent\", \"/usr/local/CTS/bin/apply_personality\",\n    \"/opt/puppetlabs/puppet/bin/ruby\"\n  ) or\n  (process.parent.name like (\"python*\", \"platform-python*\") and process.parent.command_line like \"*ansible*\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "config",
+        "timeout",
+        "python",
+        "platform-python"
+      ],
+      "raw_values": [
+        "/var/lib/dpkg/info/*",
+        "/usr/lib/bootloader/grub2-efi/config",
+        "/tmp/newroot/*",
+        "/usr/lib/kernel/install.d/*",
+        "/run/user/*/.bubblewrap/*/timeout",
+        "python*",
+        "platform-python*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "grub-mkconfig",
+        "grub2-mkconfig",
+        "update-grub"
+      ],
+      "raw_values": [
+        "grub-mkconfig",
+        "grub2-mkconfig",
+        "update-grub"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "run-parts",
+        "sudo",
+        "update-grub",
+        "pacman",
+        "dockerd",
+        "dnf",
+        "rpm",
+        "yum",
+        "timeout",
+        "nvidia-boot-update",
+        "misc_updates.sh",
+        "puppet",
+        "selinux-activate",
+        "stop-workspace",
+        "install_agent",
+        "apply_personality",
+        "ruby"
+      ],
+      "raw_values": [
+        "run-parts",
+        "sudo",
+        "update-grub",
+        "pacman",
+        "dockerd",
+        "dnf",
+        "rpm",
+        "yum",
+        "/usr/bin/timeout",
+        "/usr/sbin/nvidia-boot-update",
+        "/usr/lib/oci-linux-config/misc_updates.sh",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/sbin/selinux-activate",
+        "/usr/lib/skylight/stop-workspace",
+        "/var/lib/aws-replication-agent/install_agent",
+        "/usr/local/CTS/bin/apply_personality",
+        "/opt/puppetlabs/puppet/bin/ruby"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "ansible"
+      ],
+      "raw_values": [
+        "*ansible*"
+      ]
+    }
+  ]
+}

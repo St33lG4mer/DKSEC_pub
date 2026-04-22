@@ -1,0 +1,75 @@
+{
+  "source": "elastic",
+  "name": "Manual Loading of a Suspicious Chromium Extension",
+  "slug": "persistence_manual_chromium_extension_loading",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Credential Access",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_manual_chromium_extension_loading.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.action == \"exec\" and\n  process.name in (\"Google Chrome\", \"Brave Browser\", \"Microsoft Edge\") and\n  process.args like \"--load-extension=/*\" and\n  not (process.args like \"--load-extension=/Users/*/Library/Application Support/Cypress/*\" and\n       process.parent.executable like (\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\",\n                                        \"/Users/*/Library/Caches/Cypress/*/Cypress.app/Contents/MacOS/Cypress\")) and\n  not process.parent.executable like (\"/opt/homebrew/Caskroom/chromedriver/*/chromedriver\",\n                                    \"/Applications/Cypress.app/Contents/MacOS/Cypress\",\n                                    \"/usr/local/bin/chromedriver\")\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "google chrome",
+        "cypress",
+        "chromedriver"
+      ],
+      "raw_values": [
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "/Users/*/Library/Caches/Cypress/*/Cypress.app/Contents/MacOS/Cypress",
+        "/opt/homebrew/Caskroom/chromedriver/*/chromedriver",
+        "/Applications/Cypress.app/Contents/MacOS/Cypress",
+        "/usr/local/bin/chromedriver"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "google chrome",
+        "brave browser",
+        "microsoft edge"
+      ],
+      "raw_values": [
+        "Google Chrome",
+        "Brave Browser",
+        "Microsoft Edge"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ]
+}

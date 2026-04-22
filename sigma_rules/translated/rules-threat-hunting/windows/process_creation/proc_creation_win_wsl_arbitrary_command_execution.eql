@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\wsl.exe" or process.pe.original_file_name:"wsl.exe") and (process.command_line like~ ("* -e *", "* --exec*", "* --system*", "* --shell-type *", "* /mnt/c*", "* --user root*", "* -u root*", "*--debug-shell*"))) and (not (process.parent.executable:"*\\cmd.exe" and (process.command_line:"* -d *" and process.command_line:"* -e kill *")))

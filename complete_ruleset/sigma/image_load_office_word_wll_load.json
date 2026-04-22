@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "image_load_office_word_wll_load",
+  "subtree": "rules-threat-hunting",
+  "category": "library",
+  "sigma_path": "rules-threat-hunting/windows/image_load/image_load_office_word_wll_load.eql",
+  "raw_query": "any where process.executable:\"*\\\\winword.exe\" and file.path:\"*.wll\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".wll"
+      ],
+      "raw_values": [
+        "*.wll"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_office_outlook_enable_unsafe_client_mail_rules",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_office_outlook_enable_unsafe_client_mail_rules.eql",
+  "raw_query": "any where process.command_line:\"*\\\\Outlook\\\\Security\\\\EnableUnsafeClientMailRules*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "enableunsafeclientmailrules"
+      ],
+      "raw_values": [
+        "*\\\\Outlook\\\\Security\\\\EnableUnsafeClientMailRules*"
+      ]
+    }
+  ]
+}

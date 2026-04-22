@@ -1,0 +1,118 @@
+{
+  "source": "elastic",
+  "name": "Suricata and Elastic Defend Network Correlation",
+  "slug": "command_and_control_suricata_elastic_defend_c2",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "Domain: Network",
+    "OS: Linux",
+    "OS: Windows",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Data Source: Suricata",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/command_and_control_suricata_elastic_defend_c2.toml",
+  "raw_query": "sequence by source.port, source.ip, destination.ip with maxspan=5s\n [network where data_stream.dataset == \"suricata.eve\" and event.kind == \"alert\" and\n  event.severity != 3 and source.ip != null and destination.ip != null and\n  not source.domain : (\"*nessusscan*\", \"SCCMPS*\") and\n  not rule.name in (\"ET INFO SMB2 NT Create AndX Request For a Powershell .ps1 File\", \"ET SCAN MS Terminal Server Traffic on Non-standard Port\")]\n [network where event.module == \"endpoint\" and event.action in (\"disconnect_received\", \"connection_attempted\") and\n  not process.executable in (\"System\", \"C:\\\\Program Files (x86)\\\\Admin Arsenal\\\\PDQ Inventory\\\\PDQInventoryService.exe\") and \n  not process.executable : \"C:\\\\Windows\\\\AdminArsenal\\\\PDQInventory-Scanner\\\\service-*\\\\exec\\\\PDQInventoryScanner.exe\"]\n",
+  "conditions": [
+    {
+      "field": "source.domain",
+      "raw_field": "source.domain",
+      "operator": ":",
+      "values": [
+        "nessusscan",
+        "sccmps"
+      ],
+      "raw_values": [
+        "*nessusscan*",
+        "SCCMPS*"
+      ]
+    },
+    {
+      "field": "rule.name",
+      "raw_field": "rule.name",
+      "operator": "in",
+      "values": [
+        "et info smb2 nt create andx request for a powershell .ps1 file",
+        "et scan ms terminal server traffic on non-standard port"
+      ],
+      "raw_values": [
+        "ET INFO SMB2 NT Create AndX Request For a Powershell .ps1 File",
+        "ET SCAN MS Terminal Server Traffic on Non-standard Port"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "disconnect_received",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "disconnect_received",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "suricata.eve"
+      ],
+      "raw_values": [
+        "suricata.eve"
+      ]
+    },
+    {
+      "field": "event.kind",
+      "raw_field": "event.kind",
+      "operator": "==",
+      "values": [
+        "alert"
+      ],
+      "raw_values": [
+        "alert"
+      ]
+    },
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "endpoint"
+      ],
+      "raw_values": [
+        "endpoint"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pdqinventoryscanner.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\AdminArsenal\\\\PDQInventory-Scanner\\\\service-*\\\\exec\\\\PDQInventoryScanner.exe"
+      ]
+    }
+  ]
+}

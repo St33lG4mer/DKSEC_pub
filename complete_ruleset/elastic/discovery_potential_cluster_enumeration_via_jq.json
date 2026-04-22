@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "Potential Cluster Enumeration via jq Detected via Defend for Containers",
+  "slug": "discovery_potential_cluster_enumeration_via_jq",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/discovery_potential_cluster_enumeration_via_jq.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.name == \"jq\" and\nprocess.interactive == true and container.id like \"?*\" \n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ]
+}

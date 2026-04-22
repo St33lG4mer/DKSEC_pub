@@ -1,0 +1,23 @@
+{
+  "source": "elastic",
+  "name": "Rapid7 Threat Command CVEs Correlation",
+  "slug": "threat_intel_rapid7_threat_command",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "OS: Windows",
+    "Data Source: Elastic Endgame",
+    "Data Source: Windows",
+    "Data Source: Network",
+    "Data Source: Rapid7 Threat Command",
+    "Rule Type: Threat Match",
+    "Resources: Investigation Guide",
+    "Use Case: Vulnerability",
+    "Use Case: Asset Visibility",
+    "Use Case: Continuous Monitoring"
+  ],
+  "elastic_path": "rules/threat_intel/threat_intel_rapid7_threat_command.toml",
+  "raw_query": "vulnerability.id : *\n",
+  "conditions": []
+}

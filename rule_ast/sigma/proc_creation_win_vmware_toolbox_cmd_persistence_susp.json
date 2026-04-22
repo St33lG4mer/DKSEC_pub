@@ -1,0 +1,61 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_vmware_toolbox_cmd_persistence_susp",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_vmware_toolbox_cmd_persistence_susp.eql",
+  "raw_query": "any where (process.executable:\"*\\\\VMwareToolBoxCmd.exe\" or process.pe.original_file_name:\"toolbox-cmd.exe\") and (process.command_line:\"* script *\" and process.command_line:\"* set *\") and (process.command_line like~ (\"*:\\\\PerfLogs\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Windows\\\\System32\\\\Tasks\\\\*\", \"*:\\\\Windows\\\\Tasks\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "temp"
+      ],
+      "raw_values": [
+        "*:\\\\PerfLogs\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\System32\\\\Tasks\\\\*",
+        "*:\\\\Windows\\\\Tasks\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmwaretoolboxcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\VMwareToolBoxCmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "toolbox-cmd.exe"
+      ],
+      "raw_values": [
+        "toolbox-cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "script",
+        "set"
+      ],
+      "raw_values": [
+        "* script *",
+        "* set *"
+      ]
+    }
+  ]
+}

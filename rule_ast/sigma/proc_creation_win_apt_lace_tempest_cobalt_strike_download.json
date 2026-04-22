@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_lace_tempest_cobalt_strike_download",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/Lace-Tempest/proc_creation_win_apt_lace_tempest_cobalt_strike_download.eql",
+  "raw_query": "any where process.command_line:\"*-nop -w hidden -c IEX ((new-object net.webclient).downloadstring(*\" and process.command_line:\"*/a')*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-nop -w hidden -c iex ((new-object net.webclient).downloadstring(",
+        "a')"
+      ],
+      "raw_values": [
+        "*-nop -w hidden -c IEX ((new-object net.webclient).downloadstring(*",
+        "*/a')*"
+      ]
+    }
+  ]
+}

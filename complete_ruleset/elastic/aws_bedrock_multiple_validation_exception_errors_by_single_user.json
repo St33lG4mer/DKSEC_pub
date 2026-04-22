@@ -1,0 +1,34 @@
+{
+  "source": "elastic",
+  "name": "AWS Bedrock Detected Multiple Validation Exception Errors by a Single User",
+  "slug": "aws_bedrock_multiple_validation_exception_errors_by_single_user",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: LLM",
+    "Data Source: AWS",
+    "Data Source: AWS Bedrock",
+    "Data Source: AWS S3",
+    "Use Case: Policy Violation",
+    "Mitre Atlas: T0015",
+    "Mitre Atlas: T0034",
+    "Mitre Atlas: T0046",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws_bedrock/aws_bedrock_multiple_validation_exception_errors_by_single_user.toml",
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Truncate timestamp to 1-minute window\n| eval Esql.time_window_date_trunc = date_trunc(1 minutes, @timestamp)\n\n// Filter for validation exceptions in responses\n| where gen_ai.response.error_code == \"ValidationException\"\n\n// keep relevant ECS and derived fields\n| keep\n  user.id,\n  gen_ai.request.model.id,\n  cloud.account.id,\n  gen_ai.response.error_code,\n  Esql.time_window_date_trunc\n\n// count number of denials by user/account/time window\n| stats\n    Esql.ml_response_validation_error_count = count(*)\n  by\n    Esql.time_window_date_trunc,\n    user.id,\n    cloud.account.id\n\n// Filter for excessive errors\n| where Esql.ml_response_validation_error_count > 3\n",
+  "conditions": [
+    {
+      "field": "gen_ai.response.error_code",
+      "raw_field": "gen_ai.response.error_code",
+      "operator": "==",
+      "values": [
+        "validationexception"
+      ],
+      "raw_values": [
+        "ValidationException"
+      ]
+    }
+  ]
+}

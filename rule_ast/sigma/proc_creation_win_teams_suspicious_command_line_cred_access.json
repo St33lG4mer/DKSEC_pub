@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_teams_suspicious_command_line_cred_access",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_teams_suspicious_command_line_cred_access.eql",
+  "raw_query": "any where (process.command_line like~ (\"*\\\\Microsoft\\\\Teams\\\\Cookies*\", \"*\\\\Microsoft\\\\Teams\\\\Local Storage\\\\leveldb*\")) and (not process.executable:\"*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "cookies",
+        "leveldb"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Teams\\\\Cookies*",
+        "*\\\\Microsoft\\\\Teams\\\\Local Storage\\\\leveldb*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "teams.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe"
+      ]
+    }
+  ]
+}

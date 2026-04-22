@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_shadowcopy_deletion",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_shadowcopy_deletion.eql",
+  "raw_query": "any where (process.command_line like~ (\"*Get-WmiObject*\", \"*gwmi*\", \"*Get-CimInstance*\", \"*gcim*\")) and process.command_line:\"*Win32_ShadowCopy*\" and (process.command_line like~ (\"*.Delete()*\", \"*Remove-WmiObject*\", \"*rwmi*\", \"*Remove-CimInstance*\", \"*rcim*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "get-wmiobject",
+        "gwmi",
+        "get-ciminstance",
+        "gcim"
+      ],
+      "raw_values": [
+        "*Get-WmiObject*",
+        "*gwmi*",
+        "*Get-CimInstance*",
+        "*gcim*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "win32_shadowcopy"
+      ],
+      "raw_values": [
+        "*Win32_ShadowCopy*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wmic_recon_system_info",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_wmic_recon_system_info.eql",
+  "raw_query": "any where ((process.pe.description:\"WMI Commandline Utility\" or process.pe.original_file_name:\"wmic.exe\" or process.executable:\"*\\\\WMIC.exe\") and process.command_line:\"*get*\" and (process.command_line like~ (\"*baseboard*\", \"*bios*\", \"*cpu*\", \"*diskdrive*\", \"*logicaldisk*\", \"*memphysical*\", \"*os*\", \"*path*\", \"*startup*\", \"*win32_videocontroller*\")) and (process.command_line like~ (\"*caption*\", \"*command*\", \"*driverversion*\", \"*maxcapacity*\", \"*name*\", \"*osarchitecture*\", \"*product*\", \"*size*\", \"*smbiosbiosversion*\", \"*version*\", \"*videomodedescription*\"))) and (not process.parent.command_line:\"*\\\\VMware\\\\VMware Tools\\\\serviceDiscovery\\\\scripts\\\\*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "baseboard",
+        "bios",
+        "cpu",
+        "diskdrive",
+        "logicaldisk",
+        "memphysical",
+        "path",
+        "startup",
+        "win32_videocontroller",
+        "caption",
+        "command",
+        "driverversion",
+        "maxcapacity",
+        "name",
+        "osarchitecture",
+        "product",
+        "size",
+        "smbiosbiosversion",
+        "version",
+        "videomodedescription"
+      ],
+      "raw_values": [
+        "*baseboard*",
+        "*bios*",
+        "*cpu*",
+        "*diskdrive*",
+        "*logicaldisk*",
+        "*memphysical*",
+        "*os*",
+        "*path*",
+        "*startup*",
+        "*win32_videocontroller*",
+        "*caption*",
+        "*command*",
+        "*driverversion*",
+        "*maxcapacity*",
+        "*name*",
+        "*osarchitecture*",
+        "*product*",
+        "*size*",
+        "*smbiosbiosversion*",
+        "*version*",
+        "*videomodedescription*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "wmi commandline utility"
+      ],
+      "raw_values": [
+        "WMI Commandline Utility"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "get"
+      ],
+      "raw_values": [
+        "*get*"
+      ]
+    }
+  ]
+}

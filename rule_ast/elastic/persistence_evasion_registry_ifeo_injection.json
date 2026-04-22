@@ -1,0 +1,94 @@
+{
+  "source": "elastic",
+  "name": "Image File Execution Options Injection",
+  "slug": "persistence_evasion_registry_ifeo_injection",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_evasion_registry_ifeo_injection.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.value : (\"Debugger\", \"MonitorProcess\") and length(registry.data.strings) > 0 and\n  registry.path : (\n    \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*.exe\\\\Debugger\",\n    \"HKLM\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*\\\\Debugger\",\n    \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess\",\n    \"HKLM\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess\",\n    \"\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*.exe\\\\Debugger\",\n    \"\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*\\\\Debugger\",\n    \"\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess\",\n    \"\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess\",\n    \"MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*.exe\\\\Debugger\",\n    \"MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*\\\\Debugger\",\n    \"MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess\",\n    \"MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess\"\n  ) and\n    /* add FPs here */\n  not registry.data.strings regex~ (\"\"\"C:\\\\Program Files( \\(x86\\))?\\\\ThinKiosk\\\\thinkiosk\\.exe\"\"\", \"\"\".*\\\\PSAppDeployToolkit\\\\.*\"\"\")\n",
+  "conditions": [
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "debugger",
+        "monitorprocess"
+      ],
+      "raw_values": [
+        "Debugger",
+        "MonitorProcess"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\image file execution options\\\\*.exe\\\\debugger",
+        "hklm\\\\software\\\\wow6432node\\\\microsoft\\\\windows nt\\\\currentversion\\\\image file execution options\\\\*\\\\debugger",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\silentprocessexit\\\\*\\\\monitorprocess",
+        "hklm\\\\software\\\\wow6432node\\\\microsoft\\\\windows nt\\\\currentversion\\\\silentprocessexit\\\\*\\\\monitorprocess",
+        "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\image file execution options\\\\*.exe\\\\debugger",
+        "\\\\registry\\\\machine\\\\software\\\\wow6432node\\\\microsoft\\\\windows nt\\\\currentversion\\\\image file execution options\\\\*\\\\debugger",
+        "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\silentprocessexit\\\\*\\\\monitorprocess",
+        "\\\\registry\\\\machine\\\\software\\\\wow6432node\\\\microsoft\\\\windows nt\\\\currentversion\\\\silentprocessexit\\\\*\\\\monitorprocess",
+        "machine\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\image file execution options\\\\*.exe\\\\debugger",
+        "machine\\\\software\\\\wow6432node\\\\microsoft\\\\windows nt\\\\currentversion\\\\image file execution options\\\\*\\\\debugger",
+        "machine\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\silentprocessexit\\\\*\\\\monitorprocess",
+        "machine\\\\software\\\\wow6432node\\\\microsoft\\\\windows nt\\\\currentversion\\\\silentprocessexit\\\\*\\\\monitorprocess"
+      ],
+      "raw_values": [
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*.exe\\\\Debugger",
+        "HKLM\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*\\\\Debugger",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess",
+        "HKLM\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess",
+        "\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*.exe\\\\Debugger",
+        "\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*\\\\Debugger",
+        "\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess",
+        "\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess",
+        "MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*.exe\\\\Debugger",
+        "MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*\\\\Debugger",
+        "MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess",
+        "MACHINE\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\*\\\\MonitorProcess"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    }
+  ]
+}

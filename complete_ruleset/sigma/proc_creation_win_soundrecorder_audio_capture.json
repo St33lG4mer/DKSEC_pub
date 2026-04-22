@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_soundrecorder_audio_capture",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_soundrecorder_audio_capture.eql",
+  "raw_query": "any where process.executable:\"*\\\\SoundRecorder.exe\" and process.command_line:\"*/FILE*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "soundrecorder.exe"
+      ],
+      "raw_values": [
+        "*\\\\SoundRecorder.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "file"
+      ],
+      "raw_values": [
+        "*/FILE*"
+      ]
+    }
+  ]
+}

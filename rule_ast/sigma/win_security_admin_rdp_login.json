@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "win_security_admin_rdp_login",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/account_management/win_security_admin_rdp_login.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4624\" and winlog.event_data.LogonType:\"10\" and winlog.event_data.AuthenticationPackageName:\"Negotiate\" and winlog.event_data.TargetUserName:\"Admin*\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4624"
+      ],
+      "raw_values": [
+        "4624"
+      ]
+    },
+    {
+      "field": "winlog.event_data.authenticationpackagename",
+      "raw_field": "winlog.event_data.AuthenticationPackageName",
+      "operator": ":",
+      "values": [
+        "negotiate"
+      ],
+      "raw_values": [
+        "Negotiate"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetusername",
+      "raw_field": "winlog.event_data.TargetUserName",
+      "operator": ":",
+      "values": [
+        "admin"
+      ],
+      "raw_values": [
+        "Admin*"
+      ]
+    }
+  ]
+}

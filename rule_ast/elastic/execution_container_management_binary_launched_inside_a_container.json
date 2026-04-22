@@ -1,0 +1,220 @@
+{
+  "source": "elastic",
+  "name": "Container Management Utility Execution Detected via Defend for Containers",
+  "slug": "execution_container_management_binary_launched_inside_a_container",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/execution_container_management_binary_launched_inside_a_container.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  process.name in (\"dockerd\", \"kubelet\", \"kube-proxy\", \"kubectl\", \"containerd\", \"systemd\", \"crictl\") or\n  (\n    /* Account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\n      \"dockerd\", \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/local/bin/dockerd\",\n      \"kubelet\", \"/bin/kubelet\", \"/usr/bin/kubelet\", \"/usr/local/bin/kubelet\",\n      \"kube-proxy\", \"/bin/kube-proxy\", \"/usr/bin/kube-proxy\", \"/usr/local/bin/kube-proxy\",\n      \"kubectl\", \"/bin/kubectl\", \"/usr/bin/kubectl\", \"/usr/local/bin/kubectl\",\n      \"containerd\", \"/bin/containerd\", \"/usr/bin/containerd\", \"/usr/local/bin/containerd\",\n      \"systemd\", \"/bin/systemd\", \"/usr/bin/systemd\", \"/usr/local/bin/systemd\",\n      \"crictl\", \"/bin/crictl\", \"/usr/bin/crictl\", \"/usr/local/bin/crictl\"\n    ) and \n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )\n) and\nprocess.interactive == true and container.id like \"*\" and\nnot (\n  process.parent.executable in (\"/sbin/init\", \"/usr/bin/dockerd\", \"/usr/bin/runc\", \"/usr/bin/containerd-shim-runc-v2\") or\n  process.working_directory == \"/aws\" or\n  (process.parent.args == \"init\" and process.parent.args == \"runc\") or\n  (process.parent.name == \"busybox\" and process.name == \"kubectl\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dockerd",
+        "kubelet",
+        "kube-proxy",
+        "kubectl",
+        "containerd",
+        "systemd",
+        "crictl",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "dockerd",
+        "kubelet",
+        "kube-proxy",
+        "kubectl",
+        "containerd",
+        "systemd",
+        "crictl",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "dockerd",
+        "kubelet",
+        "kube-proxy",
+        "kubectl",
+        "containerd",
+        "systemd",
+        "crictl",
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "dockerd",
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/local/bin/dockerd",
+        "kubelet",
+        "/bin/kubelet",
+        "/usr/bin/kubelet",
+        "/usr/local/bin/kubelet",
+        "kube-proxy",
+        "/bin/kube-proxy",
+        "/usr/bin/kube-proxy",
+        "/usr/local/bin/kube-proxy",
+        "kubectl",
+        "/bin/kubectl",
+        "/usr/bin/kubectl",
+        "/usr/local/bin/kubectl",
+        "containerd",
+        "/bin/containerd",
+        "/usr/bin/containerd",
+        "/usr/local/bin/containerd",
+        "systemd",
+        "/bin/systemd",
+        "/usr/bin/systemd",
+        "/usr/local/bin/systemd",
+        "crictl",
+        "/bin/crictl",
+        "/usr/bin/crictl",
+        "/usr/local/bin/crictl",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "init",
+        "dockerd",
+        "runc",
+        "containerd-shim-runc-v2"
+      ],
+      "raw_values": [
+        "/sbin/init",
+        "/usr/bin/dockerd",
+        "/usr/bin/runc",
+        "/usr/bin/containerd-shim-runc-v2"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "==",
+      "values": [
+        "/aws"
+      ],
+      "raw_values": [
+        "/aws"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "init",
+        "runc"
+      ],
+      "raw_values": [
+        "init",
+        "runc"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "busybox"
+      ],
+      "raw_values": [
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "kubectl"
+      ],
+      "raw_values": [
+        "kubectl"
+      ]
+    }
+  ]
+}

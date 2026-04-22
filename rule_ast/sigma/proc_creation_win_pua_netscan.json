@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_netscan",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_netscan.eql",
+  "raw_query": "any where process.executable:\"*\\\\netscan.exe\" or process.pe.product:\"Network Scanner\" or process.pe.description:\"Application for scanning networks\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netscan.exe"
+      ],
+      "raw_values": [
+        "*\\\\netscan.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "network scanner"
+      ],
+      "raw_values": [
+        "Network Scanner"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "application for scanning networks"
+      ],
+      "raw_values": [
+        "Application for scanning networks"
+      ]
+    }
+  ]
+}

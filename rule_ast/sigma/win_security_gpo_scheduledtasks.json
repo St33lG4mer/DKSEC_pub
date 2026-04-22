@@ -1,0 +1,95 @@
+{
+  "source": "sigma",
+  "name": "win_security_gpo_scheduledtasks",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_gpo_scheduledtasks.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"5136\" and (winlog.event_data.AttributeLDAPDisplayName like~ (\"gPCMachineExtensionNames\", \"gPCUserExtensionNames\")) and (winlog.event_data.AttributeValue like~ (\"*CAB54552-DEEA-4691-817E-ED4A4D1AFC72*\", \"*AADCED64-746C-4633-A97C-D61349046527*\"))) or (event.code:\"5145\" and winlog.event_data.ShareName:\"*\\\\SYSVOL\" and winlog.event_data.RelativeTargetName:\"*ScheduledTasks.xml\" and (winlog.event_data.AccessList like~ (\"*WriteData*\", \"*%%4417*\"))))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": "like~",
+      "values": [
+        "gpcmachineextensionnames",
+        "gpcuserextensionnames"
+      ],
+      "raw_values": [
+        "gPCMachineExtensionNames",
+        "gPCUserExtensionNames"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributevalue",
+      "raw_field": "winlog.event_data.AttributeValue",
+      "operator": "like~",
+      "values": [
+        "cab54552-deea-4691-817e-ed4a4d1afc72",
+        "aadced64-746c-4633-a97c-d61349046527"
+      ],
+      "raw_values": [
+        "*CAB54552-DEEA-4691-817E-ED4A4D1AFC72*",
+        "*AADCED64-746C-4633-A97C-D61349046527*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": "like~",
+      "values": [
+        "writedata",
+        "%%4417"
+      ],
+      "raw_values": [
+        "*WriteData*",
+        "*%%4417*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5136",
+        "5145"
+      ],
+      "raw_values": [
+        "5136",
+        "5145"
+      ]
+    },
+    {
+      "field": "winlog.event_data.sharename",
+      "raw_field": "winlog.event_data.ShareName",
+      "operator": ":",
+      "values": [
+        "\\\\sysvol"
+      ],
+      "raw_values": [
+        "*\\\\SYSVOL"
+      ]
+    },
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": ":",
+      "values": [
+        "scheduledtasks.xml"
+      ],
+      "raw_values": [
+        "*ScheduledTasks.xml"
+      ]
+    }
+  ]
+}

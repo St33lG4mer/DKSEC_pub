@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_shutdown_logoff",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_shutdown_logoff.eql",
+  "raw_query": "any where process.executable:\"*\\\\shutdown.exe\" and process.command_line:\"*/l*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "shutdown.exe"
+      ],
+      "raw_values": [
+        "*\\\\shutdown.exe"
+      ]
+    }
+  ]
+}

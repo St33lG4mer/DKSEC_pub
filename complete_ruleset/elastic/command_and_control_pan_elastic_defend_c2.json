@@ -1,0 +1,60 @@
+{
+  "source": "elastic",
+  "name": "PANW and Elastic Defend - Command and Control Correlation",
+  "slug": "command_and_control_pan_elastic_defend_c2",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: Windows",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Data Source: PAN-OS",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/command_and_control_pan_elastic_defend_c2.toml",
+  "raw_query": "sequence by source.port, source.ip, destination.ip with maxspan=1m\n [network where event.module == \"panw\" and event.action == \"c2_communication\"]\n [network where event.module == \"endpoint\" and event.action in (\"disconnect_received\", \"connection_attempted\")]\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "disconnect_received",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "disconnect_received",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "panw",
+        "endpoint"
+      ],
+      "raw_values": [
+        "panw",
+        "endpoint"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "c2_communication"
+      ],
+      "raw_values": [
+        "c2_communication"
+      ]
+    }
+  ]
+}

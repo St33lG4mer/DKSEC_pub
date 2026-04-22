@@ -1,0 +1,32 @@
+{
+  "source": "elastic",
+  "name": "Unusual Execution from Kernel Thread (kthreadd) Parent",
+  "slug": "execution_unusual_kthreadd_execution",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/linux/execution_unusual_kthreadd_execution.toml",
+  "raw_query": "host.os.type:linux and event.category:process and event.type:start and event.action:(exec or ProcessRollup2) and process.parent.name:kthreadd and (\n  process.executable:(/dev/shm/* or /tmp/* or /var/tmp/* or /var/www/*) or\n  process.name:(bash or csh or curl or dash or fish or id or ksh or nohup or setsid or sh or tcsh or wget or whoami or zsh)\n) and\nprocess.command_line:(\n  */dev/shm/* or */dev/tcp/* or */etc/init.d* or */etc/ld.so* or */etc/profile* or */etc/rc.local* or */etc/shadow* or */etc/ssh* or\n  */etc/sudoers* or */home/*/.ssh/* or */root/.ssh* or */tmp/* or */var/log/* or */var/run/* or */var/tmp/* or */var/www/* or\n  *base64* or *cron* or *xxd* or *~/.ssh/*\n) and not (\n  process.name:(true or cifs.upcall or dpkg or flock or gdbus or getopt or grep or mount or touch or umount or uname) or\n  process.command_line:(\n    \"sh -c /bin/true\" or */bin/ps* or */usr/bin/find* or */usr/bin/grep* or *ds_agent* or *gitlabrunner* or *nagios* or\n    *omsagent* or *pgrep*\n  ) or\n  process.executable:(\n    /lib/systemd/systemd-cgroups-agent or /proc/self/exe or /usr/local/axs-haproxy-monitoring/haproxy_stats.sh or /tmp/newroot/* or\n    /var/lib/docker/overlay2/* or /vz/root/*\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "true"
+      ],
+      "raw_values": [
+        "sh -c /bin/true"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Named Pipe Creation",
+  "slug": "execution_suspicious_mkfifo_execution",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/linux/execution_suspicious_mkfifo_execution.toml",
+  "raw_query": "host.os.type:linux and event.category:process and event.type:start and event.action:(exec or ProcessRollup2 or start) and process.name:mkfifo and\nprocess.parent.name:(bash or csh or dash or fish or ksh or sh or tcsh or zsh) and\nprocess.args:((/dev/shm/* or /tmp/* or /var/tmp/*) and not (/*fifo* or /var/tmp/dracut* or /var/tmp/portage/* or /tmp/opencode_install*.trace))\n",
+  "conditions": []
+}

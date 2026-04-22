@@ -1,0 +1,124 @@
+{
+  "source": "elastic",
+  "name": "Kernel Instrumentation Discovery via kprobes and tracefs",
+  "slug": "discovery_kernel_instrumentation_discovery_via_kprobes_and_tracefs",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/discovery_kernel_instrumentation_discovery_via_kprobes_and_tracefs.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name in (\n  \"cat\", \"grep\", \"head\", \"tail\", \"ls\",\n  \"less\", \"more\",\n  \"awk\", \"sed\", \"cut\", \"tr\", \"xargs\", \"tee\",\n  \"find\", \"stat\", \"readlink\",\n  \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\"\n) and\nprocess.args like (\"/sys/kernel/debug/kprobes/*\", \"/sys/kernel/debug/tracing/*\", \"/sys/kernel/tracing/*\")\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "cat",
+        "grep",
+        "head",
+        "tail",
+        "less",
+        "more",
+        "awk",
+        "sed",
+        "cut",
+        "xargs",
+        "tee",
+        "find",
+        "stat",
+        "readlink",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "cat",
+        "grep",
+        "head",
+        "tail",
+        "ls",
+        "less",
+        "more",
+        "awk",
+        "sed",
+        "cut",
+        "tr",
+        "xargs",
+        "tee",
+        "find",
+        "stat",
+        "readlink",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

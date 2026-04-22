@@ -1,0 +1,62 @@
+{
+  "source": "sigma",
+  "name": "win_security_syskey_registry_access",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_syskey_registry_access.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"4656\", \"4663\")) and winlog.event_data.ObjectType:\"key\" and (winlog.event_data.ObjectName like~ (\"*lsa\\\\JD\", \"*lsa\\\\GBG\", \"*lsa\\\\Skew1\", \"*lsa\\\\Data\")))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4656",
+        "4663"
+      ],
+      "raw_values": [
+        "4656",
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        "lsa\\\\jd",
+        "lsa\\\\gbg",
+        "lsa\\\\skew1",
+        "lsa\\\\data"
+      ],
+      "raw_values": [
+        "*lsa\\\\JD",
+        "*lsa\\\\GBG",
+        "*lsa\\\\Skew1",
+        "*lsa\\\\Data"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "key"
+      ],
+      "raw_values": [
+        "key"
+      ]
+    }
+  ]
+}

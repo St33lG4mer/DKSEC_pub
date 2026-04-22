@@ -1,0 +1,1 @@
+any where (network.direction:"true" and (process.executable like~ ("*\\regsvr32.exe", "*\\rundll32.exe", "*\\dllhost.exe")) and (winlog.event_data.CommandLine like~ ("*\\regsvr32.exe", "*\\rundll32.exe", "*\\dllhost.exe"))) and (not (winlog.event_data.CommandLine=="" or (?winlog.event_data.CommandLine == null)))

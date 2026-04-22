@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "registry_set_turn_on_dev_features",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_turn_on_dev_features.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\AppModelUnlock*\", \"*\\\\Policies\\\\Microsoft\\\\Windows\\\\Appx\\\\*\")) and (registry.path like~ (\"*\\\\AllowAllTrustedApps\", \"*\\\\AllowDevelopmentWithoutDevLicense\")) and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\appmodelunlock",
+        "\\\\policies\\\\microsoft\\\\windows\\\\appx\\\\",
+        "\\\\allowalltrustedapps",
+        "\\\\allowdevelopmentwithoutdevlicense"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\AppModelUnlock*",
+        "*\\\\Policies\\\\Microsoft\\\\Windows\\\\Appx\\\\*",
+        "*\\\\AllowAllTrustedApps",
+        "*\\\\AllowDevelopmentWithoutDevLicense"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_nmap_zenmap",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_nmap_zenmap.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\nmap.exe\", \"*\\\\zennmap.exe\")) or (process.pe.original_file_name like~ (\"nmap.exe\", \"zennmap.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "nmap.exe",
+        "zennmap.exe"
+      ],
+      "raw_values": [
+        "*\\\\nmap.exe",
+        "*\\\\zennmap.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "nmap.exe",
+        "zennmap.exe"
+      ],
+      "raw_values": [
+        "nmap.exe",
+        "zennmap.exe"
+      ]
+    }
+  ]
+}

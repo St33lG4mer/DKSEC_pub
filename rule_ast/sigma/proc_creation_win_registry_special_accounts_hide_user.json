@@ -1,0 +1,37 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_registry_special_accounts_hide_user",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_registry_special_accounts_hide_user.eql",
+  "raw_query": "any where process.executable:\"*\\\\reg.exe\" and (process.command_line:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\SpecialAccounts\\\\UserList*\" and process.command_line:\"*add*\" and process.command_line:\"*/v*\" and process.command_line:\"*/d 0*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "userlist",
+        "add",
+        "d 0"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\SpecialAccounts\\\\UserList*",
+        "*add*",
+        "*/v*",
+        "*/d 0*"
+      ]
+    }
+  ]
+}

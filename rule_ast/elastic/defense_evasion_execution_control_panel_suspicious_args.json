@@ -1,0 +1,88 @@
+{
+  "source": "elastic",
+  "name": "Control Panel Process with Unusual Arguments",
+  "slug": "defense_evasion_execution_control_panel_suspicious_args",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_execution_control_panel_suspicious_args.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : \"control.exe\" and\n  process.command_line : (\n    \"*.jpg*\", \"*.png*\",\n    \"*.gif*\", \"*.bmp*\",\n    \"*.jpeg*\", \"*.TIFF*\",\n    \"*.inf*\", \"*.cpl:*/*\",\n    \"*../../..*\",\n    \"*/AppData/Local/*\",\n    \"*:\\\\Users\\\\Public\\\\*\",\n    \"*\\\\AppData\\\\Local\\\\*\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".jpg",
+        ".png",
+        ".gif",
+        ".bmp",
+        ".jpeg",
+        ".tiff",
+        ".inf"
+      ],
+      "raw_values": [
+        "*.jpg*",
+        "*.png*",
+        "*.gif*",
+        "*.bmp*",
+        "*.jpeg*",
+        "*.TIFF*",
+        "*.inf*",
+        "*.cpl:*/*",
+        "*../../..*",
+        "*/AppData/Local/*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*\\\\AppData\\\\Local\\\\*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "control.exe"
+      ],
+      "raw_values": [
+        "control.exe"
+      ]
+    }
+  ]
+}

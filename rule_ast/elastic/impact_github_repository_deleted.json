@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "GitHub Repository Deleted",
+  "slug": "impact_github_repository_deleted",
+  "category": "configuration",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Use Case: UEBA",
+    "Tactic: Impact",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/impact_github_repository_deleted.toml",
+  "raw_query": "configuration where event.module == \"github\" and data_stream.dataset == \"github.audit\" and event.action == \"repo.destroy\"\n",
+  "conditions": [
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "github"
+      ],
+      "raw_values": [
+        "github"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "repo.destroy"
+      ],
+      "raw_values": [
+        "repo.destroy"
+      ]
+    }
+  ]
+}

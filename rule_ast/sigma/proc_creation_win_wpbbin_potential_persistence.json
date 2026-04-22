@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wpbbin_potential_persistence",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wpbbin_potential_persistence.eql",
+  "raw_query": "any where process.executable:\"C:\\\\Windows\\\\System32\\\\wpbbin.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wpbbin.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\wpbbin.exe"
+      ]
+    }
+  ]
+}

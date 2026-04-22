@@ -1,0 +1,58 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_invocation_specific",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_invocation_specific.eql",
+  "raw_query": "any where ((process.command_line:\"*-nop*\" and process.command_line:\"* -w *\" and process.command_line:\"*hidden*\" and process.command_line:\"* -c *\" and process.command_line:\"*[Convert]::FromBase64String*\") or (process.command_line:\"* -w *\" and process.command_line:\"*hidden*\" and process.command_line:\"*-noni*\" and process.command_line:\"*-nop*\" and process.command_line:\"* -c *\" and process.command_line:\"*iex*\" and process.command_line:\"*New-Object*\") or (process.command_line:\"* -w *\" and process.command_line:\"*hidden*\" and process.command_line:\"*-ep*\" and process.command_line:\"*bypass*\" and process.command_line:\"*-Enc*\") or (process.command_line:\"*powershell*\" and process.command_line:\"*reg*\" and process.command_line:\"*add*\" and process.command_line:\"*\\\\software\\\\*\") or (process.command_line:\"*bypass*\" and process.command_line:\"*-noprofile*\" and process.command_line:\"*-windowstyle*\" and process.command_line:\"*hidden*\" and process.command_line:\"*new-object*\" and process.command_line:\"*system.net.webclient*\" and process.command_line:\"*.download*\") or (process.command_line:\"*iex*\" and process.command_line:\"*New-Object*\" and process.command_line:\"*Net.WebClient*\" and process.command_line:\"*.Download*\")) and (not (process.command_line like~ (\"*(New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1*\", \"*Write-ChocolateyWarning*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-nop",
+        "hidden",
+        "[convert]::frombase64string",
+        "-noni",
+        "iex",
+        "new-object",
+        "-ep",
+        "bypass",
+        "-enc",
+        "powershell",
+        "reg",
+        "add",
+        "-noprofile",
+        "-windowstyle",
+        "system.net.webclient",
+        ".download",
+        "net.webclient"
+      ],
+      "raw_values": [
+        "*-nop*",
+        "* -w *",
+        "*hidden*",
+        "* -c *",
+        "*[Convert]::FromBase64String*",
+        "*-noni*",
+        "*iex*",
+        "*New-Object*",
+        "*-ep*",
+        "*bypass*",
+        "*-Enc*",
+        "*powershell*",
+        "*reg*",
+        "*add*",
+        "*\\\\software\\\\*",
+        "*-noprofile*",
+        "*-windowstyle*",
+        "*new-object*",
+        "*system.net.webclient*",
+        "*.download*",
+        "*Net.WebClient*",
+        "*.Download*"
+      ]
+    }
+  ]
+}

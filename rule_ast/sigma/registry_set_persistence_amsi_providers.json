@@ -1,0 +1,61 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_amsi_providers",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_amsi_providers.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\AMSI\\\\Providers\\\\*\", \"*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\AMSI\\\\Providers\\\\*\")) and (not (((process.executable like~ (\"C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\RegSvr.exe\", \"C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\x86\\\\RegSvr.exe\")) and registry.path:\"*\\\\{FB904E4E-D2C7-4C8D-8492-B620BB9896B1}*\") or ((process.executable like~ (\"C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\RegSvr.exe\", \"C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\x86\\\\RegSvr.exe\")) and registry.path:\"*\\\\{FB904E4E-D2C7-4C8D-8492-B620BB9896B1}*\") or (process.executable:\"C:\\\\Program Files\\\\Avira\\\\Endpoint Protection SDK\\\\endpointprotection.exe\" and registry.path:\"*\\\\{00000001-3DCC-4B48-A82E-E2071FE58E05}*\")))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\amsi\\\\providers\\\\",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\amsi\\\\providers\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\AMSI\\\\Providers\\\\*",
+        "*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\AMSI\\\\Providers\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "regsvr.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\RegSvr.exe",
+        "C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\x86\\\\RegSvr.exe",
+        "C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\RegSvr.exe",
+        "C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\x86\\\\RegSvr.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\{fb904e4e-d2c7-4c8d-8492-b620bb9896b1}",
+        "\\\\{00000001-3dcc-4b48-a82e-e2071fe58e05}"
+      ],
+      "raw_values": [
+        "*\\\\{FB904E4E-D2C7-4C8D-8492-B620BB9896B1}*",
+        "*\\\\{00000001-3DCC-4B48-A82E-E2071FE58E05}*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "endpointprotection.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Avira\\\\Endpoint Protection SDK\\\\endpointprotection.exe"
+      ]
+    }
+  ]
+}

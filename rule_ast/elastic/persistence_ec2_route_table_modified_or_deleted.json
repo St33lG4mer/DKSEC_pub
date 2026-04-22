@@ -1,0 +1,73 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Route Table Modified or Deleted",
+  "slug": "persistence_ec2_route_table_modified_or_deleted",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Network Security Monitoring",
+    "Resources: Investigation Guide",
+    "Tactic: Persistence"
+  ],
+  "elastic_path": "rules/integrations/aws/persistence_ec2_route_table_modified_or_deleted.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ec2.amazonaws.com\"\n    and event.action:(\n        \"ReplaceRoute\" or\n        \"ReplaceRouteTableAssociation\" or\n        \"DeleteRouteTable\" or\n        \"DeleteRoute\" or\n        \"DisassociateRouteTable\"\n    )\n    and event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "replaceroute",
+        "replaceroutetableassociation",
+        "deleteroutetable",
+        "deleteroute",
+        "disassociateroutetable"
+      ],
+      "raw_values": [
+        "ReplaceRoute",
+        "ReplaceRouteTableAssociation",
+        "DeleteRouteTable",
+        "DeleteRoute",
+        "DisassociateRouteTable"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

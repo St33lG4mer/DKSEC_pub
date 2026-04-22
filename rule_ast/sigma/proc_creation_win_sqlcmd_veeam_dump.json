@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sqlcmd_veeam_dump",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sqlcmd_veeam_dump.eql",
+  "raw_query": "any where process.executable:\"*\\\\sqlcmd.exe\" and (process.command_line:\"*SELECT*\" and process.command_line:\"*TOP*\" and process.command_line:\"*[VeeamBackup].[dbo].[Credentials]*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqlcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlcmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "select",
+        "top",
+        "[veeambackup].[dbo].[credentials]"
+      ],
+      "raw_values": [
+        "*SELECT*",
+        "*TOP*",
+        "*[VeeamBackup].[dbo].[Credentials]*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_uac_bypass_msconfig_gui",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_uac_bypass_msconfig_gui.eql",
+  "raw_query": "any where file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\pkgmgr.exe\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "pkgmgr.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\pkgmgr.exe"
+      ]
+    }
+  ]
+}

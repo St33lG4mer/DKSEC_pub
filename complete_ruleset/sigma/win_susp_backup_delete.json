@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_susp_backup_delete",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/application/microsoft_windows_backup/win_susp_backup_delete.eql",
+  "raw_query": "any where winlog.channel:\"Application\" and (event.code:\"524\" and winlog.provider_name:\"Microsoft-Windows-Backup\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "application"
+      ],
+      "raw_values": [
+        "Application"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "524"
+      ],
+      "raw_values": [
+        "524"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-backup"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Backup"
+      ]
+    }
+  ]
+}

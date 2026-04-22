@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_set_acl_susp_location",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_set_acl_susp_location.eql",
+  "raw_query": "any where ((process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\")) or (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\"))) and (process.command_line:\"*Set-Acl *\" and process.command_line:\"*-AclObject *\") and (process.command_line like~ (\"*-Path \\\"C:\\\\Windows*\", \"*-Path 'C:\\\\Windows*\", \"*-Path %windir%*\", \"*-Path $env:windir*\")) and (process.command_line like~ (\"*FullControl*\", \"*Allow*\"))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "fullcontrol",
+        "allow"
+      ],
+      "raw_values": [
+        "*-Path \\",
+        ", ",
+        "*FullControl*",
+        "*Allow*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "set-acl",
+        "-aclobject"
+      ],
+      "raw_values": [
+        "*Set-Acl *",
+        "*-AclObject *"
+      ]
+    }
+  ]
+}

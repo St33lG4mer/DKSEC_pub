@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_replace",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_replace.eql",
+  "raw_query": "any where process.executable:\"*\\\\replace.exe\" and process.command_line like~ (\"*-a*\", \"*/a*\", \"*\u2013a*\", \"*\u2014a*\", \"*\u2015a*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "replace.exe"
+      ],
+      "raw_values": [
+        "*\\\\replace.exe"
+      ]
+    }
+  ]
+}

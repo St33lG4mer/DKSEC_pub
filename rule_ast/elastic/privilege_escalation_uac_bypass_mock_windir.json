@@ -1,0 +1,61 @@
+{
+  "source": "elastic",
+  "name": "UAC Bypass Attempt via Windows Directory Masquerading",
+  "slug": "privilege_escalation_uac_bypass_mock_windir",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_uac_bypass_mock_windir.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.args : (\"C:\\\\Windows \\\\system32\\\\*.exe\", \"C:\\\\Windows \\\\SysWOW64\\\\*.exe\")\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows \\\\system32\\\\*.exe",
+        "C:\\\\Windows \\\\SysWOW64\\\\*.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

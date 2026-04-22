@@ -1,0 +1,41 @@
+{
+  "source": "elastic",
+  "name": "External User Added to Google Workspace Group",
+  "slug": "initial_access_external_user_added_to_google_workspace_group",
+  "category": "iam",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Google Workspace",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/google_workspace/initial_access_external_user_added_to_google_workspace_group.toml",
+  "raw_query": "iam where data_stream.dataset == \"google_workspace.admin\" and event.action == \"ADD_GROUP_MEMBER\" and\n  not endsWith(user.target.email, user.target.group.domain)\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "google_workspace.admin"
+      ],
+      "raw_values": [
+        "google_workspace.admin"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "add_group_member"
+      ],
+      "raw_values": [
+        "ADD_GROUP_MEMBER"
+      ]
+    }
+  ]
+}

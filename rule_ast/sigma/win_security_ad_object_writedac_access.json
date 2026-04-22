@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "win_security_ad_object_writedac_access",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_ad_object_writedac_access.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4662\" and winlog.event_data.ObjectServer:\"DS\" and winlog.event_data.AccessMask:\"0x40000\" and (winlog.event_data.ObjectType like~ (\"19195a5b-6da0-11d0-afd3-00c04fd930c9\", \"domainDNS\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": "like~",
+      "values": [
+        "19195a5b-6da0-11d0-afd3-00c04fd930c9",
+        "domaindns"
+      ],
+      "raw_values": [
+        "19195a5b-6da0-11d0-afd3-00c04fd930c9",
+        "domainDNS"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4662"
+      ],
+      "raw_values": [
+        "4662"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x40000"
+      ],
+      "raw_values": [
+        "0x40000"
+      ]
+    }
+  ]
+}

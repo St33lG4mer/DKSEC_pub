@@ -1,0 +1,146 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes User Exec into Pod",
+  "slug": "execution_user_exec_to_pod",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/execution_user_exec_to_pod.toml",
+  "raw_query": "any where data_stream.dataset == \"kubernetes.audit_logs\" and kubernetes.audit.verb in (\"get\", \"create\") and\nkubernetes.audit.objectRef.subresource == \"exec\" and kubernetes.audit.stage in (\"ResponseComplete\", \"ResponseStarted\") and\nkubernetes.audit.level == \"Request\" and `kubernetes.audit.annotations.authorization_k8s_io/decision` == \"allow\" and\nnot (\n  (kubernetes.audit.objectRef.namespace == \"trident\" and kubernetes.audit.objectRef.name like \"trident-controller-*\") or\n  (kubernetes.audit.objectRef.namespace == \"vuls\" and kubernetes.audit.requestURI like \"/api/v1/namespaces/vuls/pods/vuls-*/exec?command=sh&command=-c&command=*+%2Fvuls%2Fresults*\") or\n  (kubernetes.audit.objectRef.namespace == \"git-runners\" and kubernetes.audit.requestURI like (\n     \"/api/v1/namespaces/git-runners/pods/runner-*/exec?command=sh&command=-c&command=if+%5B+-x+%2Fusr%2Flocal%2Fbin%2Fbash+%5D%3B+then%0A%09exec+%2Fusr%2Flocal%2Fbin%2Fbash+%0Aelif+%5B+-x+%2Fusr%2Fbin%2Fbash+%5D%3B+then%0A%09exec+%2Fusr%2Fbin%2Fbash+%0Aelif+%5B+-x+%2Fbin%2Fbash+%5D%3B+then%0A%09exec+%2Fbin%2Fbash+%0Aelif+%5B+-x+%2Fusr%2Flocal%2Fbin%2Fsh+%5D%3B+then%0A%09exec+%2Fusr%2Flocal%2Fbin%2Fsh+%0Aelif+%5B+-x+%2Fusr%2Fbin%2Fsh+%5D%3B+then%0A%09exec+%2Fusr%2Fbin%2Fsh+%0Aelif+%5B+-x+%2Fbin%2Fsh+%5D%3B+then%0A%09exec+%2Fbin%2Fsh+%0Aelif+%5B+-x+%2Fbusybox%2Fsh+%5D%3B+then%0A%09exec+%2Fbusybox%2Fsh+%0Aelse%0A%09echo+shell+not+found%0A%09exit+1%0Afi%0A%0A&container=*&container=*&stderr=true&stdin=true&stdout=true\",\n     \"/api/v1/namespaces/git-runners/pods/runner-*/exec?command=gitlab-runner-helper&command=read-logs&command=--path&command=%2Flogs-*%2Foutput.log&command=--offset&command=0&command=--wait-file-timeout&command=1m0s&container=*&container=*&stderr=true&stdout=true\"\n  )) or\n  (kubernetes.audit.objectRef.namespace == \"elasticsearch-cluster\" and kubernetes.audit.requestURI like (\n    \"/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=elasticsearch&stdin=true&stdout=true&tty=true\",\n    \"/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=elasticsearch&stderr=true&stdout=true\",\n    \"/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=kibana&stderr=true&stdout=true\"\n  )) or\n  (kubernetes.audit.objectRef.namespace == \"kube-system\" and kubernetes.audit.requestURI like (\n    \"/api/v1/namespaces/kube-system/pods/*/exec?command=%2Fproxy-agent&command=--help&container=konnectivity-agent&stderr=true&stdout=true\",\n    \"api/v1/namespaces/kube-system/pods/*/exec?command=cilium&command=endpoint&command=list&command=-o&command=json&container=cilium-agent&stderr=true&stdout=true\",\n    \"/api/v1/namespaces/kube-system/pods/*/exec?command=cilium&command=status&command=-o&command=json&container=cilium-agent&stderr=true&stdout=true\",\n    \"/api/v1/namespaces/kube-system/pods/*/exec?command=sh&command=-c&command=clear%3B+%28bash+%7C%7C+ash+%7C%7C+sh%29&container=*&stdin=true&stdout=true&tty=true\"\n  ))\n)\n",
+  "conditions": [
+    {
+      "field": "kubernetes.audit.requesturi",
+      "raw_field": "kubernetes.audit.requestURI",
+      "operator": ":",
+      "values": [
+        "/api/v1/namespaces/git-runners/pods/runner-*/exec?command=sh&command=-c&command=if+%5b+-x+%2fusr%2flocal%2fbin%2fbash+%5d%3b+then%0a%09exec+%2fusr%2flocal%2fbin%2fbash+%0aelif+%5b+-x+%2fusr%2fbin%2fbash+%5d%3b+then%0a%09exec+%2fusr%2fbin%2fbash+%0aelif+%5b+-x+%2fbin%2fbash+%5d%3b+then%0a%09exec+%2fbin%2fbash+%0aelif+%5b+-x+%2fusr%2flocal%2fbin%2fsh+%5d%3b+then%0a%09exec+%2fusr%2flocal%2fbin%2fsh+%0aelif+%5b+-x+%2fusr%2fbin%2fsh+%5d%3b+then%0a%09exec+%2fusr%2fbin%2fsh+%0aelif+%5b+-x+%2fbin%2fsh+%5d%3b+then%0a%09exec+%2fbin%2fsh+%0aelif+%5b+-x+%2fbusybox%2fsh+%5d%3b+then%0a%09exec+%2fbusybox%2fsh+%0aelse%0a%09echo+shell+not+found%0a%09exit+1%0afi%0a%0a&container=*&container=*&stderr=true&stdin=true&stdout=true",
+        "/api/v1/namespaces/git-runners/pods/runner-*/exec?command=gitlab-runner-helper&command=read-logs&command=--path&command=%2flogs-*%2foutput.log&command=--offset&command=0&command=--wait-file-timeout&command=1m0s&container=*&container=*&stderr=true&stdout=true",
+        "/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=elasticsearch&stdin=true&stdout=true&tty=true",
+        "/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=elasticsearch&stderr=true&stdout=true",
+        "/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=kibana&stderr=true&stdout=true",
+        "/api/v1/namespaces/kube-system/pods/*/exec?command=%2fproxy-agent&command=--help&container=konnectivity-agent&stderr=true&stdout=true",
+        "api/v1/namespaces/kube-system/pods/*/exec?command=cilium&command=endpoint&command=list&command=-o&command=json&container=cilium-agent&stderr=true&stdout=true",
+        "/api/v1/namespaces/kube-system/pods/*/exec?command=cilium&command=status&command=-o&command=json&container=cilium-agent&stderr=true&stdout=true",
+        "/api/v1/namespaces/kube-system/pods/*/exec?command=sh&command=-c&command=clear%3b+%28bash+%7c%7c+ash+%7c%7c+sh%29&container=*&stdin=true&stdout=true&tty=true"
+      ],
+      "raw_values": [
+        "/api/v1/namespaces/git-runners/pods/runner-*/exec?command=sh&command=-c&command=if+%5B+-x+%2Fusr%2Flocal%2Fbin%2Fbash+%5D%3B+then%0A%09exec+%2Fusr%2Flocal%2Fbin%2Fbash+%0Aelif+%5B+-x+%2Fusr%2Fbin%2Fbash+%5D%3B+then%0A%09exec+%2Fusr%2Fbin%2Fbash+%0Aelif+%5B+-x+%2Fbin%2Fbash+%5D%3B+then%0A%09exec+%2Fbin%2Fbash+%0Aelif+%5B+-x+%2Fusr%2Flocal%2Fbin%2Fsh+%5D%3B+then%0A%09exec+%2Fusr%2Flocal%2Fbin%2Fsh+%0Aelif+%5B+-x+%2Fusr%2Fbin%2Fsh+%5D%3B+then%0A%09exec+%2Fusr%2Fbin%2Fsh+%0Aelif+%5B+-x+%2Fbin%2Fsh+%5D%3B+then%0A%09exec+%2Fbin%2Fsh+%0Aelif+%5B+-x+%2Fbusybox%2Fsh+%5D%3B+then%0A%09exec+%2Fbusybox%2Fsh+%0Aelse%0A%09echo+shell+not+found%0A%09exit+1%0Afi%0A%0A&container=*&container=*&stderr=true&stdin=true&stdout=true",
+        "/api/v1/namespaces/git-runners/pods/runner-*/exec?command=gitlab-runner-helper&command=read-logs&command=--path&command=%2Flogs-*%2Foutput.log&command=--offset&command=0&command=--wait-file-timeout&command=1m0s&container=*&container=*&stderr=true&stdout=true",
+        "/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=elasticsearch&stdin=true&stdout=true&tty=true",
+        "/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=elasticsearch&stderr=true&stdout=true",
+        "/api/v1/namespaces/elasticsearch-cluster/pods/*/exec?command=df&command=-h&container=kibana&stderr=true&stdout=true",
+        "/api/v1/namespaces/kube-system/pods/*/exec?command=%2Fproxy-agent&command=--help&container=konnectivity-agent&stderr=true&stdout=true",
+        "api/v1/namespaces/kube-system/pods/*/exec?command=cilium&command=endpoint&command=list&command=-o&command=json&container=cilium-agent&stderr=true&stdout=true",
+        "/api/v1/namespaces/kube-system/pods/*/exec?command=cilium&command=status&command=-o&command=json&container=cilium-agent&stderr=true&stdout=true",
+        "/api/v1/namespaces/kube-system/pods/*/exec?command=sh&command=-c&command=clear%3B+%28bash+%7C%7C+ash+%7C%7C+sh%29&container=*&stdin=true&stdout=true&tty=true"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": "in",
+      "values": [
+        "get",
+        "create"
+      ],
+      "raw_values": [
+        "get",
+        "create"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": "in",
+      "values": [
+        "responsecomplete",
+        "responsestarted"
+      ],
+      "raw_values": [
+        "ResponseComplete",
+        "ResponseStarted"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.subresource",
+      "raw_field": "kubernetes.audit.objectRef.subresource",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.level",
+      "raw_field": "kubernetes.audit.level",
+      "operator": "==",
+      "values": [
+        "request"
+      ],
+      "raw_values": [
+        "Request"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.namespace",
+      "raw_field": "kubernetes.audit.objectRef.namespace",
+      "operator": "==",
+      "values": [
+        "trident",
+        "vuls",
+        "git-runners",
+        "elasticsearch-cluster",
+        "kube-system"
+      ],
+      "raw_values": [
+        "trident",
+        "vuls",
+        "git-runners",
+        "elasticsearch-cluster",
+        "kube-system"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.name",
+      "raw_field": "kubernetes.audit.objectRef.name",
+      "operator": "like",
+      "values": [
+        "trident-controller-"
+      ],
+      "raw_values": [
+        "trident-controller-*"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.requesturi",
+      "raw_field": "kubernetes.audit.requestURI",
+      "operator": "like",
+      "values": [
+        "/api/v1/namespaces/vuls/pods/vuls-*/exec?command=sh&command=-c&command=*+%2fvuls%2fresults"
+      ],
+      "raw_values": [
+        "/api/v1/namespaces/vuls/pods/vuls-*/exec?command=sh&command=-c&command=*+%2Fvuls%2Fresults*"
+      ]
+    }
+  ]
+}

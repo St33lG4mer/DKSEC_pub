@@ -1,0 +1,48 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_dump64_defender_av_bypass_rename",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_dump64_defender_av_bypass_rename.eql",
+  "raw_query": "any where (process.executable:\":\\\\Program Files*\" and process.executable:\"*\\\\Microsoft Visual Studio\\\\*\" and process.executable:\"*\\\\dump64.exe\") and (process.pe.original_file_name:\"procdump\" or (process.command_line like~ (\"* -ma *\", \"* -mp *\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-ma",
+        "-mp"
+      ],
+      "raw_values": [
+        "* -ma *",
+        "* -mp *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "program files",
+        "dump64.exe"
+      ],
+      "raw_values": [
+        ":\\\\Program Files*",
+        "*\\\\Microsoft Visual Studio\\\\*",
+        "*\\\\dump64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "procdump"
+      ],
+      "raw_values": [
+        "procdump"
+      ]
+    }
+  ]
+}

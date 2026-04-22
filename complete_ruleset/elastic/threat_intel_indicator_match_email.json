@@ -1,0 +1,15 @@
+{
+  "source": "elastic",
+  "name": "Threat Intel Email Indicator Match",
+  "slug": "threat_intel_indicator_match_email",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Rule Type: Threat Match",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/threat_intel/threat_intel_indicator_match_email.toml",
+  "raw_query": "email.from.address:* or email.sender.address:* or email.reply_to.address:* or email.to.address:*\n",
+  "conditions": []
+}

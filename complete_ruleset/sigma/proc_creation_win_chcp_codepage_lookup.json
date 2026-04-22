@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_chcp_codepage_lookup",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_chcp_codepage_lookup.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\cmd.exe\" and (process.parent.command_line like~ (\"* -c *\", \"* /c *\", \"* \u2013c *\", \"* \u2014c *\", \"* \u2015c *\") or process.parent.command_line like~ (\"* -r *\", \"* /r *\", \"* \u2013r *\", \"* \u2014r *\", \"* \u2015r *\") or process.parent.command_line like~ (\"* -k *\", \"* /k *\", \"* \u2013k *\", \"* \u2014k *\", \"* \u2015k *\")) and process.executable:\"*\\\\chcp.com\" and (process.command_line like~ (\"*chcp\", \"*chcp \", \"*chcp  \"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "chcp"
+      ],
+      "raw_values": [
+        "*chcp",
+        "*chcp ",
+        "*chcp  "
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "chcp.com"
+      ],
+      "raw_values": [
+        "*\\\\chcp.com"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "source": "elastic",
+  "name": "ESXI Timestomping using Touch Command",
+  "slug": "defense_evasion_esxi_suspicious_timestomp_touch",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_esxi_suspicious_timestomp_touch.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\n event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\n process.name == \"touch\" and process.args == \"-r\" and process.args : (\"/etc/vmware/*\", \"/usr/lib/vmware/*\", \"/vmfs/*\")\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "touch"
+      ],
+      "raw_values": [
+        "touch"
+      ]
+    }
+  ]
+}

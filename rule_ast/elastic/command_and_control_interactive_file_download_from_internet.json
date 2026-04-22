@@ -1,0 +1,122 @@
+{
+  "source": "elastic",
+  "name": "File Download Detected via Defend for Containers",
+  "slug": "command_and_control_interactive_file_download_from_internet",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/command_and_control_interactive_file_download_from_internet.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.interactive == true and (\n  (\n    (process.name == \"curl\" or process.args in (\"curl\", \"/bin/curl\", \"/usr/bin/curl\", \"/usr/local/bin/curl\")) and\n    process.args in (\"-o\", \"-O\", \"--output\", \"--remote-name\", \"--remote-name-all\", \"--output-dir\")\n  ) or\n  (\n    (process.name == \"wget\" or process.args in (\"wget\", \"/bin/wget\", \"/usr/bin/wget\", \"/usr/local/bin/wget\")) and\n    process.args like (\"-*O*\", \"--output-document=*\", \"--output-file=*\")\n  )\n) and (\n process.args like~ \"*http*\" or\n process.args regex~ \".*[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}[:/]{1}.*\"\n) and container.id like \"?*\"\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-*o",
+        "--output-document=",
+        "--output-file="
+      ],
+      "raw_values": [
+        "-*O*",
+        "--output-document=*",
+        "--output-file=*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "curl",
+        "--output",
+        "--remote-name",
+        "--remote-name-all",
+        "--output-dir",
+        "wget"
+      ],
+      "raw_values": [
+        "curl",
+        "/bin/curl",
+        "/usr/bin/curl",
+        "/usr/local/bin/curl",
+        "-o",
+        "-O",
+        "--output",
+        "--remote-name",
+        "--remote-name-all",
+        "--output-dir",
+        "wget",
+        "/bin/wget",
+        "/usr/bin/wget",
+        "/usr/local/bin/wget"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "curl",
+        "wget"
+      ],
+      "raw_values": [
+        "curl",
+        "wget"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "*http*"
+      ]
+    }
+  ]
+}

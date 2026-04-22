@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_sysmon_uninstall",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_sysmon_uninstall.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\Sysmon64.exe\", \"*\\\\Sysmon.exe\")) or process.pe.description:\"System activity monitor\") and process.command_line like~ (\"*-u*\", \"*/u*\", \"*\u2013u*\", \"*\u2014u*\", \"*\u2015u*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "sysmon64.exe",
+        "sysmon.exe"
+      ],
+      "raw_values": [
+        "*\\\\Sysmon64.exe",
+        "*\\\\Sysmon.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "system activity monitor"
+      ],
+      "raw_values": [
+        "System activity monitor"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "registry_set_deviceguard_hypervisorenforcedcodeintegrity_disabled",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_deviceguard_hypervisorenforcedcodeintegrity_disabled.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\Control\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity\", \"*\\\\Control\\\\DeviceGuard\\\\Scenarios\\\\HypervisorEnforcedCodeIntegrity\\\\Enabled\", \"*\\\\Microsoft\\\\Windows\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity\")) and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\control\\\\deviceguard\\\\hypervisorenforcedcodeintegrity",
+        "\\\\control\\\\deviceguard\\\\scenarios\\\\hypervisorenforcedcodeintegrity\\\\enabled",
+        "\\\\microsoft\\\\windows\\\\deviceguard\\\\hypervisorenforcedcodeintegrity"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity",
+        "*\\\\Control\\\\DeviceGuard\\\\Scenarios\\\\HypervisorEnforcedCodeIntegrity\\\\Enabled",
+        "*\\\\Microsoft\\\\Windows\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ]
+}

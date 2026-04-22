@@ -1,0 +1,35 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_http_appdata",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_http_appdata.eql",
+  "raw_query": "any where process.executable:\"*\\\\cmd.exe\" and (process.command_line:\"*http*\" and process.command_line:\"*://*\" and process.command_line:\"*%AppData%*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http",
+        "%appdata%"
+      ],
+      "raw_values": [
+        "*http*",
+        "*://*",
+        "*%AppData%*"
+      ]
+    }
+  ]
+}

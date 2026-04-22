@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "registry_set_tls_protocol_old_version_enabled",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_tls_protocol_old_version_enabled.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS 1.0\\\\*\", \"*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS 1.1\\\\*\")) and registry.path:\"*\\\\Enabled\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\control\\\\securityproviders\\\\schannel\\\\protocols\\\\tls 1.0\\\\",
+        "\\\\control\\\\securityproviders\\\\schannel\\\\protocols\\\\tls 1.1\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS 1.0\\\\*",
+        "*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS 1.1\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\enabled"
+      ],
+      "raw_values": [
+        "*\\\\Enabled"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ]
+}

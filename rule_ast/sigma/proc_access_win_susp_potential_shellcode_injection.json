@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "proc_access_win_susp_potential_shellcode_injection",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_access/proc_access_win_susp_potential_shellcode_injection.eql",
+  "raw_query": "any where ((winlog.event_data.GrantedAccess like~ (\"0x147a\", \"0x1f3fff\")) and winlog.event_data.CallTrace:\"*UNKNOWN*\") and (not (process.executable:\"C:\\\\Windows\\\\System32\\\\Wbem\\\\Wmiprvse.exe\" and winlog.event_data.TargetImage:\"C:\\\\Windows\\\\system32\\\\lsass.exe\")) and (not (((process.executable like~ (\"C:\\\\Program Files\\\\Dell\\\\*\", \"C:\\\\Program Files (x86)\\\\Dell\\\\*\")) and (winlog.event_data.TargetImage like~ (\"C:\\\\Program Files\\\\Dell\\\\*\", \"C:\\\\Program Files (x86)\\\\Dell\\\\*\"))) or (process.executable:\"C:\\\\Program Files (x86)\\\\Dell\\\\UpdateService\\\\ServiceShell.exe\" and winlog.event_data.TargetImage:\"C:\\\\Windows\\\\Explorer.EXE\") or (process.executable:\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\*\" and winlog.event_data.TargetImage:\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\*\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": "like~",
+      "values": [
+        "0x147a",
+        "0x1f3fff"
+      ],
+      "raw_values": [
+        "0x147a",
+        "0x1f3fff"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": "like~",
+      "values": [
+        "c:\\\\program files\\\\dell\\\\"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Dell\\\\*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "unknown"
+      ],
+      "raw_values": [
+        "*UNKNOWN*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe",
+        "serviceshell.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\Wbem\\\\Wmiprvse.exe",
+        "C:\\\\Program Files (x86)\\\\Dell\\\\UpdateService\\\\ServiceShell.exe",
+        "C:\\\\Program Files\\\\Microsoft Visual Studio\\\\*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\lsass.exe",
+        "c:\\\\windows\\\\explorer.exe",
+        "c:\\\\program files\\\\microsoft visual studio\\\\"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\lsass.exe",
+        "C:\\\\Windows\\\\Explorer.EXE",
+        "C:\\\\Program Files\\\\Microsoft Visual Studio\\\\*"
+      ]
+    }
+  ]
+}

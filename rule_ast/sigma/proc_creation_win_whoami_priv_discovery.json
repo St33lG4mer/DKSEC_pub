@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_whoami_priv_discovery",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_whoami_priv_discovery.eql",
+  "raw_query": "any where (process.executable:\"*\\\\whoami.exe\" or process.pe.original_file_name:\"whoami.exe\") and (process.command_line like~ (\"* /priv*\", \"* -priv*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "priv",
+        "-priv"
+      ],
+      "raw_values": [
+        "* /priv*",
+        "* -priv*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\whoami.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "whoami.exe"
+      ]
+    }
+  ]
+}

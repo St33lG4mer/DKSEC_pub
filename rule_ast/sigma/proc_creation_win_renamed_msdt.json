@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_msdt",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_msdt.eql",
+  "raw_query": "any where process.pe.original_file_name:\"msdt.exe\" and (not process.executable:\"*\\\\msdt.exe\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "msdt.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    }
+  ]
+}

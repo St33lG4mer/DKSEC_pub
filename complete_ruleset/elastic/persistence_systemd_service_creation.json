@@ -1,0 +1,293 @@
+{
+  "source": "elastic",
+  "name": "Systemd Service Created",
+  "slug": "persistence_systemd_service_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_systemd_service_creation.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"rename\", \"creation\") and file.path : (\n  \"/etc/systemd/system/*\", \"/etc/systemd/user/*\", \"/usr/local/lib/systemd/system/*\",\n  \"/lib/systemd/system/*\", \"/usr/lib/systemd/system/*\", \"/usr/lib/systemd/user/*\",\n  \"/home/*/.config/systemd/user/*\", \"/home/*/.local/share/systemd/user/*\",\n  \"/root/.config/systemd/user/*\", \"/root/.local/share/systemd/user/*\"\n) and file.extension == \"service\" and not (\n  process.executable in (\n    \"/bin/dpkg\", \"/usr/bin/dpkg\", \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/sbin/dockerd\", \"/bin/microdnf\",\n    \"/usr/bin/microdnf\", \"/bin/rpm\", \"/usr/bin/rpm\", \"/bin/snapd\", \"/usr/bin/snapd\", \"/bin/yum\", \"/usr/bin/yum\",\n    \"/bin/dnf\", \"/usr/bin/dnf\", \"/bin/podman\", \"/usr/bin/podman\", \"/bin/dnf-automatic\", \"/usr/bin/dnf-automatic\",\n    \"/usr/bin/dpkg-divert\", \"/bin/dpkg-divert\", \"/sbin/apk\", \"/usr/sbin/apk\",\n    \"/usr/local/sbin/apk\", \"/usr/bin/apt\", \"/bin/podman\", \"/usr/bin/podman\", \"/usr/bin/puppet\",\n    \"/bin/puppet\", \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/bin/chef-client\", \"/bin/chef-client\",\n    \"/bin/autossl_check\", \"/usr/bin/autossl_check\", \"/proc/self/exe\",  \"/usr/bin/pamac-daemon\",\n    \"/bin/pamac-daemon\", \"/usr/lib/snapd/snapd\", \"/usr/local/bin/dockerd\", \"/usr/bin/crio\", \"/usr/sbin/crond\",\n    \"/opt/puppetlabs/puppet/bin/ruby\", \"/usr/libexec/platform-python\", \"/kaniko/kaniko-executor\",\n    \"/usr/local/bin/dockerd\", \"/usr/bin/podman\", \"/bin/install\", \"/proc/self/exe\", \"/usr/lib/systemd/systemd\",\n    \"/usr/sbin/sshd\", \"/usr/bin/gitlab-runner\", \"/opt/gitlab/embedded/bin/ruby\", \"/usr/sbin/gdm\", \"/usr/bin/install\",\n    \"/usr/local/manageengine/uems_agent/bin/dcregister\", \"/usr/local/bin/defender\", \"./usr/bin/podman\",\n    \"/etc/checkpoint/common/install.sh\", \"/usr/bin/dnf5\", \"/usr/lib/dracut/dracut-install\", \"/usr/bin/buildah\",\n    \"/opt/msp-agent/msp-agent-core\", \"/opt/sysmon/sysmon\", \"/opt/datadog-agent/embedded/bin/installer\", \"/usr/bin/tdnf\",\n    \"/opt/teleport/system/bin/teleport-update\", \"/opt/gitlab/embedded/bin/cinc-client\", \"/usr/libexec/snapd/snapd\",\n    \"/usr/sbin/yum-cron\", \"/sbin/yum-cron\", \"/opt/splunkforwarder/bin/splunk\"\n  ) or\n  file.extension in (\"swp\", \"swpx\", \"swx\", \"dpkg-remove\") or\n  file.Ext.original.extension == \"dpkg-new\" or\n  process.executable : (\n    \"/nix/store/*\", \"/var/lib/dpkg/*\", \"/tmp/vmis.*\", \"/snap/*\", \"/dev/fd/*\", \"/usr/lib/virtualbox/*\",\n    \"/usr/share/elastic-agent/data/*/components/endpoint-security\",  \"/opt/Elastic/Agent/data/*/components/endpoint-security\",\n    \"/opt/TrendMicro/EndpointBasecamp/*\", \"/var/lib/docker/overlay2/*dockerd\", \"/var/lib/containers/storage/overlay/*/dockerd\",\n    \"/var/opt/kaspersky/kesl/*/opt/kaspersky/kesl/libexec/launcher\"\n\n  ) or\n  process.executable == null or\n  process.name like (\n    \"ssm-agent-worker\", \"platform-python*\", \"dnf_install\", \"cloudflared\", \"lxc-pve-prestart-hook\",\n    \"convert-usrmerge\", \"elastic-agent\", \"google_metadata_script_runner\", \"update-alternatives\", \"gitlab-runner\",\n    \"install\", \"crio\", \"apt-get\", \"package-cleanup\", \"dcservice\", \"dcregister\", \"jumpcloud-agent\", \"executor\",\n    \"pacman\", \"convert2rhel\", \"packagekitd\"\n  ) or\n  (process.name == \"sed\" and file.name : \"sed*\") or\n  (process.name == \"perl\" and file.name : \"e2scrub_all.tmp*\") \n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmis.",
+        "endpoint-security",
+        "dockerd",
+        "launcher",
+        "ssm-agent-worker",
+        "platform-python",
+        "dnf_install",
+        "cloudflared",
+        "lxc-pve-prestart-hook",
+        "convert-usrmerge",
+        "elastic-agent",
+        "google_metadata_script_runner",
+        "update-alternatives",
+        "gitlab-runner",
+        "install",
+        "crio",
+        "apt-get",
+        "package-cleanup",
+        "dcservice",
+        "dcregister",
+        "jumpcloud-agent",
+        "executor",
+        "pacman",
+        "convert2rhel",
+        "packagekitd"
+      ],
+      "raw_values": [
+        "/nix/store/*",
+        "/var/lib/dpkg/*",
+        "/tmp/vmis.*",
+        "/snap/*",
+        "/dev/fd/*",
+        "/usr/lib/virtualbox/*",
+        "/usr/share/elastic-agent/data/*/components/endpoint-security",
+        "/opt/Elastic/Agent/data/*/components/endpoint-security",
+        "/opt/TrendMicro/EndpointBasecamp/*",
+        "/var/lib/docker/overlay2/*dockerd",
+        "/var/lib/containers/storage/overlay/*/dockerd",
+        "/var/opt/kaspersky/kesl/*/opt/kaspersky/kesl/libexec/launcher",
+        "ssm-agent-worker",
+        "platform-python*",
+        "dnf_install",
+        "cloudflared",
+        "lxc-pve-prestart-hook",
+        "convert-usrmerge",
+        "elastic-agent",
+        "google_metadata_script_runner",
+        "update-alternatives",
+        "gitlab-runner",
+        "install",
+        "crio",
+        "apt-get",
+        "package-cleanup",
+        "dcservice",
+        "dcregister",
+        "jumpcloud-agent",
+        "executor",
+        "pacman",
+        "convert2rhel",
+        "packagekitd"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "rename",
+        "creation"
+      ],
+      "raw_values": [
+        "rename",
+        "creation"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "dpkg",
+        "dockerd",
+        "microdnf",
+        "rpm",
+        "snapd",
+        "yum",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "dpkg-divert",
+        "apk",
+        "apt",
+        "puppet",
+        "chef-client",
+        "autossl_check",
+        "exe",
+        "pamac-daemon",
+        "crio",
+        "crond",
+        "ruby",
+        "platform-python",
+        "kaniko-executor",
+        "install",
+        "systemd",
+        "sshd",
+        "gitlab-runner",
+        "gdm",
+        "dcregister",
+        "defender",
+        "install.sh",
+        "dnf5",
+        "dracut-install",
+        "buildah",
+        "msp-agent-core",
+        "sysmon",
+        "installer",
+        "tdnf",
+        "teleport-update",
+        "cinc-client",
+        "yum-cron",
+        "splunk"
+      ],
+      "raw_values": [
+        "/bin/dpkg",
+        "/usr/bin/dpkg",
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/sbin/dockerd",
+        "/bin/microdnf",
+        "/usr/bin/microdnf",
+        "/bin/rpm",
+        "/usr/bin/rpm",
+        "/bin/snapd",
+        "/usr/bin/snapd",
+        "/bin/yum",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "/usr/bin/dnf",
+        "/bin/podman",
+        "/usr/bin/podman",
+        "/bin/dnf-automatic",
+        "/usr/bin/dnf-automatic",
+        "/usr/bin/dpkg-divert",
+        "/bin/dpkg-divert",
+        "/sbin/apk",
+        "/usr/sbin/apk",
+        "/usr/local/sbin/apk",
+        "/usr/bin/apt",
+        "/usr/bin/puppet",
+        "/bin/puppet",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/bin/chef-client",
+        "/bin/chef-client",
+        "/bin/autossl_check",
+        "/usr/bin/autossl_check",
+        "/proc/self/exe",
+        "/usr/bin/pamac-daemon",
+        "/bin/pamac-daemon",
+        "/usr/lib/snapd/snapd",
+        "/usr/local/bin/dockerd",
+        "/usr/bin/crio",
+        "/usr/sbin/crond",
+        "/opt/puppetlabs/puppet/bin/ruby",
+        "/usr/libexec/platform-python",
+        "/kaniko/kaniko-executor",
+        "/bin/install",
+        "/usr/lib/systemd/systemd",
+        "/usr/sbin/sshd",
+        "/usr/bin/gitlab-runner",
+        "/opt/gitlab/embedded/bin/ruby",
+        "/usr/sbin/gdm",
+        "/usr/bin/install",
+        "/usr/local/manageengine/uems_agent/bin/dcregister",
+        "/usr/local/bin/defender",
+        "./usr/bin/podman",
+        "/etc/checkpoint/common/install.sh",
+        "/usr/bin/dnf5",
+        "/usr/lib/dracut/dracut-install",
+        "/usr/bin/buildah",
+        "/opt/msp-agent/msp-agent-core",
+        "/opt/sysmon/sysmon",
+        "/opt/datadog-agent/embedded/bin/installer",
+        "/usr/bin/tdnf",
+        "/opt/teleport/system/bin/teleport-update",
+        "/opt/gitlab/embedded/bin/cinc-client",
+        "/usr/libexec/snapd/snapd",
+        "/usr/sbin/yum-cron",
+        "/sbin/yum-cron",
+        "/opt/splunkforwarder/bin/splunk"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ],
+      "raw_values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "==",
+      "values": [
+        "service"
+      ],
+      "raw_values": [
+        "service"
+      ]
+    },
+    {
+      "field": "file.ext.original.extension",
+      "raw_field": "file.Ext.original.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sed",
+        "perl"
+      ],
+      "raw_values": [
+        "sed",
+        "perl"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "sed",
+        "e2scrub_all.tmp"
+      ],
+      "raw_values": [
+        "sed*",
+        "e2scrub_all.tmp*"
+      ]
+    }
+  ]
+}

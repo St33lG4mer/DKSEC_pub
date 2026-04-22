@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_boinc",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_boinc.eql",
+  "raw_query": "any where process.pe.original_file_name:\"BOINC.exe\" and (not process.executable:\"*\\\\BOINC.exe\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "boinc.exe"
+      ],
+      "raw_values": [
+        "BOINC.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "boinc.exe"
+      ],
+      "raw_values": [
+        "*\\\\BOINC.exe"
+      ]
+    }
+  ]
+}

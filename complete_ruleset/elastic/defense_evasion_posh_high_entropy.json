@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "Potential PowerShell Obfuscated Script via High Entropy",
+  "slug": "defense_evasion_posh_high_entropy",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: PowerShell Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_posh_high_entropy.toml",
+  "raw_query": "event.category:process and host.os.type:windows and powershell.file.script_block_length > 1000 and\n  powershell.file.script_block_entropy_bits >= 5.5 and powershell.file.script_block_surprisal_stdev > 0.7 and\n  not file.directory: (\n        \"C:\\Program Files (x86)\\Microsoft Intune Management Extension\\Content\\DetectionScripts\" or\n        \"C:\\Program Files\\Microsoft Azure AD Connect Health Agent\\Products\\AdFederationService\\AdfsDiagnostics\\AdfsToolbox\\diagnosticsModule\\Private\"\n  )\n",
+  "conditions": []
+}

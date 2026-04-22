@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_zxshell",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2014/TA/Axiom/proc_creation_win_apt_zxshell.eql",
+  "raw_query": "any where process.executable:\"*\\\\rundll32.exe\" and (process.command_line like~ (\"*zxFunction*\", \"*RemoteDiskXXXXX*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "zxfunction",
+        "remotediskxxxxx"
+      ],
+      "raw_values": [
+        "*zxFunction*",
+        "*RemoteDiskXXXXX*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ]
+}

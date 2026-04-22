@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_wwlib",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_wwlib.eql",
+  "raw_query": "any where file.path:\"*\\\\wwlib.dll\" and (not ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\*\", \"C:\\\\Program Files\\\\Microsoft Office\\\\*\")) and process.executable:\"*\\\\winword.exe\" and (file.path like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\*\", \"C:\\\\Program Files\\\\Microsoft Office\\\\*\"))))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "wwlib.dll"
+      ],
+      "raw_values": [
+        "*\\\\wwlib.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\winword.exe"
+      ]
+    }
+  ]
+}

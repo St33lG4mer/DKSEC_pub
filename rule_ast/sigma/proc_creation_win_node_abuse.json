@@ -1,0 +1,50 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_node_abuse",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_node_abuse.eql",
+  "raw_query": "any where (process.executable:\"*\\\\node.exe\" and (process.command_line like~ (\"* -e *\", \"* --eval *\"))) and (process.command_line:\"*.exec(*\" and process.command_line:\"*net.socket*\" and process.command_line:\"*.connect*\" and process.command_line:\"*child_process*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--eval"
+      ],
+      "raw_values": [
+        "* -e *",
+        "* --eval *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "node.exe"
+      ],
+      "raw_values": [
+        "*\\\\node.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".exec(",
+        "net.socket",
+        ".connect",
+        "child_process"
+      ],
+      "raw_values": [
+        "*.exec(*",
+        "*net.socket*",
+        "*.connect*",
+        "*child_process*"
+      ]
+    }
+  ]
+}

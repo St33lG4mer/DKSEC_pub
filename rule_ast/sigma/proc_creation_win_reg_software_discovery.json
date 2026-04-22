@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_reg_software_discovery",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_reg_software_discovery.eql",
+  "raw_query": "any where process.executable:\"*\\\\reg.exe\" and (process.command_line:\"*query*\" and process.command_line:\"*\\\\software\\\\*\" and process.command_line:\"*/v*\" and process.command_line:\"*svcversion*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "query",
+        "svcversion"
+      ],
+      "raw_values": [
+        "*query*",
+        "*\\\\software\\\\*",
+        "*/v*",
+        "*svcversion*"
+      ]
+    }
+  ]
+}

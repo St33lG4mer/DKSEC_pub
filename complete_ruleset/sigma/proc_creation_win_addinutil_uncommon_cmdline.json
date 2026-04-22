@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_addinutil_uncommon_cmdline",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_addinutil_uncommon_cmdline.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\addinutil.exe\" or process.pe.original_file_name:\"AddInUtil.exe\") and (process.command_line like~ (\"*-AddInRoot:*\", \"*-PipelineRoot:*\"))) and (not (process.command_line like~ (\"*-AddInRoot:\\\"C:\\\\Program Files (x86)\\\\Common Files\\\\Microsoft Shared\\\\VSTA*\", \"*-AddInRoot:C:\\\\Program Files (x86)\\\\Common Files\\\\Microsoft Shared\\\\VSTA*\", \"*-PipelineRoot:\\\"C:\\\\Program Files (x86)\\\\Common Files\\\\Microsoft Shared\\\\VSTA*\", \"*-PipelineRoot:C:\\\\Program Files (x86)\\\\Common Files\\\\Microsoft Shared\\\\VSTA*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-addinroot:",
+        "-pipelineroot:"
+      ],
+      "raw_values": [
+        "*-AddInRoot:*",
+        "*-PipelineRoot:*",
+        "*-AddInRoot:\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "addinutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\addinutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "addinutil.exe"
+      ],
+      "raw_values": [
+        "AddInUtil.exe"
+      ]
+    }
+  ]
+}

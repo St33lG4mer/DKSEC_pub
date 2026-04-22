@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_csi_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_csi_execution.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\csi.exe\", \"*\\\\rcsi.exe\")) or (process.pe.original_file_name like~ (\"csi.exe\", \"rcsi.exe\"))) and process.pe.company:\"Microsoft Corporation\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "csi.exe",
+        "rcsi.exe"
+      ],
+      "raw_values": [
+        "*\\\\csi.exe",
+        "*\\\\rcsi.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "csi.exe",
+        "rcsi.exe"
+      ],
+      "raw_values": [
+        "csi.exe",
+        "rcsi.exe"
+      ]
+    },
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "microsoft corporation"
+      ],
+      "raw_values": [
+        "Microsoft Corporation"
+      ]
+    }
+  ]
+}

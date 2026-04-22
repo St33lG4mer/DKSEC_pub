@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_event_runkey_winekey",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_event_runkey_winekey.eql",
+  "raw_query": "any where registry.path:\"*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\Backup Mgr\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\backup mgr"
+      ],
+      "raw_values": [
+        "*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\Backup Mgr"
+      ]
+    }
+  ]
+}

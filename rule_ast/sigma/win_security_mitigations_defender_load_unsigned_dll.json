@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "win_security_mitigations_defender_load_unsigned_dll",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security_mitigations/win_security_mitigations_defender_load_unsigned_dll.eql",
+  "raw_query": "any where (winlog.channel like~ (\"Microsoft-Windows-Security-Mitigations/Kernel Mode\", \"Microsoft-Windows-Security-Mitigations/User Mode\")) and ((event.code like~ (\"11\", \"12\")) and (winlog.event_data.ProcessPath like~ (\"*\\\\MpCmdRun.exe\", \"*\\\\NisSrv.exe\")))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": "like~",
+      "values": [
+        "microsoft-windows-security-mitigations/kernel mode",
+        "microsoft-windows-security-mitigations/user mode"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Security-Mitigations/Kernel Mode",
+        "Microsoft-Windows-Security-Mitigations/User Mode"
+      ]
+    },
+    {
+      "field": "winlog.event_data.processpath",
+      "raw_field": "winlog.event_data.ProcessPath",
+      "operator": "like~",
+      "values": [
+        "\\\\mpcmdrun.exe",
+        "\\\\nissrv.exe"
+      ],
+      "raw_values": [
+        "*\\\\MpCmdRun.exe",
+        "*\\\\NisSrv.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_diskshadow_child_process_susp",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_diskshadow_child_process_susp.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\diskshadow.exe\" and (process.executable like~ (\"*\\\\certutil.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wscript.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "certutil.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "*\\\\diskshadow.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_safetykatz",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_safetykatz.eql",
+  "raw_query": "any where process.executable:\"*\\\\SafetyKatz.exe\" or process.pe.original_file_name:\"SafetyKatz.exe\" or process.pe.description:\"SafetyKatz\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "safetykatz.exe"
+      ],
+      "raw_values": [
+        "*\\\\SafetyKatz.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "safetykatz.exe"
+      ],
+      "raw_values": [
+        "SafetyKatz.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "safetykatz"
+      ],
+      "raw_values": [
+        "SafetyKatz"
+      ]
+    }
+  ]
+}

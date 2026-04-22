@@ -1,0 +1,53 @@
+{
+  "source": "sigma",
+  "name": "dns_query_win_dns_server_discovery_via_ldap_query",
+  "subtree": "rules",
+  "category": "dns",
+  "sigma_path": "rules/windows/dns_query/dns_query_win_dns_server_discovery_via_ldap_query.eql",
+  "raw_query": "any where dns.question.name:\"_ldap.*\" and (not ((process.executable like~ (\"*:\\\\Program Files\\\\*\", \"*:\\\\Program Files (x86)\\\\*\", \"*:\\\\Windows\\\\*\")) or (process.executable:\"*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\" and process.executable:\"*\\\\MsMpEng.exe\") or process.executable:\"<unknown process>\" or (?process.executable == null))) and (not (process.executable:\"C:\\\\WindowsAzure\\\\GuestAgent*\" or (process.executable like~ (\"*\\\\chrome.exe\", \"*\\\\firefox.exe\", \"*\\\\opera.exe\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "chrome.exe",
+        "firefox.exe",
+        "opera.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\*",
+        "*\\\\chrome.exe",
+        "*\\\\firefox.exe",
+        "*\\\\opera.exe"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "_ldap."
+      ],
+      "raw_values": [
+        "_ldap.*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe",
+        "<unknown process>",
+        "guestagent"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*",
+        "*\\\\MsMpEng.exe",
+        "<unknown process>",
+        "C:\\\\WindowsAzure\\\\GuestAgent*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "source": "elastic",
+  "name": "Azure Automation Webhook Created",
+  "slug": "persistence_automation_webhook_created",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Configuration Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_automation_webhook_created.toml",
+  "raw_query": "data_stream.dataset:azure.activitylogs and\n  azure.activitylogs.operation_name:\n    (\n      \"MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/WEBHOOKS/ACTION\" or\n      \"MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/WEBHOOKS/WRITE\"\n    ) and\n  event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.automation/automationaccounts/webhooks/action",
+        "microsoft.automation/automationaccounts/webhooks/write"
+      ],
+      "raw_values": [
+        "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/WEBHOOKS/ACTION",
+        "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/WEBHOOKS/WRITE"
+      ]
+    }
+  ]
+}

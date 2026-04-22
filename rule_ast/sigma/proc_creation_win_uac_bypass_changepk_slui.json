@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_changepk_slui",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_changepk_slui.eql",
+  "raw_query": "any where process.executable:\"*\\\\changepk.exe\" and process.parent.executable:\"*\\\\slui.exe\" and (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "changepk.exe"
+      ],
+      "raw_values": [
+        "*\\\\changepk.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "slui.exe"
+      ],
+      "raw_values": [
+        "*\\\\slui.exe"
+      ]
+    }
+  ]
+}

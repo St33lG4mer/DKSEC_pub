@@ -1,0 +1,43 @@
+{
+  "source": "elastic",
+  "name": "PowerShell Suspicious Script with Audio Capture Capabilities",
+  "slug": "collection_posh_audio_capture",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Resources: Investigation Guide",
+    "Data Source: PowerShell Logs"
+  ],
+  "elastic_path": "rules/windows/collection_posh_audio_capture.toml",
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n    \"Get-MicrophoneAudio\" or\n    (\"Get-AudioDevice\" and \"Recording\" and \"Set-AudioDevice\") or\n    \"WindowsAudioDevice-Powershell-Cmdlet\" or\n    (\n      \"winmm.dll\" and\n      (\n        \"waveInGetNumDevs\" or \"waveInOpen\" or \"waveInStart\" or\n        \"mciSendString\" or \"mciSendStringA\" or \"mciSendStringW\"\n      )\n    )\n  ) and\n  not powershell.file.script_block_text : (\n    \"sentinelbreakpoints\" and \"Set-PSBreakpoint\" and \"PowerSploitIndicators\"\n  )\n",
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "get-microphoneaudio",
+        "get-audiodevice",
+        "recording",
+        "set-audiodevice",
+        "sentinelbreakpoints",
+        "set-psbreakpoint",
+        "powersploitindicators"
+      ],
+      "raw_values": [
+        "Get-MicrophoneAudio",
+        "Get-AudioDevice",
+        "Recording",
+        "Set-AudioDevice",
+        "sentinelbreakpoints",
+        "Set-PSBreakpoint",
+        "PowerSploitIndicators"
+      ]
+    }
+  ]
+}

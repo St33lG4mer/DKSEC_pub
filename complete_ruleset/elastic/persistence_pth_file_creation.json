@@ -1,0 +1,121 @@
+{
+  "source": "elastic",
+  "name": "Python Path File (pth) Creation",
+  "slug": "persistence_pth_file_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Execution",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_pth_file_creation.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action == \"creation\" and file.extension == \"pth\" and\nfile.path like (\n  \"/usr/local/lib/python*/dist-packages/*\", \n  \"/usr/lib/python*/dist-packages/*\",\n  \"/usr/local/lib/python*/site-packages/*\",\n  \"/usr/lib/python*/site-packages/*\",\n  \"/home/*/.local/lib/python*/site-packages/*\",\n  \"/opt/*/lib/python*/site-packages/*\"\n) and process.executable != null and not (\n  process.executable in (\n    \"/usr/bin/restic\", \"/usr/bin/pacman\", \"/usr/bin/dockerd\",  \"/usr/bin/podman\", \"/usr/bin/pamac-daemon\",\n    \"/usr/bin/dnf\", \"/usr/bin/dnf5\", \"/bin/dnf5\", \"/bin/podman\", \"./usr/bin/podman\", \"/kaniko/executor\",\n    \"/dev/fd/3\", \"/opt/SolarWinds/Agent/bin/Plugins/Discovery/SolarWinds.Agent.Discovery.Plugin\", \"/usr/bin/crio\",\n    \"/opt/splunk/bin/splunkd\", \"/opt/Tanium/TaniumClient/TaniumCX\"\n  ) or\n  process.executable like (\n    \"/nix/store/*libexec/docker/dockerd\", \"/snap/docker/*dockerd\"\n  ) or\n  (\n    process.name like (\"platform-python*\", \"cp\", \"uv\") and\n    file.name in (\"distutils-precedence.pth\", \"_virtualenv.pth\")\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dockerd",
+        "platform-python"
+      ],
+      "raw_values": [
+        "/nix/store/*libexec/docker/dockerd",
+        "/snap/docker/*dockerd",
+        "platform-python*",
+        "cp",
+        "uv"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "restic",
+        "pacman",
+        "dockerd",
+        "podman",
+        "pamac-daemon",
+        "dnf",
+        "dnf5",
+        "executor",
+        "solarwinds.agent.discovery.plugin",
+        "crio",
+        "splunkd",
+        "taniumcx"
+      ],
+      "raw_values": [
+        "/usr/bin/restic",
+        "/usr/bin/pacman",
+        "/usr/bin/dockerd",
+        "/usr/bin/podman",
+        "/usr/bin/pamac-daemon",
+        "/usr/bin/dnf",
+        "/usr/bin/dnf5",
+        "/bin/dnf5",
+        "/bin/podman",
+        "./usr/bin/podman",
+        "/kaniko/executor",
+        "/dev/fd/3",
+        "/opt/SolarWinds/Agent/bin/Plugins/Discovery/SolarWinds.Agent.Discovery.Plugin",
+        "/usr/bin/crio",
+        "/opt/splunk/bin/splunkd",
+        "/opt/Tanium/TaniumClient/TaniumCX"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "in",
+      "values": [
+        "distutils-precedence.pth",
+        "_virtualenv.pth"
+      ],
+      "raw_values": [
+        "distutils-precedence.pth",
+        "_virtualenv.pth"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "==",
+      "values": [
+        "pth"
+      ],
+      "raw_values": [
+        "pth"
+      ]
+    }
+  ]
+}

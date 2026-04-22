@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_soaphound_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_soaphound_execution.eql",
+  "raw_query": "any where (process.command_line like~ (\"* --buildcache *\", \"* --bhdump *\", \"* --certdump *\", \"* --dnsdump *\")) and (process.command_line like~ (\"* -c *\", \"* --cachefilename *\", \"* -o *\", \"* --outputdirectory*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--buildcache",
+        "--bhdump",
+        "--certdump",
+        "--dnsdump",
+        "--cachefilename",
+        "--outputdirectory"
+      ],
+      "raw_values": [
+        "* --buildcache *",
+        "* --bhdump *",
+        "* --certdump *",
+        "* --dnsdump *",
+        "* -c *",
+        "* --cachefilename *",
+        "* -o *",
+        "* --outputdirectory*"
+      ]
+    }
+  ]
+}

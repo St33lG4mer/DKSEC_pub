@@ -1,0 +1,102 @@
+{
+  "source": "elastic",
+  "name": "Newly Observed FortiGate Alert",
+  "slug": "newly_observed_fortigate_alert",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 99,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Domain: Network",
+    "Data Source: Fortinet"
+  ],
+  "elastic_path": "rules/cross-platform/newly_observed_fortigate_alert.toml",
+  "raw_query": "FROM logs-fortinet_fortigate.*, filebeat-* metadata _id\n\n| WHERE event.module == \"fortinet_fortigate\" and event.action in (\"signature\", \"ssl-anomaly\") and\n  message is not null and event.category != \"authentication\" and\n  message != \"Connection Failed\" and not message like \"Web.Client: *\" and\n  not message like \"Network.Service: *\" and not message like \"General.Interest*\" and not message like \"Update: *\" and\n  not message like \"tcp_reassembler*\" and not message like \"a-ipdf*\" and not message like \"Video*\" and not message like \"nbss_decode*\" and\n  not message like \"name_server*\" and not message like \"misc*\" and not message like \"Collaboration*\" and not message like \"Business*\" and\n  not message like \"Cloud.IT*\" and not message like \"Mobile*\"\n\n| STATS Esql.alerts_count = count(*),\n        Esql.first_time_seen = MIN(@timestamp),\n        Esql.distinct_count_src_ip = COUNT_DISTINCT(source.ip),\n        Esql.distinct_count_dst_ip = COUNT_DISTINCT(destination.ip),\n        src_ip = VALUES(source.ip),\n        dst_ip = VALUES(destination.ip),\n        url_domain = VALUES(url.domain),\n        url_path = VALUES(url.path) by message, event.category, event.outcome\n\n// first time seen is within 10m of the rule execution time\n| eval Esql.recent = DATE_DIFF(\"minute\", Esql.first_time_seen, now())\n| where Esql.recent <= 10 and Esql.alerts_count <= 5 and Esql.distinct_count_src_ip <= 2 and Esql.distinct_count_dst_ip <= 2\n\n// move dynamic fields to ECS equivalent for rule exceptions\n| eval source.ip = MV_FIRST(src_ip),\n       destination.ip = MV_FIRST(dst_ip),\n       url.domain = MV_FIRST(url_domain),\n       url.path = MV_FIRST(url_path)\n\n| keep message, event.category, event.outcome, Esql.*, source.ip, destination.ip, url.domain, url.path\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "signature",
+        "ssl-anomaly"
+      ],
+      "raw_values": [
+        "signature",
+        "ssl-anomaly"
+      ]
+    },
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "fortinet_fortigate"
+      ],
+      "raw_values": [
+        "fortinet_fortigate"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "!=",
+      "values": [
+        "authentication"
+      ],
+      "raw_values": [
+        "authentication"
+      ]
+    },
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": "!=",
+      "values": [
+        "connection failed"
+      ],
+      "raw_values": [
+        "Connection Failed"
+      ]
+    },
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": "like",
+      "values": [
+        "web.client:",
+        "network.service:",
+        "general.interest",
+        "update:",
+        "tcp_reassembler",
+        "a-ipdf",
+        "video",
+        "nbss_decode",
+        "name_server",
+        "misc",
+        "collaboration",
+        "business",
+        "cloud.it",
+        "mobile"
+      ],
+      "raw_values": [
+        "Web.Client: *",
+        "Network.Service: *",
+        "General.Interest*",
+        "Update: *",
+        "tcp_reassembler*",
+        "a-ipdf*",
+        "Video*",
+        "nbss_decode*",
+        "name_server*",
+        "misc*",
+        "Collaboration*",
+        "Business*",
+        "Cloud.IT*",
+        "Mobile*"
+      ]
+    }
+  ]
+}

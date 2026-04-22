@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "High Number of Cloned GitHub Repos From PAT",
+  "slug": "execution_github_high_number_of_cloned_repos_from_pat",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Use Case: UEBA",
+    "Tactic: Execution",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/execution_github_high_number_of_cloned_repos_from_pat.toml",
+  "raw_query": "data_stream.dataset:\"github.audit\" and event.category:\"configuration\" and event.action:\"git.clone\" and\ngithub.programmatic_access_type:(\"OAuth access token\" or \"Fine-grained personal access token\") and\ngithub.repository_public:false\n",
+  "conditions": [
+    {
+      "field": "github.programmatic_access_type",
+      "raw_field": "github.programmatic_access_type",
+      "operator": ":",
+      "values": [
+        "oauth access token",
+        "fine-grained personal access token"
+      ],
+      "raw_values": [
+        "OAuth access token",
+        "Fine-grained personal access token"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "configuration"
+      ],
+      "raw_values": [
+        "configuration"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "git.clone"
+      ],
+      "raw_values": [
+        "git.clone"
+      ]
+    }
+  ]
+}

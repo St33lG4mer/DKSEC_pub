@@ -1,0 +1,83 @@
+{
+  "source": "elastic",
+  "name": "Entra ID Unusual Cloud Device Registration",
+  "slug": "persistence_entra_id_suspicious_cloud_device_registration",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Data Source: Microsoft Entra ID Audit Logs",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_entra_id_suspicious_cloud_device_registration.toml",
+  "raw_query": "sequence by azure.correlation_id with maxspan=5m\n[any where data_stream.dataset == \"azure.auditlogs\" and\n    azure.auditlogs.identity == \"Device Registration Service\" and\n    azure.auditlogs.operation_name == \"Add device\" and\n    (\n        azure.auditlogs.properties.additional_details.value like \"Microsoft.OData.Client/*\" or\n        azure.auditlogs.properties.additional_details.value like \"Dsreg/*\" or\n        azure.auditlogs.properties.additional_details.value == \"DeviceRegistrationClient\"\n    ) and\n    `azure.auditlogs.properties.target_resources.0.modified_properties.1.display_name` == \"CloudAccountEnabled\" and\n    `azure.auditlogs.properties.target_resources.0.modified_properties.1.new_value` == \"[true]\"]\n[any where data_stream.dataset == \"azure.auditlogs\" and\n    azure.auditlogs.operation_name == \"Add registered users to device\" and\n    `azure.auditlogs.properties.target_resources.0.modified_properties.2.new_value` like \"*urn:ms-drs:enterpriseregistration.windows.net*\"]\n[any where data_stream.dataset == \"azure.auditlogs\" and\n    azure.auditlogs.operation_name == \"Add registered owner to device\"]\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "azure.auditlogs"
+      ],
+      "raw_values": [
+        "azure.auditlogs"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.identity",
+      "raw_field": "azure.auditlogs.identity",
+      "operator": "==",
+      "values": [
+        "device registration service"
+      ],
+      "raw_values": [
+        "Device Registration Service"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": "==",
+      "values": [
+        "add device",
+        "add registered users to device",
+        "add registered owner to device"
+      ],
+      "raw_values": [
+        "Add device",
+        "Add registered users to device",
+        "Add registered owner to device"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.properties.additional_details.value",
+      "raw_field": "azure.auditlogs.properties.additional_details.value",
+      "operator": "like",
+      "values": [
+        "microsoft.odata.client/",
+        "dsreg/"
+      ],
+      "raw_values": [
+        "Microsoft.OData.Client/*",
+        "Dsreg/*"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.properties.additional_details.value",
+      "raw_field": "azure.auditlogs.properties.additional_details.value",
+      "operator": "==",
+      "values": [
+        "deviceregistrationclient"
+      ],
+      "raw_values": [
+        "DeviceRegistrationClient"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "source": "sigma",
+  "name": "win_security_scm_database_handle_failure",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_scm_database_handle_failure.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4656\" and winlog.event_data.ObjectType:\"SC_MANAGER OBJECT\" and winlog.event_data.ObjectName:\"ServicesActive\" and winlog.event_data.AccessMask:\"0xf003f\") and (not winlog.logon.id:\"0x3e4\"))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4656"
+      ],
+      "raw_values": [
+        "4656"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "sc_manager object"
+      ],
+      "raw_values": [
+        "SC_MANAGER OBJECT"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "servicesactive"
+      ],
+      "raw_values": [
+        "ServicesActive"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0xf003f"
+      ],
+      "raw_values": [
+        "0xf003f"
+      ]
+    },
+    {
+      "field": "winlog.logon.id",
+      "raw_field": "winlog.logon.id",
+      "operator": ":",
+      "values": [
+        "0x3e4"
+      ],
+      "raw_values": [
+        "0x3e4"
+      ]
+    }
+  ]
+}

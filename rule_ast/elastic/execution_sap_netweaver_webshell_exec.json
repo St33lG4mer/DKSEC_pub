@@ -1,0 +1,103 @@
+{
+  "source": "elastic",
+  "name": "Potential SAP NetWeaver Exploitation",
+  "slug": "execution_sap_netweaver_webshell_exec",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Use Case: Vulnerability",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/execution_sap_netweaver_webshell_exec.toml",
+  "raw_query": "process where event.type == \"start\" and host.os.type in (\"linux\", \"windows\") and\n   process.name : (\"sh\",\n                   \"bash\",\n                   \"dash\",\n                   \"ksh\",\n                   \"tcsh\",\n                   \"zsh\",\n                   \"curl\",\n                   \"perl*\",\n                   \"python*\",\n                   \"ruby*\",\n                   \"php*\",\n                   \"wget\",\n                   \"cmd.exe\",\n                   \"powershell.exe\",\n                   \"rundll32.exe\",\n                   \"msbuild.exe\",\n                   \"curl.exe\",\n                   \"certutil.exe\") and\n   (\n    process.working_directory : (\"/*/sap.com*/servlet_jsp/irj/*\", \"*\\\\sap.com*\\\\servlet_jsp\\\\irj\\\\*\") or\n    process.command_line : (\"*/sap.com*/servlet_jsp/irj/*\", \"*\\\\sap.com*\\\\servlet_jsp\\\\irj\\\\*\") or\n    process.parent.command_line : (\"*/sap.com*/servlet_jsp/irj/*\", \"*\\\\sap.com*\\\\servlet_jsp\\\\irj\\\\*\")\n   )\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "ksh",
+        "tcsh",
+        "zsh",
+        "curl",
+        "perl",
+        "python",
+        "ruby",
+        "php",
+        "wget",
+        "cmd.exe",
+        "powershell.exe",
+        "rundll32.exe",
+        "msbuild.exe",
+        "curl.exe",
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "sh",
+        "bash",
+        "dash",
+        "ksh",
+        "tcsh",
+        "zsh",
+        "curl",
+        "perl*",
+        "python*",
+        "ruby*",
+        "php*",
+        "wget",
+        "cmd.exe",
+        "powershell.exe",
+        "rundll32.exe",
+        "msbuild.exe",
+        "curl.exe",
+        "certutil.exe"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/*/sap.com*/servlet_jsp/irj/",
+        "\\\\sap.com*\\\\servlet_jsp\\\\irj\\\\"
+      ],
+      "raw_values": [
+        "/*/sap.com*/servlet_jsp/irj/*",
+        "*\\\\sap.com*\\\\servlet_jsp\\\\irj\\\\*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "linux",
+        "windows"
+      ],
+      "raw_values": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

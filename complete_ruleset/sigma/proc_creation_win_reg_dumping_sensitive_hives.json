@@ -1,0 +1,77 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_reg_dumping_sensitive_hives",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_reg_dumping_sensitive_hives.eql",
+  "raw_query": "any where (process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and (process.command_line like~ (\"* save *\", \"* export *\", \"* \u02e2ave *\", \"* e\u02e3port *\")) and (process.command_line like~ (\"*hklm*\", \"*hk\u02eam*\", \"*hkey_local_machine*\", \"*hkey_\u02eaocal_machine*\", \"*hkey_loca\u02ea_machine*\", \"*hkey_\u02eaoca\u02ea_machine*\")) and (process.command_line like~ (\"*\\\\system*\", \"*\\\\sam*\", \"*\\\\security*\", \"*\\\\\u02e2ystem*\", \"*\\\\sy\u02e2tem*\", \"*\\\\\u02e2y\u02e2tem*\", \"*\\\\\u02e2am*\", \"*\\\\\u02e2ecurity*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "save",
+        "export",
+        "\u02e2ave",
+        "e\u02e3port",
+        "hklm",
+        "hk\u02eam",
+        "hkey_local_machine",
+        "hkey_\u02eaocal_machine",
+        "hkey_loca\u02ea_machine",
+        "hkey_\u02eaoca\u02ea_machine",
+        "system",
+        "sam",
+        "security",
+        "\u02e2ystem",
+        "sy\u02e2tem",
+        "\u02e2y\u02e2tem",
+        "\u02e2am",
+        "\u02e2ecurity"
+      ],
+      "raw_values": [
+        "* save *",
+        "* export *",
+        "* \u02e2ave *",
+        "* e\u02e3port *",
+        "*hklm*",
+        "*hk\u02eam*",
+        "*hkey_local_machine*",
+        "*hkey_\u02eaocal_machine*",
+        "*hkey_loca\u02ea_machine*",
+        "*hkey_\u02eaoca\u02ea_machine*",
+        "*\\\\system*",
+        "*\\\\sam*",
+        "*\\\\security*",
+        "*\\\\\u02e2ystem*",
+        "*\\\\sy\u02e2tem*",
+        "*\\\\\u02e2y\u02e2tem*",
+        "*\\\\\u02e2am*",
+        "*\\\\\u02e2ecurity*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    }
+  ]
+}

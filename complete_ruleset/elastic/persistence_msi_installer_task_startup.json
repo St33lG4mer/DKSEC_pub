@@ -1,0 +1,121 @@
+{
+  "source": "elastic",
+  "name": "Persistence via a Windows Installer",
+  "slug": "persistence_msi_installer_task_startup",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_msi_installer_task_startup.toml",
+  "raw_query": "any where host.os.type == \"windows\" and\n  (process.name : \"msiexec.exe\" or Effective_process.name : \"msiexec.exe\") and\n  (\n    (\n      event.category == \"file\" and event.action == \"creation\" and\n      file.path : (\n        \"?:\\\\Windows\\\\System32\\\\Tasks\\\\*\",\n        \"?:\\\\programdata\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup\\\\*\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*\"\n      ) and\n      not file.path : (\n        \"?:\\\\Windows\\\\System32\\\\Tasks\\\\Adobe Acrobat Update Task\",\n        \"?:\\\\Windows\\\\System32\\\\Tasks\\\\HP\\\\Sure Click\\\\Sure Click ?.?.??.????\",\n        \"?:\\\\Windows\\\\System32\\\\Tasks\\\\HP\\\\Sure Click\\\\Sure Click UI ?.?.??.????\",\n        \"?:\\\\Windows\\\\System32\\\\Tasks\\\\HP\\\\Sure Click\\\\Upgrade Repair ?.?.??.????\",\n        \"?:\\\\Windows\\\\System32\\\\Tasks\\\\IntelSURQC-Upgrade-86621605-2a0b-4128-8ffc-15514c247132\",\n        \"?:\\\\Windows\\\\System32\\\\Tasks\\\\IntelSURQC-Upgrade-86621605-2a0b-4128-8ffc-15514c247132-Logon\"\n      )\n    ) or\n    (\n      event.category == \"registry\" and event.action == \"modification\" and registry.data.strings != null and\n      registry.path : (\n        \"H*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*\",\n        \"H*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*\",\n        \"H*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*\",\n        \"H*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*\"\n      ) and\n      not registry.data.strings : (\n        \"C:\\\\Program Files (x86)\\\\Common Files\\\\Acronis\\\\TibMounter\\\\tib_mounter_monitor.exe\",\n        \"C:\\\\Program Files (x86)\\\\Common Files\\\\Java\\\\Java Update\\\\jusched.exe\",\n        \"C:\\\\Program Files\\\\Citrix\\\\Secure Access Client\\\\CtxsDPS.exe --clean-user-installs\",\n        \"C:\\\\Program Files\\\\OpenVPN\\\\bin\\\\openvpn-gui.exe\",\n        \"C:\\\\Program Files\\\\Veeam\\\\Endpoint Backup\\\\Veeam.EndPoint.Tray.exe -NoControlPanel -CheckNumberOfRunningAgents\",\n        \"\\\"C:\\\\Program Files (x86)\\\\Cisco\\\\Cisco Secure Client\\\\UI\\\\csc_ui.exe\\\" -minimized\",\n        \"\\\"C:\\\\Program Files (x86)\\\\Citrix\\\\ICA Client\\\\concentr.exe\\\" /startup\",\n        \"\\\"C:\\\\Program Files (x86)\\\\Citrix\\\\ICA Client\\\\Receiver\\\\AnalyticsSrv.exe\\\" /Startup\",\n        \"\\\"C:\\\\Program Files (x86)\\\\Citrix\\\\ICA Client\\\\redirector.exe\\\" /startup\",\n        \"\\\"C:\\\\Program Files (x86)\\\\EPSON Software\\\\Download Navigator\\\\EPSDNMON.EXE\\\"\",\n        \"\\\"C:\\\\Program Files (x86)\\\\Jabra\\\\Direct6\\\\jabra-direct.exe\\\" /minimized\",\n        \"\\\"C:\\\\Program Files (x86)\\\\VMware\\\\VMware Workstation\\\\vmware-tray.exe\\\"\",\n        \"\\\"C:\\\\Program Files\\\\ESET\\\\ESET Security\\\\ecmds.exe\\\" /run /hide /proxy\",\n        \"\\\"C:\\\\Program Files\\\\iTunes\\\\iTunesHelper.exe\\\"\",\n        \"\\\"C:\\\\Program Files\\\\KeePassXC\\\\KeePassXC.exe\\\"\",\n        \"\\\"C:\\\\Program Files\\\\Palo Alto Networks\\\\GlobalProtect\\\\PanGPA.exe\\\"\",\n        \"\\\"C:\\\\Program Files\\\\PDF24\\\\pdf24.exe\\\"\",\n        \"\\\"C:\\\\Program Files\\\\VMware\\\\VMware Tools\\\\vmtoolsd.exe\\\" -n vmusr\",\n        \"\\\"C:\\\\PROGRA~2\\\\Citrix\\\\DEVICE~1\\\\Bin64\\\\DTCLIE~1.EXE\\\"\",\n        \"\\\"%ProgramFiles%\\\\Teams Installer\\\\Teams.exe\\\" --checkInstall --source=default\"\n      )\n    )\n  )\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "adobe acrobat update task",
+        "sure click ?.?.??.",
+        "sure click ui ?.?.??.",
+        "upgrade repair ?.?.??.",
+        "intelsurqc-upgrade-86621605-2a0b-4128-8ffc-15514c247132",
+        "intelsurqc-upgrade-86621605-2a0b-4128-8ffc-15514c247132-logon"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\Tasks\\\\*",
+        "?:\\\\programdata\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup\\\\*",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*",
+        "?:\\\\Windows\\\\System32\\\\Tasks\\\\Adobe Acrobat Update Task",
+        "?:\\\\Windows\\\\System32\\\\Tasks\\\\HP\\\\Sure Click\\\\Sure Click ?.?.??.????",
+        "?:\\\\Windows\\\\System32\\\\Tasks\\\\HP\\\\Sure Click\\\\Sure Click UI ?.?.??.????",
+        "?:\\\\Windows\\\\System32\\\\Tasks\\\\HP\\\\Sure Click\\\\Upgrade Repair ?.?.??.????",
+        "?:\\\\Windows\\\\System32\\\\Tasks\\\\IntelSURQC-Upgrade-86621605-2a0b-4128-8ffc-15514c247132",
+        "?:\\\\Windows\\\\System32\\\\Tasks\\\\IntelSURQC-Upgrade-86621605-2a0b-4128-8ffc-15514c247132-Logon"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "h*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\",
+        "h*\\\\software\\\\wow6432node\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\",
+        "h*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run\\\\",
+        "h*\\\\software\\\\wow6432node\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run\\\\"
+      ],
+      "raw_values": [
+        "H*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*",
+        "H*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*",
+        "H*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*",
+        "H*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "msiexec.exe"
+      ]
+    },
+    {
+      "field": "effective_process.name",
+      "raw_field": "Effective_process.name",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "msiexec.exe"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "file",
+        "registry"
+      ],
+      "raw_values": [
+        "file",
+        "registry"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation",
+        "modification"
+      ],
+      "raw_values": [
+        "creation",
+        "modification"
+      ]
+    }
+  ]
+}

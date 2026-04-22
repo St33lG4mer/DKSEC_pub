@@ -1,0 +1,15 @@
+{
+  "source": "elastic",
+  "name": "Behavior - Detected - Elastic Defend",
+  "slug": "elastic_endpoint_security_behavior_detected",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/endpoint/elastic_endpoint_security_behavior_detected.toml",
+  "raw_query": "event.kind : alert and event.code : behavior and (event.type : allowed or (event.type: denied and event.outcome: failure))\n",
+  "conditions": []
+}

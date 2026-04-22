@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "Modification of Dynamic Linker Preload Shared Object",
+  "slug": "privilege_escalation_ld_preload_shared_object_modif",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_ld_preload_shared_object_modif.toml",
+  "raw_query": "host.os.type:linux and event.category:file and event.action:(file_rename_event or rename or renamed or updated) and\nnot event.type:deletion and file.path:/etc/ld.so.preload and\nprocess.name:(* and not (oneagentinstallaction or passwd or wine))\n",
+  "conditions": []
+}

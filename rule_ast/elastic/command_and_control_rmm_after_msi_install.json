@@ -1,0 +1,97 @@
+{
+  "source": "elastic",
+  "name": "Remote Management Access Launch After MSI Install",
+  "slug": "command_and_control_rmm_after_msi_install",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Crowdstrike",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Elastic Endgame"
+  ],
+  "elastic_path": "rules/windows/command_and_control_rmm_after_msi_install.toml",
+  "raw_query": "sequence by host.id with maxspan=1m\n [process where host.os.type == \"windows\" and event.type == \"start\" and process.name : \"msiexec.exe\" and \n  process.args : (\"/i*\", \"-i*\") and process.parent.name : (\"explorer.exe\", \"sihost.exe\")]\n [process where host.os.type == \"windows\" and event.type == \"start\" and\n  (\n   (process.name : \"ScreenConnect.ClientService.exe\" and process.command_line : \"*?e=Access&y=Guest&h*&k=*\") or\n   (process.name : \"Syncro.Installer.exe\" and process.args : \"--config-json\" and process.args : \"--key\") or \n    process.name : (\"tvnserver.exe\", \"winvnc.exe\") \n  )]\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "e=access&y=guest&h*&k=",
+        "--config-json",
+        "--key"
+      ],
+      "raw_values": [
+        "/i*",
+        "-i*",
+        "*?e=Access&y=Guest&h*&k=*",
+        "--config-json",
+        "--key"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "explorer.exe",
+        "sihost.exe"
+      ],
+      "raw_values": [
+        "explorer.exe",
+        "sihost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "tvnserver.exe",
+        "winvnc.exe",
+        "msiexec.exe",
+        "screenconnect.clientservice.exe",
+        "syncro.installer.exe"
+      ],
+      "raw_values": [
+        "tvnserver.exe",
+        "winvnc.exe",
+        "msiexec.exe",
+        "ScreenConnect.ClientService.exe",
+        "Syncro.Installer.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

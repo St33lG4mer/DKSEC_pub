@@ -1,0 +1,43 @@
+{
+  "source": "elastic",
+  "name": "Exchange Mailbox Export via PowerShell",
+  "slug": "collection_mailbox_export_winlog",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Resources: Investigation Guide",
+    "Data Source: PowerShell Logs"
+  ],
+  "elastic_path": "rules/windows/collection_mailbox_export_winlog.toml",
+  "raw_query": "event.category:process and host.os.type:windows and\npowershell.file.script_block_text : \"New-MailboxExportRequest\" and\n(\n  powershell.file.script_block_text : (\"-FilePath\" or \".pst\") and\n  powershell.file.script_block_text : (\"-Mailbox\" or \"Get-Mailbox\" or \"ExportToPSTFile\" or \"-Identity\")\n)\n",
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "-filepath",
+        ".pst",
+        "-mailbox",
+        "get-mailbox",
+        "exporttopstfile",
+        "-identity",
+        "new-mailboxexportrequest"
+      ],
+      "raw_values": [
+        "-FilePath",
+        ".pst",
+        "-Mailbox",
+        "Get-Mailbox",
+        "ExportToPSTFile",
+        "-Identity",
+        "New-MailboxExportRequest"
+      ]
+    }
+  ]
+}

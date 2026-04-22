@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_forfiles_proxy_execution_",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_forfiles_proxy_execution_.eql",
+  "raw_query": "any where (process.executable:\"*\\\\forfiles.exe\" or process.pe.original_file_name:\"forfiles.exe\") and process.command_line like~ (\"* -c *\", \"* /c *\", \"* \u2013c *\", \"* \u2014c *\", \"* \u2015c *\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "forfiles.exe"
+      ],
+      "raw_values": [
+        "*\\\\forfiles.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "forfiles.exe"
+      ],
+      "raw_values": [
+        "forfiles.exe"
+      ]
+    }
+  ]
+}

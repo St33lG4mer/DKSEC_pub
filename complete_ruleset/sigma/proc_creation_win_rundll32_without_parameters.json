@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_without_parameters",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_without_parameters.eql",
+  "raw_query": "any where process.command_line like~ (\"rundll32.exe\", \"rundll32\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "rundll32.exe",
+        "rundll32"
+      ],
+      "raw_values": [
+        "rundll32.exe",
+        "rundll32"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "source": "elastic",
+  "name": "FortiGate Overly Permissive Firewall Policy Created",
+  "slug": "defense_evasion_fortigate_overly_permissive_firewall_policy",
+  "category": "network",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Domain: Network",
+    "Data Source: Fortinet",
+    "Data Source: Fortinet FortiGate"
+  ],
+  "elastic_path": "rules/network/defense_evasion_fortigate_overly_permissive_firewall_policy.toml",
+  "raw_query": "any where data_stream.dataset == \"fortinet_fortigate.log\" and\n    event.code == \"0100044547\" and\n    fortinet.firewall.cfgpath == \"firewall.policy\" and\n    fortinet.firewall.action in (\"Add\", \"Edit\") and\n    fortinet.firewall.cfgattr like~ \"*srcaddr[all]*\" and\n    fortinet.firewall.cfgattr like~ \"*dstaddr[all]*\" and\n    fortinet.firewall.cfgattr like~ \"*service[all]*\"\n",
+  "conditions": [
+    {
+      "field": "fortinet.firewall.action",
+      "raw_field": "fortinet.firewall.action",
+      "operator": "in",
+      "values": [
+        "add",
+        "edit"
+      ],
+      "raw_values": [
+        "Add",
+        "Edit"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "fortinet_fortigate.log"
+      ],
+      "raw_values": [
+        "fortinet_fortigate.log"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "0100044547"
+      ],
+      "raw_values": [
+        "0100044547"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.cfgpath",
+      "raw_field": "fortinet.firewall.cfgpath",
+      "operator": "==",
+      "values": [
+        "firewall.policy"
+      ],
+      "raw_values": [
+        "firewall.policy"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.cfgattr",
+      "raw_field": "fortinet.firewall.cfgattr",
+      "operator": "like~",
+      "values": [
+        "srcaddr[all]",
+        "dstaddr[all]",
+        "service[all]"
+      ],
+      "raw_values": [
+        "*srcaddr[all]*",
+        "*dstaddr[all]*",
+        "*service[all]*"
+      ]
+    }
+  ]
+}

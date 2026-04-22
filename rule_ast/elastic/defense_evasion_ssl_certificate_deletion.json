@@ -1,0 +1,85 @@
+{
+  "source": "elastic",
+  "name": "SSL Certificate Deletion",
+  "slug": "defense_evasion_ssl_certificate_deletion",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Impact",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_ssl_certificate_deletion.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"deletion\" and process.executable != null and\nfile.path : \"/etc/ssl/certs/*\" and file.extension in (\"pem\", \"crt\") and\nnot (\n  process.name in (\"dockerd\", \"pacman\") or\n  process.executable in (\n    \"/kaniko/executor\", \"/usr/sbin/update-ca-certificates\", \"/usr/bin/gnurm\", \"/usr/bin/podman\",\n    \"/usr/local/bin/executor\", \"/opt/kaniko/executor\", \"/.envbuilder/bin/envbuilder\", \"/opt/kaspersky/kesl/libexec/kesl\"\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "pem",
+        "crt"
+      ],
+      "raw_values": [
+        "pem",
+        "crt"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dockerd",
+        "pacman",
+        "executor",
+        "update-ca-certificates",
+        "gnurm",
+        "podman",
+        "envbuilder",
+        "kesl"
+      ],
+      "raw_values": [
+        "dockerd",
+        "pacman",
+        "/kaniko/executor",
+        "/usr/sbin/update-ca-certificates",
+        "/usr/bin/gnurm",
+        "/usr/bin/podman",
+        "/usr/local/bin/executor",
+        "/opt/kaniko/executor",
+        "/.envbuilder/bin/envbuilder",
+        "/opt/kaspersky/kesl/libexec/kesl"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ]
+}

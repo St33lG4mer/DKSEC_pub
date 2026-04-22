@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "win_security_invoke_obfuscation_via_use_mshta_services_security",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_use_mshta_services_security.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (winlog.event_data.ServiceFileName:\"*mshta*\" and winlog.event_data.ServiceFileName:\"*vbscript:createobject*\" and winlog.event_data.ServiceFileName:\"*.run*\" and winlog.event_data.ServiceFileName:\"*window.close*\"))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "mshta",
+        "vbscript:createobject",
+        ".run",
+        "window.close"
+      ],
+      "raw_values": [
+        "*mshta*",
+        "*vbscript:createobject*",
+        "*.run*",
+        "*window.close*"
+      ]
+    }
+  ]
+}

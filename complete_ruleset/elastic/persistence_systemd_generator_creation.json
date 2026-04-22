@@ -1,0 +1,197 @@
+{
+  "source": "elastic",
+  "name": "Systemd Generator Created",
+  "slug": "persistence_systemd_generator_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_systemd_generator_creation.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"rename\", \"creation\") and file.path : (\n\"/run/systemd/system-generators/*\", \"/etc/systemd/system-generators/*\",\n\"/usr/local/lib/systemd/system-generators/*\", \"/lib/systemd/system-generators/*\",\n\"/usr/lib/systemd/system-generators/*\", \"/etc/systemd/user-generators/*\",\n\"/usr/local/lib/systemd/user-generators/*\", \"/usr/lib/systemd/user-generators/*\",\n\"/lib/systemd/user-generators/*\"\n) and not (\n  process.executable in (\n    \"/bin/dpkg\", \"/usr/bin/dpkg\", \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/sbin/dockerd\", \"/bin/microdnf\",\n    \"/usr/bin/microdnf\", \"/bin/rpm\", \"/usr/bin/rpm\", \"/bin/snapd\", \"/usr/bin/snapd\", \"/bin/yum\", \"/usr/bin/yum\",\n    \"/bin/dnf\", \"/usr/bin/dnf\", \"/bin/podman\", \"/usr/bin/podman\", \"/bin/dnf-automatic\", \"/usr/bin/dnf-automatic\",\n    \"/bin/pacman\", \"/usr/bin/pacman\", \"/usr/bin/dpkg-divert\", \"/bin/dpkg-divert\", \"/sbin/apk\", \"/usr/sbin/apk\",\n    \"/usr/local/sbin/apk\", \"/usr/bin/apt\", \"/usr/sbin/pacman\", \"/bin/podman\", \"/usr/bin/podman\", \"/usr/bin/puppet\",\n    \"/bin/puppet\", \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/bin/chef-client\", \"/bin/chef-client\", \"/usr/sbin/sshd\",\n    \"/bin/autossl_check\", \"/usr/bin/autossl_check\", \"/proc/self/exe\", \"/dev/fd/*\",  \"/usr/bin/pamac-daemon\",\n    \"/bin/pamac-daemon\", \"/usr/lib/snapd/snapd\", \"/usr/local/bin/dockerd\", \"/usr/libexec/platform-python\",\n    \"./usr/bin/podman\", \"/usr/lib/dracut/dracut-install\", \"/usr/bin/dnf5\", \"/usr/libexec/packagekitd\", \"/usr/sbin/dnf\",\n    \"/kaniko/executor\", \"/dev/fd/3\", \"/usr/local/bin/defender\", \"./usr/bin/qemu-aarch64-static\", \"/usr/sbin/yum\"\n  ) or\n  process.executable like (\n    \"/snap/docker/*/bin/dockerd\", \"/var/lib/docker/overlay2/*/dockerd\", \"/var/lib/containers/storage/overlay/*/dockerd\"\n  ) or\n  process.name like~ (\"ssm-agent-worker\", \"crio\", \"docker-init\", \"systemd\", \"pacman\", \"python*\", \"platform-python*\") or\n  file.extension in (\"swp\", \"swpx\", \"swx\", \"dpkg-remove\") or\n  file.Ext.original.extension == \"dpkg-new\" or\n  process.executable == null\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dockerd"
+      ],
+      "raw_values": [
+        "/snap/docker/*/bin/dockerd",
+        "/var/lib/docker/overlay2/*/dockerd",
+        "/var/lib/containers/storage/overlay/*/dockerd"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "ssm-agent-worker",
+        "crio",
+        "docker-init",
+        "systemd",
+        "pacman",
+        "python",
+        "platform-python"
+      ],
+      "raw_values": [
+        "ssm-agent-worker",
+        "crio",
+        "docker-init",
+        "systemd",
+        "pacman",
+        "python*",
+        "platform-python*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "rename",
+        "creation"
+      ],
+      "raw_values": [
+        "rename",
+        "creation"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "dpkg",
+        "dockerd",
+        "microdnf",
+        "rpm",
+        "snapd",
+        "yum",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "pacman",
+        "dpkg-divert",
+        "apk",
+        "apt",
+        "puppet",
+        "chef-client",
+        "sshd",
+        "autossl_check",
+        "exe",
+        "pamac-daemon",
+        "platform-python",
+        "dracut-install",
+        "dnf5",
+        "packagekitd",
+        "executor",
+        "defender",
+        "qemu-aarch64-static"
+      ],
+      "raw_values": [
+        "/bin/dpkg",
+        "/usr/bin/dpkg",
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/sbin/dockerd",
+        "/bin/microdnf",
+        "/usr/bin/microdnf",
+        "/bin/rpm",
+        "/usr/bin/rpm",
+        "/bin/snapd",
+        "/usr/bin/snapd",
+        "/bin/yum",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "/usr/bin/dnf",
+        "/bin/podman",
+        "/usr/bin/podman",
+        "/bin/dnf-automatic",
+        "/usr/bin/dnf-automatic",
+        "/bin/pacman",
+        "/usr/bin/pacman",
+        "/usr/bin/dpkg-divert",
+        "/bin/dpkg-divert",
+        "/sbin/apk",
+        "/usr/sbin/apk",
+        "/usr/local/sbin/apk",
+        "/usr/bin/apt",
+        "/usr/sbin/pacman",
+        "/usr/bin/puppet",
+        "/bin/puppet",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/bin/chef-client",
+        "/bin/chef-client",
+        "/usr/sbin/sshd",
+        "/bin/autossl_check",
+        "/usr/bin/autossl_check",
+        "/proc/self/exe",
+        "/dev/fd/*",
+        "/usr/bin/pamac-daemon",
+        "/bin/pamac-daemon",
+        "/usr/lib/snapd/snapd",
+        "/usr/local/bin/dockerd",
+        "/usr/libexec/platform-python",
+        "./usr/bin/podman",
+        "/usr/lib/dracut/dracut-install",
+        "/usr/bin/dnf5",
+        "/usr/libexec/packagekitd",
+        "/usr/sbin/dnf",
+        "/kaniko/executor",
+        "/dev/fd/3",
+        "/usr/local/bin/defender",
+        "./usr/bin/qemu-aarch64-static",
+        "/usr/sbin/yum"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ],
+      "raw_values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "file.ext.original.extension",
+      "raw_field": "file.Ext.original.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    }
+  ]
+}

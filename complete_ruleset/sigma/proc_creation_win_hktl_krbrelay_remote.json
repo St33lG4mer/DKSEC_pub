@@ -1,0 +1,84 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_krbrelay_remote",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_krbrelay_remote.eql",
+  "raw_query": "any where (process.executable:\"*\\\\RemoteKrbRelay.exe\" or process.pe.original_file_name:\"RemoteKrbRelay.exe\") or (process.command_line:\"* -clsid *\" and process.command_line:\"* -target *\" and process.command_line:\"* -victim *\") or (process.command_line:\"*-rbcd *\" and (process.command_line like~ (\"*-cn *\", \"*--computername *\"))) or (process.command_line:\"*-chp *\" and (process.command_line:\"*-chpPass *\" and process.command_line:\"*-chpUser *\")) or (process.command_line:\"*-addgroupmember *\" and process.command_line:\"*-group *\" and process.command_line:\"*-groupuser *\") or ((process.command_line:\"*-smb *\" and process.command_line:\"*--smbkeyword *\") and (process.command_line like~ (\"*interactive*\", \"*secrets*\", \"*service-add*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-cn",
+        "--computername",
+        "interactive",
+        "secrets",
+        "service-add"
+      ],
+      "raw_values": [
+        "*-cn *",
+        "*--computername *",
+        "*interactive*",
+        "*secrets*",
+        "*service-add*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "remotekrbrelay.exe"
+      ],
+      "raw_values": [
+        "*\\\\RemoteKrbRelay.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "remotekrbrelay.exe"
+      ],
+      "raw_values": [
+        "RemoteKrbRelay.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-clsid",
+        "-target",
+        "-victim",
+        "-rbcd",
+        "-chp",
+        "-chppass",
+        "-chpuser",
+        "-addgroupmember",
+        "-group",
+        "-groupuser",
+        "-smb",
+        "--smbkeyword"
+      ],
+      "raw_values": [
+        "* -clsid *",
+        "* -target *",
+        "* -victim *",
+        "*-rbcd *",
+        "*-chp *",
+        "*-chpPass *",
+        "*-chpUser *",
+        "*-addgroupmember *",
+        "*-group *",
+        "*-groupuser *",
+        "*-smb *",
+        "*--smbkeyword *"
+      ]
+    }
+  ]
+}

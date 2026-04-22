@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "Unusual Exim4 Child Process",
+  "slug": "persistence_unusual_exim4_child_process",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_unusual_exim4_child_process.toml",
+  "raw_query": "host.os.type:linux and event.type:start and event.action:exec and process.parent.name:exim4 and\nnot process.name:(\n  exim4 or start-stop-daemon or run-parts or systemctl or update-exim4.conf or install or plymouth or\n  readlink or grep or stat or cmake or gcc or cppcheck or sort or sshd\n)\n",
+  "conditions": []
+}

@@ -1,0 +1,34 @@
+{
+  "source": "elastic",
+  "name": "Deprecated - M365 Security Compliance Potential Ransomware Activity",
+  "slug": "impact_security_compliance_potential_ransomware_activity",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: SaaS",
+    "Data Source: Microsoft 365",
+    "Data Source: Microsoft 365 Audit Logs",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/impact_security_compliance_potential_ransomware_activity.toml",
+  "raw_query": "data_stream.dataset:o365.audit and\n    event.provider:SecurityComplianceCenter and\n    event.category:web and\n    rule.name:(\"Ransomware activity\" or \"Potential ransomware activity\") and\n    event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "rule.name",
+      "raw_field": "rule.name",
+      "operator": ":",
+      "values": [
+        "ransomware activity",
+        "potential ransomware activity"
+      ],
+      "raw_values": [
+        "Ransomware activity",
+        "Potential ransomware activity"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "image_load_scrcons_wmi_scripteventconsumer",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_scrcons_wmi_scripteventconsumer.eql",
+  "raw_query": "any where process.executable:\"*\\\\scrcons.exe\" and (file.path like~ (\"*\\\\vbscript.dll\", \"*\\\\wbemdisp.dll\", \"*\\\\wshom.ocx\", \"*\\\\scrrun.dll\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "vbscript.dll",
+        "wbemdisp.dll",
+        "wshom.ocx",
+        "scrrun.dll"
+      ],
+      "raw_values": [
+        "*\\\\vbscript.dll",
+        "*\\\\wbemdisp.dll",
+        "*\\\\wshom.ocx",
+        "*\\\\scrrun.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "scrcons.exe"
+      ],
+      "raw_values": [
+        "*\\\\scrcons.exe"
+      ]
+    }
+  ]
+}

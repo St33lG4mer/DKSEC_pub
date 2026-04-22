@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "registry_set_new_network_provider",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_new_network_provider.eql",
+  "raw_query": "any where (registry.path:\"*\\\\System\\\\CurrentControlSet\\\\Services\\\\*\" and registry.path:\"*\\\\NetworkProvider*\") and (not ((registry.path like~ (\"*\\\\System\\\\CurrentControlSet\\\\Services\\\\WebClient\\\\NetworkProvider*\", \"*\\\\System\\\\CurrentControlSet\\\\Services\\\\LanmanWorkstation\\\\NetworkProvider*\", \"*\\\\System\\\\CurrentControlSet\\\\Services\\\\RDPNP\\\\NetworkProvider*\")) or process.executable:\"C:\\\\Windows\\\\System32\\\\poqexec.exe\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\services\\\\webclient\\\\networkprovider",
+        "\\\\system\\\\currentcontrolset\\\\services\\\\lanmanworkstation\\\\networkprovider",
+        "\\\\system\\\\currentcontrolset\\\\services\\\\rdpnp\\\\networkprovider"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Services\\\\WebClient\\\\NetworkProvider*",
+        "*\\\\System\\\\CurrentControlSet\\\\Services\\\\LanmanWorkstation\\\\NetworkProvider*",
+        "*\\\\System\\\\CurrentControlSet\\\\Services\\\\RDPNP\\\\NetworkProvider*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\services\\\\",
+        "\\\\networkprovider"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Services\\\\*",
+        "*\\\\NetworkProvider*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "poqexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\poqexec.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_lolbin_gather_network_info_script_output",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_lolbin_gather_network_info_script_output.eql",
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\System32\\\\config*\" and (file.path like~ (\"*\\\\Hotfixinfo.txt\", \"*\\\\netiostate.txt\", \"*\\\\sysportslog.txt\", \"*\\\\VmSwitchLog.evtx\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "hotfixinfo.txt",
+        "netiostate.txt",
+        "sysportslog.txt",
+        "vmswitchlog.evtx"
+      ],
+      "raw_values": [
+        "*\\\\Hotfixinfo.txt",
+        "*\\\\netiostate.txt",
+        "*\\\\sysportslog.txt",
+        "*\\\\VmSwitchLog.evtx"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "config"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\config*"
+      ]
+    }
+  ]
+}

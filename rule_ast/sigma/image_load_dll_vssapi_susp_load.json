@@ -1,0 +1,53 @@
+{
+  "source": "sigma",
+  "name": "image_load_dll_vssapi_susp_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_dll_vssapi_susp_load.eql",
+  "raw_query": "any where file.path:\"*\\\\vssapi.dll\" and (not (((process.executable like~ (\"C:\\\\Windows\\\\explorer.exe\", \"C:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe\")) or (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\Temp\\\\{*\", \"C:\\\\Windows\\\\WinSxS\\\\*\"))) or (process.executable like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\")) or (?process.executable == null))) and (not (process.executable:\"C:\\\\ProgramData\\\\Package Cache\\\\*\" or (process.executable:\"*\\\\temp\\\\is-*\" and process.executable:\"*\\\\avira_system_speedup.tmp*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "systemsettings.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\explorer.exe",
+        "C:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe",
+        "C:\\\\Windows\\\\System32\\\\*",
+        "C:\\\\Windows\\\\SysWOW64\\\\*",
+        "C:\\\\Windows\\\\Temp\\\\{*",
+        "C:\\\\Windows\\\\WinSxS\\\\*",
+        "C:\\\\Program Files\\\\*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "vssapi.dll"
+      ],
+      "raw_values": [
+        "*\\\\vssapi.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "is-",
+        "avira_system_speedup.tmp"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\Package Cache\\\\*",
+        "*\\\\temp\\\\is-*",
+        "*\\\\avira_system_speedup.tmp*"
+      ]
+    }
+  ]
+}

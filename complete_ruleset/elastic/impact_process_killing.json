@@ -1,0 +1,113 @@
+{
+  "source": "elastic",
+  "name": "Process Killing Detected via Defend for Containers",
+  "slug": "impact_process_killing",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/impact_process_killing.toml",
+  "raw_query": "process where event.type == \"start\" and event.action == \"exec\" and container.id like \"*?\" and \n(\n  process.name in (\"kill\", \"pkill\", \"killall\") or\n  (\n    /* Account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\n      \"kill\", \"/bin/kill\", \"/usr/bin/kill\", \"/usr/local/bin/kill\",\n      \"pkill\", \"/bin/pkill\", \"/usr/bin/pkill\", \"/usr/local/bin/pkill\",\n      \"killall\", \"/bin/killall\", \"/usr/bin/killall\", \"/usr/local/bin/killall\"\n    ) and\n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "kill",
+        "pkill",
+        "killall",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "kill",
+        "pkill",
+        "killall",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "kill",
+        "pkill",
+        "killall",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "kill",
+        "/bin/kill",
+        "/usr/bin/kill",
+        "/usr/local/bin/kill",
+        "pkill",
+        "/bin/pkill",
+        "/usr/bin/pkill",
+        "/usr/local/bin/pkill",
+        "killall",
+        "/bin/killall",
+        "/usr/bin/killall",
+        "/usr/local/bin/killall",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ]
+}

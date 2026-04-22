@@ -1,0 +1,27 @@
+# Private / sensitive — must never appear in the public repo
+threat_hunter.py
+reports/
+sliver_test_harness/
+venv/
+
+# Scan & secret-detection output
+gitleaks-*.json
+eql_validation_failures.json
+scan_output.txt
+.grep_step1.txt
+
+# Runtime / editor
+__pycache__/
+*.pyc
+.env
+config.yaml
+.claude/
+
+# Cached data
+.alerts_cache.json
+.kibana_rules_cache.json
+
+# Sigma community rule packs (large, pulled at runtime)
+sigma_rules/rules/
+sigma_rules/rules-threat-hunting/
+sigma_rules/rules-emerging-threats/

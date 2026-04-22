@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_invoke_obfuscation_via_var",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_invoke_obfuscation_via_var.eql",
+  "raw_query": "any where (process.command_line:\"*&&set*\" and process.command_line:\"*cmd*\" and process.command_line:\"*/c*\" and process.command_line:\"*-f*\") and (process.command_line like~ (\"*{0}*\", \"*{1}*\", \"*{2}*\", \"*{3}*\", \"*{4}*\", \"*{5}*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "{0}",
+        "{1}",
+        "{2}",
+        "{3}",
+        "{4}",
+        "{5}"
+      ],
+      "raw_values": [
+        "*{0}*",
+        "*{1}*",
+        "*{2}*",
+        "*{3}*",
+        "*{4}*",
+        "*{5}*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "&&set",
+        "cmd"
+      ],
+      "raw_values": [
+        "*&&set*",
+        "*cmd*",
+        "*/c*",
+        "*-f*"
+      ]
+    }
+  ]
+}

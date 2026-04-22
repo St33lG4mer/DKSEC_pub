@@ -1,0 +1,24 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_right_to_left_override",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_right_to_left_override.eql",
+  "raw_query": "any where process.command_line like~ (\"*\\\\u202e*\", \"*[U+202E]*\", \"*\u202e*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "u202e",
+        "[u+202e]"
+      ],
+      "raw_values": [
+        "*\\\\u202e*",
+        "*[U+202E]*",
+        "*\u202e*"
+      ]
+    }
+  ]
+}

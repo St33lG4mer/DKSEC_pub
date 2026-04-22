@@ -1,0 +1,137 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_susp_parent_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_susp_parent_process.eql",
+  "raw_query": "any where (process.parent.executable:\"*tomcat*\" or (process.parent.executable like~ (\"*\\\\amigo.exe\", \"*\\\\browser.exe\", \"*\\\\chrome.exe\", \"*\\\\firefox.exe\", \"*\\\\httpd.exe\", \"*\\\\iexplore.exe\", \"*\\\\jbosssvc.exe\", \"*\\\\microsoftedge.exe\", \"*\\\\microsoftedgecp.exe\", \"*\\\\MicrosoftEdgeSH.exe\", \"*\\\\mshta.exe\", \"*\\\\nginx.exe\", \"*\\\\outlook.exe\", \"*\\\\php-cgi.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\safari.exe\", \"*\\\\services.exe\", \"*\\\\sqlagent.exe\", \"*\\\\sqlserver.exe\", \"*\\\\sqlservr.exe\", \"*\\\\vivaldi.exe\", \"*\\\\w3wp.exe\"))) and ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.command_line like~ (\"*/c powershell*\", \"*/c pwsh*\")) or process.pe.description:\"Windows PowerShell\" or process.pe.product:\"PowerShell Core 6\" or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\")))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "amigo.exe",
+        "browser.exe",
+        "chrome.exe",
+        "firefox.exe",
+        "httpd.exe",
+        "iexplore.exe",
+        "jbosssvc.exe",
+        "microsoftedge.exe",
+        "microsoftedgecp.exe",
+        "microsoftedgesh.exe",
+        "mshta.exe",
+        "nginx.exe",
+        "outlook.exe",
+        "php-cgi.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "safari.exe",
+        "services.exe",
+        "sqlagent.exe",
+        "sqlserver.exe",
+        "sqlservr.exe",
+        "vivaldi.exe",
+        "w3wp.exe"
+      ],
+      "raw_values": [
+        "*\\\\amigo.exe",
+        "*\\\\browser.exe",
+        "*\\\\chrome.exe",
+        "*\\\\firefox.exe",
+        "*\\\\httpd.exe",
+        "*\\\\iexplore.exe",
+        "*\\\\jbosssvc.exe",
+        "*\\\\microsoftedge.exe",
+        "*\\\\microsoftedgecp.exe",
+        "*\\\\MicrosoftEdgeSH.exe",
+        "*\\\\mshta.exe",
+        "*\\\\nginx.exe",
+        "*\\\\outlook.exe",
+        "*\\\\php-cgi.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\safari.exe",
+        "*\\\\services.exe",
+        "*\\\\sqlagent.exe",
+        "*\\\\sqlserver.exe",
+        "*\\\\sqlservr.exe",
+        "*\\\\vivaldi.exe",
+        "*\\\\w3wp.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "c powershell",
+        "c pwsh"
+      ],
+      "raw_values": [
+        "*/c powershell*",
+        "*/c pwsh*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "tomcat"
+      ],
+      "raw_values": [
+        "*tomcat*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "windows powershell"
+      ],
+      "raw_values": [
+        "Windows PowerShell"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "powershell core 6"
+      ],
+      "raw_values": [
+        "PowerShell Core 6"
+      ]
+    }
+  ]
+}

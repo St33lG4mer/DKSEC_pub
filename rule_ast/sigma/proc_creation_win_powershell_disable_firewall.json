@@ -1,0 +1,70 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_disable_firewall",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_disable_firewall.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\powershell_ise.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line:\"*Set-NetFirewallProfile *\" and process.command_line:\"* -Enabled *\" and process.command_line:\"* False*\") and (process.command_line like~ (\"* -All *\", \"*Public*\", \"*Domain*\", \"*Private*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\powershell_ise.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-all",
+        "public",
+        "domain",
+        "private"
+      ],
+      "raw_values": [
+        "* -All *",
+        "*Public*",
+        "*Domain*",
+        "*Private*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "set-netfirewallprofile",
+        "-enabled",
+        "false"
+      ],
+      "raw_values": [
+        "*Set-NetFirewallProfile *",
+        "* -Enabled *",
+        "* False*"
+      ]
+    }
+  ]
+}

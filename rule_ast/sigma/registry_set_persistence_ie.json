@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_ie",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_ie.eql",
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings*\" and (not (winlog.event_data.Details:\"DWORD*\" or (?winlog.event_data.Details == null) or (winlog.event_data.Details like~ (\"Cookie:\", \"Visited:\", \"(Empty)\")) or (registry.path like~ (\"*\\\\Cache*\", \"*\\\\ZoneMap*\", \"*\\\\WpadDecision*\")) or winlog.event_data.Details:\"Binary Data\")) and (not registry.path:\"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\Accepted Documents*\")",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "cookie:",
+        "visited:"
+      ],
+      "raw_values": [
+        "Cookie:",
+        "Visited:"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\cache",
+        "\\\\zonemap",
+        "\\\\wpaddecision"
+      ],
+      "raw_values": [
+        "*\\\\Cache*",
+        "*\\\\ZoneMap*",
+        "*\\\\WpadDecision*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\internet settings",
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\internet settings\\\\accepted documents"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings*",
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\Accepted Documents*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword",
+        "binary data"
+      ],
+      "raw_values": [
+        "DWORD*",
+        "Binary Data"
+      ]
+    }
+  ]
+}

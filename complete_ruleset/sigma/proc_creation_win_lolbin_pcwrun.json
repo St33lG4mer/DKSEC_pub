@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_pcwrun",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_pcwrun.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\pcwrun.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "pcwrun.exe"
+      ],
+      "raw_values": [
+        "*\\\\pcwrun.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "source": "elastic",
+  "name": "File Creation, Execution and Self-Deletion in Suspicious Directory",
+  "slug": "execution_file_execution_followed_by_deletion",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_file_execution_followed_by_deletion.toml",
+  "raw_query": "sequence by host.id, user.id with maxspan=1m\n  [file where host.os.type == \"linux\" and event.action == \"creation\" and\n   process.name in (\"curl\", \"wget\", \"fetch\", \"ftp\", \"sftp\", \"scp\", \"rsync\", \"ld\") and\n   file.path : (\"/dev/shm/*\", \"/run/shm/*\", \"/tmp/*\", \"/var/tmp/*\",\n     \"/run/*\", \"/var/run/*\", \"/var/www/*\", \"/proc/*/fd/*\")] by file.name\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.parent.name in (\"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and\n   not process.parent.executable like (\n     \"/tmp/VeeamApp*\", \"/tmp/rajh/spack-stage/*\", \"plz-out/bin/vault/bridge/test/e2e/base/bridge-dev\",\n     \"/usr/bin/ranlib\", \"/usr/bin/ar\", \"plz-out/bin/vault/bridge/test/e2e/base/local-k8s\"\n   )] by process.name\n  [file where host.os.type == \"linux\" and event.action == \"deletion\" and\n   file.path : (\n     \"/dev/shm/*\", \"/run/shm/*\", \"/tmp/*\", \"/var/tmp/*\", \"/run/*\", \"/var/run/*\", \"/var/www/*\", \"/proc/*/fd/*\"\n    ) and not process.name in (\"rm\", \"ld\", \"conftest\", \"link\", \"gcc\", \"getarch\", \"ld\")] by file.name\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "veeamapp",
+        "bridge-dev",
+        "ranlib",
+        "local-k8s"
+      ],
+      "raw_values": [
+        "/tmp/VeeamApp*",
+        "/tmp/rajh/spack-stage/*",
+        "plz-out/bin/vault/bridge/test/e2e/base/bridge-dev",
+        "/usr/bin/ranlib",
+        "/usr/bin/ar",
+        "plz-out/bin/vault/bridge/test/e2e/base/local-k8s"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "wget",
+        "fetch",
+        "ftp",
+        "sftp",
+        "scp",
+        "rsync",
+        "conftest",
+        "link",
+        "gcc",
+        "getarch"
+      ],
+      "raw_values": [
+        "curl",
+        "wget",
+        "fetch",
+        "ftp",
+        "sftp",
+        "scp",
+        "rsync",
+        "ld",
+        "rm",
+        "conftest",
+        "link",
+        "gcc",
+        "getarch"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation",
+        "exec",
+        "deletion"
+      ],
+      "raw_values": [
+        "creation",
+        "exec",
+        "deletion"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

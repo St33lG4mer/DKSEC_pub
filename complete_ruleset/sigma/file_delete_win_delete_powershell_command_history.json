@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_delete_win_delete_powershell_command_history",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_delete/file_delete_win_delete_powershell_command_history.eql",
+  "raw_query": "any where file.path:\"*\\\\PSReadLine\\\\ConsoleHost_history.txt\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "consolehost_history.txt"
+      ],
+      "raw_values": [
+        "*\\\\PSReadLine\\\\ConsoleHost_history.txt"
+      ]
+    }
+  ]
+}

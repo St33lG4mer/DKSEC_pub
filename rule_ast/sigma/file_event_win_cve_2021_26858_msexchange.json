@@ -1,0 +1,40 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_cve_2021_26858_msexchange",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2021/Exploits/CVE-2021-26858/file_event_win_cve_2021_26858_msexchange.eql",
+  "raw_query": "any where process.executable:\"*UMWorkerProcess.exe\" and (not (file.path like~ (\"*CacheCleanup.bin\", \"*.txt\", \"*.LOG\", \"*.cfg\", \"*cleanup.bin\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "cachecleanup.bin",
+        ".txt",
+        ".log",
+        ".cfg",
+        "cleanup.bin"
+      ],
+      "raw_values": [
+        "*CacheCleanup.bin",
+        "*.txt",
+        "*.LOG",
+        "*.cfg",
+        "*cleanup.bin"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "umworkerprocess.exe"
+      ],
+      "raw_values": [
+        "*UMWorkerProcess.exe"
+      ]
+    }
+  ]
+}

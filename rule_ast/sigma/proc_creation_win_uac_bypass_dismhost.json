@@ -1,0 +1,40 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_dismhost",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_dismhost.eql",
+  "raw_query": "any where (process.parent.executable:\"*C:\\\\Users\\\\*\" and process.parent.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and process.parent.executable:\"*\\\\DismHost.exe*\") and (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dismhost.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\DismHost.exe*"
+      ]
+    }
+  ]
+}

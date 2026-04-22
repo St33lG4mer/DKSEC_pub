@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "registry_set_legalnotice_susp_message",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_legalnotice_susp_message.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\LegalNoticeCaption*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\LegalNoticeText*\")) and (winlog.event_data.Details like~ (\"*encrypted*\", \"*Unlock-Password*\", \"*paying*\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\legalnoticecaption",
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\legalnoticetext"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\LegalNoticeCaption*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\LegalNoticeText*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "encrypted",
+        "unlock-password",
+        "paying"
+      ],
+      "raw_values": [
+        "*encrypted*",
+        "*Unlock-Password*",
+        "*paying*"
+      ]
+    }
+  ]
+}

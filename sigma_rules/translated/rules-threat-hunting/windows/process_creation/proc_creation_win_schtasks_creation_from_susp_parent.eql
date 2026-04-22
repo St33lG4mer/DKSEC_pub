@@ -1,0 +1,1 @@
+any where ((process.parent.executable like~ ("*:\\Temp\\*", "*\\AppData\\Local\\*", "*\\AppData\\Roaming\\*", "*\\Temporary Internet*", "*\\Users\\Public\\*", "*\\Windows\\Temp\\*")) and process.executable:"*\\schtasks.exe" and process.command_line:"*/Create *") and (not (process.command_line like~ ("*update_task.xml*", "*unattended.ini*")))

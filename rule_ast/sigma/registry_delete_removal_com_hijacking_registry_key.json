@@ -1,0 +1,112 @@
+{
+  "source": "sigma",
+  "name": "registry_delete_removal_com_hijacking_registry_key",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_delete/registry_delete_removal_com_hijacking_registry_key.eql",
+  "raw_query": "any where registry.path:\"*\\\\shell\\\\open\\\\command\" and (not (process.executable:\"*C:\\\\Windows\\\\explorer.exe\" or process.executable:\"C:\\\\Windows\\\\system32\\\\svchost.exe\" or (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\msiexec.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\")) or (process.executable like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\")) or process.executable:\"C:\\\\Windows\\\\System32\\\\OpenWith.exe\")) and (not ((process.executable:\"*\\\\Dropbox.exe\" and registry.path:\"*\\\\Dropbox.*\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\Wireshark_uninstaller.exe\" and registry.path:\"*\\\\wireshark-capture-file\\\\*\") or (process.executable:\"*peazip*\" and registry.path:\"*\\\\PeaZip.*\") or (process.executable:\"*\\\\Everything.exe\" and registry.path:\"*\\\\Everything.*\") or process.executable:\"C:\\\\Windows\\\\Installer\\\\MSI*\" or (process.executable:\"C:\\\\Program Files (x86)\\\\Java\\\\*\" and process.executable:\"*\\\\installer.exe\" and registry.path:\"*\\\\Classes\\\\WOW6432Node\\\\CLSID\\\\{4299124F-F2C3-41b4-9C73-9236B2AD0E8F}*\") or process.executable:\"*\\\\Microsoft\\\\EdgeUpdate\\\\Install*\" or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Avira\\\\Antivirus\\\\\", \"C:\\\\Program Files\\\\Avira\\\\Antivirus\\\\\")) and (registry.path like~ (\"*\\\\CLSID\\\\{305CA226-D286-468e-B848-2B2E8E697B74}\\\\Shell\\\\Open\\\\Command\", \"*\\\\AntiVir.Keyfile\\\\shell\\\\open\\\\command\"))) or ((process.executable:\"*AppData\\\\Local\\\\Temp*\" and process.executable:\"*\\\\setup.exe*\") or (process.executable:\"*\\\\Temp\\\\is-*\" and process.executable:\"*\\\\target.tmp*\")) or process.executable:\"*\\\\ninite.exe\" or (process.executable:\"*\\\\reg.exe\" and registry.path:\"*\\\\Discord\\\\shell\\\\open\\\\command\") or (process.executable:\"*\\\\Spotify.exe\" and registry.path:\"*\\\\Spotify\\\\shell\\\\open\\\\command\") or (process.executable:\"*C:\\\\eclipse\\\\eclipse.exe\" and registry.path:\"*_Classes\\\\eclipse+*\") or (process.executable:\"*\\\\Temp*\" and process.executable:\"*\\\\TeamViewer*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "C:\\\\Program Files\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\clsid\\\\{305ca226-d286-468e-b848-2b2e8e697b74}\\\\shell\\\\open\\\\command",
+        "\\\\antivir.keyfile\\\\shell\\\\open\\\\command"
+      ],
+      "raw_values": [
+        "*\\\\CLSID\\\\{305CA226-D286-468e-B848-2B2E8E697B74}\\\\Shell\\\\Open\\\\Command",
+        "*\\\\AntiVir.Keyfile\\\\shell\\\\open\\\\command"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\shell\\\\open\\\\command",
+        "\\\\dropbox.",
+        "\\\\wireshark-capture-file\\\\",
+        "\\\\peazip.",
+        "\\\\everything.",
+        "\\\\classes\\\\wow6432node\\\\clsid\\\\{4299124f-f2c3-41b4-9c73-9236b2ad0e8f}",
+        "\\\\discord\\\\shell\\\\open\\\\command",
+        "\\\\spotify\\\\shell\\\\open\\\\command",
+        "_classes\\\\eclipse+"
+      ],
+      "raw_values": [
+        "*\\\\shell\\\\open\\\\command",
+        "*\\\\Dropbox.*",
+        "*\\\\wireshark-capture-file\\\\*",
+        "*\\\\PeaZip.*",
+        "*\\\\Everything.*",
+        "*\\\\Classes\\\\WOW6432Node\\\\CLSID\\\\{4299124F-F2C3-41b4-9C73-9236B2AD0E8F}*",
+        "*\\\\Discord\\\\shell\\\\open\\\\command",
+        "*\\\\Spotify\\\\shell\\\\open\\\\command",
+        "*_Classes\\\\eclipse+*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe",
+        "svchost.exe",
+        "openwith.exe",
+        "dropbox.exe",
+        "wireshark_uninstaller.exe",
+        "peazip",
+        "everything.exe",
+        "msi",
+        "installer.exe",
+        "install",
+        "temp",
+        "setup.exe",
+        "is-",
+        "target.tmp",
+        "ninite.exe",
+        "reg.exe",
+        "spotify.exe",
+        "eclipse.exe",
+        "teamviewer"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\explorer.exe",
+        "C:\\\\Windows\\\\system32\\\\svchost.exe",
+        "C:\\\\Windows\\\\System32\\\\OpenWith.exe",
+        "*\\\\Dropbox.exe",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\Wireshark_uninstaller.exe",
+        "*peazip*",
+        "*\\\\Everything.exe",
+        "C:\\\\Windows\\\\Installer\\\\MSI*",
+        "C:\\\\Program Files (x86)\\\\Java\\\\*",
+        "*\\\\installer.exe",
+        "*\\\\Microsoft\\\\EdgeUpdate\\\\Install*",
+        "*AppData\\\\Local\\\\Temp*",
+        "*\\\\setup.exe*",
+        "*\\\\Temp\\\\is-*",
+        "*\\\\target.tmp*",
+        "*\\\\ninite.exe",
+        "*\\\\reg.exe",
+        "*\\\\Spotify.exe",
+        "*C:\\\\eclipse\\\\eclipse.exe",
+        "*\\\\Temp*",
+        "*\\\\TeamViewer*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Unauthorized Access to an Okta Application",
+  "slug": "initial_access_okta_user_attempted_unauthorized_access",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Tactic: Initial Access",
+    "Use Case: Identity and Access Audit",
+    "Data Source: Okta",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/initial_access_okta_user_attempted_unauthorized_access.toml",
+  "raw_query": "data_stream.dataset:okta.system and event.action:app.generic.unauth_app_access_attempt\n",
+  "conditions": []
+}

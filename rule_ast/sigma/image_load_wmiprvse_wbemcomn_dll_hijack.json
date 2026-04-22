@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "image_load_wmiprvse_wbemcomn_dll_hijack",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_wmiprvse_wbemcomn_dll_hijack.eql",
+  "raw_query": "any where process.executable:\"*\\\\wmiprvse.exe\" and file.path:\"*\\\\wbem\\\\wbemcomn.dll\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe"
+      ],
+      "raw_values": [
+        "*\\\\wmiprvse.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "wbemcomn.dll"
+      ],
+      "raw_values": [
+        "*\\\\wbem\\\\wbemcomn.dll"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_mfdetours",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_mfdetours.eql",
+  "raw_query": "any where file.path:\"*\\\\mfdetours.dll\" and (not file.path:\"*:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\bin\\\\*\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mfdetours.dll"
+      ],
+      "raw_values": [
+        "*\\\\mfdetours.dll",
+        "*:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\bin\\\\*"
+      ]
+    }
+  ]
+}

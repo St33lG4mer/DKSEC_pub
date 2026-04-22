@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "Attempt to Disable Gatekeeper",
+  "slug": "defense_evasion_attempt_to_disable_gatekeeper",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/defense_evasion_attempt_to_disable_gatekeeper.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.name == \"spctl\" and\n process.args like~ \"--master-disable\"\n",
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "spctl"
+      ],
+      "raw_values": [
+        "spctl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "--master-disable"
+      ],
+      "raw_values": [
+        "--master-disable"
+      ]
+    }
+  ]
+}

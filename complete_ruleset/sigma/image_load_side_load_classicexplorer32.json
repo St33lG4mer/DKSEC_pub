@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_classicexplorer32",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_classicexplorer32.eql",
+  "raw_query": "any where file.path:\"*\\\\ClassicExplorer32.dll\" and (not file.path:\"C:\\\\Program Files\\\\Classic Shell\\\\*\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "classicexplorer32.dll"
+      ],
+      "raw_values": [
+        "*\\\\ClassicExplorer32.dll",
+        "C:\\\\Program Files\\\\Classic Shell\\\\*"
+      ]
+    }
+  ]
+}

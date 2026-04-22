@@ -1,0 +1,42 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_sam_access",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_sam_access.eql",
+  "raw_query": "any where (process.command_line:\"*\\\\HarddiskVolumeShadowCopy*\" and process.command_line:\"*System32\\\\config\\\\sam*\") and (process.command_line like~ (\"*Copy-Item*\", \"*cp $_.*\", \"*cpi $_.*\", \"*copy $_.*\", \"*.File]::Copy(*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "copy-item",
+        "cp $_.",
+        "cpi $_.",
+        "copy $_.",
+        ".file]::copy("
+      ],
+      "raw_values": [
+        "*Copy-Item*",
+        "*cp $_.*",
+        "*cpi $_.*",
+        "*copy $_.*",
+        "*.File]::Copy(*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "harddiskvolumeshadowcopy",
+        "sam"
+      ],
+      "raw_values": [
+        "*\\\\HarddiskVolumeShadowCopy*",
+        "*System32\\\\config\\\\sam*"
+      ]
+    }
+  ]
+}

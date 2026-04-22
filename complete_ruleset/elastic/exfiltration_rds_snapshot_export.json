@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "AWS RDS Snapshot Export",
+  "slug": "exfiltration_rds_snapshot_export",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Use Case: Asset Visibility",
+    "Tactic: Collection",
+    "Tactic: Exfiltration",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/exfiltration_rds_snapshot_export.toml",
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: rds.amazonaws.com \n    and event.action: StartExportTask \n    and event.outcome: success\n",
+  "conditions": []
+}

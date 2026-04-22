@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "win_security_smb_file_creation_admin_shares",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_smb_file_creation_admin_shares.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"5145\" and winlog.event_data.ShareName:\"*C$\" and winlog.event_data.AccessMask:\"0x2\") and (not user.name:\"*$\") and (not source.ip==\"::1\"))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x2"
+      ],
+      "raw_values": [
+        "0x2"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "==",
+      "values": [
+        "::1"
+      ],
+      "raw_values": [
+        "::1"
+      ]
+    }
+  ]
+}

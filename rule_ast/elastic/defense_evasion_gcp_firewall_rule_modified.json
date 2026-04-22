@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "GCP Firewall Rule Modification",
+  "slug": "defense_evasion_gcp_firewall_rule_modified",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: GCP",
+    "Data Source: Google Cloud Platform",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/gcp/defense_evasion_gcp_firewall_rule_modified.toml",
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:(*.compute.firewalls.patch or google.appengine.*.Firewall.Update*Rule)\n",
+  "conditions": []
+}

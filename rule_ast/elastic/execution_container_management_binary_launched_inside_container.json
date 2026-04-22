@@ -1,0 +1,148 @@
+{
+  "source": "elastic",
+  "name": "Container Management Utility Run Inside A Container",
+  "slug": "execution_container_management_binary_launched_inside_container",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_container_management_binary_launched_inside_container.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.entry_leader.entry_meta.type == \"container\" and process.interactive == true and\nprocess.name in (\"dockerd\", \"kubelet\", \"kube-proxy\", \"kubectl\", \"containerd\", \"systemd\", \"crictl\") and\nnot (\n  process.parent.executable in (\"/sbin/init\", \"/usr/bin/dockerd\", \"/usr/bin/runc\", \"/usr/bin/containerd-shim-runc-v2\") or\n  process.working_directory == \"/aws\" or\n  process.parent.command_line == \"runc init\" or\n  (process.parent.name == \"busybox\" and process.name == \"kubectl\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dockerd",
+        "kubelet",
+        "kube-proxy",
+        "kubectl",
+        "containerd",
+        "systemd",
+        "crictl"
+      ],
+      "raw_values": [
+        "dockerd",
+        "kubelet",
+        "kube-proxy",
+        "kubectl",
+        "containerd",
+        "systemd",
+        "crictl"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "init",
+        "dockerd",
+        "runc",
+        "containerd-shim-runc-v2"
+      ],
+      "raw_values": [
+        "/sbin/init",
+        "/usr/bin/dockerd",
+        "/usr/bin/runc",
+        "/usr/bin/containerd-shim-runc-v2"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.entry_leader.entry_meta.type",
+      "raw_field": "process.entry_leader.entry_meta.type",
+      "operator": "==",
+      "values": [
+        "container"
+      ],
+      "raw_values": [
+        "container"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "==",
+      "values": [
+        "/aws"
+      ],
+      "raw_values": [
+        "/aws"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "==",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "busybox"
+      ],
+      "raw_values": [
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "kubectl"
+      ],
+      "raw_values": [
+        "kubectl"
+      ]
+    }
+  ]
+}

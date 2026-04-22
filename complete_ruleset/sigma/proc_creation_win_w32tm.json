@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_w32tm",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_w32tm.eql",
+  "raw_query": "any where (process.executable:\"*\\\\w32tm.exe\" or process.pe.original_file_name:\"w32time.dll\") and (process.command_line:\"*/stripchart*\" and process.command_line:\"*/computer:*\" and process.command_line:\"*/period:*\" and process.command_line:\"*/dataonly*\" and process.command_line:\"*/samples:*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "w32tm.exe"
+      ],
+      "raw_values": [
+        "*\\\\w32tm.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "w32time.dll"
+      ],
+      "raw_values": [
+        "w32time.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "stripchart",
+        "computer:",
+        "period:",
+        "dataonly",
+        "samples:"
+      ],
+      "raw_values": [
+        "*/stripchart*",
+        "*/computer:*",
+        "*/period:*",
+        "*/dataonly*",
+        "*/samples:*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "source": "elastic",
+  "name": "AWS RDS DB Instance Restored",
+  "slug": "defense_evasion_rds_instance_restored",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS RDS",
+    "Use Case: Asset Visibility",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/defense_evasion_rds_instance_restored.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"rds.amazonaws.com\"\n    and event.action: (\"RestoreDBInstanceFromDBSnapshot\" or \"RestoreDBInstanceFromS3\")\n    and event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "restoredbinstancefromdbsnapshot",
+        "restoredbinstancefroms3"
+      ],
+      "raw_values": [
+        "RestoreDBInstanceFromDBSnapshot",
+        "RestoreDBInstanceFromS3"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "rds.amazonaws.com"
+      ],
+      "raw_values": [
+        "rds.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

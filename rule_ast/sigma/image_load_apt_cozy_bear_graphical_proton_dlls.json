@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "image_load_apt_cozy_bear_graphical_proton_dlls",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/Cozy-Bear/image_load_apt_cozy_bear_graphical_proton_dlls.eql",
+  "raw_query": "any where file.path like~ (\"*\\\\AclNumsInvertHost.dll\", \"*\\\\AddressResourcesSpec.dll\", \"*\\\\BlendMonitorStringBuild.dll\", \"*\\\\ChildPaletteConnected.dll\", \"*\\\\DeregisterSeekUsers.dll\", \"*\\\\HandleFrequencyAll.dll\", \"*\\\\HardSwapColor.dll\", \"*\\\\LengthInMemoryActivate.dll\", \"*\\\\ModeBitmapNumericAnimate.dll\", \"*\\\\ModeFolderSignMove.dll\", \"*\\\\ParametersNamesPopup.dll\", \"*\\\\PerformanceCaptionApi.dll\", \"*\\\\ScrollbarHandleGet.dll\", \"*\\\\UnregisterAncestorAppendAuto.dll\", \"*\\\\WowIcmpRemoveReg.dll\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "aclnumsinverthost.dll",
+        "addressresourcesspec.dll",
+        "blendmonitorstringbuild.dll",
+        "childpaletteconnected.dll",
+        "deregisterseekusers.dll",
+        "handlefrequencyall.dll",
+        "hardswapcolor.dll",
+        "lengthinmemoryactivate.dll",
+        "modebitmapnumericanimate.dll",
+        "modefoldersignmove.dll",
+        "parametersnamespopup.dll",
+        "performancecaptionapi.dll",
+        "scrollbarhandleget.dll",
+        "unregisterancestorappendauto.dll",
+        "wowicmpremovereg.dll"
+      ],
+      "raw_values": [
+        "*\\\\AclNumsInvertHost.dll",
+        "*\\\\AddressResourcesSpec.dll",
+        "*\\\\BlendMonitorStringBuild.dll",
+        "*\\\\ChildPaletteConnected.dll",
+        "*\\\\DeregisterSeekUsers.dll",
+        "*\\\\HandleFrequencyAll.dll",
+        "*\\\\HardSwapColor.dll",
+        "*\\\\LengthInMemoryActivate.dll",
+        "*\\\\ModeBitmapNumericAnimate.dll",
+        "*\\\\ModeFolderSignMove.dll",
+        "*\\\\ParametersNamesPopup.dll",
+        "*\\\\PerformanceCaptionApi.dll",
+        "*\\\\ScrollbarHandleGet.dll",
+        "*\\\\UnregisterAncestorAppendAuto.dll",
+        "*\\\\WowIcmpRemoveReg.dll"
+      ]
+    }
+  ]
+}

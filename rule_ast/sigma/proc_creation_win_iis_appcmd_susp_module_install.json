@@ -1,0 +1,75 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_iis_appcmd_susp_module_install",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_iis_appcmd_susp_module_install.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\appcmd.exe\" or process.pe.original_file_name:\"appcmd.exe\") and ((process.command_line:\"*install*\" and process.command_line:\"*module*\") and process.command_line like~ (\"*-name:*\", \"*/name:*\", \"*\u2013name:*\", \"*\u2014name:*\", \"*\u2015name:*\"))) and (not process.parent.executable:\"C:\\\\Windows\\\\System32\\\\inetsrv\\\\iissetup.exe\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-name:",
+        "name:",
+        "\u2013name:",
+        "\u2014name:",
+        "\u2015name:"
+      ],
+      "raw_values": [
+        "*-name:*",
+        "*/name:*",
+        "*\u2013name:*",
+        "*\u2014name:*",
+        "*\u2015name:*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "appcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\appcmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "appcmd.exe"
+      ],
+      "raw_values": [
+        "appcmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "install",
+        "module"
+      ],
+      "raw_values": [
+        "*install*",
+        "*module*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "iissetup.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\inetsrv\\\\iissetup.exe"
+      ]
+    }
+  ]
+}

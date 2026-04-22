@@ -1,0 +1,1 @@
+any where (process.command_line:"*copy SolidPDFCreator.dll*" and process.command_line:"*C:\\Users\\Public\\Libraries\\PhotoTvRHD\\SolidPDFCreator.dll*") or (process.command_line:"*reg *" and process.command_line:"*\\Windows\\CurrentVersion\\Run*" and process.command_line:"*SolidPDF*" and process.command_line:"*C:\\Users\\Public\\Libraries\\PhotoTvRHD\\*")

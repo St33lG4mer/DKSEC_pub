@@ -1,0 +1,1 @@
+any where (process.command_line:"*Invoke-WMIMethod win32_process -name create -argumentlist*" and process.command_line:"*rundll32 c:\\windows*") or (process.command_line:"*wmic /node:*" and process.command_line:"*process call create \"rundll32 c:\\windows*")

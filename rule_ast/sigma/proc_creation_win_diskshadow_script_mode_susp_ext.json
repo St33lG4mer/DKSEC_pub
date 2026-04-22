@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_diskshadow_script_mode_susp_ext",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_diskshadow_script_mode_susp_ext.eql",
+  "raw_query": "any where ((process.pe.original_file_name:\"diskshadow.exe\" or process.executable:\"*\\\\diskshadow.exe\") and process.command_line like~ (\"*-s *\", \"*/s *\", \"*\u2013s *\", \"*\u2014s *\", \"*\u2015s *\")) and (not process.command_line:\"*.txt*\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "*\\\\diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".txt"
+      ],
+      "raw_values": [
+        "*.txt*"
+      ]
+    }
+  ]
+}

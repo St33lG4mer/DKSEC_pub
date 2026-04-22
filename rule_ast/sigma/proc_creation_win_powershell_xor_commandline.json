@@ -1,0 +1,90 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_xor_commandline",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_xor_commandline.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\")) or process.pe.description:\"Windows PowerShell\" or process.pe.product:\"PowerShell Core 6\") and process.command_line:\"*bxor*\" and (process.command_line like~ (\"*ForEach*\", \"*for(*\", \"*for *\", \"*-join *\", \"*-join'*\", \"*-join\\\"*\", \"*-join`*\", \"*::Join*\", \"*[char]*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "foreach",
+        "for(",
+        "for",
+        "-join",
+        "-join'"
+      ],
+      "raw_values": [
+        "*ForEach*",
+        "*for(*",
+        "*for *",
+        "*-join *",
+        "*-join'*",
+        "*-join\\",
+        ", "
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "windows powershell"
+      ],
+      "raw_values": [
+        "Windows PowerShell"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "powershell core 6"
+      ],
+      "raw_values": [
+        "PowerShell Core 6"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "bxor"
+      ],
+      "raw_values": [
+        "*bxor*"
+      ]
+    }
+  ]
+}

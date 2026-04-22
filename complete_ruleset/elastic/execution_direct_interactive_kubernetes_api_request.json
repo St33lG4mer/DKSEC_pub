@@ -1,0 +1,185 @@
+{
+  "source": "elastic",
+  "name": "Direct Interactive Kubernetes API Request Detected via Defend for Containers",
+  "slug": "execution_direct_interactive_kubernetes_api_request",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Discovery",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/execution_direct_interactive_kubernetes_api_request.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  (\n    process.name == \"curl\" and\n    process.args in (\"-H\", \"--header\") and\n    process.args like \"*Authorization: Bearer *\" and\n    (\n      /* CA-specified */\n      process.args in (\"--cacert\", \"--capath\") or\n      /* insecure */\n      process.args in (\"-k\", \"--insecure\")\n    )\n  ) or\n  (\n    process.name == \"wget\" and\n    process.args like \"--header*\" and\n    process.args like \"*Authorization: Bearer *\" and\n    (\n      /* CA-specified */\n      process.args == \"--ca-certificate\" or\n      /* insecure */\n      process.args == \"--no-check-certificate\"\n    )\n  ) or\n  (\n    /* Account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\"wget\", \"/bin/wget\", \"/usr/bin/wget\", \"/usr/local/bin/wget\") and\n    process.args like \"--header*\" and\n    process.args like \"*Authorization: Bearer*\" and\n    process.args == \"--no-check-certificate\"\n  ) or\n  (\n    /* ssl_client is busybox-specific, so we need to handle it separately */\n    process.name == \"busybox\" and\n    process.args == \"ssl_client\" and\n    process.args like \"*Authorization: Bearer*\"\n  ) or\n  (process.name == \"openssl\" and process.args == \"s_client\" and process.args == \"-connect\") or\n  (process.name == \"socat\" and process.args like~ \"*ssl*\") or\n  (process.name == \"ncat\" and process.args like \"--ssl*\") or\n  (process.name == \"kubectl\" and process.args in (\"get\", \"list\", \"watch\", \"create\", \"patch\", \"update\"))\n) and\nprocess.interactive == true and container.id like \"*\"\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--header",
+        "--cacert",
+        "--capath",
+        "--insecure",
+        "wget",
+        "get",
+        "list",
+        "watch",
+        "create",
+        "patch",
+        "update"
+      ],
+      "raw_values": [
+        "-H",
+        "--header",
+        "--cacert",
+        "--capath",
+        "-k",
+        "--insecure",
+        "wget",
+        "/bin/wget",
+        "/usr/bin/wget",
+        "/usr/local/bin/wget",
+        "get",
+        "list",
+        "watch",
+        "create",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "curl",
+        "wget",
+        "busybox",
+        "openssl",
+        "socat",
+        "ncat",
+        "kubectl"
+      ],
+      "raw_values": [
+        "curl",
+        "wget",
+        "busybox",
+        "openssl",
+        "socat",
+        "ncat",
+        "kubectl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "authorization: bearer",
+        "--header",
+        "--ssl"
+      ],
+      "raw_values": [
+        "*Authorization: Bearer *",
+        "--header*",
+        "*Authorization: Bearer*",
+        "--ssl*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "--ca-certificate",
+        "--no-check-certificate",
+        "ssl_client",
+        "s_client",
+        "-connect"
+      ],
+      "raw_values": [
+        "--ca-certificate",
+        "--no-check-certificate",
+        "ssl_client",
+        "s_client",
+        "-connect"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "ssl"
+      ],
+      "raw_values": [
+        "*ssl*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "source": "elastic",
+  "name": "Elastic Agent Service Terminated",
+  "slug": "defense_evasion_elastic_agent_service_terminated",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: Windows",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/defense_evasion_elastic_agent_service_terminated.toml",
+  "raw_query": "process where event.type == \"start\" and\n(\n  /* net, sc or wmic stopping or deleting Elastic Agent on Windows */\n  (\n    process.name : (\"net.exe\", \"sc.exe\", \"wmic.exe\",\"powershell.exe\",\"taskkill.exe\",\"PsKill.exe\",\"ProcessHacker.exe\") and\n    process.args : (\"stopservice\",\"uninstall\", \"stop\", \"disabled\",\"Stop-Process\",\"terminate\",\"suspend\") and\n    process.args : (\"elasticendpoint\", \"Elastic Agent\",\"elastic-agent\",\"elastic-endpoint\")\n  ) or\n\n  /* service or systemctl used to stop Elastic Agent on Linux */\n  (\n    process.name in (\"systemctl\", \"service\", \"chkconfig\", \"update-rc.d\") and\n    process.args : (\"elastic-agent\", \"elastic-agent.service\", \"ElasticEndpoint\") and\n    process.args : (\"stop\", \"disable\", \"remove\", \"off\", \"kill\", \"mask\") and\n    not (\n      process.parent.executable : \"/opt/Elastic/Agent/data/elastic-agent-*/components/previous/elastic-endpoint\" and\n      process.parent.args : \"uninstall\" and\n      process.parent.args : \"--keepstate\"\n    )\n  ) or\n  \n  /* pkill, killall used to stop Elastic Agent or Endpoint on Linux */\n  (process.name in (\"pkill\", \"killall\", \"kill\") and process.args : (\"elastic-agent\", \"elastic-endpoint\")) or\n\n  /* Unload Elastic Defend extension on MacOS */\n  (process.name : \"kextunload\" and process.args : \"com.apple.iokit.EndpointSecurity\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "net.exe",
+        "sc.exe",
+        "wmic.exe",
+        "powershell.exe",
+        "taskkill.exe",
+        "pskill.exe",
+        "processhacker.exe",
+        "kextunload"
+      ],
+      "raw_values": [
+        "net.exe",
+        "sc.exe",
+        "wmic.exe",
+        "powershell.exe",
+        "taskkill.exe",
+        "PsKill.exe",
+        "ProcessHacker.exe",
+        "kextunload"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "stopservice",
+        "uninstall",
+        "stop",
+        "disabled",
+        "stop-process",
+        "terminate",
+        "suspend",
+        "elasticendpoint",
+        "elastic agent",
+        "elastic-agent",
+        "elastic-endpoint",
+        "elastic-agent.service",
+        "disable",
+        "remove",
+        "off",
+        "kill",
+        "mask",
+        "com.apple.iokit.endpointsecurity"
+      ],
+      "raw_values": [
+        "stopservice",
+        "uninstall",
+        "stop",
+        "disabled",
+        "Stop-Process",
+        "terminate",
+        "suspend",
+        "elasticendpoint",
+        "Elastic Agent",
+        "elastic-agent",
+        "elastic-endpoint",
+        "elastic-agent.service",
+        "ElasticEndpoint",
+        "disable",
+        "remove",
+        "off",
+        "kill",
+        "mask",
+        "com.apple.iokit.EndpointSecurity"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "systemctl",
+        "service",
+        "chkconfig",
+        "update-rc.d",
+        "pkill",
+        "killall",
+        "kill"
+      ],
+      "raw_values": [
+        "systemctl",
+        "service",
+        "chkconfig",
+        "update-rc.d",
+        "pkill",
+        "killall",
+        "kill"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "elastic-endpoint"
+      ],
+      "raw_values": [
+        "/opt/Elastic/Agent/data/elastic-agent-*/components/previous/elastic-endpoint"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "uninstall",
+        "--keepstate"
+      ],
+      "raw_values": [
+        "uninstall",
+        "--keepstate"
+      ]
+    }
+  ]
+}

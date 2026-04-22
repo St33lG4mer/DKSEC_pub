@@ -1,0 +1,102 @@
+{
+  "source": "elastic",
+  "name": "Incoming DCOM Lateral Movement via MSHTA",
+  "slug": "lateral_movement_dcom_hta",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/lateral_movement_dcom_hta.toml",
+  "raw_query": "sequence with maxspan=1m\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n     process.name : \"mshta.exe\" and process.args : \"-Embedding\"\n  ] by host.id, process.entity_id\n  [network where host.os.type == \"windows\" and event.type == \"start\" and process.name : \"mshta.exe\" and\n     network.direction : (\"incoming\", \"ingress\") and network.transport == \"tcp\" and\n     source.port > 49151 and destination.port > 49151 and source.ip != \"127.0.0.1\" and source.ip != \"::1\"\n  ] by host.id, process.entity_id\n",
+  "conditions": [
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": ":",
+      "values": [
+        "incoming",
+        "ingress"
+      ],
+      "raw_values": [
+        "incoming",
+        "ingress"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "mshta.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-embedding"
+      ],
+      "raw_values": [
+        "-Embedding"
+      ]
+    },
+    {
+      "field": "network.transport",
+      "raw_field": "network.transport",
+      "operator": "==",
+      "values": [
+        "tcp"
+      ],
+      "raw_values": [
+        "tcp"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1",
+        "::1"
+      ],
+      "raw_values": [
+        "127.0.0.1",
+        "::1"
+      ]
+    }
+  ]
+}

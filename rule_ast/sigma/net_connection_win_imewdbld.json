@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_imewdbld",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_imewdbld.eql",
+  "raw_query": "any where network.direction:\"true\" and process.executable:\"*\\\\IMEWDBLD.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "imewdbld.exe"
+      ],
+      "raw_values": [
+        "*\\\\IMEWDBLD.exe"
+      ]
+    }
+  ]
+}

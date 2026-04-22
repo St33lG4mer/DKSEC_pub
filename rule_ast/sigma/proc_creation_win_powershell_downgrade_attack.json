@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_downgrade_attack",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_downgrade_attack.eql",
+  "raw_query": "any where process.executable:\"*\\\\powershell.exe\" and (process.command_line like~ (\"* -version 2 *\", \"* -versio 2 *\", \"* -versi 2 *\", \"* -vers 2 *\", \"* -ver 2 *\", \"* -ve 2 *\", \"* -v 2 *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-version 2",
+        "-versio 2",
+        "-versi 2",
+        "-vers 2",
+        "-ver 2",
+        "-ve 2",
+        "-v 2"
+      ],
+      "raw_values": [
+        "* -version 2 *",
+        "* -versio 2 *",
+        "* -versi 2 *",
+        "* -vers 2 *",
+        "* -ver 2 *",
+        "* -ve 2 *",
+        "* -v 2 *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe"
+      ]
+    }
+  ]
+}

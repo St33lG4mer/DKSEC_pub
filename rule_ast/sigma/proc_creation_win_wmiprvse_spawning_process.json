@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wmiprvse_spawning_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wmiprvse_spawning_process.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\WmiPrvSe.exe\" and (not ((winlog.event_data.LogonId like~ (\"0x3e7\", \"null\")) or (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) or process.executable:\"*\\\\WmiPrvSE.exe\" or process.executable:\"*\\\\WerFault.exe\" or (?winlog.event_data.LogonId == null)))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.logonid",
+      "raw_field": "winlog.event_data.LogonId",
+      "operator": "like~",
+      "values": [
+        "0x3e7"
+      ],
+      "raw_values": [
+        "0x3e7",
+        "null"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe"
+      ],
+      "raw_values": [
+        "*\\\\WmiPrvSe.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe",
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*\\\\WmiPrvSE.exe",
+        "*\\\\WerFault.exe"
+      ]
+    }
+  ]
+}

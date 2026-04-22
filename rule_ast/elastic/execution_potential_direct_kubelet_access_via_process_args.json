@@ -1,0 +1,65 @@
+{
+  "source": "elastic",
+  "name": "Potential Direct Kubelet Access via Process Arguments Detected via Defend for Containers",
+  "slug": "execution_potential_direct_kubelet_access_via_process_args",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Discovery",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/execution_potential_direct_kubelet_access_via_process_args.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.args like \"http*:10250*\" and process.interactive == true and container.id like \"?*\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "http*:10250"
+      ],
+      "raw_values": [
+        "http*:10250*"
+      ]
+    }
+  ]
+}

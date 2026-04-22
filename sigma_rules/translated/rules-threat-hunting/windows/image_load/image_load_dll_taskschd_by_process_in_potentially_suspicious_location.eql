@@ -1,0 +1,1 @@
+any where (file.path:"*\\taskschd.dll" or file.pe.original_file_name:"taskschd.dll") and (process.executable like~ ("*:\\Temp\\*", "*:\\Users\\Public\\*", "*:\\Windows\\Temp\\*", "*\\AppData\\Local\\Temp\\*", "*\\Desktop\\*", "*\\Downloads\\*"))

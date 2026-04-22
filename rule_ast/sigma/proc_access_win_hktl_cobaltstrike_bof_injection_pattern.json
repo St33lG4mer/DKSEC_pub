@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_access_win_hktl_cobaltstrike_bof_injection_pattern",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_access/proc_access_win_hktl_cobaltstrike_bof_injection_pattern.eql",
+  "raw_query": "any where winlog.event_data.CallTrace:\"SigmaRegularExpression(regexp=SigmaString(['^C:\\\\\\\\Windows\\\\\\\\SYSTEM32\\\\\\\\ntdll\\\\.dll\\\\+[a-z0-9]{4,6}\\\\|C:\\\\\\\\Windows\\\\\\\\System32\\\\\\\\KERNELBASE\\\\.dll\\\\+[a-z0-9]{4,6}\\\\|UNKNOWN\\\\([A-Z0-9]{16}\\\\)$']), flags=set())\" and (winlog.event_data.GrantedAccess like~ (\"0x1028\", \"0x1fffff\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": "like~",
+      "values": [
+        "0x1028",
+        "0x1fffff"
+      ],
+      "raw_values": [
+        "0x1028",
+        "0x1fffff"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['^c:\\\\\\\\windows\\\\\\\\system32\\\\\\\\ntdll\\\\.dll\\\\+[a-z0-9]{4,6}\\\\|c:\\\\\\\\windows\\\\\\\\system32\\\\\\\\kernelbase\\\\.dll\\\\+[a-z0-9]{4,6}\\\\|unknown\\\\([a-z0-9]{16}\\\\)$']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['^C:\\\\\\\\Windows\\\\\\\\SYSTEM32\\\\\\\\ntdll\\\\.dll\\\\+[a-z0-9]{4,6}\\\\|C:\\\\\\\\Windows\\\\\\\\System32\\\\\\\\KERNELBASE\\\\.dll\\\\+[a-z0-9]{4,6}\\\\|UNKNOWN\\\\([A-Z0-9]{16}\\\\)$']), flags=set())"
+      ]
+    }
+  ]
+}

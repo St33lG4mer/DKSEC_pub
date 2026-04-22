@@ -1,0 +1,84 @@
+{
+  "source": "sigma",
+  "name": "net_dns_external_service_interaction_domains",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/network/dns/net_dns_external_service_interaction_domains.eql",
+  "raw_query": "any where (query like~ (\"*.burpcollaborator.net\", \"*.canarytokens.com\", \"*.ceye.io\", \"*.ddns.1443.eu.org\", \"*.ddns.bypass.eu.org\", \"*.ddns.xn--gg8h.eu.org\", \"*.digimg.store\", \"*.dns.su18.org\", \"*.dnshook.site\", \"*.dnslog.cn\", \"*.dnslog.ink\", \"*.instances.httpworkbench.com\", \"*.interact.sh\", \"*.log.dnslog.pp.ua\", \"*.log.dnslog.qzz.io\", \"*.log.dnslogs.dpdns.org\", \"*.log.javaweb.org\", \"*.log.nat.cloudns.ph\", \"*.oast.fun\", \"*.oast.live\", \"*.oast.me\", \"*.oast.online\", \"*.oast.pro\", \"*.oast.site\", \"*.oastify.com\", \"*.p8.lol\", \"*.requestbin.net\")) and (not query:\"*polling.oastify.com*\")",
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": "like~",
+      "values": [
+        ".burpcollaborator.net",
+        ".canarytokens.com",
+        ".ceye.io",
+        ".ddns.1443.eu.org",
+        ".ddns.bypass.eu.org",
+        ".ddns.xn--gg8h.eu.org",
+        ".digimg.store",
+        ".dns.su18.org",
+        ".dnshook.site",
+        ".dnslog.cn",
+        ".dnslog.ink",
+        ".instances.httpworkbench.com",
+        ".interact.sh",
+        ".log.dnslog.pp.ua",
+        ".log.dnslog.qzz.io",
+        ".log.dnslogs.dpdns.org",
+        ".log.javaweb.org",
+        ".log.nat.cloudns.ph",
+        ".oast.fun",
+        ".oast.live",
+        ".oast.me",
+        ".oast.online",
+        ".oast.pro",
+        ".oast.site",
+        ".oastify.com",
+        ".p8.lol",
+        ".requestbin.net"
+      ],
+      "raw_values": [
+        "*.burpcollaborator.net",
+        "*.canarytokens.com",
+        "*.ceye.io",
+        "*.ddns.1443.eu.org",
+        "*.ddns.bypass.eu.org",
+        "*.ddns.xn--gg8h.eu.org",
+        "*.digimg.store",
+        "*.dns.su18.org",
+        "*.dnshook.site",
+        "*.dnslog.cn",
+        "*.dnslog.ink",
+        "*.instances.httpworkbench.com",
+        "*.interact.sh",
+        "*.log.dnslog.pp.ua",
+        "*.log.dnslog.qzz.io",
+        "*.log.dnslogs.dpdns.org",
+        "*.log.javaweb.org",
+        "*.log.nat.cloudns.ph",
+        "*.oast.fun",
+        "*.oast.live",
+        "*.oast.me",
+        "*.oast.online",
+        "*.oast.pro",
+        "*.oast.site",
+        "*.oastify.com",
+        "*.p8.lol",
+        "*.requestbin.net"
+      ]
+    },
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        "polling.oastify.com"
+      ],
+      "raw_values": [
+        "*polling.oastify.com*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "source": "elastic",
+  "name": "My First Rule",
+  "slug": "guided_onboarding_sample_rule",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Use Case: Guided Onboarding",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/guided_onboarding_sample_rule.toml",
+  "raw_query": "event.kind:event\n",
+  "conditions": []
+}

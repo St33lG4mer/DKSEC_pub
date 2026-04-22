@@ -1,0 +1,99 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Cluster-Admin Role Binding Created",
+  "slug": "persistence_cluster_admin_rolebinding_created",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/persistence_cluster_admin_rolebinding_created.toml",
+  "raw_query": "data_stream.dataset: \"kubernetes.audit_logs\" and kubernetes.audit.objectRef.resource:(\"clusterrolebindings\" or \"rolebindings\") and\nkubernetes.audit.verb:\"create\" and kubernetes.audit.requestObject.roleRef.name:\"cluster-admin\" and\nkubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.level:\"RequestResponse\" and kubernetes.audit.stage:\"ResponseComplete\"\n",
+  "conditions": [
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "clusterrolebindings",
+        "rolebindings"
+      ],
+      "raw_values": [
+        "clusterrolebindings",
+        "rolebindings"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "create"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.requestobject.roleref.name",
+      "raw_field": "kubernetes.audit.requestObject.roleRef.name",
+      "operator": ":",
+      "values": [
+        "cluster-admin"
+      ],
+      "raw_values": [
+        "cluster-admin"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.level",
+      "raw_field": "kubernetes.audit.level",
+      "operator": ":",
+      "values": [
+        "requestresponse"
+      ],
+      "raw_values": [
+        "RequestResponse"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": ":",
+      "values": [
+        "responsecomplete"
+      ],
+      "raw_values": [
+        "ResponseComplete"
+      ]
+    }
+  ]
+}

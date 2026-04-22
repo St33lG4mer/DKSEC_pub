@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_winrar_exfil_dmp_files",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_winrar_exfil_dmp_files.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\rar.exe\", \"*\\\\winrar.exe\")) or process.pe.description:\"Command line RAR\") and (process.command_line like~ (\"*.dmp*\", \"*.dump*\", \"*.hdmp*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rar.exe",
+        "winrar.exe"
+      ],
+      "raw_values": [
+        "*\\\\rar.exe",
+        "*\\\\winrar.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".dmp",
+        ".dump",
+        ".hdmp"
+      ],
+      "raw_values": [
+        "*.dmp*",
+        "*.dump*",
+        "*.hdmp*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "command line rar"
+      ],
+      "raw_values": [
+        "Command line RAR"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_utilityfunctions",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_utilityfunctions.eql",
+  "raw_query": "any where process.command_line like~ (\"*UtilityFunctions.ps1*\", \"*RegSnapin *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "utilityfunctions.ps1",
+        "regsnapin"
+      ],
+      "raw_values": [
+        "*UtilityFunctions.ps1*",
+        "*RegSnapin *"
+      ]
+    }
+  ]
+}

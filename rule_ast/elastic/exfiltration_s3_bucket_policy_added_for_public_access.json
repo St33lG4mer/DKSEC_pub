@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "AWS S3 Bucket Policy Added to Allow Public Access",
+  "slug": "exfiltration_s3_bucket_policy_added_for_public_access",
+  "category": "info",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS S3",
+    "Use Case: Threat Detection",
+    "Tactic: Exfiltration",
+    "Tactic: Collection",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/exfiltration_s3_bucket_policy_added_for_public_access.toml",
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n    and event.provider == \"s3.amazonaws.com\"\n    and event.action == \"PutBucketPolicy\" \n    and event.outcome == \"success\"\n    and stringContains(aws.cloudtrail.request_parameters, \"Effect=Allow\")\n    and stringContains(aws.cloudtrail.request_parameters, \"Principal=\\\\*\")\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "putbucketpolicy"
+      ],
+      "raw_values": [
+        "PutBucketPolicy"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

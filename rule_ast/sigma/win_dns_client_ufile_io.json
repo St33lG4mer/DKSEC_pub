@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_dns_client_ufile_io",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/dns_client/win_dns_client_ufile_io.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-DNS Client Events/Operational\" and (event.code:\"3008\" and dns.question.name:\"*ufile.io*\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-dns client events/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-DNS Client Events/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "3008"
+      ],
+      "raw_values": [
+        "3008"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "ufile.io"
+      ],
+      "raw_values": [
+        "*ufile.io*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\iexpress.exe" and (process.executable:"*\\makecab.exe" or process.pe.original_file_name:"makecab.exe")) or ((process.executable:"*\\iexpress.exe" or process.pe.original_file_name:"IEXPRESS.exe") and process.command_line:"* /n *")

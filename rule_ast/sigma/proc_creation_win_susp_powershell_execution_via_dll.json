@@ -1,0 +1,71 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_powershell_execution_via_dll",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_powershell_execution_via_dll.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\InstallUtil.exe\", \"*\\\\RegAsm.exe\", \"*\\\\RegSvcs.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\")) or (process.pe.original_file_name like~ (\"InstallUtil.exe\", \"RegAsm.exe\", \"RegSvcs.exe\", \"REGSVR32.EXE\", \"RUNDLL32.EXE\"))) and (process.command_line like~ (\"*Default.GetString*\", \"*DownloadString*\", \"*FromBase64String*\", \"*ICM *\", \"*IEX *\", \"*Invoke-Command*\", \"*Invoke-Expression*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "installutil.exe",
+        "regasm.exe",
+        "regsvcs.exe",
+        "regsvr32.exe",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\InstallUtil.exe",
+        "*\\\\RegAsm.exe",
+        "*\\\\RegSvcs.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "installutil.exe",
+        "regasm.exe",
+        "regsvcs.exe",
+        "regsvr32.exe",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "InstallUtil.exe",
+        "RegAsm.exe",
+        "RegSvcs.exe",
+        "REGSVR32.EXE",
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "default.getstring",
+        "downloadstring",
+        "frombase64string",
+        "icm",
+        "iex",
+        "invoke-command",
+        "invoke-expression"
+      ],
+      "raw_values": [
+        "*Default.GetString*",
+        "*DownloadString*",
+        "*FromBase64String*",
+        "*ICM *",
+        "*IEX *",
+        "*Invoke-Command*",
+        "*Invoke-Expression*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_ieinstal",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_ieinstal.eql",
+  "raw_query": "any where (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\")) and process.parent.executable:\"*\\\\ieinstal.exe\" and process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and process.executable:\"*consent.exe\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "ieinstal.exe"
+      ],
+      "raw_values": [
+        "*\\\\ieinstal.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "consent.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*consent.exe"
+      ]
+    }
+  ]
+}

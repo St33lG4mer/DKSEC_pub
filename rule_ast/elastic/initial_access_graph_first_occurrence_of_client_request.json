@@ -1,0 +1,65 @@
+{
+  "source": "elastic",
+  "name": "Microsoft Graph Request User Impersonation by Unusual Client",
+  "slug": "initial_access_graph_first_occurrence_of_client_request",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Data Source: Microsoft Graph",
+    "Data Source: Microsoft Graph Activity Logs",
+    "Resources: Investigation Guide",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access"
+  ],
+  "elastic_path": "rules/integrations/azure/initial_access_graph_first_occurrence_of_client_request.toml",
+  "raw_query": "data_stream.dataset: \"azure.graphactivitylogs\"\n    and event.type: \"access\"\n    and azure.graphactivitylogs.properties.app_id: *\n    and azure.graphactivitylogs.properties.c_idtyp: \"user\"\n    and azure.graphactivitylogs.properties.client_auth_method: 0\n    and http.response.status_code: 200\n    and url.domain: \"graph.microsoft.com\"\n    and not url.path: (\n        /v1.0/organization\n        or /v1.0/me/licenseDetails\n        or /v1.0/me/photo*\n        or /v1.0/me/photos*\n        or /beta/me/settings/regionalAndLanguageSettings\n        or /v1.0/me/drive/special/copilotuploads\n        or /v1.0/me/informationProtection/sensitivityLabels\n        or /beta/me/informationProtection/dataLossPreventionPolicies\n    )\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.graphactivitylogs"
+      ],
+      "raw_values": [
+        "azure.graphactivitylogs"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "access"
+      ],
+      "raw_values": [
+        "access"
+      ]
+    },
+    {
+      "field": "azure.graphactivitylogs.properties.c_idtyp",
+      "raw_field": "azure.graphactivitylogs.properties.c_idtyp",
+      "operator": ":",
+      "values": [
+        "user"
+      ],
+      "raw_values": [
+        "user"
+      ]
+    },
+    {
+      "field": "url.domain",
+      "raw_field": "url.domain",
+      "operator": ":",
+      "values": [
+        "graph.microsoft.com"
+      ],
+      "raw_values": [
+        "graph.microsoft.com"
+      ]
+    }
+  ]
+}

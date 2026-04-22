@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "Abnormally Large DNS Response",
+  "slug": "lateral_movement_dns_server_overflow",
+  "category": "network",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Tactic: Impact",
+    "Resources: Investigation Guide",
+    "Use Case: Vulnerability"
+  ],
+  "elastic_path": "rules/network/lateral_movement_dns_server_overflow.toml",
+  "raw_query": "(data_stream.dataset: network_traffic.dns or (event.category: (network or network_traffic) and destination.port: 53)) and\n  (data_stream.dataset:zeek.dns or type:dns or event.type:connection) and network.bytes > 60000\n",
+  "conditions": []
+}

@@ -1,0 +1,159 @@
+{
+  "source": "elastic",
+  "name": "Netcat File Transfer or Listener Detected via Defend for Containers",
+  "slug": "execution_netcat_listener_established_inside_a_container",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/execution_netcat_listener_established_inside_a_container.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  process.name in (\"nc\",\"ncat\",\"netcat\",\"netcat.openbsd\",\"netcat.traditional\") or\n  (\n    /* account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\n      \"nc\", \"/bin/nc\", \"/usr/bin/nc\", \"/usr/local/bin/nc\",\n      \"ncat\", \"/bin/ncat\", \"/usr/bin/ncat\", \"/usr/local/bin/ncat\",\n      \"netcat\", \"/bin/netcat\", \"/usr/bin/netcat\", \"/usr/local/bin/netcat\",\n      \"netcat.openbsd\", \"/bin/netcat.openbsd\", \"/usr/bin/netcat.openbsd\", \"/usr/local/bin/netcat.openbsd\",\n      \"netcat.traditional\", \"/bin/netcat.traditional\", \"/usr/bin/netcat.traditional\", \"/usr/local/bin/netcat.traditional\"\n    ) and \n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )\n) and\nprocess.args like~ (\n  /* bind shell to specific port or listener */\n  \"-*l*\",\"-*p*\",\n  /* reverse shell to command-line interpreter used for command execution */\n  \"-*e*\",\n  /* file transfer via stdout/pipe */\n  \">\",\"<\", \"|\"\n) and process.interactive == true and container.id like \"*\"\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "-*l",
+        "-*p",
+        "-*e"
+      ],
+      "raw_values": [
+        "-*l*",
+        "-*p*",
+        "-*e*",
+        ">",
+        "<",
+        "|"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "ncat",
+        "netcat",
+        "netcat.openbsd",
+        "netcat.traditional",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "nc",
+        "ncat",
+        "netcat",
+        "netcat.openbsd",
+        "netcat.traditional",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "ncat",
+        "netcat",
+        "netcat.openbsd",
+        "netcat.traditional",
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "nc",
+        "/bin/nc",
+        "/usr/bin/nc",
+        "/usr/local/bin/nc",
+        "ncat",
+        "/bin/ncat",
+        "/usr/bin/ncat",
+        "/usr/local/bin/ncat",
+        "netcat",
+        "/bin/netcat",
+        "/usr/bin/netcat",
+        "/usr/local/bin/netcat",
+        "netcat.openbsd",
+        "/bin/netcat.openbsd",
+        "/usr/bin/netcat.openbsd",
+        "/usr/local/bin/netcat.openbsd",
+        "netcat.traditional",
+        "/bin/netcat.traditional",
+        "/usr/bin/netcat.traditional",
+        "/usr/local/bin/netcat.traditional",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ]
+}

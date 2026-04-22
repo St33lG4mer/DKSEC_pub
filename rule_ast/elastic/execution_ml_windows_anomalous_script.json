@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Powershell Script",
+  "slug": "execution_ml_windows_anomalous_script",
+  "category": "any",
+  "language": "",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Rule Type: ML",
+    "Rule Type: Machine Learning",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/ml/execution_ml_windows_anomalous_script.toml",
+  "raw_query": "",
+  "conditions": []
+}

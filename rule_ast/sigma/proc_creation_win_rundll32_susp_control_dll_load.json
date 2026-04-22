@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_susp_control_dll_load",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_susp_control_dll_load.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\System32\\\\control.exe\" and (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\")) and (not process.command_line:\"*Shell32.dll*\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "control.exe"
+      ],
+      "raw_values": [
+        "*\\\\System32\\\\control.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shell32.dll"
+      ],
+      "raw_values": [
+        "*Shell32.dll*"
+      ]
+    }
+  ]
+}

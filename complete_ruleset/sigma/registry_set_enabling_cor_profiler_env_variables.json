@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "registry_set_enabling_cor_profiler_env_variables",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_enabling_cor_profiler_env_variables.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\COR_ENABLE_PROFILING\", \"*\\\\COR_PROFILER\", \"*\\\\CORECLR_ENABLE_PROFILING\")) or registry.path:\"*\\\\CORECLR_PROFILER_PATH*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\cor_enable_profiling",
+        "\\\\cor_profiler",
+        "\\\\coreclr_enable_profiling"
+      ],
+      "raw_values": [
+        "*\\\\COR_ENABLE_PROFILING",
+        "*\\\\COR_PROFILER",
+        "*\\\\CORECLR_ENABLE_PROFILING"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\coreclr_profiler_path"
+      ],
+      "raw_values": [
+        "*\\\\CORECLR_PROFILER_PATH*"
+      ]
+    }
+  ]
+}

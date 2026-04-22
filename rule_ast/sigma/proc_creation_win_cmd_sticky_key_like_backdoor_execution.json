@@ -1,0 +1,69 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_sticky_key_like_backdoor_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_sticky_key_like_backdoor_execution.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\winlogon.exe\" and (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wscript.exe\", \"*\\\\wt.exe\")) and (process.command_line like~ (\"*sethc.exe*\", \"*utilman.exe*\", \"*osk.exe*\", \"*Magnify.exe*\", \"*Narrator.exe*\", \"*DisplaySwitch.exe*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe",
+        "wt.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wscript.exe",
+        "*\\\\wt.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "sethc.exe",
+        "utilman.exe",
+        "osk.exe",
+        "magnify.exe",
+        "narrator.exe",
+        "displayswitch.exe"
+      ],
+      "raw_values": [
+        "*sethc.exe*",
+        "*utilman.exe*",
+        "*osk.exe*",
+        "*Magnify.exe*",
+        "*Narrator.exe*",
+        "*DisplaySwitch.exe*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "winlogon.exe"
+      ],
+      "raw_values": [
+        "*\\\\winlogon.exe"
+      ]
+    }
+  ]
+}

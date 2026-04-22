@@ -1,0 +1,27 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_network_scan_loop",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_network_scan_loop.eql",
+  "raw_query": "any where (process.command_line like~ (\"*for *\", \"*foreach *\")) and (process.command_line like~ (\"*nslookup*\", \"*ping*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "for",
+        "foreach",
+        "nslookup",
+        "ping"
+      ],
+      "raw_values": [
+        "*for *",
+        "*foreach *",
+        "*nslookup*",
+        "*ping*"
+      ]
+    }
+  ]
+}

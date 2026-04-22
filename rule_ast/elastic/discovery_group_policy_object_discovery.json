@@ -1,0 +1,70 @@
+{
+  "source": "elastic",
+  "name": "Group Policy Discovery via Microsoft GPResult Utility",
+  "slug": "discovery_group_policy_object_discovery",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/discovery_group_policy_object_discovery.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n(process.name: \"gpresult.exe\" or ?process.pe.original_file_name == \"gprslt.exe\") and process.args: (\"/z\", \"/v\", \"/r\", \"/x\")\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "gpresult.exe"
+      ],
+      "raw_values": [
+        "gpresult.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "gprslt.exe"
+      ],
+      "raw_values": [
+        "gprslt.exe"
+      ]
+    }
+  ]
+}

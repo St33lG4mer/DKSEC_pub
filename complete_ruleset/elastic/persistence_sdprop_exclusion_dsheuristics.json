@@ -1,0 +1,55 @@
+{
+  "source": "elastic",
+  "name": "AdminSDHolder SDProp Exclusion Added",
+  "slug": "persistence_sdprop_exclusion_dsheuristics",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Active Directory",
+    "Resources: Investigation Guide",
+    "Use Case: Active Directory Monitoring",
+    "Data Source: Windows Security Event Logs"
+  ],
+  "elastic_path": "rules/windows/persistence_sdprop_exclusion_dsheuristics.toml",
+  "raw_query": "any where host.os.type == \"windows\" and event.code == \"5136\" and\n  winlog.event_data.AttributeLDAPDisplayName : \"dSHeuristics\" and\n  length(winlog.event_data.AttributeValue) > 15 and\n  winlog.event_data.AttributeValue regex~ \"[0-9]{15}([1-9a-f]).*\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "5136"
+      ],
+      "raw_values": [
+        "5136"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": ":",
+      "values": [
+        "dsheuristics"
+      ],
+      "raw_values": [
+        "dSHeuristics"
+      ]
+    }
+  ]
+}

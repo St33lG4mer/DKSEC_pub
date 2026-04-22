@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "registry_set_susp_service_installed",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_susp_service_installed.eql",
+  "raw_query": "any where (registry.path like~ (\"HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\NalDrv\\\\ImagePath\", \"HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\PROCEXP152\\\\ImagePath\")) and (not ((process.executable like~ (\"*\\\\procexp64.exe\", \"*\\\\procexp.exe\", \"*\\\\procmon64.exe\", \"*\\\\procmon.exe\", \"*\\\\handle.exe\", \"*\\\\handle64.exe\")) and winlog.event_data.Details:\"*\\\\WINDOWS\\\\system32\\\\Drivers\\\\PROCEXP152.SYS*\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "hklm\\\\system\\\\currentcontrolset\\\\services\\\\naldrv\\\\imagepath",
+        "hklm\\\\system\\\\currentcontrolset\\\\services\\\\procexp152\\\\imagepath"
+      ],
+      "raw_values": [
+        "HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\NalDrv\\\\ImagePath",
+        "HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\PROCEXP152\\\\ImagePath"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "procexp64.exe",
+        "procexp.exe",
+        "procmon64.exe",
+        "procmon.exe",
+        "handle.exe",
+        "handle64.exe"
+      ],
+      "raw_values": [
+        "*\\\\procexp64.exe",
+        "*\\\\procexp.exe",
+        "*\\\\procmon64.exe",
+        "*\\\\procmon.exe",
+        "*\\\\handle.exe",
+        "*\\\\handle64.exe"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "\\\\windows\\\\system32\\\\drivers\\\\procexp152.sys"
+      ],
+      "raw_values": [
+        "*\\\\WINDOWS\\\\system32\\\\Drivers\\\\PROCEXP152.SYS*"
+      ]
+    }
+  ]
+}

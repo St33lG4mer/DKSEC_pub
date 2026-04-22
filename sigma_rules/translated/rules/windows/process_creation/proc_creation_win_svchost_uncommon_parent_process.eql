@@ -1,0 +1,1 @@
+any where process.executable:"*\\svchost.exe" and (not ((process.parent.executable like~ ("*\\Mrt.exe", "*\\MsMpEng.exe", "*\\ngen.exe", "*\\rpcnet.exe", "*\\services.exe", "*\\TiWorker.exe")) or (?process.parent.executable == null) or (process.parent.executable like~ ("-", ""))))

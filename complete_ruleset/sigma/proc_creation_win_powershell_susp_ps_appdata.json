@@ -1,0 +1,29 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_susp_ps_appdata",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_susp_ps_appdata.eql",
+  "raw_query": "any where (process.command_line like~ (\"*powershell.exe*\", \"*\\\\powershell*\", \"*\\\\pwsh*\", \"*pwsh.exe*\")) and ((process.command_line:\"*/c *\" and process.command_line:\"*\\\\AppData\\\\*\") and (process.command_line like~ (\"*Local\\\\*\", \"*Roaming\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell",
+        "pwsh",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*powershell.exe*",
+        "*\\\\powershell*",
+        "*\\\\pwsh*",
+        "*pwsh.exe*",
+        "*Local\\\\*",
+        "*Roaming\\\\*"
+      ]
+    }
+  ]
+}

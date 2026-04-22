@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_adcspwn",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_adcspwn.eql",
+  "raw_query": "any where process.command_line:\"* --adcs *\" and process.command_line:\"* --port *\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--adcs",
+        "--port"
+      ],
+      "raw_values": [
+        "* --adcs *",
+        "* --port *"
+      ]
+    }
+  ]
+}

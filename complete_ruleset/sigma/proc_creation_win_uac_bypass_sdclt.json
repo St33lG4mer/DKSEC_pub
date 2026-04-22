@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_sdclt",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_sdclt.eql",
+  "raw_query": "any where process.executable:\"*sdclt.exe\" and (winlog.event_data.IntegrityLevel like~ (\"High\", \"S-1-16-12288\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sdclt.exe"
+      ],
+      "raw_values": [
+        "*sdclt.exe"
+      ]
+    }
+  ]
+}

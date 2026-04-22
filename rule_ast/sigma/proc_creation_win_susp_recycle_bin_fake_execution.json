@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_recycle_bin_fake_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_recycle_bin_fake_execution.eql",
+  "raw_query": "any where process.executable like~ (\"*RECYCLERS.BIN\\\\*\", \"*RECYCLER.BIN\\\\*\")",
+  "conditions": []
+}

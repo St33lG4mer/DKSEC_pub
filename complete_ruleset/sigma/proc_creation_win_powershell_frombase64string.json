@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_frombase64string",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_frombase64string.eql",
+  "raw_query": "any where process.command_line:\"*::FromBase64String(*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "::frombase64string("
+      ],
+      "raw_values": [
+        "*::FromBase64String(*"
+      ]
+    }
+  ]
+}

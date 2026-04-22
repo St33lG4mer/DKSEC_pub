@@ -1,0 +1,21 @@
+{
+  "source": "elastic",
+  "name": "Abnormal Process ID or Lock File Created",
+  "slug": "execution_abnormal_process_id_file_created",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Threat: BPFDoor",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame"
+  ],
+  "elastic_path": "rules/linux/execution_abnormal_process_id_file_created.toml",
+  "raw_query": "host.os.type:linux and event.category:file and event.action:(creation or file_create_event) and\nfile.extension:(pid or lock or reboot) and file.path:(/var/run/* or /run/*) and (\n  (process.name : (\n    bash or dash or sh or tcsh or csh or zsh or ksh or fish or ash or touch or nano or vim or vi or editor or mv or cp)\n  ) or (\n  process.executable : (\n    ./* or /tmp/* or /var/tmp/* or /dev/shm/* or /var/run/* or /boot/* or /srv/* or /run/*\n  ))\n) and not (\n  process.executable : (\n  /tmp/newroot/* or /run/containerd/* or /run/k3s/containerd/* or /run/k0s/container* or /snap/* or /vz/* or\n  /var/lib/docker/* or /etc/*/universal-hooks/pkgs/mysql-community-server/* or /var/lib/snapd/* or /etc/rubrik/* or\n  /run/udev/data/*\n  ) or\n  process.name : (\n    go or git or containerd* or snap-confine or cron or crond or sshd or unattended-upgrade or vzctl or ifup or\n    rpcbind or runc or gitlab-runner-helper or elastic-agent or metricbeat or redis-server or libvirt_leaseshelper or\n    s6-ipcserver-socketbinder or xinetd or libvirtd or veeamdeploymentsvc  or dnsmasq or virtlogd or lynis or\n    veeamtransport or bash or dash or sh or touch or podman or chrome_crashpad_handler or snmpd or automount or\n    chrome or yumBackend.py or rhsmcertd-worker or snapd or cp or dotnet or leapp or haproxy or multipathd or\n    falcond or python* or atopacctd or postmaster or httpd or pulseaudio or iptables or atd or package-cleanup or local\n  ) or\n  file.name : (\n    jem.*.pid or lynis.pid or redis.pid or yum.pid or MFS.pid or jenkins.pid or nvmupdate.pid or openlitespeed.pid or\n    rhnsd.pid\n  ) or\n  file.path : (/run/containerd/* or /var/run/docker/containerd/* or /var/run/jem*.pid)\n)\n",
+  "conditions": []
+}

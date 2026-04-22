@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_natural_language",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_natural_language.eql",
+  "raw_query": "any where registry.path:\"*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\ContentIndex\\\\Language\\\\*\" and (registry.path like~ (\"*\\\\StemmerDLLPathOverride*\", \"*\\\\WBDLLPathOverride*\", \"*\\\\StemmerClass*\", \"*\\\\WBreakerClass*\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\stemmerdllpathoverride",
+        "\\\\wbdllpathoverride",
+        "\\\\stemmerclass",
+        "\\\\wbreakerclass"
+      ],
+      "raw_values": [
+        "*\\\\StemmerDLLPathOverride*",
+        "*\\\\WBDLLPathOverride*",
+        "*\\\\StemmerClass*",
+        "*\\\\WBreakerClass*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\control\\\\contentindex\\\\language\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\ContentIndex\\\\Language\\\\*"
+      ]
+    }
+  ]
+}

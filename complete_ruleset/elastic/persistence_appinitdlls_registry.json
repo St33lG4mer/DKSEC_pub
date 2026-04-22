@@ -1,0 +1,87 @@
+{
+  "source": "elastic",
+  "name": "Registry Persistence via AppInit DLL",
+  "slug": "persistence_appinitdlls_registry",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/persistence_appinitdlls_registry.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.value : \"AppInit_Dlls\" and\n  not process.executable : (\n     \"?:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository\\\\*\\\\Display.NvContainer\\\\NVDisplay.Container.exe\",\n     \"?:\\\\Windows\\\\System32\\\\msiexec.exe\",\n     \"?:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\",\n     \"?:\\\\Program Files\\\\Commvault\\\\Base\\\\cvd.exe\",\n     \"?:\\\\Program Files\\\\Commvault\\\\ContentStore*\\\\Base\\\\cvd.exe\",\n     \"?:\\\\Program Files (x86)\\\\Commvault\\\\Base\\\\cvd.exe\",\n     \"?:\\\\Program Files (x86)\\\\Commvault\\\\ContentStore*\\\\Base\\\\cvd.exe\",\n     \"?:\\\\Program Files\\\\NVIDIA Corporation\\\\Display.NvContainer\\\\NVDisplay.Container.exe\",\n\n     /* Crowdstrike specific condition as it uses NT Object paths */\n     \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository\\\\*\\\\Display.NvContainer\\\\NVDisplay.Container.exe\",\n     \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\msiexec.exe\",\n     \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\SysWOW64\\\\msiexec.exe\",\n     \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Commvault\\\\Base\\\\cvd.exe\",\n     \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Commvault\\\\ContentStore*\\\\Base\\\\cvd.exe\",\n     \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\Commvault\\\\Base\\\\cvd.exe\",\n     \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\Commvault\\\\ContentStore*\\\\Base\\\\cvd.exe\",\n     \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\NVIDIA Corporation\\\\Display.NvContainer\\\\NVDisplay.Container.exe\"\n  )\n  /*\n    Full registry key path omitted due to data source variations:\n    \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\AppInit_Dlls\"\n    \"HKLM\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\AppInit_Dlls\"\n  */\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "nvdisplay.container.exe",
+        "msiexec.exe",
+        "cvd.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository\\\\*\\\\Display.NvContainer\\\\NVDisplay.Container.exe",
+        "?:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "?:\\\\Program Files\\\\Commvault\\\\Base\\\\cvd.exe",
+        "?:\\\\Program Files\\\\Commvault\\\\ContentStore*\\\\Base\\\\cvd.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "appinit_dlls"
+      ],
+      "raw_values": [
+        "AppInit_Dlls"
+      ]
+    },
+    {
+      "field": "variations",
+      "raw_field": "variations",
+      "operator": ":",
+      "values": [
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\windows\\\\appinit_dlls"
+      ],
+      "raw_values": [
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\AppInit_Dlls"
+      ]
+    }
+  ]
+}

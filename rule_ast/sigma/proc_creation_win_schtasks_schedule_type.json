@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_schedule_type",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_schedule_type.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\schtasks.exe\" or process.pe.original_file_name:\"schtasks.exe\") and (process.command_line like~ (\"* ONLOGON *\", \"* ONSTART *\", \"* ONCE *\", \"* ONIDLE *\"))) and (not (process.command_line like~ (\"*NT AUT*\", \"* SYSTEM*\", \"*HIGHEST*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "onlogon",
+        "onstart",
+        "once",
+        "onidle",
+        "nt aut",
+        "system",
+        "highest"
+      ],
+      "raw_values": [
+        "* ONLOGON *",
+        "* ONSTART *",
+        "* ONCE *",
+        "* ONIDLE *",
+        "*NT AUT*",
+        "* SYSTEM*",
+        "*HIGHEST*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe"
+      ]
+    }
+  ]
+}

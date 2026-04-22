@@ -1,0 +1,50 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_download_com_cradles",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_download_com_cradles.eql",
+  "raw_query": "any where process.command_line:\"*[Type]::GetTypeFromCLSID(*\" and (process.command_line like~ (\"*0002DF01-0000-0000-C000-000000000046*\", \"*F6D90F16-9C73-11D3-B32E-00C04F990BB4*\", \"*F5078F35-C551-11D3-89B9-0000F81FE221*\", \"*88d96a0a-f192-11d4-a65f-0040963251e5*\", \"*AFBA6B42-5692-48EA-8141-DC517DCF0EF1*\", \"*AFB40FFD-B609-40A3-9828-F88BBE11E4E3*\", \"*88d96a0b-f192-11d4-a65f-0040963251e5*\", \"*2087c2f4-2cef-4953-a8ab-66779b670495*\", \"*000209FF-0000-0000-C000-000000000046*\", \"*00024500-0000-0000-C000-000000000046*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "0002df01-0000-0000-c000-000000000046",
+        "f6d90f16-9c73-11d3-b32e-00c04f990bb4",
+        "f5078f35-c551-11d3-89b9-0000f81fe221",
+        "88d96a0a-f192-11d4-a65f-0040963251e5",
+        "afba6b42-5692-48ea-8141-dc517dcf0ef1",
+        "afb40ffd-b609-40a3-9828-f88bbe11e4e3",
+        "88d96a0b-f192-11d4-a65f-0040963251e5",
+        "2087c2f4-2cef-4953-a8ab-66779b670495",
+        "000209ff-0000-0000-c000-000000000046",
+        "00024500-0000-0000-c000-000000000046"
+      ],
+      "raw_values": [
+        "*0002DF01-0000-0000-C000-000000000046*",
+        "*F6D90F16-9C73-11D3-B32E-00C04F990BB4*",
+        "*F5078F35-C551-11D3-89B9-0000F81FE221*",
+        "*88d96a0a-f192-11d4-a65f-0040963251e5*",
+        "*AFBA6B42-5692-48EA-8141-DC517DCF0EF1*",
+        "*AFB40FFD-B609-40A3-9828-F88BBE11E4E3*",
+        "*88d96a0b-f192-11d4-a65f-0040963251e5*",
+        "*2087c2f4-2cef-4953-a8ab-66779b670495*",
+        "*000209FF-0000-0000-C000-000000000046*",
+        "*00024500-0000-0000-C000-000000000046*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "[type]::gettypefromclsid("
+      ],
+      "raw_values": [
+        "*[Type]::GetTypeFromCLSID(*"
+      ]
+    }
+  ]
+}

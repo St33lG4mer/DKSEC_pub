@@ -1,0 +1,72 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mstsc_remote_connection",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mstsc_remote_connection.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\mstsc.exe\" or process.pe.original_file_name:\"mstsc.exe\") and process.command_line like~ (\"* -v:*\", \"* /v:*\", \"* \u2013v:*\", \"* \u2014v:*\", \"* \u2015v:*\")) and (not (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\lxss\\\\wslhost.exe\" and process.command_line:\"*C:\\\\ProgramData\\\\Microsoft\\\\WSL\\\\wslg.rdp*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-v:",
+        "\u2013v:",
+        "\u2014v:",
+        "\u2015v:"
+      ],
+      "raw_values": [
+        "* -v:*",
+        "* /v:*",
+        "* \u2013v:*",
+        "* \u2014v:*",
+        "* \u2015v:*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mstsc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mstsc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mstsc.exe"
+      ],
+      "raw_values": [
+        "mstsc.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wslhost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\lxss\\\\wslhost.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "wslg.rdp"
+      ],
+      "raw_values": [
+        "*C:\\\\ProgramData\\\\Microsoft\\\\WSL\\\\wslg.rdp*"
+      ]
+    }
+  ]
+}

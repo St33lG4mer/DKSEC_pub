@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msiexec_dll",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msiexec_dll.eql",
+  "raw_query": "any where (process.executable:\"*\\\\msiexec.exe\" or process.pe.original_file_name:\"\\\\msiexec.exe\") and process.command_line like~ (\"* -z *\", \"* /z *\", \"* \u2013z *\", \"* \u2014z *\", \"* \u2015z *\") and process.command_line:\"*.dll*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\msiexec.exe"
+      ],
+      "raw_values": [
+        "\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "*.dll*"
+      ]
+    }
+  ]
+}

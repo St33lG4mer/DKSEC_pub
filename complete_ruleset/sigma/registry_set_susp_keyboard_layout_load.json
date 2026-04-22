@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "registry_set_susp_keyboard_layout_load",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_susp_keyboard_layout_load.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\Keyboard Layout\\\\Preload\\\\*\", \"*\\\\Keyboard Layout\\\\Substitutes\\\\*\")) and (winlog.event_data.Details like~ (\"*00000429*\", \"*00050429*\", \"*0000042a*\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\keyboard layout\\\\preload\\\\",
+        "\\\\keyboard layout\\\\substitutes\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Keyboard Layout\\\\Preload\\\\*",
+        "*\\\\Keyboard Layout\\\\Substitutes\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "00000429",
+        "00050429",
+        "0000042a"
+      ],
+      "raw_values": [
+        "*00000429*",
+        "*00050429*",
+        "*0000042a*"
+      ]
+    }
+  ]
+}

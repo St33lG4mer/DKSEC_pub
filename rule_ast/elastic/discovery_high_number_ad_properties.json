@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Access to LDAP Attributes",
+  "slug": "discovery_high_number_ad_properties",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Active Directory",
+    "Data Source: Windows",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/discovery_high_number_ad_properties.toml",
+  "raw_query": "any where host.os.type == \"windows\" and event.code == \"4662\" and not winlog.event_data.SubjectUserSid : \"S-1-5-18\" and\n winlog.event_data.AccessMaskDescription == \"Read Property\" and length(winlog.event_data.Properties) >= 2000\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "4662"
+      ],
+      "raw_values": [
+        "4662"
+      ]
+    },
+    {
+      "field": "winlog.event_data.subjectusersid",
+      "raw_field": "winlog.event_data.SubjectUserSid",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmaskdescription",
+      "raw_field": "winlog.event_data.AccessMaskDescription",
+      "operator": "==",
+      "values": [
+        "read property"
+      ],
+      "raw_values": [
+        "Read Property"
+      ]
+    }
+  ]
+}

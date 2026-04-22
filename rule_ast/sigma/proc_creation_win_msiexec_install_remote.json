@@ -1,0 +1,86 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msiexec_install_remote",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msiexec_install_remote.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\msiexec.exe\" or process.pe.original_file_name:\"msiexec.exe\") and (process.command_line like~ (\"*-i*\", \"*/i*\", \"*\u2013i*\", \"*\u2014i*\", \"*\u2015i*\") or process.command_line like~ (\"*-package*\", \"*/package*\", \"*\u2013package*\", \"*\u2014package*\", \"*\u2015package*\") or process.command_line like~ (\"*-a*\", \"*/a*\", \"*\u2013a*\", \"*\u2014a*\", \"*\u2015a*\") or process.command_line like~ (\"*-j*\", \"*/j*\", \"*\u2013j*\", \"*\u2014j*\", \"*\u2015j*\")) and process.command_line like~ (\"*-q*\", \"*/q*\", \"*\u2013q*\", \"*\u2014q*\", \"*\u2015q*\") and (process.command_line like~ (\"*http*\", \"*\\\\\\\\*\"))) and (not (process.command_line:\"*\\\\AppData\\\\Local\\\\Temp\\\\OpenOffice*\" and process.command_line:\"*Installation Files\\\\openoffice*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-package",
+        "package",
+        "\u2013package",
+        "\u2014package",
+        "\u2015package",
+        "http"
+      ],
+      "raw_values": [
+        "*-i*",
+        "*/i*",
+        "*\u2013i*",
+        "*\u2014i*",
+        "*\u2015i*",
+        "*-package*",
+        "*/package*",
+        "*\u2013package*",
+        "*\u2014package*",
+        "*\u2015package*",
+        "*-a*",
+        "*/a*",
+        "*\u2013a*",
+        "*\u2014a*",
+        "*\u2015a*",
+        "*-j*",
+        "*/j*",
+        "*\u2013j*",
+        "*\u2014j*",
+        "*\u2015j*",
+        "*-q*",
+        "*/q*",
+        "*\u2013q*",
+        "*\u2014q*",
+        "*\u2015q*",
+        "*http*",
+        "*\\\\\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "openoffice"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\OpenOffice*",
+        "*Installation Files\\\\openoffice*"
+      ]
+    }
+  ]
+}

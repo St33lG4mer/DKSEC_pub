@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_create_service",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_create_service.eql",
+  "raw_query": "any where process.command_line:\"*New-Service*\" and process.command_line:\"*-BinaryPathName*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "new-service",
+        "-binarypathname"
+      ],
+      "raw_values": [
+        "*New-Service*",
+        "*-BinaryPathName*"
+      ]
+    }
+  ]
+}

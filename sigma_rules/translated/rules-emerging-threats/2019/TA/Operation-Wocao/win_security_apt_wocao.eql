@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4799" and winlog.event_data.TargetUserName:"Administr*" and winlog.event_data.CallerProcessName:"*\\checkadmin.exe")

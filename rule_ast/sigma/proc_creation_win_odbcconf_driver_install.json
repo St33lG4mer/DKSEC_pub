@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_odbcconf_driver_install",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_odbcconf_driver_install.eql",
+  "raw_query": "any where (process.executable:\"*\\\\odbcconf.exe\" or process.pe.original_file_name:\"odbcconf.exe\") and (process.command_line:\"*INSTALLDRIVER *\" and process.command_line:\"*.dll*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "odbcconf.exe"
+      ],
+      "raw_values": [
+        "*\\\\odbcconf.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "odbcconf.exe"
+      ],
+      "raw_values": [
+        "odbcconf.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "installdriver",
+        ".dll"
+      ],
+      "raw_values": [
+        "*INSTALLDRIVER *",
+        "*.dll*"
+      ]
+    }
+  ]
+}

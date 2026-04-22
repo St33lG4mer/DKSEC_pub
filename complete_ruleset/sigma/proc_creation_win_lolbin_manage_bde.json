@@ -1,0 +1,69 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_manage_bde",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_manage_bde.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\wscript.exe\" or process.pe.original_file_name:\"wscript.exe\") and process.command_line:\"*manage-bde.wsf*\") or (((process.parent.executable like~ (\"*\\\\cscript.exe\", \"*\\\\wscript.exe\")) and process.parent.command_line:\"*manage-bde.wsf*\") and (not process.executable:\"*\\\\cmd.exe\"))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wscript.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\wscript.exe",
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "manage-bde.wsf"
+      ],
+      "raw_values": [
+        "*manage-bde.wsf*"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "manage-bde.wsf"
+      ],
+      "raw_values": [
+        "*manage-bde.wsf*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mshta_susp_pattern",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mshta_susp_pattern.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\mshta.exe\" or process.pe.original_file_name:\"MSHTA.EXE\") and ((process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wscript.exe\")) and (process.command_line like~ (\"*\\\\AppData\\\\Local\\\\*\", \"*C:\\\\ProgramData\\\\*\", \"*C:\\\\Users\\\\Public\\\\*\", \"*C:\\\\Windows\\\\Temp\\\\*\")))) or ((process.executable:\"*\\\\mshta.exe\" or process.pe.original_file_name:\"MSHTA.EXE\") and (not ((process.executable like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")) or (process.command_line like~ (\"*.htm*\", \"*.hta*\")) or (process.command_line like~ (\"*mshta.exe\", \"*mshta\")))))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".htm",
+        ".hta",
+        "mshta.exe",
+        "mshta"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\*",
+        "*C:\\\\ProgramData\\\\*",
+        "*C:\\\\Users\\\\Public\\\\*",
+        "*C:\\\\Windows\\\\Temp\\\\*",
+        "*.htm*",
+        "*.hta*",
+        "*mshta.exe",
+        "*mshta"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "*\\\\mshta.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "MSHTA.EXE"
+      ]
+    }
+  ]
+}

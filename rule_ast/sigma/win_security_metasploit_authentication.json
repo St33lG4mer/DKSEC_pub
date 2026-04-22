@@ -1,0 +1,78 @@
+{
+  "source": "sigma",
+  "name": "win_security_metasploit_authentication",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_metasploit_authentication.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (((event.code like~ (\"4625\", \"4624\")) and winlog.event_data.LogonType:\"3\" and winlog.event_data.AuthenticationPackageName:\"NTLM\" and source.domain:\"SigmaRegularExpression(regexp=SigmaString(['^[A-Za-z0-9]{16}$']), flags=set())\") or (event.code:\"4776\" and winlog.event_data.Workstation:\"SigmaRegularExpression(regexp=SigmaString(['^[A-Za-z0-9]{16}$']), flags=set())\"))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4625",
+        "4624"
+      ],
+      "raw_values": [
+        "4625",
+        "4624"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.authenticationpackagename",
+      "raw_field": "winlog.event_data.AuthenticationPackageName",
+      "operator": ":",
+      "values": [
+        "ntlm"
+      ],
+      "raw_values": [
+        "NTLM"
+      ]
+    },
+    {
+      "field": "source.domain",
+      "raw_field": "source.domain",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['^[a-za-z0-9]{16}$']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['^[A-Za-z0-9]{16}$']), flags=set())"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4776"
+      ],
+      "raw_values": [
+        "4776"
+      ]
+    },
+    {
+      "field": "winlog.event_data.workstation",
+      "raw_field": "winlog.event_data.Workstation",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['^[a-za-z0-9]{16}$']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['^[A-Za-z0-9]{16}$']), flags=set())"
+      ]
+    }
+  ]
+}

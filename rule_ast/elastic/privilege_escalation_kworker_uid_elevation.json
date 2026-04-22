@@ -1,0 +1,55 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Kworker UID Elevation",
+  "slug": "privilege_escalation_kworker_uid_elevation",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_kworker_uid_elevation.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.action == \"session_id_change\" and process.name : \"kworker*\" and\nuser.id == \"0\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "session_id_change"
+      ],
+      "raw_values": [
+        "session_id_change"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "kworker"
+      ],
+      "raw_values": [
+        "kworker*"
+      ]
+    }
+  ]
+}

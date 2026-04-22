@@ -1,0 +1,52 @@
+{
+  "source": "elastic",
+  "name": "GitHub App Deleted",
+  "slug": "execution_github_app_deleted",
+  "category": "configuration",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/execution_github_app_deleted.toml",
+  "raw_query": "configuration where data_stream.dataset == \"github.audit\" and github.category == \"integration_installation\" and event.type == \"deletion\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "github.category",
+      "raw_field": "github.category",
+      "operator": "==",
+      "values": [
+        "integration_installation"
+      ],
+      "raw_values": [
+        "integration_installation"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ]
+}

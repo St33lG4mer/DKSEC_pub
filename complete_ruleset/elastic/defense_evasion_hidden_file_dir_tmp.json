@@ -1,0 +1,138 @@
+{
+  "source": "elastic",
+  "name": "Creation of Hidden Files and Directories via CommandLine",
+  "slug": "defense_evasion_hidden_file_dir_tmp",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_hidden_file_dir_tmp.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.working_directory in (\"/tmp\", \"/var/tmp\", \"/dev/shm\") and\nprocess.args regex~ \"\"\"\\.[a-z0-9_\\-][a-z0-9_\\-\\.]{1,254}\"\"\" and\nprocess.name like (\n  \"touch\", \"tee\", \"cp\", \"mv\", \"install\", \"dd\", \"vi\", \"vim\", \"nano\", \"truncate\", \"sed\", \"awk\", \"curl\", \"wget\",\n  \"ftp\", \"scp\", \"rsync\", \"sftp\", \"tar\", \"unzip\", \"gunzip\", \"7z\", \"bzip2\", \"xz\", \"python*\", \"php*\", \"perl*\",\n  \"ruby*\", \"node*\", \"java\", \"printf\", \"echo\", \"cat\", \".*\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "touch",
+        "tee",
+        "install",
+        "vim",
+        "nano",
+        "truncate",
+        "sed",
+        "awk",
+        "curl",
+        "wget",
+        "ftp",
+        "scp",
+        "rsync",
+        "sftp",
+        "tar",
+        "unzip",
+        "gunzip",
+        "bzip2",
+        "python",
+        "php",
+        "perl",
+        "ruby",
+        "node",
+        "java",
+        "printf",
+        "echo",
+        "cat"
+      ],
+      "raw_values": [
+        "touch",
+        "tee",
+        "cp",
+        "mv",
+        "install",
+        "dd",
+        "vi",
+        "vim",
+        "nano",
+        "truncate",
+        "sed",
+        "awk",
+        "curl",
+        "wget",
+        "ftp",
+        "scp",
+        "rsync",
+        "sftp",
+        "tar",
+        "unzip",
+        "gunzip",
+        "7z",
+        "bzip2",
+        "xz",
+        "python*",
+        "php*",
+        "perl*",
+        "ruby*",
+        "node*",
+        "java",
+        "printf",
+        "echo",
+        "cat",
+        ".*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "in",
+      "values": [
+        "/tmp",
+        "/var/tmp",
+        "/dev/shm"
+      ],
+      "raw_values": [
+        "/tmp",
+        "/var/tmp",
+        "/dev/shm"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ]
+}

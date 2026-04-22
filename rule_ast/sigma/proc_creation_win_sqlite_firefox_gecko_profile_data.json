@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sqlite_firefox_gecko_profile_data",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sqlite_firefox_gecko_profile_data.eql",
+  "raw_query": "any where (process.pe.product:\"SQLite\" or (process.executable like~ (\"*\\\\sqlite.exe\", \"*\\\\sqlite3.exe\"))) and (process.command_line like~ (\"*cookies.sqlite*\", \"*places.sqlite*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "sqlite.exe",
+        "sqlite3.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlite.exe",
+        "*\\\\sqlite3.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "cookies.sqlite",
+        "places.sqlite"
+      ],
+      "raw_values": [
+        "*cookies.sqlite*",
+        "*places.sqlite*"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sqlite"
+      ],
+      "raw_values": [
+        "SQLite"
+      ]
+    }
+  ]
+}

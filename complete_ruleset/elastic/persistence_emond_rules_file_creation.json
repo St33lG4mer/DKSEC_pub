@@ -1,0 +1,55 @@
+{
+  "source": "elastic",
+  "name": "Emond Rules Creation or Modification",
+  "slug": "persistence_emond_rules_file_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_emond_rules_file_creation.toml",
+  "raw_query": "file where host.os.type == \"macos\" and event.action == \"modification\" and\n file.path like (\"/private/etc/emond.d/rules/*.plist\", \"/etc/emon.d/rules/*.plist\", \"/private/var/db/emondClients/*\")\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".plist"
+      ],
+      "raw_values": [
+        "/private/etc/emond.d/rules/*.plist",
+        "/etc/emon.d/rules/*.plist",
+        "/private/var/db/emondClients/*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modification"
+      ],
+      "raw_values": [
+        "modification"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_ftp",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_ftp.eql",
+  "raw_query": "any where process.pe.original_file_name:\"ftp.exe\" and (not process.executable:\"*\\\\ftp.exe\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ftp.exe"
+      ],
+      "raw_values": [
+        "ftp.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ftp.exe"
+      ],
+      "raw_values": [
+        "*\\\\ftp.exe"
+      ]
+    }
+  ]
+}

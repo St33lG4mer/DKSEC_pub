@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "win_security_invoke_obfuscation_via_rundll_services_security",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_rundll_services_security.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (winlog.event_data.ServiceFileName:\"*rundll32.exe*\" and winlog.event_data.ServiceFileName:\"*shell32.dll*\" and winlog.event_data.ServiceFileName:\"*shellexec_rundll*\" and winlog.event_data.ServiceFileName:\"*powershell*\"))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "rundll32.exe",
+        "shell32.dll",
+        "shellexec_rundll",
+        "powershell"
+      ],
+      "raw_values": [
+        "*rundll32.exe*",
+        "*shell32.dll*",
+        "*shellexec_rundll*",
+        "*powershell*"
+      ]
+    }
+  ]
+}

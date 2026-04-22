@@ -1,0 +1,73 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_accesschk_check_permissions",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_accesschk_check_permissions.eql",
+  "raw_query": "any where (process.pe.product:\"*AccessChk\" or process.pe.description:\"*Reports effective permissions*\" or (process.executable like~ (\"*\\\\accesschk.exe\", \"*\\\\accesschk64.exe\")) or process.pe.original_file_name:\"accesschk.exe\") and (process.command_line like~ (\"*uwcqv *\", \"*kwsu *\", \"*qwsu *\", \"*uwdqs *\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "accesschk.exe",
+        "accesschk64.exe"
+      ],
+      "raw_values": [
+        "*\\\\accesschk.exe",
+        "*\\\\accesschk64.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "uwcqv",
+        "kwsu",
+        "qwsu",
+        "uwdqs"
+      ],
+      "raw_values": [
+        "*uwcqv *",
+        "*kwsu *",
+        "*qwsu *",
+        "*uwdqs *"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "accesschk"
+      ],
+      "raw_values": [
+        "*AccessChk"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "reports effective permissions"
+      ],
+      "raw_values": [
+        "*Reports effective permissions*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "accesschk.exe"
+      ],
+      "raw_values": [
+        "accesschk.exe"
+      ]
+    }
+  ]
+}

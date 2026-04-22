@@ -1,0 +1,33 @@
+{
+  "source": "elastic",
+  "name": "Potential Buffer Overflow Attack Detected",
+  "slug": "privilege_escalation_potential_bufferoverflow_attack",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Tactic: Initial Access",
+    "Use Case: Vulnerability",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_potential_bufferoverflow_attack.toml",
+  "raw_query": "kibana.alert.rule.rule_id:\"5c81fc9d-1eae-437f-ba07-268472967013\" and host.os.type:linux and event.kind:signal\n",
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.rule_id",
+      "raw_field": "kibana.alert.rule.rule_id",
+      "operator": ":",
+      "values": [
+        "5c81fc9d-1eae-437f-ba07-268472967013"
+      ],
+      "raw_values": [
+        "5c81fc9d-1eae-437f-ba07-268472967013"
+      ]
+    }
+  ]
+}

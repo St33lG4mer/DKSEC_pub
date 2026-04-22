@@ -1,0 +1,54 @@
+{
+  "source": "elastic",
+  "name": "M365 Identity Login from Impossible Travel Location",
+  "slug": "initial_access_entra_id_portal_login_impossible_travel",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Data Source: Microsoft 365",
+    "Data Source: Microsoft 365 Audit Logs",
+    "Use Case: Threat Detection",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/initial_access_entra_id_portal_login_impossible_travel.toml",
+  "raw_query": "data_stream.dataset:o365.audit and\n    event.provider:AzureActiveDirectory and\n    event.action:UserLoggedIn and\n    event.outcome:success and\n    o365.audit.Target.Type:(0 or 10 or 2 or 3 or 5 or 6) and\n    o365.audit.UserId:(* and not \"Not Available\") and\n    source.geo.region_iso_code:* and\n    not o365.audit.ApplicationId:(\n        29d9ed98-a469-4536-ade2-f981bc1d605e or\n        38aa3b87-a06d-4817-b275-7a316988d93b or\n        a809996b-059e-42e2-9866-db24b99a9782\n    ) and not o365.audit.ExtendedProperties.RequestType:(\n        \"Cmsi:Cmsi\" or\n        \"Consent:Set\" or\n        \"Login:reprocess\" or\n        \"Login:resume\" or\n        \"MessagePrompt:MessagePrompt\" or\n        \"SAS:EndAuth\"\n    )\n",
+  "conditions": [
+    {
+      "field": "o365.audit.userid",
+      "raw_field": "o365.audit.UserId",
+      "operator": ":",
+      "values": [
+        "not available"
+      ],
+      "raw_values": [
+        "Not Available"
+      ]
+    },
+    {
+      "field": "o365.audit.extendedproperties.requesttype",
+      "raw_field": "o365.audit.ExtendedProperties.RequestType",
+      "operator": ":",
+      "values": [
+        "cmsi:cmsi",
+        "consent:set",
+        "login:reprocess",
+        "login:resume",
+        "messageprompt:messageprompt",
+        "sas:endauth"
+      ],
+      "raw_values": [
+        "Cmsi:Cmsi",
+        "Consent:Set",
+        "Login:reprocess",
+        "Login:resume",
+        "MessagePrompt:MessagePrompt",
+        "SAS:EndAuth"
+      ]
+    }
+  ]
+}

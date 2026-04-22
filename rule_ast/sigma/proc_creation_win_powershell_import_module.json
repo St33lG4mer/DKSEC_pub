@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_import_module",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_powershell_import_module.eql",
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"*Import-Module *\", \"*ipmo *\"))) and (not ((process.parent.executable like~ (\"*:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal_*\", \"*:\\\\Windows\\\\System32\\\\cmd.exe*\")) and (process.command_line:\"*:\\\\Program Files\\\\Microsoft Visual Studio\\\\*\" and process.command_line:\"*Tools\\\\Microsoft.VisualStudio.DevShell.dll*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "import-module",
+        "ipmo"
+      ],
+      "raw_values": [
+        "*Import-Module *",
+        "*ipmo *"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "microsoft.windowsterminal_",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal_*",
+        "*:\\\\Windows\\\\System32\\\\cmd.exe*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "microsoft.visualstudio.devshell.dll"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Microsoft Visual Studio\\\\*",
+        "*Tools\\\\Microsoft.VisualStudio.DevShell.dll*"
+      ]
+    }
+  ]
+}

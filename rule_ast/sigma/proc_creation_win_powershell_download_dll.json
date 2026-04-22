@@ -1,0 +1,42 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_download_dll",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_download_dll.eql",
+  "raw_query": "any where (process.command_line like~ (\"*Invoke-RestMethod *\", \"*Invoke-WebRequest *\", \"*IRM *\", \"*IWR *\")) and (process.command_line:\"*http*\" and process.command_line:\"*OutFile*\" and process.command_line:\"*.dll*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-restmethod",
+        "invoke-webrequest",
+        "irm",
+        "iwr"
+      ],
+      "raw_values": [
+        "*Invoke-RestMethod *",
+        "*Invoke-WebRequest *",
+        "*IRM *",
+        "*IWR *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http",
+        "outfile",
+        ".dll"
+      ],
+      "raw_values": [
+        "*http*",
+        "*OutFile*",
+        "*.dll*"
+      ]
+    }
+  ]
+}

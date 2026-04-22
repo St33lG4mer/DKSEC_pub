@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_data_exfiltration_by_using_datasvcutil",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_data_exfiltration_by_using_datasvcutil.eql",
+  "raw_query": "any where (process.command_line like~ (\"*/in:*\", \"*/out:*\", \"*/uri:*\")) and (process.executable:\"*\\\\DataSvcUtil.exe\" or process.pe.original_file_name:\"DataSvcUtil.exe\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "in:",
+        "out:",
+        "uri:"
+      ],
+      "raw_values": [
+        "*/in:*",
+        "*/out:*",
+        "*/uri:*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "datasvcutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\DataSvcUtil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "datasvcutil.exe"
+      ],
+      "raw_values": [
+        "DataSvcUtil.exe"
+      ]
+    }
+  ]
+}

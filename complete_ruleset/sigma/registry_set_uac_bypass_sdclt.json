@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_set_uac_bypass_sdclt",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_uac_bypass_sdclt.eql",
+  "raw_query": "any where registry.path:\"*Software\\\\Classes\\\\exefile\\\\shell\\\\runas\\\\command\\\\isolatedCommand\" or (registry.path:\"*Software\\\\Classes\\\\Folder\\\\shell\\\\open\\\\command\\\\SymbolicLinkValue\" and winlog.event_data.Details:\"SigmaRegularExpression(regexp=SigmaString(['-1[0-9]{3}\\\\\\\\Software\\\\\\\\Classes\\\\\\\\']), flags=set())\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\classes\\\\exefile\\\\shell\\\\runas\\\\command\\\\isolatedcommand",
+        "software\\\\classes\\\\folder\\\\shell\\\\open\\\\command\\\\symboliclinkvalue"
+      ],
+      "raw_values": [
+        "*Software\\\\Classes\\\\exefile\\\\shell\\\\runas\\\\command\\\\isolatedCommand",
+        "*Software\\\\Classes\\\\Folder\\\\shell\\\\open\\\\command\\\\SymbolicLinkValue"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['-1[0-9]{3}\\\\\\\\software\\\\\\\\classes\\\\\\\\']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['-1[0-9]{3}\\\\\\\\Software\\\\\\\\Classes\\\\\\\\']), flags=set())"
+      ]
+    }
+  ]
+}

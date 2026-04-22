@@ -1,0 +1,84 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_ntfs_short_name_path_use_image",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_ntfs_short_name_path_use_image.eql",
+  "raw_query": "any where (process.executable like~ (\"*~1\\\\*\", \"*~2\\\\*\")) and (not ((process.parent.executable like~ (\"C:\\\\Windows\\\\System32\\\\Dism.exe\", \"C:\\\\Windows\\\\System32\\\\cleanmgr.exe\")) or ((process.executable:\"*\\\\AppData\\\\*\" and process.executable:\"*\\\\Temp\\\\*\") or (process.executable like~ (\"*~1\\\\unzip.exe\", \"*~1\\\\7zG.exe\"))))) and (not (process.parent.executable:\"*\\\\WebEx\\\\WebexHost.exe\" or process.parent.executable:\"*\\\\thor\\\\thor64.exe\" or (process.pe.product:\"InstallShield (R)\" or process.pe.description:\"InstallShield (R) Setup Engine\" or process.pe.company:\"InstallShield Software Corporation\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "unzip.exe",
+        "7zg.exe"
+      ],
+      "raw_values": [
+        "*~1\\\\*",
+        "*~2\\\\*",
+        "*~1\\\\unzip.exe",
+        "*~1\\\\7zG.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "dism.exe",
+        "cleanmgr.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\Dism.exe",
+        "C:\\\\Windows\\\\System32\\\\cleanmgr.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "webexhost.exe",
+        "thor64.exe"
+      ],
+      "raw_values": [
+        "*\\\\WebEx\\\\WebexHost.exe",
+        "*\\\\thor\\\\thor64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "installshield (r)"
+      ],
+      "raw_values": [
+        "InstallShield (R)"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "installshield (r) setup engine"
+      ],
+      "raw_values": [
+        "InstallShield (R) Setup Engine"
+      ]
+    },
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "installshield software corporation"
+      ],
+      "raw_values": [
+        "InstallShield Software Corporation"
+      ]
+    }
+  ]
+}

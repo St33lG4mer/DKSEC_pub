@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_vscode_tunnel_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_vscode_tunnel_execution.eql",
+  "raw_query": "any where ((?process.pe.original_file_name == null) and process.command_line:\"*.exe tunnel\") or (process.command_line:\"*.exe tunnel*\" and process.command_line:\"*--accept-server-license-terms*\") or (process.parent.command_line:\"* tunnel\" and process.executable:\"*\\\\cmd.exe\" and (process.command_line:\"*/d /c *\" and process.command_line:\"*\\\\servers\\\\Stable-*\" and process.command_line:\"*code-server.cmd*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".exe tunnel",
+        "--accept-server-license-terms",
+        "stable-",
+        "code-server.cmd"
+      ],
+      "raw_values": [
+        "*.exe tunnel",
+        "*.exe tunnel*",
+        "*--accept-server-license-terms*",
+        "*/d /c *",
+        "*\\\\servers\\\\Stable-*",
+        "*code-server.cmd*"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "tunnel"
+      ],
+      "raw_values": [
+        "* tunnel"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    }
+  ]
+}

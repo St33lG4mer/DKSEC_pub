@@ -1,0 +1,52 @@
+{
+  "source": "elastic",
+  "name": "Newly Observed High Severity Suricata Alert",
+  "slug": "newly_observed_suricata_alert",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 99,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Domain: Network",
+    "Data Source: Suricata"
+  ],
+  "elastic_path": "rules/cross-platform/newly_observed_suricata_alert.toml",
+  "raw_query": "FROM logs-suricata.*\n\n  // high severity alerts\n| where event.module == \"suricata\" and event.kind == \"signal\" and event.severity == 1 and\n        rule.name is not null and\n        not rule.name like \"SURICATA STREAM*\"\n\n| STATS Esql.alerts_count = count(*),\n        Esql.first_time_seen = MIN(@timestamp),\n        Esql.distinct_count_src_ip = COUNT_DISTINCT(source.ip),\n        Esql.distinct_count_dst_ip = COUNT_DISTINCT(destination.ip),\n        src_ip_values = VALUES(source.ip),\n        dst_ip_values = VALUES(destination.ip),\n        url_dom = VALUES(url.domain),\n        url_path = VALUES(url.path) by rule.name, event.type\n\n| eval Esql.recent = DATE_DIFF(\"minute\", Esql.first_time_seen, now())\n  // first time seen is within 10m of the rule execution time\n| where Esql.recent <= 10 and\n// exclude high volume alerts such as vuln-scanners\n  Esql.alerts_count <= 5 and Esql.distinct_count_src_ip <= 2 and Esql.distinct_count_dst_ip <= 2\n\n// move dynamic fields to ECS quivalent for rule exceptions\n| eval source.ip = MV_FIRST(src_ip_values),\n       destination.ip = MV_FIRST(dst_ip_values),\n       url.domain = MV_FIRST(url_dom),\n       url.path = MV_FIRST(url_path)\n| keep rule.name, event.type, Esql.*, source.ip, destination.ip, url.domain, url.path\n",
+  "conditions": [
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "suricata"
+      ],
+      "raw_values": [
+        "suricata"
+      ]
+    },
+    {
+      "field": "event.kind",
+      "raw_field": "event.kind",
+      "operator": "==",
+      "values": [
+        "signal"
+      ],
+      "raw_values": [
+        "signal"
+      ]
+    },
+    {
+      "field": "rule.name",
+      "raw_field": "rule.name",
+      "operator": "like",
+      "values": [
+        "suricata stream"
+      ],
+      "raw_values": [
+        "SURICATA STREAM*"
+      ]
+    }
+  ]
+}

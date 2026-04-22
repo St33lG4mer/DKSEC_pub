@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "AppArmor Policy Violation Detected",
+  "slug": "defense_evasion_apparmor_policy_violation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Auditd Manager",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_apparmor_policy_violation.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"change\" and event.action == \"violated-apparmor-policy\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "violated-apparmor-policy"
+      ],
+      "raw_values": [
+        "violated-apparmor-policy"
+      ]
+    }
+  ]
+}

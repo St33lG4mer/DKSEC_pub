@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_workfolders",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_workfolders.eql",
+  "raw_query": "any where (process.executable:\"*\\\\control.exe\" and process.parent.executable:\"*\\\\WorkFolders.exe\") and (not process.executable:\"C:\\\\Windows\\\\System32\\\\control.exe\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "control.exe"
+      ],
+      "raw_values": [
+        "*\\\\control.exe",
+        "C:\\\\Windows\\\\System32\\\\control.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "workfolders.exe"
+      ],
+      "raw_values": [
+        "*\\\\WorkFolders.exe"
+      ]
+    }
+  ]
+}

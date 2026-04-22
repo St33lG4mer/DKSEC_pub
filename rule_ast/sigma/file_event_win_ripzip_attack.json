@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_ripzip_attack",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_ripzip_attack.eql",
+  "raw_query": "any where (file.path:\"*\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*\" and file.path:\"*.lnk.{0AFACED1-E828-11D1-9187-B532F1E9575D}*\") and process.executable:\"*\\\\explorer.exe\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "startup",
+        ".lnk.{0afaced1-e828-11d1-9187-b532f1e9575d}"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*",
+        "*.lnk.{0AFACED1-E828-11D1-9187-B532F1E9575D}*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe"
+      ]
+    }
+  ]
+}

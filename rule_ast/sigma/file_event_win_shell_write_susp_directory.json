@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_shell_write_susp_directory",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_shell_write_susp_directory.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\bash.exe\", \"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\msbuild.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\sh.exe\", \"*\\\\wscript.exe\")) and (file.path like~ (\"C:\\\\PerfLogs\\\\*\", \"C:\\\\Users\\\\Public\\\\*\"))) or ((process.executable like~ (\"*\\\\certutil.exe\", \"*\\\\forfiles.exe\", \"*\\\\mshta.exe\", \"*\\\\schtasks.exe\", \"*\\\\scriptrunner.exe\", \"*\\\\wmic.exe\")) and (file.path like~ (\"*C:\\\\PerfLogs\\\\*\", \"*C:\\\\Users\\\\Public\\\\*\", \"*C:\\\\Windows\\\\Temp\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bash.exe",
+        "cmd.exe",
+        "cscript.exe",
+        "msbuild.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "sh.exe",
+        "wscript.exe",
+        "certutil.exe",
+        "forfiles.exe",
+        "mshta.exe",
+        "schtasks.exe",
+        "scriptrunner.exe",
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\bash.exe",
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\msbuild.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\sh.exe",
+        "*\\\\wscript.exe",
+        "*\\\\certutil.exe",
+        "*\\\\forfiles.exe",
+        "*\\\\mshta.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\scriptrunner.exe",
+        "*\\\\wmic.exe"
+      ]
+    }
+  ]
+}

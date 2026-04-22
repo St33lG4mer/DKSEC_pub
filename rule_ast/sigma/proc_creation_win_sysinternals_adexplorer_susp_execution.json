@@ -1,0 +1,71 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_adexplorer_susp_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_adexplorer_susp_execution.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\ADExp.exe\", \"*\\\\ADExplorer.exe\", \"*\\\\ADExplorer64.exe\", \"*\\\\ADExplorer64a.exe\")) or process.pe.original_file_name:\"AdExp\" or process.pe.description:\"Active Directory Editor\" or process.pe.product:\"Sysinternals ADExplorer\") and process.command_line:\"*snapshot*\" and (process.command_line like~ (\"*\\\\Downloads\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\AppData\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "adexp.exe",
+        "adexplorer.exe",
+        "adexplorer64.exe",
+        "adexplorer64a.exe"
+      ],
+      "raw_values": [
+        "*\\\\ADExp.exe",
+        "*\\\\ADExplorer.exe",
+        "*\\\\ADExplorer64.exe",
+        "*\\\\ADExplorer64a.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "adexp"
+      ],
+      "raw_values": [
+        "AdExp"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "active directory editor"
+      ],
+      "raw_values": [
+        "Active Directory Editor"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sysinternals adexplorer"
+      ],
+      "raw_values": [
+        "Sysinternals ADExplorer"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "snapshot"
+      ],
+      "raw_values": [
+        "*snapshot*"
+      ]
+    }
+  ]
+}

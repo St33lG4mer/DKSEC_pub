@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_get_localgroup_member_recon",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_get_localgroup_member_recon.eql",
+  "raw_query": "any where process.command_line:\"*Get-LocalGroupMember *\" and (process.command_line like~ (\"*domain admins*\", \"* administrator*\", \"* administrateur*\", \"*enterprise admins*\", \"*Exchange Trusted Subsystem*\", \"*Remote Desktop Users*\", \"*Utilisateurs du Bureau \u00e0 distance*\", \"*Usuarios de escritorio remoto*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "domain admins",
+        "administrator",
+        "administrateur",
+        "enterprise admins",
+        "exchange trusted subsystem",
+        "remote desktop users",
+        "utilisateurs du bureau \u00e0 distance",
+        "usuarios de escritorio remoto"
+      ],
+      "raw_values": [
+        "*domain admins*",
+        "* administrator*",
+        "* administrateur*",
+        "*enterprise admins*",
+        "*Exchange Trusted Subsystem*",
+        "*Remote Desktop Users*",
+        "*Utilisateurs du Bureau \u00e0 distance*",
+        "*Usuarios de escritorio remoto*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "get-localgroupmember"
+      ],
+      "raw_values": [
+        "*Get-LocalGroupMember *"
+      ]
+    }
+  ]
+}

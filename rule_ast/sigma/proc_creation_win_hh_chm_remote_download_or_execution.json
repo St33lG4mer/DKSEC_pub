@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hh_chm_remote_download_or_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hh_chm_remote_download_or_execution.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"HH.exe\" or process.executable:\"*\\\\hh.exe\") and (process.command_line like~ (\"*http://*\", \"*https://*\", \"*\\\\\\\\*\"))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "hh.exe"
+      ],
+      "raw_values": [
+        "HH.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "hh.exe"
+      ],
+      "raw_values": [
+        "*\\\\hh.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "source": "elastic",
+  "name": "Web Application Suspicious Activity: POST Request Declined",
+  "slug": "apm_403_response_to_a_post",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: APM",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/apm/apm_403_response_to_a_post.toml",
+  "raw_query": "http.response.status_code:403 and http.request.method:post\n",
+  "conditions": []
+}

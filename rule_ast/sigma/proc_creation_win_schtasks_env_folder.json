@@ -1,0 +1,102 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_env_folder",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_env_folder.eql",
+  "raw_query": "any where (((process.executable:\"*\\\\schtasks.exe\" and process.command_line like~ (\"* -create *\", \"* /create *\", \"* \u2013create *\", \"* \u2014create *\", \"* \u2015create *\")) and (process.command_line like~ (\"*:\\\\Perflogs*\", \"*:\\\\Users\\\\All Users\\\\*\", \"*:\\\\Users\\\\Default\\\\*\", \"*:\\\\Users\\\\Public*\", \"*:\\\\Windows\\\\Temp*\", \"*\\\\AppData\\\\Local\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*%AppData%*\", \"*%Public%*\"))) or (process.parent.command_line:\"*\\\\svchost.exe -k netsvcs -p -s Schedule\" and (process.command_line like~ (\"*:\\\\Perflogs*\", \"*:\\\\Windows\\\\Temp*\", \"*\\\\Users\\\\Public*\", \"*%Public%*\")))) and (not ((process.parent.command_line:\"*unattended.ini*\" or process.command_line:\"*update_task.xml*\") or process.command_line:\"*/Create /TN TVInstallRestore /TR*\" or (process.command_line:\"*/Create /Xml *\" and process.command_line:\"*\\\\Temp\\\\.CR.*\" and process.command_line:\"*\\\\Avira_Security_Installation.xml*\") or ((process.command_line:\"*/Create /F /TN*\" and process.command_line:\"*/Xml *\" and process.command_line:\"*\\\\Temp\\\\*\" and process.command_line:\"*Avira_*\") and (process.command_line like~ (\"*.tmp\\\\UpdateFallbackTask.xml*\", \"*.tmp\\\\WatchdogServiceControlManagerTimeout.xml*\", \"*.tmp\\\\SystrayAutostart.xml*\", \"*.tmp\\\\MaintenanceTask.xml*\"))) or (process.command_line:\"*\\\\Temp\\\\*\" and process.command_line:\"*/Create /TN \\\"klcp_update\\\" /XML *\" and process.command_line:\"*\\\\klcp_update_task.xml*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-create",
+        "create",
+        "\u2013create",
+        "\u2014create",
+        "\u2015create",
+        "perflogs",
+        "public",
+        "temp",
+        "%appdata%",
+        "%public%",
+        "updatefallbacktask.xml",
+        "watchdogservicecontrolmanagertimeout.xml",
+        "systrayautostart.xml",
+        "maintenancetask.xml"
+      ],
+      "raw_values": [
+        "* -create *",
+        "* /create *",
+        "* \u2013create *",
+        "* \u2014create *",
+        "* \u2015create *",
+        "*:\\\\Perflogs*",
+        "*:\\\\Users\\\\All Users\\\\*",
+        "*:\\\\Users\\\\Default\\\\*",
+        "*:\\\\Users\\\\Public*",
+        "*:\\\\Windows\\\\Temp*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*%AppData%*",
+        "*%Public%*",
+        "*\\\\Users\\\\Public*",
+        "*.tmp\\\\UpdateFallbackTask.xml*",
+        "*.tmp\\\\WatchdogServiceControlManagerTimeout.xml*",
+        "*.tmp\\\\SystrayAutostart.xml*",
+        "*.tmp\\\\MaintenanceTask.xml*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "svchost.exe -k netsvcs -p -s schedule",
+        "unattended.ini"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe -k netsvcs -p -s Schedule",
+        "*unattended.ini*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "update_task.xml",
+        "xml",
+        ".cr.",
+        "avira_security_installation.xml",
+        "avira_",
+        "klcp_update_task.xml"
+      ],
+      "raw_values": [
+        "*update_task.xml*",
+        "*/Create /TN TVInstallRestore /TR*",
+        "*/Create /Xml *",
+        "*\\\\Temp\\\\.CR.*",
+        "*\\\\Avira_Security_Installation.xml*",
+        "*/Create /F /TN*",
+        "*/Xml *",
+        "*\\\\Temp\\\\*",
+        "*Avira_*",
+        "*/Create /TN \\",
+        "*\\\\klcp_update_task.xml*"
+      ]
+    }
+  ]
+}

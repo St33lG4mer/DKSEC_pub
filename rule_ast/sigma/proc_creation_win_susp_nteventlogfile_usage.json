@@ -1,0 +1,48 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_nteventlogfile_usage",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_nteventlogfile_usage.eql",
+  "raw_query": "any where process.command_line:\"*Win32_NTEventlogFile*\" and (process.command_line like~ (\"*.BackupEventlog(*\", \"*.ChangeSecurityPermissions(*\", \"*.ChangeSecurityPermissionsEx(*\", \"*.ClearEventLog(*\", \"*.Delete(*\", \"*.DeleteEx(*\", \"*.Rename(*\", \"*.TakeOwnerShip(*\", \"*.TakeOwnerShipEx(*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".backupeventlog(",
+        ".changesecuritypermissions(",
+        ".changesecuritypermissionsex(",
+        ".cleareventlog(",
+        ".delete(",
+        ".deleteex(",
+        ".rename(",
+        ".takeownership(",
+        ".takeownershipex("
+      ],
+      "raw_values": [
+        "*.BackupEventlog(*",
+        "*.ChangeSecurityPermissions(*",
+        "*.ChangeSecurityPermissionsEx(*",
+        "*.ClearEventLog(*",
+        "*.Delete(*",
+        "*.DeleteEx(*",
+        "*.Rename(*",
+        "*.TakeOwnerShip(*",
+        "*.TakeOwnerShipEx(*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "win32_nteventlogfile"
+      ],
+      "raw_values": [
+        "*Win32_NTEventlogFile*"
+      ]
+    }
+  ]
+}

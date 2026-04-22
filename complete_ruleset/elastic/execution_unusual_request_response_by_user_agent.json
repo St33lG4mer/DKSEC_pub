@@ -1,0 +1,42 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Unusual Decision by User Agent",
+  "slug": "execution_unusual_request_response_by_user_agent",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Domain: Container",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/execution_unusual_request_response_by_user_agent.toml",
+  "raw_query": "data_stream.dataset:\"kubernetes.audit_logs\" and kubernetes.audit.stage:\"ResponseComplete\" and\nuser_agent.original:(* and not (*kubernetes/$Format)) and\nnot (\n  user_agent.original:kubelet* and\n  not kubernetes.audit.objectRef.resource:(pods or nodes or csinodes or csidrivers or configmaps or secrets or events or leases or runtimeclasses) and\n  kubernetes.audit.verb:(get or list or watch or patch)\n)\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": ":",
+      "values": [
+        "responsecomplete"
+      ],
+      "raw_values": [
+        "ResponseComplete"
+      ]
+    }
+  ]
+}

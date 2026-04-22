@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_edputil",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_edputil.eql",
+  "raw_query": "any where file.path:\"*\\\\edputil.dll\" and (not (file.path like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C\\\\Windows\\\\WinSxS\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "edputil.dll"
+      ],
+      "raw_values": [
+        "*\\\\edputil.dll"
+      ]
+    }
+  ]
+}

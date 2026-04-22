@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_meterpreter_getsystem",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_meterpreter_getsystem.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\services.exe\" and (((process.command_line:\"*/c*\" and process.command_line:\"*echo*\" and process.command_line:\"*\\\\pipe\\\\*\") and (process.command_line like~ (\"*cmd*\", \"*%COMSPEC%*\"))) or (process.command_line:\"*rundll32*\" and process.command_line:\"*.dll,a*\" and process.command_line:\"*/p:*\")) and (not process.command_line:\"*MpCmdRun*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "cmd",
+        "%comspec%"
+      ],
+      "raw_values": [
+        "*cmd*",
+        "*%COMSPEC%*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "services.exe"
+      ],
+      "raw_values": [
+        "*\\\\services.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "echo",
+        "rundll32",
+        ".dll,a",
+        "mpcmdrun"
+      ],
+      "raw_values": [
+        "*/c*",
+        "*echo*",
+        "*\\\\pipe\\\\*",
+        "*rundll32*",
+        "*.dll,a*",
+        "*/p:*",
+        "*MpCmdRun*"
+      ]
+    }
+  ]
+}

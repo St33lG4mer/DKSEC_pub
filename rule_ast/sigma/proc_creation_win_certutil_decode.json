@@ -1,0 +1,61 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_certutil_decode",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_certutil_decode.eql",
+  "raw_query": "any where (process.executable:\"*\\\\certutil.exe\" or process.pe.original_file_name:\"CertUtil.exe\") and (process.command_line like~ (\"*-decode *\", \"*/decode *\", \"*\u2013decode *\", \"*\u2014decode *\", \"*\u2015decode *\") or process.command_line like~ (\"*-decodehex *\", \"*/decodehex *\", \"*\u2013decodehex *\", \"*\u2014decodehex *\", \"*\u2015decodehex *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-decode",
+        "decode",
+        "\u2013decode",
+        "\u2014decode",
+        "\u2015decode",
+        "-decodehex",
+        "decodehex",
+        "\u2013decodehex",
+        "\u2014decodehex",
+        "\u2015decodehex"
+      ],
+      "raw_values": [
+        "*-decode *",
+        "*/decode *",
+        "*\u2013decode *",
+        "*\u2014decode *",
+        "*\u2015decode *",
+        "*-decodehex *",
+        "*/decodehex *",
+        "*\u2013decodehex *",
+        "*\u2014decodehex *",
+        "*\u2015decodehex *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    }
+  ]
+}

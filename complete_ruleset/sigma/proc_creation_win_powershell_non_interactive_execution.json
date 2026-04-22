@@ -1,0 +1,80 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_non_interactive_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_non_interactive_execution.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (not ((process.parent.executable like~ (\"*:\\\\Windows\\\\explorer.exe\", \"*:\\\\Windows\\\\System32\\\\CompatTelRunner.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\explorer.exe\")) or process.parent.executable:\":\\\\$WINDOWS.~BT\\\\Sources\\\\SetupHost.exe\")) and (not ((process.parent.executable:\"*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft VS Code\\\\Code.exe\" and process.parent.command_line:\"* --ms-enable-electron-run-as-node *\") or (process.parent.executable:\"*:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal_*\" and process.parent.executable:\"*\\\\WindowsTerminal.exe\") or process.parent.executable:\"*:\\\\Program Files\\\\Windows Defender Advanced Threat Protection\\\\SenseIR.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "compattelrunner.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\explorer.exe",
+        "*:\\\\Windows\\\\System32\\\\CompatTelRunner.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "setuphost.exe",
+        "code.exe",
+        "microsoft.windowsterminal_",
+        "windowsterminal.exe",
+        "senseir.exe"
+      ],
+      "raw_values": [
+        ":\\\\$WINDOWS.~BT\\\\Sources\\\\SetupHost.exe",
+        "*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft VS Code\\\\Code.exe",
+        "*:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal_*",
+        "*\\\\WindowsTerminal.exe",
+        "*:\\\\Program Files\\\\Windows Defender Advanced Threat Protection\\\\SenseIR.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "--ms-enable-electron-run-as-node"
+      ],
+      "raw_values": [
+        "* --ms-enable-electron-run-as-node *"
+      ]
+    }
+  ]
+}

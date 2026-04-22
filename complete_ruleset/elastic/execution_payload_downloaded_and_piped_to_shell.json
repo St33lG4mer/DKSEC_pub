@@ -1,0 +1,208 @@
+{
+  "source": "elastic",
+  "name": "Payload Execution via Shell Pipe Detected by Defend for Containers",
+  "slug": "execution_payload_downloaded_and_piped_to_shell",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Command and Control",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/execution_payload_downloaded_and_piped_to_shell.toml",
+  "raw_query": "sequence by process.parent.entity_id, container.id with maxspan=1s\n  [process where event.type == \"start\" and event.action == \"exec\" and process.name in (\"curl\", \"wget\")]\n  [process where event.action in (\"exec\", \"end\") and\n  /*\n    If the flow is executed from a parent script, the event action will be \"exec\".\n    If the flow is executed manually, the event action will be \"end\".\n  */\n   process.name like (\n     \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\",\n     \"python*\", \"perl*\", \"ruby*\", \"lua*\", \"php*\"\n   ) and\n   process.args like (\n     \"-bash\", \"-dash\", \"-sh\", \"-tcsh\", \"-csh\", \"-zsh\", \"-ksh\", \"-fish\",\n     \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\",\n     \"/bin/bash\", \"/bin/dash\", \"/bin/sh\", \"/bin/tcsh\", \"/bin/csh\",\n     \"/bin/zsh\", \"/bin/ksh\", \"/bin/fish\",\n     \"/usr/bin/bash\", \"/usr/bin/dash\", \"/usr/bin/sh\", \"/usr/bin/tcsh\",\n     \"/usr/bin/csh\", \"/usr/bin/zsh\", \"/usr/bin/ksh\", \"/usr/bin/fish\",\n     \"-busybox\", \"busybox\", \"/bin/busybox\", \"/usr/bin/busybox\",\n     \"*python*\", \"*perl*\", \"*ruby*\", \"*lua*\", \"*php*\", \"/dev/fd/*\"\n   ) and\n   not process.args in (\n     \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n     \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n     \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n     \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n   )]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox",
+        "python",
+        "perl",
+        "ruby",
+        "lua",
+        "php"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox",
+        "python*",
+        "perl*",
+        "ruby*",
+        "lua*",
+        "php*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-bash",
+        "-dash",
+        "-sh",
+        "-tcsh",
+        "-csh",
+        "-zsh",
+        "-ksh",
+        "-fish",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "-busybox",
+        "busybox",
+        "python",
+        "perl",
+        "ruby",
+        "lua",
+        "php"
+      ],
+      "raw_values": [
+        "-bash",
+        "-dash",
+        "-sh",
+        "-tcsh",
+        "-csh",
+        "-zsh",
+        "-ksh",
+        "-fish",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "/bin/bash",
+        "/bin/dash",
+        "/bin/sh",
+        "/bin/tcsh",
+        "/bin/csh",
+        "/bin/zsh",
+        "/bin/ksh",
+        "/bin/fish",
+        "/usr/bin/bash",
+        "/usr/bin/dash",
+        "/usr/bin/sh",
+        "/usr/bin/tcsh",
+        "/usr/bin/csh",
+        "/usr/bin/zsh",
+        "/usr/bin/ksh",
+        "/usr/bin/fish",
+        "-busybox",
+        "busybox",
+        "/bin/busybox",
+        "/usr/bin/busybox",
+        "*python*",
+        "*perl*",
+        "*ruby*",
+        "*lua*",
+        "*php*",
+        "/dev/fd/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "wget"
+      ],
+      "raw_values": [
+        "curl",
+        "wget"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "end"
+      ],
+      "raw_values": [
+        "exec",
+        "end"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ]
+}

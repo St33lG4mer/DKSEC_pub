@@ -1,0 +1,111 @@
+{
+  "source": "elastic",
+  "name": "Privileged Container Creation with Host Directory Mount",
+  "slug": "execution_privileged_container_creation_with_host_reference",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "Domain: Container",
+    "OS: Linux",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/execution_privileged_container_creation_with_host_reference.toml",
+  "raw_query": "process where event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name == \"docker\" and process.args == \"--privileged\" and process.args == \"run\" and\nprocess.args == \"-v\" and process.args like \"/:/*\" and\nnot (\n  (process.args == \"aktosecurity/mirror-api-logging:k8s_ebpf\" and process.args == \"akto-api-security-traffic-collector\") or\n  (process.args like \"goharbor/prepare:*\" and process.args in (\"/:/hostfs\", \"/:/hostfs/\"))\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "hostfs"
+      ],
+      "raw_values": [
+        "/:/hostfs",
+        "/:/hostfs/"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "docker"
+      ],
+      "raw_values": [
+        "docker"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "--privileged",
+        "run",
+        "mirror-api-logging:k8s_ebpf",
+        "akto-api-security-traffic-collector"
+      ],
+      "raw_values": [
+        "--privileged",
+        "run",
+        "-v",
+        "aktosecurity/mirror-api-logging:k8s_ebpf",
+        "akto-api-security-traffic-collector"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "prepare:"
+      ],
+      "raw_values": [
+        "/:/*",
+        "goharbor/prepare:*"
+      ]
+    }
+  ]
+}

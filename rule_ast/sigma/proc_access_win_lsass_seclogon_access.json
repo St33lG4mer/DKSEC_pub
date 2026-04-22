@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_access_win_lsass_seclogon_access",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_access/proc_access_win_lsass_seclogon_access.eql",
+  "raw_query": "any where winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and process.executable:\"*\\\\svchost.exe\" and winlog.event_data.GrantedAccess:\"0x14c0\" and winlog.event_data.CallTrace:\"*seclogon.dll*\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x14c0"
+      ],
+      "raw_values": [
+        "0x14c0"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "seclogon.dll"
+      ],
+      "raw_values": [
+        "*seclogon.dll*"
+      ]
+    }
+  ]
+}

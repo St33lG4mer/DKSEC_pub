@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_lsass_default_dump_file_names",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_lsass_default_dump_file_names.eql",
+  "raw_query": "any where (file.path like~ (\"*\\\\Andrew.dmp\", \"*\\\\Coredump.dmp\", \"*\\\\lsass.dmp\", \"*\\\\lsass.rar\", \"*\\\\lsass.zip\", \"*\\\\NotLSASS.zip\", \"*\\\\PPLBlade.dmp\", \"*\\\\rustive.dmp\")) or (file.path like~ (\"*\\\\lsass_2*\", \"*\\\\lsassdmp*\", \"*\\\\lsassdump*\")) or (file.path:\"*\\\\lsass*\" and file.path:\"*.dmp*\") or (file.path:\"*SQLDmpr*\" and file.path:\"*.mdmp\") or ((file.path like~ (\"*\\\\nanodump*\", \"*\\\\proc_*\")) and file.path:\"*.dmp\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "andrew.dmp",
+        "coredump.dmp",
+        "lsass.dmp",
+        "lsass.rar",
+        "lsass.zip",
+        "notlsass.zip",
+        "pplblade.dmp",
+        "rustive.dmp",
+        "lsass_2",
+        "lsassdmp",
+        "lsassdump",
+        "nanodump",
+        "proc_"
+      ],
+      "raw_values": [
+        "*\\\\Andrew.dmp",
+        "*\\\\Coredump.dmp",
+        "*\\\\lsass.dmp",
+        "*\\\\lsass.rar",
+        "*\\\\lsass.zip",
+        "*\\\\NotLSASS.zip",
+        "*\\\\PPLBlade.dmp",
+        "*\\\\rustive.dmp",
+        "*\\\\lsass_2*",
+        "*\\\\lsassdmp*",
+        "*\\\\lsassdump*",
+        "*\\\\nanodump*",
+        "*\\\\proc_*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "lsass",
+        ".dmp",
+        "sqldmpr",
+        ".mdmp"
+      ],
+      "raw_values": [
+        "*\\\\lsass*",
+        "*.dmp*",
+        "*SQLDmpr*",
+        "*.mdmp",
+        "*.dmp"
+      ]
+    }
+  ]
+}

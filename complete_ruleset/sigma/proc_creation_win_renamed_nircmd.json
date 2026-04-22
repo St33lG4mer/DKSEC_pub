@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_nircmd",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_nircmd.eql",
+  "raw_query": "any where process.pe.original_file_name:\"NirCmd.exe\" and (not (process.executable like~ (\"*\\\\nircmd.exe\", \"*\\\\nircmdc.exe\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "nircmd.exe",
+        "nircmdc.exe"
+      ],
+      "raw_values": [
+        "*\\\\nircmd.exe",
+        "*\\\\nircmdc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "nircmd.exe"
+      ],
+      "raw_values": [
+        "NirCmd.exe"
+      ]
+    }
+  ]
+}

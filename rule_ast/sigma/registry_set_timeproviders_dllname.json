@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "registry_set_timeproviders_dllname",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_timeproviders_dllname.eql",
+  "raw_query": "any where (registry.path:\"*\\\\Services\\\\W32Time\\\\TimeProviders*\" and registry.path:\"*\\\\DllName\") and (not (winlog.event_data.Details like~ (\"%SystemRoot%\\\\System32\\\\vmictimeprovider.dll\", \"%systemroot%\\\\system32\\\\w32time.dll\", \"C:\\\\Windows\\\\SYSTEM32\\\\w32time.DLL\")))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "%systemroot%\\\\system32\\\\vmictimeprovider.dll",
+        "%systemroot%\\\\system32\\\\w32time.dll",
+        "c:\\\\windows\\\\system32\\\\w32time.dll"
+      ],
+      "raw_values": [
+        "%SystemRoot%\\\\System32\\\\vmictimeprovider.dll",
+        "%systemroot%\\\\system32\\\\w32time.dll",
+        "C:\\\\Windows\\\\SYSTEM32\\\\w32time.DLL"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\services\\\\w32time\\\\timeproviders",
+        "\\\\dllname"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\W32Time\\\\TimeProviders*",
+        "*\\\\DllName"
+      ]
+    }
+  ]
+}

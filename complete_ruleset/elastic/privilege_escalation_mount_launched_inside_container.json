@@ -1,0 +1,128 @@
+{
+  "source": "elastic",
+  "name": "Mount Launched Inside a Container",
+  "slug": "privilege_escalation_mount_launched_inside_container",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_mount_launched_inside_container.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.entry_leader.entry_meta.type == \"container\" and process.name == \"mount\" and not (\n  process.parent.command_line like \"*grep*\" or\n  process.parent.executable like (\n    \"/usr/local/bin/dind\", \"/run/k3s/containerd/io.containerd.runtime.v2.task/k8s.io/*/longhorn-instance-manager\",\n    \"/run/k3s/containerd/io.containerd.runtime.v2.task/k8s.io/*/longhorn-manager\", \"/usr/sbin/update-binfmts\",\n    \"/usr/local/bin/engine-manager\", \"/usr/bin/timeout\", \"/opt/gitlab/embedded/bin/ruby\", \"/usr/local/sbin/longhorn-manager\",\n    \"/longhorn-share-manager\", \"/usr/lib/systemd/systemd\", \"/lib/systemd/systemd\"\n  ) or\n  process.parent.args in (\"/usr/local/bin/instance-manager\", \"/usr/local/sbin/nsmounter\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dind",
+        "longhorn-instance-manager",
+        "longhorn-manager",
+        "update-binfmts",
+        "engine-manager",
+        "timeout",
+        "ruby",
+        "longhorn-share-manager",
+        "systemd"
+      ],
+      "raw_values": [
+        "/usr/local/bin/dind",
+        "/run/k3s/containerd/io.containerd.runtime.v2.task/k8s.io/*/longhorn-instance-manager",
+        "/run/k3s/containerd/io.containerd.runtime.v2.task/k8s.io/*/longhorn-manager",
+        "/usr/sbin/update-binfmts",
+        "/usr/local/bin/engine-manager",
+        "/usr/bin/timeout",
+        "/opt/gitlab/embedded/bin/ruby",
+        "/usr/local/sbin/longhorn-manager",
+        "/longhorn-share-manager",
+        "/usr/lib/systemd/systemd",
+        "/lib/systemd/systemd"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/usr/local/bin/instance-manager",
+        "/usr/local/sbin/nsmounter"
+      ],
+      "raw_values": [
+        "/usr/local/bin/instance-manager",
+        "/usr/local/sbin/nsmounter"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.entry_leader.entry_meta.type",
+      "raw_field": "process.entry_leader.entry_meta.type",
+      "operator": "==",
+      "values": [
+        "container"
+      ],
+      "raw_values": [
+        "container"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "mount"
+      ],
+      "raw_values": [
+        "mount"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "grep"
+      ],
+      "raw_values": [
+        "*grep*"
+      ]
+    }
+  ]
+}

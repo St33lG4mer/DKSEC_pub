@@ -1,0 +1,107 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_kerberos_manipulation",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_kerberos_manipulation.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"675\", \"4768\", \"4769\", \"4771\")) and (winlog.event_data.Status like~ (\"0x9\", \"0xA\", \"0xB\", \"0xF\", \"0x10\", \"0x11\", \"0x13\", \"0x14\", \"0x1A\", \"0x1F\", \"0x21\", \"0x22\", \"0x23\", \"0x24\", \"0x26\", \"0x27\", \"0x28\", \"0x29\", \"0x2C\", \"0x2D\", \"0x2E\", \"0x2F\", \"0x31\", \"0x32\", \"0x3E\", \"0x3F\", \"0x40\", \"0x41\", \"0x43\", \"0x44\")))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "675",
+        "4768",
+        "4769",
+        "4771"
+      ],
+      "raw_values": [
+        "675",
+        "4768",
+        "4769",
+        "4771"
+      ]
+    },
+    {
+      "field": "winlog.event_data.status",
+      "raw_field": "winlog.event_data.Status",
+      "operator": "like~",
+      "values": [
+        "0x9",
+        "0xa",
+        "0xb",
+        "0xf",
+        "0x10",
+        "0x11",
+        "0x13",
+        "0x14",
+        "0x1a",
+        "0x1f",
+        "0x21",
+        "0x22",
+        "0x23",
+        "0x24",
+        "0x26",
+        "0x27",
+        "0x28",
+        "0x29",
+        "0x2c",
+        "0x2d",
+        "0x2e",
+        "0x2f",
+        "0x31",
+        "0x32",
+        "0x3e",
+        "0x3f",
+        "0x40",
+        "0x41",
+        "0x43",
+        "0x44"
+      ],
+      "raw_values": [
+        "0x9",
+        "0xA",
+        "0xB",
+        "0xF",
+        "0x10",
+        "0x11",
+        "0x13",
+        "0x14",
+        "0x1A",
+        "0x1F",
+        "0x21",
+        "0x22",
+        "0x23",
+        "0x24",
+        "0x26",
+        "0x27",
+        "0x28",
+        "0x29",
+        "0x2C",
+        "0x2D",
+        "0x2E",
+        "0x2F",
+        "0x31",
+        "0x32",
+        "0x3E",
+        "0x3F",
+        "0x40",
+        "0x41",
+        "0x43",
+        "0x44"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ]
+}

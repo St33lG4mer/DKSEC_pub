@@ -1,0 +1,130 @@
+{
+  "source": "elastic",
+  "name": "Virtual Machine Fingerprinting",
+  "slug": "discovery_virtual_machine_fingerprinting",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/discovery_virtual_machine_fingerprinting.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and \nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"process_started\") and\nprocess.args in (\n  \"/sys/class/dmi/id/bios_version\", \"/sys/class/dmi/id/product_name\", \"/sys/class/dmi/id/chassis_vendor\",\n  \"/proc/scsi/scsi\", \"/proc/ide/hd0/model\"\n) and not (\n  user.name == \"root\" or\n  ?process.parent.name in (\"LinkManager.exe\", \"saposcol\", \"svc_snow_discovery\") or\n  ?process.working_directory == \"/home/qualys\" or\n  ?process.parent.executable in (\n    \"/usr/sara/sbin/sys2prometheus\", \"/usr/sara/sbin/sys2ganglia\", \"/usr/libexec/valgrind/memcheck-amd64-linux\",\n    \"/var/lib/cfengine3/modules/init_node\", \"/opt/emby-server/system/EmbyServer\"\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "bios_version",
+        "product_name",
+        "chassis_vendor",
+        "scsi",
+        "model"
+      ],
+      "raw_values": [
+        "/sys/class/dmi/id/bios_version",
+        "/sys/class/dmi/id/product_name",
+        "/sys/class/dmi/id/chassis_vendor",
+        "/proc/scsi/scsi",
+        "/proc/ide/hd0/model"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "linkmanager.exe",
+        "saposcol",
+        "svc_snow_discovery",
+        "sys2prometheus",
+        "sys2ganglia",
+        "memcheck-amd64-linux",
+        "init_node",
+        "embyserver"
+      ],
+      "raw_values": [
+        "LinkManager.exe",
+        "saposcol",
+        "svc_snow_discovery",
+        "/usr/sara/sbin/sys2prometheus",
+        "/usr/sara/sbin/sys2ganglia",
+        "/usr/libexec/valgrind/memcheck-amd64-linux",
+        "/var/lib/cfengine3/modules/init_node",
+        "/opt/emby-server/system/EmbyServer"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "==",
+      "values": [
+        "root"
+      ],
+      "raw_values": [
+        "root"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "==",
+      "values": [
+        "/home/qualys"
+      ],
+      "raw_values": [
+        "/home/qualys"
+      ]
+    }
+  ]
+}

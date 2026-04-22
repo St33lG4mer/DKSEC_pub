@@ -1,0 +1,42 @@
+{
+  "source": "elastic",
+  "name": "Potential Azure OpenAI Model Theft",
+  "slug": "azure_openai_model_theft_detection",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: LLM",
+    "Data Source: Azure OpenAI",
+    "Data Source: Azure Event Hubs",
+    "Use Case: Model Theft",
+    "Mitre Atlas: T0044",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure_openai/azure_openai_model_theft_detection.toml",
+  "raw_query": "from logs-azure_openai.logs-*\n| where\n    azure.open_ai.operation_name == \"ListKey\" and\n    azure.open_ai.category == \"Audit\"\n| keep\n    @timestamp,\n    azure.open_ai.operation_name,\n    azure.open_ai.category,\n    azure.resource.group,\n    azure.resource.name,\n    azure.open_ai.properties.response_length\n| stats\n    Esql.event_count = count(*),\n    Esql.azure_open_ai_properties_response_length_max = max(azure.open_ai.properties.response_length)\n  by\n    azure.resource.group,\n    azure.resource.name\n| where\n    Esql.event_count >= 100 or\n    Esql.azure_open_ai_properties_response_length_max >= 1000000\n| sort\n    Esql.event_count desc\n",
+  "conditions": [
+    {
+      "field": "azure.open_ai.operation_name",
+      "raw_field": "azure.open_ai.operation_name",
+      "operator": "==",
+      "values": [
+        "listkey"
+      ],
+      "raw_values": [
+        "ListKey"
+      ]
+    },
+    {
+      "field": "azure.open_ai.category",
+      "raw_field": "azure.open_ai.category",
+      "operator": "==",
+      "values": [
+        "audit"
+      ],
+      "raw_values": [
+        "Audit"
+      ]
+    }
+  ]
+}

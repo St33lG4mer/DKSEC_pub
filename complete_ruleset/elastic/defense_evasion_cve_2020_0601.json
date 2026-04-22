@@ -1,0 +1,43 @@
+{
+  "source": "elastic",
+  "name": "Windows CryptoAPI Spoofing Vulnerability (CVE-2020-0601 - CurveBall)",
+  "slug": "defense_evasion_cve_2020_0601",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Use Case: Vulnerability",
+    "Data Source: Windows Security Event Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_cve_2020_0601.toml",
+  "raw_query": "event.provider:\"Microsoft-Windows-Audit-CVE\" and message:\"[CVE-2020-0601]\" and host.os.type:windows\n",
+  "conditions": [
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-audit-cve"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Audit-CVE"
+      ]
+    },
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": ":",
+      "values": [
+        "[cve-2020-0601]"
+      ],
+      "raw_values": [
+        "[CVE-2020-0601]"
+      ]
+    }
+  ]
+}

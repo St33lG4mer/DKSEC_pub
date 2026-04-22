@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_explorer_nouaccheck",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_explorer_nouaccheck.eql",
+  "raw_query": "any where (process.executable:\"*\\\\explorer.exe\" and process.command_line:\"*/NOUACCHECK*\") and (not (process.parent.command_line:\"C:\\\\Windows\\\\system32\\\\svchost.exe -k netsvcs -p -s Schedule\" or process.parent.executable:\"C:\\\\Windows\\\\System32\\\\svchost.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "nouaccheck"
+      ],
+      "raw_values": [
+        "*/NOUACCHECK*"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "svchost.exe -k netsvcs -p -s schedule"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\svchost.exe -k netsvcs -p -s Schedule"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\svchost.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "source": "elastic",
+  "name": "GCP Virtual Private Cloud Route Creation",
+  "slug": "defense_evasion_gcp_virtual_private_cloud_route_created",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: GCP",
+    "Data Source: Google Cloud Platform",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/gcp/defense_evasion_gcp_virtual_private_cloud_route_created.toml",
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:(v*.compute.routes.insert or \"beta.compute.routes.insert\")\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "beta.compute.routes.insert"
+      ],
+      "raw_values": [
+        "beta.compute.routes.insert"
+      ]
+    }
+  ]
+}

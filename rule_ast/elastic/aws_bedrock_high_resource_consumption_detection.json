@@ -1,0 +1,21 @@
+{
+  "source": "elastic",
+  "name": "Potential Abuse of Resources by High Token Count and Large Response Sizes",
+  "slug": "aws_bedrock_high_resource_consumption_detection",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: LLM",
+    "Data Source: AWS Bedrock",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS S3",
+    "Use Case: Potential Overload",
+    "Use Case: Resource Exhaustion",
+    "Mitre Atlas: LLM04",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws_bedrock/aws_bedrock_high_resource_consumption_detection.toml",
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// keep token usage data\n| keep\n  user.id,\n  gen_ai.usage.prompt_tokens,\n  gen_ai.usage.completion_tokens\n\n// Aggregate usage metrics\n| stats\n    Esql.ml_usage_prompt_tokens_max = max(gen_ai.usage.prompt_tokens),\n    Esql.ml_invocations_total_count = count(*),\n    Esql.ml_usage_completion_tokens_avg = avg(gen_ai.usage.completion_tokens)\n  by\n    user.id\n\n// Filter for suspicious usage patterns\n| where\n  Esql.ml_usage_prompt_tokens_max > 5000\n  and Esql.ml_invocations_total_count > 10\n  and Esql.ml_usage_completion_tokens_avg > 500\n\n// Calculate a custom risk factor\n| eval Esql.ml_risk_score =\n    (Esql.ml_usage_prompt_tokens_max / 1000) *\n    Esql.ml_invocations_total_count *\n    (Esql.ml_usage_completion_tokens_avg / 500)\n\n// Filter on risk score\n| where Esql.ml_risk_score > 10\n\n// sort high risk users to top\n| sort Esql.ml_risk_score desc\n",
+  "conditions": []
+}

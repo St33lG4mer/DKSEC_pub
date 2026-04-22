@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Azure Automation Account Created",
+  "slug": "persistence_automation_account_created",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_automation_account_created.toml",
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/WRITE\" and event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.automation/automationaccounts/write"
+      ],
+      "raw_values": [
+        "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/WRITE"
+      ]
+    }
+  ]
+}

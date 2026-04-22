@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_quarks_pwdump",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_quarks_pwdump.eql",
+  "raw_query": "any where process.executable:\"*\\\\QuarksPwDump.exe\" or (process.command_line like~ (\" -dhl\", \" --dump-hash-local\", \" -dhdc\", \" --dump-hash-domain-cached\", \" --dump-bitlocker\", \" -dhd \", \" --dump-hash-domain \", \"--ntds-file\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-dhl",
+        "--dump-hash-local",
+        "-dhdc",
+        "--dump-hash-domain-cached",
+        "--dump-bitlocker",
+        "-dhd",
+        "--dump-hash-domain",
+        "--ntds-file"
+      ],
+      "raw_values": [
+        " -dhl",
+        " --dump-hash-local",
+        " -dhdc",
+        " --dump-hash-domain-cached",
+        " --dump-bitlocker",
+        " -dhd ",
+        " --dump-hash-domain ",
+        "--ntds-file"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "quarkspwdump.exe"
+      ],
+      "raw_values": [
+        "*\\\\QuarksPwDump.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_syncappvpublishingserver_vbs_execute_psh",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_syncappvpublishingserver_vbs_execute_psh.eql",
+  "raw_query": "any where process.command_line:\"*\\\\SyncAppvPublishingServer.vbs*\" and process.command_line:\"*;*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "syncappvpublishingserver.vbs"
+      ],
+      "raw_values": [
+        "*\\\\SyncAppvPublishingServer.vbs*",
+        "*;*"
+      ]
+    }
+  ]
+}

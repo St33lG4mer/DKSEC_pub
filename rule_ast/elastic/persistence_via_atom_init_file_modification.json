@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "Potential Persistence via Atom Init Script Modification",
+  "slug": "persistence_via_atom_init_file_modification",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_via_atom_init_file_modification.toml",
+  "raw_query": "file where host.os.type == \"macos\" and event.action == \"modification\" and\n file.path like \"/Users/*/.atom/init.coffee\" and \n not process.name like (\"Atom\", \"xpcproxy\") and \n not user.name == \"root\"\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "atom",
+        "xpcproxy"
+      ],
+      "raw_values": [
+        "Atom",
+        "xpcproxy"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modification"
+      ],
+      "raw_values": [
+        "modification"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like",
+      "values": [
+        "init.coffee"
+      ],
+      "raw_values": [
+        "/Users/*/.atom/init.coffee"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "==",
+      "values": [
+        "root"
+      ],
+      "raw_values": [
+        "root"
+      ]
+    }
+  ]
+}

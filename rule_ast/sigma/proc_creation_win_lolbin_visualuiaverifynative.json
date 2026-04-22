@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_visualuiaverifynative",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_visualuiaverifynative.eql",
+  "raw_query": "any where process.executable:\"*\\\\VisualUiaVerifyNative.exe\" or process.pe.original_file_name:\"VisualUiaVerifyNative.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "visualuiaverifynative.exe"
+      ],
+      "raw_values": [
+        "*\\\\VisualUiaVerifyNative.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "visualuiaverifynative.exe"
+      ],
+      "raw_values": [
+        "VisualUiaVerifyNative.exe"
+      ]
+    }
+  ]
+}

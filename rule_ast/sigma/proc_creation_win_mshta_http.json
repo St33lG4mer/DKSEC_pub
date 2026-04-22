@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mshta_http",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mshta_http.eql",
+  "raw_query": "any where (process.executable:\"*\\\\mshta.exe\" or process.pe.original_file_name:\"MSHTA.EXE\") and (process.command_line like~ (\"*http://*\", \"*https://*\", \"*ftp://*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "*\\\\mshta.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "MSHTA.EXE"
+      ]
+    }
+  ]
+}

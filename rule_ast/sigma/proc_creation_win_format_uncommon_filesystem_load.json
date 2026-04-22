@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_format_uncommon_filesystem_load",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_format_uncommon_filesystem_load.eql",
+  "raw_query": "any where (process.executable:\"*\\\\format.com\" and process.command_line:\"*/fs:*\") and (not (process.command_line like~ (\"*/fs:exFAT*\", \"*/fs:FAT*\", \"*/fs:NTFS*\", \"*/fs:ReFS*\", \"*/fs:UDF*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "fs:exfat",
+        "fs:fat",
+        "fs:ntfs",
+        "fs:refs",
+        "fs:udf"
+      ],
+      "raw_values": [
+        "*/fs:exFAT*",
+        "*/fs:FAT*",
+        "*/fs:NTFS*",
+        "*/fs:ReFS*",
+        "*/fs:UDF*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "format.com"
+      ],
+      "raw_values": [
+        "*\\\\format.com"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "fs:"
+      ],
+      "raw_values": [
+        "*/fs:*"
+      ]
+    }
+  ]
+}

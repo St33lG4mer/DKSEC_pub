@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_cli_obfuscation_escape_char",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_cli_obfuscation_escape_char.eql",
+  "raw_query": "any where process.command_line like~ (\"*h^t^t^p*\", \"*h\\\"t\\\"t\\\"p*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "h^t^t^p"
+      ],
+      "raw_values": [
+        "*h^t^t^p*",
+        "*h\\",
+        "t\\"
+      ]
+    }
+  ]
+}

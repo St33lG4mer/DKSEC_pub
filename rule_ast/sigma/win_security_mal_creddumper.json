@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "win_security_mal_creddumper",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_mal_creddumper.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (winlog.event_data.ServiceFileName like~ (\"*cachedump*\", \"*dumpsvc*\", \"*fgexec*\", \"*gsecdump*\", \"*mimidrv*\", \"*pwdump*\", \"*servpw*\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": "like~",
+      "values": [
+        "cachedump",
+        "dumpsvc",
+        "fgexec",
+        "gsecdump",
+        "mimidrv",
+        "pwdump",
+        "servpw"
+      ],
+      "raw_values": [
+        "*cachedump*",
+        "*dumpsvc*",
+        "*fgexec*",
+        "*gsecdump*",
+        "*mimidrv*",
+        "*pwdump*",
+        "*servpw*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    }
+  ]
+}

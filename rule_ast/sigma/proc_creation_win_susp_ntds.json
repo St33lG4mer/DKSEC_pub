@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_ntds",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_ntds.eql",
+  "raw_query": "any where (((process.executable like~ (\"*\\\\NTDSDump.exe\", \"*\\\\NTDSDumpEx.exe\")) or (process.command_line:\"*ntds.dit*\" and process.command_line:\"*system.hiv*\") or process.command_line:\"*NTDSgrab.ps1*\") or (process.command_line:\"*ac i ntds*\" and process.command_line:\"*create full*\") or (process.command_line:\"*/c copy *\" and process.command_line:\"*\\\\windows\\\\ntds\\\\ntds.dit*\") or (process.command_line:\"*activate instance ntds*\" and process.command_line:\"*create full*\") or (process.command_line:\"*powershell*\" and process.command_line:\"*ntds.dit*\")) or (process.command_line:\"*ntds.dit*\" and ((process.parent.executable like~ (\"*\\\\apache*\", \"*\\\\tomcat*\", \"*\\\\AppData\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Public\\\\*\", \"*\\\\PerfLogs\\\\*\")) or (process.executable like~ (\"*\\\\apache*\", \"*\\\\tomcat*\", \"*\\\\AppData\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Public\\\\*\", \"*\\\\PerfLogs\\\\*\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "ntdsdump.exe",
+        "ntdsdumpex.exe",
+        "apache",
+        "tomcat"
+      ],
+      "raw_values": [
+        "*\\\\NTDSDump.exe",
+        "*\\\\NTDSDumpEx.exe",
+        "*\\\\apache*",
+        "*\\\\tomcat*",
+        "*\\\\AppData\\\\*",
+        "*\\\\Temp\\\\*",
+        "*\\\\Public\\\\*",
+        "*\\\\PerfLogs\\\\*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "apache",
+        "tomcat"
+      ],
+      "raw_values": [
+        "*\\\\apache*",
+        "*\\\\tomcat*",
+        "*\\\\AppData\\\\*",
+        "*\\\\Temp\\\\*",
+        "*\\\\Public\\\\*",
+        "*\\\\PerfLogs\\\\*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ntds.dit",
+        "system.hiv",
+        "ntdsgrab.ps1",
+        "ac i ntds",
+        "create full",
+        "c copy",
+        "activate instance ntds",
+        "powershell"
+      ],
+      "raw_values": [
+        "*ntds.dit*",
+        "*system.hiv*",
+        "*NTDSgrab.ps1*",
+        "*ac i ntds*",
+        "*create full*",
+        "*/c copy *",
+        "*\\\\windows\\\\ntds\\\\ntds.dit*",
+        "*activate instance ntds*",
+        "*powershell*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "Forwarded Google Workspace Security Alert",
+  "slug": "google_workspace_alert_center_promotion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Google Workspace",
+    "Use Case: Log Auditing",
+    "Use Case: Threat Detection",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/google_workspace/google_workspace_alert_center_promotion.toml",
+  "raw_query": "data_stream.dataset: google_workspace.alert\n",
+  "conditions": []
+}

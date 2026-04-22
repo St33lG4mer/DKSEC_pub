@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_amsi_null_bits_bypass",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_amsi_null_bits_bypass.eql",
+  "raw_query": "any where process.command_line like~ (\"*if(0){{{0}}}' -f $(0 -as [char]) +*\", \"*#<NULL>*\")",
+  "conditions": []
+}

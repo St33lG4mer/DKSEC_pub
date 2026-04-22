@@ -1,0 +1,26 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_unc2452_ps",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2020/TA/SolarWinds-Supply-Chain/proc_creation_win_apt_unc2452_ps.eql",
+  "raw_query": "any where (process.command_line:\"*Invoke-WMIMethod win32_process -name create -argumentlist*\" and process.command_line:\"*rundll32 c:\\\\windows*\") or (process.command_line:\"*wmic /node:*\" and process.command_line:\"*process call create \\\"rundll32 c:\\\\windows*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "invoke-wmimethod win32_process -name create -argumentlist",
+        "windows",
+        "node:"
+      ],
+      "raw_values": [
+        "*Invoke-WMIMethod win32_process -name create -argumentlist*",
+        "*rundll32 c:\\\\windows*",
+        "*wmic /node:*",
+        "*process call create \\"
+      ]
+    }
+  ]
+}

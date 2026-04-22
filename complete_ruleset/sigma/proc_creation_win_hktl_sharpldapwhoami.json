@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_sharpldapwhoami",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_sharpldapwhoami.eql",
+  "raw_query": "any where process.executable:\"*\\\\SharpLdapWhoami.exe\" or (process.pe.original_file_name:\"*SharpLdapWhoami*\" or process.pe.product:\"SharpLdapWhoami\") or (process.command_line like~ (\"* /method:ntlm\", \"* /method:kerb\", \"* /method:nego\", \"* /m:nego\", \"* /m:ntlm\", \"* /m:kerb\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "method:ntlm",
+        "method:kerb",
+        "method:nego",
+        "m:nego",
+        "m:ntlm",
+        "m:kerb"
+      ],
+      "raw_values": [
+        "* /method:ntlm",
+        "* /method:kerb",
+        "* /method:nego",
+        "* /m:nego",
+        "* /m:ntlm",
+        "* /m:kerb"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sharpldapwhoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\SharpLdapWhoami.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sharpldapwhoami"
+      ],
+      "raw_values": [
+        "*SharpLdapWhoami*"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sharpldapwhoami"
+      ],
+      "raw_values": [
+        "SharpLdapWhoami"
+      ]
+    }
+  ]
+}

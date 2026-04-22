@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_customshellhost_susp_exec",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_customshellhost_susp_exec.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\CustomShellHost.exe\" and (not process.executable:\"C:\\\\Windows\\\\explorer.exe\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "customshellhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\CustomShellHost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\explorer.exe"
+      ]
+    }
+  ]
+}

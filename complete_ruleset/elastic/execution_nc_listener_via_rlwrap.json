@@ -1,0 +1,91 @@
+{
+  "source": "elastic",
+  "name": "Netcat Listener Established via rlwrap",
+  "slug": "execution_nc_listener_via_rlwrap",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_nc_listener_via_rlwrap.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\n  event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\n  process.name == \"rlwrap\" and process.args in (\"nc\", \"ncat\", \"netcat\", \"nc.openbsd\", \"socat\") and\n  process.args : \"*l*\" and process.args_count >= 4\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "ncat",
+        "netcat",
+        "nc.openbsd",
+        "socat"
+      ],
+      "raw_values": [
+        "nc",
+        "ncat",
+        "netcat",
+        "nc.openbsd",
+        "socat"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "rlwrap"
+      ],
+      "raw_values": [
+        "rlwrap"
+      ]
+    }
+  ]
+}

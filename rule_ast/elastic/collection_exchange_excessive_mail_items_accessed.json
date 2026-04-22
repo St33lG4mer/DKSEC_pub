@@ -1,0 +1,76 @@
+{
+  "source": "elastic",
+  "name": "M365 Exchange Mailbox Items Accessed Excessively",
+  "slug": "collection_exchange_excessive_mail_items_accessed",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Email",
+    "Data Source: Microsoft 365",
+    "Data Source: Microsoft 365 Audit Logs",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/collection_exchange_excessive_mail_items_accessed.toml",
+  "raw_query": "data_stream.dataset: \"o365.audit\" and\n    event.provider: \"Exchange\" and\n    event.action: \"MailItemsAccessed\" and\n    event.code: \"ExchangeItemAggregated\" and\n    (\n        (\n            o365.audit.OperationProperties.Name: \"IsThrottled\" and\n            o365.audit.OperationProperties.Value: \"True\"\n        ) or o365.audit.OperationCount >= 100\n    )\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "exchange"
+      ],
+      "raw_values": [
+        "Exchange"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "mailitemsaccessed"
+      ],
+      "raw_values": [
+        "MailItemsAccessed"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "exchangeitemaggregated"
+      ],
+      "raw_values": [
+        "ExchangeItemAggregated"
+      ]
+    },
+    {
+      "field": "o365.audit.operationproperties.name",
+      "raw_field": "o365.audit.OperationProperties.Name",
+      "operator": ":",
+      "values": [
+        "isthrottled"
+      ],
+      "raw_values": [
+        "IsThrottled"
+      ]
+    }
+  ]
+}

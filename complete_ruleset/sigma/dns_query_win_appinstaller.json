@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "dns_query_win_appinstaller",
+  "subtree": "rules",
+  "category": "dns",
+  "sigma_path": "rules/windows/dns_query/dns_query_win_appinstaller.eql",
+  "raw_query": "any where process.executable:\"C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.DesktopAppInstaller_*\" and process.executable:\"*\\\\AppInstaller.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microsoft.desktopappinstaller_",
+        "appinstaller.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.DesktopAppInstaller_*",
+        "*\\\\AppInstaller.exe"
+      ]
+    }
+  ]
+}

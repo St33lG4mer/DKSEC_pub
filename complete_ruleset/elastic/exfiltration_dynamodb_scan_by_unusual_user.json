@@ -1,0 +1,65 @@
+{
+  "source": "elastic",
+  "name": "AWS DynamoDB Scan by Unusual User",
+  "slug": "exfiltration_dynamodb_scan_by_unusual_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS DynamoDB",
+    "Resources: Investigation Guide",
+    "Use Case: Threat Detection",
+    "Tactic: Exfiltration"
+  ],
+  "elastic_path": "rules/integrations/aws/exfiltration_dynamodb_scan_by_unusual_user.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"dynamodb.amazonaws.com\"\n    and event.action: \"Scan\"\n    and event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "dynamodb.amazonaws.com"
+      ],
+      "raw_values": [
+        "dynamodb.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "scan"
+      ],
+      "raw_values": [
+        "Scan"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

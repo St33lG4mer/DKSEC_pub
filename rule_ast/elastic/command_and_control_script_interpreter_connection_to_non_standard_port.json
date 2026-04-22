@@ -1,0 +1,78 @@
+{
+  "source": "elastic",
+  "name": "Script Interpreter Connection to Non-Standard Port",
+  "slug": "command_and_control_script_interpreter_connection_to_non_standard_port",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/command_and_control_script_interpreter_connection_to_non_standard_port.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=1m\n  [process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and \n    (process.name like~ \"python*\" or process.name in (\"node\", \"ruby\")) and \n    process.args_count == 2]\n  [network where host.os.type == \"macos\" and event.type == \"start\" and \n    (process.name like~ \"python*\" or process.name in (\"node\", \"ruby\")) and \n    destination.domain == null and \n    not destination.port in (443, 80, 53, 22, 25, 587, 465, 8080, 8089, 8200, 9200) and \n    destination.port < 49152 and\n    not cidrmatch(destination.ip, \"240.0.0.0/4\", \"233.252.0.0/24\", \"224.0.0.0/4\", \"198.19.0.0/16\", \n                  \"192.18.0.0/15\", \"192.0.0.0/24\", \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \n                  \"172.16.0.0/12\", \"192.0.2.0/24\", \"192.31.196.0/24\", \"192.52.193.0/24\", \n                  \"192.168.0.0/16\", \"192.88.99.0/24\", \"100.64.0.0/10\", \"192.175.48.0/24\", \n                  \"198.18.0.0/15\", \"198.51.100.0/24\", \"203.0.113.0/24\", \"::1\", \"FE80::/10\", \"FF00::/8\")]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "node",
+        "ruby"
+      ],
+      "raw_values": [
+        "node",
+        "ruby"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_gpg4win_encryption",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_gpg4win_encryption.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\gpg.exe\", \"*\\\\gpg2.exe\")) or process.pe.description:\"GnuPG\u2019s OpenPGP tool\") and (process.command_line:\"* -c *\" and process.command_line:\"*passphrase*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "gpg.exe",
+        "gpg2.exe"
+      ],
+      "raw_values": [
+        "*\\\\gpg.exe",
+        "*\\\\gpg2.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "gnupg\u2019s openpgp tool"
+      ],
+      "raw_values": [
+        "GnuPG\u2019s OpenPGP tool"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "passphrase"
+      ],
+      "raw_values": [
+        "* -c *",
+        "*passphrase*"
+      ]
+    }
+  ]
+}

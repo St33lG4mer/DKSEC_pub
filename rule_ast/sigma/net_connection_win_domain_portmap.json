@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_domain_portmap",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_domain_portmap.eql",
+  "raw_query": "any where network.direction:\"true\" and destination.domain:\"*.portmap.io\"",
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        ".portmap.io"
+      ],
+      "raw_values": [
+        "*.portmap.io"
+      ]
+    }
+  ]
+}

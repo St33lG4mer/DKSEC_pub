@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_system_susp_service_installation_folder_pattern",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/service_control_manager/win_system_susp_service_installation_folder_pattern.eql",
+  "raw_query": "any where winlog.channel:\"System\" and ((winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\") and (winlog.event_data.ImagePath like~ (\"SigmaRegularExpression(regexp=SigmaString(['^[Cc]:\\\\\\\\[Pp]rogram[Dd]ata\\\\\\\\.{1,9}\\\\.exe']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['^[Cc]:\\\\\\\\.{1,9}\\\\.exe']), flags=set())\")))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    }
+  ]
+}

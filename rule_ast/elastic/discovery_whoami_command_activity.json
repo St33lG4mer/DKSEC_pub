@@ -1,0 +1,168 @@
+{
+  "source": "elastic",
+  "name": "Whoami Process Activity",
+  "slug": "discovery_whoami_command_activity",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: Windows Security Event Logs"
+  ],
+  "elastic_path": "rules/windows/discovery_whoami_command_activity.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and process.name : \"whoami.exe\" and\n(\n  (\n    /* scoped for whoami execution under system privileges */\n    (\n      (\n        user.domain : (\"NT *\", \"* NT\", \"IIS APPPOOL\") and\n        user.id : (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\", \"S-1-5-82-*\") and\n        not ?winlog.event_data.SubjectUserName : \"*$\" and\n\n        /* Sysmon will always populate user.id as S-1-5-18, leading to FPs */\n        not data_stream.dataset : (\"windows.sysmon_operational\", \"windows.sysmon\")\n      ) or\n      (?process.Ext.token.integrity_level_name : \"System\" or ?winlog.event_data.IntegrityLevel : \"System\")\n    ) and\n    not (\n      process.parent.name : \"cmd.exe\" and\n      process.parent.args : (\n          \"chcp 437>nul 2>&1 & C:\\\\WINDOWS\\\\System32\\\\whoami.exe  /groups\",\n          \"chcp 437>nul 2>&1 & %systemroot%\\\\system32\\\\whoami /user\",\n          \"C:\\\\WINDOWS\\\\System32\\\\whoami.exe /groups\",\n          \"*WINDOWS\\\\system32\\\\config\\\\systemprofile*\"\n      )\n    ) and\n    not (process.parent.executable : \"C:\\\\Windows\\\\system32\\\\inetsrv\\\\appcmd.exe\" and process.parent.args : \"LIST\") and\n    not process.parent.executable : (\n        \"C:\\\\Program Files\\\\Microsoft Monitoring Agent\\\\Agent\\\\MonitoringHost.exe\",\n        \"C:\\\\Program Files\\\\Cohesity\\\\cohesity_windows_agent_service.exe\"\n    )\n  ) or\n  process.parent.name : (\"wsmprovhost.exe\", \"w3wp.exe\", \"wmiprvse.exe\", \"rundll32.exe\", \"regsvr32.exe\")\n)\n",
+  "conditions": [
+    {
+      "field": "user.domain",
+      "raw_field": "user.domain",
+      "operator": ":",
+      "values": [
+        "iis apppool"
+      ],
+      "raw_values": [
+        "NT *",
+        "* NT",
+        "IIS APPPOOL"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20",
+        "s-1-5-82-"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20",
+        "S-1-5-82-*"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "windows.sysmon_operational",
+        "windows.sysmon"
+      ],
+      "raw_values": [
+        "windows.sysmon_operational",
+        "windows.sysmon"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "chcp 437>nul 2>&1 & c:\\\\windows\\\\system32\\\\whoami.exe  /groups",
+        "chcp 437>nul 2>&1 & %systemroot%\\\\system32\\\\whoami /user",
+        "c:\\\\windows\\\\system32\\\\whoami.exe /groups",
+        "windows\\\\system32\\\\config\\\\systemprofile",
+        "list"
+      ],
+      "raw_values": [
+        "chcp 437>nul 2>&1 & C:\\\\WINDOWS\\\\System32\\\\whoami.exe  /groups",
+        "chcp 437>nul 2>&1 & %systemroot%\\\\system32\\\\whoami /user",
+        "C:\\\\WINDOWS\\\\System32\\\\whoami.exe /groups",
+        "*WINDOWS\\\\system32\\\\config\\\\systemprofile*",
+        "LIST"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "monitoringhost.exe",
+        "cohesity_windows_agent_service.exe",
+        "wsmprovhost.exe",
+        "w3wp.exe",
+        "wmiprvse.exe",
+        "rundll32.exe",
+        "regsvr32.exe",
+        "cmd.exe",
+        "appcmd.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft Monitoring Agent\\\\Agent\\\\MonitoringHost.exe",
+        "C:\\\\Program Files\\\\Cohesity\\\\cohesity_windows_agent_service.exe",
+        "wsmprovhost.exe",
+        "w3wp.exe",
+        "wmiprvse.exe",
+        "rundll32.exe",
+        "regsvr32.exe",
+        "cmd.exe",
+        "C:\\\\Windows\\\\system32\\\\inetsrv\\\\appcmd.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "whoami.exe"
+      ]
+    },
+    {
+      "field": "process.ext.token.integrity_level_name",
+      "raw_field": "process.Ext.token.integrity_level_name",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    }
+  ]
+}

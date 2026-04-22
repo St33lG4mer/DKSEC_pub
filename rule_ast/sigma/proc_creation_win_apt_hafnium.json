@@ -1,0 +1,99 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_hafnium",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2021/TA/HAFNIUM/proc_creation_win_apt_hafnium.eql",
+  "raw_query": "any where (process.command_line:\"*attrib*\" and process.command_line:\"* +h *\" and process.command_line:\"* +s *\" and process.command_line:\"* +r *\" and process.command_line:\"*.aspx*\") or (process.executable:\"*\\\\ProgramData\\\\VSPerfMon\\\\*\" or (process.command_line:\"*schtasks*\" and process.command_line:\"*VSPerfMon*\")) or (process.executable:\"*Opera_browser.exe\" and (process.parent.executable like~ (\"*\\\\services.exe\", \"*\\\\svchost.exe\"))) or process.executable:\"*Users\\\\Public\\\\opera\\\\Opera_browser.exe\" or (process.command_line:\"*vssadmin list shadows*\" and process.command_line:\"*Temp\\\\__output*\") or (process.executable:\"*\\\\makecab.exe\" and (process.command_line:\"*inetpub\\\\wwwroot\\\\*\" and process.command_line:\"*.dmp.zip*\")) or (process.executable:\"*\\\\makecab.exe\" and (process.command_line like~ (\"*Microsoft\\\\Exchange Server\\\\*\", \"*compressionmemory*\", \"*.gif*\"))) or (process.command_line:\"* -t7z *\" and process.command_line:\"*C:\\\\Programdata\\\\pst*\" and process.command_line:\"*\\\\it.zip*\") or (process.command_line:\"*\\\\comsvcs.dll*\" and process.command_line:\"*Minidump*\" and process.command_line:\"*full *\" and process.command_line:\"*\\\\inetpub\\\\wwwroot*\") or (process.command_line like~ (\"*Windows\\\\Temp\\\\xx.bat*\", \"*Windows\\\\WwanSvcdcs*\", \"*Windows\\\\Temp\\\\cw.exe*\"))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "services.exe",
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\services.exe",
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "compressionmemory",
+        ".gif",
+        "xx.bat",
+        "wwansvcdcs",
+        "cw.exe"
+      ],
+      "raw_values": [
+        "*Microsoft\\\\Exchange Server\\\\*",
+        "*compressionmemory*",
+        "*.gif*",
+        "*Windows\\\\Temp\\\\xx.bat*",
+        "*Windows\\\\WwanSvcdcs*",
+        "*Windows\\\\Temp\\\\cw.exe*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "attrib",
+        ".aspx",
+        "schtasks",
+        "vsperfmon",
+        "vssadmin list shadows",
+        "__output",
+        ".dmp.zip",
+        "-t7z",
+        "pst",
+        "it.zip",
+        "comsvcs.dll",
+        "minidump",
+        "full",
+        "wwwroot"
+      ],
+      "raw_values": [
+        "*attrib*",
+        "* +h *",
+        "* +s *",
+        "* +r *",
+        "*.aspx*",
+        "*schtasks*",
+        "*VSPerfMon*",
+        "*vssadmin list shadows*",
+        "*Temp\\\\__output*",
+        "*inetpub\\\\wwwroot\\\\*",
+        "*.dmp.zip*",
+        "* -t7z *",
+        "*C:\\\\Programdata\\\\pst*",
+        "*\\\\it.zip*",
+        "*\\\\comsvcs.dll*",
+        "*Minidump*",
+        "*full *",
+        "*\\\\inetpub\\\\wwwroot*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "opera_browser.exe",
+        "makecab.exe"
+      ],
+      "raw_values": [
+        "*\\\\ProgramData\\\\VSPerfMon\\\\*",
+        "*Opera_browser.exe",
+        "*Users\\\\Public\\\\opera\\\\Opera_browser.exe",
+        "*\\\\makecab.exe"
+      ]
+    }
+  ]
+}

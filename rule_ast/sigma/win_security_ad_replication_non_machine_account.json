@@ -1,0 +1,70 @@
+{
+  "source": "sigma",
+  "name": "win_security_ad_replication_non_machine_account",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_ad_replication_non_machine_account.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4662\" and winlog.event_data.AccessMask:\"0x100\" and (winlog.event_data.Properties like~ (\"*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*\", \"*1131f6ad-9c07-11d1-f79f-00c04fc2dcd2*\", \"*89e95b76-444d-4c62-991a-0facbeda640c*\"))) and (not (user.name like~ (\"*$\", \"MSOL_*\"))))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.properties",
+      "raw_field": "winlog.event_data.Properties",
+      "operator": "like~",
+      "values": [
+        "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
+        "1131f6ad-9c07-11d1-f79f-00c04fc2dcd2",
+        "89e95b76-444d-4c62-991a-0facbeda640c"
+      ],
+      "raw_values": [
+        "*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*",
+        "*1131f6ad-9c07-11d1-f79f-00c04fc2dcd2*",
+        "*89e95b76-444d-4c62-991a-0facbeda640c*"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "msol_"
+      ],
+      "raw_values": [
+        "*$",
+        "MSOL_*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4662"
+      ],
+      "raw_values": [
+        "4662"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x100"
+      ],
+      "raw_values": [
+        "0x100"
+      ]
+    }
+  ]
+}

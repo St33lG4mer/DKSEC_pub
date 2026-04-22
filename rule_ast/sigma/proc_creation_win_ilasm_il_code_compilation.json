@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_ilasm_il_code_compilation",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_ilasm_il_code_compilation.eql",
+  "raw_query": "any where (process.executable:\"*\\\\ilasm.exe\" or process.pe.original_file_name:\"ilasm.exe\") and (process.command_line like~ (\"* /dll*\", \"* /exe*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "dll",
+        "exe"
+      ],
+      "raw_values": [
+        "* /dll*",
+        "* /exe*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ilasm.exe"
+      ],
+      "raw_values": [
+        "*\\\\ilasm.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ilasm.exe"
+      ],
+      "raw_values": [
+        "ilasm.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_dumpstack_log_evasion",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_dumpstack_log_evasion.eql",
+  "raw_query": "any where process.executable:\"*\\\\DumpStack.log\" or process.command_line:\"* -o DumpStack.log*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dumpstack.log"
+      ],
+      "raw_values": [
+        "*\\\\DumpStack.log"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-o dumpstack.log"
+      ],
+      "raw_values": [
+        "* -o DumpStack.log*"
+      ]
+    }
+  ]
+}

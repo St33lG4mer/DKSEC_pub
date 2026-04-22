@@ -1,0 +1,93 @@
+{
+  "source": "elastic",
+  "name": "Microsoft Exchange Server UM Spawning Suspicious Processes",
+  "slug": "initial_access_suspicious_ms_exchange_process",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Tactic: Lateral Movement",
+    "Data Source: Elastic Endgame",
+    "Use Case: Vulnerability",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/initial_access_suspicious_ms_exchange_process.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.parent.name : (\"UMService.exe\", \"UMWorkerProcess.exe\") and\n    not process.executable : (\n          \"?:\\\\Windows\\\\System32\\\\werfault.exe\",\n          \"?:\\\\Windows\\\\System32\\\\wermgr.exe\",\n          \"?:\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\V??\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"?:\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"D:\\\\Exchange 2016\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"E:\\\\ExchangeServer\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"D:\\\\Exchange\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"D:\\\\Exchange Server\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"E:\\\\Exchange Server\\\\V15\\\\Bin\\\\UMWorkerProcess.exe\",\n\n          /* Crowdstrike specific exclusion as it uses NT Object paths */\n          \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\werfault.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\wermgr.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\V??\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Exchange 2016\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\ExchangeServer\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Exchange\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Exchange Server\\\\Bin\\\\UMWorkerProcess.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Exchange Server\\\\V15\\\\Bin\\\\UMWorkerProcess.exe\"\n    )\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "umservice.exe",
+        "umworkerprocess.exe"
+      ],
+      "raw_values": [
+        "UMService.exe",
+        "UMWorkerProcess.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe",
+        "wermgr.exe",
+        "umworkerprocess.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\werfault.exe",
+        "?:\\\\Windows\\\\System32\\\\wermgr.exe",
+        "?:\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\V??\\\\Bin\\\\UMWorkerProcess.exe",
+        "?:\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\Bin\\\\UMWorkerProcess.exe",
+        "D:\\\\Exchange 2016\\\\Bin\\\\UMWorkerProcess.exe",
+        "E:\\\\ExchangeServer\\\\Bin\\\\UMWorkerProcess.exe",
+        "D:\\\\Exchange\\\\Bin\\\\UMWorkerProcess.exe",
+        "D:\\\\Exchange Server\\\\Bin\\\\UMWorkerProcess.exe",
+        "E:\\\\Exchange Server\\\\V15\\\\Bin\\\\UMWorkerProcess.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\werfault.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\wermgr.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\V??\\\\Bin\\\\UMWorkerProcess.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\Bin\\\\UMWorkerProcess.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Exchange 2016\\\\Bin\\\\UMWorkerProcess.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\ExchangeServer\\\\Bin\\\\UMWorkerProcess.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Exchange\\\\Bin\\\\UMWorkerProcess.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Exchange Server\\\\Bin\\\\UMWorkerProcess.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Exchange Server\\\\V15\\\\Bin\\\\UMWorkerProcess.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

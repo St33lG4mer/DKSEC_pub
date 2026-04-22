@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "win_codeintegrity_revoked_image_loaded",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/code_integrity/win_codeintegrity_revoked_image_loaded.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CodeIntegrity/Operational\" and (event.code like~ (\"3032\", \"3035\"))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "3032",
+        "3035"
+      ],
+      "raw_values": [
+        "3032",
+        "3035"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-codeintegrity/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CodeIntegrity/Operational"
+      ]
+    }
+  ]
+}

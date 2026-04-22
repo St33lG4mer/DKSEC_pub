@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "win_firewall_as_reset_config",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/firewall_as/win_firewall_as_reset_config.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" and (event.code like~ (\"2032\", \"2060\"))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "2032",
+        "2060"
+      ],
+      "raw_values": [
+        "2032",
+        "2060"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows firewall with advanced security/firewall"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall"
+      ]
+    }
+  ]
+}

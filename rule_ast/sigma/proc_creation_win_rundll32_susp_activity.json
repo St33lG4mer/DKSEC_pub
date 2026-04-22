@@ -1,0 +1,118 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_susp_activity",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_susp_activity.eql",
+  "raw_query": "any where ((process.command_line:\"*javascript:*\" and process.command_line:\"*.RegisterXLL*\") or (process.command_line:\"*url.dll*\" and process.command_line:\"*OpenURL*\") or (process.command_line:\"*url.dll*\" and process.command_line:\"*OpenURLA*\") or (process.command_line:\"*url.dll*\" and process.command_line:\"*FileProtocolHandler*\") or (process.command_line:\"*zipfldr.dll*\" and process.command_line:\"*RouteTheCall*\") or (process.command_line:\"*shell32.dll*\" and process.command_line:\"*Control_RunDLL*\") or (process.command_line:\"*shell32.dll*\" and process.command_line:\"*ShellExec_RunDLL*\") or (process.command_line:\"*mshtml.dll*\" and process.command_line:\"*PrintHTML*\") or (process.command_line:\"*advpack.dll*\" and process.command_line:\"*LaunchINFSection*\") or (process.command_line:\"*advpack.dll*\" and process.command_line:\"*RegisterOCX*\") or (process.command_line:\"*ieadvpack.dll*\" and process.command_line:\"*LaunchINFSection*\") or (process.command_line:\"*ieadvpack.dll*\" and process.command_line:\"*RegisterOCX*\") or (process.command_line:\"*ieframe.dll*\" and process.command_line:\"*OpenURL*\") or (process.command_line:\"*shdocvw.dll*\" and process.command_line:\"*OpenURL*\") or (process.command_line:\"*syssetup.dll*\" and process.command_line:\"*SetupInfObjectInstallAction*\") or (process.command_line:\"*setupapi.dll*\" and process.command_line:\"*InstallHinfSection*\") or (process.command_line:\"*pcwutl.dll*\" and process.command_line:\"*LaunchApplication*\") or (process.command_line:\"*dfshim.dll*\" and process.command_line:\"*ShOpenVerbApplication*\") or (process.command_line:\"*dfshim.dll*\" and process.command_line:\"*ShOpenVerbShortcut*\") or (process.command_line:\"*scrobj.dll*\" and process.command_line:\"*GenerateTypeLib*\" and process.command_line:\"*http*\") or (process.command_line:\"*shimgvw.dll*\" and process.command_line:\"*ImageView_Fullscreen*\" and process.command_line:\"*http*\") or (process.command_line:\"*comsvcs.dll*\" and process.command_line:\"*MiniDump*\")) and (not (process.command_line:\"*shell32.dll,Control_RunDLL desk.cpl,screensaver,@screensaver*\" or (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\control.exe\" and process.parent.command_line:\"*.cpl*\" and (process.command_line:\"*Shell32.dll*\" and process.command_line:\"*Control_RunDLL*\" and process.command_line:\"*.cpl*\")) or (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\control.exe\" and process.command_line:\"\\\"C:\\\\Windows\\\\system32\\\\rundll32.exe\\\" Shell32.dll,Control_RunDLL \\\"C:\\\\Windows\\\\System32\\\\*\" and process.command_line:\"*.cpl\\\",\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "javascript:",
+        ".registerxll",
+        "url.dll",
+        "openurl",
+        "openurla",
+        "fileprotocolhandler",
+        "zipfldr.dll",
+        "routethecall",
+        "shell32.dll",
+        "control_rundll",
+        "shellexec_rundll",
+        "mshtml.dll",
+        "printhtml",
+        "advpack.dll",
+        "launchinfsection",
+        "registerocx",
+        "ieadvpack.dll",
+        "ieframe.dll",
+        "shdocvw.dll",
+        "syssetup.dll",
+        "setupinfobjectinstallaction",
+        "setupapi.dll",
+        "installhinfsection",
+        "pcwutl.dll",
+        "launchapplication",
+        "dfshim.dll",
+        "shopenverbapplication",
+        "shopenverbshortcut",
+        "scrobj.dll",
+        "generatetypelib",
+        "http",
+        "shimgvw.dll",
+        "imageview_fullscreen",
+        "comsvcs.dll",
+        "minidump",
+        "shell32.dll,control_rundll desk.cpl,screensaver,@screensaver",
+        ".cpl"
+      ],
+      "raw_values": [
+        "*javascript:*",
+        "*.RegisterXLL*",
+        "*url.dll*",
+        "*OpenURL*",
+        "*OpenURLA*",
+        "*FileProtocolHandler*",
+        "*zipfldr.dll*",
+        "*RouteTheCall*",
+        "*shell32.dll*",
+        "*Control_RunDLL*",
+        "*ShellExec_RunDLL*",
+        "*mshtml.dll*",
+        "*PrintHTML*",
+        "*advpack.dll*",
+        "*LaunchINFSection*",
+        "*RegisterOCX*",
+        "*ieadvpack.dll*",
+        "*ieframe.dll*",
+        "*shdocvw.dll*",
+        "*syssetup.dll*",
+        "*SetupInfObjectInstallAction*",
+        "*setupapi.dll*",
+        "*InstallHinfSection*",
+        "*pcwutl.dll*",
+        "*LaunchApplication*",
+        "*dfshim.dll*",
+        "*ShOpenVerbApplication*",
+        "*ShOpenVerbShortcut*",
+        "*scrobj.dll*",
+        "*GenerateTypeLib*",
+        "*http*",
+        "*shimgvw.dll*",
+        "*ImageView_Fullscreen*",
+        "*comsvcs.dll*",
+        "*MiniDump*",
+        "*shell32.dll,Control_RunDLL desk.cpl,screensaver,@screensaver*",
+        "*Shell32.dll*",
+        "*.cpl*",
+        "\\",
+        "*.cpl\\"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "control.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\control.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        ".cpl"
+      ],
+      "raw_values": [
+        "*.cpl*"
+      ]
+    }
+  ]
+}

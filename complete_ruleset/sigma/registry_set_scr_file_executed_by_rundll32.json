@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "registry_set_scr_file_executed_by_rundll32",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_scr_file_executed_by_rundll32.eql",
+  "raw_query": "any where process.executable:\"*\\\\rundll32.exe\" and (registry.path:\"*\\\\Control Panel\\\\Desktop\\\\SCRNSAVE.EXE*\" and winlog.event_data.Details:\"*.scr\") and (not (winlog.event_data.Details like~ (\"*C:\\\\Windows\\\\System32\\\\*\", \"*C:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\",
+        "c:\\\\windows\\\\syswow64\\\\"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\System32\\\\*",
+        "*C:\\\\Windows\\\\SysWOW64\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\control panel\\\\desktop\\\\scrnsave.exe"
+      ],
+      "raw_values": [
+        "*\\\\Control Panel\\\\Desktop\\\\SCRNSAVE.EXE*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        ".scr"
+      ],
+      "raw_values": [
+        "*.scr"
+      ]
+    }
+  ]
+}

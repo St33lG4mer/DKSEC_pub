@@ -1,0 +1,62 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_whoami_parent_anomaly",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_whoami_parent_anomaly.eql",
+  "raw_query": "any where (process.executable:\"*\\\\whoami.exe\" or process.pe.original_file_name:\"whoami.exe\") and (not ((process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (?process.parent.executable == null) or (process.parent.executable like~ (\"\", \"-\")))) and (not process.parent.executable:\"*:\\\\Program Files\\\\Microsoft Monitoring Agent\\\\Agent\\\\MonitoringHost.exe\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "",
+        "-"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\whoami.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "whoami.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "monitoringhost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Microsoft Monitoring Agent\\\\Agent\\\\MonitoringHost.exe"
+      ]
+    }
+  ]
+}

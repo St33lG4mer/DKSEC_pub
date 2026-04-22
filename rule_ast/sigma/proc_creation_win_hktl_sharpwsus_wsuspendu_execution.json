@@ -1,0 +1,50 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_sharpwsus_wsuspendu_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_sharpwsus_wsuspendu_execution.eql",
+  "raw_query": "any where (process.command_line:\"* -Inject *\" and (process.command_line like~ (\"* -PayloadArgs *\", \"* -PayloadFile *\"))) or ((process.command_line like~ (\"* approve *\", \"* create *\", \"* check *\", \"* delete *\")) and (process.command_line like~ (\"* /payload:*\", \"* /payload=*\", \"* /updateid:*\", \"* /updateid=*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-payloadargs",
+        "-payloadfile",
+        "approve",
+        "create",
+        "check",
+        "delete",
+        "payload:",
+        "payload=",
+        "updateid:",
+        "updateid="
+      ],
+      "raw_values": [
+        "* -PayloadArgs *",
+        "* -PayloadFile *",
+        "* approve *",
+        "* create *",
+        "* check *",
+        "* delete *",
+        "* /payload:*",
+        "* /payload=*",
+        "* /updateid:*",
+        "* /updateid=*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-inject"
+      ],
+      "raw_values": [
+        "* -Inject *"
+      ]
+    }
+  ]
+}

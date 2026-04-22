@@ -1,0 +1,21 @@
+{
+  "source": "elastic",
+  "name": "AWS S3 Bucket Configuration Deletion",
+  "slug": "defense_evasion_s3_bucket_configuration_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: Amazon S3",
+    "Use Case: Asset Visibility",
+    "Tactic: Defense Evasion",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/defense_evasion_s3_bucket_configuration_deletion.toml",
+  "raw_query": "data_stream.dataset:aws.cloudtrail and \n    event.provider:s3.amazonaws.com and\n    event.action:(DeleteBucketPolicy or \n                    DeleteBucketReplication or \n                    DeleteBucketCors or \n                    DeleteBucketEncryption or \n                    DeleteBucketLifecycle) and \n    event.outcome:success\n",
+  "conditions": []
+}

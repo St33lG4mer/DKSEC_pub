@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "win_mssql_sp_maggie",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2022/Malware/win_mssql_sp_maggie.eql",
+  "raw_query": "any where winlog.channel:\"Application\" and (winlog.provider_name:\"MSSQLSERVER\" and event.code:\"8128\" and winlog.event_data.Message:\"*maggie*\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "application"
+      ],
+      "raw_values": [
+        "Application"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "mssqlserver"
+      ],
+      "raw_values": [
+        "MSSQLSERVER"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "8128"
+      ],
+      "raw_values": [
+        "8128"
+      ]
+    },
+    {
+      "field": "winlog.event_data.message",
+      "raw_field": "winlog.event_data.Message",
+      "operator": ":",
+      "values": [
+        "maggie"
+      ],
+      "raw_values": [
+        "*maggie*"
+      ]
+    }
+  ]
+}

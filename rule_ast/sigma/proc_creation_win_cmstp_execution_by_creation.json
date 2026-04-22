@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmstp_execution_by_creation",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmstp_execution_by_creation.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\cmstp.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmstp.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmstp.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Attempt to Revoke Okta API Token",
+  "slug": "impact_attempt_to_revoke_okta_api_token",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Use Case: Identity and Access Audit",
+    "Data Source: Okta",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/impact_attempt_to_revoke_okta_api_token.toml",
+  "raw_query": "data_stream.dataset:okta.system and event.action:system.api_token.revoke\n",
+  "conditions": []
+}

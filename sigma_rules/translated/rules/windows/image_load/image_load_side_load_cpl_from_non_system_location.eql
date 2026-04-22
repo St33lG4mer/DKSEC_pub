@@ -1,0 +1,1 @@
+any where (file.path like~ ("*\\appwiz.cpl", "*\\bthprops.cpl", "*\\hdwwiz.cpl")) and (not (file.path like~ ("C:\\Windows\\Prefetch\\*", "C:\\Windows\\System32\\*", "C:\\Windows\\SysWOW64\\*", "C:\\Windows\\WinSxS\\*")))

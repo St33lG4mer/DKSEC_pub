@@ -1,0 +1,43 @@
+{
+  "source": "elastic",
+  "name": "Unusual High Denied Topic Blocks Detected",
+  "slug": "aws_bedrock_multiple_topic_policy_blocks_detected",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: LLM",
+    "Data Source: AWS Bedrock",
+    "Data Source: AWS S3",
+    "Use Case: Policy Violation",
+    "Mitre Atlas: T0051",
+    "Mitre Atlas: T0054",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws_bedrock/aws_bedrock_multiple_topic_policy_blocks_detected.toml",
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Expand multi-value policy name field\n| mv_expand gen_ai.policy.name\n| mv_expand gen_ai.policy.action\n\n// Filter for blocked topic policy violations\n| where\n  gen_ai.policy.action == \"BLOCKED\"\n  and gen_ai.compliance.violation_detected == \"true\"\n  and gen_ai.policy.name == \"topic_policy\"\n\n// keep only user info\n| keep user.id\n\n// count how many times each user triggered a blocked topic policy\n| stats\n    Esql.ml_policy_blocked_topic_count = count()\n  by user.id\n\n// Filter for excessive violations\n| where Esql.ml_policy_blocked_topic_count > 5\n\n// sort highest to lowest\n| sort Esql.ml_policy_blocked_topic_count desc\n",
+  "conditions": [
+    {
+      "field": "gen_ai.policy.action",
+      "raw_field": "gen_ai.policy.action",
+      "operator": "==",
+      "values": [
+        "blocked"
+      ],
+      "raw_values": [
+        "BLOCKED"
+      ]
+    },
+    {
+      "field": "gen_ai.policy.name",
+      "raw_field": "gen_ai.policy.name",
+      "operator": "==",
+      "values": [
+        "topic_policy"
+      ],
+      "raw_values": [
+        "topic_policy"
+      ]
+    }
+  ]
+}

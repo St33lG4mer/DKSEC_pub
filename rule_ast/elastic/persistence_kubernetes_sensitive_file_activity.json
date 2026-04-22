@@ -1,0 +1,93 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Sensitive Configuration File Activity",
+  "slug": "persistence_kubernetes_sensitive_file_activity",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "Domain: Kubernetes",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Defend for Containers",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_kubernetes_sensitive_file_activity.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.type != \"deletion\" and file.path like (\n  \"/etc/kubernetes/manifests/*\",\n  \"/etc/kubernetes/pki/*\",\n  \"/etc/kubernetes/*.conf\"\n) and not (\n  process.name in (\"kubeadm\", \"kubelet\", \"dpkg\", \"sed\") or\n  (process.name in (\"vi\", \"vim\", \"vim.basic\") and file.extension in (\"swx\", \"swp\"))\n)\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".conf"
+      ],
+      "raw_values": [
+        "/etc/kubernetes/manifests/*",
+        "/etc/kubernetes/pki/*",
+        "/etc/kubernetes/*.conf"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "kubeadm",
+        "kubelet",
+        "dpkg",
+        "sed",
+        "vim",
+        "vim.basic"
+      ],
+      "raw_values": [
+        "kubeadm",
+        "kubelet",
+        "dpkg",
+        "sed",
+        "vi",
+        "vim",
+        "vim.basic"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swx",
+        "swp"
+      ],
+      "raw_values": [
+        "swx",
+        "swp"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "source": "elastic",
+  "name": "Unusual Kernel Module Enumeration",
+  "slug": "discovery_kernel_module_enumeration",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/discovery_kernel_module_enumeration.toml",
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:exec and (\n (process.name:(lsmod or modinfo)) or\n (process.name:kmod and process.args:list) or\n (process.name:depmod and process.args:(--all or -a))\n) and\nnot (\n  process.parent.name:(\n    mkinitramfs or cryptroot or framebuffer or dracut or jem or thin-provisioning-tools or readykernel or lvm2 or\n    vz-start or iscsi or mdadm or ovalprobes or bcache or plymouth or dkms or overlayroot or weak-modules or zfs or\n    systemd or whoopsie-upload-all or kdumpctl or apport-gtk or casper or rear or kernel-install or newrelic-infra\n  ) or\n  process.parent.executable:(\n    /var/lib/dpkg/info/linux-modules*-generic.post* or \"/var/ossec/bin/wazuh-modulesd\" or \"/opt/gitlab/embedded/bin/ruby\" or\n    \"/usr/share/initramfs-tools/hooks/thermal\" or \"/usr/libexec/iptables/iptables.init\" or \"/usr/sbin/mkinitramfs\" or\n    \"/usr/share/initramfs-tools/hooks/cryptroot\" or \"/usr/bin/kdumpctl\"\n  ) or\n  process.parent.args:(/var/lib/dpkg/info/* or /var/tmp/rpm-tmp* or \"longhorn-manager\" or \"/usr/bin/entry\") or\n  process.entry_leader.executable:(\n    \"/usr/lib/apt/apt.systemd.daily\" or \"/usr/libexec/gnome-terminal-server\" or \"/usr/local/qualys/cloud-agent/bin/qualys-cloud-agent\"\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wazuh-modulesd",
+        "ruby",
+        "thermal",
+        "iptables.init",
+        "mkinitramfs",
+        "cryptroot",
+        "kdumpctl"
+      ],
+      "raw_values": [
+        "/var/ossec/bin/wazuh-modulesd",
+        "/opt/gitlab/embedded/bin/ruby",
+        "/usr/share/initramfs-tools/hooks/thermal",
+        "/usr/libexec/iptables/iptables.init",
+        "/usr/sbin/mkinitramfs",
+        "/usr/share/initramfs-tools/hooks/cryptroot",
+        "/usr/bin/kdumpctl"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "longhorn-manager",
+        "/usr/bin/entry"
+      ],
+      "raw_values": [
+        "longhorn-manager",
+        "/usr/bin/entry"
+      ]
+    },
+    {
+      "field": "process.entry_leader.executable",
+      "raw_field": "process.entry_leader.executable",
+      "operator": ":",
+      "values": [
+        "/usr/lib/apt/apt.systemd.daily",
+        "/usr/libexec/gnome-terminal-server",
+        "/usr/local/qualys/cloud-agent/bin/qualys-cloud-agent"
+      ],
+      "raw_values": [
+        "/usr/lib/apt/apt.systemd.daily",
+        "/usr/libexec/gnome-terminal-server",
+        "/usr/local/qualys/cloud-agent/bin/qualys-cloud-agent"
+      ]
+    }
+  ]
+}

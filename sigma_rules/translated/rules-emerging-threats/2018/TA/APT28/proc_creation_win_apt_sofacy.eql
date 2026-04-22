@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\rundll32.exe" and (process.command_line like~ ("*%LOCALAPPDATA%*", "*\\AppData\\Local\\*"))) and (process.command_line:"*.dat\",*" or (process.command_line like~ ("*.dll #1", "*.dll\" #1", "*.dll\",#1")))) and (not process.command_line:"*\\AppData\\Local\\Temp\\*")

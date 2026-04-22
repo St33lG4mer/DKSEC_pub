@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "dns_query_win_regsvr32_dns_query",
+  "subtree": "rules",
+  "category": "dns",
+  "sigma_path": "rules/windows/dns_query/dns_query_win_regsvr32_dns_query.eql",
+  "raw_query": "any where process.executable:\"*\\\\regsvr32.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    }
+  ]
+}

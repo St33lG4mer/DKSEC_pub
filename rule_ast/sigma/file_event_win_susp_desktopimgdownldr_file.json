@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_susp_desktopimgdownldr_file",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_susp_desktopimgdownldr_file.eql",
+  "raw_query": "any where (process.executable:\"*\\\\svchost.exe\" and file.path:\"*\\\\Personalization\\\\LockScreenImage\\\\*\") and (not file.path:\"*C:\\\\Windows\\\\*\") and (not (file.path like~ (\"*.jpg*\", \"*.jpeg*\", \"*.png*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".jpg",
+        ".jpeg",
+        ".png"
+      ],
+      "raw_values": [
+        "*.jpg*",
+        "*.jpeg*",
+        "*.png*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    }
+  ]
+}

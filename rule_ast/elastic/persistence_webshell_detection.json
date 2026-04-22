@@ -1,0 +1,133 @@
+{
+  "source": "elastic",
+  "name": "Web Shell Detection: Script Process Child of Common Web Processes",
+  "slug": "persistence_webshell_detection",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Initial Access",
+    "Tactic: Execution",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/persistence_webshell_detection.toml",
+  "raw_query": "host.os.type:windows and event.category:process and event.type:start and process.args : * and\n  process.parent.name:(\"w3wp.exe\" or \"httpd.exe\" or \"nginx.exe\" or \"php.exe\" or \"php-cgi.exe\" or \"tomcat.exe\" or \"ArcSOC.exe\") and\n  (\n    process.name : (\"cmd.exe\" or \"cscript.exe\" or \"powershell.exe\" or \"pwsh.exe\" or \"powershell_ise.exe\" or \"wmic.exe\" or \"wscript.exe\") or\n    process.name.caseless : (\"cmd.exe\" or \"cscript.exe\" or \"powershell.exe\" or \"pwsh.exe\" or \"powershell_ise.exe\" or \"wmic.exe\" or \"wscript.exe\")\n  ) and\n  not\n  (\n    process.command_line : (\n      \"cmd.exe /c mode CON\" or\n      \"cmd.exe /s /c \\\"mode CON\\\"\" or\n      \"cmd.exe /c \\\"mode\\\"\" or\n      \"cmd.exe /s /c \\\"tput colors 2>&1\\\"\" or\n      \"cmd.exe /s /c \\\"stty 2> NUL\\\"\" or\n      \"cmd.exe /s /c \\\"stty 2>&1\\\"\" or\n      \"cmd.exe /c \\\"stty 2>&1\\\"\" or\n      \"cmd.exe /s /c \\\"ipconfig /all 2>&1\\\"\" or\n      \"cmd.exe /s /c \\\"echo '%os%'\\\"\" or\n      *.\\\\install\\\\awk.exe*\n    ) or\n    process.args : (\\(git or (*artisan* and *queue\\:work*) or *rmdir* or \"mode CON\" or ver or ls or mode or dir) or\n\n    (process.name:cmd.exe and process.parent.args : \"c:\\\\\\\\xampp\\\\\\\\htdocs\\\\\\\\open-audit\\\\\\\\index.php\") or\n\n    (process.name:cmd.exe and process.args:(\"/V:ON\" and \"--header-html\")) or\n\n    (process.parent.args:\"WebCession\" and process.args:E\\:\\\\Data\\\\CLM\\\\cession\\\\*.bat) or\n\n    (process.parent.executable :\"D:\\\\AiDKlinik\\\\php\\\\php-cgi.exe\" and process.args:D\\:\\\\AiDKlinik\\\\web*) or\n\n    (process.parent.args :\"E:/wamp64/bin/apache/apache2.4.62.1\" and process.args:node*) or\n\n    (process.parent.name:\"php.exe\" and process.name:\"cmd.exe\" and process.args:(\"/V:ON\" and \"/E:ON\"))\n  )\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "w3wp.exe",
+        "httpd.exe",
+        "nginx.exe",
+        "php.exe",
+        "php-cgi.exe",
+        "tomcat.exe",
+        "arcsoc.exe"
+      ],
+      "raw_values": [
+        "w3wp.exe",
+        "httpd.exe",
+        "nginx.exe",
+        "php.exe",
+        "php-cgi.exe",
+        "tomcat.exe",
+        "ArcSOC.exe",
+        "D:\\\\AiDKlinik\\\\php\\\\php-cgi.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.name.caseless",
+      "raw_field": "process.name.caseless",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "c mode con",
+        "v:on",
+        "--header-html",
+        "e:on"
+      ],
+      "raw_values": [
+        "cmd.exe /c mode CON",
+        "cmd.exe /s /c \\",
+        "",
+        "cmd.exe /c \\",
+        "/V:ON",
+        "--header-html",
+        "/E:ON"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "c:\\\\\\\\xampp\\\\\\\\htdocs\\\\\\\\open-audit\\\\\\\\index.php",
+        "webcession",
+        "e:/wamp64/bin/apache/apache2.4.62.1"
+      ],
+      "raw_values": [
+        "c:\\\\\\\\xampp\\\\\\\\htdocs\\\\\\\\open-audit\\\\\\\\index.php",
+        "WebCession",
+        "E:/wamp64/bin/apache/apache2.4.62.1"
+      ]
+    }
+  ]
+}

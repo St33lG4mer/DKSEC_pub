@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_curl",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_curl.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"curl.exe\" or process.pe.description:\"The curl executable\") and (not process.executable:\"*\\\\curl*\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "the curl executable"
+      ],
+      "raw_values": [
+        "The curl executable"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl"
+      ],
+      "raw_values": [
+        "*\\\\curl*"
+      ]
+    }
+  ]
+}

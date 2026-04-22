@@ -1,0 +1,69 @@
+{
+  "source": "elastic",
+  "name": "SSH Key Generated via ssh-keygen",
+  "slug": "persistence_ssh_key_generation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Tactic: Persistence",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_ssh_key_generation.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"creation\", \"file_create_event\") and\nprocess.executable == \"/usr/bin/ssh-keygen\" and file.path : (\"/home/*/.ssh/*\", \"/root/.ssh/*\", \"/etc/ssh/*\") and\nnot file.name : \"known_hosts.*\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "creation",
+        "file_create_event"
+      ],
+      "raw_values": [
+        "creation",
+        "file_create_event"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "==",
+      "values": [
+        "ssh-keygen"
+      ],
+      "raw_values": [
+        "/usr/bin/ssh-keygen"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "known_hosts."
+      ],
+      "raw_values": [
+        "known_hosts.*"
+      ]
+    }
+  ]
+}

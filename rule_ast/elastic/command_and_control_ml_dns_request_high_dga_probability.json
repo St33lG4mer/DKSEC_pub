@@ -1,0 +1,21 @@
+{
+  "source": "elastic",
+  "name": "Machine Learning Detected a DNS Request With a High DGA Probability Score",
+  "slug": "command_and_control_ml_dns_request_high_dga_probability",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Network",
+    "Domain: Endpoint",
+    "Data Source: Elastic Defend",
+    "Use Case: Domain Generation Algorithm Detection",
+    "Rule Type: ML",
+    "Rule Type: Machine Learning",
+    "Tactic: Command and Control",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/dga/command_and_control_ml_dns_request_high_dga_probability.toml",
+  "raw_query": "ml_is_dga.malicious_probability > 0.98\n",
+  "conditions": []
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_event_silentprocessexit_lsass",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_event_silentprocessexit_lsass.eql",
+  "raw_query": "any where registry.path:\"*Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\lsass.exe*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "microsoft\\\\windows nt\\\\currentversion\\\\silentprocessexit\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SilentProcessExit\\\\lsass.exe*"
+      ]
+    }
+  ]
+}

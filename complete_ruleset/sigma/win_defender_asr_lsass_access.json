@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "win_defender_asr_lsass_access",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/windefend/win_defender_asr_lsass_access.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Defender/Operational\" and ((event.code:\"1121\" and winlog.event_data.Path:\"*\\\\lsass.exe\") and (not ((process.executable:\"C:\\\\Windows\\\\Temp\\\\asgard2-agent\\\\*\" and (process.executable like~ (\"*\\\\thor64.exe\", \"*\\\\thor.exe\"))) or (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\atiesrxx.exe\", \"C:\\\\Windows\\\\System32\\\\CompatTelRunner.exe\", \"C:\\\\Windows\\\\System32\\\\msiexec.exe\", \"C:\\\\Windows\\\\System32\\\\nvwmi64.exe\", \"C:\\\\Windows\\\\System32\\\\svchost.exe\", \"C:\\\\Windows\\\\System32\\\\Taskmgr.exe\", \"C:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\")) or (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\DriverStore\\\\*\", \"C:\\\\WINDOWS\\\\Installer\\\\*\", \"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\")))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "thor64.exe",
+        "thor.exe",
+        "atiesrxx.exe",
+        "compattelrunner.exe",
+        "msiexec.exe",
+        "nvwmi64.exe",
+        "svchost.exe",
+        "taskmgr.exe",
+        "wmiprvse.exe"
+      ],
+      "raw_values": [
+        "*\\\\thor64.exe",
+        "*\\\\thor.exe",
+        "C:\\\\Windows\\\\System32\\\\atiesrxx.exe",
+        "C:\\\\Windows\\\\System32\\\\CompatTelRunner.exe",
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\System32\\\\nvwmi64.exe",
+        "C:\\\\Windows\\\\System32\\\\svchost.exe",
+        "C:\\\\Windows\\\\System32\\\\Taskmgr.exe",
+        "C:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "C:\\\\Windows\\\\System32\\\\DriverStore\\\\*",
+        "C:\\\\WINDOWS\\\\Installer\\\\*",
+        "C:\\\\Program Files\\\\*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows defender/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Defender/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "1121"
+      ],
+      "raw_values": [
+        "1121"
+      ]
+    },
+    {
+      "field": "winlog.event_data.path",
+      "raw_field": "winlog.event_data.Path",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "source": "elastic",
+  "name": "Linux User or Group Deletion",
+  "slug": "defense_evasion_user_or_group_deletion",
+  "category": "iam",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_user_or_group_deletion.toml",
+  "raw_query": "iam where host.os.type == \"linux\" and event.type in (\"group\", \"user\") and event.type == \"deletion\" and event.outcome == \"success\"\n",
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "group",
+        "user"
+      ],
+      "raw_values": [
+        "group",
+        "user"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "source": "elastic",
+  "name": "FortiGate Configuration File Downloaded",
+  "slug": "collection_fortigate_config_download",
+  "category": "network",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Tactic: Credential Access",
+    "Resources: Investigation Guide",
+    "Domain: Network",
+    "Data Source: Fortinet",
+    "Data Source: Fortinet FortiGate"
+  ],
+  "elastic_path": "rules/network/collection_fortigate_config_download.toml",
+  "raw_query": "any where data_stream.dataset == \"fortinet_fortigate.log\" and\n    event.code == \"0100032095\" and\n    fortinet.firewall.action == \"download\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "fortinet_fortigate.log"
+      ],
+      "raw_values": [
+        "fortinet_fortigate.log"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "0100032095"
+      ],
+      "raw_values": [
+        "0100032095"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.action",
+      "raw_field": "fortinet.firewall.action",
+      "operator": "==",
+      "values": [
+        "download"
+      ],
+      "raw_values": [
+        "download"
+      ]
+    }
+  ]
+}

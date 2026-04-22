@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_splwow64_cli_anomaly",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_splwow64_cli_anomaly.eql",
+  "raw_query": "any where process.executable:\"*\\\\splwow64.exe\" and process.command_line:\"*splwow64.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "splwow64.exe"
+      ],
+      "raw_values": [
+        "*\\\\splwow64.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "splwow64.exe"
+      ],
+      "raw_values": [
+        "*splwow64.exe"
+      ]
+    }
+  ]
+}

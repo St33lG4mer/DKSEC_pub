@@ -1,0 +1,31 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_office_macro_files_created",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_office_macro_files_created.eql",
+  "raw_query": "any where file.path like~ (\"*.docm\", \"*.dotm\", \"*.xlsm\", \"*.xltm\", \"*.potm\", \"*.pptm\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".docm",
+        ".dotm",
+        ".xlsm",
+        ".xltm",
+        ".potm",
+        ".pptm"
+      ],
+      "raw_values": [
+        "*.docm",
+        "*.dotm",
+        "*.xlsm",
+        "*.xltm",
+        "*.potm",
+        "*.pptm"
+      ]
+    }
+  ]
+}

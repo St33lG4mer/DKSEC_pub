@@ -1,0 +1,48 @@
+{
+  "source": "sigma",
+  "name": "file_access_win_susp_gpo_files",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_access/file_access_win_susp_gpo_files.eql",
+  "raw_query": "any where (file.path:\"\\\\*\" and (file.path:\"*\\\\sysvol\\\\*\" and file.path:\"*\\\\Policies\\\\*\") and (file.path like~ (\"*audit.csv\", \"*Files.xml\", \"*GptTmpl.inf\", \"*groups.xml\", \"*Registry.pol\", \"*Registry.xml\", \"*scheduledtasks.xml\", \"*scripts.ini\", \"*services.xml\"))) and (not ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Program Files\\\\*\", \"C:\\\\Windows\\\\system32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")) or process.executable:\"C:\\\\Windows\\\\explorer.exe\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "audit.csv",
+        "files.xml",
+        "gpttmpl.inf",
+        "groups.xml",
+        "registry.pol",
+        "registry.xml",
+        "scheduledtasks.xml",
+        "scripts.ini",
+        "services.xml"
+      ],
+      "raw_values": [
+        "*audit.csv",
+        "*Files.xml",
+        "*GptTmpl.inf",
+        "*groups.xml",
+        "*Registry.pol",
+        "*Registry.xml",
+        "*scheduledtasks.xml",
+        "*scripts.ini",
+        "*services.xml"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\explorer.exe"
+      ]
+    }
+  ]
+}

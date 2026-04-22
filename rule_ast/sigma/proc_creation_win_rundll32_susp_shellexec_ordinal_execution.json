@@ -1,0 +1,93 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_susp_shellexec_ordinal_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_susp_shellexec_ordinal_execution.eql",
+  "raw_query": "any where (process.parent.command_line:\"*SHELL32.DLL*\" and (process.parent.command_line like~ (\"*#568*\", \"*#570*\", \"*#572*\", \"*#576*\"))) and (((process.parent.command_line like~ (\"*comspec*\", \"*iex*\", \"*Invoke-*\", \"*msiexec*\", \"*odbcconf*\", \"*regsvr32*\")) or (process.parent.command_line like~ (\"*\\\\Desktop\\\\*\", \"*\\\\ProgramData\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\"))) or (process.executable like~ (\"*\\\\bash.exe\", \"*\\\\bitsadmin.exe\", \"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\curl.exe\", \"*\\\\mshta.exe\", \"*\\\\msiexec.exe\", \"*\\\\msxsl.exe\", \"*\\\\odbcconf.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\schtasks.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\")))",
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "#568",
+        "#570",
+        "#572",
+        "#576",
+        "comspec",
+        "iex",
+        "invoke-",
+        "msiexec",
+        "odbcconf",
+        "regsvr32"
+      ],
+      "raw_values": [
+        "*#568*",
+        "*#570*",
+        "*#572*",
+        "*#576*",
+        "*comspec*",
+        "*iex*",
+        "*Invoke-*",
+        "*msiexec*",
+        "*odbcconf*",
+        "*regsvr32*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\ProgramData\\\\*",
+        "*\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bash.exe",
+        "bitsadmin.exe",
+        "cmd.exe",
+        "cscript.exe",
+        "curl.exe",
+        "mshta.exe",
+        "msiexec.exe",
+        "msxsl.exe",
+        "odbcconf.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "schtasks.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\bash.exe",
+        "*\\\\bitsadmin.exe",
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\curl.exe",
+        "*\\\\mshta.exe",
+        "*\\\\msiexec.exe",
+        "*\\\\msxsl.exe",
+        "*\\\\odbcconf.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "shell32.dll"
+      ],
+      "raw_values": [
+        "*SHELL32.DLL*"
+      ]
+    }
+  ]
+}

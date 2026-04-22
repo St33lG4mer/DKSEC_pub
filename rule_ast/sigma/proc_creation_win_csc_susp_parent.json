@@ -1,0 +1,118 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_csc_susp_parent",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_csc_susp_parent.eql",
+  "raw_query": "any where (process.executable:\"*\\\\csc.exe\" or process.pe.original_file_name:\"csc.exe\") and ((process.parent.executable like~ (\"*\\\\cscript.exe\", \"*\\\\excel.exe\", \"*\\\\mshta.exe\", \"*\\\\onenote.exe\", \"*\\\\outlook.exe\", \"*\\\\powerpnt.exe\", \"*\\\\winword.exe\", \"*\\\\wscript.exe\")) or ((process.parent.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.parent.command_line like~ (\"*-Encoded *\", \"*FromBase64String*\"))) or (process.parent.command_line:\"SigmaRegularExpression(regexp=SigmaString(['([Pp]rogram[Dd]ata|%([Ll]ocal)', <SpecialChars.WILDCARD_SINGLE: 2>, '[Aa]pp[Dd]ata%|\\\\\\\\[Aa]pp[Dd]ata\\\\\\\\([Ll]ocal([Ll]ow)', <SpecialChars.WILDCARD_SINGLE: 2>, '|[Rr]oaming))\\\\\\\\[^\\\\\\\\]{1,256}$']), flags=set())\" or (process.parent.command_line like~ (\"*:\\\\PerfLogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\Temporary Internet*\")) or (process.parent.command_line:\"*:\\\\Users\\\\*\" and process.parent.command_line:\"*\\\\Favorites\\\\*\") or (process.parent.command_line:\"*:\\\\Users\\\\*\" and process.parent.command_line:\"*\\\\Favourites\\\\*\") or (process.parent.command_line:\"*:\\\\Users\\\\*\" and process.parent.command_line:\"*\\\\Contacts\\\\*\") or (process.parent.command_line:\"*:\\\\Users\\\\*\" and process.parent.command_line:\"*\\\\Pictures\\\\*\"))) and (not ((process.parent.executable like~ (\"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Program Files\\\\*\")) or process.parent.executable:\"C:\\\\Windows\\\\System32\\\\sdiagnhost.exe\" or process.parent.executable:\"C:\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe\")) and (not (process.parent.executable:\"C:\\\\ProgramData\\\\chocolatey\\\\choco.exe\" or process.parent.command_line:\"*\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced Threat Protection*\" or (process.parent.command_line like~ (\"*JwB7ACIAZgBhAGkAbABlAGQAIgA6AHQAcgB1AGUALAAiAG0AcwBnACIAOgAiAEEAbgBzAGkAYgBsAGUAIAByAGUAcQB1AGkAcgBlAHMAIABQAG8AdwBlAHIAUwBoAGUAbABsACAAdgAzAC4AMAAgAG8AcgAgAG4AZQB3AGUAcgAiAH0AJw*\", \"*cAewAiAGYAYQBpAGwAZQBkACIAOgB0AHIAdQBlACwAIgBtAHMAZwAiADoAIgBBAG4AcwBpAGIAbABlACAAcgBlAHEAdQBpAHIAZQBzACAAUABvAHcAZQByAFMAaABlAGwAbAAgAHYAMwAuADAAIABvAHIAIABuAGUAdwBlAHIAIgB9ACcA*\", \"*nAHsAIgBmAGEAaQBsAGUAZAAiADoAdAByAHUAZQAsACIAbQBzAGcAIgA6ACIAQQBuAHMAaQBiAGwAZQAgAHIAZQBxAHUAaQByAGUAcwAgAFAAbwB3AGUAcgBTAGgAZQBsAGwAIAB2ADMALgAwACAAbwByACAAbgBlAHcAZQByACIAfQAnA*\"))))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "excel.exe",
+        "mshta.exe",
+        "onenote.exe",
+        "outlook.exe",
+        "powerpnt.exe",
+        "winword.exe",
+        "wscript.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe",
+        "*\\\\excel.exe",
+        "*\\\\mshta.exe",
+        "*\\\\onenote.exe",
+        "*\\\\outlook.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\winword.exe",
+        "*\\\\wscript.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "-encoded",
+        "frombase64string",
+        "temporary internet",
+        "jwb7aciazgbhagkabablagqaiga6ahqacgb1agualaaiag0acwbnaciaogaiaeeabgbzagkaygbsaguaiabyaguacqb1agkacgblahmaiabqag8adwblahiauwboaguababsacaadgazac4amaagag8acgagag4azqb3aguacgaiah0ajw",
+        "caewaiagyayqbpagwazqbkaciaogb0ahiadqblacwaigbtahmazwaiadoaigbbag4acwbpagiabablacaacgblaheadqbpahiazqbzacaauabvahcazqbyafmaaablagwabaagahyamwauadaaiabvahiaiabuaguadwblahiaigb9acca",
+        "nahsaigbmageaaqbsaguazaaiadoadabyahuazqasaciabqbzagcaiga6aciaqqbuahmaaqbiagwazqagahiazqbxahuaaqbyaguacwagafaabwb3aguacgbtaggazqbsagwaiab2admalgawacaabwbyacaabgblahcazqbyaciafqana"
+      ],
+      "raw_values": [
+        "*-Encoded *",
+        "*FromBase64String*",
+        "*:\\\\PerfLogs\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\Temporary Internet*",
+        "*JwB7ACIAZgBhAGkAbABlAGQAIgA6AHQAcgB1AGUALAAiAG0AcwBnACIAOgAiAEEAbgBzAGkAYgBsAGUAIAByAGUAcQB1AGkAcgBlAHMAIABQAG8AdwBlAHIAUwBoAGUAbABsACAAdgAzAC4AMAAgAG8AcgAgAG4AZQB3AGUAcgAiAH0AJw*",
+        "*cAewAiAGYAYQBpAGwAZQBkACIAOgB0AHIAdQBlACwAIgBtAHMAZwAiADoAIgBBAG4AcwBpAGIAbABlACAAcgBlAHEAdQBpAHIAZQBzACAAUABvAHcAZQByAFMAaABlAGwAbAAgAHYAMwAuADAAIABvAHIAIABuAGUAdwBlAHIAIgB9ACcA*",
+        "*nAHsAIgBmAGEAaQBsAGUAZAAiADoAdAByAHUAZQAsACIAbQBzAGcAIgA6ACIAQQBuAHMAaQBiAGwAZQAgAHIAZQBxAHUAaQByAGUAcwAgAFAAbwB3AGUAcgBTAGgAZQBsAGwAIAB2ADMALgAwACAAbwByACAAbgBlAHcAZQByACIAfQAnA*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csc.exe"
+      ],
+      "raw_values": [
+        "*\\\\csc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "csc.exe"
+      ],
+      "raw_values": [
+        "csc.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "]{1,256}$']), flags=set())",
+        "windows defender advanced threat protection"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['([Pp]rogram[Dd]ata|%([Ll]ocal)', <SpecialChars.WILDCARD_SINGLE: 2>, '[Aa]pp[Dd]ata%|\\\\\\\\[Aa]pp[Dd]ata\\\\\\\\([Ll]ocal([Ll]ow)', <SpecialChars.WILDCARD_SINGLE: 2>, '|[Rr]oaming))\\\\\\\\[^\\\\\\\\]{1,256}$']), flags=set())",
+        "*:\\\\Users\\\\*",
+        "*\\\\Favorites\\\\*",
+        "*\\\\Favourites\\\\*",
+        "*\\\\Contacts\\\\*",
+        "*\\\\Pictures\\\\*",
+        "*\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced Threat Protection*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sdiagnhost.exe",
+        "w3wp.exe",
+        "choco.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\sdiagnhost.exe",
+        "C:\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe",
+        "C:\\\\ProgramData\\\\chocolatey\\\\choco.exe"
+      ]
+    }
+  ]
+}

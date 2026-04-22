@@ -1,0 +1,262 @@
+{
+  "source": "elastic",
+  "name": "Base64 Decoded Payload Piped to Interpreter",
+  "slug": "defense_evasion_interpreter_launched_from_decoded_payload",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_interpreter_launched_from_decoded_payload.toml",
+  "raw_query": "sequence by host.id, process.parent.entity_id with maxspan=3s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"ProcessRollup2\") and (\n    (process.name in (\"base64\", \"base64plain\", \"base64url\", \"base64mime\", \"base64pem\", \"base32\", \"base16\") and process.command_line like~ \"*-*d*\") or\n    (process.name == \"openssl\" and process.args == \"enc\" and process.args in (\"-d\", \"-base64\", \"-a\")) or\n    (process.name like \"python*\" and\n    (process.args == \"base64\" and process.args in (\"-d\", \"-u\", \"-t\")) or\n    (process.args == \"-c\" and process.args like \"*base64*\" and process.command_line like~ \"*b64decode*\")\n    ) or\n    (process.name like \"perl*\" and process.command_line like~ \"*decode_base64*\") or\n    (process.name like \"ruby*\" and process.args == \"-e\" and process.command_line like~ \"*Base64.decode64*\")\n  )]\n [process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"ProcessRollup2\") and process.name like~ (\n    \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"python*\", \"perl*\", \"ruby*\", \"lua*\", \"php*\"\n  ) and\n  not (\n    ?process.parent.command_line in (\n      \"bash ./run_tests.sh unit-integration\",\n      \"/bin/sh /var/lib/dpkg/info/nmap-common.postinst configure\",\n      \"bash -c base64 -d <<< Zm9yIHN2YyBpbiBxZW11LWt2bSBvdnMtdnN3aXRjaGQgbGlidmlydGQgdmlydGxvY2tkIHBhY2VtYWtlciBwY3NkOyBkbyBzeXN0ZW1jdGwgaXMtYWN0aXZlICRzdmM7IGRvbmU= | bash -l\"\n    ) or\n    process.command_line == \"/usr/bin/perl /usr/bin/shasum -a 256\" or\n    ?process.working_directory like (\n      \"/usr/local/zeek\", \"/opt/zeek\", \"/var/lib/docker/overlay2/*/opt/zeek\", \"/usr/local/zeek_old_install\",\n      \"/var/lib/docker/overlay2/*/usr/local/zeek\", \"/proc/self/fd/*/usr/local/zeek\"\n    ) or\n    (?process.parent.name == \"zsh\" and ?process.parent.command_line like \"*extendedglob*\") or\n    (process.name like \"python*\" and ?process.parent.name == \"python*\") or\n    process.args like \"/tmp/apt-key-gpghome*\"\n  )]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "python",
+        "perl",
+        "ruby",
+        "lua",
+        "php"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "python*",
+        "perl*",
+        "ruby*",
+        "lua*",
+        "php*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/usr/local/zeek",
+        "/opt/zeek",
+        "/var/lib/docker/overlay2/*/opt/zeek",
+        "/usr/local/zeek_old_install",
+        "/var/lib/docker/overlay2/*/usr/local/zeek",
+        "/proc/self/fd/*/usr/local/zeek"
+      ],
+      "raw_values": [
+        "/usr/local/zeek",
+        "/opt/zeek",
+        "/var/lib/docker/overlay2/*/opt/zeek",
+        "/usr/local/zeek_old_install",
+        "/var/lib/docker/overlay2/*/usr/local/zeek",
+        "/proc/self/fd/*/usr/local/zeek"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "base64",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "base32",
+        "base16"
+      ],
+      "raw_values": [
+        "base64",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "base32",
+        "base16"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "-base64"
+      ],
+      "raw_values": [
+        "-d",
+        "-base64",
+        "-a",
+        "-u",
+        "-t"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "in",
+      "values": [
+        "run_tests.sh unit-integration",
+        "nmap-common.postinst configure",
+        "bash -c base64 -d <<< zm9yihn2yybpbibxzw11lwt2bsbvdnmtdnn3axrjagqgbglidmlydgqgdmlydgxvy2tkihbhy2vtywtlcibwy3nkoybkbybzexn0zw1jdgwgaxmtywn0axzlicrzdmm7igrvbmu= | bash -l"
+      ],
+      "raw_values": [
+        "bash ./run_tests.sh unit-integration",
+        "/bin/sh /var/lib/dpkg/info/nmap-common.postinst configure",
+        "bash -c base64 -d <<< Zm9yIHN2YyBpbiBxZW11LWt2bSBvdnMtdnN3aXRjaGQgbGlidmlydGQgdmlydGxvY2tkIHBhY2VtYWtlciBwY3NkOyBkbyBzeXN0ZW1jdGwgaXMtYWN0aXZlICRzdmM7IGRvbmU= | bash -l"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-*d",
+        "b64decode",
+        "decode_base64",
+        "base64.decode64"
+      ],
+      "raw_values": [
+        "*-*d*",
+        "*b64decode*",
+        "*decode_base64*",
+        "*Base64.decode64*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "openssl"
+      ],
+      "raw_values": [
+        "openssl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "enc",
+        "base64",
+        "shasum -a 256"
+      ],
+      "raw_values": [
+        "enc",
+        "base64",
+        "-c",
+        "-e",
+        "/usr/bin/perl /usr/bin/shasum -a 256"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python",
+        "perl",
+        "ruby"
+      ],
+      "raw_values": [
+        "python*",
+        "perl*",
+        "ruby*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "base64",
+        "apt-key-gpghome"
+      ],
+      "raw_values": [
+        "*base64*",
+        "/tmp/apt-key-gpghome*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "zsh",
+        "python"
+      ],
+      "raw_values": [
+        "zsh",
+        "python*"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "extendedglob"
+      ],
+      "raw_values": [
+        "*extendedglob*"
+      ]
+    }
+  ]
+}

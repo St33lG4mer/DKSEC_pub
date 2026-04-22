@@ -1,0 +1,66 @@
+{
+  "source": "sigma",
+  "name": "win_security_kerberoasting_activity",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_kerberoasting_activity.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4769\" and winlog.event_data.Status:\"0x0\" and winlog.event_data.TicketEncryptionType:\"0x17\") and (not ((service.name like~ (\"*krbtgt\", \"*$\")) or winlog.event_data.TargetUserName:\"*$@*\")))",
+  "conditions": [
+    {
+      "field": "service.name",
+      "raw_field": "service.name",
+      "operator": "like~",
+      "values": [
+        "krbtgt"
+      ],
+      "raw_values": [
+        "*krbtgt",
+        "*$"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4769"
+      ],
+      "raw_values": [
+        "4769"
+      ]
+    },
+    {
+      "field": "winlog.event_data.status",
+      "raw_field": "winlog.event_data.Status",
+      "operator": ":",
+      "values": [
+        "0x0"
+      ],
+      "raw_values": [
+        "0x0"
+      ]
+    },
+    {
+      "field": "winlog.event_data.ticketencryptiontype",
+      "raw_field": "winlog.event_data.TicketEncryptionType",
+      "operator": ":",
+      "values": [
+        "0x17"
+      ],
+      "raw_values": [
+        "0x17"
+      ]
+    }
+  ]
+}

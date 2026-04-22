@@ -1,0 +1,157 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_spoolsv_susp_child_processes",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_spoolsv_susp_child_processes.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\spoolsv.exe\" and (winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\"))) and ((process.executable like~ (\"*\\\\gpupdate.exe\", \"*\\\\whoami.exe\", \"*\\\\nltest.exe\", \"*\\\\taskkill.exe\", \"*\\\\wmic.exe\", \"*\\\\taskmgr.exe\", \"*\\\\sc.exe\", \"*\\\\findstr.exe\", \"*\\\\curl.exe\", \"*\\\\wget.exe\", \"*\\\\certutil.exe\", \"*\\\\bitsadmin.exe\", \"*\\\\accesschk.exe\", \"*\\\\wevtutil.exe\", \"*\\\\bcdedit.exe\", \"*\\\\fsutil.exe\", \"*\\\\cipher.exe\", \"*\\\\schtasks.exe\", \"*\\\\write.exe\", \"*\\\\wuauclt.exe\", \"*\\\\systeminfo.exe\", \"*\\\\reg.exe\", \"*\\\\query.exe\")) or ((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) and (not process.command_line:\"*start*\")) or (process.executable:\"*\\\\cmd.exe\" and (not (process.command_line like~ (\"*.spl*\", \"*route add*\", \"*program files*\")))) or (process.executable:\"*\\\\netsh.exe\" and (not (process.command_line like~ (\"*add portopening*\", \"*rule name*\")))) or ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (not process.command_line:\"*.spl*\")) or ((process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and process.command_line:\"*rundll32.exe\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "gpupdate.exe",
+        "whoami.exe",
+        "nltest.exe",
+        "taskkill.exe",
+        "wmic.exe",
+        "taskmgr.exe",
+        "sc.exe",
+        "findstr.exe",
+        "curl.exe",
+        "wget.exe",
+        "certutil.exe",
+        "bitsadmin.exe",
+        "accesschk.exe",
+        "wevtutil.exe",
+        "bcdedit.exe",
+        "fsutil.exe",
+        "cipher.exe",
+        "schtasks.exe",
+        "write.exe",
+        "wuauclt.exe",
+        "systeminfo.exe",
+        "reg.exe",
+        "query.exe",
+        "net.exe",
+        "net1.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\gpupdate.exe",
+        "*\\\\whoami.exe",
+        "*\\\\nltest.exe",
+        "*\\\\taskkill.exe",
+        "*\\\\wmic.exe",
+        "*\\\\taskmgr.exe",
+        "*\\\\sc.exe",
+        "*\\\\findstr.exe",
+        "*\\\\curl.exe",
+        "*\\\\wget.exe",
+        "*\\\\certutil.exe",
+        "*\\\\bitsadmin.exe",
+        "*\\\\accesschk.exe",
+        "*\\\\wevtutil.exe",
+        "*\\\\bcdedit.exe",
+        "*\\\\fsutil.exe",
+        "*\\\\cipher.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\write.exe",
+        "*\\\\wuauclt.exe",
+        "*\\\\systeminfo.exe",
+        "*\\\\reg.exe",
+        "*\\\\query.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".spl",
+        "route add",
+        "program files",
+        "add portopening",
+        "rule name"
+      ],
+      "raw_values": [
+        "*.spl*",
+        "*route add*",
+        "*program files*",
+        "*add portopening*",
+        "*rule name*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "spoolsv.exe"
+      ],
+      "raw_values": [
+        "*\\\\spoolsv.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "start",
+        ".spl",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*start*",
+        "*.spl*",
+        "*rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "netsh.exe",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\netsh.exe",
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "pipe_created_hktl_diagtrack_eop",
+  "subtree": "rules",
+  "category": "pipe",
+  "sigma_path": "rules/windows/pipe_created/pipe_created_hktl_diagtrack_eop.eql",
+  "raw_query": "any where file.name:\"*thisispipe*\"",
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "thisispipe"
+      ],
+      "raw_values": [
+        "*thisispipe*"
+      ]
+    }
+  ]
+}

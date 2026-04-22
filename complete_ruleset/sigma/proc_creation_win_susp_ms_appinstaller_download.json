@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_ms_appinstaller_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_ms_appinstaller_download.eql",
+  "raw_query": "any where process.command_line:\"*ms-appinstaller://?source=*\" and process.command_line:\"*http*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "source=",
+        "http"
+      ],
+      "raw_values": [
+        "*ms-appinstaller://?source=*",
+        "*http*"
+      ]
+    }
+  ]
+}

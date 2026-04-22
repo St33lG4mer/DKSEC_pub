@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_powertool",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_powertool.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\PowerTool.exe\", \"*\\\\PowerTool64.exe\")) or process.pe.original_file_name:\"PowerTool.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powertool.exe",
+        "powertool64.exe"
+      ],
+      "raw_values": [
+        "*\\\\PowerTool.exe",
+        "*\\\\PowerTool64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "powertool.exe"
+      ],
+      "raw_values": [
+        "PowerTool.exe"
+      ]
+    }
+  ]
+}

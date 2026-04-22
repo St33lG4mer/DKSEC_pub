@@ -1,0 +1,52 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Forbidden Request from Unusual User Agent",
+  "slug": "execution_forbidden_request_from_unsual_user_agent",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/execution_forbidden_request_from_unsual_user_agent.toml",
+  "raw_query": "data_stream.dataset:\"kubernetes.audit_logs\" and\nkubernetes.audit.stage:\"ResponseComplete\" and\nkubernetes.audit.annotations.authorization_k8s_io/decision:\"forbid\" and\nuser_agent.original:(* and not (*kubernetes/$Format))\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": ":",
+      "values": [
+        "responsecomplete"
+      ],
+      "raw_values": [
+        "ResponseComplete"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "forbid"
+      ],
+      "raw_values": [
+        "forbid"
+      ]
+    }
+  ]
+}

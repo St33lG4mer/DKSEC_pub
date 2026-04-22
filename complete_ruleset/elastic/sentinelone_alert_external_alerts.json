@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "SentinelOne Alert External Alerts",
+  "slug": "sentinelone_alert_external_alerts",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: SentinelOne",
+    "Use Case: Threat Detection",
+    "Resources: Investigation Guide",
+    "Promotion: External Alerts"
+  ],
+  "elastic_path": "rules/promotions/sentinelone_alert_external_alerts.toml",
+  "raw_query": "event.kind: event and data_stream.dataset: sentinel_one.alert\n",
+  "conditions": []
+}

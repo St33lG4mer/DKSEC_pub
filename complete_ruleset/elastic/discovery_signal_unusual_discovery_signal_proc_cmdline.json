@@ -1,0 +1,45 @@
+{
+  "source": "elastic",
+  "name": "Unusual Discovery Signal Alert with Unusual Process Command Line",
+  "slug": "discovery_signal_unusual_discovery_signal_proc_cmdline",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/discovery_signal_unusual_discovery_signal_proc_cmdline.toml",
+  "raw_query": "host.os.type:windows and event.kind:signal and kibana.alert.rule.rule_id:(\n  \"d68e95ad-1c82-4074-a12a-125fe10ac8ba\" or \"7b8bfc26-81d2-435e-965c-d722ee397ef1\" or\n  \"0635c542-1b96-4335-9b47-126582d2c19a\" or \"6ea55c81-e2ba-42f2-a134-bccf857ba922\" or\n  \"e0881d20-54ac-457f-8733-fe0bc5d44c55\" or \"06568a02-af29-4f20-929c-f3af281e41aa\" or\n  \"c4e9ed3e-55a2-4309-a012-bc3c78dad10a\" or \"51176ed2-2d90-49f2-9f3d-17196428b169\"\n)\n",
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.rule_id",
+      "raw_field": "kibana.alert.rule.rule_id",
+      "operator": ":",
+      "values": [
+        "d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+        "7b8bfc26-81d2-435e-965c-d722ee397ef1",
+        "0635c542-1b96-4335-9b47-126582d2c19a",
+        "6ea55c81-e2ba-42f2-a134-bccf857ba922",
+        "e0881d20-54ac-457f-8733-fe0bc5d44c55",
+        "06568a02-af29-4f20-929c-f3af281e41aa",
+        "c4e9ed3e-55a2-4309-a012-bc3c78dad10a",
+        "51176ed2-2d90-49f2-9f3d-17196428b169"
+      ],
+      "raw_values": [
+        "d68e95ad-1c82-4074-a12a-125fe10ac8ba",
+        "7b8bfc26-81d2-435e-965c-d722ee397ef1",
+        "0635c542-1b96-4335-9b47-126582d2c19a",
+        "6ea55c81-e2ba-42f2-a134-bccf857ba922",
+        "e0881d20-54ac-457f-8733-fe0bc5d44c55",
+        "06568a02-af29-4f20-929c-f3af281e41aa",
+        "c4e9ed3e-55a2-4309-a012-bc3c78dad10a",
+        "51176ed2-2d90-49f2-9f3d-17196428b169"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_domain_cloudflared_communication",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_domain_cloudflared_communication.eql",
+  "raw_query": "any where network.direction:\"true\" and (destination.domain like~ (\"*.v2.argotunnel.com\", \"*protocol-v2.argotunnel.com\", \"*trycloudflare.com\", \"*update.argotunnel.com\"))",
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        ".v2.argotunnel.com",
+        "protocol-v2.argotunnel.com",
+        "trycloudflare.com",
+        "update.argotunnel.com"
+      ],
+      "raw_values": [
+        "*.v2.argotunnel.com",
+        "*protocol-v2.argotunnel.com",
+        "*trycloudflare.com",
+        "*update.argotunnel.com"
+      ]
+    }
+  ]
+}

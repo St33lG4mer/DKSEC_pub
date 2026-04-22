@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_aspnet_compiler_exectuion",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_aspnet_compiler_exectuion.eql",
+  "raw_query": "any where (process.executable like~ (\"*:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*\")) and process.executable:\"*\\\\aspnet_compiler.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "aspnet_compiler.exe"
+      ],
+      "raw_values": [
+        "*\\\\aspnet_compiler.exe"
+      ]
+    }
+  ]
+}

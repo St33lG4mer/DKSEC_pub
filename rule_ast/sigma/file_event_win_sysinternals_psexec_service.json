@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_sysinternals_psexec_service",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_sysinternals_psexec_service.eql",
+  "raw_query": "any where file.path:\"*\\\\PSEXESVC.exe\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "psexesvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\PSEXESVC.exe"
+      ]
+    }
+  ]
+}

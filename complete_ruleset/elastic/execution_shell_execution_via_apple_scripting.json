@@ -1,0 +1,99 @@
+{
+  "source": "elastic",
+  "name": "Shell Execution via Apple Scripting",
+  "slug": "execution_shell_execution_via_apple_scripting",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/execution_shell_execution_via_apple_scripting.toml",
+  "raw_query": "sequence by host.id with maxspan=10s\n [process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and event.action == \"exec\" and process.name == \"osascript\" and process.args == \"-e\"] by process.entity_id\n [process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and process.name in (\"sh\", \"bash\", \"zsh\") and process.args == \"-c\" and process.command_line : (\"*curl*\", \"*pbpaste*\", \"*http*\", \"*chmod*\", \"*nscurl*\")] by process.parent.entity_id\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "curl",
+        "pbpaste",
+        "http",
+        "chmod",
+        "nscurl"
+      ],
+      "raw_values": [
+        "*curl*",
+        "*pbpaste*",
+        "*http*",
+        "*chmod*",
+        "*nscurl*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "sh",
+        "bash",
+        "zsh"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "osascript"
+      ],
+      "raw_values": [
+        "osascript"
+      ]
+    }
+  ]
+}

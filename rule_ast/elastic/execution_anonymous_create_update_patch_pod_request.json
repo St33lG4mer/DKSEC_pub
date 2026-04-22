@@ -1,0 +1,84 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Anonymous User Create/Update/Patch Pods Request",
+  "slug": "execution_anonymous_create_update_patch_pod_request",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/execution_anonymous_create_update_patch_pod_request.toml",
+  "raw_query": "any where data_stream.dataset == \"kubernetes.audit_logs\" and (\n    kubernetes.audit.user.username in (\"system:anonymous\", \"system:unauthenticated\") or\n    kubernetes.audit.user.username == null or\n    kubernetes.audit.user.username == \"\"\n  ) and kubernetes.audit.level in (\"RequestResponse\", \"ResponseComplete\", \"Request\") and kubernetes.audit.verb in (\"create\", \"update\", \"patch\") and\nkubernetes.audit.objectRef.resource == \"pods\"\n\n",
+  "conditions": [
+    {
+      "field": "kubernetes.audit.user.username",
+      "raw_field": "kubernetes.audit.user.username",
+      "operator": "in",
+      "values": [
+        "system:anonymous",
+        "system:unauthenticated"
+      ],
+      "raw_values": [
+        "system:anonymous",
+        "system:unauthenticated"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.level",
+      "raw_field": "kubernetes.audit.level",
+      "operator": "in",
+      "values": [
+        "requestresponse",
+        "responsecomplete",
+        "request"
+      ],
+      "raw_values": [
+        "RequestResponse",
+        "ResponseComplete",
+        "Request"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": "in",
+      "values": [
+        "create",
+        "update",
+        "patch"
+      ],
+      "raw_values": [
+        "create",
+        "update",
+        "patch"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": "==",
+      "values": [
+        "pods"
+      ],
+      "raw_values": [
+        "pods"
+      ]
+    }
+  ]
+}

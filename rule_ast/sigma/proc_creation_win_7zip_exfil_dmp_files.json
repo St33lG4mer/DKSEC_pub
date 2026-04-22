@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_7zip_exfil_dmp_files",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_7zip_exfil_dmp_files.eql",
+  "raw_query": "any where (process.pe.description:\"*7-Zip*\" or (process.executable like~ (\"*\\\\7z.exe\", \"*\\\\7zr.exe\", \"*\\\\7za.exe\")) or (process.pe.original_file_name like~ (\"7z.exe\", \"7za.exe\"))) and (process.command_line like~ (\"*.dmp*\", \"*.dump*\", \"*.hdmp*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "7z.exe",
+        "7zr.exe",
+        "7za.exe"
+      ],
+      "raw_values": [
+        "*\\\\7z.exe",
+        "*\\\\7zr.exe",
+        "*\\\\7za.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "7z.exe",
+        "7za.exe"
+      ],
+      "raw_values": [
+        "7z.exe",
+        "7za.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".dmp",
+        ".dump",
+        ".hdmp"
+      ],
+      "raw_values": [
+        "*.dmp*",
+        "*.dump*",
+        "*.hdmp*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "7-zip"
+      ],
+      "raw_values": [
+        "*7-Zip*"
+      ]
+    }
+  ]
+}

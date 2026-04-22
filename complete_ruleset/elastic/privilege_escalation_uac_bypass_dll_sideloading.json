@@ -1,0 +1,79 @@
+{
+  "source": "elastic",
+  "name": "UAC Bypass Attempt via Privileged IFileOperation COM Interface",
+  "slug": "privilege_escalation_uac_bypass_dll_sideloading",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_uac_bypass_dll_sideloading.toml",
+  "raw_query": "file where host.os.type == \"windows\" and event.type : \"change\" and process.name : \"dllhost.exe\" and\n  /* Known modules names side loaded into process running with high or system integrity level for UAC Bypass, update here for new modules */\n  file.name : (\"wow64log.dll\", \"comctl32.dll\", \"DismCore.dll\", \"OskSupport.dll\", \"duser.dll\", \"Accessibility.ni.dll\") and\n  /* has no impact on rule logic just to avoid OS install related FPs */\n  not file.path : (\"C:\\\\Windows\\\\SoftwareDistribution\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")\n",
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "wow64log.dll",
+        "comctl32.dll",
+        "dismcore.dll",
+        "osksupport.dll",
+        "duser.dll",
+        "accessibility.ni.dll"
+      ],
+      "raw_values": [
+        "wow64log.dll",
+        "comctl32.dll",
+        "DismCore.dll",
+        "OskSupport.dll",
+        "duser.dll",
+        "Accessibility.ni.dll"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "dllhost.exe"
+      ]
+    }
+  ]
+}

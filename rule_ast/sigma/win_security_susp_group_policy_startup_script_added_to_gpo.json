@@ -1,0 +1,106 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_group_policy_startup_script_added_to_gpo",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_group_policy_startup_script_added_to_gpo.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"5136\", \"5145\")) and ((((winlog.event_data.AttributeLDAPDisplayName like~ (\"gPCMachineExtensionNames\", \"gPCUserExtensionNames\")) and winlog.event_data.AttributeValue:\"*42B5FAAE-6536-11D2-AE5A-0000F87571E3*\") and (winlog.event_data.AttributeValue like~ (\"*40B6664F-4972-11D1-A7CA-0000F87571E3*\", \"*40B66650-4972-11D1-A7CA-0000F87571E3*\"))) or (winlog.event_data.ShareName:\"*\\\\SYSVOL\" and (winlog.event_data.RelativeTargetName like~ (\"*\\\\scripts.ini\", \"*\\\\psscripts.ini\")) and winlog.event_data.AccessList:\"*%%4417*\")))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "5136",
+        "5145"
+      ],
+      "raw_values": [
+        "5136",
+        "5145"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": "like~",
+      "values": [
+        "gpcmachineextensionnames",
+        "gpcuserextensionnames"
+      ],
+      "raw_values": [
+        "gPCMachineExtensionNames",
+        "gPCUserExtensionNames"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributevalue",
+      "raw_field": "winlog.event_data.AttributeValue",
+      "operator": "like~",
+      "values": [
+        "40b6664f-4972-11d1-a7ca-0000f87571e3",
+        "40b66650-4972-11d1-a7ca-0000f87571e3"
+      ],
+      "raw_values": [
+        "*40B6664F-4972-11D1-A7CA-0000F87571E3*",
+        "*40B66650-4972-11D1-A7CA-0000F87571E3*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": "like~",
+      "values": [
+        "\\\\scripts.ini",
+        "\\\\psscripts.ini"
+      ],
+      "raw_values": [
+        "*\\\\scripts.ini",
+        "*\\\\psscripts.ini"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributevalue",
+      "raw_field": "winlog.event_data.AttributeValue",
+      "operator": ":",
+      "values": [
+        "42b5faae-6536-11d2-ae5a-0000f87571e3"
+      ],
+      "raw_values": [
+        "*42B5FAAE-6536-11D2-AE5A-0000F87571E3*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.sharename",
+      "raw_field": "winlog.event_data.ShareName",
+      "operator": ":",
+      "values": [
+        "\\\\sysvol"
+      ],
+      "raw_values": [
+        "*\\\\SYSVOL"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": ":",
+      "values": [
+        "%%4417"
+      ],
+      "raw_values": [
+        "*%%4417*"
+      ]
+    }
+  ]
+}

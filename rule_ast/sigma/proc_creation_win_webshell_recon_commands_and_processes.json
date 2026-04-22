@@ -1,0 +1,187 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_webshell_recon_commands_and_processes",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_webshell_recon_commands_and_processes.eql",
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\w3wp.exe\", \"*\\\\php-cgi.exe\", \"*\\\\nginx.exe\", \"*\\\\httpd.exe\", \"*\\\\caddy.exe\", \"*\\\\ws_tomcatservice.exe\")) or ((process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and (process.parent.executable like~ (\"*-tomcat-*\", \"*\\\\tomcat*\"))) or ((process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and (process.command_line like~ (\"*catalina.jar*\", \"*CATALINA_HOME*\")))) and (((process.pe.original_file_name like~ (\"net.exe\", \"net1.exe\")) and (process.command_line like~ (\"* user *\", \"* use *\", \"* group *\"))) or (process.pe.original_file_name:\"ping.exe\" and process.command_line:\"* -n *\") or (process.command_line like~ (\"*&cd&echo*\", \"*cd /d *\")) or (process.pe.original_file_name:\"wmic.exe\" and process.command_line:\"* /node:*\") or ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.command_line like~ (\"* -enc *\", \"* -EncodedCommand *\", \"* -w hidden *\", \"* -windowstyle hidden*\", \"*.WebClient).Download*\"))) or ((process.executable like~ (\"*\\\\dsquery.exe\", \"*\\\\find.exe\", \"*\\\\findstr.exe\", \"*\\\\ipconfig.exe\", \"*\\\\netstat.exe\", \"*\\\\nslookup.exe\", \"*\\\\pathping.exe\", \"*\\\\quser.exe\", \"*\\\\schtasks.exe\", \"*\\\\systeminfo.exe\", \"*\\\\tasklist.exe\", \"*\\\\tracert.exe\", \"*\\\\ver.exe\", \"*\\\\wevtutil.exe\", \"*\\\\whoami.exe\")) or (process.pe.original_file_name like~ (\"dsquery.exe\", \"find.exe\", \"findstr.exe\", \"ipconfig.exe\", \"netstat.exe\", \"nslookup.exe\", \"pathping.exe\", \"quser.exe\", \"schtasks.exe\", \"sysinfo.exe\", \"tasklist.exe\", \"tracert.exe\", \"ver.exe\", \"VSSADMIN.EXE\", \"wevtutil.exe\", \"whoami.exe\"))) or (process.command_line like~ (\"* Test-NetConnection *\", \"*dir \\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "w3wp.exe",
+        "php-cgi.exe",
+        "nginx.exe",
+        "httpd.exe",
+        "caddy.exe",
+        "ws_tomcatservice.exe",
+        "java.exe",
+        "javaw.exe",
+        "-tomcat-",
+        "tomcat"
+      ],
+      "raw_values": [
+        "*\\\\w3wp.exe",
+        "*\\\\php-cgi.exe",
+        "*\\\\nginx.exe",
+        "*\\\\httpd.exe",
+        "*\\\\caddy.exe",
+        "*\\\\ws_tomcatservice.exe",
+        "*\\\\java.exe",
+        "*\\\\javaw.exe",
+        "*-tomcat-*",
+        "*\\\\tomcat*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "catalina.jar",
+        "catalina_home",
+        "user",
+        "use",
+        "group",
+        "&cd&echo",
+        "-enc",
+        "-encodedcommand",
+        "-w hidden",
+        "-windowstyle hidden",
+        "test-netconnection"
+      ],
+      "raw_values": [
+        "*catalina.jar*",
+        "*CATALINA_HOME*",
+        "* user *",
+        "* use *",
+        "* group *",
+        "*&cd&echo*",
+        "*cd /d *",
+        "* -enc *",
+        "* -EncodedCommand *",
+        "* -w hidden *",
+        "* -windowstyle hidden*",
+        "* Test-NetConnection *",
+        "*dir \\\\*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe",
+        "dsquery.exe",
+        "find.exe",
+        "findstr.exe",
+        "ipconfig.exe",
+        "netstat.exe",
+        "nslookup.exe",
+        "pathping.exe",
+        "quser.exe",
+        "schtasks.exe",
+        "sysinfo.exe",
+        "tasklist.exe",
+        "tracert.exe",
+        "ver.exe",
+        "vssadmin.exe",
+        "wevtutil.exe",
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "net.exe",
+        "net1.exe",
+        "dsquery.exe",
+        "find.exe",
+        "findstr.exe",
+        "ipconfig.exe",
+        "netstat.exe",
+        "nslookup.exe",
+        "pathping.exe",
+        "quser.exe",
+        "schtasks.exe",
+        "sysinfo.exe",
+        "tasklist.exe",
+        "tracert.exe",
+        "ver.exe",
+        "VSSADMIN.EXE",
+        "wevtutil.exe",
+        "whoami.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "dsquery.exe",
+        "find.exe",
+        "findstr.exe",
+        "ipconfig.exe",
+        "netstat.exe",
+        "nslookup.exe",
+        "pathping.exe",
+        "quser.exe",
+        "schtasks.exe",
+        "systeminfo.exe",
+        "tasklist.exe",
+        "tracert.exe",
+        "ver.exe",
+        "wevtutil.exe",
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\dsquery.exe",
+        "*\\\\find.exe",
+        "*\\\\findstr.exe",
+        "*\\\\ipconfig.exe",
+        "*\\\\netstat.exe",
+        "*\\\\nslookup.exe",
+        "*\\\\pathping.exe",
+        "*\\\\quser.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\systeminfo.exe",
+        "*\\\\tasklist.exe",
+        "*\\\\tracert.exe",
+        "*\\\\ver.exe",
+        "*\\\\wevtutil.exe",
+        "*\\\\whoami.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ping.exe",
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "ping.exe",
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "node:"
+      ],
+      "raw_values": [
+        "* -n *",
+        "* /node:*"
+      ]
+    }
+  ]
+}

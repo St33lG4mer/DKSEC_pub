@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_delete_win_zone_identifier_ads",
+  "subtree": "rules-threat-hunting",
+  "category": "file",
+  "sigma_path": "rules-threat-hunting/windows/file/file_delete/file_delete_win_zone_identifier_ads.eql",
+  "raw_query": "any where file.path:\"*:Zone.Identifier\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ":zone.identifier"
+      ],
+      "raw_values": [
+        "*:Zone.Identifier"
+      ]
+    }
+  ]
+}

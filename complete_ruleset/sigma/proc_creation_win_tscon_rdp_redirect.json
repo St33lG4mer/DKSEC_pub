@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_tscon_rdp_redirect",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_tscon_rdp_redirect.eql",
+  "raw_query": "any where process.command_line:\"* /dest:rdp-tcp#*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dest:rdp-tcp#"
+      ],
+      "raw_values": [
+        "* /dest:rdp-tcp#*"
+      ]
+    }
+  ]
+}

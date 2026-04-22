@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_webdav_client_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_webdav_client_execution.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\svchost.exe\" and (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and process.command_line:\"*C:\\\\windows\\\\system32\\\\davclnt.dll,DavSetCookie*\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "davclnt.dll,davsetcookie"
+      ],
+      "raw_values": [
+        "*C:\\\\windows\\\\system32\\\\davclnt.dll,DavSetCookie*"
+      ]
+    }
+  ]
+}

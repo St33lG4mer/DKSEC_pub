@@ -1,0 +1,69 @@
+{
+  "source": "elastic",
+  "name": "Alerts in Different ATT&CK Tactics by Host",
+  "slug": "multiple_alerts_risky_host_esql",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/multiple_alerts_risky_host_esql.toml",
+  "raw_query": "from .alerts-security.*  metadata _id\n\n// filter for alerts with populated risk score, excluding threat_match rules, deprecated and some other noisy ones.\n| where kibana.alert.risk_score > 0 and\n        kibana.alert.rule.name IS NOT NULL and\n        host.id is not null and data_stream.dataset is not null and\n        kibana.alert.rule.type != \"threat_match\" and\n        // Top noisy influencing rules\n        not kibana.alert.rule.name in (\"Agent Spoofing - Mismatched Agent ID\", \"Compression DLL Loaded by Unusual Process\", \"Process Termination followed by Deletion\", \"Suspicious PrintSpooler Service Executable File Creation\", \"Potential PrintNightmare File Modification\") and\n        not kibana.alert.rule.name like \"Deprecated - *\" and\n        not KQL(\"\"\"kibana.alert.rule.tags : \"Rule Type: Higher-Order Rule\" \"\"\")\n\n// extract unique counts and values by host.id\n| stats Esql.alerts_count = COUNT(*),\n        Esql.kibana_alert_rule_name_distinct_count = COUNT_DISTINCT(kibana.alert.rule.name),\n        Esql.event_module_distinct_count = COUNT_DISTINCT(event.module),\n        Esql.event_module_values = VALUES(event.module),\n        Esql.kibana_alert_rule_name_values = VALUES(kibana.alert.rule.name),\n        Esql.threat_tactic_id_distinct_count = COUNT_DISTINCT(kibana.alert.rule.threat.tactic.id),\n        Esql.threat_tactic_name_values = VALUES(kibana.alert.rule.threat.tactic.name),\n        Esql.kibana_alert_risk_score_sum = sum(kibana.alert.risk_score),\n        Esql.process_executable_values = VALUES(process.executable),\n        Esql.process_parent_executable_values = VALUES(process.parent.executable),\n        Esql.process_command_line_values = VALUES(process.command_line),\n        Esql.process_entity_id_distinct_count = COUNT_DISTINCT(process.entity_id) by host.id\n\n// divide the sum of risk scores by the total number of alerts\n| eval Esql.risk_alerts_count_ratio = Esql.kibana_alert_risk_score_sum/Esql.alerts_count\n\n// filter for risky hosts by risk score and unique count of rules and tactics\n| where Esql.kibana_alert_rule_name_distinct_count >= 5 and Esql.threat_tactic_id_distinct_count >= 3 and Esql.threat_tactic_id_distinct_count >= 3 and Esql.alerts_count <= 500 and Esql.risk_alerts_count_ratio >= 50\n\n// fiels populated in the resulting alert\n| keep host.id,\n       Esql.alerts_count,\n       Esql.kibana_alert_risk_score_sum,\n       Esql.risk_alerts_count_ratio,\n       Esql.kibana_alert_rule_name_distinct_count,\n       Esql.event_module_values,\n       Esql.kibana_alert_rule_name_values,\n       Esql.threat_tactic_name_values,\n       Esql.process_executable_values,\n       Esql.process_parent_executable_values,\n       Esql.process_command_line_values\n",
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.name",
+      "raw_field": "kibana.alert.rule.name",
+      "operator": "in",
+      "values": [
+        "agent spoofing - mismatched agent id",
+        "compression dll loaded by unusual process",
+        "process termination followed by deletion",
+        "suspicious printspooler service executable file creation",
+        "potential printnightmare file modification"
+      ],
+      "raw_values": [
+        "Agent Spoofing - Mismatched Agent ID",
+        "Compression DLL Loaded by Unusual Process",
+        "Process Termination followed by Deletion",
+        "Suspicious PrintSpooler Service Executable File Creation",
+        "Potential PrintNightmare File Modification"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.type",
+      "raw_field": "kibana.alert.rule.type",
+      "operator": "!=",
+      "values": [
+        "threat_match"
+      ],
+      "raw_values": [
+        "threat_match"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.name",
+      "raw_field": "kibana.alert.rule.name",
+      "operator": "like",
+      "values": [
+        "deprecated -"
+      ],
+      "raw_values": [
+        "Deprecated - *"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.tags",
+      "raw_field": "kibana.alert.rule.tags",
+      "operator": ":",
+      "values": [
+        "rule type: higher-order rule"
+      ],
+      "raw_values": [
+        "Rule Type: Higher-Order Rule"
+      ]
+    }
+  ]
+}

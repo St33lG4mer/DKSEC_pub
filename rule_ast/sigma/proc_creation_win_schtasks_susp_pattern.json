@@ -1,0 +1,93 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_susp_pattern",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_susp_pattern.eql",
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe\" and process.command_line:\"*/Create *\") and (((process.command_line like~ (\"*/sc minute *\", \"*/ru system *\")) and (process.command_line like~ (\"*cmd /c*\", \"*cmd /k*\", \"*cmd /r*\", \"*cmd.exe /c *\", \"*cmd.exe /k *\", \"*cmd.exe /r *\"))) or (process.command_line like~ (\"* -decode *\", \"* -enc *\", \"* -w hidden *\", \"* bypass *\", \"* IEX*\", \"*.DownloadData*\", \"*.DownloadFile*\", \"*.DownloadString*\", \"*/c start /min *\", \"*FromBase64String*\", \"*mshta http*\", \"*mshta.exe http*\")) or ((process.command_line like~ (\"*:\\\\ProgramData\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Tmp\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\*\", \"*%AppData%*\", \"*%Temp%*\", \"*%tmp%*\")) and (process.command_line like~ (\"*cscript*\", \"*curl*\", \"*wscript*\"))))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "sc minute",
+        "ru system",
+        "-decode",
+        "-enc",
+        "-w hidden",
+        "bypass",
+        "iex",
+        ".downloaddata",
+        ".downloadfile",
+        ".downloadstring",
+        "min",
+        "frombase64string",
+        "mshta http",
+        "mshta.exe http",
+        "%appdata%",
+        "%temp%",
+        "%tmp%",
+        "cscript",
+        "curl",
+        "wscript"
+      ],
+      "raw_values": [
+        "*/sc minute *",
+        "*/ru system *",
+        "*cmd /c*",
+        "*cmd /k*",
+        "*cmd /r*",
+        "*cmd.exe /c *",
+        "*cmd.exe /k *",
+        "*cmd.exe /r *",
+        "* -decode *",
+        "* -enc *",
+        "* -w hidden *",
+        "* bypass *",
+        "* IEX*",
+        "*.DownloadData*",
+        "*.DownloadFile*",
+        "*.DownloadString*",
+        "*/c start /min *",
+        "*FromBase64String*",
+        "*mshta http*",
+        "*mshta.exe http*",
+        "*:\\\\ProgramData\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Tmp\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\*",
+        "*%AppData%*",
+        "*%Temp%*",
+        "*%tmp%*",
+        "*cscript*",
+        "*curl*",
+        "*wscript*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "*/Create *"
+      ]
+    }
+  ]
+}

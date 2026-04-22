@@ -1,0 +1,50 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_bcdedit_boot_conf_tamper",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_bcdedit_boot_conf_tamper.eql",
+  "raw_query": "any where (process.executable:\"*\\\\bcdedit.exe\" or process.pe.original_file_name:\"bcdedit.exe\") and process.command_line:\"*set*\" and ((process.command_line:\"*bootstatuspolicy*\" and process.command_line:\"*ignoreallfailures*\") or (process.command_line:\"*recoveryenabled*\" and process.command_line:\"*no*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bcdedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\bcdedit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bcdedit.exe"
+      ],
+      "raw_values": [
+        "bcdedit.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "set",
+        "bootstatuspolicy",
+        "ignoreallfailures",
+        "recoveryenabled"
+      ],
+      "raw_values": [
+        "*set*",
+        "*bootstatuspolicy*",
+        "*ignoreallfailures*",
+        "*recoveryenabled*",
+        "*no*"
+      ]
+    }
+  ]
+}

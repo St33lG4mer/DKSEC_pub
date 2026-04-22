@@ -1,0 +1,29 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_domain_ngrok",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_domain_ngrok.eql",
+  "raw_query": "any where network.direction:\"true\" and (destination.domain like~ (\"*.ngrok-free.app\", \"*.ngrok-free.dev\", \"*.ngrok.app\", \"*.ngrok.dev\", \"*.ngrok.io\"))",
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        ".ngrok-free.app",
+        ".ngrok-free.dev",
+        ".ngrok.app",
+        ".ngrok.dev",
+        ".ngrok.io"
+      ],
+      "raw_values": [
+        "*.ngrok-free.app",
+        "*.ngrok-free.dev",
+        "*.ngrok.app",
+        "*.ngrok.dev",
+        "*.ngrok.io"
+      ]
+    }
+  ]
+}

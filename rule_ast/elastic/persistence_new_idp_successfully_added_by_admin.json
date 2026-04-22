@@ -1,0 +1,51 @@
+{
+  "source": "elastic",
+  "name": "New Okta Identity Provider (IdP) Added by Admin",
+  "slug": "persistence_new_idp_successfully_added_by_admin",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Identity and Access Audit",
+    "Tactic: Persistence",
+    "Data Source: Okta",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/persistence_new_idp_successfully_added_by_admin.toml",
+  "raw_query": "data_stream.dataset: \"okta.system\" and event.action: \"system.idp.lifecycle.create\" and okta.outcome.result: \"SUCCESS\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "system.idp.lifecycle.create"
+      ],
+      "raw_values": [
+        "system.idp.lifecycle.create"
+      ]
+    },
+    {
+      "field": "okta.outcome.result",
+      "raw_field": "okta.outcome.result",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "SUCCESS"
+      ]
+    }
+  ]
+}

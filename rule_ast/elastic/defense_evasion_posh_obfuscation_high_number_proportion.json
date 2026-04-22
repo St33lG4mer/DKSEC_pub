@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "Potential PowerShell Obfuscation via High Numeric Character Proportion",
+  "slug": "defense_evasion_posh_obfuscation_high_number_proportion",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: PowerShell Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_posh_obfuscation_high_number_proportion.toml",
+  "raw_query": "from logs-windows.powershell_operational* metadata _id, _version, _index\n| where event.code == \"4104\"\n\n// Filter out smaller scripts that are unlikely to implement obfuscation using the patterns we are looking for\n| eval Esql.script_block_length = length(powershell.file.script_block_text)\n| where Esql.script_block_length > 1000\n\n// replace the patterns we are looking for with the \ud83d\udd25 emoji to enable counting them\n// The emoji is used because it's unlikely to appear in scripts and has a consistent character length of 1\n| eval Esql.script_block_tmp = replace(powershell.file.script_block_text, \"\"\"[0-9]\"\"\", \"\ud83d\udd25\")\n\n// count how many patterns were detected by calculating the number of \ud83d\udd25 characters inserted\n| eval Esql.script_block_pattern_count = Esql.script_block_length - length(replace(Esql.script_block_tmp, \"\ud83d\udd25\", \"\"))\n\n// Calculate the ratio of special characters to total length\n| eval Esql.script_block_ratio = Esql.script_block_pattern_count::double / Esql.script_block_length::double\n\n// keep the fields relevant to the query, although this is not needed as the alert is populated using _id\n| keep\n    Esql.script_block_pattern_count,\n    Esql.script_block_ratio,\n    Esql.script_block_length,\n    Esql.script_block_tmp,\n    powershell.file.*,\n    file.directory,\n    file.path,\n    powershell.sequence,\n    powershell.total,\n    _id,\n    _version,\n    _index,\n    host.name,\n    host.id,\n    agent.id,\n    user.id\n\n// Filter for scripts with high numeric character ratio\n| where Esql.script_block_ratio > 0.5\n\n// Exclude Windows Defender Noisy Patterns\n| where not (\n    file.directory == \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced Threat Protection\\\\Downloads\" or\n    file.directory like (\n        \"C:\\\\\\\\ProgramData\\\\\\\\Microsoft\\\\\\\\Windows Defender Advanced Threat Protection\\\\\\\\DataCollection*\",\n        \"C:\\\\\\\\Program Files\\\\\\\\SentinelOne\\\\\\\\Sentinel Agent*\"\n    )\n  )\n  // ESQL requires this condition, otherwise it only returns matches where file.directory exists.\n  or file.directory is null\n| where not powershell.file.script_block_text like \"*[System.IO.File]::Open('C:\\\\\\\\ProgramData\\\\\\\\Microsoft\\\\\\\\Windows Defender Advanced Threat Protection\\\\\\\\DataCollection*\"\n| where not powershell.file.script_block_text : \"26a24ae4-039d-4ca4-87b4-2f64180311f0\"\n",
+  "conditions": [
+    {
+      "field": "file.directory",
+      "raw_field": "file.directory",
+      "operator": ":",
+      "values": [
+        "c:\\\\\\\\programdata\\\\\\\\microsoft\\\\\\\\windows defender advanced threat protection\\\\\\\\datacollection",
+        "c:\\\\\\\\program files\\\\\\\\sentinelone\\\\\\\\sentinel agent"
+      ],
+      "raw_values": [
+        "C:\\\\\\\\ProgramData\\\\\\\\Microsoft\\\\\\\\Windows Defender Advanced Threat Protection\\\\\\\\DataCollection*",
+        "C:\\\\\\\\Program Files\\\\\\\\SentinelOne\\\\\\\\Sentinel Agent*"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "4104"
+      ],
+      "raw_values": [
+        "4104"
+      ]
+    },
+    {
+      "field": "file.directory",
+      "raw_field": "file.directory",
+      "operator": "==",
+      "values": [
+        "c:\\\\programdata\\\\microsoft\\\\windows defender advanced threat protection\\\\downloads"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced Threat Protection\\\\Downloads"
+      ]
+    },
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": "like",
+      "values": [
+        "[system.io.file]::open('c:\\\\\\\\programdata\\\\\\\\microsoft\\\\\\\\windows defender advanced threat protection\\\\\\\\datacollection"
+      ],
+      "raw_values": [
+        "*[System.IO.File]::Open('C:\\\\\\\\ProgramData\\\\\\\\Microsoft\\\\\\\\Windows Defender Advanced Threat Protection\\\\\\\\DataCollection*"
+      ]
+    },
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "26a24ae4-039d-4ca4-87b4-2f64180311f0"
+      ],
+      "raw_values": [
+        "26a24ae4-039d-4ca4-87b4-2f64180311f0"
+      ]
+    }
+  ]
+}

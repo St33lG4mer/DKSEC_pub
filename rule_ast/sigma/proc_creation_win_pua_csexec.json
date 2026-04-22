@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_csexec",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_csexec.eql",
+  "raw_query": "any where process.executable:\"*\\\\csexec.exe\" or process.pe.description:\"csexec\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\csexec.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "csexec"
+      ],
+      "raw_values": [
+        "csexec"
+      ]
+    }
+  ]
+}

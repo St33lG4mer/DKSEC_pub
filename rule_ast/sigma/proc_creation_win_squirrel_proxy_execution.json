@@ -1,0 +1,61 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_squirrel_proxy_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_squirrel_proxy_execution.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\squirrel.exe\", \"*\\\\update.exe\")) and (process.command_line like~ (\"*--processStart*\", \"*--processStartAndWait*\", \"*--createShortcut*\"))) and (not (((process.command_line:\"*:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\Discord\\\\Update.exe*\" and process.command_line:\"*Discord.exe*\") and (process.command_line like~ (\"*--createShortcut*\", \"*--processStart*\"))) or ((process.command_line:\"*:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\GitHubDesktop\\\\Update.exe*\" and process.command_line:\"*GitHubDesktop.exe*\") and (process.command_line like~ (\"*--createShortcut*\", \"*--processStartAndWait*\"))) or ((process.command_line:\"*:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\Update.exe*\" and process.command_line:\"*Teams.exe*\") and (process.command_line like~ (\"*--processStart*\", \"*--createShortcut*\"))) or ((process.command_line:\"*:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\yammerdesktop\\\\Update.exe*\" and process.command_line:\"*Yammer.exe*\") and (process.command_line like~ (\"*--processStart*\", \"*--createShortcut*\")))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "squirrel.exe",
+        "update.exe"
+      ],
+      "raw_values": [
+        "*\\\\squirrel.exe",
+        "*\\\\update.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--processstart",
+        "--processstartandwait",
+        "--createshortcut"
+      ],
+      "raw_values": [
+        "*--processStart*",
+        "*--processStartAndWait*",
+        "*--createShortcut*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "update.exe",
+        "discord.exe",
+        "githubdesktop.exe",
+        "teams.exe",
+        "yammer.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Discord\\\\Update.exe*",
+        "*Discord.exe*",
+        "*\\\\AppData\\\\Local\\\\GitHubDesktop\\\\Update.exe*",
+        "*GitHubDesktop.exe*",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\Update.exe*",
+        "*Teams.exe*",
+        "*\\\\AppData\\\\Local\\\\yammerdesktop\\\\Update.exe*",
+        "*Yammer.exe*"
+      ]
+    }
+  ]
+}

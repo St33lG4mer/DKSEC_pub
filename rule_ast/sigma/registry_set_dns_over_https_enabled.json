@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "registry_set_dns_over_https_enabled",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_dns_over_https_enabled.eql",
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Edge\\\\BuiltInDnsClientEnabled\" and winlog.event_data.Details:\"DWORD (0x00000001)\") or (registry.path:\"*\\\\SOFTWARE\\\\Google\\\\Chrome\\\\DnsOverHttpsMode\" and winlog.event_data.Details:\"secure\") or (registry.path:\"*\\\\SOFTWARE\\\\Policies\\\\Mozilla\\\\Firefox\\\\DNSOverHTTPS\\\\Enabled\" and winlog.event_data.Details:\"DWORD (0x00000001)\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\policies\\\\microsoft\\\\edge\\\\builtindnsclientenabled",
+        "\\\\software\\\\google\\\\chrome\\\\dnsoverhttpsmode",
+        "\\\\software\\\\policies\\\\mozilla\\\\firefox\\\\dnsoverhttps\\\\enabled"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Edge\\\\BuiltInDnsClientEnabled",
+        "*\\\\SOFTWARE\\\\Google\\\\Chrome\\\\DnsOverHttpsMode",
+        "*\\\\SOFTWARE\\\\Policies\\\\Mozilla\\\\Firefox\\\\DNSOverHTTPS\\\\Enabled"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)",
+        "secure"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)",
+        "secure"
+      ]
+    }
+  ]
+}

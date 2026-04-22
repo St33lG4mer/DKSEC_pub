@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_domain_localtonet_tunnel",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_domain_localtonet_tunnel.eql",
+  "raw_query": "any where (destination.domain like~ (\"*.localto.net\", \"*.localtonet.com\")) and network.direction:\"true\"",
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        ".localto.net",
+        ".localtonet.com"
+      ],
+      "raw_values": [
+        "*.localto.net",
+        "*.localtonet.com"
+      ]
+    }
+  ]
+}

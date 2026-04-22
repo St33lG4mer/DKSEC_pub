@@ -1,0 +1,27 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_iso_file_recent",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_iso_file_recent.eql",
+  "raw_query": "any where (file.path like~ (\"*.iso.lnk\", \"*.img.lnk\", \"*.vhd.lnk\", \"*.vhdx.lnk\")) and file.path:\"*\\\\Microsoft\\\\Windows\\\\Recent\\\\*\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".iso.lnk",
+        ".img.lnk",
+        ".vhd.lnk",
+        ".vhdx.lnk"
+      ],
+      "raw_values": [
+        "*.iso.lnk",
+        "*.img.lnk",
+        "*.vhd.lnk",
+        "*.vhdx.lnk"
+      ]
+    }
+  ]
+}

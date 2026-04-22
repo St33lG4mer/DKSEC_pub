@@ -1,0 +1,55 @@
+{
+  "source": "elastic",
+  "name": "KRBTGT Delegation Backdoor",
+  "slug": "persistence_msds_alloweddelegateto_krbtgt",
+  "category": "iam",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Use Case: Active Directory Monitoring",
+    "Data Source: Active Directory",
+    "Data Source: Windows Security Event Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_msds_alloweddelegateto_krbtgt.toml",
+  "raw_query": "iam where host.os.type == \"windows\" and event.code == \"4738\" and winlog.event_data.AllowedToDelegateTo : \"*krbtgt*\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "4738"
+      ],
+      "raw_values": [
+        "4738"
+      ]
+    },
+    {
+      "field": "winlog.event_data.allowedtodelegateto",
+      "raw_field": "winlog.event_data.AllowedToDelegateTo",
+      "operator": ":",
+      "values": [
+        "krbtgt"
+      ],
+      "raw_values": [
+        "*krbtgt*"
+      ]
+    }
+  ]
+}

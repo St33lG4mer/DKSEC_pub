@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_use_of_vsjitdebugger_bin",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_use_of_vsjitdebugger_bin.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\vsjitdebugger.exe\" and (not (process.executable like~ (\"*\\\\vsimmersiveactivatehelper*.exe\", \"*\\\\devenv.exe\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "vsimmersiveactivatehelper*.exe",
+        "devenv.exe"
+      ],
+      "raw_values": [
+        "*\\\\vsimmersiveactivatehelper*.exe",
+        "*\\\\devenv.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "vsjitdebugger.exe"
+      ],
+      "raw_values": [
+        "*\\\\vsjitdebugger.exe"
+      ]
+    }
+  ]
+}

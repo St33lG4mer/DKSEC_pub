@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "win_security_scheduled_task_deletion",
+  "subtree": "rules-threat-hunting",
+  "category": "builtin",
+  "sigma_path": "rules-threat-hunting/windows/builtin/security/win_security_scheduled_task_deletion.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4699\" and (not (winlog.event_data.TaskName like~ (\"\\\\Microsoft\\\\Windows\\\\RemovalTools\\\\MRT_ERROR_HB\", \"*\\\\Mozilla\\\\Firefox Default Browser Agent *\"))))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": "like~",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\removaltools\\\\mrt_error_hb",
+        "\\\\mozilla\\\\firefox default browser agent"
+      ],
+      "raw_values": [
+        "\\\\Microsoft\\\\Windows\\\\RemovalTools\\\\MRT_ERROR_HB",
+        "*\\\\Mozilla\\\\Firefox Default Browser Agent *"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4699"
+      ],
+      "raw_values": [
+        "4699"
+      ]
+    }
+  ]
+}

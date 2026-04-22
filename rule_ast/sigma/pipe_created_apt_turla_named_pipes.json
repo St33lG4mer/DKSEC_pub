@@ -1,0 +1,29 @@
+{
+  "source": "sigma",
+  "name": "pipe_created_apt_turla_named_pipes",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2017/TA/Turla/pipe_created_apt_turla_named_pipes.eql",
+  "raw_query": "any where file.name like~ (\"\\\\atctl\", \"\\\\comnap\", \"\\\\iehelper\", \"\\\\sdlrpc\", \"\\\\userpipe\")",
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "atctl",
+        "comnap",
+        "iehelper",
+        "sdlrpc",
+        "userpipe"
+      ],
+      "raw_values": [
+        "\\\\atctl",
+        "\\\\comnap",
+        "\\\\iehelper",
+        "\\\\sdlrpc",
+        "\\\\userpipe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "source": "elastic",
+  "name": "Yum/DNF Plugin Status Discovery",
+  "slug": "discovery_yum_dnf_plugin_detection",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Data Source: Auditd Manager",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/discovery_yum_dnf_plugin_detection.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name == \"grep\" and process.args : \"plugins*\" and process.args like (\n  \"/etc/yum.conf\", \"/usr/lib/yum-plugins/*\", \"/etc/yum/pluginconf.d/*\",\n  \"/usr/lib/python*/site-packages/dnf-plugins/*\", \"/etc/dnf/plugins/*\", \"/etc/dnf/dnf.conf\"\n) and\nnot ?process.parent.executable == \"/usr/lib/venv-salt-minion/bin/python.original\"\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "yum.conf",
+        "dnf.conf",
+        "plugins"
+      ],
+      "raw_values": [
+        "/etc/yum.conf",
+        "/usr/lib/yum-plugins/*",
+        "/etc/yum/pluginconf.d/*",
+        "/usr/lib/python*/site-packages/dnf-plugins/*",
+        "/etc/dnf/plugins/*",
+        "/etc/dnf/dnf.conf",
+        "plugins*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "grep"
+      ],
+      "raw_values": [
+        "grep"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "python.original"
+      ],
+      "raw_values": [
+        "/usr/lib/venv-salt-minion/bin/python.original"
+      ]
+    }
+  ]
+}

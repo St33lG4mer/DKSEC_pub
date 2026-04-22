@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_access_win_lsass_remote_access_trough_winrm",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_access/proc_access_win_lsass_remote_access_trough_winrm.eql",
+  "raw_query": "any where (winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and process.executable:\"*:\\\\Windows\\\\system32\\\\wsmprovhost.exe\") and (not winlog.event_data.GrantedAccess:\"0x80000000\")",
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wsmprovhost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\system32\\\\wsmprovhost.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x80000000"
+      ],
+      "raw_values": [
+        "0x80000000"
+      ]
+    }
+  ]
+}

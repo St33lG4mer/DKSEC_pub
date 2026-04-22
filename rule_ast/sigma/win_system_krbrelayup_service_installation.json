@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_system_krbrelayup_service_installation",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/service_control_manager/win_system_krbrelayup_service_installation.eql",
+  "raw_query": "any where winlog.channel:\"System\" and (event.code:\"7045\" and winlog.event_data.ServiceName:\"KrbSCM\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicename",
+      "raw_field": "winlog.event_data.ServiceName",
+      "operator": ":",
+      "values": [
+        "krbscm"
+      ],
+      "raw_values": [
+        "KrbSCM"
+      ]
+    }
+  ]
+}

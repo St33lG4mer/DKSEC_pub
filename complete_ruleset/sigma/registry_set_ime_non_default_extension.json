@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_set_ime_non_default_extension",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_ime_non_default_extension.eql",
+  "raw_query": "any where (registry.path:\"*\\\\Control\\\\Keyboard Layouts\\\\*\" and registry.path:\"*Ime File*\") and (not winlog.event_data.Details:\"*.ime\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\control\\\\keyboard layouts\\\\",
+        "ime file"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\Keyboard Layouts\\\\*",
+        "*Ime File*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        ".ime"
+      ],
+      "raw_values": [
+        "*.ime"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "pipe_created_powershell_execution_pipe",
+  "subtree": "rules",
+  "category": "pipe",
+  "sigma_path": "rules/windows/pipe_created/pipe_created_powershell_execution_pipe.eql",
+  "raw_query": "any where file.name:\"\\\\PSHost*\"",
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "pshost"
+      ],
+      "raw_values": [
+        "\\\\PSHost*"
+      ]
+    }
+  ]
+}

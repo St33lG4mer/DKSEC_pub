@@ -1,0 +1,131 @@
+{
+  "source": "elastic",
+  "name": "Enumeration Command Spawned via WMIPrvSE",
+  "slug": "execution_enumeration_via_wmiprvse",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/execution_enumeration_via_wmiprvse.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and process.command_line != null and\n  process.name:\n  (\n    \"arp.exe\", \"dsquery.exe\", \"dsget.exe\", \"gpresult.exe\", \"hostname.exe\", \"ipconfig.exe\", \"nbtstat.exe\",\n    \"net.exe\", \"net1.exe\", \"netsh.exe\", \"netstat.exe\", \"nltest.exe\", \"ping.exe\", \"qprocess.exe\", \"quser.exe\",\n    \"qwinsta.exe\", \"reg.exe\", \"sc.exe\", \"systeminfo.exe\", \"tasklist.exe\", \"tracert.exe\", \"whoami.exe\"\n  ) and\n  process.parent.name:\"wmiprvse.exe\" and\n  not (\n    process.name : \"sc.exe\" and process.args : \"RemoteRegistry\" and process.args : \"start=\" and\n    process.args : (\"demand\", \"disabled\")\n  ) and\n  not process.args : \"tenable_mw_scan\"\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "arp.exe",
+        "dsquery.exe",
+        "dsget.exe",
+        "gpresult.exe",
+        "hostname.exe",
+        "ipconfig.exe",
+        "nbtstat.exe",
+        "net.exe",
+        "net1.exe",
+        "netsh.exe",
+        "netstat.exe",
+        "nltest.exe",
+        "ping.exe",
+        "qprocess.exe",
+        "quser.exe",
+        "qwinsta.exe",
+        "reg.exe",
+        "sc.exe",
+        "systeminfo.exe",
+        "tasklist.exe",
+        "tracert.exe",
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "arp.exe",
+        "dsquery.exe",
+        "dsget.exe",
+        "gpresult.exe",
+        "hostname.exe",
+        "ipconfig.exe",
+        "nbtstat.exe",
+        "net.exe",
+        "net1.exe",
+        "netsh.exe",
+        "netstat.exe",
+        "nltest.exe",
+        "ping.exe",
+        "qprocess.exe",
+        "quser.exe",
+        "qwinsta.exe",
+        "reg.exe",
+        "sc.exe",
+        "systeminfo.exe",
+        "tasklist.exe",
+        "tracert.exe",
+        "whoami.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "demand",
+        "disabled",
+        "remoteregistry",
+        "start=",
+        "tenable_mw_scan"
+      ],
+      "raw_values": [
+        "demand",
+        "disabled",
+        "RemoteRegistry",
+        "start=",
+        "tenable_mw_scan"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe"
+      ],
+      "raw_values": [
+        "wmiprvse.exe"
+      ]
+    }
+  ]
+}

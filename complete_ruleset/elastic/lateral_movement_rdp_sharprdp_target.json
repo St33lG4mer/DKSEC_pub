@@ -1,0 +1,150 @@
+{
+  "source": "elastic",
+  "name": "Potential SharpRDP Behavior",
+  "slug": "lateral_movement_rdp_sharprdp_target",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/lateral_movement_rdp_sharprdp_target.toml",
+  "raw_query": "/* Incoming RDP followed by a new RunMRU string value set to cmd, powershell, taskmgr or tsclient, followed by process execution within 1m */\n\nsequence by host.id with maxspan=1m\n  [network where host.os.type == \"windows\" and event.type == \"start\" and process.name : \"svchost.exe\" and destination.port == 3389 and\n   network.direction : (\"incoming\", \"ingress\") and network.transport == \"tcp\" and\n   source.ip != \"127.0.0.1\" and source.ip != \"::1\"\n  ]\n\n  [registry where host.os.type == \"windows\" and event.type == \"change\" and process.name : \"explorer.exe\" and\n   registry.path : (\"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\RunMRU\\\\*\") and\n   registry.data.strings : (\"cmd.exe*\", \"powershell.exe*\", \"taskmgr*\", \"\\\\\\\\tsclient\\\\*.exe\\\\*\")\n  ]\n\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n   (process.parent.name : (\"cmd.exe\", \"powershell.exe\", \"taskmgr.exe\") or process.args : (\"\\\\\\\\tsclient\\\\*.exe\")) and\n   not process.name : \"conhost.exe\"\n   ]\n",
+  "conditions": [
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": ":",
+      "values": [
+        "incoming",
+        "ingress"
+      ],
+      "raw_values": [
+        "incoming",
+        "ingress"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\runmru\\\\"
+      ],
+      "raw_values": [
+        "HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\RunMRU\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "taskmgr",
+        "\\\\\\\\tsclient\\\\*.exe\\\\"
+      ],
+      "raw_values": [
+        "cmd.exe*",
+        "powershell.exe*",
+        "taskmgr*",
+        "\\\\\\\\tsclient\\\\*.exe\\\\*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "taskmgr.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "powershell.exe",
+        "taskmgr.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "\\\\\\\\tsclient\\\\*.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "change"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "svchost.exe",
+        "explorer.exe",
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "svchost.exe",
+        "explorer.exe",
+        "conhost.exe"
+      ]
+    },
+    {
+      "field": "network.transport",
+      "raw_field": "network.transport",
+      "operator": "==",
+      "values": [
+        "tcp"
+      ],
+      "raw_values": [
+        "tcp"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1",
+        "::1"
+      ],
+      "raw_values": [
+        "127.0.0.1",
+        "::1"
+      ]
+    }
+  ]
+}

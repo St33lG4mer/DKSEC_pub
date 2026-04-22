@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "AWS Route 53 Resolver Query Log Configuration Deleted",
+  "slug": "defense_evasion_route53_dns_query_resolver_config_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS Route 53",
+    "Use Case: Log Auditing",
+    "Resources: Investigation Guide",
+    "Tactic: Defense Evasion"
+  ],
+  "elastic_path": "rules/integrations/aws/defense_evasion_route53_dns_query_resolver_config_deletion.toml",
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: route53resolver.amazonaws.com\n    and event.action: DeleteResolverQueryLogConfig \n    and event.outcome: success\n",
+  "conditions": []
+}

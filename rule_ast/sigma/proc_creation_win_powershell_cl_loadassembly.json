@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_cl_loadassembly",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_cl_loadassembly.eql",
+  "raw_query": "any where process.command_line like~ (\"*LoadAssemblyFromPath *\", \"*LoadAssemblyFromNS *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "loadassemblyfrompath",
+        "loadassemblyfromns"
+      ],
+      "raw_values": [
+        "*LoadAssemblyFromPath *",
+        "*LoadAssemblyFromNS *"
+      ]
+    }
+  ]
+}

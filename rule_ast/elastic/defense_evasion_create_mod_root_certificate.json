@@ -1,0 +1,126 @@
+{
+  "source": "elastic",
+  "name": "Creation or Modification of Root Certificate",
+  "slug": "defense_evasion_create_mod_root_certificate",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_create_mod_root_certificate.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and registry.value : \"Blob\" and\n  registry.path :\n    (\n      \"HKLM\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob\",\n      \"HKLM\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob\",\n      \"HKLM\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob\",\n      \"HKLM\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob\",\n      \"\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob\",\n      \"\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob\",\n      \"\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob\",\n      \"\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob\",\n      \"MACHINE\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob\",\n      \"MACHINE\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob\",\n      \"MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob\",\n      \"MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob\"\n    ) and\n  not process.executable : (\n          \"?:\\\\Program Files (x86)\\\\*.exe\",\n          \"?:\\\\Program Files\\\\*.exe\",\n          \"?:\\\\ProgramData\\\\bomgar-*\\\\*\\\\sra-pin.exe\",\n          \"?:\\\\ProgramData\\\\bomgar-*\\\\*\\\\bomgar-scc.exe\",\n          \"?:\\\\ProgramData\\\\CTES\\\\Ctes.exe\",\n          \"?:\\\\ProgramData\\\\CTES\\\\Components\\\\SNG\\\\AbtSngSvc.exe\",\n          \"?:\\\\ProgramData\\\\CTES\\\\Components\\\\SVC\\\\CtesHostSvc.exe\",\n          \"?:\\\\ProgramData\\\\Lenovo\\\\Vantage\\\\Addins\\\\LenovoHardwareScanAddin\\\\*\\\\LdeApi.Server.exe\",\n          \"?:\\\\ProgramData\\\\Logishrd\\\\LogiOptionsPlus\\\\Plugins\\\\64\\\\certmgr.exe\",\n          \"?:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\\\\*.exe\",\n          \"?:\\\\ProgramData\\\\Quest\\\\KACE\\\\modules\\\\clientidentifier\\\\clientidentifier.exe\",\n          \"?:\\\\ProgramData\\\\Sophos\\\\AutoUpdate\\\\Cache\\\\sophos_autoupdate1.dir\\\\*.exe\",\n          \"?:\\\\ProgramData\\\\tychoncloud\\\\bin\\\\OVAL\\\\tvs.exe\",\n          \"?:\\\\Windows\\\\CCM\\\\CcmEval.exe\",\n          \"?:\\\\Windows\\\\CCM\\\\CcmExec.exe\",\n          \"?:\\\\Windows\\\\ccmsetup\\\\autoupgrade\\\\ccmsetup*.exe\",\n          \"?:\\\\Windows\\\\ccmsetup\\\\cache\\\\ccmsetup.exe\",\n          \"?:\\\\Windows\\\\ccmsetup\\\\ccmsetup.exe\",\n          \"?:\\\\Windows\\\\Cluster\\\\clussvc.exe\",\n          \"?:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe\",\n          \"?:\\\\Windows\\\\Lenovo\\\\ImController\\\\PluginHost86\\\\Lenovo.Modern.ImController.PluginHost.Device.exe\",\n          \"?:\\\\Windows\\\\Lenovo\\\\ImController\\\\Service\\\\Lenovo.Modern.ImController.exe\",\n          \"?:\\\\Windows\\\\Sysmon.exe\",\n          \"?:\\\\Windows\\\\Sysmon64.exe\",\n          \"?:\\\\Windows\\\\UUS\\\\amd64\\\\MoUsoCoreWorker.exe\",\n          \"?:\\\\Windows\\\\UUS\\\\amd64\\\\WaaSMedicAgent.exe\",\n          \"?:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\MoUsoCoreWorker.exe\",\n          \"?:\\\\Windows\\\\WinSxS\\\\*.exe\"\n  ) and\n  not\n  (\n    process.executable : (\n      \"?:\\\\Windows\\\\System32\\\\*.exe\",\n      \"?:\\\\Windows\\\\SysWOW64\\\\*.exe\"\n    ) and\n    not process.name : (\n        \"rundll32.exe\", \"mshta.exe\", \"powershell.exe\", \"pwsh.exe\", \"cmd.exe\", \"expand.exe\",\n        \"regsvr32.exe\", \"cscript.exe\", \"wscript.exe\", \"wmiprvse.exe\", \"certutil.exe\", \"xcopy.exe\"\n    )\n  )\n",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\software\\\\microsoft\\\\systemcertificates\\\\root\\\\certificates\\\\*\\\\blob",
+        "hklm\\\\software\\\\microsoft\\\\systemcertificates\\\\authroot\\\\certificates\\\\*\\\\blob",
+        "hklm\\\\software\\\\policies\\\\microsoft\\\\systemcertificates\\\\root\\\\certificates\\\\*\\\\blob",
+        "hklm\\\\software\\\\policies\\\\microsoft\\\\systemcertificates\\\\authroot\\\\certificates\\\\*\\\\blob",
+        "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\systemcertificates\\\\root\\\\certificates\\\\*\\\\blob",
+        "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\systemcertificates\\\\authroot\\\\certificates\\\\*\\\\blob",
+        "\\\\registry\\\\machine\\\\software\\\\policies\\\\microsoft\\\\systemcertificates\\\\root\\\\certificates\\\\*\\\\blob",
+        "\\\\registry\\\\machine\\\\software\\\\policies\\\\microsoft\\\\systemcertificates\\\\authroot\\\\certificates\\\\*\\\\blob",
+        "machine\\\\software\\\\microsoft\\\\systemcertificates\\\\root\\\\certificates\\\\*\\\\blob",
+        "machine\\\\software\\\\microsoft\\\\systemcertificates\\\\authroot\\\\certificates\\\\*\\\\blob",
+        "machine\\\\software\\\\policies\\\\microsoft\\\\systemcertificates\\\\root\\\\certificates\\\\*\\\\blob",
+        "machine\\\\software\\\\policies\\\\microsoft\\\\systemcertificates\\\\authroot\\\\certificates\\\\*\\\\blob"
+      ],
+      "raw_values": [
+        "HKLM\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob",
+        "HKLM\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob",
+        "HKLM\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob",
+        "HKLM\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob",
+        "\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob",
+        "\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob",
+        "\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob",
+        "\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob",
+        "MACHINE\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob",
+        "MACHINE\\\\Software\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob",
+        "MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\Root\\\\Certificates\\\\*\\\\Blob",
+        "MACHINE\\\\Software\\\\Policies\\\\Microsoft\\\\SystemCertificates\\\\AuthRoot\\\\Certificates\\\\*\\\\Blob"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "rundll32.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe",
+        "expand.exe",
+        "regsvr32.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "wmiprvse.exe",
+        "certutil.exe",
+        "xcopy.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\*.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\*.exe",
+        "rundll32.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe",
+        "expand.exe",
+        "regsvr32.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "wmiprvse.exe",
+        "certutil.exe",
+        "xcopy.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "blob"
+      ],
+      "raw_values": [
+        "Blob"
+      ]
+    }
+  ]
+}

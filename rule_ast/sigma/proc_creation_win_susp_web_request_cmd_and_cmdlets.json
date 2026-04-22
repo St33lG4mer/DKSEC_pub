@@ -1,0 +1,39 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_web_request_cmd_and_cmdlets",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_web_request_cmd_and_cmdlets.eql",
+  "raw_query": "any where process.command_line like~ (\"*[System.Net.WebRequest]::create*\", \"*curl *\", \"*Invoke-RestMethod*\", \"*Invoke-WebRequest*\", \"* irm *\", \"*iwr *\", \"*Resume-BitsTransfer*\", \"*Start-BitsTransfer*\", \"*wget *\", \"*WinHttp.WinHttpRequest*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "[system.net.webrequest]::create",
+        "curl",
+        "invoke-restmethod",
+        "invoke-webrequest",
+        "irm",
+        "iwr",
+        "resume-bitstransfer",
+        "start-bitstransfer",
+        "wget",
+        "winhttp.winhttprequest"
+      ],
+      "raw_values": [
+        "*[System.Net.WebRequest]::create*",
+        "*curl *",
+        "*Invoke-RestMethod*",
+        "*Invoke-WebRequest*",
+        "* irm *",
+        "*iwr *",
+        "*Resume-BitsTransfer*",
+        "*Start-BitsTransfer*",
+        "*wget *",
+        "*WinHttp.WinHttpRequest*"
+      ]
+    }
+  ]
+}

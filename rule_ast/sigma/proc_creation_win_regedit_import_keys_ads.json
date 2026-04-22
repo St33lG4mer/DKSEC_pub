@@ -1,0 +1,70 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_regedit_import_keys_ads",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_regedit_import_keys_ads.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\regedit.exe\" or process.pe.original_file_name:\"REGEDIT.EXE\") and ((process.command_line like~ (\"* /i *\", \"*.reg*\")) and process.command_line:\"SigmaRegularExpression(regexp=SigmaString([':[^ \\\\\\\\]']), flags=set())\")) and (not (process.command_line like~ (\"* -e *\", \"* /e *\", \"* \u2013e *\", \"* \u2014e *\", \"* \u2015e *\") or process.command_line like~ (\"* -a *\", \"* /a *\", \"* \u2013a *\", \"* \u2014a *\", \"* \u2015a *\") or process.command_line like~ (\"* -c *\", \"* /c *\", \"* \u2013c *\", \"* \u2014c *\", \"* \u2015c *\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".reg"
+      ],
+      "raw_values": [
+        "* /i *",
+        "*.reg*",
+        "* -e *",
+        "* /e *",
+        "* \u2013e *",
+        "* \u2014e *",
+        "* \u2015e *",
+        "* -a *",
+        "* /a *",
+        "* \u2013a *",
+        "* \u2014a *",
+        "* \u2015a *",
+        "* -c *",
+        "* /c *",
+        "* \u2013c *",
+        "* \u2014c *",
+        "* \u2015c *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\regedit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "REGEDIT.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "]']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString([':[^ \\\\\\\\]']), flags=set())"
+      ]
+    }
+  ]
+}

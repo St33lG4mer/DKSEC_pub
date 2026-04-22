@@ -1,0 +1,87 @@
+{
+  "source": "elastic",
+  "name": "AWS CLI Command with Custom Endpoint URL",
+  "slug": "command_and_control_aws_cli_endpoint_url_used",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/linux/command_and_control_aws_cli_endpoint_url_used.toml",
+  "raw_query": "host.os.type:\"linux\" and event.category:\"process\" and\nevent.action:(\"exec\" or \"exec_event\" or \"executed\" or \"process_started\" or \"ProcessRollup2\") and\nprocess.name:\"aws\" and process.args:\"--endpoint-url\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "aws"
+      ],
+      "raw_values": [
+        "aws"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--endpoint-url"
+      ],
+      "raw_values": [
+        "--endpoint-url"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "registry_set_ie_security_zone_protocol_defaults_downgrade",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_ie_security_zone_protocol_defaults_downgrade.eql",
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\ZoneMap\\\\ProtocolDefaults*\" and (registry.path like~ (\"*\\\\http\", \"*\\\\https\")) and winlog.event_data.Details:\"*DWORD (0x00000000)*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\http",
+        "\\\\https"
+      ],
+      "raw_values": [
+        "*\\\\http",
+        "*\\\\https"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\internet settings\\\\zonemap\\\\protocoldefaults"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\ZoneMap\\\\ProtocolDefaults*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "*DWORD (0x00000000)*"
+      ]
+    }
+  ]
+}

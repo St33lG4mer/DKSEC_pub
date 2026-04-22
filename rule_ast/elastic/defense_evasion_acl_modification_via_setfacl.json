@@ -1,0 +1,138 @@
+{
+  "source": "elastic",
+  "name": "Access Control List Modification via setfacl",
+  "slug": "defense_evasion_acl_modification_via_setfacl",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_acl_modification_via_setfacl.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name == \"setfacl\" and not (\n  ?process.parent.executable in (\n    \"/opt/puppetlabs/puppet/bin/ruby\", \"/usr/libexec/dirsrv/ds_systemd_ask_password_acl\", \"/usr/lib/systemd/systemd-udevd\",\n    \"/usr/bin/udevadm\", \"/usr/sbin/ds_systemd_ask_password_acl\", \"/usr/bin/su\", \"/bin/su\"\n  ) or\n  process.command_line == \"/bin/setfacl --restore=-\" or\n  process.args == \"/var/log/journal/\" or\n  ?process.parent.name in (\"stats.pl\", \"perl\", \"find\") or\n  ?process.parent.command_line like~ \"*ansible*\" or\n  ?process.parent.args == \"/opt/audit-log-acl.sh\"\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "ruby",
+        "ds_systemd_ask_password_acl",
+        "systemd-udevd",
+        "udevadm",
+        "stats.pl",
+        "perl",
+        "find"
+      ],
+      "raw_values": [
+        "/opt/puppetlabs/puppet/bin/ruby",
+        "/usr/libexec/dirsrv/ds_systemd_ask_password_acl",
+        "/usr/lib/systemd/systemd-udevd",
+        "/usr/bin/udevadm",
+        "/usr/sbin/ds_systemd_ask_password_acl",
+        "/usr/bin/su",
+        "/bin/su",
+        "stats.pl",
+        "perl",
+        "find"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "setfacl"
+      ],
+      "raw_values": [
+        "setfacl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "==",
+      "values": [
+        "setfacl --restore=-"
+      ],
+      "raw_values": [
+        "/bin/setfacl --restore=-",
+        "/var/log/journal/"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "ansible"
+      ],
+      "raw_values": [
+        "*ansible*"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "/opt/audit-log-acl.sh"
+      ],
+      "raw_values": [
+        "/opt/audit-log-acl.sh"
+      ]
+    }
+  ]
+}

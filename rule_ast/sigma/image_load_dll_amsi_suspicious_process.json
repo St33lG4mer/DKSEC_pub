@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "image_load_dll_amsi_suspicious_process",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_dll_amsi_suspicious_process.eql",
+  "raw_query": "any where file.path:\"*\\\\amsi.dll\" and (process.executable like~ (\"*\\\\ExtExport.exe\", \"*\\\\odbcconf.exe\", \"*\\\\rundll32.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "extexport.exe",
+        "odbcconf.exe",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\ExtExport.exe",
+        "*\\\\odbcconf.exe",
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "amsi.dll"
+      ],
+      "raw_values": [
+        "*\\\\amsi.dll"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_set_hangs_debugger_persistence",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_hangs_debugger_persistence.eql",
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\Hangs\\\\Debugger*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\windows error reporting\\\\hangs\\\\debugger"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\Hangs\\\\Debugger*"
+      ]
+    }
+  ]
+}

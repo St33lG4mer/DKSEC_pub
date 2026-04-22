@@ -1,0 +1,103 @@
+{
+  "source": "sigma",
+  "name": "image_load_wsman_provider_image_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_wsman_provider_image_load.eql",
+  "raw_query": "any where (((file.path like~ (\"*\\\\WsmSvc.dll\", \"*\\\\WsmAuto.dll\", \"*\\\\Microsoft.WSMan.Management.ni.dll\")) or (file.pe.original_file_name like~ (\"WsmSvc.dll\", \"WSMANAUTOMATION.DLL\", \"Microsoft.WSMan.Management.dll\"))) or (process.executable:\"*\\\\svchost.exe\" and file.pe.original_file_name:\"WsmWmiPl.dll\")) and (not ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\PowerShell\\\\6\\\\pwsh.exe\", \"C:\\\\Program Files (x86)\\\\PowerShell\\\\7\\\\pwsh.exe\", \"C:\\\\Program Files\\\\PowerShell\\\\6\\\\pwsh.exe\", \"C:\\\\Program Files\\\\PowerShell\\\\7\\\\pwsh.exe\", \"C:\\\\Windows\\\\System32\\\\sdiagnhost.exe\", \"C:\\\\Windows\\\\System32\\\\services.exe\", \"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe\", \"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\")) or (winlog.event_data.CommandLine like~ (\"*svchost.exe -k netsvcs -p -s BITS*\", \"*svchost.exe -k GraphicsPerfSvcGroup -s GraphicsPerfSvc*\", \"*svchost.exe -k NetworkService -p -s Wecsvc*\", \"*svchost.exe -k netsvcs*\")) or ((process.executable like~ (\"C:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\v*\", \"C:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\v*\", \"C:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\v*\", \"C:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\v*\")) and process.executable:\"*\\\\mscorsvw.exe\") or (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\Configure-SMRemoting.exe\", \"C:\\\\Windows\\\\System32\\\\ServerManager.exe\")) or process.executable:\"C:\\\\Windows\\\\Temp\\\\asgard2-agent\\\\*\" or process.executable:\"C:\\\\Program Files\\\\Citrix\\\\*\" or process.executable:\"C:\\\\$WINDOWS.~BT\\\\Sources\\\\*\" or process.executable:\"*\\\\mmc.exe\")) and (not (process.executable:\"*\\\\svchost.exe\" and (?winlog.event_data.CommandLine == null)))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "wsmsvc.dll",
+        "wsmauto.dll",
+        "microsoft.wsman.management.ni.dll"
+      ],
+      "raw_values": [
+        "*\\\\WsmSvc.dll",
+        "*\\\\WsmAuto.dll",
+        "*\\\\Microsoft.WSMan.Management.ni.dll"
+      ]
+    },
+    {
+      "field": "file.pe.original_file_name",
+      "raw_field": "file.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "wsmsvc.dll",
+        "wsmanautomation.dll",
+        "microsoft.wsman.management.dll"
+      ],
+      "raw_values": [
+        "WsmSvc.dll",
+        "WSMANAUTOMATION.DLL",
+        "Microsoft.WSMan.Management.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "winlog.event_data.CommandLine",
+      "operator": "like~",
+      "values": [
+        "svchost.exe -k netsvcs -p -s bits",
+        "svchost.exe -k graphicsperfsvcgroup -s graphicsperfsvc",
+        "svchost.exe -k networkservice -p -s wecsvc",
+        "svchost.exe -k netsvcs"
+      ],
+      "raw_values": [
+        "*svchost.exe -k netsvcs -p -s BITS*",
+        "*svchost.exe -k GraphicsPerfSvcGroup -s GraphicsPerfSvc*",
+        "*svchost.exe -k NetworkService -p -s Wecsvc*",
+        "*svchost.exe -k netsvcs*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "configure-smremoting.exe",
+        "servermanager.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\v*",
+        "C:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\v*",
+        "C:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\v*",
+        "C:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\v*",
+        "C:\\\\Windows\\\\System32\\\\Configure-SMRemoting.exe",
+        "C:\\\\Windows\\\\System32\\\\ServerManager.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe",
+        "mscorsvw.exe",
+        "mmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe",
+        "*\\\\mscorsvw.exe",
+        "C:\\\\Windows\\\\Temp\\\\asgard2-agent\\\\*",
+        "C:\\\\Program Files\\\\Citrix\\\\*",
+        "C:\\\\$WINDOWS.~BT\\\\Sources\\\\*",
+        "*\\\\mmc.exe"
+      ]
+    },
+    {
+      "field": "file.pe.original_file_name",
+      "raw_field": "file.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wsmwmipl.dll"
+      ],
+      "raw_values": [
+        "WsmWmiPl.dll"
+      ]
+    }
+  ]
+}

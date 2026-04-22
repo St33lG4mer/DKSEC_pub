@@ -1,0 +1,58 @@
+{
+  "source": "elastic",
+  "name": "Potential Traffic Tunneling using QEMU",
+  "slug": "command_and_control_tunnel_qemu",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "OS: Linux",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/command_and_control_tunnel_qemu.toml",
+  "raw_query": "process where event.type == \"start\" and\n process.args : \"-netdev\" and\n (\n  (process.args : \"-nographic\" and process.command_line : \"*connect=*\" and process.command_line : \"*restrict=off*\") or\n   process.command_line : \"*hostfwd=*\"\n )\n",
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-netdev",
+        "-nographic",
+        "connect=",
+        "restrict=off",
+        "hostfwd="
+      ],
+      "raw_values": [
+        "-netdev",
+        "-nographic",
+        "*connect=*",
+        "*restrict=off*",
+        "*hostfwd=*"
+      ]
+    }
+  ]
+}

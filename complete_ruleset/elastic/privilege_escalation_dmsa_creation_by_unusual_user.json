@@ -1,0 +1,44 @@
+{
+  "source": "elastic",
+  "name": "dMSA Account Creation by an Unusual User",
+  "slug": "privilege_escalation_dmsa_creation_by_unusual_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Use Case: Active Directory Monitoring",
+    "Data Source: Active Directory",
+    "Data Source: Windows Security Event Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_dmsa_creation_by_unusual_user.toml",
+  "raw_query": "event.code:5137 and host.os.type:\"windows\" and winlog.event_data.ObjectClass:\"msDS-DelegatedManagedServiceAccount\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectclass",
+      "raw_field": "winlog.event_data.ObjectClass",
+      "operator": ":",
+      "values": [
+        "msds-delegatedmanagedserviceaccount"
+      ],
+      "raw_values": [
+        "msDS-DelegatedManagedServiceAccount"
+      ]
+    }
+  ]
+}

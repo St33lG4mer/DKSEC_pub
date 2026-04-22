@@ -1,0 +1,143 @@
+{
+  "source": "elastic",
+  "name": "Curl SOCKS Proxy Activity from Unusual Parent",
+  "slug": "command_and_control_curl_socks_proxy_detected",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/command_and_control_curl_socks_proxy_detected.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.name == \"curl\" and (\n  process.parent.executable like (\n    \"/dev/shm/*\", \"/tmp/*\", \"/var/tmp/*\", \"/var/run/*\", \"/root/*\", \"/boot/*\", \"/var/www/*\", \"/opt/.*\",\n    \"/home/*\"\n  ) or\n  process.parent.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") or\n  process.parent.name like \".*\"\n) and (\n  process.args like (\"--socks5-hostname\", \"--proxy\", \"--preproxy\", \"socks5*\") or\n  process.args == \"-x\" or\n  process.env_vars like~ (\"http_proxy=socks5h://*\", \"HTTPS_PROXY=socks5h://*\", \"ALL_PROXY=socks5h://*\")\n) and not (\n  process.parent.args == \"/opt/rudder/share/commands/agent-run\" or\n  process.args == \"http://localhost:8080/rudder/api/status\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--socks5-hostname",
+        "--proxy",
+        "--preproxy",
+        "socks5"
+      ],
+      "raw_values": [
+        "--socks5-hostname",
+        "--proxy",
+        "--preproxy",
+        "socks5*"
+      ]
+    },
+    {
+      "field": "process.env_vars",
+      "raw_field": "process.env_vars",
+      "operator": "like~",
+      "values": [
+        "http_proxy=socks5h://",
+        "https_proxy=socks5h://",
+        "all_proxy=socks5h://"
+      ],
+      "raw_values": [
+        "http_proxy=socks5h://*",
+        "HTTPS_PROXY=socks5h://*",
+        "ALL_PROXY=socks5h://*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "curl"
+      ],
+      "raw_values": [
+        "curl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "status"
+      ],
+      "raw_values": [
+        "-x",
+        "http://localhost:8080/rudder/api/status"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "/opt/rudder/share/commands/agent-run"
+      ],
+      "raw_values": [
+        "/opt/rudder/share/commands/agent-run"
+      ]
+    }
+  ]
+}

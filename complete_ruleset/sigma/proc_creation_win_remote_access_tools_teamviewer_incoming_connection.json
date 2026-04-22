@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_remote_access_tools_teamviewer_incoming_connection",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_teamviewer_incoming_connection.eql",
+  "raw_query": "any where process.executable:\"TeamViewer_Desktop.exe\" and process.parent.executable:\"TeamViewer_Service.exe\" and process.command_line:\"*TeamViewer_Desktop.exe --IPCport 5939 --Module 1\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "teamviewer_desktop.exe"
+      ],
+      "raw_values": [
+        "TeamViewer_Desktop.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "teamviewer_service.exe"
+      ],
+      "raw_values": [
+        "TeamViewer_Service.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "teamviewer_desktop.exe --ipcport 5939 --module 1"
+      ],
+      "raw_values": [
+        "*TeamViewer_Desktop.exe --IPCport 5939 --Module 1"
+      ]
+    }
+  ]
+}

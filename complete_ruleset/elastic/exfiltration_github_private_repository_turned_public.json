@@ -1,0 +1,86 @@
+{
+  "source": "elastic",
+  "name": "GitHub Private Repository Turned Public",
+  "slug": "exfiltration_github_private_repository_turned_public",
+  "category": "configuration",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Tactic: Exfiltration",
+    "Tactic: Impact",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/exfiltration_github_private_repository_turned_public.toml",
+  "raw_query": "configuration where data_stream.dataset == \"github.audit\" and github.operation_type == \"modify\" and github.category == \"repo\" and\nevent.action == \"repo.access\" and github.previous_visibility == \"private\" and github.visibility == \"public\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "github.operation_type",
+      "raw_field": "github.operation_type",
+      "operator": "==",
+      "values": [
+        "modify"
+      ],
+      "raw_values": [
+        "modify"
+      ]
+    },
+    {
+      "field": "github.category",
+      "raw_field": "github.category",
+      "operator": "==",
+      "values": [
+        "repo"
+      ],
+      "raw_values": [
+        "repo"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "repo.access"
+      ],
+      "raw_values": [
+        "repo.access"
+      ]
+    },
+    {
+      "field": "github.previous_visibility",
+      "raw_field": "github.previous_visibility",
+      "operator": "==",
+      "values": [
+        "private"
+      ],
+      "raw_values": [
+        "private"
+      ]
+    },
+    {
+      "field": "github.visibility",
+      "raw_field": "github.visibility",
+      "operator": "==",
+      "values": [
+        "public"
+      ],
+      "raw_values": [
+        "public"
+      ]
+    }
+  ]
+}

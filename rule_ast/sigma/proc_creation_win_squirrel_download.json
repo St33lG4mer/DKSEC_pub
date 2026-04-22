@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_squirrel_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_squirrel_download.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\squirrel.exe\", \"*\\\\update.exe\")) and (process.command_line like~ (\"* --download *\", \"* --update *\", \"* --updateRollback=*\")) and process.command_line:\"*http*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "squirrel.exe",
+        "update.exe"
+      ],
+      "raw_values": [
+        "*\\\\squirrel.exe",
+        "*\\\\update.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--download",
+        "--update",
+        "--updaterollback="
+      ],
+      "raw_values": [
+        "* --download *",
+        "* --update *",
+        "* --updateRollback=*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "*http*"
+      ]
+    }
+  ]
+}

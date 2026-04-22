@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "AWS SSM Command Document Created by Rare User",
+  "slug": "execution_ssm_command_document_created_by_rare_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS SSM",
+    "Data Source: AWS Systems Manager",
+    "Resources: Investigation Guide",
+    "Use Case: Threat Detection",
+    "Tactic: Execution"
+  ],
+  "elastic_path": "rules/integrations/aws/execution_ssm_command_document_created_by_rare_user.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ssm.amazonaws.com\"\n    and event.action: \"CreateDocument\"\n    and event.outcome: \"success\"\n    and aws.cloudtrail.flattened.response_elements.documentDescription.documentType: \"Command\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ssm.amazonaws.com"
+      ],
+      "raw_values": [
+        "ssm.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "createdocument"
+      ],
+      "raw_values": [
+        "CreateDocument"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.flattened.response_elements.documentdescription.documenttype",
+      "raw_field": "aws.cloudtrail.flattened.response_elements.documentDescription.documentType",
+      "operator": ":",
+      "values": [
+        "command"
+      ],
+      "raw_values": [
+        "Command"
+      ]
+    }
+  ]
+}

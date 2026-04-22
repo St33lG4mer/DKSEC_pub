@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_remote_access_tools_screenconnect_remote_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_screenconnect_remote_execution.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\ScreenConnect.ClientService.exe\" and (process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and process.command_line:\"*\\\\TEMP\\\\ScreenConnect\\\\*\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "screenconnect.clientservice.exe"
+      ],
+      "raw_values": [
+        "*\\\\ScreenConnect.ClientService.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    }
+  ]
+}

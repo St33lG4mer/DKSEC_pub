@@ -1,0 +1,82 @@
+{
+  "source": "elastic",
+  "name": "Apple Scripting Execution with Administrator Privileges",
+  "slug": "privilege_escalation_applescript_with_admin_privs",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/privilege_escalation_applescript_with_admin_privs.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and process.name == \"osascript\" and\n process.command_line : \"osascript*with administrator privileges\" and\n ((process.parent.code_signature.trusted == false or process.parent.code_signature.exists == false) or process.Ext.effective_parent.executable like (\"/tmp/*\", \"/private/tmp/*\", \"/Users/Shared/*\"))\n",
+  "conditions": [
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": ":",
+      "values": [
+        "/tmp/",
+        "/private/tmp/",
+        "/users/shared/"
+      ],
+      "raw_values": [
+        "/tmp/*",
+        "/private/tmp/*",
+        "/Users/Shared/*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "osascript"
+      ],
+      "raw_values": [
+        "osascript"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "osascript*with administrator privileges"
+      ],
+      "raw_values": [
+        "osascript*with administrator privileges"
+      ]
+    }
+  ]
+}

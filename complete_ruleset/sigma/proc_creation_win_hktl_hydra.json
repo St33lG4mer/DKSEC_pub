@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_hydra",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_hydra.eql",
+  "raw_query": "any where (process.command_line:\"*-u *\" and process.command_line:\"*-p *\") and (process.command_line like~ (\"*^USER^*\", \"*^PASS^*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "^user^",
+        "^pass^"
+      ],
+      "raw_values": [
+        "*^USER^*",
+        "*^PASS^*"
+      ]
+    }
+  ]
+}

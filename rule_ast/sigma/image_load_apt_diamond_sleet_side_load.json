@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "image_load_apt_diamond_sleet_side_load",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/Diamond-Sleet/image_load_apt_diamond_sleet_side_load.eql",
+  "raw_query": "any where (process.executable:\"*:\\\\ProgramData\\\\clip.exe\" and file.path:\"*:\\\\ProgramData\\\\Version.dll\") or (process.executable:\"*:\\\\ProgramData\\\\wsmprovhost.exe\" and file.path:\"*:\\\\ProgramData\\\\DSROLE.dll\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "clip.exe",
+        "wsmprovhost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\clip.exe",
+        "*:\\\\ProgramData\\\\wsmprovhost.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "version.dll",
+        "dsrole.dll"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\Version.dll",
+        "*:\\\\ProgramData\\\\DSROLE.dll"
+      ]
+    }
+  ]
+}

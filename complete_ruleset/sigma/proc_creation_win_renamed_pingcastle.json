@@ -1,0 +1,98 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_pingcastle",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_pingcastle.eql",
+  "raw_query": "any where ((process.pe.original_file_name like~ (\"PingCastleReporting.exe\", \"PingCastleCloud.exe\", \"PingCastle.exe\")) or (process.command_line like~ (\"*--scanner aclcheck*\", \"*--scanner antivirus*\", \"*--scanner computerversion*\", \"*--scanner foreignusers*\", \"*--scanner laps_bitlocker*\", \"*--scanner localadmin*\", \"*--scanner nullsession*\", \"*--scanner nullsession-trust*\", \"*--scanner oxidbindings*\", \"*--scanner remote*\", \"*--scanner share*\", \"*--scanner smb*\", \"*--scanner smb3querynetwork*\", \"*--scanner spooler*\", \"*--scanner startup*\", \"*--scanner zerologon*\")) or process.command_line:\"*--no-enum-limit*\" or (process.command_line:\"*--healthcheck*\" and process.command_line:\"*--level Full*\") or (process.command_line:\"*--healthcheck*\" and process.command_line:\"*--server *\")) and (not (process.executable like~ (\"*\\\\PingCastleReporting.exe\", \"*\\\\PingCastleCloud.exe\", \"*\\\\PingCastle.exe\")))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "pingcastlereporting.exe",
+        "pingcastlecloud.exe",
+        "pingcastle.exe"
+      ],
+      "raw_values": [
+        "PingCastleReporting.exe",
+        "PingCastleCloud.exe",
+        "PingCastle.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--scanner aclcheck",
+        "--scanner antivirus",
+        "--scanner computerversion",
+        "--scanner foreignusers",
+        "--scanner laps_bitlocker",
+        "--scanner localadmin",
+        "--scanner nullsession",
+        "--scanner nullsession-trust",
+        "--scanner oxidbindings",
+        "--scanner remote",
+        "--scanner share",
+        "--scanner smb",
+        "--scanner smb3querynetwork",
+        "--scanner spooler",
+        "--scanner startup",
+        "--scanner zerologon"
+      ],
+      "raw_values": [
+        "*--scanner aclcheck*",
+        "*--scanner antivirus*",
+        "*--scanner computerversion*",
+        "*--scanner foreignusers*",
+        "*--scanner laps_bitlocker*",
+        "*--scanner localadmin*",
+        "*--scanner nullsession*",
+        "*--scanner nullsession-trust*",
+        "*--scanner oxidbindings*",
+        "*--scanner remote*",
+        "*--scanner share*",
+        "*--scanner smb*",
+        "*--scanner smb3querynetwork*",
+        "*--scanner spooler*",
+        "*--scanner startup*",
+        "*--scanner zerologon*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "pingcastlereporting.exe",
+        "pingcastlecloud.exe",
+        "pingcastle.exe"
+      ],
+      "raw_values": [
+        "*\\\\PingCastleReporting.exe",
+        "*\\\\PingCastleCloud.exe",
+        "*\\\\PingCastle.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--no-enum-limit",
+        "--healthcheck",
+        "--level full",
+        "--server"
+      ],
+      "raw_values": [
+        "*--no-enum-limit*",
+        "*--healthcheck*",
+        "*--level Full*",
+        "*--server *"
+      ]
+    }
+  ]
+}

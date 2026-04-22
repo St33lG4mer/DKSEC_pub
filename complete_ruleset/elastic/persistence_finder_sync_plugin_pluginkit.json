@@ -1,0 +1,86 @@
+{
+  "source": "elastic",
+  "name": "Finder Sync Plugin Registered and Enabled",
+  "slug": "persistence_finder_sync_plugin_pluginkit",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_finder_sync_plugin_pluginkit.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and process.name == \"pluginkit\" and\n  process.args == \"-e\" and process.args like~ \"use\" and process.args == \"-i\" and\n  (process.name like~ (\"python*\", \"node\", \"osascript\", \"bash\", \"sh\", \"zsh\") or (process.parent.code_signature.exists == false or process.parent.code_signature.trusted == false))\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "python",
+        "node",
+        "osascript",
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "python*",
+        "node",
+        "osascript",
+        "bash",
+        "sh",
+        "zsh"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "pluginkit"
+      ],
+      "raw_values": [
+        "pluginkit"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "use"
+      ],
+      "raw_values": [
+        "use"
+      ]
+    }
+  ]
+}

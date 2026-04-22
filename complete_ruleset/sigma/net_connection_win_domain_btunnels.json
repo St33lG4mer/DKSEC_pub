@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_domain_btunnels",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_domain_btunnels.eql",
+  "raw_query": "any where network.direction:\"true\" and destination.domain:\"*.btunnel.co.in\"",
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        ".btunnel.co.in"
+      ],
+      "raw_values": [
+        "*.btunnel.co.in"
+      ]
+    }
+  ]
+}

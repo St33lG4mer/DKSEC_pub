@@ -1,0 +1,50 @@
+{
+  "source": "sigma",
+  "name": "registry_set_set_nopolicies_user",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_set_nopolicies_user.eql",
+  "raw_query": "any where (registry.path like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoLogOff\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoDesktop\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoRun\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoFind\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoControlPanel\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoFileMenu\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoClose\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoSetTaskbar\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoPropertiesMyDocuments\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoTrayContextMenu\")) and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\nologoff",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\nodesktop",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\norun",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\nofind",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\nocontrolpanel",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\nofilemenu",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\noclose",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\nosettaskbar",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\nopropertiesmydocuments",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\notraycontextmenu"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoLogOff",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoDesktop",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoRun",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoFind",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoControlPanel",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoFileMenu",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoClose",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoSetTaskbar",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoPropertiesMyDocuments",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoTrayContextMenu"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ]
+}

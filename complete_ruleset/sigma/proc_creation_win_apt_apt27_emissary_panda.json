@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_apt27_emissary_panda",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2018/TA/APT27/proc_creation_win_apt_apt27_emissary_panda.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\sllauncher.exe\" and process.executable:\"*\\\\svchost.exe\") or (process.parent.executable:\"*\\\\AppData\\\\Roaming\\\\*\" and process.executable:\"*\\\\svchost.exe\" and process.command_line:\"*-k*\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sllauncher.exe"
+      ],
+      "raw_values": [
+        "*\\\\sllauncher.exe",
+        "*\\\\AppData\\\\Roaming\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    }
+  ]
+}

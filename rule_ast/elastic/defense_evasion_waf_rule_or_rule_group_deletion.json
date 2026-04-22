@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "AWS WAF Rule or Rule Group Deletion",
+  "slug": "defense_evasion_waf_rule_or_rule_group_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS WAF",
+    "Use Case: Network Security Monitoring",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/defense_evasion_waf_rule_or_rule_group_deletion.toml",
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: (waf.amazonaws.com or waf-regional.amazonaws.com or wafv2.amazonaws.com) \n    and event.action: (DeleteRule or DeleteRuleGroup) \n    and event.outcome: success\n",
+  "conditions": []
+}

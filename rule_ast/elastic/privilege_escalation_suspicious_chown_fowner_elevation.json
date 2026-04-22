@@ -1,0 +1,114 @@
+{
+  "source": "elastic",
+  "name": "Privilege Escalation via CAP_CHOWN/CAP_FOWNER Capabilities",
+  "slug": "privilege_escalation_suspicious_chown_fowner_elevation",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Auditd Manager",
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_suspicious_chown_fowner_elevation.toml",
+  "raw_query": "sequence by host.id, process.pid with maxspan=1s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.name != null and process.thread.capabilities.effective : (\"CAP_CHOWN\", \"CAP_FOWNER\") and\n   process.command_line : (\"*sudoers*\", \"*passwd*\", \"*shadow*\", \"*/root/*\") and user.id != \"0\"]\n  [file where host.os.type == \"linux\" and event.action == \"changed-file-ownership-of\" and event.type == \"change\" and\n   event.outcome == \"success\" and file.path in (\n     \"/etc/passwd\",\n     \"/etc/shadow\",\n     \"/etc/sudoers\",\n     \"/root/.ssh/*\"\n   ) and user.id != \"0\"\n  ]\n",
+  "conditions": [
+    {
+      "field": "process.thread.capabilities.effective",
+      "raw_field": "process.thread.capabilities.effective",
+      "operator": ":",
+      "values": [
+        "cap_chown",
+        "cap_fowner"
+      ],
+      "raw_values": [
+        "CAP_CHOWN",
+        "CAP_FOWNER"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sudoers",
+        "passwd",
+        "shadow"
+      ],
+      "raw_values": [
+        "*sudoers*",
+        "*passwd*",
+        "*shadow*",
+        "*/root/*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "in",
+      "values": [
+        "passwd",
+        "shadow",
+        "sudoers"
+      ],
+      "raw_values": [
+        "/etc/passwd",
+        "/etc/shadow",
+        "/etc/sudoers",
+        "/root/.ssh/*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "changed-file-ownership-of"
+      ],
+      "raw_values": [
+        "exec",
+        "changed-file-ownership-of"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

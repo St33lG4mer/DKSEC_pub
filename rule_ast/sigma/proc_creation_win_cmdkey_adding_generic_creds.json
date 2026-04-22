@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmdkey_adding_generic_creds",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmdkey_adding_generic_creds.eql",
+  "raw_query": "any where (process.executable:\"*\\\\cmdkey.exe\" or process.pe.original_file_name:\"cmdkey.exe\") and process.command_line like~ (\"* -g*\", \"* /g*\", \"* \u2013g*\", \"* \u2014g*\", \"* \u2015g*\") and process.command_line like~ (\"* -u*\", \"* /u*\", \"* \u2013u*\", \"* \u2014u*\", \"* \u2015u*\") and process.command_line like~ (\"* -p*\", \"* /p*\", \"* \u2013p*\", \"* \u2014p*\", \"* \u2015p*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmdkey.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmdkey.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmdkey.exe"
+      ],
+      "raw_values": [
+        "cmdkey.exe"
+      ]
+    }
+  ]
+}

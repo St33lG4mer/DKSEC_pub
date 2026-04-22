@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_inveigh",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_inveigh.eql",
+  "raw_query": "any where process.executable:\"*\\\\Inveigh.exe\" or (process.pe.original_file_name like~ (\"\\\\Inveigh.exe\", \"\\\\Inveigh.dll\")) or process.pe.description:\"Inveigh\" or (process.command_line like~ (\"* -SpooferIP*\", \"* -ReplyToIPs *\", \"* -ReplyToDomains *\", \"* -ReplyToMACs *\", \"* -SnifferIP*\"))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "\\\\inveigh.exe",
+        "\\\\inveigh.dll"
+      ],
+      "raw_values": [
+        "\\\\Inveigh.exe",
+        "\\\\Inveigh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-spooferip",
+        "-replytoips",
+        "-replytodomains",
+        "-replytomacs",
+        "-snifferip"
+      ],
+      "raw_values": [
+        "* -SpooferIP*",
+        "* -ReplyToIPs *",
+        "* -ReplyToDomains *",
+        "* -ReplyToMACs *",
+        "* -SnifferIP*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "inveigh.exe"
+      ],
+      "raw_values": [
+        "*\\\\Inveigh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "inveigh"
+      ],
+      "raw_values": [
+        "Inveigh"
+      ]
+    }
+  ]
+}

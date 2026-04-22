@@ -1,0 +1,53 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_regsvr32_uncommon_extension",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_regsvr32_uncommon_extension.eql",
+  "raw_query": "any where (process.executable:\"*\\\\regsvr32.exe\" or process.pe.original_file_name:\"REGSVR32.EXE\") and (not ((process.command_line like~ (\"*.ax*\", \"*.cpl*\", \"*.dll*\", \"*.ocx*\")) or (?process.command_line == null) or process.command_line==\"\")) and (not (process.command_line like~ (\"*.ppl*\", \"*.bav*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".ax",
+        ".cpl",
+        ".dll",
+        ".ocx",
+        ".ppl",
+        ".bav"
+      ],
+      "raw_values": [
+        "*.ax*",
+        "*.cpl*",
+        "*.dll*",
+        "*.ocx*",
+        "*.ppl*",
+        "*.bav*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "REGSVR32.EXE"
+      ]
+    }
+  ]
+}

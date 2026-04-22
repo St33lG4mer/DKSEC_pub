@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_diamond_sleet_indicators",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/Diamond-Sleet/proc_creation_win_apt_diamond_sleet_indicators.eql",
+  "raw_query": "any where process.command_line:\"* uTYNkfKxHiZrx3KJ*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "utynkfkxhizrx3kj"
+      ],
+      "raw_values": [
+        "* uTYNkfKxHiZrx3KJ*"
+      ]
+    }
+  ]
+}

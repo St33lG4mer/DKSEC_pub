@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_certutil_export_pfx",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_certutil_export_pfx.eql",
+  "raw_query": "any where (process.executable:\"*\\\\certutil.exe\" or process.pe.original_file_name:\"CertUtil.exe\") and process.command_line like~ (\"*-exportPFX *\", \"*/exportPFX *\", \"*\u2013exportPFX *\", \"*\u2014exportPFX *\", \"*\u2015exportPFX *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-exportpfx",
+        "exportpfx",
+        "\u2013exportpfx",
+        "\u2014exportpfx",
+        "\u2015exportpfx"
+      ],
+      "raw_values": [
+        "*-exportPFX *",
+        "*/exportPFX *",
+        "*\u2013exportPFX *",
+        "*\u2014exportPFX *",
+        "*\u2015exportPFX *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    }
+  ]
+}

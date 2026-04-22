@@ -1,0 +1,133 @@
+{
+  "source": "elastic",
+  "name": "Suspicious File Creation via Pkg Install Script",
+  "slug": "persistence_suspicious_file_creation_via_pkg_install_script",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_suspicious_file_creation_via_pkg_install_script.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=30s\n  [process where host.os.type == \"macos\" and event.type == \"start\" and process.name in (\"bash\", \"sh\", \"zsh\") and\n    process.args like~ (\"/tmp/PKInstallSandbox.*/Scripts/com.*/preinstall\", \n                        \"/tmp/PKInstallSandbox.*/Scripts/*/postinstall\") and\n    process.args like (\"/Users/*\", \"/Volumes/*\") and \n    not process.args like~ \"/Users/*/Library/Caches/*\"]\n  [file where host.os.type == \"macos\" and event.action != \"deletion\" and process.name in (\"mv\", \"cp\") and\n    (file.extension in (\"py\", \"js\", \"sh\", \"scpt\", \"terminal\", \"tcl\", \"app\", \"pkg\", \"dmg\", \"command\") or\n      file.Ext.header_bytes like~ (\"cffaedfe*\", \"cafebabe*\")) and\n    file.path like (\"/private/etc/*\", \"/var/tmp/*\", \"/tmp/*\", \"/var/folders/*\", \"/Users/Shared/*\",\n                    \"/Library/Graphics/*\", \"/Library/Containers/*\", \"/Users/*/Library/Containers/*\", \n                    \"/Users/*/Library/Services/*\", \"/Users/*/Library/Preferences/*\", \"/var/root/*\",\n                    \"/Library/WebServer/*\", \"/Library/Fonts/*\", \"/usr/local/bin/*\") and \n    not file.name == \"CodeResources\"]\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "preinstall",
+        "postinstall"
+      ],
+      "raw_values": [
+        "/tmp/PKInstallSandbox.*/Scripts/com.*/preinstall",
+        "/tmp/PKInstallSandbox.*/Scripts/*/postinstall",
+        "/Users/*/Library/Caches/*"
+      ]
+    },
+    {
+      "field": "file.ext.header_bytes",
+      "raw_field": "file.Ext.header_bytes",
+      "operator": "like~",
+      "values": [
+        "cffaedfe",
+        "cafebabe"
+      ],
+      "raw_values": [
+        "cffaedfe*",
+        "cafebabe*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "bash",
+        "sh",
+        "zsh",
+        "mv",
+        "cp"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "scpt",
+        "terminal",
+        "tcl",
+        "app",
+        "pkg",
+        "dmg",
+        "command"
+      ],
+      "raw_values": [
+        "py",
+        "js",
+        "sh",
+        "scpt",
+        "terminal",
+        "tcl",
+        "app",
+        "pkg",
+        "dmg",
+        "command"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "==",
+      "values": [
+        "coderesources"
+      ],
+      "raw_values": [
+        "CodeResources"
+      ]
+    }
+  ]
+}

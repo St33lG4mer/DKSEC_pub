@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_radmin",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_radmin.eql",
+  "raw_query": "any where process.pe.description:\"Radmin Viewer\" or process.pe.product:\"Radmin Viewer\" or process.pe.original_file_name:\"Radmin.exe\"",
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "radmin viewer"
+      ],
+      "raw_values": [
+        "Radmin Viewer"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "radmin viewer"
+      ],
+      "raw_values": [
+        "Radmin Viewer"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "radmin.exe"
+      ],
+      "raw_values": [
+        "Radmin.exe"
+      ]
+    }
+  ]
+}

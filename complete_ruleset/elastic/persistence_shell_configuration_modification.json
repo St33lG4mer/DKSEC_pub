@@ -1,0 +1,301 @@
+{
+  "source": "elastic",
+  "name": "Shell Configuration Creation",
+  "slug": "persistence_shell_configuration_modification",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_shell_configuration_modification.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action == \"creation\" and file.path : (\n  // system-wide configurations\n  \"/etc/profile\", \"/etc/profile.d/*\", \"/etc/bash.bashrc\", \"/etc/bash.bash_logout\", \"/etc/zsh/*\",\n  \"/etc/csh.cshrc\", \"/etc/csh.login\", \"/etc/fish/config.fish\", \"/etc/ksh.kshrc\",\n  // root and user configurations\n  \"/home/*/.profile\", \"/home/*/.bashrc\", \"/home/*/.bash_login\", \"/home/*/.bash_logout\", \"/home/*/.bash_profile\",\n  \"/root/.profile\", \"/root/.bashrc\", \"/root/.bash_login\", \"/root/.bash_logout\", \"/root/.bash_profile\",\n  \"/root/.bash_aliases\", \"/home/*/.bash_aliases\", \"/home/*/.zprofile\", \"/home/*/.zshrc\", \"/root/.zprofile\",\n  \"/root/.zshrc\", \"/home/*/.cshrc\", \"/home/*/.login\", \"/home/*/.logout\", \"/root/.cshrc\", \"/root/.login\",\n  \"/root/.logout\", \"/home/*/.config/fish/config.fish\", \"/root/.config/fish/config.fish\", \"/home/*/.kshrc\",\n  \"/root/.kshrc\"\n) and not (\n  process.executable in (\n    \"/bin/dpkg\", \"/usr/bin/dpkg\", \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/sbin/dockerd\", \"/bin/microdnf\",\n    \"/usr/bin/microdnf\", \"/bin/rpm\", \"/usr/bin/rpm\", \"/bin/snapd\", \"/usr/bin/snapd\", \"/bin/yum\", \"/usr/bin/yum\",\n    \"/bin/dnf\", \"/usr/bin/dnf\", \"/bin/podman\", \"/usr/bin/podman\", \"/bin/dnf-automatic\", \"/usr/bin/dnf-automatic\",\n    \"/bin/pacman\", \"/usr/bin/pacman\", \"/usr/bin/dpkg-divert\", \"/bin/dpkg-divert\", \"/sbin/apk\", \"/usr/sbin/apk\",\n    \"/usr/local/sbin/apk\", \"/usr/bin/apt\", \"/usr/sbin/pacman\", \"/bin/podman\", \"/usr/bin/podman\", \"/usr/bin/puppet\",\n    \"/bin/puppet\", \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/bin/chef-client\", \"/bin/chef-client\",\n    \"/bin/autossl_check\", \"/usr/bin/autossl_check\", \"/proc/self/exe\",  \"/usr/bin/pamac-daemon\",\n    \"/bin/pamac-daemon\", \"/usr/lib/snapd/snapd\", \"/usr/sbin/adduser\", \"/usr/sbin/useradd\", \"/usr/local/bin/dockerd\",\n    \"/usr/sbin/gdm\", \"/usr/bin/unzip\", \"/usr/bin/gnome-shell\", \"/sbin/mkhomedir_helper\", \"/usr/sbin/sshd\",\n    \"/opt/puppetlabs/puppet/bin/ruby\", \"/usr/bin/xfce4-session\", \"/usr/libexec/oddjob/mkhomedir\", \"/sbin/useradd\",\n    \"/usr/lib/systemd/systemd\", \"/usr/sbin/crond\", \"/usr/bin/pamac-daemon\", \"/usr/sbin/mkhomedir_helper\",\n    \"/opt/pbis/sbin/lwsmd\", \"/usr/sbin/oddjobd\", \"./usr/bin/podman\", \"/usr/bin/dnf5\", \"/bin/dnf5\",\n    \"/usr/libexec/gnome-terminal-server\", \"/usr/bin/buildah\", \"/usr/lib/venv-salt-minion/bin/python.original\"\n  ) or\n  file.extension in (\"swp\", \"swpx\", \"swx\", \"dpkg-remove\") or\n  file.Ext.original.extension == \"dpkg-new\" or\n  process.executable like (\n    \"/nix/store/*\", \"/var/lib/dpkg/*\", \"/tmp/vmis.*\", \"/snap/*\", \"/dev/fd/*\", \"/usr/lib/virtualbox/*\",\n    \"/usr/libexec/platform-python*\", \"./snap/snapd/*/usr/lib/snapd/snap-update-ns\", \"/opt/alt/python*/bin/python*\"\n  ) or\n  process.executable == null or\n  process.name in (\"adclient\", \"mkhomedir_helper\", \"teleport\", \"mkhomedir\", \"adduser\", \"desktopDaemon\", \"executor\", \"crio\") or\n  (process.name == \"sed\" and file.name like \"sed*\") or\n  (process.name == \"perl\" and file.name like \"e2scrub_all.tmp*\")\n)\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "profile",
+        "bash.bashrc",
+        "bash.bash_logout",
+        "csh.cshrc",
+        "csh.login",
+        "config.fish",
+        "ksh.kshrc",
+        ".profile",
+        ".bashrc",
+        ".bash_login",
+        ".bash_logout",
+        ".bash_profile",
+        ".bash_aliases",
+        ".zprofile",
+        ".zshrc",
+        ".cshrc",
+        ".login",
+        ".logout",
+        ".kshrc"
+      ],
+      "raw_values": [
+        "/etc/profile",
+        "/etc/profile.d/*",
+        "/etc/bash.bashrc",
+        "/etc/bash.bash_logout",
+        "/etc/zsh/*",
+        "/etc/csh.cshrc",
+        "/etc/csh.login",
+        "/etc/fish/config.fish",
+        "/etc/ksh.kshrc",
+        "/home/*/.profile",
+        "/home/*/.bashrc",
+        "/home/*/.bash_login",
+        "/home/*/.bash_logout",
+        "/home/*/.bash_profile",
+        "/root/.profile",
+        "/root/.bashrc",
+        "/root/.bash_login",
+        "/root/.bash_logout",
+        "/root/.bash_profile",
+        "/root/.bash_aliases",
+        "/home/*/.bash_aliases",
+        "/home/*/.zprofile",
+        "/home/*/.zshrc",
+        "/root/.zprofile",
+        "/root/.zshrc",
+        "/home/*/.cshrc",
+        "/home/*/.login",
+        "/home/*/.logout",
+        "/root/.cshrc",
+        "/root/.login",
+        "/root/.logout",
+        "/home/*/.config/fish/config.fish",
+        "/root/.config/fish/config.fish",
+        "/home/*/.kshrc",
+        "/root/.kshrc"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmis.",
+        "platform-python",
+        "snap-update-ns",
+        "python"
+      ],
+      "raw_values": [
+        "/nix/store/*",
+        "/var/lib/dpkg/*",
+        "/tmp/vmis.*",
+        "/snap/*",
+        "/dev/fd/*",
+        "/usr/lib/virtualbox/*",
+        "/usr/libexec/platform-python*",
+        "./snap/snapd/*/usr/lib/snapd/snap-update-ns",
+        "/opt/alt/python*/bin/python*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "dpkg",
+        "dockerd",
+        "microdnf",
+        "rpm",
+        "snapd",
+        "yum",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "pacman",
+        "dpkg-divert",
+        "apk",
+        "apt",
+        "puppet",
+        "chef-client",
+        "autossl_check",
+        "exe",
+        "pamac-daemon",
+        "adduser",
+        "useradd",
+        "gdm",
+        "unzip",
+        "gnome-shell",
+        "mkhomedir_helper",
+        "sshd",
+        "ruby",
+        "xfce4-session",
+        "mkhomedir",
+        "systemd",
+        "crond",
+        "lwsmd",
+        "oddjobd",
+        "dnf5",
+        "gnome-terminal-server",
+        "buildah",
+        "python.original",
+        "adclient",
+        "teleport",
+        "desktopdaemon",
+        "executor",
+        "crio"
+      ],
+      "raw_values": [
+        "/bin/dpkg",
+        "/usr/bin/dpkg",
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/sbin/dockerd",
+        "/bin/microdnf",
+        "/usr/bin/microdnf",
+        "/bin/rpm",
+        "/usr/bin/rpm",
+        "/bin/snapd",
+        "/usr/bin/snapd",
+        "/bin/yum",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "/usr/bin/dnf",
+        "/bin/podman",
+        "/usr/bin/podman",
+        "/bin/dnf-automatic",
+        "/usr/bin/dnf-automatic",
+        "/bin/pacman",
+        "/usr/bin/pacman",
+        "/usr/bin/dpkg-divert",
+        "/bin/dpkg-divert",
+        "/sbin/apk",
+        "/usr/sbin/apk",
+        "/usr/local/sbin/apk",
+        "/usr/bin/apt",
+        "/usr/sbin/pacman",
+        "/usr/bin/puppet",
+        "/bin/puppet",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/bin/chef-client",
+        "/bin/chef-client",
+        "/bin/autossl_check",
+        "/usr/bin/autossl_check",
+        "/proc/self/exe",
+        "/usr/bin/pamac-daemon",
+        "/bin/pamac-daemon",
+        "/usr/lib/snapd/snapd",
+        "/usr/sbin/adduser",
+        "/usr/sbin/useradd",
+        "/usr/local/bin/dockerd",
+        "/usr/sbin/gdm",
+        "/usr/bin/unzip",
+        "/usr/bin/gnome-shell",
+        "/sbin/mkhomedir_helper",
+        "/usr/sbin/sshd",
+        "/opt/puppetlabs/puppet/bin/ruby",
+        "/usr/bin/xfce4-session",
+        "/usr/libexec/oddjob/mkhomedir",
+        "/sbin/useradd",
+        "/usr/lib/systemd/systemd",
+        "/usr/sbin/crond",
+        "/usr/sbin/mkhomedir_helper",
+        "/opt/pbis/sbin/lwsmd",
+        "/usr/sbin/oddjobd",
+        "./usr/bin/podman",
+        "/usr/bin/dnf5",
+        "/bin/dnf5",
+        "/usr/libexec/gnome-terminal-server",
+        "/usr/bin/buildah",
+        "/usr/lib/venv-salt-minion/bin/python.original",
+        "adclient",
+        "mkhomedir_helper",
+        "teleport",
+        "mkhomedir",
+        "adduser",
+        "desktopDaemon",
+        "executor",
+        "crio"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ],
+      "raw_values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "file.ext.original.extension",
+      "raw_field": "file.Ext.original.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sed",
+        "perl"
+      ],
+      "raw_values": [
+        "sed",
+        "perl"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like",
+      "values": [
+        "sed",
+        "e2scrub_all.tmp"
+      ],
+      "raw_values": [
+        "sed*",
+        "e2scrub_all.tmp*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "source": "elastic",
+  "name": "Attempt to Clear Logs via Journalctl",
+  "slug": "defense_evasion_journalctl_clear_logs",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_journalctl_clear_logs.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name == \"journalctl\" and process.args like (\"--vacuum-time=*\", \"--vacuum-size=*\", \"--vacuum-files=*\") and\nnot process.parent.args == \"/etc/cron.daily/clean-journal-logs\"\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--vacuum-time=",
+        "--vacuum-size=",
+        "--vacuum-files="
+      ],
+      "raw_values": [
+        "--vacuum-time=*",
+        "--vacuum-size=*",
+        "--vacuum-files=*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "journalctl"
+      ],
+      "raw_values": [
+        "journalctl"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "/etc/cron.daily/clean-journal-logs"
+      ],
+      "raw_values": [
+        "/etc/cron.daily/clean-journal-logs"
+      ]
+    }
+  ]
+}

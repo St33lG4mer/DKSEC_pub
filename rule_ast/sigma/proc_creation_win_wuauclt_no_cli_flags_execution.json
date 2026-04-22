@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wuauclt_no_cli_flags_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wuauclt_no_cli_flags_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\Wuauclt.exe\" or process.pe.original_file_name:\"Wuauclt.exe\") and (process.command_line like~ (\"*Wuauclt\", \"*Wuauclt.exe\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "wuauclt",
+        "wuauclt.exe"
+      ],
+      "raw_values": [
+        "*Wuauclt",
+        "*Wuauclt.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wuauclt.exe"
+      ],
+      "raw_values": [
+        "*\\\\Wuauclt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wuauclt.exe"
+      ],
+      "raw_values": [
+        "Wuauclt.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_psloglist",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_psloglist.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"psloglist.exe\" or (process.executable like~ (\"*\\\\psloglist.exe\", \"*\\\\psloglist64.exe\"))) and (process.command_line like~ (\"* security*\", \"* application*\", \"* system*\")) and (process.command_line like~ (\"* -d*\", \"* /d*\", \"* \u2013d*\", \"* \u2014d*\", \"* \u2015d*\") or process.command_line like~ (\"* -x*\", \"* /x*\", \"* \u2013x*\", \"* \u2014x*\", \"* \u2015x*\") or process.command_line like~ (\"* -s*\", \"* /s*\", \"* \u2013s*\", \"* \u2014s*\", \"* \u2015s*\") or process.command_line like~ (\"* -c*\", \"* /c*\", \"* \u2013c*\", \"* \u2014c*\", \"* \u2015c*\") or process.command_line like~ (\"* -g*\", \"* /g*\", \"* \u2013g*\", \"* \u2014g*\", \"* \u2015g*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "psloglist.exe",
+        "psloglist64.exe"
+      ],
+      "raw_values": [
+        "*\\\\psloglist.exe",
+        "*\\\\psloglist64.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "security",
+        "application",
+        "system"
+      ],
+      "raw_values": [
+        "* security*",
+        "* application*",
+        "* system*",
+        "* -d*",
+        "* /d*",
+        "* \u2013d*",
+        "* \u2014d*",
+        "* \u2015d*",
+        "* -x*",
+        "* /x*",
+        "* \u2013x*",
+        "* \u2014x*",
+        "* \u2015x*",
+        "* -s*",
+        "* /s*",
+        "* \u2013s*",
+        "* \u2014s*",
+        "* \u2015s*",
+        "* -c*",
+        "* /c*",
+        "* \u2013c*",
+        "* \u2014c*",
+        "* \u2015c*",
+        "* -g*",
+        "* /g*",
+        "* \u2013g*",
+        "* \u2014g*",
+        "* \u2015g*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "psloglist.exe"
+      ],
+      "raw_values": [
+        "psloglist.exe"
+      ]
+    }
+  ]
+}

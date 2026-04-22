@@ -1,0 +1,76 @@
+{
+  "source": "elastic",
+  "name": "Potential AWS S3 Bucket Ransomware Note Uploaded",
+  "slug": "impact_s3_bucket_object_uploaded_with_ransom_keyword",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS S3",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/impact_s3_bucket_object_uploaded_with_ransom_keyword.toml",
+  "raw_query": "file where\n  data_stream.dataset == \"aws.cloudtrail\" and\n  event.provider == \"s3.amazonaws.com\" and\n  event.action == \"PutObject\" and\n  event.outcome == \"success\" and\n  /* Apply regex to match patterns only after the bucket name */\n  /* common ransom note file name keywords */\n  aws.cloudtrail.resources.arn regex~ \"arn:aws:s3:::[^/]+/.*?(how|decrypt|restor|help|instruct|read|get|recov|save|encrypt|info|ransom).*\"\n  and not aws.cloudtrail.resources.arn regex~ \".*(AWSLogs|CloudTrail|access-logs).*\"\n  and not aws.cloudtrail.user_identity.type == \"AWSService\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "putobject"
+      ],
+      "raw_values": [
+        "PutObject"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": "==",
+      "values": [
+        "awsservice"
+      ],
+      "raw_values": [
+        "AWSService"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "source": "elastic",
+  "name": "Remote XSL Script Execution via COM",
+  "slug": "initial_access_xsl_script_execution_via_com",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/initial_access_xsl_script_execution_via_com.toml",
+  "raw_query": "sequence with maxspan=1m\n [library where host.os.type == \"windows\" and dll.name : \"msxml3.dll\" and\n  process.name : (\"winword.exe\", \"excel.exe\", \"powerpnt.exe\", \"mspub.exe\")] by process.entity_id\n [process where host.os.type == \"windows\" and event.action == \"start\" and\n  process.parent.name : (\"winword.exe\", \"excel.exe\", \"powerpnt.exe\", \"mspub.exe\") and\n  not process.executable :\n        (\"?:\\\\Windows\\\\System32\\\\WerFault.exe\",\n         \"?:\\\\Windows\\\\SysWoW64\\\\WerFault.exe\",\n         \"?:\\\\windows\\\\splwow64.exe\",\n         \"?:\\\\Windows\\\\System32\\\\conhost.exe\",\n         \"?:\\\\Program Files\\\\*.exe\",\n         \"?:\\\\Program Files (x86)\\\\*exe\")] by process.parent.entity_id\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "mspub.exe",
+        "werfault.exe",
+        "splwow64.exe",
+        "conhost.exe",
+        ".exe"
+      ],
+      "raw_values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "mspub.exe",
+        "?:\\\\Windows\\\\System32\\\\WerFault.exe",
+        "?:\\\\Windows\\\\SysWoW64\\\\WerFault.exe",
+        "?:\\\\windows\\\\splwow64.exe",
+        "?:\\\\Windows\\\\System32\\\\conhost.exe",
+        "?:\\\\Program Files\\\\*.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "mspub.exe"
+      ],
+      "raw_values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "mspub.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "dll.name",
+      "raw_field": "dll.name",
+      "operator": ":",
+      "values": [
+        "msxml3.dll"
+      ],
+      "raw_values": [
+        "msxml3.dll"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

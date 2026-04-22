@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_relay_attacks_tools",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_relay_attacks_tools.eql",
+  "raw_query": "any where ((process.executable like~ (\"*PetitPotam*\", \"*RottenPotato*\", \"*HotPotato*\", \"*JuicyPotato*\", \"*\\\\just_dce_*\", \"*Juicy Potato*\", \"*\\\\temp\\\\rot.exe*\", \"*\\\\Potato.exe*\", \"*\\\\SpoolSample.exe*\", \"*\\\\Responder.exe*\", \"*\\\\smbrelayx*\", \"*\\\\ntlmrelayx*\", \"*\\\\LocalPotato*\")) or (process.command_line like~ (\"*Invoke-Tater*\", \"* smbrelay*\", \"* ntlmrelay*\", \"*cme smb *\", \"* /ntlm:NTLMhash *\", \"*Invoke-PetitPotam*\", \"*.exe -t * -p *\")) or (process.command_line:\"*.exe -c \\\"{*\" and process.command_line:\"*}\\\" -z\")) and (not (process.executable like~ (\"*HotPotatoes6*\", \"*HotPotatoes7*\", \"*HotPotatoes *\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "petitpotam",
+        "rottenpotato",
+        "hotpotato",
+        "juicypotato",
+        "just_dce_",
+        "juicy potato",
+        "rot.exe",
+        "potato.exe",
+        "spoolsample.exe",
+        "responder.exe",
+        "smbrelayx",
+        "ntlmrelayx",
+        "localpotato",
+        "hotpotatoes6",
+        "hotpotatoes7",
+        "hotpotatoes"
+      ],
+      "raw_values": [
+        "*PetitPotam*",
+        "*RottenPotato*",
+        "*HotPotato*",
+        "*JuicyPotato*",
+        "*\\\\just_dce_*",
+        "*Juicy Potato*",
+        "*\\\\temp\\\\rot.exe*",
+        "*\\\\Potato.exe*",
+        "*\\\\SpoolSample.exe*",
+        "*\\\\Responder.exe*",
+        "*\\\\smbrelayx*",
+        "*\\\\ntlmrelayx*",
+        "*\\\\LocalPotato*",
+        "*HotPotatoes6*",
+        "*HotPotatoes7*",
+        "*HotPotatoes *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-tater",
+        "smbrelay",
+        "ntlmrelay",
+        "cme smb",
+        "ntlm:ntlmhash",
+        "invoke-petitpotam",
+        ".exe -t * -p"
+      ],
+      "raw_values": [
+        "*Invoke-Tater*",
+        "* smbrelay*",
+        "* ntlmrelay*",
+        "*cme smb *",
+        "* /ntlm:NTLMhash *",
+        "*Invoke-PetitPotam*",
+        "*.exe -t * -p *"
+      ]
+    }
+  ]
+}

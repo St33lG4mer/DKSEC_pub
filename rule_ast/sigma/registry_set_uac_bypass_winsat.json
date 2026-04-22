@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "registry_set_uac_bypass_winsat",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_uac_bypass_winsat.eql",
+  "raw_query": "any where registry.path:\"*\\\\Root\\\\InventoryApplicationFile\\\\winsat.exe|*\" and registry.path:\"*\\\\LowerCaseLongPath\" and winlog.event_data.Details:\"c:\\\\users\\\\*\" and winlog.event_data.Details:\"*\\\\appdata\\\\local\\\\temp\\\\system32\\\\winsat.exe\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\root\\\\inventoryapplicationfile\\\\winsat.exe|",
+        "\\\\lowercaselongpath"
+      ],
+      "raw_values": [
+        "*\\\\Root\\\\InventoryApplicationFile\\\\winsat.exe|*",
+        "*\\\\LowerCaseLongPath"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "c:\\\\users\\\\",
+        "\\\\appdata\\\\local\\\\temp\\\\system32\\\\winsat.exe"
+      ],
+      "raw_values": [
+        "c:\\\\users\\\\*",
+        "*\\\\appdata\\\\local\\\\temp\\\\system32\\\\winsat.exe"
+      ]
+    }
+  ]
+}

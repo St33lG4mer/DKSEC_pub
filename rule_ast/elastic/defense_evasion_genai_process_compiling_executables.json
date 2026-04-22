@@ -1,0 +1,216 @@
+{
+  "source": "elastic",
+  "name": "GenAI Process Compiling or Generating Executables",
+  "slug": "defense_evasion_genai_process_compiling_executables",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: macOS",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Auditd Manager",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide",
+    "Domain: LLM",
+    "Mitre Atlas: T0053"
+  ],
+  "elastic_path": "rules/cross-platform/defense_evasion_genai_process_compiling_executables.toml",
+  "raw_query": "process where event.type == \"start\" and\n\n  // GenAI parent process\n  (\n    process.parent.name in (\n      \"ollama.exe\", \"ollama\", \"Ollama\",\n      \"textgen.exe\", \"textgen\", \"text-generation-webui.exe\", \"oobabooga.exe\",\n      \"lmstudio.exe\", \"lmstudio\", \"LM Studio\",\n      \"claude.exe\", \"claude\", \"Claude\",\n      \"cursor.exe\", \"cursor\", \"Cursor\", \"Cursor Helper\", \"Cursor Helper (Plugin)\",\n      \"copilot.exe\", \"copilot\", \"Copilot\",\n      \"codex.exe\", \"codex\",\n      \"Jan\", \"jan.exe\", \"jan\", \"Jan Helper\",\n      \"gpt4all.exe\", \"gpt4all\", \"GPT4All\",\n      \"gemini-cli.exe\", \"gemini-cli\",\n      \"genaiscript.exe\", \"genaiscript\",\n      \"grok.exe\", \"grok\",\n      \"qwen.exe\", \"qwen\",\n      \"koboldcpp.exe\", \"koboldcpp\", \"KoboldCpp\",\n      \"llama-server\", \"llama-cli\"\n    ) or\n    \n    // Node/Deno with GenAI frameworks\n    (process.parent.name in (\"node.exe\", \"node\", \"deno.exe\", \"deno\") and\n     process.parent.command_line like~ (\"*mcp-server*\", \"*@modelcontextprotocol*\", \"*langchain*\", \"*autogpt*\", \"*babyagi*\", \"*agentgpt*\", \"*crewai*\", \"*semantic-kernel*\", \"*llama-index*\", \"*haystack*\")) or\n    \n    // Python with GenAI frameworks\n    (process.parent.name like~ \"python*\" and\n     process.parent.command_line like~ (\"*langchain*\", \"*autogpt*\", \"*babyagi*\", \"*agentgpt*\", \"*crewai*\", \"*semantic-kernel*\", \"*llama-index*\", \"*haystack*\"))\n  ) and\n\n  // Compilation tools\n  (\n    // Python packaging\n    process.name in (\"pyinstaller\", \"py2exe\", \"cx_Freeze\", \"nuitka\", \"pyarmor\", \"pkg\") or\n    \n    // C/C++ compilation with output\n    (process.name in (\"gcc\", \"g++\", \"clang\", \"clang++\", \"cl.exe\") and\n     process.command_line like~ \"*-o *\" and\n     process.command_line like~ (\"*.c *\", \"*.c\", \"*.cpp *\", \"*.cpp\", \"*.cc *\", \"*.cc\", \"*.m *\", \"*.m\") and\n     not process.command_line like~ \"*git*\") or\n    \n    // Go compilation\n    (process.name == \"go\" and process.args == \"build\") or\n    \n    // Rust compilation\n    (process.name == \"cargo\" and process.args == \"build\") or\n    (process.name == \"rustc\" and process.command_line like~ \"*-o *\") or\n    \n    // .NET compilation\n    process.name in (\"csc.exe\", \"vbc.exe\", \"msbuild.exe\") or\n    (process.name == \"dotnet\" and process.args == \"build\") or\n    \n    // Java compilation\n    process.name == \"javac\"\n  )\n",
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "mcp-server",
+        "@modelcontextprotocol",
+        "langchain",
+        "autogpt",
+        "babyagi",
+        "agentgpt",
+        "crewai",
+        "semantic-kernel",
+        "llama-index",
+        "haystack"
+      ],
+      "raw_values": [
+        "*mcp-server*",
+        "*@modelcontextprotocol*",
+        "*langchain*",
+        "*autogpt*",
+        "*babyagi*",
+        "*agentgpt*",
+        "*crewai*",
+        "*semantic-kernel*",
+        "*llama-index*",
+        "*haystack*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".cpp",
+        ".cc",
+        "git"
+      ],
+      "raw_values": [
+        "*.c *",
+        "*.c",
+        "*.cpp *",
+        "*.cpp",
+        "*.cc *",
+        "*.cc",
+        "*.m *",
+        "*.m",
+        "*-o *",
+        "*git*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "ollama.exe",
+        "ollama",
+        "textgen.exe",
+        "textgen",
+        "text-generation-webui.exe",
+        "oobabooga.exe",
+        "lmstudio.exe",
+        "lmstudio",
+        "lm studio",
+        "claude.exe",
+        "claude",
+        "cursor.exe",
+        "cursor",
+        "cursor helper",
+        "node.exe",
+        "node",
+        "deno.exe",
+        "deno"
+      ],
+      "raw_values": [
+        "ollama.exe",
+        "ollama",
+        "Ollama",
+        "textgen.exe",
+        "textgen",
+        "text-generation-webui.exe",
+        "oobabooga.exe",
+        "lmstudio.exe",
+        "lmstudio",
+        "LM Studio",
+        "claude.exe",
+        "claude",
+        "Claude",
+        "cursor.exe",
+        "cursor",
+        "Cursor",
+        "Cursor Helper",
+        "node.exe",
+        "node",
+        "deno.exe",
+        "deno"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "pyinstaller",
+        "py2exe",
+        "cx_freeze",
+        "nuitka",
+        "pyarmor",
+        "pkg",
+        "gcc",
+        "g++",
+        "clang",
+        "clang++",
+        "cl.exe",
+        "csc.exe",
+        "vbc.exe",
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "pyinstaller",
+        "py2exe",
+        "cx_Freeze",
+        "nuitka",
+        "pyarmor",
+        "pkg",
+        "gcc",
+        "g++",
+        "clang",
+        "clang++",
+        "cl.exe",
+        "csc.exe",
+        "vbc.exe",
+        "msbuild.exe"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like~",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "cargo",
+        "rustc",
+        "dotnet",
+        "javac"
+      ],
+      "raw_values": [
+        "go",
+        "cargo",
+        "rustc",
+        "dotnet",
+        "javac"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "build"
+      ],
+      "raw_values": [
+        "build"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_shelldispatch",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_shelldispatch.eql",
+  "raw_query": "any where file.path:\"*\\\\ShellDispatch.dll\" and (not ((file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\") or file.path:\"*:\\\\Windows\\\\Temp\\\\*\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "shelldispatch.dll"
+      ],
+      "raw_values": [
+        "*\\\\ShellDispatch.dll",
+        "*:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ]
+}

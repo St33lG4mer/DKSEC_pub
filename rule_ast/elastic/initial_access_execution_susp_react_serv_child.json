@@ -1,0 +1,296 @@
+{
+  "source": "elastic",
+  "name": "Suspicious React Server Child Process",
+  "slug": "initial_access_execution_susp_react_serv_child",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: macOS",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Data Source: SentinelOne",
+    "Data Source: Sysmon",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/initial_access_execution_susp_react_serv_child.toml",
+  "raw_query": "process where event.type == \"start\" and event.action in (\"exec\", \"executed\", \"start\", \"process_started\") and (\n    process.name in (\n      \"sh\", \"bash\", \"zsh\", \"dash\", \"curl\", \"wget\", \"id\", \"whoami\", \"uname\", \"cmd.exe\", \"cat\", \"powershell.exe\", \"java\", \"rundll32.exe\", \"wget.exe\", \"certutil.exe\",\n      \"nc\", \"ncat\", \"netcat\", \"nc.openbsd\", \"nc.traditional\", \"socat\", \"busybox\", \"mkfifo\", \"nohup\", \"setsid\", \"xterm\"\n    ) or\n    (process.name : \"python*\" and process.args : \"-c\" and process.args : (\n     \"*import*pty*spawn*\", \"*import*subprocess*call*\"\n    )) or\n    (process.name : \"perl*\" and process.args : \"-e\" and process.args : \"*socket*\" and process.args : (\n     \"*exec*\", \"*system*\"\n    )) or\n    (process.name : \"ruby*\" and process.args : (\"-e\", \"-rsocket\") and process.args : (\n     \"*TCPSocket.new*\", \"*TCPSocket.open*\"\n     )) or\n    (process.name : \"lua*\" and process.args : \"-e\" and process.args : \"*socket.tcp*\" and process.args : (\n     \"*io.popen*\", \"*os.execute*\"\n    )) or\n    (process.name : \"php*\" and process.args : \"-r\" and process.args : \"*fsockopen*\" and process.args : \"*/bin/*sh*\") or \n    (process.name == \"node\" and process.args == \"-e\" and process.args : \"*spawn*sh*\" and process.args : \"*connect*\") or\n    (process.name : (\"awk\", \"gawk\", \"mawk\", \"nawk\") and process.args : \"*/inet/tcp/*\") or\n    (process.name in (\"rvim\", \"vim\", \"vimdiff\", \"rview\", \"view\") and process.args == \"-c\" and process.args : \"*socket*\")\n)\nand (\n  ?process.working_directory : (\n    \"*react-dom*\", \"*.next*\", \"*node_modules/next*\", \"*react-server*\", \"*bin/next*\", \"*.pnpm/next*\", \"*next/dist/server*\", \"*react-scripts*\") or\n  (\n    process.parent.name in (\"node\", \"bun\", \"node.exe\", \"bun.exe\") and\n    process.parent.command_line : (\n      \"*react-dom*\", \"*.next*\", \"*node_modules/next*\", \"*react-server*\", \"*next-server*\", \"* server.js*\",  \"*start-server.js*\", \"*bin/next*\",\n      \"*--experimental-https*\", \"*app/server*\", \"*.pnpm/next*\", \"*next start*\", \"*next dev*\", \"*react-scripts start*\", \"*next/dist/server*\"\n    )\n  )\n) and not (\n  ?process.parent.executable in (\"./runc\", \"/opt/google/chrome/chrome\") or\n  process.command_line like \"/bin/sh -c git config*\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "import*pty*spawn",
+        "import*subprocess*call",
+        "exec",
+        "system",
+        "-rsocket",
+        "tcpsocket.new",
+        "tcpsocket.open",
+        "io.popen",
+        "os.execute",
+        "socket",
+        "socket.tcp",
+        "fsockopen",
+        "spawn*sh",
+        "connect"
+      ],
+      "raw_values": [
+        "*import*pty*spawn*",
+        "*import*subprocess*call*",
+        "*exec*",
+        "*system*",
+        "-e",
+        "-rsocket",
+        "*TCPSocket.new*",
+        "*TCPSocket.open*",
+        "*io.popen*",
+        "*os.execute*",
+        "-c",
+        "*socket*",
+        "*socket.tcp*",
+        "-r",
+        "*fsockopen*",
+        "*/bin/*sh*",
+        "*spawn*sh*",
+        "*connect*",
+        "*/inet/tcp/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk",
+        "python",
+        "perl",
+        "ruby",
+        "lua",
+        "php"
+      ],
+      "raw_values": [
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk",
+        "python*",
+        "perl*",
+        "ruby*",
+        "lua*",
+        "php*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "react-dom",
+        ".next",
+        "node_modules/next",
+        "react-server",
+        "bin/next",
+        ".pnpm/next",
+        "next/dist/server",
+        "react-scripts"
+      ],
+      "raw_values": [
+        "*react-dom*",
+        "*.next*",
+        "*node_modules/next*",
+        "*react-server*",
+        "*bin/next*",
+        "*.pnpm/next*",
+        "*next/dist/server*",
+        "*react-scripts*"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "react-dom",
+        ".next",
+        "next",
+        "react-server",
+        "next-server",
+        "server.js",
+        "start-server.js",
+        "--experimental-https",
+        "server",
+        "next start",
+        "next dev",
+        "react-scripts start"
+      ],
+      "raw_values": [
+        "*react-dom*",
+        "*.next*",
+        "*node_modules/next*",
+        "*react-server*",
+        "*next-server*",
+        "* server.js*",
+        "*start-server.js*",
+        "*bin/next*",
+        "*--experimental-https*",
+        "*app/server*",
+        "*.pnpm/next*",
+        "*next start*",
+        "*next dev*",
+        "*react-scripts start*",
+        "*next/dist/server*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "executed",
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "executed",
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh",
+        "dash",
+        "curl",
+        "wget",
+        "whoami",
+        "uname",
+        "cmd.exe",
+        "cat",
+        "powershell.exe",
+        "java",
+        "rundll32.exe",
+        "wget.exe",
+        "certutil.exe",
+        "ncat",
+        "netcat",
+        "nc.openbsd",
+        "nc.traditional",
+        "socat",
+        "busybox",
+        "mkfifo",
+        "nohup",
+        "setsid",
+        "xterm",
+        "rvim",
+        "vim",
+        "vimdiff",
+        "rview",
+        "view"
+      ],
+      "raw_values": [
+        "sh",
+        "bash",
+        "zsh",
+        "dash",
+        "curl",
+        "wget",
+        "id",
+        "whoami",
+        "uname",
+        "cmd.exe",
+        "cat",
+        "powershell.exe",
+        "java",
+        "rundll32.exe",
+        "wget.exe",
+        "certutil.exe",
+        "nc",
+        "ncat",
+        "netcat",
+        "nc.openbsd",
+        "nc.traditional",
+        "socat",
+        "busybox",
+        "mkfifo",
+        "nohup",
+        "setsid",
+        "xterm",
+        "rvim",
+        "vim",
+        "vimdiff",
+        "rview",
+        "view"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "node",
+        "bun",
+        "node.exe",
+        "bun.exe",
+        "runc",
+        "chrome"
+      ],
+      "raw_values": [
+        "node",
+        "bun",
+        "node.exe",
+        "bun.exe",
+        "./runc",
+        "/opt/google/chrome/chrome"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "node"
+      ],
+      "raw_values": [
+        "node"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like",
+      "values": [
+        "sh -c git config"
+      ],
+      "raw_values": [
+        "/bin/sh -c git config*"
+      ]
+    }
+  ]
+}

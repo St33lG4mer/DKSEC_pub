@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_fodhelper",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_fodhelper.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\fodhelper.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "fodhelper.exe"
+      ],
+      "raw_values": [
+        "*\\\\fodhelper.exe"
+      ]
+    }
+  ]
+}

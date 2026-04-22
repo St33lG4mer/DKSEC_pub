@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_tttracer_mod_load",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_tttracer_mod_load.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\tttracer.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "tttracer.exe"
+      ],
+      "raw_values": [
+        "*\\\\tttracer.exe"
+      ]
+    }
+  ]
+}

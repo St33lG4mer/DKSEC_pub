@@ -1,0 +1,54 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 AMI Shared with Another Account",
+  "slug": "exfiltration_ec2_ami_shared_with_separate_account",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Threat Detection",
+    "Tactic: Exfiltration",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/exfiltration_ec2_ami_shared_with_separate_account.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" and event.provider: \"ec2.amazonaws.com\"\n    and event.action: ModifyImageAttribute and event.outcome: success\n    and aws.cloudtrail.request_parameters: *add=*\n    and not aws.cloudtrail.user_identity.invoked_by: \"assets.marketplace.amazonaws.com\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.invoked_by",
+      "raw_field": "aws.cloudtrail.user_identity.invoked_by",
+      "operator": ":",
+      "values": [
+        "assets.marketplace.amazonaws.com"
+      ],
+      "raw_values": [
+        "assets.marketplace.amazonaws.com"
+      ]
+    }
+  ]
+}

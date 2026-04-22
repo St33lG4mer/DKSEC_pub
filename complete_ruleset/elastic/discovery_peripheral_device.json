@@ -1,0 +1,83 @@
+{
+  "source": "elastic",
+  "name": "Peripheral Device Discovery",
+  "slug": "discovery_peripheral_device",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/discovery_peripheral_device.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (process.name : \"fsutil.exe\" or ?process.pe.original_file_name == \"fsutil.exe\") and\n  process.args : \"fsinfo\" and process.args : \"drives\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "fsutil.exe"
+      ],
+      "raw_values": [
+        "fsutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "fsutil.exe"
+      ],
+      "raw_values": [
+        "fsutil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "fsinfo",
+        "drives"
+      ],
+      "raw_values": [
+        "fsinfo",
+        "drives"
+      ]
+    }
+  ]
+}

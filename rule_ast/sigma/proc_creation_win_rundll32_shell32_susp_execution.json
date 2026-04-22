@@ -1,0 +1,65 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_shell32_susp_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_shell32_susp_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and ((process.command_line:\"*shell32.dll*\" and process.command_line:\"*Control_RunDLL*\") and (process.command_line like~ (\"*%AppData%*\", \"*%LocalAppData%*\", \"*%Temp%*\", \"*%tmp%*\", \"*\\\\AppData\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "%appdata%",
+        "%localappdata%",
+        "%temp%",
+        "%tmp%"
+      ],
+      "raw_values": [
+        "*%AppData%*",
+        "*%LocalAppData%*",
+        "*%Temp%*",
+        "*%tmp%*",
+        "*\\\\AppData\\\\*",
+        "*\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shell32.dll",
+        "control_rundll"
+      ],
+      "raw_values": [
+        "*shell32.dll*",
+        "*Control_RunDLL*"
+      ]
+    }
+  ]
+}

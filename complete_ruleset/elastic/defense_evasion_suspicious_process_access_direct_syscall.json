@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Process Access via Direct System Call",
+  "slug": "defense_evasion_suspicious_process_access_direct_syscall",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Execution",
+    "Resources: Investigation Guide",
+    "Data Source: Sysmon"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_suspicious_process_access_direct_syscall.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.code == \"10\" and\n length(winlog.event_data.CallTrace) > 0 and\n\n /* Sysmon CallTrace starting with unknown memory module instead of ntdll which host Windows NT Syscalls */\n not winlog.event_data.CallTrace :\n            (\"?:\\\\WINDOWS\\\\SYSTEM32\\\\ntdll.dll*\",\n             \"?:\\\\WINDOWS\\\\SysWOW64\\\\ntdll.dll*\",\n             \"?:\\\\WINDOWS\\\\System32\\\\sysfer.dll*\",\n             \"?:\\\\Windows\\\\System32\\\\wow64cpu.dll*\",\n             \"?:\\\\WINDOWS\\\\System32\\\\wow64win.dll*\",\n             \"?:\\\\Windows\\\\System32\\\\win32u.dll*\",\n             \"?:\\\\ProgramData\\\\Symantec\\\\Symantec Endpoint Protection\\\\*\\\\sysfer.dll*\") and\n\n not winlog.event_data.TargetImage :\n            (\"?:\\\\Program Files (x86)\\\\Malwarebytes Anti-Exploit\\\\mbae-svc.exe\",\n             \"?:\\\\Program Files\\\\Cisco\\\\AMP\\\\*\\\\sfc.exe\",\n             \"?:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\*\\\\msedgewebview2.exe\",\n             \"?:\\\\Program Files\\\\Adobe\\\\Acrobat DC\\\\Acrobat\\\\*\\\\AcroCEF.exe\") and\n\n not (process.executable : (\"?:\\\\Program Files\\\\Adobe\\\\Acrobat DC\\\\Acrobat\\\\Acrobat.exe\",\n                            \"?:\\\\Program Files (x86)\\\\World of Warcraft\\\\_classic_\\\\WowClassic.exe\") and\n      not winlog.event_data.TargetImage : \"?:\\\\WINDOWS\\\\system32\\\\lsass.exe\")\n",
+  "conditions": [
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\system32\\\\ntdll.dll",
+        ":\\\\windows\\\\syswow64\\\\ntdll.dll",
+        ":\\\\windows\\\\system32\\\\sysfer.dll",
+        ":\\\\windows\\\\system32\\\\wow64cpu.dll",
+        ":\\\\windows\\\\system32\\\\wow64win.dll",
+        ":\\\\windows\\\\system32\\\\win32u.dll",
+        ":\\\\programdata\\\\symantec\\\\symantec endpoint protection\\\\*\\\\sysfer.dll"
+      ],
+      "raw_values": [
+        "?:\\\\WINDOWS\\\\SYSTEM32\\\\ntdll.dll*",
+        "?:\\\\WINDOWS\\\\SysWOW64\\\\ntdll.dll*",
+        "?:\\\\WINDOWS\\\\System32\\\\sysfer.dll*",
+        "?:\\\\Windows\\\\System32\\\\wow64cpu.dll*",
+        "?:\\\\WINDOWS\\\\System32\\\\wow64win.dll*",
+        "?:\\\\Windows\\\\System32\\\\win32u.dll*",
+        "?:\\\\ProgramData\\\\Symantec\\\\Symantec Endpoint Protection\\\\*\\\\sysfer.dll*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "acrobat.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\Adobe\\\\Acrobat DC\\\\Acrobat\\\\Acrobat.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\system32\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "?:\\\\WINDOWS\\\\system32\\\\lsass.exe"
+      ]
+    }
+  ]
+}

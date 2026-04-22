@@ -1,0 +1,146 @@
+{
+  "source": "elastic",
+  "name": "Potential Data Splitting Detected",
+  "slug": "exfiltration_potential_data_splitting_for_exfiltration",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Exfiltration",
+    "Data Source: Elastic Defend",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/exfiltration_potential_data_splitting_for_exfiltration.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\n  event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\n  (\n    (process.name == \"dd\" and process.args like \"bs=*\" and process.args like \"if=*\") or\n    (\n      process.name in (\"split\", \"rsplit\") and\n      (\n        (process.args == \"-b\" or process.args like \"--bytes*\") or\n        (process.args == \"-C\" or process.args like \"--line-bytes*\")\n      )\n    )\n  ) and\n  not (\n    process.parent.name in (\"apport\", \"overlayroot\", \"nessus-agent-module\") or\n    process.args like (\n      \"if=/tmp/nvim*\", \"if=/boot/*\", \"if=/dev/random\", \"if=/dev/urandom\", \"/dev/mapper/*\",\n      \"if=*.iso\", \"of=/dev/stdout\", \"if=/dev/zero\", \"if=/dev/sda\", \"/proc/sys/kernel/*\"\n    ) or\n    ?process.parent.args in (\"/etc/init.d/apport\", \"/usr/bin/spectre-meltdown-checker\")\n  )\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "nvim",
+        "random",
+        "urandom",
+        "if=*.iso",
+        "stdout",
+        "zero",
+        "sda"
+      ],
+      "raw_values": [
+        "if=/tmp/nvim*",
+        "if=/boot/*",
+        "if=/dev/random",
+        "if=/dev/urandom",
+        "/dev/mapper/*",
+        "if=*.iso",
+        "of=/dev/stdout",
+        "if=/dev/zero",
+        "if=/dev/sda",
+        "/proc/sys/kernel/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "split",
+        "rsplit"
+      ],
+      "raw_values": [
+        "split",
+        "rsplit"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "apport",
+        "overlayroot",
+        "nessus-agent-module"
+      ],
+      "raw_values": [
+        "apport",
+        "overlayroot",
+        "nessus-agent-module"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/etc/init.d/apport",
+        "/usr/bin/spectre-meltdown-checker"
+      ],
+      "raw_values": [
+        "/etc/init.d/apport",
+        "/usr/bin/spectre-meltdown-checker"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "bs=",
+        "if=",
+        "--bytes",
+        "--line-bytes"
+      ],
+      "raw_values": [
+        "bs=*",
+        "if=*",
+        "--bytes*",
+        "--line-bytes*"
+      ]
+    }
+  ]
+}

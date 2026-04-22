@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_raccess_sensitive_fext",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_raccess_sensitive_fext.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"5145\" and (winlog.event_data.RelativeTargetName like~ (\"*.bak\", \"*.dmp\", \"*.edb\", \"*.kirbi\", \"*.msg\", \"*.nsf\", \"*.nst\", \"*.oab\", \"*.ost\", \"*.pst\", \"*.rdp\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": "like~",
+      "values": [
+        ".bak",
+        ".dmp",
+        ".edb",
+        ".kirbi",
+        ".msg",
+        ".nsf",
+        ".nst",
+        ".oab",
+        ".ost",
+        ".pst",
+        ".rdp"
+      ],
+      "raw_values": [
+        "*.bak",
+        "*.dmp",
+        "*.edb",
+        "*.kirbi",
+        "*.msg",
+        "*.nsf",
+        "*.nst",
+        "*.oab",
+        "*.ost",
+        "*.pst",
+        "*.rdp"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    }
+  ]
+}

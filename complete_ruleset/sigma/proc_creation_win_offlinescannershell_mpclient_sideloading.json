@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_offlinescannershell_mpclient_sideloading",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_offlinescannershell_mpclient_sideloading.eql",
+  "raw_query": "any where (process.executable:\"*\\\\OfflineScannerShell.exe\" or process.pe.original_file_name:\"OfflineScannerShell.exe\") and (not (process.working_directory:\"C:\\\\Program Files\\\\Windows Defender\\\\Offline\\\\\" or process.working_directory==\"\" or (?process.working_directory == null)))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "offlinescannershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\OfflineScannerShell.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "offlinescannershell.exe"
+      ],
+      "raw_values": [
+        "OfflineScannerShell.exe"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "c:\\\\program files\\\\windows defender\\\\offline\\\\"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Windows Defender\\\\Offline\\\\"
+      ]
+    }
+  ]
+}

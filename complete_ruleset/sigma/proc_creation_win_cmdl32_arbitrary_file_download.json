@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmdl32_arbitrary_file_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmdl32_arbitrary_file_download.eql",
+  "raw_query": "any where (process.executable:\"*\\\\cmdl32.exe\" or process.pe.original_file_name:\"CMDL32.EXE\") and (process.command_line:\"*/vpn*\" and process.command_line:\"*/lan*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmdl32.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmdl32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmdl32.exe"
+      ],
+      "raw_values": [
+        "CMDL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "vpn",
+        "lan"
+      ],
+      "raw_values": [
+        "*/vpn*",
+        "*/lan*"
+      ]
+    }
+  ]
+}

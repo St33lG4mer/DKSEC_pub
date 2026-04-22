@@ -1,0 +1,39 @@
+{
+  "source": "sigma",
+  "name": "image_load_cmstp_load_dll_from_susp_location",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_cmstp_load_dll_from_susp_location.eql",
+  "raw_query": "any where process.executable:\"*\\\\cmstp.exe\" and (file.path like~ (\"*\\\\PerfLogs\\\\*\", \"*\\\\ProgramData\\\\*\", \"*\\\\Users\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\", \"*C:\\\\Temp\\\\*\")) and (file.path like~ (\"*.dll\", \"*.ocx\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".dll",
+        ".ocx"
+      ],
+      "raw_values": [
+        "*\\\\PerfLogs\\\\*",
+        "*\\\\ProgramData\\\\*",
+        "*\\\\Users\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*",
+        "*C:\\\\Temp\\\\*",
+        "*.dll",
+        "*.ocx"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmstp.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmstp.exe"
+      ]
+    }
+  ]
+}

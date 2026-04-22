@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_slingshot",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2018/TA/Slingshot/proc_creation_win_apt_slingshot.eql",
+  "raw_query": "any where process.executable:\"*\\\\schtasks.exe\" and (process.command_line like~ (\"*/delete*\", \"*/change*\")) and (process.command_line:\"*/TN*\" and process.command_line:\"*\\\\Microsoft\\\\Windows\\\\Defrag\\\\ScheduledDefrag*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "delete",
+        "change"
+      ],
+      "raw_values": [
+        "*/delete*",
+        "*/change*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "scheduleddefrag"
+      ],
+      "raw_values": [
+        "*/TN*",
+        "*\\\\Microsoft\\\\Windows\\\\Defrag\\\\ScheduledDefrag*"
+      ]
+    }
+  ]
+}

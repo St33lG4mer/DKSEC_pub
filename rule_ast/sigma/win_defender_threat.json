@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "win_defender_threat",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/windefend/win_defender_threat.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Defender/Operational\" and (event.code like~ (\"1006\", \"1015\", \"1116\", \"1117\"))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "1006",
+        "1015",
+        "1116",
+        "1117"
+      ],
+      "raw_values": [
+        "1006",
+        "1015",
+        "1116",
+        "1117"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows defender/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Defender/Operational"
+      ]
+    }
+  ]
+}

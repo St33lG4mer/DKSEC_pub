@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_diskshadow_child_process",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_diskshadow_child_process.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\diskshadow.exe\" and (not process.executable:\"*:\\\\Windows\\\\System32\\\\WerFault.exe\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "*\\\\diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\WerFault.exe"
+      ]
+    }
+  ]
+}

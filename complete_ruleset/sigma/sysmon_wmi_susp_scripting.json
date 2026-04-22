@@ -1,0 +1,50 @@
+{
+  "source": "sigma",
+  "name": "sysmon_wmi_susp_scripting",
+  "subtree": "rules",
+  "category": "wmi",
+  "sigma_path": "rules/windows/wmi_event/sysmon_wmi_susp_scripting.eql",
+  "raw_query": "any where (process.executable:\"*new-object*\" and process.executable:\"*net.webclient*\" and process.executable:\"*.downloadstring*\") or (process.executable:\"*new-object*\" and process.executable:\"*net.webclient*\" and process.executable:\"*.downloadfile*\") or (process.executable like~ (\"* iex(*\", \"* -nop *\", \"* -noprofile *\", \"* -decode *\", \"* -enc *\", \"*WScript.Shell*\", \"*System.Security.Cryptography.FromBase64Transform*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "iex(",
+        "-nop",
+        "-noprofile",
+        "-decode",
+        "-enc",
+        "wscript.shell",
+        "system.security.cryptography.frombase64transform"
+      ],
+      "raw_values": [
+        "* iex(*",
+        "* -nop *",
+        "* -noprofile *",
+        "* -decode *",
+        "* -enc *",
+        "*WScript.Shell*",
+        "*System.Security.Cryptography.FromBase64Transform*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "new-object",
+        "net.webclient",
+        ".downloadstring",
+        ".downloadfile"
+      ],
+      "raw_values": [
+        "*new-object*",
+        "*net.webclient*",
+        "*.downloadstring*",
+        "*.downloadfile*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_query_session_exfil",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_query_session_exfil.eql",
+  "raw_query": "any where process.executable:\"*:\\\\Windows\\\\System32\\\\query.exe\" and (process.command_line like~ (\"*session >*\", \"*process >*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "session >",
+        "process >"
+      ],
+      "raw_values": [
+        "*session >*",
+        "*process >*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "query.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\query.exe"
+      ]
+    }
+  ]
+}

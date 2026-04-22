@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "AWS SNS Topic Created by Rare User",
+  "slug": "resource_development_sns_topic_created_by_rare_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS SNS",
+    "Resources: Investigation Guide",
+    "Use Case: Threat Detection",
+    "Tactic: Resource Development",
+    "Tactic: Impact"
+  ],
+  "elastic_path": "rules/integrations/aws/resource_development_sns_topic_created_by_rare_user.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"sns.amazonaws.com\"\n    and event.action: \"CreateTopic\"\n    and event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "sns.amazonaws.com"
+      ],
+      "raw_values": [
+        "sns.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "createtopic"
+      ],
+      "raw_values": [
+        "CreateTopic"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

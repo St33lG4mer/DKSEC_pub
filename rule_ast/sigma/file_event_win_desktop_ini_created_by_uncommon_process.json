@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_desktop_ini_created_by_uncommon_process",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_desktop_ini_created_by_uncommon_process.eql",
+  "raw_query": "any where file.path:\"*\\\\desktop.ini\" and (not ((process.executable like~ (\"C:\\\\Windows\\\\*\", \"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\")) or file.path:\"C:\\\\$WINDOWS.~BT\\\\NewOS\\\\*\")) and (not ((process.executable:\"C:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\JetBrains\\\\Toolbox\\\\bin\\\\7z.exe\" and file.path:\"*\\\\JetBrains\\\\apps\\\\*\") or (process.executable:\"C:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "desktop.ini"
+      ],
+      "raw_values": [
+        "*\\\\desktop.ini",
+        "C:\\\\$WINDOWS.~BT\\\\NewOS\\\\*",
+        "*\\\\JetBrains\\\\apps\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "7z.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\JetBrains\\\\Toolbox\\\\bin\\\\7z.exe",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\*"
+      ]
+    }
+  ]
+}

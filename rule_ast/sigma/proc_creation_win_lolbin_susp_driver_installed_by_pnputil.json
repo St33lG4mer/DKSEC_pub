@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_susp_driver_installed_by_pnputil",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_susp_driver_installed_by_pnputil.eql",
+  "raw_query": "any where (process.command_line like~ (\"*-i*\", \"*/install*\", \"*-a*\", \"*/add-driver*\", \"*.inf*\")) and process.executable:\"*\\\\pnputil.exe\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "install",
+        "add-driver",
+        ".inf"
+      ],
+      "raw_values": [
+        "*-i*",
+        "*/install*",
+        "*-a*",
+        "*/add-driver*",
+        "*.inf*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pnputil.exe"
+      ],
+      "raw_values": [
+        "*\\\\pnputil.exe"
+      ]
+    }
+  ]
+}

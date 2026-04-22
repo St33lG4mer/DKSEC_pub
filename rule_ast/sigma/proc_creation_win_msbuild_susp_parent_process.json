@@ -1,0 +1,53 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msbuild_susp_parent_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msbuild_susp_parent_process.eql",
+  "raw_query": "any where (process.executable:\"*\\\\MSBuild.exe\" or process.pe.original_file_name:\"MSBuild.exe\") and (not (process.parent.executable like~ (\"*\\\\devenv.exe\", \"*\\\\cmd.exe\", \"*\\\\msbuild.exe\", \"*\\\\python.exe\", \"*\\\\explorer.exe\", \"*\\\\nuget.exe\")))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "devenv.exe",
+        "cmd.exe",
+        "msbuild.exe",
+        "python.exe",
+        "explorer.exe",
+        "nuget.exe"
+      ],
+      "raw_values": [
+        "*\\\\devenv.exe",
+        "*\\\\cmd.exe",
+        "*\\\\msbuild.exe",
+        "*\\\\python.exe",
+        "*\\\\explorer.exe",
+        "*\\\\nuget.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "*\\\\MSBuild.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "MSBuild.exe"
+      ]
+    }
+  ]
+}

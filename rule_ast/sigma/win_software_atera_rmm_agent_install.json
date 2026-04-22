@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "win_software_atera_rmm_agent_install",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/application/msiinstaller/win_software_atera_rmm_agent_install.eql",
+  "raw_query": "any where winlog.channel:\"Application\" and (event.code:\"1033\" and winlog.provider_name:\"MsiInstaller\" and winlog.event_data.Message:\"*AteraAgent*\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "application"
+      ],
+      "raw_values": [
+        "Application"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "1033"
+      ],
+      "raw_values": [
+        "1033"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "msiinstaller"
+      ],
+      "raw_values": [
+        "MsiInstaller"
+      ]
+    },
+    {
+      "field": "winlog.event_data.message",
+      "raw_field": "winlog.event_data.Message",
+      "operator": ":",
+      "values": [
+        "ateraagent"
+      ],
+      "raw_values": [
+        "*AteraAgent*"
+      ]
+    }
+  ]
+}

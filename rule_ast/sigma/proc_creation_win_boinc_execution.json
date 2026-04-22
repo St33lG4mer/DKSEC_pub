@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_boinc_execution",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_boinc_execution.eql",
+  "raw_query": "any where process.pe.description:\"University of California, Berkeley\"",
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "university of california, berkeley"
+      ],
+      "raw_values": [
+        "University of California, Berkeley"
+      ]
+    }
+  ]
+}

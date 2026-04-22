@@ -1,0 +1,46 @@
+{
+  "source": "elastic",
+  "name": "PowerShell Suspicious Discovery Related Windows API Functions",
+  "slug": "discovery_posh_suspicious_api_functions",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Tactic: Collection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide",
+    "Data Source: PowerShell Logs"
+  ],
+  "elastic_path": "rules/windows/discovery_posh_suspicious_api_functions.toml",
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n    NetShareEnum or\n    NetWkstaUserEnum or\n    NetSessionEnum or\n    NetLocalGroupEnum or\n    NetLocalGroupGetMembers or\n    DsGetSiteName or\n    DsEnumerateDomainTrusts or\n    WTSEnumerateSessionsEx or\n    WTSQuerySessionInformation or\n    LsaGetLogonSessionData or\n    QueryServiceObjectSecurity or\n    GetComputerNameEx or\n    NetWkstaGetInfo or\n    GetUserNameEx or\n    NetUserEnum or\n    NetUserGetInfo or\n    NetGroupEnum or\n    NetGroupGetInfo or\n    NetGroupGetUsers or\n    NetWkstaTransportEnum or\n    NetServerGetInfo or\n    LsaEnumerateTrustedDomains  or\n    NetScheduleJobEnum or\n    NetUserModalsGet\n  ) and\n  not powershell.file.script_block_text : (\n    (\"DsGetSiteName\" and (\"DiscoverWindowsComputerProperties.ps1\" and \"param($SourceType, $SourceId, $ManagedEntityId, $ComputerIdentity)\")) or\n    (\"# Copyright: (c) 2018, Ansible Project\" and \"#Requires -Module Ansible.ModuleUtils.AddType\" and \"#AnsibleRequires -CSharpUtil Ansible.Basic\") or\n    (\"Ansible.Windows.Setup\" and \"Ansible.Windows.Setup\" and \"NativeMethods.NetWkstaGetInfo(null, 100, out netBuffer);\")\n  ) and\n  not file.directory: \"C:\\Program Files (x86)\\Automox\\WDK\\Win32\\WinSession\"\n",
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "dsgetsitename",
+        "discoverwindowscomputerproperties.ps1"
+      ],
+      "raw_values": [
+        "DsGetSiteName",
+        "DiscoverWindowsComputerProperties.ps1"
+      ]
+    },
+    {
+      "field": "file.directory",
+      "raw_field": "file.directory",
+      "operator": ":",
+      "values": [
+        "c:\\program files (x86)\\automox\\wdk\\win32\\winsession"
+      ],
+      "raw_values": [
+        "C:\\Program Files (x86)\\Automox\\WDK\\Win32\\WinSession"
+      ]
+    }
+  ]
+}

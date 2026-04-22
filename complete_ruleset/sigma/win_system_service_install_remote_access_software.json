@@ -1,0 +1,96 @@
+{
+  "source": "sigma",
+  "name": "win_system_service_install_remote_access_software",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/service_control_manager/win_system_service_install_remote_access_software.eql",
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Service Control Manager\" and (event.code like~ (\"7045\", \"7036\")) and (winlog.event_data.ServiceName like~ (\"*AmmyyAdmin*\", \"*Atera*\", \"*BASupportExpressSrvcUpdater*\", \"*BASupportExpressStandaloneService*\", \"*chromoting*\", \"*GoToAssist*\", \"*GoToMyPC*\", \"*jumpcloud*\", \"*LMIGuardianSvc*\", \"*LogMeIn*\", \"*monblanking*\", \"*Parsec*\", \"*RManService*\", \"*RPCPerformanceService*\", \"*RPCService*\", \"*SplashtopRemoteService*\", \"*SSUService*\", \"*TeamViewer*\", \"*TightVNC*\", \"*vncserver*\", \"*Zoho*\")))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "7045",
+        "7036"
+      ],
+      "raw_values": [
+        "7045",
+        "7036"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicename",
+      "raw_field": "winlog.event_data.ServiceName",
+      "operator": "like~",
+      "values": [
+        "ammyyadmin",
+        "atera",
+        "basupportexpresssrvcupdater",
+        "basupportexpressstandaloneservice",
+        "chromoting",
+        "gotoassist",
+        "gotomypc",
+        "jumpcloud",
+        "lmiguardiansvc",
+        "logmein",
+        "monblanking",
+        "parsec",
+        "rmanservice",
+        "rpcperformanceservice",
+        "rpcservice",
+        "splashtopremoteservice",
+        "ssuservice",
+        "teamviewer",
+        "tightvnc",
+        "vncserver",
+        "zoho"
+      ],
+      "raw_values": [
+        "*AmmyyAdmin*",
+        "*Atera*",
+        "*BASupportExpressSrvcUpdater*",
+        "*BASupportExpressStandaloneService*",
+        "*chromoting*",
+        "*GoToAssist*",
+        "*GoToMyPC*",
+        "*jumpcloud*",
+        "*LMIGuardianSvc*",
+        "*LogMeIn*",
+        "*monblanking*",
+        "*Parsec*",
+        "*RManService*",
+        "*RPCPerformanceService*",
+        "*RPCService*",
+        "*SplashtopRemoteService*",
+        "*SSUService*",
+        "*TeamViewer*",
+        "*TightVNC*",
+        "*vncserver*",
+        "*Zoho*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    }
+  ]
+}

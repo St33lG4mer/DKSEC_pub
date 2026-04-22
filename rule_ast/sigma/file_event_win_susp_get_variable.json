@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_susp_get_variable",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_susp_get_variable.eql",
+  "raw_query": "any where file.path:\"*Local\\\\Microsoft\\\\WindowsApps\\\\Get-Variable.exe\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "get-variable.exe"
+      ],
+      "raw_values": [
+        "*Local\\\\Microsoft\\\\WindowsApps\\\\Get-Variable.exe"
+      ]
+    }
+  ]
+}

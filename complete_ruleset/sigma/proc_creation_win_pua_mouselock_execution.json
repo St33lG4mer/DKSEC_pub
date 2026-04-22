@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_mouselock_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_mouselock_execution.eql",
+  "raw_query": "any where process.pe.product:\"*Mouse Lock*\" or process.pe.company:\"*Misc314*\" or process.command_line:\"*Mouse Lock_*\"",
+  "conditions": [
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "mouse lock"
+      ],
+      "raw_values": [
+        "*Mouse Lock*"
+      ]
+    },
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "misc314"
+      ],
+      "raw_values": [
+        "*Misc314*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "mouse lock_"
+      ],
+      "raw_values": [
+        "*Mouse Lock_*"
+      ]
+    }
+  ]
+}

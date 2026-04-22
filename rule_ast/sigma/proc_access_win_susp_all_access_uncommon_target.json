@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_access_win_susp_all_access_uncommon_target",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_access/proc_access_win_susp_all_access_uncommon_target.eql",
+  "raw_query": "any where (winlog.event_data.TargetImage like~ (\"*\\\\calc.exe\", \"*\\\\calculator.exe\", \"*\\\\mspaint.exe\", \"*\\\\notepad.exe\", \"*\\\\ping.exe\", \"*\\\\wordpad.exe\", \"*\\\\write.exe\")) and winlog.event_data.GrantedAccess:\"0x1FFFFF\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": "like~",
+      "values": [
+        "\\\\calc.exe",
+        "\\\\calculator.exe",
+        "\\\\mspaint.exe",
+        "\\\\notepad.exe",
+        "\\\\ping.exe",
+        "\\\\wordpad.exe",
+        "\\\\write.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe",
+        "*\\\\calculator.exe",
+        "*\\\\mspaint.exe",
+        "*\\\\notepad.exe",
+        "*\\\\ping.exe",
+        "*\\\\wordpad.exe",
+        "*\\\\write.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x1fffff"
+      ],
+      "raw_values": [
+        "0x1FFFFF"
+      ]
+    }
+  ]
+}

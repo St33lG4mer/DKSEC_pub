@@ -1,0 +1,43 @@
+{
+  "source": "elastic",
+  "name": "Azure Compute Snapshot Deletion by Unusual User and Resource Group",
+  "slug": "impact_azure_compute_vm_snapshot_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Storage",
+    "Data Source: Azure",
+    "Data Source: Azure Activity Logs",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/impact_azure_compute_vm_snapshot_deletion.toml",
+  "raw_query": "data_stream.dataset: azure.activitylogs and\n    azure.activitylogs.operation_name: \"MICROSOFT.COMPUTE/SNAPSHOTS/DELETE\" and\n    azure.activitylogs.properties.status_code: \"Accepted\" and\n    azure.activitylogs.identity.claims_initiated_by_user.name: *\n",
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.compute/snapshots/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.COMPUTE/SNAPSHOTS/DELETE"
+      ]
+    },
+    {
+      "field": "azure.activitylogs.properties.status_code",
+      "raw_field": "azure.activitylogs.properties.status_code",
+      "operator": ":",
+      "values": [
+        "accepted"
+      ],
+      "raw_values": [
+        "Accepted"
+      ]
+    }
+  ]
+}

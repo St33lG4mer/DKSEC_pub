@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_exchange_webshell_drop",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_exchange_webshell_drop.eql",
+  "raw_query": "any where (process.executable:\"*\\\\w3wp.exe\" and winlog.event_data.CommandLine:\"*MSExchange*\" and (file.path like~ (\"*FrontEnd\\\\HttpProxy\\\\*\", \"*\\\\inetpub\\\\wwwroot\\\\aspnet_client\\\\*\"))) and (file.path like~ (\"*.aspx\", \"*.asp\", \"*.ashx\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".aspx",
+        ".asp",
+        ".ashx"
+      ],
+      "raw_values": [
+        "*FrontEnd\\\\HttpProxy\\\\*",
+        "*\\\\inetpub\\\\wwwroot\\\\aspnet_client\\\\*",
+        "*.aspx",
+        "*.asp",
+        "*.ashx"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "w3wp.exe"
+      ],
+      "raw_values": [
+        "*\\\\w3wp.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "winlog.event_data.CommandLine",
+      "operator": ":",
+      "values": [
+        "msexchange"
+      ],
+      "raw_values": [
+        "*MSExchange*"
+      ]
+    }
+  ]
+}

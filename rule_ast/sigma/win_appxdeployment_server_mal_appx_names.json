@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "win_appxdeployment_server_mal_appx_names",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/appxdeployment_server/win_appxdeployment_server_mal_appx_names.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-AppXDeploymentServer/Operational\" and ((event.code like~ (\"400\", \"401\")) and winlog.event_data.PackageFullName:\"*3669e262-ec02-4e9d-bcb4-3d008b4afac9*\")",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "400",
+        "401"
+      ],
+      "raw_values": [
+        "400",
+        "401"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-appxdeploymentserver/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-AppXDeploymentServer/Operational"
+      ]
+    },
+    {
+      "field": "winlog.event_data.packagefullname",
+      "raw_field": "winlog.event_data.PackageFullName",
+      "operator": ":",
+      "values": [
+        "3669e262-ec02-4e9d-bcb4-3d008b4afac9"
+      ],
+      "raw_values": [
+        "*3669e262-ec02-4e9d-bcb4-3d008b4afac9*"
+      ]
+    }
+  ]
+}

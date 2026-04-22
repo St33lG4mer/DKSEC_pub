@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_ssh_port_forward",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_ssh_port_forward.eql",
+  "raw_query": "any where process.executable:\"*\\\\ssh.exe\" and process.command_line like~ (\"* -R *\", \"* /R *\", \"* \u2013R *\", \"* \u2014R *\", \"* \u2015R *\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ssh.exe"
+      ],
+      "raw_values": [
+        "*\\\\ssh.exe"
+      ]
+    }
+  ]
+}

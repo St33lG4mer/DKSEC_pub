@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "win_security_sam_registry_hive_handle_request",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_sam_registry_hive_handle_request.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4656\" and winlog.event_data.ObjectType:\"Key\" and winlog.event_data.ObjectName:\"*\\\\SAM\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4656"
+      ],
+      "raw_values": [
+        "4656"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "key"
+      ],
+      "raw_values": [
+        "Key"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\sam"
+      ],
+      "raw_values": [
+        "*\\\\SAM"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_x509enrollment",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_x509enrollment.eql",
+  "raw_query": "any where process.command_line like~ (\"*X509Enrollment.CBinaryConverter*\", \"*884e2002-217d-11da-b2a4-000e7bbb2b09*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "x509enrollment.cbinaryconverter",
+        "884e2002-217d-11da-b2a4-000e7bbb2b09"
+      ],
+      "raw_values": [
+        "*X509Enrollment.CBinaryConverter*",
+        "*884e2002-217d-11da-b2a4-000e7bbb2b09*"
+      ]
+    }
+  ]
+}

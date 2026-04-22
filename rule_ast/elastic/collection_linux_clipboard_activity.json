@@ -1,0 +1,96 @@
+{
+  "source": "elastic",
+  "name": "Linux Clipboard Activity Detected",
+  "slug": "collection_linux_clipboard_activity",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/collection_linux_clipboard_activity.toml",
+  "raw_query": "event.category:process and host.os.type:\"linux\" and event.type:\"start\" and\nevent.action:(\"exec\" or \"exec_event\" or \"executed\" or \"process_started\" or \"start\") and\nprocess.name:(\"xclip\" or \"xsel\" or \"wl-clipboard\" or \"clipman\" or \"copyq\") and\nnot process.parent.name:(\"bwrap\" or \"micro\")\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started",
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "xclip",
+        "xsel",
+        "wl-clipboard",
+        "clipman",
+        "copyq"
+      ],
+      "raw_values": [
+        "xclip",
+        "xsel",
+        "wl-clipboard",
+        "clipman",
+        "copyq"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "bwrap",
+        "micro"
+      ],
+      "raw_values": [
+        "bwrap",
+        "micro"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

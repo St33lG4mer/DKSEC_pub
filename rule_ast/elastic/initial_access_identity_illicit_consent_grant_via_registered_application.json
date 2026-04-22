@@ -1,0 +1,54 @@
+{
+  "source": "elastic",
+  "name": "M365 Identity OAuth Illicit Consent Grant by Rare Client and User",
+  "slug": "initial_access_identity_illicit_consent_grant_via_registered_application",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Data Source: Microsoft 365 Audit Logs",
+    "Use Case: Identity and Access Audit",
+    "Resources: Investigation Guide",
+    "Tactic: Initial Access",
+    "Tactic: Credential Access"
+  ],
+  "elastic_path": "rules/integrations/o365/initial_access_identity_illicit_consent_grant_via_registered_application.toml",
+  "raw_query": "data_stream.dataset: \"o365.audit\"\n  and o365.audit.Actor.Type: 5\n  and event.action: \"Consent to application.\"\n  and event.outcome: \"success\"\n  and o365.audit.Target.Type: (0 or 2 or 3 or 9 or 10)\n  and o365.audit.UserId: *\n  and o365.audit.ObjectId: *\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "consent to application."
+      ],
+      "raw_values": [
+        "Consent to application."
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "source": "elastic",
+  "name": "Shell Command-Line History Deletion Detected via Defend for Containers",
+  "slug": "defense_evasion_deletion_of_shell_cmdline_history",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/defense_evasion_deletion_of_shell_cmdline_history.toml",
+  "raw_query": "any where host.os.type == \"linux\" and event.category in (\"file\", \"process\") and process.interactive == true and container.id like \"?*\" and (\n  (event.category == \"file\" and event.type == \"deletion\" and file.name in (\".bash_history\", \".sh_history\",  \".zsh_history\")) or\n  (event.category == \"process\" and event.type == \"start\" and event.action == \"exec\" and (\n    (\n      (\n        process.args in (\n          \"rm\", \"/bin/rm\", \"/usr/bin/rm\", \"/usr/local/bin/rm\",\n          \"echo\", \"/bin/echo\", \"/usr/bin/echo\", \"/usr/local/bin/echo\"\n        ) or\n        (process.args in (\"ln\", \"/bin/ln\", \"/usr/bin/ln\", \"/usr/local/bin/ln\") and process.args == \"-sf\" and process.args == \"/dev/null\") or\n        (process.args in (\"truncate\", \"/bin/truncate\", \"/usr/bin/truncate\", \"/usr/local/bin/truncate\") and process.args == \"-s0\")\n      ) and process.args like (\"*.bash_history*\", \"*.sh_history*\", \"*.zsh_history*\")\n    ) or\n    (process.name == \"history\" and process.args == \"-c\") or\n    (process.args == \"export\" and process.args in (\"HISTFILE=/dev/null\", \"HISTFILESIZE=0\")) or\n    (process.args == \"unset\" and process.args == \"HISTFILE\") or\n    (process.args == \"set\" and process.args == \"history\" and process.args == \"+o\")\n  )\n )\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ".bash_history",
+        ".sh_history",
+        ".zsh_history"
+      ],
+      "raw_values": [
+        "*.bash_history*",
+        "*.sh_history*",
+        "*.zsh_history*"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "in",
+      "values": [
+        "file",
+        "process"
+      ],
+      "raw_values": [
+        "file",
+        "process"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "in",
+      "values": [
+        ".bash_history",
+        ".sh_history",
+        ".zsh_history"
+      ],
+      "raw_values": [
+        ".bash_history",
+        ".sh_history",
+        ".zsh_history"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "echo",
+        "truncate",
+        "null",
+        "histfilesize=0"
+      ],
+      "raw_values": [
+        "rm",
+        "/bin/rm",
+        "/usr/bin/rm",
+        "/usr/local/bin/rm",
+        "echo",
+        "/bin/echo",
+        "/usr/bin/echo",
+        "/usr/local/bin/echo",
+        "ln",
+        "/bin/ln",
+        "/usr/bin/ln",
+        "/usr/local/bin/ln",
+        "truncate",
+        "/bin/truncate",
+        "/usr/bin/truncate",
+        "/usr/local/bin/truncate",
+        "HISTFILE=/dev/null",
+        "HISTFILESIZE=0"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "file",
+        "process"
+      ],
+      "raw_values": [
+        "file",
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "deletion",
+        "start"
+      ],
+      "raw_values": [
+        "deletion",
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "-sf",
+        "null",
+        "-s0",
+        "export",
+        "unset",
+        "histfile",
+        "set",
+        "history"
+      ],
+      "raw_values": [
+        "-sf",
+        "/dev/null",
+        "-s0",
+        "-c",
+        "export",
+        "unset",
+        "HISTFILE",
+        "set",
+        "history",
+        "+o"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "history"
+      ],
+      "raw_values": [
+        "history"
+      ]
+    }
+  ]
+}

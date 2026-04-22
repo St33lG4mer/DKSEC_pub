@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msdt_susp_cab_options",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msdt_susp_cab_options.eql",
+  "raw_query": "any where (process.executable:\"*\\\\msdt.exe\" or process.pe.original_file_name:\"msdt.exe\") and process.command_line like~ (\"* -cab *\", \"* /cab *\", \"* \u2013cab *\", \"* \u2014cab *\", \"* \u2015cab *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-cab",
+        "cab",
+        "\u2013cab",
+        "\u2014cab",
+        "\u2015cab"
+      ],
+      "raw_values": [
+        "* -cab *",
+        "* /cab *",
+        "* \u2013cab *",
+        "* \u2014cab *",
+        "* \u2015cab *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "msdt.exe"
+      ]
+    }
+  ]
+}

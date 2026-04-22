@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_nircmd",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_nircmd.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\NirCmd.exe\" or process.pe.original_file_name:\"NirCmd.exe\") or (process.command_line like~ (\"* execmd *\", \"*.exe script *\", \"*.exe shexec *\", \"* runinteractive *\"))) or ((process.command_line like~ (\"* exec *\", \"* exec2 *\")) and (process.command_line like~ (\"* show *\", \"* hide *\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "execmd",
+        ".exe script",
+        ".exe shexec",
+        "runinteractive",
+        "exec",
+        "exec2",
+        "show",
+        "hide"
+      ],
+      "raw_values": [
+        "* execmd *",
+        "*.exe script *",
+        "*.exe shexec *",
+        "* runinteractive *",
+        "* exec *",
+        "* exec2 *",
+        "* show *",
+        "* hide *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "nircmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\NirCmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "nircmd.exe"
+      ],
+      "raw_values": [
+        "NirCmd.exe"
+      ]
+    }
+  ]
+}

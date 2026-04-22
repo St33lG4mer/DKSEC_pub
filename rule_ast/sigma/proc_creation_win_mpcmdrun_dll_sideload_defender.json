@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mpcmdrun_dll_sideload_defender",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mpcmdrun_dll_sideload_defender.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\MpCmdRun.exe\", \"*\\\\NisSrv.exe\")) and (not (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Windows Defender\\\\*\", \"C:\\\\Program Files\\\\Microsoft Security Client\\\\*\", \"C:\\\\Program Files\\\\Windows Defender\\\\*\", \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mpcmdrun.exe",
+        "nissrv.exe"
+      ],
+      "raw_values": [
+        "*\\\\MpCmdRun.exe",
+        "*\\\\NisSrv.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_type_arbitrary_file_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_type_arbitrary_file_download.eql",
+  "raw_query": "any where (process.command_line:\"*type *\" and process.command_line:\"* > \\\\\\\\*\") or (process.command_line:\"*type \\\\\\\\*\" and process.command_line:\"* > *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "type"
+      ],
+      "raw_values": [
+        "*type *",
+        "* > \\\\\\\\*",
+        "*type \\\\\\\\*",
+        "* > *"
+      ]
+    }
+  ]
+}

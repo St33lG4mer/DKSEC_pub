@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_encode",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_encode.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.command_line like~ (\"* -e *\", \"* -en *\", \"* -enc *\", \"* -enco*\", \"* -ec *\"))) and (not (process.command_line:\"* -Encoding *\" or (process.parent.executable like~ (\"*C:\\\\Packages\\\\Plugins\\\\Microsoft.GuestConfiguration.ConfigurationforWindows\\\\*\", \"*\\\\gc_worker.exe*\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-en",
+        "-enc",
+        "-enco",
+        "-ec"
+      ],
+      "raw_values": [
+        "* -e *",
+        "* -en *",
+        "* -enc *",
+        "* -enco*",
+        "* -ec *"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "gc_worker.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Packages\\\\Plugins\\\\Microsoft.GuestConfiguration.ConfigurationforWindows\\\\*",
+        "*\\\\gc_worker.exe*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-encoding"
+      ],
+      "raw_values": [
+        "* -Encoding *"
+      ]
+    }
+  ]
+}

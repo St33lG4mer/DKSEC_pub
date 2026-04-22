@@ -1,0 +1,93 @@
+{
+  "source": "elastic",
+  "name": "Outbound Scheduled Task Activity via PowerShell",
+  "slug": "execution_scheduled_task_powershell_source",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/execution_scheduled_task_powershell_source.toml",
+  "raw_query": "sequence by host.id, process.entity_id with maxspan = 5s\n [any where host.os.type == \"windows\" and (event.category == \"library\" or (event.category == \"process\" and event.action : \"Image loaded*\")) and\n  (?dll.name : \"taskschd.dll\" or file.name : \"taskschd.dll\") and process.name : (\"powershell.exe\", \"pwsh.exe\", \"powershell_ise.exe\")]\n [network where host.os.type == \"windows\" and process.name : (\"powershell.exe\", \"pwsh.exe\", \"powershell_ise.exe\") and destination.port == 135 and not cidrmatch(destination.ip, \"127.0.0.0/8\", \"::1/128\")]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "library",
+        "process"
+      ],
+      "raw_values": [
+        "library",
+        "process"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "image loaded"
+      ],
+      "raw_values": [
+        "Image loaded*"
+      ]
+    },
+    {
+      "field": "dll.name",
+      "raw_field": "dll.name",
+      "operator": ":",
+      "values": [
+        "taskschd.dll"
+      ],
+      "raw_values": [
+        "taskschd.dll"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "taskschd.dll"
+      ],
+      "raw_values": [
+        "taskschd.dll"
+      ]
+    }
+  ]
+}

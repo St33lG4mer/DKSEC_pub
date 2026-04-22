@@ -1,0 +1,193 @@
+{
+  "source": "elastic",
+  "name": "Ingress Tool Transfer Followed by Execution and Deletion Detected via Defend for Containers",
+  "slug": "defense_evasion_file_creation_execution_deletion_cradle",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/defense_evasion_file_creation_execution_deletion_cradle.toml",
+  "raw_query": "sequence by container.id, user.id with maxspan=10s\n  [file where event.action == \"creation\" and (\n     process.name in (\"curl\", \"wget\", \"fetch\", \"ftp\", \"sftp\", \"scp\", \"rsync\", \"ld\") or\n     (\n       process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n       process.args in (\n         \"curl\", \"/bin/curl\", \"/usr/bin/curl\", \"/usr/local/bin/curl\",\n         \"wget\", \"/bin/wget\", \"/usr/bin/wget\", \"/usr/local/bin/wget\",\n         \"fetch\", \"/bin/fetch\", \"/usr/bin/fetch\", \"/usr/local/bin/fetch\",\n         \"ftp\", \"/bin/ftp\", \"/usr/bin/ftp\", \"/usr/local/bin/ftp\",\n         \"sftp\", \"/bin/sftp\", \"/usr/bin/sftp\", \"/usr/local/bin/sftp\",\n         \"scp\", \"/bin/scp\", \"/usr/bin/scp\", \"/usr/local/bin/scp\",\n         \"rsync\", \"/bin/rsync\", \"/usr/bin/rsync\", \"/usr/local/bin/rsync\",\n         \"ld\", \"/bin/ld\", \"/usr/bin/ld\", \"/usr/local/bin/ld\"\n       ) and\n       /* default exclusion list to not FP on default multi-process commands */\n       not process.args in (\n         \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n         \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n         \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n         \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n       )\n     )\n   ) and file.path like (\n     \"/dev/shm/*\", \"/run/shm/*\", \"/tmp/*\", \"/var/tmp/*\", \"/run/*\", \"/var/run/*\", \"/var/www/*\",\n     \"/proc/*/fd/*\", \"/home/*/*\", \"/root/*\", \"/opt/*\"\n   )\n  ] by file.name\n  [process where event.type == \"start\" and event.action == \"exec\" and\n   process.parent.name in (\"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\")\n  ] by process.name\n  [file where event.action == \"deletion\" and file.path like (\n     \"/dev/shm/*\", \"/run/shm/*\", \"/tmp/*\", \"/var/tmp/*\", \"/run/*\", \"/var/run/*\", \"/var/www/*\",\n     \"/proc/*/fd/*\", \"/home/*/*\", \"/root/*\", \"/opt/*\"\n    ) and not process.name in (\"rm\", \"ld\", \"conftest\", \"link\", \"gcc\", \"getarch\", \"ld\")\n  ] by file.name\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "wget",
+        "fetch",
+        "ftp",
+        "sftp",
+        "scp",
+        "rsync",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox",
+        "conftest",
+        "link",
+        "gcc",
+        "getarch"
+      ],
+      "raw_values": [
+        "curl",
+        "wget",
+        "fetch",
+        "ftp",
+        "sftp",
+        "scp",
+        "rsync",
+        "ld",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox",
+        "rm",
+        "conftest",
+        "link",
+        "gcc",
+        "getarch"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "curl",
+        "wget",
+        "fetch",
+        "ftp",
+        "sftp",
+        "scp",
+        "rsync",
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "curl",
+        "/bin/curl",
+        "/usr/bin/curl",
+        "/usr/local/bin/curl",
+        "wget",
+        "/bin/wget",
+        "/usr/bin/wget",
+        "/usr/local/bin/wget",
+        "fetch",
+        "/bin/fetch",
+        "/usr/bin/fetch",
+        "/usr/local/bin/fetch",
+        "ftp",
+        "/bin/ftp",
+        "/usr/bin/ftp",
+        "/usr/local/bin/ftp",
+        "sftp",
+        "/bin/sftp",
+        "/usr/bin/sftp",
+        "/usr/local/bin/sftp",
+        "scp",
+        "/bin/scp",
+        "/usr/bin/scp",
+        "/usr/local/bin/scp",
+        "rsync",
+        "/bin/rsync",
+        "/usr/bin/rsync",
+        "/usr/local/bin/rsync",
+        "ld",
+        "/bin/ld",
+        "/usr/bin/ld",
+        "/usr/local/bin/ld",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation",
+        "exec",
+        "deletion"
+      ],
+      "raw_values": [
+        "creation",
+        "exec",
+        "deletion"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

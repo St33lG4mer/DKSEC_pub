@@ -1,0 +1,66 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_control_panel_item",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_control_panel_item.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and (process.command_line:\"*add*\" and process.command_line:\"*CurrentVersion\\\\Control Panel\\\\CPLs*\")) or (process.command_line:\"*.cpl\" and (not ((process.command_line like~ (\"*\\\\System32\\\\*\", \"*%System%*\", \"*|C:\\\\Windows\\\\system32|*\")) or (process.command_line:\"*regsvr32 *\" and process.command_line:\"* /s *\" and process.command_line:\"*igfxCPL.cpl*\"))))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "%system%",
+        "system32|"
+      ],
+      "raw_values": [
+        "*\\\\System32\\\\*",
+        "*%System%*",
+        "*|C:\\\\Windows\\\\system32|*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "cpls",
+        ".cpl",
+        "regsvr32",
+        "igfxcpl.cpl"
+      ],
+      "raw_values": [
+        "*add*",
+        "*CurrentVersion\\\\Control Panel\\\\CPLs*",
+        "*.cpl",
+        "*regsvr32 *",
+        "* /s *",
+        "*igfxCPL.cpl*"
+      ]
+    }
+  ]
+}

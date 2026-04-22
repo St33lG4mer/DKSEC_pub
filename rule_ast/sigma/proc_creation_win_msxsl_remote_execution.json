@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msxsl_remote_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msxsl_remote_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\msxsl.exe\" and process.command_line:\"*http*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msxsl.exe"
+      ],
+      "raw_values": [
+        "*\\\\msxsl.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "*http*"
+      ]
+    }
+  ]
+}

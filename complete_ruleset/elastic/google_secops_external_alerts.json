@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Google SecOps External Alerts",
+  "slug": "google_secops_external_alerts",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Google SecOps",
+    "Use Case: Threat Detection",
+    "Resources: Investigation Guide",
+    "Promotion: External Alerts"
+  ],
+  "elastic_path": "rules/promotions/google_secops_external_alerts.toml",
+  "raw_query": "event.kind: alert and data_stream.dataset: google_secops.alert\n",
+  "conditions": []
+}

@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "Possible FIN7 DGA Command and Control Behavior",
+  "slug": "command_and_control_fin7_c2_behavior",
+  "category": "network",
+  "language": "lucene",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Domain: Endpoint",
+    "Data Source: PAN-OS",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/network/command_and_control_fin7_c2_behavior.toml",
+  "raw_query": "(data_stream.dataset: (network_traffic.tls OR network_traffic.http) OR\n    (event.category: (network OR network_traffic) AND type: (tls OR http) AND network.transport: tcp)) AND\ndestination.domain:/[a-zA-Z]{4,5}\\.(pw|us|club|info|site|top)/ AND NOT destination.domain:zoom.us\n",
+  "conditions": []
+}

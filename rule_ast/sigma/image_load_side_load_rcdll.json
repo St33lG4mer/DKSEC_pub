@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_rcdll",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_rcdll.eql",
+  "raw_query": "any where file.path:\"*\\\\rcdll.dll\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\*\", \"C:\\\\Program Files (x86)\\\\Windows Kits\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "rcdll.dll"
+      ],
+      "raw_values": [
+        "*\\\\rcdll.dll"
+      ]
+    }
+  ]
+}

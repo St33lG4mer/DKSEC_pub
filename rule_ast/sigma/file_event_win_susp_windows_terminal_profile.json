@@ -1,0 +1,42 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_susp_windows_terminal_profile",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_susp_windows_terminal_profile.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\")) and file.path:\"*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\\\LocalState\\\\settings.json\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "settings.json"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\\\LocalState\\\\settings.json"
+      ]
+    }
+  ]
+}

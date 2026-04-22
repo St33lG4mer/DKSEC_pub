@@ -1,0 +1,1 @@
+any where (process.command_line:"*ldifde*" and process.command_line:"*-f -n*" and process.command_line:"*eprod.ldf*") or ((process.command_line:"*copy \\\\*" and process.command_line:"*c$*") and (process.command_line like~ ("*\\aaaa\\procdump64.exe*", "*\\aaaa\\netsess.exe*", "*\\aaaa\\7za.exe*", "*\\c$\\aaaa\\*")))

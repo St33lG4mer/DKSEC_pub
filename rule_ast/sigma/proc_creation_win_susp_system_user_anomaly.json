@@ -1,0 +1,196 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_system_user_anomaly",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_system_user_anomaly.eql",
+  "raw_query": "any where (((winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\")) and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\"))) and ((process.executable like~ (\"*\\\\calc.exe\", \"*\\\\cscript.exe\", \"*\\\\forfiles.exe\", \"*\\\\hh.exe\", \"*\\\\mshta.exe\", \"*\\\\ping.exe\", \"*\\\\wscript.exe\")) or process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['net\\\\s+user\\\\s+']), flags=set())\" or (process.command_line like~ (\"* -NoP *\", \"* -W Hidden *\", \"* -decode *\", \"* /decode *\", \"* /urlcache *\", \"* -urlcache *\", \"* -e* JAB*\", \"* -e* SUVYI*\", \"* -e* SQBFAFgA*\", \"* -e* aWV4I*\", \"* -e* IAB*\", \"* -e* PAA*\", \"* -e* aQBlAHgA*\", \"*vssadmin delete shadows*\", \"*reg SAVE HKLM*\", \"* -ma *\", \"*Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\", \"*.downloadstring(*\", \"*.downloadfile(*\", \"* /ticket:*\", \"*dpapi::*\", \"*event::clear*\", \"*event::drop*\", \"*id::modify*\", \"*kerberos::*\", \"*lsadump::*\", \"*misc::*\", \"*privilege::*\", \"*rpc::*\", \"*sekurlsa::*\", \"*sid::*\", \"*token::*\", \"*vault::cred*\", \"*vault::list*\", \"* p::d *\", \"*;iex(*\", \"*MiniDump*\")))) and (not ((process.command_line:\"*ping*\" and process.command_line:\"*127.0.0.1*\" and process.command_line:\"* -n *\") or (process.executable:\"*\\\\PING.EXE\" and process.parent.command_line:\"*\\\\DismFoDInstall.cmd*\") or process.parent.executable:\"*:\\\\Packages\\\\Plugins\\\\Microsoft.GuestConfiguration.ConfigurationforWindows\\\\*\" or ((process.parent.executable like~ (\"*:\\\\Program Files (x86)\\\\Java\\\\*\", \"*:\\\\Program Files\\\\Java\\\\*\")) and process.parent.executable:\"*\\\\bin\\\\javaws.exe\" and (process.executable like~ (\"*:\\\\Program Files (x86)\\\\Java\\\\*\", \"*:\\\\Program Files\\\\Java\\\\*\")) and process.executable:\"*\\\\bin\\\\jp2launcher.exe\" and process.command_line:\"* -ma *\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "calc.exe",
+        "cscript.exe",
+        "forfiles.exe",
+        "hh.exe",
+        "mshta.exe",
+        "ping.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe",
+        "*\\\\cscript.exe",
+        "*\\\\forfiles.exe",
+        "*\\\\hh.exe",
+        "*\\\\mshta.exe",
+        "*\\\\ping.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-nop",
+        "-w hidden",
+        "-decode",
+        "decode",
+        "urlcache",
+        "-urlcache",
+        "-e* jab",
+        "-e* suvyi",
+        "-e* sqbfafga",
+        "-e* awv4i",
+        "-e* iab",
+        "-e* paa",
+        "-e* aqblahga",
+        "vssadmin delete shadows",
+        "reg save hklm",
+        "-ma",
+        "run",
+        ".downloadstring(",
+        ".downloadfile(",
+        "ticket:",
+        "dpapi::",
+        "event::clear",
+        "event::drop",
+        "id::modify",
+        "kerberos::",
+        "lsadump::",
+        "misc::",
+        "privilege::",
+        "rpc::",
+        "sekurlsa::",
+        "sid::",
+        "token::",
+        "vault::cred",
+        "vault::list",
+        "p::d",
+        ";iex(",
+        "minidump"
+      ],
+      "raw_values": [
+        "* -NoP *",
+        "* -W Hidden *",
+        "* -decode *",
+        "* /decode *",
+        "* /urlcache *",
+        "* -urlcache *",
+        "* -e* JAB*",
+        "* -e* SUVYI*",
+        "* -e* SQBFAFgA*",
+        "* -e* aWV4I*",
+        "* -e* IAB*",
+        "* -e* PAA*",
+        "* -e* aQBlAHgA*",
+        "*vssadmin delete shadows*",
+        "*reg SAVE HKLM*",
+        "* -ma *",
+        "*Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*.downloadstring(*",
+        "*.downloadfile(*",
+        "* /ticket:*",
+        "*dpapi::*",
+        "*event::clear*",
+        "*event::drop*",
+        "*id::modify*",
+        "*kerberos::*",
+        "*lsadump::*",
+        "*misc::*",
+        "*privilege::*",
+        "*rpc::*",
+        "*sekurlsa::*",
+        "*sid::*",
+        "*token::*",
+        "*vault::cred*",
+        "*vault::list*",
+        "* p::d *",
+        "*;iex(*",
+        "*MiniDump*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "s+']), flags=set())",
+        "ping",
+        "127.0.0.1",
+        "-ma"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['net\\\\s+user\\\\s+']), flags=set())",
+        "*ping*",
+        "*127.0.0.1*",
+        "* -n *",
+        "* -ma *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ping.exe",
+        "jp2launcher.exe"
+      ],
+      "raw_values": [
+        "*\\\\PING.EXE",
+        "*\\\\bin\\\\jp2launcher.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "dismfodinstall.cmd"
+      ],
+      "raw_values": [
+        "*\\\\DismFoDInstall.cmd*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "javaws.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Packages\\\\Plugins\\\\Microsoft.GuestConfiguration.ConfigurationforWindows\\\\*",
+        "*\\\\bin\\\\javaws.exe"
+      ]
+    }
+  ]
+}

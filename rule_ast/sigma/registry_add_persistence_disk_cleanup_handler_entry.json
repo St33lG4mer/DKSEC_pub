@@ -1,0 +1,105 @@
+{
+  "source": "sigma",
+  "name": "registry_add_persistence_disk_cleanup_handler_entry",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_add/registry_add_persistence_disk_cleanup_handler_entry.eql",
+  "raw_query": "any where (winlog.event_data.EventType:\"CreateKey\" and registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\VolumeCaches\\\\*\") and (not (registry.path like~ (\"*\\\\Active Setup Temp Folders\", \"*\\\\BranchCache\", \"*\\\\Content Indexer Cleaner\", \"*\\\\D3D Shader Cache\", \"*\\\\Delivery Optimization Files\", \"*\\\\Device Driver Packages\", \"*\\\\Diagnostic Data Viewer database files\", \"*\\\\Downloaded Program Files\", \"*\\\\DownloadsFolder\", \"*\\\\Feedback Hub Archive log files\", \"*\\\\Internet Cache Files\", \"*\\\\Language Pack\", \"*\\\\Microsoft Office Temp Files\", \"*\\\\Offline Pages Files\", \"*\\\\Old ChkDsk Files\", \"*\\\\Previous Installations\", \"*\\\\Recycle Bin\", \"*\\\\RetailDemo Offline Content\", \"*\\\\Setup Log Files\", \"*\\\\System error memory dump files\", \"*\\\\System error minidump files\", \"*\\\\Temporary Files\", \"*\\\\Temporary Setup Files\", \"*\\\\Temporary Sync Files\", \"*\\\\Thumbnail Cache\", \"*\\\\Update Cleanup\", \"*\\\\Upgrade Discarded Files\", \"*\\\\User file versions\", \"*\\\\Windows Defender\", \"*\\\\Windows Error Reporting Files\", \"*\\\\Windows ESD installation files\", \"*\\\\Windows Upgrade Log Files\")))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\active setup temp folders",
+        "\\\\branchcache",
+        "\\\\content indexer cleaner",
+        "\\\\d3d shader cache",
+        "\\\\delivery optimization files",
+        "\\\\device driver packages",
+        "\\\\diagnostic data viewer database files",
+        "\\\\downloaded program files",
+        "\\\\downloadsfolder",
+        "\\\\feedback hub archive log files",
+        "\\\\internet cache files",
+        "\\\\language pack",
+        "\\\\microsoft office temp files",
+        "\\\\offline pages files",
+        "\\\\old chkdsk files",
+        "\\\\previous installations",
+        "\\\\recycle bin",
+        "\\\\retaildemo offline content",
+        "\\\\setup log files",
+        "\\\\system error memory dump files",
+        "\\\\system error minidump files",
+        "\\\\temporary files",
+        "\\\\temporary setup files",
+        "\\\\temporary sync files",
+        "\\\\thumbnail cache",
+        "\\\\update cleanup",
+        "\\\\upgrade discarded files",
+        "\\\\user file versions",
+        "\\\\windows defender",
+        "\\\\windows error reporting files",
+        "\\\\windows esd installation files",
+        "\\\\windows upgrade log files"
+      ],
+      "raw_values": [
+        "*\\\\Active Setup Temp Folders",
+        "*\\\\BranchCache",
+        "*\\\\Content Indexer Cleaner",
+        "*\\\\D3D Shader Cache",
+        "*\\\\Delivery Optimization Files",
+        "*\\\\Device Driver Packages",
+        "*\\\\Diagnostic Data Viewer database files",
+        "*\\\\Downloaded Program Files",
+        "*\\\\DownloadsFolder",
+        "*\\\\Feedback Hub Archive log files",
+        "*\\\\Internet Cache Files",
+        "*\\\\Language Pack",
+        "*\\\\Microsoft Office Temp Files",
+        "*\\\\Offline Pages Files",
+        "*\\\\Old ChkDsk Files",
+        "*\\\\Previous Installations",
+        "*\\\\Recycle Bin",
+        "*\\\\RetailDemo Offline Content",
+        "*\\\\Setup Log Files",
+        "*\\\\System error memory dump files",
+        "*\\\\System error minidump files",
+        "*\\\\Temporary Files",
+        "*\\\\Temporary Setup Files",
+        "*\\\\Temporary Sync Files",
+        "*\\\\Thumbnail Cache",
+        "*\\\\Update Cleanup",
+        "*\\\\Upgrade Discarded Files",
+        "*\\\\User file versions",
+        "*\\\\Windows Defender",
+        "*\\\\Windows Error Reporting Files",
+        "*\\\\Windows ESD installation files",
+        "*\\\\Windows Upgrade Log Files"
+      ]
+    },
+    {
+      "field": "winlog.event_data.eventtype",
+      "raw_field": "winlog.event_data.EventType",
+      "operator": ":",
+      "values": [
+        "createkey"
+      ],
+      "raw_values": [
+        "CreateKey"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\volumecaches\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\VolumeCaches\\\\*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Route Table Created",
+  "slug": "persistence_route_table_created",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Network Security Monitoring",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/persistence_route_table_created.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ec2.amazonaws.com\" \n    and event.action:(\n        \"CreateRoute\" or \n        \"CreateRouteTable\"\n    ) \n    and event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "createroute",
+        "createroutetable"
+      ],
+      "raw_values": [
+        "CreateRoute",
+        "CreateRouteTable"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

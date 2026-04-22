@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msdt_arbitrary_command_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msdt_arbitrary_command_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\msdt.exe\" or process.pe.original_file_name:\"msdt.exe\") and (process.command_line:\"*IT_BrowseForFile=*\" or (process.command_line:\"* PCWDiagnostic*\" and process.command_line like~ (\"* -af *\", \"* /af *\", \"* \u2013af *\", \"* \u2014af *\", \"* \u2015af *\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-af",
+        "\u2013af",
+        "\u2014af",
+        "\u2015af"
+      ],
+      "raw_values": [
+        "* -af *",
+        "* /af *",
+        "* \u2013af *",
+        "* \u2014af *",
+        "* \u2015af *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "msdt.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "it_browseforfile=",
+        "pcwdiagnostic"
+      ],
+      "raw_values": [
+        "*IT_BrowseForFile=*",
+        "* PCWDiagnostic*"
+      ]
+    }
+  ]
+}

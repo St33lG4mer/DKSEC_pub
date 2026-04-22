@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_forfiles_child_process_masquerading",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_forfiles_child_process_masquerading.eql",
+  "raw_query": "any where ((process.parent.command_line like~ (\"*.exe\", \"*.exe\\\"\")) and process.executable:\"*\\\\cmd.exe\" and process.command_line:\"/c echo \\\"*\") and (not ((process.parent.executable like~ (\"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\")) and process.parent.executable:\"*\\\\forfiles.exe\" and (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\")) and process.executable:\"*\\\\cmd.exe\"))",
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "*.exe",
+        "*.exe\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "forfiles.exe"
+      ],
+      "raw_values": [
+        "*\\\\forfiles.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_ping_copy_combined_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_ping_copy_combined_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and (process.command_line:\"*ping*\" and process.command_line:\"*copy *\") and process.command_line like~ (\"* -n *\", \"* /n *\", \"* \u2013n *\", \"* \u2014n *\", \"* \u2015n *\") and process.command_line like~ (\"* -y *\", \"* /y *\", \"* \u2013y *\", \"* \u2014y *\", \"* \u2015y *\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ping",
+        "copy"
+      ],
+      "raw_values": [
+        "*ping*",
+        "*copy *"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Exposed Service Created With Type NodePort",
+  "slug": "persistence_exposed_service_created_with_type_nodeport",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Tactic: Execution",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/persistence_exposed_service_created_with_type_nodeport.toml",
+  "raw_query": "data_stream.dataset : \"kubernetes.audit_logs\"\n  and kubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\"\n  and kubernetes.audit.objectRef.resource:\"services\"\n  and kubernetes.audit.verb:(\"create\" or \"update\" or \"patch\")\n  and kubernetes.audit.requestObject.spec.type:\"NodePort\"\n",
+  "conditions": [
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create",
+        "update",
+        "patch"
+      ],
+      "raw_values": [
+        "create",
+        "update",
+        "patch"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "services"
+      ],
+      "raw_values": [
+        "services"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.requestobject.spec.type",
+      "raw_field": "kubernetes.audit.requestObject.spec.type",
+      "operator": ":",
+      "values": [
+        "nodeport"
+      ],
+      "raw_values": [
+        "NodePort"
+      ]
+    }
+  ]
+}

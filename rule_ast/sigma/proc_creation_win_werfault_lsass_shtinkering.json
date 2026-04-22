@@ -1,0 +1,83 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_werfault_lsass_shtinkering",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_werfault_lsass_shtinkering.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\Werfault.exe\" or process.pe.original_file_name:\"WerFault.exe\") and ((winlog.event_data.ParentUser like~ (\"*AUTHORI*\", \"*AUTORI*\")) and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) and (process.command_line:\"* -u -p *\" and process.command_line:\"* -ip *\" and process.command_line:\"* -s *\"))) and (not process.parent.executable:\"C:\\\\Windows\\\\System32\\\\lsass.exe\")",
+  "conditions": [
+    {
+      "field": "winlog.event_data.parentuser",
+      "raw_field": "winlog.event_data.ParentUser",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*\\\\Werfault.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "WerFault.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-u -p",
+        "-ip"
+      ],
+      "raw_values": [
+        "* -u -p *",
+        "* -ip *",
+        "* -s *"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "lsass.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\lsass.exe"
+      ]
+    }
+  ]
+}

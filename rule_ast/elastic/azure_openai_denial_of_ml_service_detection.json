@@ -1,0 +1,31 @@
+{
+  "source": "elastic",
+  "name": "Potential Denial of Azure OpenAI ML Service",
+  "slug": "azure_openai_denial_of_ml_service_detection",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: LLM",
+    "Data Source: Azure OpenAI",
+    "Data Source: Azure Event Hubs",
+    "Use Case: Denial of Service",
+    "Mitre Atlas: T0029",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure_openai/azure_openai_denial_of_ml_service_detection.toml",
+  "raw_query": "from logs-azure_openai.logs-*\n| eval\n    Esql.time_window_date_trunc = date_trunc(1 minutes, @timestamp)\n| where azure.open_ai.operation_name == \"ChatCompletions_Create\"\n| keep\n    azure.open_ai.properties.request_length,\n    azure.resource.name,\n    cloud.account.id,\n    Esql.time_window_date_trunc\n| stats\n    Esql.event_count = count(*),\n    Esql.azure_open_ai_properties_request_length_avg = avg(azure.open_ai.properties.request_length)\n  by\n    Esql.time_window_date_trunc,\n    azure.resource.name\n| where\n    Esql.event_count >= 10 and\n    Esql.azure_open_ai_properties_request_length_avg >= 5000\n| sort Esql.event_count desc\n",
+  "conditions": [
+    {
+      "field": "azure.open_ai.operation_name",
+      "raw_field": "azure.open_ai.operation_name",
+      "operator": "==",
+      "values": [
+        "chatcompletions_create"
+      ],
+      "raw_values": [
+        "ChatCompletions_Create"
+      ]
+    }
+  ]
+}

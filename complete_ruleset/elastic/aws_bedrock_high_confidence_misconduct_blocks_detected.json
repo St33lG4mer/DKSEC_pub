@@ -1,0 +1,75 @@
+{
+  "source": "elastic",
+  "name": "Unusual High Confidence Content Filter Blocks Detected",
+  "slug": "aws_bedrock_high_confidence_misconduct_blocks_detected",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: LLM",
+    "Data Source: AWS Bedrock",
+    "Data Source: AWS S3",
+    "Use Case: Policy Violation",
+    "Mitre Atlas: T0051",
+    "Mitre Atlas: T0054",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws_bedrock/aws_bedrock_high_confidence_misconduct_blocks_detected.toml",
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Expand multi-value fields\n| mv_expand gen_ai.compliance.violation_code\n| mv_expand gen_ai.policy.confidence\n| mv_expand gen_ai.policy.name\n| mv_expand gen_ai.policy.action\n\n// Filter for high-confidence content policy blocks with targeted violations\n| where\n  gen_ai.policy.action == \"BLOCKED\"\n  and gen_ai.policy.name == \"content_policy\"\n  and gen_ai.policy.confidence like \"HIGH\"\n  and gen_ai.compliance.violation_code in (\"HATE\", \"MISCONDUCT\", \"SEXUAL\", \"INSULTS\", \"PROMPT_ATTACK\", \"VIOLENCE\")\n\n// keep ECS + compliance fields\n| keep\n  user.id,\n  gen_ai.compliance.violation_code\n\n// count blocked violations per user per violation type\n| stats\n    Esql.ml_policy_blocked_violation_count = count()\n  by\n    user.id,\n    gen_ai.compliance.violation_code\n\n// Aggregate all violation types per user\n| stats\n    Esql.ml_policy_blocked_violation_total_count = sum(Esql.ml_policy_blocked_violation_count)\n  by\n    user.id\n\n// Filter for users with more than 5 total violations\n| where Esql.ml_policy_blocked_violation_total_count > 5\n\n// sort by violation volume\n| sort Esql.ml_policy_blocked_violation_total_count desc\n",
+  "conditions": [
+    {
+      "field": "gen_ai.compliance.violation_code",
+      "raw_field": "gen_ai.compliance.violation_code",
+      "operator": "in",
+      "values": [
+        "hate",
+        "misconduct",
+        "sexual",
+        "insults",
+        "prompt_attack",
+        "violence"
+      ],
+      "raw_values": [
+        "HATE",
+        "MISCONDUCT",
+        "SEXUAL",
+        "INSULTS",
+        "PROMPT_ATTACK",
+        "VIOLENCE"
+      ]
+    },
+    {
+      "field": "gen_ai.policy.action",
+      "raw_field": "gen_ai.policy.action",
+      "operator": "==",
+      "values": [
+        "blocked"
+      ],
+      "raw_values": [
+        "BLOCKED"
+      ]
+    },
+    {
+      "field": "gen_ai.policy.name",
+      "raw_field": "gen_ai.policy.name",
+      "operator": "==",
+      "values": [
+        "content_policy"
+      ],
+      "raw_values": [
+        "content_policy"
+      ]
+    },
+    {
+      "field": "gen_ai.policy.confidence",
+      "raw_field": "gen_ai.policy.confidence",
+      "operator": "like",
+      "values": [
+        "high"
+      ],
+      "raw_values": [
+        "HIGH"
+      ]
+    }
+  ]
+}

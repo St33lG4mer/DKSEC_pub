@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "net_dns_susp_b64_queries",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/network/dns/net_dns_susp_b64_queries.eql",
+  "raw_query": "any where query:\"*==.*\"",
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        "==."
+      ],
+      "raw_values": [
+        "*==.*"
+      ]
+    }
+  ]
+}

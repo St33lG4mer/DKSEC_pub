@@ -1,0 +1,190 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_lsass_dump_generic",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_lsass_dump_generic.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (((event.code:\"4656\" and winlog.event_data.ObjectName:\"*\\\\lsass.exe\" and (winlog.event_data.AccessMask like~ (\"*0x40*\", \"*0x1400*\", \"*0x100000*\", \"*0x1410*\", \"*0x1010*\", \"*0x1438*\", \"*0x143a*\", \"*0x1418*\", \"*0x1f0fff*\", \"*0x1f1fff*\", \"*0x1f2fff*\", \"*0x1f3fff*\"))) or (event.code:\"4663\" and winlog.event_data.ObjectName:\"*\\\\lsass.exe\" and (winlog.event_data.AccessList like~ (\"*4484*\", \"*4416*\")))) and (not (((process.executable like~ (\"*\\\\csrss.exe\", \"*\\\\GamingServices.exe\", \"*\\\\lsm.exe\", \"*\\\\MicrosoftEdgeUpdate.exe\", \"*\\\\minionhost.exe\", \"*\\\\MRT.exe\", \"*\\\\MsMpEng.exe\", \"*\\\\perfmon.exe\", \"*\\\\procexp.exe\", \"*\\\\procexp64.exe\", \"*\\\\svchost.exe\", \"*\\\\taskmgr.exe\", \"*\\\\thor.exe\", \"*\\\\thor64.exe\", \"*\\\\vmtoolsd.exe\", \"*\\\\VsTskMgr.exe\", \"*\\\\wininit.exe\", \"*\\\\wmiprvse.exe\", \"*RtkAudUService64\")) and (process.executable like~ (\"*:\\\\Program Files (x86)\\\\*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\", \"*:\\\\Windows\\\\SysNative\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWow64\\\\*\", \"*:\\\\Windows\\\\Temp\\\\asgard2-agent\\\\*\"))) or process.executable:\"*:\\\\Program Files*\" or (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\taskhostw.exe\", \"*:\\\\Windows\\\\System32\\\\msiexec.exe\", \"*:\\\\Windows\\\\CCM\\\\CcmExec.exe\")) or (process.executable:\"*:\\\\Windows\\\\Sysmon64.exe\" and winlog.event_data.AccessList:\"*%%4484*\") or (process.executable:\"*:\\\\Windows\\\\Temp\\\\asgard2-agent-sc\\\\aurora\\\\*\" and process.executable:\"*\\\\aurora-agent-64.exe\" and winlog.event_data.AccessList:\"*%%4484*\") or (process.executable:\"*\\\\x64\\\\SCENARIOENGINE.EXE\" and winlog.event_data.AccessList:\"*%%4484*\") or ((process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\is-*\") and process.executable:\"*\\\\avira_system_speedup.tmp\" and winlog.event_data.AccessList:\"*%%4484*\") or (process.executable:\"*:\\\\Windows\\\\Temp\\\\*\" and process.executable:\"*\\\\avira_speedup_setup_update.tmp\" and winlog.event_data.AccessList:\"*%%4484*\") or (process.executable:\"*:\\\\Windows\\\\System32\\\\snmp.exe\" and winlog.event_data.AccessList:\"*%%4484*\") or (process.executable:\"*:\\\\Windows\\\\SystemTemp\\\\*\" and process.executable:\"*\\\\GoogleUpdate.exe\" and winlog.event_data.AccessList:\"*%%4484*\"))) and (not ((process.executable like~ (\"*\\\\procmon64.exe\", \"*\\\\procmon.exe\")) and winlog.event_data.AccessList:\"*%%4484*\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": "like~",
+      "values": [
+        "0x40",
+        "0x1400",
+        "0x100000",
+        "0x1410",
+        "0x1010",
+        "0x1438",
+        "0x143a",
+        "0x1418",
+        "0x1f0fff",
+        "0x1f1fff",
+        "0x1f2fff",
+        "0x1f3fff"
+      ],
+      "raw_values": [
+        "*0x40*",
+        "*0x1400*",
+        "*0x100000*",
+        "*0x1410*",
+        "*0x1010*",
+        "*0x1438*",
+        "*0x143a*",
+        "*0x1418*",
+        "*0x1f0fff*",
+        "*0x1f1fff*",
+        "*0x1f2fff*",
+        "*0x1f3fff*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": "like~",
+      "values": [
+        "4484",
+        "4416"
+      ],
+      "raw_values": [
+        "*4484*",
+        "*4416*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "csrss.exe",
+        "gamingservices.exe",
+        "lsm.exe",
+        "microsoftedgeupdate.exe",
+        "minionhost.exe",
+        "mrt.exe",
+        "msmpeng.exe",
+        "perfmon.exe",
+        "procexp.exe",
+        "procexp64.exe",
+        "svchost.exe",
+        "taskmgr.exe",
+        "thor.exe",
+        "thor64.exe",
+        "vmtoolsd.exe",
+        "vstskmgr.exe",
+        "wininit.exe",
+        "wmiprvse.exe",
+        "rtkauduservice64",
+        "taskhostw.exe",
+        "msiexec.exe",
+        "ccmexec.exe",
+        "procmon64.exe",
+        "procmon.exe"
+      ],
+      "raw_values": [
+        "*\\\\csrss.exe",
+        "*\\\\GamingServices.exe",
+        "*\\\\lsm.exe",
+        "*\\\\MicrosoftEdgeUpdate.exe",
+        "*\\\\minionhost.exe",
+        "*\\\\MRT.exe",
+        "*\\\\MsMpEng.exe",
+        "*\\\\perfmon.exe",
+        "*\\\\procexp.exe",
+        "*\\\\procexp64.exe",
+        "*\\\\svchost.exe",
+        "*\\\\taskmgr.exe",
+        "*\\\\thor.exe",
+        "*\\\\thor64.exe",
+        "*\\\\vmtoolsd.exe",
+        "*\\\\VsTskMgr.exe",
+        "*\\\\wininit.exe",
+        "*\\\\wmiprvse.exe",
+        "*RtkAudUService64",
+        "*:\\\\Windows\\\\System32\\\\taskhostw.exe",
+        "*:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "*:\\\\Windows\\\\CCM\\\\CcmExec.exe",
+        "*\\\\procmon64.exe",
+        "*\\\\procmon.exe"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4656",
+        "4663"
+      ],
+      "raw_values": [
+        "4656",
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "program files",
+        "sysmon64.exe",
+        "aurora-agent-64.exe",
+        "scenarioengine.exe",
+        "is-",
+        "avira_system_speedup.tmp",
+        "avira_speedup_setup_update.tmp",
+        "snmp.exe",
+        "googleupdate.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files*",
+        "*:\\\\Windows\\\\Sysmon64.exe",
+        "*:\\\\Windows\\\\Temp\\\\asgard2-agent-sc\\\\aurora\\\\*",
+        "*\\\\aurora-agent-64.exe",
+        "*\\\\x64\\\\SCENARIOENGINE.EXE",
+        "*:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\is-*",
+        "*\\\\avira_system_speedup.tmp",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\avira_speedup_setup_update.tmp",
+        "*:\\\\Windows\\\\System32\\\\snmp.exe",
+        "*:\\\\Windows\\\\SystemTemp\\\\*",
+        "*\\\\GoogleUpdate.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": ":",
+      "values": [
+        "%%4484"
+      ],
+      "raw_values": [
+        "*%%4484*"
+      ]
+    }
+  ]
+}

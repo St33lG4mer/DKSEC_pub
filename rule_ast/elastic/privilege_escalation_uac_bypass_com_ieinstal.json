@@ -1,0 +1,92 @@
+{
+  "source": "elastic",
+  "name": "UAC Bypass Attempt via Elevated COM Internet Explorer Add-On Installer",
+  "slug": "privilege_escalation_uac_bypass_com_ieinstal",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Tactic: Defense Evasion",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_uac_bypass_com_ieinstal.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n process.executable : \"C:\\\\*\\\\AppData\\\\*\\\\Temp\\\\IDC*.tmp\\\\*.exe\" and\n process.parent.name : \"ieinstal.exe\" and process.parent.args : \"-Embedding\"\n\n /* uncomment once in winlogbeat */\n /* and not (process.code_signature.subject_name == \"Microsoft Corporation\" and process.code_signature.trusted == true) */\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "C:\\\\*\\\\AppData\\\\*\\\\Temp\\\\IDC*.tmp\\\\*.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "ieinstal.exe"
+      ],
+      "raw_values": [
+        "ieinstal.exe"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "-embedding"
+      ],
+      "raw_values": [
+        "-Embedding"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": "==",
+      "values": [
+        "microsoft corporation"
+      ],
+      "raw_values": [
+        "Microsoft Corporation"
+      ]
+    }
+  ]
+}

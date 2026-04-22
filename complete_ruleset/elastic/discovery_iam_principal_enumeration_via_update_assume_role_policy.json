@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "AWS IAM Principal Enumeration via UpdateAssumeRolePolicy",
+  "slug": "discovery_iam_principal_enumeration_via_update_assume_role_policy",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS IAM",
+    "Use Case: Identity and Access Audit",
+    "Resources: Investigation Guide",
+    "Tactic: Discovery",
+    "Tactic: Credential Access"
+  ],
+  "elastic_path": "rules/integrations/aws/discovery_iam_principal_enumeration_via_update_assume_role_policy.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" \n    and event.provider: \"iam.amazonaws.com\" \n    and event.action: \"UpdateAssumeRolePolicy\" \n    and aws.cloudtrail.error_code: \"MalformedPolicyDocumentException\" \n    and event.outcome: \"failure\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "updateassumerolepolicy"
+      ],
+      "raw_values": [
+        "UpdateAssumeRolePolicy"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.error_code",
+      "raw_field": "aws.cloudtrail.error_code",
+      "operator": ":",
+      "values": [
+        "malformedpolicydocumentexception"
+      ],
+      "raw_values": [
+        "MalformedPolicyDocumentException"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "failure"
+      ],
+      "raw_values": [
+        "failure"
+      ]
+    }
+  ]
+}

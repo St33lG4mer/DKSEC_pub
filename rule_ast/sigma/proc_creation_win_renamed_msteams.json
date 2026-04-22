@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_msteams",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_msteams.eql",
+  "raw_query": "any where (process.pe.original_file_name like~ (\"msteams.exe\", \"teams.exe\")) and (not (process.executable like~ (\"*\\\\msteams.exe\", \"*\\\\teams.exe\")))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "msteams.exe",
+        "teams.exe"
+      ],
+      "raw_values": [
+        "msteams.exe",
+        "teams.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "msteams.exe",
+        "teams.exe"
+      ],
+      "raw_values": [
+        "*\\\\msteams.exe",
+        "*\\\\teams.exe"
+      ]
+    }
+  ]
+}

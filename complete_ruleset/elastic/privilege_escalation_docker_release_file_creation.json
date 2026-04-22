@@ -1,0 +1,73 @@
+{
+  "source": "elastic",
+  "name": "Docker Release File Creation",
+  "slug": "privilege_escalation_docker_release_file_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_docker_release_file_creation.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"creation\" and file.name in (\"release_agent\", \"notify_on_release\") and\nnot process.executable in (\"/usr/bin/podman\", \"/sbin/sos\", \"/sbin/sosreport\", \"/usr/bin/git\")\n",
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "in",
+      "values": [
+        "release_agent",
+        "notify_on_release"
+      ],
+      "raw_values": [
+        "release_agent",
+        "notify_on_release"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "podman",
+        "sos",
+        "sosreport",
+        "git"
+      ],
+      "raw_values": [
+        "/usr/bin/podman",
+        "/sbin/sos",
+        "/sbin/sosreport",
+        "/usr/bin/git"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "source": "sigma",
+  "name": "registry_event_net_ntlm_downgrade",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_event_net_ntlm_downgrade.eql",
+  "raw_query": "any where (registry.path:\"*SYSTEM\\\\*\" and registry.path:\"*ControlSet*\" and registry.path:\"*\\\\Control\\\\Lsa*\") and ((registry.path:\"*\\\\lmcompatibilitylevel\" and (winlog.event_data.Details like~ (\"DWORD (0x00000000)\", \"DWORD (0x00000001)\", \"DWORD (0x00000002)\"))) or (registry.path:\"*\\\\NtlmMinClientSec\" and (winlog.event_data.Details like~ (\"DWORD (0x00000000)\", \"DWORD (0x00000010)\", \"DWORD (0x00000020)\", \"DWORD (0x00000030)\"))) or registry.path:\"*\\\\RestrictSendingNTLMTraffic\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "system\\\\",
+        "controlset",
+        "\\\\control\\\\lsa",
+        "\\\\lmcompatibilitylevel",
+        "\\\\ntlmminclientsec",
+        "\\\\restrictsendingntlmtraffic"
+      ],
+      "raw_values": [
+        "*SYSTEM\\\\*",
+        "*ControlSet*",
+        "*\\\\Control\\\\Lsa*",
+        "*\\\\lmcompatibilitylevel",
+        "*\\\\NtlmMinClientSec",
+        "*\\\\RestrictSendingNTLMTraffic"
+      ]
+    }
+  ]
+}

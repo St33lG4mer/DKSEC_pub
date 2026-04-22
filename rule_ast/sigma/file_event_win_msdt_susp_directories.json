@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_msdt_susp_directories",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_msdt_susp_directories.eql",
+  "raw_query": "any where process.executable:\"*\\\\msdt.exe\" and (file.path like~ (\"*\\\\Desktop\\\\*\", \"*\\\\Start Menu\\\\Programs\\\\Startup\\\\*\", \"*C:\\\\PerfLogs\\\\*\", \"*C:\\\\ProgramData\\\\*\", \"*C:\\\\Users\\\\Public\\\\*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    }
+  ]
+}

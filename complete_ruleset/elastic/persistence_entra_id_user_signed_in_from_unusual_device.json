@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "Entra ID User Sign-in with Unusual Non-Managed Device",
+  "slug": "persistence_entra_id_user_signed_in_from_unusual_device",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Data Source: Microsoft Entra ID Sign-in Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_entra_id_user_signed_in_from_unusual_device.toml",
+  "raw_query": "data_stream.dataset: \"azure.signinlogs\" and\n    event.category: \"authentication\" and\n    azure.signinlogs.properties.user_type: \"Member\" and\n    azure.signinlogs.properties.token_protection_status_details.sign_in_session_status: \"unbound\" and\n    not azure.signinlogs.properties.device_detail.is_managed: true and\n    not azure.signinlogs.properties.device_detail.device_id: \"\" and\n    azure.signinlogs.properties.user_principal_name: *\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.signinlogs"
+      ],
+      "raw_values": [
+        "azure.signinlogs"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "authentication"
+      ],
+      "raw_values": [
+        "authentication"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.user_type",
+      "raw_field": "azure.signinlogs.properties.user_type",
+      "operator": ":",
+      "values": [
+        "member"
+      ],
+      "raw_values": [
+        "Member"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.token_protection_status_details.sign_in_session_status",
+      "raw_field": "azure.signinlogs.properties.token_protection_status_details.sign_in_session_status",
+      "operator": ":",
+      "values": [
+        "unbound"
+      ],
+      "raw_values": [
+        "unbound"
+      ]
+    }
+  ]
+}

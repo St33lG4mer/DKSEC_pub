@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "win_capi2_acquire_certificate_private_key",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/capi2/win_capi2_acquire_certificate_private_key.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CAPI2/Operational\" and event.code:\"70\"",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-capi2/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CAPI2/Operational"
+      ]
+    }
+  ]
+}

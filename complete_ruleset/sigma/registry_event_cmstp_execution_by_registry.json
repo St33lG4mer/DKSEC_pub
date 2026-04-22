@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_event_cmstp_execution_by_registry",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_event_cmstp_execution_by_registry.eql",
+  "raw_query": "any where registry.path:\"*\\\\cmmgr32.exe*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\cmmgr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmmgr32.exe*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_remotefxvgpudisablement_abuse",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_remotefxvgpudisablement_abuse.eql",
+  "raw_query": "any where process.command_line like~ (\"*Invoke-ATHRemoteFXvGPUDisablementCommand*\", \"*Invoke-ATHRemoteFXvGPUDisableme*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-athremotefxvgpudisablementcommand",
+        "invoke-athremotefxvgpudisableme"
+      ],
+      "raw_values": [
+        "*Invoke-ATHRemoteFXvGPUDisablementCommand*",
+        "*Invoke-ATHRemoteFXvGPUDisableme*"
+      ]
+    }
+  ]
+}

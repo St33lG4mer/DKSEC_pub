@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_office_excel_dcom_lateral_movement",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_office_excel_dcom_lateral_movement.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\excel.exe\" and ((process.pe.original_file_name like~ (\"foxprow.exe\", \"schdplus.exe\", \"winproj.exe\")) or (process.executable like~ (\"*\\\\foxprow.exe\", \"*\\\\schdplus.exe\", \"*\\\\winproj.exe\")))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "foxprow.exe",
+        "schdplus.exe",
+        "winproj.exe"
+      ],
+      "raw_values": [
+        "foxprow.exe",
+        "schdplus.exe",
+        "winproj.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "foxprow.exe",
+        "schdplus.exe",
+        "winproj.exe"
+      ],
+      "raw_values": [
+        "*\\\\foxprow.exe",
+        "*\\\\schdplus.exe",
+        "*\\\\winproj.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "excel.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe"
+      ]
+    }
+  ]
+}

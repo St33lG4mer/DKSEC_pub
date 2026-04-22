@@ -1,0 +1,41 @@
+{
+  "source": "elastic",
+  "name": "Newly Observed Palo Alto Network Alert",
+  "slug": "newly_observed_panos_alert",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 99,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Domain: Network",
+    "Data Source: PAN-OS"
+  ],
+  "elastic_path": "rules/cross-platform/newly_observed_panos_alert.toml",
+  "raw_query": "FROM logs-panw.panos-*, filebeat-* metadata _id\n\n// exclude Informational and Low severity levels (4 and 5)\n| where data_stream.dataset == \"panw.panos\" and TO_INTEGER(event.severity) <= 3 and event.action != \"flood_detected\"\n\n| STATS Esql.alerts_count = count(*),\n        Esql.first_time_seen = MIN(@timestamp),\n        Esql.distinct_count_src_ip = COUNT_DISTINCT(source.ip),\n        Esql.distinct_count_dst_ip = COUNT_DISTINCT(destination.ip),\n        src_ip = VALUES(source.ip),\n        dst_ip = VALUES(destination.ip),\n        url_dom = VALUES(url.domain),\n        url_path = VALUES(url.path) by rule.name, event.action, event.type, event.kind, event.severity\n\n// first time seen is within 10m of the rule execution time within last 5 days\n| eval Esql.recent = DATE_DIFF(\"minute\", Esql.first_time_seen, now())\n| where Esql.recent <= 10 and Esql.alerts_count <= 5 and Esql.distinct_count_src_ip <= 2 and Esql.distinct_count_dst_ip <= 2\n\n// move dynamic fields to ECS quivalent for rule exceptions\n| eval source.ip = MV_FIRST(src_ip),\n       destination.ip = MV_FIRST(dst_ip),\n       url.domain = MV_FIRST(url_dom),\n       url.path = MV_FIRST(url_path)\n| keep rule.name, event.*, Esql.*, source.ip, destination.ip, url.domain, url.path\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "panw.panos"
+      ],
+      "raw_values": [
+        "panw.panos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "flood_detected"
+      ],
+      "raw_values": [
+        "flood_detected"
+      ]
+    }
+  ]
+}

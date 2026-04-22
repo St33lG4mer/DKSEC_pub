@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "M365 Exchange Anti-Phish Policy Deleted",
+  "slug": "defense_evasion_exchange_anti_phish_policy_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/defense_evasion_exchange_anti_phish_policy_deletion.toml",
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:\"Remove-AntiPhishPolicy\" and event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "remove-antiphishpolicy"
+      ],
+      "raw_values": [
+        "Remove-AntiPhishPolicy"
+      ]
+    }
+  ]
+}

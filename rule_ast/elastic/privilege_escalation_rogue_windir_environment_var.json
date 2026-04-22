@@ -1,0 +1,86 @@
+{
+  "source": "elastic",
+  "name": "Privilege Escalation via Windir Environment Variable",
+  "slug": "privilege_escalation_rogue_windir_environment_var",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_rogue_windir_environment_var.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\nregistry.value : (\"windir\", \"systemroot\") and registry.data.strings != null and\nregistry.path : (\n    \"*\\\\Environment\\\\windir\",\n    \"*\\\\Environment\\\\systemroot\"\n    ) and\n not registry.data.strings : (\"C:\\\\windows\", \"%SystemRoot%\")\n",
+  "conditions": [
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "windir",
+        "systemroot"
+      ],
+      "raw_values": [
+        "windir",
+        "systemroot"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\environment\\\\windir",
+        "\\\\environment\\\\systemroot"
+      ],
+      "raw_values": [
+        "*\\\\Environment\\\\windir",
+        "*\\\\Environment\\\\systemroot"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows",
+        "%systemroot%"
+      ],
+      "raw_values": [
+        "C:\\\\windows",
+        "%SystemRoot%"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    }
+  ]
+}

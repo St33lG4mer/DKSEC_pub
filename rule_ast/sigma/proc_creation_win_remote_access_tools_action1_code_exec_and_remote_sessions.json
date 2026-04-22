@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_remote_access_tools_action1_code_exec_and_remote_sessions",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_remote_access_tools_action1_code_exec_and_remote_sessions.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\action1_agent.exe\" and process.executable:\"*\\\\Windows\\\\Action1\\\\package_downloads\\\\*\") or ((process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\")) and (process.parent.command_line like~ (\"*\\\\Action1\\\\scripts\\\\Run_Command_*\", \"*\\\\Action1\\\\scripts\\\\Run_PowerShell_*\"))) or process.executable:\"*\\\\agent1_remote.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "run_command_",
+        "run_powershell_"
+      ],
+      "raw_values": [
+        "*\\\\Action1\\\\scripts\\\\Run_Command_*",
+        "*\\\\Action1\\\\scripts\\\\Run_PowerShell_*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "action1_agent.exe"
+      ],
+      "raw_values": [
+        "*\\\\action1_agent.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "agent1_remote.exe"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\Action1\\\\package_downloads\\\\*",
+        "*\\\\agent1_remote.exe"
+      ]
+    }
+  ]
+}

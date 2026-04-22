@@ -1,0 +1,27 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_vscode_tunnel_service_install",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_vscode_tunnel_service_install.eql",
+  "raw_query": "any where process.command_line:\"*tunnel *\" and process.command_line:\"*service*\" and process.command_line:\"*internal-run*\" and process.command_line:\"*tunnel-service.log*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "tunnel",
+        "service",
+        "internal-run",
+        "tunnel-service.log"
+      ],
+      "raw_values": [
+        "*tunnel *",
+        "*service*",
+        "*internal-run*",
+        "*tunnel-service.log*"
+      ]
+    }
+  ]
+}

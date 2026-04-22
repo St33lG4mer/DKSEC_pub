@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_psexec_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_psexec_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\psexec.exe\" or process.pe.original_file_name:\"psexec.c\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "psexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\psexec.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "psexec.c"
+      ],
+      "raw_values": [
+        "psexec.c"
+      ]
+    }
+  ]
+}

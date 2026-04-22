@@ -1,0 +1,72 @@
+{
+  "source": "elastic",
+  "name": "Potential Hidden Local User Account Creation",
+  "slug": "persistence_account_creation_hide_at_logon",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_account_creation_hide_at_logon.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.name == \"dscl\" and process.args like~ \"IsHidden\" and process.args like~ \"create\" and \n process.args like~ (\"true\", \"1\", \"yes\")\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "yes",
+        "ishidden",
+        "create"
+      ],
+      "raw_values": [
+        "true",
+        "1",
+        "yes",
+        "IsHidden",
+        "create"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "dscl"
+      ],
+      "raw_values": [
+        "dscl"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "source": "elastic",
+  "name": "Okta User Sessions Started from Different Geolocations",
+  "slug": "initial_access_okta_user_sessions_started_from_different_geolocations",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Identity and Access Audit",
+    "Data Source: Okta",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/initial_access_okta_user_sessions_started_from_different_geolocations.toml",
+  "raw_query": "from logs-okta*\n| where\n    data_stream.dataset == \"okta.system\" and\n    (event.action like \"user.authentication.*\" or event.action == \"user.session.start\") and\n    okta.security_context.is_proxy != true and\n    okta.actor.id != \"unknown\" and\n    event.outcome == \"success\"\n| keep\n    event.action,\n    okta.security_context.is_proxy,\n    okta.actor.id,\n    okta.actor.alternate_id,\n    event.outcome,\n    client.geo.country_name\n| stats\n    Esql.client_geo_country_name_count_distinct = count_distinct(client.geo.country_name)\n    by okta.actor.id, okta.actor.alternate_id\n| where\n    Esql.client_geo_country_name_count_distinct >= 2\n| sort\n    Esql.client_geo_country_name_count_distinct desc\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "like",
+      "values": [
+        "user.authentication."
+      ],
+      "raw_values": [
+        "user.authentication.*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "user.session.start"
+      ],
+      "raw_values": [
+        "user.session.start"
+      ]
+    },
+    {
+      "field": "okta.actor.id",
+      "raw_field": "okta.actor.id",
+      "operator": "!=",
+      "values": [
+        "unknown"
+      ],
+      "raw_values": [
+        "unknown"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_curl_susp_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_curl_susp_download.eql",
+  "raw_query": "any where (process.executable:\"*\\\\curl.exe\" or process.pe.product:\"The curl executable\") and ((process.command_line like~ (\"*%AppData%*\", \"*%Public%*\", \"*%Temp%*\", \"*%tmp%*\", \"*\\\\AppData\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*C:\\\\PerfLogs\\\\*\", \"*C:\\\\ProgramData\\\\*\", \"*C:\\\\Windows\\\\Temp\\\\*\")) or (process.command_line like~ (\"*.dll\", \"*.gif\", \"*.jpeg\", \"*.jpg\", \"*.png\", \"*.temp\", \"*.tmp\", \"*.txt\", \"*.vbe\", \"*.vbs\"))) and (not (process.parent.executable:\"C:\\\\Program Files\\\\Git\\\\usr\\\\bin\\\\sh.exe\" and process.executable:\"C:\\\\Program Files\\\\Git\\\\mingw64\\\\bin\\\\curl.exe\" and (process.command_line:\"*--silent --show-error --output *\" and process.command_line:\"*gfw-httpget-*\" and process.command_line:\"*AppData*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "%appdata%",
+        "%public%",
+        "%temp%",
+        "%tmp%",
+        ".dll",
+        ".gif",
+        ".jpeg",
+        ".jpg",
+        ".png",
+        ".temp",
+        ".tmp",
+        ".txt",
+        ".vbe",
+        ".vbs"
+      ],
+      "raw_values": [
+        "*%AppData%*",
+        "*%Public%*",
+        "*%Temp%*",
+        "*%tmp%*",
+        "*\\\\AppData\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*C:\\\\PerfLogs\\\\*",
+        "*C:\\\\ProgramData\\\\*",
+        "*C:\\\\Windows\\\\Temp\\\\*",
+        "*.dll",
+        "*.gif",
+        "*.jpeg",
+        "*.jpg",
+        "*.png",
+        "*.temp",
+        "*.tmp",
+        "*.txt",
+        "*.vbe",
+        "*.vbs"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe",
+        "C:\\\\Program Files\\\\Git\\\\mingw64\\\\bin\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "the curl executable"
+      ],
+      "raw_values": [
+        "The curl executable"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sh.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Git\\\\usr\\\\bin\\\\sh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--silent --show-error --output",
+        "gfw-httpget-",
+        "appdata"
+      ],
+      "raw_values": [
+        "*--silent --show-error --output *",
+        "*gfw-httpget-*",
+        "*AppData*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_curl_custom_user_agent",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_curl_custom_user_agent.eql",
+  "raw_query": "any where (process.executable:\"*\\\\curl.exe\" or process.pe.original_file_name:\"curl.exe\") and (process.command_line like~ (\"SigmaRegularExpression(regexp=SigmaString(['\\\\s-H\\\\s']), flags=set())\", \"*--header*\")) and process.command_line:\"*User-Agent:*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "curl.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "user-agent:"
+      ],
+      "raw_values": [
+        "*User-Agent:*"
+      ]
+    }
+  ]
+}

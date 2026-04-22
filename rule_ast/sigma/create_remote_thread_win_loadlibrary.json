@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "create_remote_thread_win_loadlibrary",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/create_remote_thread/create_remote_thread_win_loadlibrary.eql",
+  "raw_query": "any where winlog.event_data.StartModule:\"*\\\\kernel32.dll\" and winlog.event_data.StartFunction:\"LoadLibraryA\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.startmodule",
+      "raw_field": "winlog.event_data.StartModule",
+      "operator": ":",
+      "values": [
+        "\\\\kernel32.dll"
+      ],
+      "raw_values": [
+        "*\\\\kernel32.dll"
+      ]
+    },
+    {
+      "field": "winlog.event_data.startfunction",
+      "raw_field": "winlog.event_data.StartFunction",
+      "operator": ":",
+      "values": [
+        "loadlibrarya"
+      ],
+      "raw_values": [
+        "LoadLibraryA"
+      ]
+    }
+  ]
+}

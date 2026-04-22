@@ -1,0 +1,67 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_event_log_query",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_event_log_query.eql",
+  "raw_query": "any where (process.command_line:\"*Select*\" and process.command_line:\"*Win32_NTLogEvent*\") or ((process.executable:\"*\\\\wevtutil.exe\" or process.pe.original_file_name:\"wevtutil.exe\") and (process.command_line like~ (\"* qe *\", \"* query-events *\"))) or ((process.executable:\"*\\\\wmic.exe\" or process.pe.original_file_name:\"wmic.exe\") and process.command_line:\"* ntevent*\") or (process.command_line like~ (\"*Get-WinEvent *\", \"*get-eventlog *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "query-events",
+        "get-winevent",
+        "get-eventlog"
+      ],
+      "raw_values": [
+        "* qe *",
+        "* query-events *",
+        "*Get-WinEvent *",
+        "*get-eventlog *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "select",
+        "win32_ntlogevent",
+        "ntevent"
+      ],
+      "raw_values": [
+        "*Select*",
+        "*Win32_NTLogEvent*",
+        "* ntevent*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wevtutil.exe",
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\wevtutil.exe",
+        "*\\\\wmic.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wevtutil.exe",
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wevtutil.exe",
+        "wmic.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_ntfs_short_name_use_image",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_ntfs_short_name_use_image.eql",
+  "raw_query": "any where (process.executable like~ (\"*~1.bat*\", \"*~1.dll*\", \"*~1.exe*\", \"*~1.hta*\", \"*~1.js*\", \"*~1.msi*\", \"*~1.ps1*\", \"*~1.tmp*\", \"*~1.vbe*\", \"*~1.vbs*\", \"*~2.bat*\", \"*~2.dll*\", \"*~2.exe*\", \"*~2.hta*\", \"*~2.js*\", \"*~2.msi*\", \"*~2.ps1*\", \"*~2.tmp*\", \"*~2.vbe*\", \"*~2.vbs*\")) and (not process.parent.executable:\"C:\\\\Windows\\\\explorer.exe\") and (not (process.parent.executable:\"*\\\\WebEx\\\\WebexHost.exe\" or process.parent.executable:\"*\\\\thor\\\\thor64.exe\" or process.executable:\"C:\\\\PROGRA~1\\\\WinZip\\\\WZPREL~1.EXE\" or process.executable:\"*\\\\VCREDI~1.EXE\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "~1.bat",
+        "~1.dll",
+        "~1.exe",
+        "~1.hta",
+        "~1.js",
+        "~1.msi",
+        "~1.ps1",
+        "~1.tmp",
+        "~1.vbe",
+        "~1.vbs",
+        "~2.bat",
+        "~2.dll",
+        "~2.exe",
+        "~2.hta",
+        "~2.js",
+        "~2.msi",
+        "~2.ps1",
+        "~2.tmp",
+        "~2.vbe",
+        "~2.vbs"
+      ],
+      "raw_values": [
+        "*~1.bat*",
+        "*~1.dll*",
+        "*~1.exe*",
+        "*~1.hta*",
+        "*~1.js*",
+        "*~1.msi*",
+        "*~1.ps1*",
+        "*~1.tmp*",
+        "*~1.vbe*",
+        "*~1.vbs*",
+        "*~2.bat*",
+        "*~2.dll*",
+        "*~2.exe*",
+        "*~2.hta*",
+        "*~2.js*",
+        "*~2.msi*",
+        "*~2.ps1*",
+        "*~2.tmp*",
+        "*~2.vbe*",
+        "*~2.vbs*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe",
+        "webexhost.exe",
+        "thor64.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\explorer.exe",
+        "*\\\\WebEx\\\\WebexHost.exe",
+        "*\\\\thor\\\\thor64.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wzprel~1.exe",
+        "vcredi~1.exe"
+      ],
+      "raw_values": [
+        "C:\\\\PROGRA~1\\\\WinZip\\\\WZPREL~1.EXE",
+        "*\\\\VCREDI~1.EXE"
+      ]
+    }
+  ]
+}

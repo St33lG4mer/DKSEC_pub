@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_office_outlook_susp_macro_creation",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_office_outlook_susp_macro_creation.eql",
+  "raw_query": "any where file.path:\"*\\\\Microsoft\\\\Outlook\\\\VbaProject.OTM\" and (not process.executable:\"*\\\\outlook.exe\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "vbaproject.otm"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Outlook\\\\VbaProject.OTM"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\outlook.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_vhd_download_via_browsers",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_vhd_download_via_browsers.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\brave.exe\", \"*\\\\chrome.exe\", \"*\\\\firefox.exe\", \"*\\\\iexplore.exe\", \"*\\\\maxthon.exe\", \"*\\\\MicrosoftEdge.exe\", \"*\\\\msedge.exe\", \"*\\\\msedgewebview2.exe\", \"*\\\\opera.exe\", \"*\\\\safari.exe\", \"*\\\\seamonkey.exe\", \"*\\\\vivaldi.exe\", \"*\\\\whale.exe\")) and file.path:\"*.vhd*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "brave.exe",
+        "chrome.exe",
+        "firefox.exe",
+        "iexplore.exe",
+        "maxthon.exe",
+        "microsoftedge.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "opera.exe",
+        "safari.exe",
+        "seamonkey.exe",
+        "vivaldi.exe",
+        "whale.exe"
+      ],
+      "raw_values": [
+        "*\\\\brave.exe",
+        "*\\\\chrome.exe",
+        "*\\\\firefox.exe",
+        "*\\\\iexplore.exe",
+        "*\\\\maxthon.exe",
+        "*\\\\MicrosoftEdge.exe",
+        "*\\\\msedge.exe",
+        "*\\\\msedgewebview2.exe",
+        "*\\\\opera.exe",
+        "*\\\\safari.exe",
+        "*\\\\seamonkey.exe",
+        "*\\\\vivaldi.exe",
+        "*\\\\whale.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".vhd"
+      ],
+      "raw_values": [
+        "*.vhd*"
+      ]
+    }
+  ]
+}

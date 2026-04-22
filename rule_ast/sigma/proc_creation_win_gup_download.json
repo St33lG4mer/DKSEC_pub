@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_gup_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_gup_download.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\GUP.exe\" or process.pe.original_file_name:\"gup.exe\") and (process.command_line:\"* -unzipTo *\" and process.command_line:\"*http*\")) and (not process.parent.executable:\"*\\\\notepad++.exe\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gup.exe"
+      ],
+      "raw_values": [
+        "*\\\\GUP.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "gup.exe"
+      ],
+      "raw_values": [
+        "gup.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-unzipto",
+        "http"
+      ],
+      "raw_values": [
+        "* -unzipTo *",
+        "*http*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "notepad++.exe"
+      ],
+      "raw_values": [
+        "*\\\\notepad++.exe"
+      ]
+    }
+  ]
+}

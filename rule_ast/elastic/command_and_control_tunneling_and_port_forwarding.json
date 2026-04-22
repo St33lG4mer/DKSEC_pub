@@ -1,0 +1,200 @@
+{
+  "source": "elastic",
+  "name": "Tunneling and/or Port Forwarding Detected via Defend for Containers",
+  "slug": "command_and_control_tunneling_and_port_forwarding",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/command_and_control_tunneling_and_port_forwarding.toml",
+  "raw_query": "process where event.type == \"start\" and event.action == \"exec\" and (\n  (\n    // Tunneling and/or Port Forwarding via process args\n    (process.args regex \"\"\".*[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}:[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}:[0-9]{1,5}.*\"\"\") or\n    // gost\n    (process.name == \"gost\" and process.args : (\"-L*\", \"-C*\", \"-R*\")) or\n    // ssh\n    (process.name == \"ssh\" and (process.args like (\"-*R*\", \"-*L*\", \"-*D*\", \"-*w*\") and \n     not (process.args == \"chmod\" or process.args like \"*rungencmd*\"))) or\n    // ssh Tunneling and/or Port Forwarding via SSH option\n    (process.name == \"ssh\" and process.args == \"-o\" and process.args like~(\n      \"*ProxyCommand*\", \"*LocalForward*\", \"*RemoteForward*\", \"*DynamicForward*\", \"*Tunnel*\", \"*GatewayPorts*\", \"*ExitOnForwardFailure*\", \"*ProxyCommand*\", \"*ProxyJump*\"\n    )) or\n    // sshuttle\n    (process.name == \"sshuttle\" and process.args in (\"-r\", \"--remote\", \"-l\", \"--listen\")) or\n    // earthworm\n    (process.args == \"-s\" and process.args == \"-d\" and process.args == \"rssocks\") or\n    // socat\n    (process.name == \"socat\" and process.args : (\"TCP4-LISTEN:*\", \"SOCKS*\")) or\n    // chisel\n    (process.name : \"chisel*\" and process.args in (\"client\", \"server\")) or\n    // iodine(d), dnscat, hans, ptunnel-ng, ssf, 3proxy & ngrok \n    (process.name in (\"iodine\", \"iodined\", \"dnscat\", \"hans\", \"hans-ubuntu\", \"ptunnel-ng\", \"ssf\", \"3proxy\", \"ngrok\", \"wstunnel\", \"pivotnacci\", \"frps\", \"proxychains\"))\n  )\n) and container.id like \"?*\"\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-*r",
+        "-*l",
+        "-*d",
+        "-*w",
+        "tcp4-listen:",
+        "socks"
+      ],
+      "raw_values": [
+        "-L*",
+        "-C*",
+        "-R*",
+        "-*R*",
+        "-*L*",
+        "-*D*",
+        "-*w*",
+        "TCP4-LISTEN:*",
+        "SOCKS*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "proxycommand",
+        "localforward",
+        "remoteforward",
+        "dynamicforward",
+        "tunnel",
+        "gatewayports",
+        "exitonforwardfailure",
+        "proxyjump"
+      ],
+      "raw_values": [
+        "*ProxyCommand*",
+        "*LocalForward*",
+        "*RemoteForward*",
+        "*DynamicForward*",
+        "*Tunnel*",
+        "*GatewayPorts*",
+        "*ExitOnForwardFailure*",
+        "*ProxyJump*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--remote",
+        "--listen",
+        "client",
+        "server"
+      ],
+      "raw_values": [
+        "-r",
+        "--remote",
+        "-l",
+        "--listen",
+        "client",
+        "server"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "iodine",
+        "iodined",
+        "dnscat",
+        "hans",
+        "hans-ubuntu",
+        "ptunnel-ng",
+        "ssf",
+        "3proxy",
+        "ngrok",
+        "wstunnel",
+        "pivotnacci",
+        "frps",
+        "proxychains"
+      ],
+      "raw_values": [
+        "iodine",
+        "iodined",
+        "dnscat",
+        "hans",
+        "hans-ubuntu",
+        "ptunnel-ng",
+        "ssf",
+        "3proxy",
+        "ngrok",
+        "wstunnel",
+        "pivotnacci",
+        "frps",
+        "proxychains"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "gost",
+        "ssh",
+        "sshuttle",
+        "socat"
+      ],
+      "raw_values": [
+        "gost",
+        "ssh",
+        "sshuttle",
+        "socat"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "chmod",
+        "rssocks"
+      ],
+      "raw_values": [
+        "chmod",
+        "-o",
+        "-s",
+        "-d",
+        "rssocks"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "rungencmd"
+      ],
+      "raw_values": [
+        "*rungencmd*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "chisel"
+      ],
+      "raw_values": [
+        "chisel*"
+      ]
+    }
+  ]
+}

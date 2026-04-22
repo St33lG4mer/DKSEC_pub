@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mstsc_rdp_hijack_shadowing",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mstsc_rdp_hijack_shadowing.eql",
+  "raw_query": "any where process.command_line:\"*noconsentprompt*\" and process.command_line:\"*shadow:*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "noconsentprompt",
+        "shadow:"
+      ],
+      "raw_values": [
+        "*noconsentprompt*",
+        "*shadow:*"
+      ]
+    }
+  ]
+}

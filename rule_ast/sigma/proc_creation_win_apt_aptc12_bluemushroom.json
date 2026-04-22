@@ -1,0 +1,26 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_aptc12_bluemushroom",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2019/TA/APC-C-12/proc_creation_win_apt_aptc12_bluemushroom.eql",
+  "raw_query": "any where process.command_line:\"*regsvr32*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\*\" and process.command_line:\"*.dll*\" and process.command_line:\"*,DllEntry*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "regsvr32",
+        ".dll",
+        ",dllentry"
+      ],
+      "raw_values": [
+        "*regsvr32*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*.dll*",
+        "*,DllEntry*"
+      ]
+    }
+  ]
+}

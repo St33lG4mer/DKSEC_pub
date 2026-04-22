@@ -1,0 +1,29 @@
+{
+  "source": "elastic",
+  "name": "M365 Exchange DKIM Signing Configuration Disabled",
+  "slug": "defense_evasion_exchange_dkim_signing_config_disabled",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/defense_evasion_exchange_dkim_signing_config_disabled.toml",
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:\"Set-DkimSigningConfig\" and o365.audit.Parameters.Enabled:False and event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "set-dkimsigningconfig"
+      ],
+      "raw_values": [
+        "Set-DkimSigningConfig"
+      ]
+    }
+  ]
+}

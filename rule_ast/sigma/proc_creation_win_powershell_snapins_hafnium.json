@@ -1,0 +1,73 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_snapins_hafnium",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_snapins_hafnium.eql",
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and process.command_line:\"*Add-PSSnapin*\" and (process.command_line like~ (\"*Microsoft.Exchange.Powershell.Snapin*\", \"*Microsoft.Exchange.Management.PowerShell.SnapIn*\"))) and (not (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\msiexec.exe\" and process.command_line:\"*$exserver=Get-ExchangeServer ([Environment]::MachineName) -ErrorVariable exerr 2> $null*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "microsoft.exchange.powershell.snapin",
+        "microsoft.exchange.management.powershell.snapin"
+      ],
+      "raw_values": [
+        "*Microsoft.Exchange.Powershell.Snapin*",
+        "*Microsoft.Exchange.Management.PowerShell.SnapIn*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add-pssnapin",
+        "$exserver=get-exchangeserver ([environment]::machinename) -errorvariable exerr 2> $null"
+      ],
+      "raw_values": [
+        "*Add-PSSnapin*",
+        "*$exserver=Get-ExchangeServer ([Environment]::MachineName) -ErrorVariable exerr 2> $null*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe"
+      ]
+    }
+  ]
+}

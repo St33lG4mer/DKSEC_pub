@@ -1,0 +1,62 @@
+{
+  "source": "sigma",
+  "name": "registry_set_add_load_service_in_safe_mode",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_add_load_service_in_safe_mode.eql",
+  "raw_query": "any where ((registry.path like~ (\"*\\\\Control\\\\SafeBoot\\\\Minimal\\\\*\", \"*\\\\Control\\\\SafeBoot\\\\Network\\\\*\")) and registry.path:\"*\\\\(Default)\" and winlog.event_data.Details:\"Service\") and (not ((process.executable:\"C:\\\\WINDOWS\\\\system32\\\\msiexec.exe\" and (registry.path like~ (\"*\\\\Control\\\\SafeBoot\\\\Minimal\\\\SAVService\\\\(Default)\", \"*\\\\Control\\\\SafeBoot\\\\Network\\\\SAVService\\\\(Default)\"))) or (process.executable:\"*\\\\MBAMInstallerService.exe\" and registry.path:\"*\\\\MBAMService\\\\(Default)\" and winlog.event_data.Details:\"Service\") or (process.executable:\"C:\\\\Hexnode\\\\Hexnode Agent\\\\Current\\\\HexnodeAgent.exe\" and (registry.path like~ (\"*\\\\Control\\\\SafeBoot\\\\Minimal\\\\Hexnode Updater\\\\(Default)\", \"*\\\\Control\\\\SafeBoot\\\\Network\\\\Hexnode Updater\\\\(Default)\", \"*\\\\Control\\\\SafeBoot\\\\Minimal\\\\Hexnode Agent\\\\(Default)\", \"*\\\\Control\\\\SafeBoot\\\\Network\\\\Hexnode Agent\\\\(Default)\")) and winlog.event_data.Details:\"Service\")))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\control\\\\safeboot\\\\minimal\\\\",
+        "\\\\control\\\\safeboot\\\\network\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\SafeBoot\\\\Minimal\\\\*",
+        "*\\\\Control\\\\SafeBoot\\\\Network\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\(default)",
+        "\\\\mbamservice\\\\(default)"
+      ],
+      "raw_values": [
+        "*\\\\(Default)",
+        "*\\\\MBAMService\\\\(Default)"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "service"
+      ],
+      "raw_values": [
+        "Service"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe",
+        "mbaminstallerservice.exe",
+        "hexnodeagent.exe"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\system32\\\\msiexec.exe",
+        "*\\\\MBAMInstallerService.exe",
+        "C:\\\\Hexnode\\\\Hexnode Agent\\\\Current\\\\HexnodeAgent.exe"
+      ]
+    }
+  ]
+}

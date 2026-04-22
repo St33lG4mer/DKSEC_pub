@@ -1,0 +1,27 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_winpwn",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_winpwn.eql",
+  "raw_query": "any where process.command_line like~ (\"*Offline_Winpwn*\", \"*WinPwn *\", \"*WinPwn.exe*\", \"*WinPwn.ps1*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "offline_winpwn",
+        "winpwn",
+        "winpwn.exe",
+        "winpwn.ps1"
+      ],
+      "raw_values": [
+        "*Offline_Winpwn*",
+        "*WinPwn *",
+        "*WinPwn.exe*",
+        "*WinPwn.ps1*"
+      ]
+    }
+  ]
+}

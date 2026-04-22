@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "GitHub Owner Role Granted To User",
+  "slug": "persistence_organization_owner_role_granted",
+  "category": "iam",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Use Case: UEBA",
+    "Tactic: Persistence",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/persistence_organization_owner_role_granted.toml",
+  "raw_query": "iam where data_stream.dataset == \"github.audit\" and event.action == \"org.update_member\" and github.permission == \"admin\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "org.update_member"
+      ],
+      "raw_values": [
+        "org.update_member"
+      ]
+    },
+    {
+      "field": "github.permission",
+      "raw_field": "github.permission",
+      "operator": "==",
+      "values": [
+        "admin"
+      ],
+      "raw_values": [
+        "admin"
+      ]
+    }
+  ]
+}

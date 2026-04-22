@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_udl_exec",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_udl_exec.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\explorer.exe\" and (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and ((process.command_line:\"*oledb32.dll*\" and process.command_line:\"*,OpenDSLFile *\" and process.command_line:\"*\\\\Users\\\\*\\\\Downloads\\\\*\") and process.command_line:\"*.udl\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "oledb32.dll",
+        ",opendslfile",
+        ".udl"
+      ],
+      "raw_values": [
+        "*oledb32.dll*",
+        "*,OpenDSLFile *",
+        "*\\\\Users\\\\*\\\\Downloads\\\\*",
+        "*.udl"
+      ]
+    }
+  ]
+}

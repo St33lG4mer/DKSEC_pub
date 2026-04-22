@@ -1,0 +1,64 @@
+{
+  "source": "elastic",
+  "name": "Privilege Escalation via Root Crontab File Modification",
+  "slug": "privilege_escalation_root_crontab_filemod",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/privilege_escalation_root_crontab_filemod.toml",
+  "raw_query": "file where host.os.type == \"macos\" and event.action == \"modification\" and\n file.path like \"/private/var/at/tabs/root\" and \n not process.executable like \"/usr/bin/crontab\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modification"
+      ],
+      "raw_values": [
+        "modification"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like",
+      "values": [
+        "root"
+      ],
+      "raw_values": [
+        "/private/var/at/tabs/root"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like",
+      "values": [
+        "crontab"
+      ],
+      "raw_values": [
+        "/usr/bin/crontab"
+      ]
+    }
+  ]
+}

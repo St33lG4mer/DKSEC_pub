@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_ta17_293a_ps",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2017/TA/Dragonfly/proc_creation_win_apt_ta17_293a_ps.eql",
+  "raw_query": "any where process.command_line:\"*ps.exe -accepteula*\" and process.command_line:\"*-s cmd /c netstat*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ps.exe -accepteula",
+        "c netstat"
+      ],
+      "raw_values": [
+        "*ps.exe -accepteula*",
+        "*-s cmd /c netstat*"
+      ]
+    }
+  ]
+}

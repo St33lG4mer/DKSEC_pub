@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "registry_set_powershell_execution_policy",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_powershell_execution_policy.eql",
+  "raw_query": "any where ((registry.path like~ (\"*\\\\ShellIds\\\\Microsoft.PowerShell\\\\ExecutionPolicy\", \"*\\\\Policies\\\\Microsoft\\\\Windows\\\\PowerShell\\\\ExecutionPolicy\")) and (winlog.event_data.Details like~ (\"*Bypass*\", \"*Unrestricted*\"))) and (not (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\shellids\\\\microsoft.powershell\\\\executionpolicy",
+        "\\\\policies\\\\microsoft\\\\windows\\\\powershell\\\\executionpolicy"
+      ],
+      "raw_values": [
+        "*\\\\ShellIds\\\\Microsoft.PowerShell\\\\ExecutionPolicy",
+        "*\\\\Policies\\\\Microsoft\\\\Windows\\\\PowerShell\\\\ExecutionPolicy"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "bypass",
+        "unrestricted"
+      ],
+      "raw_values": [
+        "*Bypass*",
+        "*Unrestricted*"
+      ]
+    }
+  ]
+}

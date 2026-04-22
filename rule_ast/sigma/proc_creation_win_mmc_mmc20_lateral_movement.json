@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mmc_mmc20_lateral_movement",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mmc_mmc20_lateral_movement.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\svchost.exe\" and process.executable:\"*\\\\mmc.exe\" and process.command_line:\"*-Embedding*\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mmc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-embedding"
+      ],
+      "raw_values": [
+        "*-Embedding*"
+      ]
+    }
+  ]
+}

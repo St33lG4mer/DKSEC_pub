@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "create_remote_thread_win_susp_target_shell_application",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/create_remote_thread/create_remote_thread_win_susp_target_shell_application.eql",
+  "raw_query": "any where (winlog.event_data.TargetImage like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (not (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Program Files\\\\*\"))) and (not process.executable:\"*\\\\MsMpEng.exe\")",
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": "like~",
+      "values": [
+        "\\\\cmd.exe",
+        "\\\\powershell.exe",
+        "\\\\pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*\\\\MsMpEng.exe"
+      ]
+    }
+  ]
+}

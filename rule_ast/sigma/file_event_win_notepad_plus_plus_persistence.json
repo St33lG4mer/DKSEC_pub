@@ -1,0 +1,69 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_notepad_plus_plus_persistence",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_notepad_plus_plus_persistence.eql",
+  "raw_query": "any where (file.path:\"*\\\\Notepad++\\\\plugins\\\\*\" and file.path:\"*.dll\") and (not (process.executable:\"*\\\\Notepad++\\\\updater\\\\gup.exe\" or (process.executable:\"C:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and (process.executable like~ (\"*\\\\target.exe\", \"*Installer.x64.exe\"))) or (process.executable:\"*\\\\npp.*\" and process.executable:\"*.exe\" and (file.path like~ (\"C:\\\\Program Files\\\\Notepad++\\\\plugins\\\\NppExport\\\\NppExport.dll\", \"C:\\\\Program Files\\\\Notepad++\\\\plugins\\\\mimeTools\\\\mimeTools.dll\", \"C:\\\\Program Files\\\\Notepad++\\\\plugins\\\\NppConverter\\\\NppConverter.dll\", \"C:\\\\Program Files\\\\Notepad++\\\\plugins\\\\Config\\\\nppPluginList.dll\")))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "target.exe",
+        "installer.x64.exe"
+      ],
+      "raw_values": [
+        "*\\\\target.exe",
+        "*Installer.x64.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "nppexport.dll",
+        "mimetools.dll",
+        "nppconverter.dll",
+        "npppluginlist.dll"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Notepad++\\\\plugins\\\\NppExport\\\\NppExport.dll",
+        "C:\\\\Program Files\\\\Notepad++\\\\plugins\\\\mimeTools\\\\mimeTools.dll",
+        "C:\\\\Program Files\\\\Notepad++\\\\plugins\\\\NppConverter\\\\NppConverter.dll",
+        "C:\\\\Program Files\\\\Notepad++\\\\plugins\\\\Config\\\\nppPluginList.dll"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "*\\\\Notepad++\\\\plugins\\\\*",
+        "*.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gup.exe",
+        "npp.",
+        ".exe"
+      ],
+      "raw_values": [
+        "*\\\\Notepad++\\\\updater\\\\gup.exe",
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\npp.*",
+        "*.exe"
+      ]
+    }
+  ]
+}

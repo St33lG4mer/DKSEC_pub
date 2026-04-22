@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_calc_uncommon_exec",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_calc_uncommon_exec.eql",
+  "raw_query": "any where process.command_line:\"*\\\\calc.exe *\" or (process.executable:\"*\\\\calc.exe\" and (not (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\", \"*:\\\\Windows\\\\WinSxS\\\\*\"))))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "calc.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "calc.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe"
+      ]
+    }
+  ]
+}

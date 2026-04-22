@@ -1,0 +1,1 @@
+any where (process.executable:"*\\cscript.exe" and process.command_line:"*.vbs /shell *") or (process.command_line:"*csvde -f C:\\windows\\web\\*" and process.command_line:"*.log*")

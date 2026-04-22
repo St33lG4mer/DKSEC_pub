@@ -1,0 +1,45 @@
+{
+  "source": "elastic",
+  "name": "Github Activity on a Private Repository from an Unusual IP",
+  "slug": "impact_github_repository_activity_from_unusual_ip",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Tactic: Initial Access",
+    "Tactic: Persistence",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/impact_github_repository_activity_from_unusual_ip.toml",
+  "raw_query": "data_stream.dataset:\"github.audit\" and event.action:(\"git.push\" or \"git.clone\") and github.repository_public:false\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "git.push",
+        "git.clone"
+      ],
+      "raw_values": [
+        "git.push",
+        "git.clone"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    }
+  ]
+}

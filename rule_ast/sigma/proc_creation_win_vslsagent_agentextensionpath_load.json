@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_vslsagent_agentextensionpath_load",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_vslsagent_agentextensionpath_load.eql",
+  "raw_query": "any where (process.executable:\"*\\\\vsls-agent.exe\" and process.command_line:\"*--agentExtensionPath*\") and (not process.command_line:\"*Microsoft.VisualStudio.LiveShare.Agent.*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vsls-agent.exe"
+      ],
+      "raw_values": [
+        "*\\\\vsls-agent.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--agentextensionpath",
+        "microsoft.visualstudio.liveshare.agent."
+      ],
+      "raw_values": [
+        "*--agentExtensionPath*",
+        "*Microsoft.VisualStudio.LiveShare.Agent.*"
+      ]
+    }
+  ]
+}

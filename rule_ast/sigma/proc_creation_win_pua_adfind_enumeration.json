@@ -1,0 +1,48 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_adfind_enumeration",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_adfind_enumeration.eql",
+  "raw_query": "any where (process.command_line like~ (\"*lockoutduration*\", \"*lockoutthreshold*\", \"*lockoutobservationwindow*\", \"*maxpwdage*\", \"*minpwdage*\", \"*minpwdlength*\", \"*pwdhistorylength*\", \"*pwdproperties*\")) or process.command_line:\"*-sc admincountdmp*\" or process.command_line:\"*-sc exchaddresses*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "lockoutduration",
+        "lockoutthreshold",
+        "lockoutobservationwindow",
+        "maxpwdage",
+        "minpwdage",
+        "minpwdlength",
+        "pwdhistorylength",
+        "pwdproperties"
+      ],
+      "raw_values": [
+        "*lockoutduration*",
+        "*lockoutthreshold*",
+        "*lockoutobservationwindow*",
+        "*maxpwdage*",
+        "*minpwdage*",
+        "*minpwdlength*",
+        "*pwdhistorylength*",
+        "*pwdproperties*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-sc admincountdmp",
+        "-sc exchaddresses"
+      ],
+      "raw_values": [
+        "*-sc admincountdmp*",
+        "*-sc exchaddresses*"
+      ]
+    }
+  ]
+}

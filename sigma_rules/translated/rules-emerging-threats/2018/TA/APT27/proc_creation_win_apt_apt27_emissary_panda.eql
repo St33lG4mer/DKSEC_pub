@@ -1,0 +1,1 @@
+any where (process.parent.executable:"*\\sllauncher.exe" and process.executable:"*\\svchost.exe") or (process.parent.executable:"*\\AppData\\Roaming\\*" and process.executable:"*\\svchost.exe" and process.command_line:"*-k*")

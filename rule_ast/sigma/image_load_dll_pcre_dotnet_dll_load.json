@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "image_load_dll_pcre_dotnet_dll_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_dll_pcre_dotnet_dll_load.eql",
+  "raw_query": "any where file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\ba9ea7344a4a5f591d6e5dc32a13494b\\\\*\"",
+  "conditions": []
+}

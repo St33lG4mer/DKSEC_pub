@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_bcdedit_susp_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_bcdedit_susp_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\bcdedit.exe\" or process.pe.original_file_name:\"bcdedit.exe\") and (process.command_line like~ (\"*delete*\", \"*deletevalue*\", \"*import*\", \"*safeboot*\", \"*network*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "delete",
+        "deletevalue",
+        "import",
+        "safeboot",
+        "network"
+      ],
+      "raw_values": [
+        "*delete*",
+        "*deletevalue*",
+        "*import*",
+        "*safeboot*",
+        "*network*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bcdedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\bcdedit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bcdedit.exe"
+      ],
+      "raw_values": [
+        "bcdedit.exe"
+      ]
+    }
+  ]
+}

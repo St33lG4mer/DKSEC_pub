@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Azure VNet Network Watcher Deleted",
+  "slug": "defense_evasion_network_watcher_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Network Security Monitoring",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/defense_evasion_network_watcher_deletion.toml",
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.NETWORK/NETWORKWATCHERS/DELETE\" and event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.network/networkwatchers/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.NETWORK/NETWORKWATCHERS/DELETE"
+      ]
+    }
+  ]
+}

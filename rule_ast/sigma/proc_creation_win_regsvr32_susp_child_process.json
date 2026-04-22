@@ -1,0 +1,80 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_regsvr32_susp_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_regsvr32_susp_child_process.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\regsvr32.exe\" and (process.executable like~ (\"*\\\\calc.exe\", \"*\\\\cscript.exe\", \"*\\\\explorer.exe\", \"*\\\\mshta.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\nltest.exe\", \"*\\\\notepad.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\reg.exe\", \"*\\\\schtasks.exe\", \"*\\\\werfault.exe\", \"*\\\\wscript.exe\"))) and (not (process.executable:\"*\\\\werfault.exe\" and process.command_line:\"* -u -p *\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "calc.exe",
+        "cscript.exe",
+        "explorer.exe",
+        "mshta.exe",
+        "net.exe",
+        "net1.exe",
+        "nltest.exe",
+        "notepad.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "reg.exe",
+        "schtasks.exe",
+        "werfault.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe",
+        "*\\\\cscript.exe",
+        "*\\\\explorer.exe",
+        "*\\\\mshta.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\nltest.exe",
+        "*\\\\notepad.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\reg.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\werfault.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*\\\\werfault.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-u -p"
+      ],
+      "raw_values": [
+        "* -u -p *"
+      ]
+    }
+  ]
+}

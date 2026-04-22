@@ -1,0 +1,70 @@
+{
+  "source": "sigma",
+  "name": "create_stream_hash_zip_tld_download",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/create_stream_hash/create_stream_hash_zip_tld_download.eql",
+  "raw_query": "any where winlog.event_data.Contents:\"*.zip/*\" and (file.path like~ (\"*.bat:Zone*\", \"*.dat:Zone*\", \"*.dll:Zone*\", \"*.doc:Zone*\", \"*.docm:Zone*\", \"*.exe:Zone*\", \"*.hta:Zone*\", \"*.pptm:Zone*\", \"*.ps1:Zone*\", \"*.rar:Zone*\", \"*.rtf:Zone*\", \"*.sct:Zone*\", \"*.vbe:Zone*\", \"*.vbs:Zone*\", \"*.ws:Zone*\", \"*.wsf:Zone*\", \"*.xll:Zone*\", \"*.xls:Zone*\", \"*.xlsm:Zone*\", \"*.zip:Zone*\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".bat:zone",
+        ".dat:zone",
+        ".dll:zone",
+        ".doc:zone",
+        ".docm:zone",
+        ".exe:zone",
+        ".hta:zone",
+        ".pptm:zone",
+        ".ps1:zone",
+        ".rar:zone",
+        ".rtf:zone",
+        ".sct:zone",
+        ".vbe:zone",
+        ".vbs:zone",
+        ".ws:zone",
+        ".wsf:zone",
+        ".xll:zone",
+        ".xls:zone",
+        ".xlsm:zone",
+        ".zip:zone"
+      ],
+      "raw_values": [
+        "*.bat:Zone*",
+        "*.dat:Zone*",
+        "*.dll:Zone*",
+        "*.doc:Zone*",
+        "*.docm:Zone*",
+        "*.exe:Zone*",
+        "*.hta:Zone*",
+        "*.pptm:Zone*",
+        "*.ps1:Zone*",
+        "*.rar:Zone*",
+        "*.rtf:Zone*",
+        "*.sct:Zone*",
+        "*.vbe:Zone*",
+        "*.vbs:Zone*",
+        "*.ws:Zone*",
+        "*.wsf:Zone*",
+        "*.xll:Zone*",
+        "*.xls:Zone*",
+        "*.xlsm:Zone*",
+        "*.zip:Zone*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.contents",
+      "raw_field": "winlog.event_data.Contents",
+      "operator": ":",
+      "values": [
+        ".zip/"
+      ],
+      "raw_values": [
+        "*.zip/*"
+      ]
+    }
+  ]
+}

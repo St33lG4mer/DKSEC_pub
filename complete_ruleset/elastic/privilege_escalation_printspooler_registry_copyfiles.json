@@ -1,0 +1,75 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Print Spooler Point and Print DLL",
+  "slug": "privilege_escalation_printspooler_registry_copyfiles",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Endgame",
+    "Use Case: Vulnerability",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Resources: Investigation Guide",
+    "Data Source: SentinelOne",
+    "Data Source: Microsoft Defender for Endpoint"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_printspooler_registry_copyfiles.toml",
+  "raw_query": "sequence by host.id with maxspan=30s\n[registry where host.os.type == \"windows\" and\n   registry.value : \"SpoolDirectory\" and\n   registry.path : \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Print\\\\Printers\\\\*\\\\SpoolDirectory\" and\n   registry.data.strings : \"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\4\"]\n[registry where host.os.type == \"windows\" and\n   registry.value : \"Module\" and\n   registry.path : \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Print\\\\Printers\\\\*\\\\CopyFiles\\\\Payload\\\\Module\" and\n   registry.data.strings : \"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\4\\\\*\"]\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "spooldirectory",
+        "module"
+      ],
+      "raw_values": [
+        "SpoolDirectory",
+        "Module"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\print\\\\printers\\\\*\\\\spooldirectory",
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\print\\\\printers\\\\*\\\\copyfiles\\\\payload\\\\module"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Print\\\\Printers\\\\*\\\\SpoolDirectory",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Print\\\\Printers\\\\*\\\\CopyFiles\\\\Payload\\\\Module"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\spool\\\\drivers\\\\x64\\\\4",
+        "c:\\\\windows\\\\system32\\\\spool\\\\drivers\\\\x64\\\\4\\\\"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\4",
+        "C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\4\\\\*"
+      ]
+    }
+  ]
+}

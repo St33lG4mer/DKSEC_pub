@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "posh_pm_susp_download",
+  "subtree": "rules",
+  "category": "powershell",
+  "sigma_path": "rules/windows/powershell/powershell_module/posh_pm_susp_download.eql",
+  "raw_query": "any where winlog.event_data.ContextInfo:\"*System.Net.WebClient*\" and (winlog.event_data.ContextInfo like~ (\"*.DownloadFile(*\", \"*.DownloadString(*\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": "like~",
+      "values": [
+        ".downloadfile(",
+        ".downloadstring("
+      ],
+      "raw_values": [
+        "*.DownloadFile(*",
+        "*.DownloadString(*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": ":",
+      "values": [
+        "system.net.webclient"
+      ],
+      "raw_values": [
+        "*System.Net.WebClient*"
+      ]
+    }
+  ]
+}

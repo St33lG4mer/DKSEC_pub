@@ -1,0 +1,277 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Child Execution via Web Server",
+  "slug": "persistence_linux_shell_activity_via_web_server",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Initial Access",
+    "Data Source: Elastic Endgame",
+    "Use Case: Vulnerability",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/linux/persistence_linux_shell_activity_via_web_server.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and process.parent.executable != null and (\n  process.parent.name like (\n    \"apache\", \"nginx\", \"apache2\", \"httpd\", \"lighttpd\", \"caddy\", \"php-fpm*\", \"mongrel_rails\", \"haproxy\",\n    \"gunicorn\", \"uwsgi\", \"openresty\", \"cherokee\", \"h2o\", \"resin\", \"puma\", \"unicorn\", \"traefik\", \"uvicorn\",\n    \"tornado\", \"hypercorn\", \"daphne\", \"twistd\", \"yaws\", \"webfsd\", \"httpd.worker\", \"flask\", \"rails\", \"mongrel\",\n    \"php-cgi\", \"php-fcgi\", \"php-cgi.cagefs\", \"catalina.sh\", \"hiawatha\", \"lswsctrl\"\n  ) or\n  user.name in (\"apache\", \"www-data\", \"httpd\", \"nginx\", \"lighttpd\", \"tomcat\", \"tomcat8\", \"tomcat9\") or\n  user.id in (\"33\", \"498\", \"48\") or\n  (process.name == \"java\" and ?process.working_directory like \"/u0?/*\")\n) and (\n  process.executable like (\n    \"/tmp/*\", \"/var/tmp/*\", \"/dev/shm/*\", \"./*\", \"/run/*\", \"/var/run/*\", \"/boot/*\", \"/sys/*\", \"/lost+found/*\",\n    \"/proc/*\", \"/var/mail/*\", \"/var/www/*\", \"/home/*\", \"/root/*\" \n  ) or\n  process.name like~ (\n    // Hidden processes\n    \".*\",\n    // Suspicious file formats\n    \"*.elf\", \"*.sh\", \"*.py\", \"*.rb\", \"*.pl\", \"*.lua*\", \"*.php*\", \".js\",\n    // Scheduled tasks\n    \"systemd\", \"cron\", \"crond\",\n    // Network utilities often used for reverse shells\n    \"nc\", \"netcat\", \"ncat\", \"telnet\", \"socat\", \"openssl\", \"nc.openbsd\", \"ngrok\", \"nc.traditional\",\n    // Cloud CLI\n    \"az\", \"gcloud\", \"aws\",\n    // Misc. tools\n    \"whoami\", \"ifconfig\", \"ip\", \"ss\", \"top\", \"htop\", \"df\", \"du\", \"lsblk\", \"lsof\", \"tcpdump\",\n    \"strace\", \"ltrace\", \"curl\", \"wget\", \"dig\", \"nslookup\", \"host\", \"nmap\", \"arp\", \"traceroute\"\n  ) \n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "apache",
+        "nginx",
+        "apache2",
+        "httpd",
+        "lighttpd",
+        "caddy",
+        "php-fpm",
+        "mongrel_rails",
+        "haproxy",
+        "gunicorn",
+        "uwsgi",
+        "openresty",
+        "cherokee",
+        "h2o",
+        "resin",
+        "puma",
+        "unicorn",
+        "traefik",
+        "uvicorn",
+        "tornado",
+        "hypercorn",
+        "daphne",
+        "twistd",
+        "yaws",
+        "webfsd",
+        "httpd.worker",
+        "flask",
+        "rails",
+        "mongrel",
+        "php-cgi",
+        "php-fcgi",
+        "php-cgi.cagefs",
+        "catalina.sh",
+        "hiawatha",
+        "lswsctrl"
+      ],
+      "raw_values": [
+        "apache",
+        "nginx",
+        "apache2",
+        "httpd",
+        "lighttpd",
+        "caddy",
+        "php-fpm*",
+        "mongrel_rails",
+        "haproxy",
+        "gunicorn",
+        "uwsgi",
+        "openresty",
+        "cherokee",
+        "h2o",
+        "resin",
+        "puma",
+        "unicorn",
+        "traefik",
+        "uvicorn",
+        "tornado",
+        "hypercorn",
+        "daphne",
+        "twistd",
+        "yaws",
+        "webfsd",
+        "httpd.worker",
+        "flask",
+        "rails",
+        "mongrel",
+        "php-cgi",
+        "php-fcgi",
+        "php-cgi.cagefs",
+        "catalina.sh",
+        "hiawatha",
+        "lswsctrl"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        ".elf",
+        ".sh",
+        ".py",
+        ".rb",
+        ".pl",
+        ".lua",
+        ".php",
+        ".js",
+        "systemd",
+        "cron",
+        "crond",
+        "netcat",
+        "ncat",
+        "telnet",
+        "socat",
+        "openssl",
+        "nc.openbsd",
+        "ngrok",
+        "nc.traditional",
+        "gcloud",
+        "aws",
+        "whoami",
+        "ifconfig",
+        "top",
+        "htop",
+        "lsblk",
+        "lsof",
+        "tcpdump",
+        "strace",
+        "ltrace",
+        "curl",
+        "wget",
+        "dig",
+        "nslookup",
+        "host",
+        "nmap",
+        "arp",
+        "traceroute"
+      ],
+      "raw_values": [
+        ".*",
+        "*.elf",
+        "*.sh",
+        "*.py",
+        "*.rb",
+        "*.pl",
+        "*.lua*",
+        "*.php*",
+        ".js",
+        "systemd",
+        "cron",
+        "crond",
+        "nc",
+        "netcat",
+        "ncat",
+        "telnet",
+        "socat",
+        "openssl",
+        "nc.openbsd",
+        "ngrok",
+        "nc.traditional",
+        "az",
+        "gcloud",
+        "aws",
+        "whoami",
+        "ifconfig",
+        "ip",
+        "ss",
+        "top",
+        "htop",
+        "df",
+        "du",
+        "lsblk",
+        "lsof",
+        "tcpdump",
+        "strace",
+        "ltrace",
+        "curl",
+        "wget",
+        "dig",
+        "nslookup",
+        "host",
+        "nmap",
+        "arp",
+        "traceroute"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "in",
+      "values": [
+        "apache",
+        "www-data",
+        "httpd",
+        "nginx",
+        "lighttpd",
+        "tomcat",
+        "tomcat8",
+        "tomcat9"
+      ],
+      "raw_values": [
+        "apache",
+        "www-data",
+        "httpd",
+        "nginx",
+        "lighttpd",
+        "tomcat",
+        "tomcat8",
+        "tomcat9"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "in",
+      "values": [
+        "498"
+      ],
+      "raw_values": [
+        "33",
+        "498",
+        "48"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "java"
+      ],
+      "raw_values": [
+        "java"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "like",
+      "values": [
+        "/u0?/"
+      ],
+      "raw_values": [
+        "/u0?/*"
+      ]
+    }
+  ]
+}

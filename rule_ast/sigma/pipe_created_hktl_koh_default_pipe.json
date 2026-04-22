@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "pipe_created_hktl_koh_default_pipe",
+  "subtree": "rules",
+  "category": "pipe",
+  "sigma_path": "rules/windows/pipe_created/pipe_created_hktl_koh_default_pipe.eql",
+  "raw_query": "any where file.name like~ (\"*\\\\imposecost*\", \"*\\\\imposingcost*\")",
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "imposecost",
+        "imposingcost"
+      ],
+      "raw_values": [
+        "*\\\\imposecost*",
+        "*\\\\imposingcost*"
+      ]
+    }
+  ]
+}

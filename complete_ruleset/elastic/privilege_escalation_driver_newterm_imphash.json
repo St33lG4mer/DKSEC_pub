@@ -1,0 +1,43 @@
+{
+  "source": "elastic",
+  "name": "First Time Seen Driver Loaded",
+  "slug": "privilege_escalation_driver_newterm_imphash",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_driver_newterm_imphash.toml",
+  "raw_query": "event.category:\"driver\" and host.os.type:windows and event.action:\"load\"\n",
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "driver"
+      ],
+      "raw_values": [
+        "driver"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "load"
+      ],
+      "raw_values": [
+        "load"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_certoc_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_certoc_download.eql",
+  "raw_query": "any where (process.executable:\"*\\\\certoc.exe\" or process.pe.original_file_name:\"CertOC.exe\") and (process.command_line:\"*-GetCACAPS*\" and process.command_line:\"*http*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certoc.exe"
+      ],
+      "raw_values": [
+        "*\\\\certoc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certoc.exe"
+      ],
+      "raw_values": [
+        "CertOC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-getcacaps",
+        "http"
+      ],
+      "raw_values": [
+        "*-GetCACAPS*",
+        "*http*"
+      ]
+    }
+  ]
+}

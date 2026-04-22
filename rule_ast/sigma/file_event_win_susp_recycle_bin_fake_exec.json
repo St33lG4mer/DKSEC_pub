@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_susp_recycle_bin_fake_exec",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_susp_recycle_bin_fake_exec.eql",
+  "raw_query": "any where (process.executable like~ (\"*RECYCLERS.BIN\\\\*\", \"*RECYCLER.BIN\\\\*\")) or (file.path like~ (\"*RECYCLERS.BIN\\\\*\", \"*RECYCLER.BIN\\\\*\"))",
+  "conditions": []
+}

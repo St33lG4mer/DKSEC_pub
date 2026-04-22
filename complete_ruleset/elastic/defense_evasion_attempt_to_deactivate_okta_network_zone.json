@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "Attempt to Deactivate an Okta Network Zone",
+  "slug": "defense_evasion_attempt_to_deactivate_okta_network_zone",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Identity and Access Audit",
+    "Data Source: Okta",
+    "Use Case: Network Security Monitoring",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/defense_evasion_attempt_to_deactivate_okta_network_zone.toml",
+  "raw_query": "data_stream.dataset:okta.system and event.action:zone.deactivate\n",
+  "conditions": []
+}

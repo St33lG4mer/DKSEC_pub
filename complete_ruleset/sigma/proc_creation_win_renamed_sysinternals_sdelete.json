@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_sysinternals_sdelete",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_sysinternals_sdelete.eql",
+  "raw_query": "any where process.pe.original_file_name:\"sdelete.exe\" and (not (process.executable like~ (\"*\\\\sdelete.exe\", \"*\\\\sdelete64.exe\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "sdelete.exe",
+        "sdelete64.exe"
+      ],
+      "raw_values": [
+        "*\\\\sdelete.exe",
+        "*\\\\sdelete64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sdelete.exe"
+      ],
+      "raw_values": [
+        "sdelete.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "source": "elastic",
+  "name": "Google Workspace User Organizational Unit Changed",
+  "slug": "persistence_google_workspace_user_organizational_unit_changed",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Google Workspace",
+    "Use Case: Configuration Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/google_workspace/persistence_google_workspace_user_organizational_unit_changed.toml",
+  "raw_query": "data_stream.dataset:\"google_workspace.admin\" and event.type:change and event.category:iam\n    and google_workspace.event.type:\"USER_SETTINGS\" and event.action:\"MOVE_USER_TO_ORG_UNIT\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "google_workspace.admin"
+      ],
+      "raw_values": [
+        "google_workspace.admin"
+      ]
+    },
+    {
+      "field": "google_workspace.event.type",
+      "raw_field": "google_workspace.event.type",
+      "operator": ":",
+      "values": [
+        "user_settings"
+      ],
+      "raw_values": [
+        "USER_SETTINGS"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "move_user_to_org_unit"
+      ],
+      "raw_values": [
+        "MOVE_USER_TO_ORG_UNIT"
+      ]
+    }
+  ]
+}

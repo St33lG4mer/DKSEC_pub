@@ -1,0 +1,91 @@
+{
+  "source": "elastic",
+  "name": "Suspicious TCC Access Granted for User Folders",
+  "slug": "defense_evasion_suspicious_tcc_access_granted",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Collection",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/defense_evasion_suspicious_tcc_access_granted.toml",
+  "raw_query": "FROM logs-endpoint.events.*\n| WHERE host.os.type == \"macos\" \n    AND event.action == \"tcc_modify\" \n    AND Tcc.right == \"allowed\"\n    AND Tcc.update_type == \"create\"\n    AND Tcc.service IN (\"SystemPolicyDocumentsFolder\", \"SystemPolicyDownloadsFolder\", \"SystemPolicyDesktopFolder\")\n    AND Effective_process.name RLIKE \"(bash|zsh|sh|osascript|python.*|perl.*|ruby.*|node|Terminal|iTerm2|ghostty)\"\n| STATS \n    Esql.grant_count = COUNT(*),\n    Esql.unique_folders = COUNT_DISTINCT(Tcc.service),  \n    Esql.folders = VALUES(Tcc.service)\n  BY Effective_process.entity_id, Effective_process.executable, host.name, user.name\n| WHERE Esql.unique_folders >= 2\n| KEEP Esql.*, Effective_process.entity_id, Effective_process.executable, host.name, user.name\n",
+  "conditions": [
+    {
+      "field": "tcc.service",
+      "raw_field": "Tcc.service",
+      "operator": "in",
+      "values": [
+        "systempolicydocumentsfolder",
+        "systempolicydownloadsfolder",
+        "systempolicydesktopfolder"
+      ],
+      "raw_values": [
+        "SystemPolicyDocumentsFolder",
+        "SystemPolicyDownloadsFolder",
+        "SystemPolicyDesktopFolder"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "tcc_modify"
+      ],
+      "raw_values": [
+        "tcc_modify"
+      ]
+    },
+    {
+      "field": "tcc.right",
+      "raw_field": "Tcc.right",
+      "operator": "==",
+      "values": [
+        "allowed"
+      ],
+      "raw_values": [
+        "allowed"
+      ]
+    },
+    {
+      "field": "tcc.update_type",
+      "raw_field": "Tcc.update_type",
+      "operator": "==",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "create"
+      ]
+    },
+    {
+      "field": "r",
+      "raw_field": "R",
+      "operator": "==",
+      "values": [
+        "(bash|zsh|sh|osascript|python.*|perl.*|ruby.*|node|terminal|iterm2|ghostty)"
+      ],
+      "raw_values": [
+        "(bash|zsh|sh|osascript|python.*|perl.*|ruby.*|node|Terminal|iTerm2|ghostty)"
+      ]
+    }
+  ]
+}

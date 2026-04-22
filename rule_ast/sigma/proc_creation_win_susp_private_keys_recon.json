@@ -1,0 +1,104 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_private_keys_recon",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_private_keys_recon.eql",
+  "raw_query": "any where (process.command_line like~ (\"*.key*\", \"*.pgp*\", \"*.gpg*\", \"*.ppk*\", \"*.p12*\", \"*.pem*\", \"*.pfx*\", \"*.cer*\", \"*.p7b*\", \"*.asc*\")) and (((process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and process.command_line:\"*dir *\") or (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and process.command_line:\"*Get-ChildItem *\") or (process.executable:\"*\\\\findstr.exe\" or process.pe.original_file_name:\"FINDSTR.EXE\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".key",
+        ".pgp",
+        ".gpg",
+        ".ppk",
+        ".p12",
+        ".pem",
+        ".pfx",
+        ".cer",
+        ".p7b",
+        ".asc"
+      ],
+      "raw_values": [
+        "*.key*",
+        "*.pgp*",
+        "*.gpg*",
+        "*.ppk*",
+        "*.p12*",
+        "*.pem*",
+        "*.pfx*",
+        "*.cer*",
+        "*.p7b*",
+        "*.asc*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\findstr.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe",
+        "FINDSTR.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dir",
+        "get-childitem"
+      ],
+      "raw_values": [
+        "*dir *",
+        "*Get-ChildItem *"
+      ]
+    }
+  ]
+}

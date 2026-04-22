@@ -1,0 +1,75 @@
+{
+  "source": "elastic",
+  "name": "Windows Service Installed via an Unusual Client",
+  "slug": "privilege_escalation_windows_service_via_unusual_client",
+  "category": "configuration",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Windows Security Event Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_windows_service_via_unusual_client.toml",
+  "raw_query": "configuration where host.os.type == \"windows\" and\n  event.action == \"service-installed\" and\n  (winlog.event_data.ClientProcessId == \"0\" or winlog.event_data.ParentProcessId == \"0\") and\n  startswith~(user.domain, winlog.computer_name) and winlog.event_data.ServiceAccount == \"LocalSystem\" and \n  not winlog.event_data.ServiceFileName : (\n    \"?:\\\\Windows\\\\VeeamVssSupport\\\\VeeamGuestHelper.exe\",\n    \"?:\\\\Windows\\\\VeeamLogShipper\\\\VeeamLogShipper.exe\",\n    \"%SystemRoot%\\\\system32\\\\Drivers\\\\Crowdstrike\\\\*-CsInstallerService.exe\",\n    \"\\\"%windir%\\\\AdminArsenal\\\\PDQInventory-Scanner\\\\service-1\\\\PDQInventory-Scanner-1.exe\\\" \",\n    \"\\\"%windir%\\\\AdminArsenal\\\\PDQDeployRunner\\\\service-1\\\\PDQDeployRunner-1.exe\\\" \",\n    \"\\\"%windir%\\\\AdminArsenal\\\\PDQInventoryWakeCommand\\\\service-1\\\\PDQInventoryWakeCommand-1.exe\\\" \",\n    \"\\\"%SystemRoot%\\\\nsnetpush.exe\\\"\",\n    \"\\\"C:\\\\WINDOWS\\\\ccmsetup\\\\ccmsetup.exe\\\" /runservice /ignoreskipupgrade /config:MobileClient.tcf\",\n    \"\\\"?:\\\\SMS\\\\bin\\\\x64\\\\srvboot.exe\\\"\",\n    \"%SystemRoot%\\\\pbpsdeploy.exe\"\n  )\n",
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\veeamvsssupport\\\\veeamguesthelper.exe",
+        ":\\\\windows\\\\veeamlogshipper\\\\veeamlogshipper.exe",
+        "%systemroot%\\\\system32\\\\drivers\\\\crowdstrike\\\\*-csinstallerservice.exe",
+        "/runservice /ignoreskipupgrade /config:mobileclient.tcf",
+        "%systemroot%\\\\pbpsdeploy.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\VeeamVssSupport\\\\VeeamGuestHelper.exe",
+        "?:\\\\Windows\\\\VeeamLogShipper\\\\VeeamLogShipper.exe",
+        "%SystemRoot%\\\\system32\\\\Drivers\\\\Crowdstrike\\\\*-CsInstallerService.exe",
+        "\\",
+        " ",
+        "",
+        " /runservice /ignoreskipupgrade /config:MobileClient.tcf",
+        "%SystemRoot%\\\\pbpsdeploy.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "service-installed"
+      ],
+      "raw_values": [
+        "service-installed"
+      ]
+    },
+    {
+      "field": "winlog.event_data.serviceaccount",
+      "raw_field": "winlog.event_data.ServiceAccount",
+      "operator": "==",
+      "values": [
+        "localsystem"
+      ],
+      "raw_values": [
+        "LocalSystem"
+      ]
+    }
+  ]
+}

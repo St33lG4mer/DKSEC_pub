@@ -1,0 +1,40 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_susp_binary_no_cmdline",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_susp_binary_no_cmdline.eql",
+  "raw_query": "any where (network.direction:\"true\" and (process.executable like~ (\"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\dllhost.exe\")) and (winlog.event_data.CommandLine like~ (\"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\dllhost.exe\"))) and (not (winlog.event_data.CommandLine==\"\" or (?winlog.event_data.CommandLine == null)))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "regsvr32.exe",
+        "rundll32.exe",
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\dllhost.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "winlog.event_data.CommandLine",
+      "operator": "like~",
+      "values": [
+        "regsvr32.exe",
+        "rundll32.exe",
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\dllhost.exe"
+      ]
+    }
+  ]
+}

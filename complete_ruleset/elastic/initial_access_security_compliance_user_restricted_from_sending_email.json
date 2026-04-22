@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Deprecated - M365 Security Compliance User Restricted from Sending Email",
+  "slug": "initial_access_security_compliance_user_restricted_from_sending_email",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Use Case: Configuration Audit",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/initial_access_security_compliance_user_restricted_from_sending_email.toml",
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:SecurityComplianceCenter and event.category:web and event.action:\"User restricted from sending email\" and event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "user restricted from sending email"
+      ],
+      "raw_values": [
+        "User restricted from sending email"
+      ]
+    }
+  ]
+}

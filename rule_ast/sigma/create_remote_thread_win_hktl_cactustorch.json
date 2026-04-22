@@ -1,0 +1,40 @@
+{
+  "source": "sigma",
+  "name": "create_remote_thread_win_hktl_cactustorch",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/create_remote_thread/create_remote_thread_win_hktl_cactustorch.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\System32\\\\cscript.exe\", \"*\\\\System32\\\\wscript.exe\", \"*\\\\System32\\\\mshta.exe\", \"*\\\\winword.exe\", \"*\\\\excel.exe\")) and winlog.event_data.TargetImage:\"*\\\\SysWOW64\\\\*\" and (?winlog.event_data.StartModule == null)",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "wscript.exe",
+        "mshta.exe",
+        "winword.exe",
+        "excel.exe"
+      ],
+      "raw_values": [
+        "*\\\\System32\\\\cscript.exe",
+        "*\\\\System32\\\\wscript.exe",
+        "*\\\\System32\\\\mshta.exe",
+        "*\\\\winword.exe",
+        "*\\\\excel.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\syswow64\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SysWOW64\\\\*"
+      ]
+    }
+  ]
+}

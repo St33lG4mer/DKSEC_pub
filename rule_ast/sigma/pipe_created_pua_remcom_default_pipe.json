@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "pipe_created_pua_remcom_default_pipe",
+  "subtree": "rules",
+  "category": "pipe",
+  "sigma_path": "rules/windows/pipe_created/pipe_created_pua_remcom_default_pipe.eql",
+  "raw_query": "any where file.name:\"*\\\\RemCom*\"",
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "remcom"
+      ],
+      "raw_values": [
+        "*\\\\RemCom*"
+      ]
+    }
+  ]
+}

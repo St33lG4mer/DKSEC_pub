@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_conhost_headless_powershell",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_conhost_headless_powershell.eql",
+  "raw_query": "any where (process.executable:\"*\\\\conhost.exe\" or process.pe.original_file_name:\"CONHOST.EXE\") and (process.command_line:\"*--headless*\" and process.command_line:\"*powershell*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\conhost.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "CONHOST.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--headless",
+        "powershell"
+      ],
+      "raw_values": [
+        "*--headless*",
+        "*powershell*"
+      ]
+    }
+  ]
+}

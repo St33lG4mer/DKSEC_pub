@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_parent_explorer",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_parent_explorer.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\explorer.exe\" and (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\")) and (not (process.command_line like~ (\"* C:\\\\Windows\\\\System32\\\\*\", \"* -localserver 22d8c27b-47a1-48d1-ad08-7da7abd79617\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-localserver 22d8c27b-47a1-48d1-ad08-7da7abd79617"
+      ],
+      "raw_values": [
+        "* C:\\\\Windows\\\\System32\\\\*",
+        "* -localserver 22d8c27b-47a1-48d1-ad08-7da7abd79617"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    }
+  ]
+}

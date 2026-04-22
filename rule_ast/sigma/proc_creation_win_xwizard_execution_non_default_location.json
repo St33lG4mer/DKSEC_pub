@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_xwizard_execution_non_default_location",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_xwizard_execution_non_default_location.eql",
+  "raw_query": "any where (process.executable:\"*\\\\xwizard.exe\" or process.pe.original_file_name:\"xwizard.exe\") and (not (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "xwizard.exe"
+      ],
+      "raw_values": [
+        "*\\\\xwizard.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "xwizard.exe"
+      ],
+      "raw_values": [
+        "xwizard.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_openconsole",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_openconsole.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"OpenConsole.exe\" or process.executable:\"*\\\\OpenConsole.exe\") and (not process.executable:\"C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal*\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "openconsole.exe"
+      ],
+      "raw_values": [
+        "OpenConsole.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "openconsole.exe",
+        "microsoft.windowsterminal"
+      ],
+      "raw_values": [
+        "*\\\\OpenConsole.exe",
+        "C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal*"
+      ]
+    }
+  ]
+}

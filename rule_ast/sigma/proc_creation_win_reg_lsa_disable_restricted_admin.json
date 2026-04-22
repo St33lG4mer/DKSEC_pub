@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_reg_lsa_disable_restricted_admin",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_reg_lsa_disable_restricted_admin.eql",
+  "raw_query": "any where process.command_line:\"*\\\\System\\\\CurrentControlSet\\\\Control\\\\Lsa*\" and process.command_line:\"*DisableRestrictedAdmin*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "lsa",
+        "disablerestrictedadmin"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Control\\\\Lsa*",
+        "*DisableRestrictedAdmin*"
+      ]
+    }
+  ]
+}

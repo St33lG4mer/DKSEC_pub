@@ -1,0 +1,102 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_elevated_system_shell_uncommon_parent",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_elevated_system_shell_uncommon_parent.eql",
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\pwsh.exe\", \"*\\\\cmd.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"powershell_ise.EXE\", \"pwsh.dll\", \"Cmd.Exe\"))) and ((user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) and winlog.event_data.LogonId:\"0x3e7\")) and (not ((process.parent.executable like~ (\"*:\\\\Program Files (x86)\\\\*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\ProgramData\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*:\\\\Windows\\\\WinSxS\\\\*\")) or (?process.parent.executable == null) or (process.parent.executable like~ (\"\", \"-\")))) and (not ((process.parent.executable:\"*:\\\\ManageEngine\\\\ADManager Plus\\\\pgsql\\\\bin\\\\postgres.exe\" and process.executable:\"*\\\\cmd.exe\") or (process.command_line:\"*:\\\\WINDOWS\\\\system32\\\\cmd.exe /c \\\"*\" and process.working_directory:\"*:\\\\WINDOWS\\\\Temp\\\\asgard2-agent\\\\*\") or (process.parent.executable:\"*:\\\\IBM\\\\SpectrumProtect\\\\webserver\\\\scripts\\\\*\" and process.command_line:\"*:\\\\IBM\\\\SpectrumProtect\\\\webserver\\\\scripts\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.dll",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "powershell_ise.EXE",
+        "pwsh.dll",
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.logonid",
+      "raw_field": "winlog.event_data.LogonId",
+      "operator": ":",
+      "values": [
+        "0x3e7"
+      ],
+      "raw_values": [
+        "0x3e7"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "postgres.exe"
+      ],
+      "raw_values": [
+        "*:\\\\ManageEngine\\\\ADManager Plus\\\\pgsql\\\\bin\\\\postgres.exe",
+        "*:\\\\IBM\\\\SpectrumProtect\\\\webserver\\\\scripts\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\temp\\\\asgard2-agent\\\\"
+      ],
+      "raw_values": [
+        "*:\\\\WINDOWS\\\\Temp\\\\asgard2-agent\\\\*"
+      ]
+    }
+  ]
+}

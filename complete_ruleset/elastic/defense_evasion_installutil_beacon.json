@@ -1,0 +1,68 @@
+{
+  "source": "elastic",
+  "name": "InstallUtil Process Making Network Connections",
+  "slug": "defense_evasion_installutil_beacon",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Resources: Investigation Guide",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_installutil_beacon.toml",
+  "raw_query": "/* the benefit of doing this as an eql sequence vs kql is this will limit to alerting only on the first network connection */\n\nsequence by process.entity_id\n  [process where host.os.type == \"windows\" and event.type == \"start\" and process.name : \"installutil.exe\"]\n  [network where host.os.type == \"windows\" and process.name : \"installutil.exe\" and network.direction : (\"outgoing\", \"egress\")]\n",
+  "conditions": [
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": ":",
+      "values": [
+        "outgoing",
+        "egress"
+      ],
+      "raw_values": [
+        "outgoing",
+        "egress"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "installutil.exe"
+      ],
+      "raw_values": [
+        "installutil.exe"
+      ]
+    }
+  ]
+}

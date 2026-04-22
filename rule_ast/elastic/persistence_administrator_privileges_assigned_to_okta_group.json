@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Administrator Privileges Assigned to an Okta Group",
+  "slug": "persistence_administrator_privileges_assigned_to_okta_group",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Identity and Access Audit",
+    "Data Source: Okta",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/persistence_administrator_privileges_assigned_to_okta_group.toml",
+  "raw_query": "data_stream.dataset:okta.system and event.action:group.privilege.grant\n",
+  "conditions": []
+}

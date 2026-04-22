@@ -1,0 +1,57 @@
+{
+  "source": "elastic",
+  "name": "M365 Exchange Inbox Forwarding Rule Created",
+  "slug": "collection_exchange_new_inbox_rule",
+  "category": "web",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: SaaS",
+    "Domain: Email",
+    "Data Source: Microsoft 365",
+    "Data Source: Microsoft 365 Audit Logs",
+    "Use Case: Configuration Audit",
+    "Tactic: Collection",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/collection_exchange_new_inbox_rule.toml",
+  "raw_query": "web where\n    event.provider == \"Exchange\" and\n    event.action in (\"New-InboxRule\", \"Set-InboxRule\") and\n    event.outcome == \"success\" and\n    (\n        (?o365.audit.Parameters.ForwardTo != null and not endsWith~(?o365.audit.Parameters.ForwardTo, user.domain)) or\n        (?o365.audit.Parameters.ForwardAsAttachmentTo != null and not endsWith~(?o365.audit.Parameters.ForwardAsAttachmentTo, user.domain)) or\n        (?o365.audit.Parameters.ForwardingAddress != null and not endsWith~(?o365.audit.Parameters.ForwardingAddress, user.domain)) or\n        (?o365.audit.Parameters.ForwardingSmtpAddress != null and not endsWith~(?o365.audit.Parameters.ForwardingSmtpAddress, user.domain)) or\n        (?o365.audit.Parameters.RedirectTo != null and not endsWith~(?o365.audit.Parameters.RedirectTo, user.domain)) or\n        (?o365.audit.Parameters.RedirectToRecipients != null and not endsWith~(?o365.audit.Parameters.RedirectToRecipients, user.domain))\n    )\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "new-inboxrule",
+        "set-inboxrule"
+      ],
+      "raw_values": [
+        "New-InboxRule",
+        "Set-InboxRule"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "exchange"
+      ],
+      "raw_values": [
+        "Exchange"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

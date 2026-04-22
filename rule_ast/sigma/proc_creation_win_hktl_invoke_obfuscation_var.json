@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_invoke_obfuscation_var",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_invoke_obfuscation_var.eql",
+  "raw_query": "any where process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['cmd.{0,5}(', <SpecialChars.WILDCARD_SINGLE: 2>, ':/c|/r)(', <SpecialChars.WILDCARD_SINGLE: 2>, ':\\\\s|)\\\\\\\"set\\\\s[a-zA-Z]{3,6}.', <SpecialChars.WILDCARD_MULTI: 1>, '(', <SpecialChars.WILDCARD_SINGLE: 2>, ':\\\\{\\\\d\\\\}){1,}\\\\\\\\\\\\\\\"\\\\s+', <SpecialChars.WILDCARD_SINGLE: 2>, '\\\\-f(', <SpecialChars.WILDCARD_SINGLE: 2>, ':.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\)){1,}.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\\\\"']), flags=set())\"",
+  "conditions": []
+}

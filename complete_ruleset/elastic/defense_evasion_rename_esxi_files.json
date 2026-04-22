@@ -1,0 +1,137 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Renaming of ESXI Files",
+  "slug": "defense_evasion_rename_esxi_files",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_rename_esxi_files.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action == \"rename\" and (\n  file.Ext.original.name : (\"*.vmdk\", \"*.vmx\", \"*.vmxf\", \"*.vmsd\", \"*.vmsn\", \"*.vswp\", \"*.vmss\", \"*.nvram\", \"*.vmem\") or\n  (file.name == \"index.html\" and file.Ext.original.path like \"/usr/lib/vmware/*\")\n)\nand not (\n  file.name : (\"*.vmdk\", \"*.vmx\", \"*.vmxf\", \"*.vmsd\", \"*.vmsn\", \"*.vswp\", \"*.vmss\", \"*.nvram\", \"*.vmem\") or\n  process.executable like (\n    \"/usr/sbin/gdm\", \"/usr/share/dotnet/dotnet\", \"/usr/bin/dotnet\", \"/usr/sbin/apache2\",\n    \"/var/lib/docker/overlay2/*/usr/bin/dotnet\", \"/usr/lib/3cxpbx/3cxSystemService\"\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "file.ext.original.name",
+      "raw_field": "file.Ext.original.name",
+      "operator": ":",
+      "values": [
+        ".vmdk",
+        ".vmx",
+        ".vmxf",
+        ".vmsd",
+        ".vmsn",
+        ".vswp",
+        ".vmss",
+        ".nvram",
+        ".vmem"
+      ],
+      "raw_values": [
+        "*.vmdk",
+        "*.vmx",
+        "*.vmxf",
+        "*.vmsd",
+        "*.vmsn",
+        "*.vswp",
+        "*.vmss",
+        "*.nvram",
+        "*.vmem"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        ".vmdk",
+        ".vmx",
+        ".vmxf",
+        ".vmsd",
+        ".vmsn",
+        ".vswp",
+        ".vmss",
+        ".nvram",
+        ".vmem"
+      ],
+      "raw_values": [
+        "*.vmdk",
+        "*.vmx",
+        "*.vmxf",
+        "*.vmsd",
+        "*.vmsn",
+        "*.vswp",
+        "*.vmss",
+        "*.nvram",
+        "*.vmem"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gdm",
+        "dotnet",
+        "apache2",
+        "3cxsystemservice"
+      ],
+      "raw_values": [
+        "/usr/sbin/gdm",
+        "/usr/share/dotnet/dotnet",
+        "/usr/bin/dotnet",
+        "/usr/sbin/apache2",
+        "/var/lib/docker/overlay2/*/usr/bin/dotnet",
+        "/usr/lib/3cxpbx/3cxSystemService"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "rename"
+      ],
+      "raw_values": [
+        "rename"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "==",
+      "values": [
+        "index.html"
+      ],
+      "raw_values": [
+        "index.html"
+      ]
+    },
+    {
+      "field": "file.ext.original.path",
+      "raw_field": "file.Ext.original.path",
+      "operator": "like",
+      "values": [
+        "/usr/lib/vmware/"
+      ],
+      "raw_values": [
+        "/usr/lib/vmware/*"
+      ]
+    }
+  ]
+}

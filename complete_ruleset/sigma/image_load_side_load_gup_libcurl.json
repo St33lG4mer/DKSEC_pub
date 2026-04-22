@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_gup_libcurl",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_gup_libcurl.eql",
+  "raw_query": "any where (process.executable:\"*\\\\gup.exe\" and file.path:\"*\\\\libcurl.dll\") and (not process.executable:\"*\\\\Notepad++\\\\updater\\\\GUP.exe\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gup.exe"
+      ],
+      "raw_values": [
+        "*\\\\gup.exe",
+        "*\\\\Notepad++\\\\updater\\\\GUP.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "libcurl.dll"
+      ],
+      "raw_values": [
+        "*\\\\libcurl.dll"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "source": "elastic",
+  "name": "Execution via MSSQL xp_cmdshell Stored Procedure",
+  "slug": "persistence_via_xp_cmdshell_mssql_stored_procedure",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/persistence_via_xp_cmdshell_mssql_stored_procedure.toml",
+  "raw_query": "host.os.type:windows and event.category:process and event.type:start and\nprocess.parent.name:\"sqlservr.exe\" and process.command_line : * and\n(\n  (\n    (process.name.caseless : \"cmd.exe\" or process.pe.original_file_name : \"Cmd.Exe\") and\n    not process.args : (\n          \\\\\\\\* or diskfree or rmdir or mkdir or dir or DIR or del or rename or bcp or md or ren or REN or send or echo or\n          ECHO or TYPE or type or EXIST or forfiles or sqlcmd or SQLCMD or dtexec or Sort-Object or cat or copy or COPY or\n          move or MOVE or CD\\\\ or show or rd or powercfg or \"C:\\SPAN4\\DATA\\RISKPARAM.SPN\" or (\"@ECHO\" and \"@FOR\") or\n          (\"@echo\" and \"@for\") or (SET and PATH=*) or (\"-ExecutionPolicy\" and \"-File\") or MSSQLFDLauncher$DATEV_DBENGINE or\n          (wmic and (cpu or computersystem or logicaldisk or os or ComputerSystem or volume)) or -s\\:C\\:\\\\WINDOWS\\\\SERVIC* or\n          D\\:\\\\* or E\\:\\\\* or F\\:\\\\* or Z\\:\\\\* or \"C:\\Program Files\\Amazon\\AWSCLIV2\\aws.exe\" or C\\:\\\\7-Zip\\\\7z.exe* or\n          C\\:\\\\FTP* or *\\(Get-Item* or C\\:\\\\ProgramData\\\\Daktronics*\n    ) and\n    not process.command_line : (\n          \"\\\"C:\\\\Windows\\\\system32\\\\cmd.exe\\\" /c \" or\n          \"\\\"C:\\\\Windows\\\\System32\\\\cmd.exe\\\"\"\n    )\n  ) or\n  process.name.caseless:(\"bitsadmin.exe\" or \"certutil.exe\" or \"vpnbridge.exe\") or\n  process.name:(\"bitsadmin.exe\" or \"certutil.exe\" or \"vpnbridge.exe\") or\n  process.pe.original_file_name:(\"CertUtil.exe\" or \"bitsadmin.exe\" or \"vpnbridge.exe\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "riskparam.spn",
+        "@echo",
+        "@for"
+      ],
+      "raw_values": [
+        "C:\\SPAN4\\DATA\\RISKPARAM.SPN",
+        "@ECHO",
+        "@FOR",
+        "\\",
+        " /c ",
+        ""
+      ]
+    },
+    {
+      "field": "process.name.caseless",
+      "raw_field": "process.name.caseless",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe",
+        "certutil.exe",
+        "vpnbridge.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "bitsadmin.exe",
+        "certutil.exe",
+        "vpnbridge.exe",
+        "cmd.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe",
+        "certutil.exe",
+        "vpnbridge.exe"
+      ],
+      "raw_values": [
+        "bitsadmin.exe",
+        "certutil.exe",
+        "vpnbridge.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe",
+        "bitsadmin.exe",
+        "vpnbridge.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe",
+        "bitsadmin.exe",
+        "vpnbridge.exe",
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "sqlservr.exe"
+      ],
+      "raw_values": [
+        "sqlservr.exe"
+      ]
+    }
+  ]
+}

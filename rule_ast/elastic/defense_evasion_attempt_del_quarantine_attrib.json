@@ -1,0 +1,60 @@
+{
+  "source": "elastic",
+  "name": "Quarantine Attrib Removed by Unsigned or Untrusted Process",
+  "slug": "defense_evasion_attempt_del_quarantine_attrib",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/defense_evasion_attempt_del_quarantine_attrib.toml",
+  "raw_query": "file where event.action == \"extended_attributes_delete\" and host.os.type == \"macos\" and process.executable != null and\n (process.code_signature.trusted == false or process.code_signature.exists == false) and \n not process.executable like (\"/usr/bin/xattr\",\n                              \"/System/*\",\n                              \"/private/tmp/KSInstallAction.*/*/Install Google Software Update.app/Contents/Helpers/ksinstall\",\n                              \"/Applications/CEWE Fotoschau.app/Contents/MacOS/FotoPlus\",\n                              \"/Applications/.com.bomgar.scc.*/Remote Support Customer Client.app/Contents/MacOS/sdcust\") and \n not file.path like \"/private/var/folders/*\"\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "xattr",
+        "ksinstall",
+        "fotoplus",
+        "sdcust"
+      ],
+      "raw_values": [
+        "/usr/bin/xattr",
+        "/System/*",
+        "/private/tmp/KSInstallAction.*/*/Install Google Software Update.app/Contents/Helpers/ksinstall",
+        "/Applications/CEWE Fotoschau.app/Contents/MacOS/FotoPlus",
+        "/Applications/.com.bomgar.scc.*/Remote Support Customer Client.app/Contents/MacOS/sdcust"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "extended_attributes_delete"
+      ],
+      "raw_values": [
+        "extended_attributes_delete"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    }
+  ]
+}

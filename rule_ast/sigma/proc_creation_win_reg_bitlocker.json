@@ -1,0 +1,52 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_reg_bitlocker",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_reg_bitlocker.eql",
+  "raw_query": "any where (process.command_line:\"*REG*\" and process.command_line:\"*ADD*\" and process.command_line:\"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\FVE*\" and process.command_line:\"*/v*\" and process.command_line:\"*/f*\") and (process.command_line like~ (\"*EnableBDEWithNoTPM*\", \"*UseAdvancedStartup*\", \"*UseTPM*\", \"*UseTPMKey*\", \"*UseTPMKeyPIN*\", \"*RecoveryKeyMessageSource*\", \"*UseTPMPIN*\", \"*RecoveryKeyMessage*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "enablebdewithnotpm",
+        "useadvancedstartup",
+        "usetpm",
+        "usetpmkey",
+        "usetpmkeypin",
+        "recoverykeymessagesource",
+        "usetpmpin",
+        "recoverykeymessage"
+      ],
+      "raw_values": [
+        "*EnableBDEWithNoTPM*",
+        "*UseAdvancedStartup*",
+        "*UseTPM*",
+        "*UseTPMKey*",
+        "*UseTPMKeyPIN*",
+        "*RecoveryKeyMessageSource*",
+        "*UseTPMPIN*",
+        "*RecoveryKeyMessage*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "reg",
+        "add",
+        "fve"
+      ],
+      "raw_values": [
+        "*REG*",
+        "*ADD*",
+        "*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\FVE*",
+        "*/v*",
+        "*/f*"
+      ]
+    }
+  ]
+}

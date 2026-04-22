@@ -1,0 +1,178 @@
+{
+  "source": "elastic",
+  "name": "Modification of Persistence Relevant Files Detected via Defend for Containers",
+  "slug": "persistence_modification_of_persistence_relevant_files",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Execution",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/persistence_modification_of_persistence_relevant_files.toml",
+  "raw_query": "file where event.type != \"deletion\" and\n/* open events currently only log file opens with write intent */\nevent.action in (\"creation\", \"rename\", \"open\") and (\n  file.path like (\n\n\t  // Cron & Anacron Jobs\n\t  \"/etc/cron.allow\", \"/etc/cron.deny\", \"/etc/cron.d/*\", \"/etc/cron.hourly/*\", \"/etc/cron.daily/*\",\n\t  \"/etc/cron.weekly/*\", \"/etc/cron.monthly/*\", \"/etc/crontab\", \"/var/spool/cron/crontabs/*\",\n\t  \"/var/spool/anacron/*\",\n\n\t  // At Job\n\t  \"/var/spool/cron/atjobs/*\", \"/var/spool/atjobs/*\",\n\n\t  // Sudoers\n\t  \"/etc/sudoers*\"\n  ) or\n  (\n  \t// Systemd Service/Timer\n    file.path like (\n\t  \"/etc/systemd/system/*\", \"/etc/systemd/user/*\", \"/usr/local/lib/systemd/system/*\",\n  \t  \"/lib/systemd/system/*\", \"/usr/lib/systemd/system/*\", \"/usr/lib/systemd/user/*\",\n      \"/home/*/.config/systemd/user/*\", \"/home/*/.local/share/systemd/user/*\",\n      \"/root/.config/systemd/user/*\", \"/root/.local/share/systemd/user/*\"\n    ) and\n    file.extension in (\"service\", \"timer\")\n  ) or\n  (\n\t// Shell Profile Configuration\n\tfile.path like (\"/etc/profile.d/*\", \"/etc/zsh/*\") or (\n\t  file.path like (\"/home/*/*\", \"/etc/*\", \"/root/*\") and\n\t  file.name in (\n  \t    \"profile\", \"bash.bashrc\", \"bash.bash_logout\", \"csh.cshrc\", \"csh.login\", \"config.fish\", \"ksh.kshrc\",\n  \t    \".bashrc\", \".bash_login\", \".bash_logout\", \".bash_profile\", \".bash_aliases\", \".zprofile\", \".zshrc\",\n  \t    \".cshrc\", \".login\", \".logout\", \".kshrc\"\n      )\n    )\n  )\n) and container.id like \"?*\" and\nnot process.name in (\"apt\", \"apt-get\", \"dnf\", \"microdnf\", \"yum\", \"zypper\", \"tdnf\", \"apk\", \"pacman\", \"rpm\", \"dpkg\")\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "cron.allow",
+        "cron.deny",
+        "crontab",
+        "sudoers"
+      ],
+      "raw_values": [
+        "/etc/cron.allow",
+        "/etc/cron.deny",
+        "/etc/cron.d/*",
+        "/etc/cron.hourly/*",
+        "/etc/cron.daily/*",
+        "/etc/cron.weekly/*",
+        "/etc/cron.monthly/*",
+        "/etc/crontab",
+        "/var/spool/cron/crontabs/*",
+        "/var/spool/anacron/*",
+        "/var/spool/cron/atjobs/*",
+        "/var/spool/atjobs/*",
+        "/etc/sudoers*",
+        "/etc/systemd/system/*",
+        "/etc/systemd/user/*",
+        "/usr/local/lib/systemd/system/*",
+        "/lib/systemd/system/*",
+        "/usr/lib/systemd/system/*",
+        "/usr/lib/systemd/user/*",
+        "/home/*/.config/systemd/user/*",
+        "/home/*/.local/share/systemd/user/*",
+        "/root/.config/systemd/user/*",
+        "/root/.local/share/systemd/user/*",
+        "/etc/profile.d/*",
+        "/etc/zsh/*",
+        "/home/*/*",
+        "/etc/*",
+        "/root/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "creation",
+        "rename",
+        "open"
+      ],
+      "raw_values": [
+        "creation",
+        "rename",
+        "open"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "service",
+        "timer"
+      ],
+      "raw_values": [
+        "service",
+        "timer"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "in",
+      "values": [
+        "profile",
+        "bash.bashrc",
+        "bash.bash_logout",
+        "csh.cshrc",
+        "csh.login",
+        "config.fish",
+        "ksh.kshrc",
+        ".bashrc",
+        ".bash_login",
+        ".bash_logout",
+        ".bash_profile",
+        ".bash_aliases",
+        ".zprofile",
+        ".zshrc",
+        ".cshrc",
+        ".login",
+        ".logout",
+        ".kshrc"
+      ],
+      "raw_values": [
+        "profile",
+        "bash.bashrc",
+        "bash.bash_logout",
+        "csh.cshrc",
+        "csh.login",
+        "config.fish",
+        "ksh.kshrc",
+        ".bashrc",
+        ".bash_login",
+        ".bash_logout",
+        ".bash_profile",
+        ".bash_aliases",
+        ".zprofile",
+        ".zshrc",
+        ".cshrc",
+        ".login",
+        ".logout",
+        ".kshrc"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "apt",
+        "apt-get",
+        "dnf",
+        "microdnf",
+        "yum",
+        "zypper",
+        "tdnf",
+        "apk",
+        "pacman",
+        "rpm",
+        "dpkg"
+      ],
+      "raw_values": [
+        "apt",
+        "apt-get",
+        "dnf",
+        "microdnf",
+        "yum",
+        "zypper",
+        "tdnf",
+        "apk",
+        "pacman",
+        "rpm",
+        "dpkg"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ]
+}

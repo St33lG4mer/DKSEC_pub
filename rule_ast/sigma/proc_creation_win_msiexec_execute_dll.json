@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msiexec_execute_dll",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msiexec_execute_dll.eql",
+  "raw_query": "any where (process.executable:\"*\\\\msiexec.exe\" and process.command_line like~ (\"* -y*\", \"* /y*\", \"* \u2013y*\", \"* \u2014y*\", \"* \u2015y*\")) and (not (process.command_line like~ (\"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Program Files\\\\Bonjour\\\\mdnsNSP.dll*\", \"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Program Files (x86)\\\\Bonjour\\\\mdnsNSP.dll*\", \"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Program Files (x86)\\\\Apple Software Update\\\\ScriptingObjectModel.dll*\", \"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Program Files (x86)\\\\Apple Software Update\\\\SoftwareUpdateAdmin.dll*\", \"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Windows\\\\CCM\\\\*\", \"*\\\\MsiExec.exe\\\" /Y C:\\\\Windows\\\\CCM\\\\*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Program Files\\\\Bonjour\\\\mdnsNSP.dll*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Program Files (x86)\\\\Bonjour\\\\mdnsNSP.dll*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Program Files (x86)\\\\Apple Software Update\\\\ScriptingObjectModel.dll*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Program Files (x86)\\\\Apple Software Update\\\\SoftwareUpdateAdmin.dll*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Windows\\\\CCM\\\\*\", \"*\\\\MsiExec.exe\\\" -Y C:\\\\Windows\\\\CCM\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "mdnsnsp.dll"
+      ],
+      "raw_values": [
+        "* -y*",
+        "* /y*",
+        "* \u2013y*",
+        "* \u2014y*",
+        "* \u2015y*",
+        "*\\\\MsiExec.exe\\",
+        "C:\\\\Program Files\\\\Bonjour\\\\mdnsNSP.dll*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    }
+  ]
+}

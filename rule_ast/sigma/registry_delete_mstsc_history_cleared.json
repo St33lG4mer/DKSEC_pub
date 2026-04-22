@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "registry_delete_mstsc_history_cleared",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_delete/registry_delete_mstsc_history_cleared.eql",
+  "raw_query": "any where (winlog.event_data.EventType:\"DeleteValue\" and registry.path:\"*\\\\Microsoft\\\\Terminal Server Client\\\\Default\\\\MRU*\") or (winlog.event_data.EventType:\"DeleteKey\" and registry.path:\"*\\\\Microsoft\\\\Terminal Server Client\\\\Servers\\\\*\")",
+  "conditions": [
+    {
+      "field": "winlog.event_data.eventtype",
+      "raw_field": "winlog.event_data.EventType",
+      "operator": ":",
+      "values": [
+        "deletevalue",
+        "deletekey"
+      ],
+      "raw_values": [
+        "DeleteValue",
+        "DeleteKey"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\terminal server client\\\\default\\\\mru",
+        "\\\\microsoft\\\\terminal server client\\\\servers\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Terminal Server Client\\\\Default\\\\MRU*",
+        "*\\\\Microsoft\\\\Terminal Server Client\\\\Servers\\\\*"
+      ]
+    }
+  ]
+}

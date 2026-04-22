@@ -1,0 +1,156 @@
+{
+  "source": "elastic",
+  "name": "UID Elevation from Previously Unknown Executable",
+  "slug": "privilege_escalation_uid_elevation_from_unknown_executable",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_uid_elevation_from_unknown_executable.toml",
+  "raw_query": "host.os.type:\"linux\" and event.category:\"process\" and event.action:\"uid_change\" and event.type:\"change\" and user.id:\"0\"\nand process.parent.name:(\"bash\" or \"dash\" or \"sh\" or \"tcsh\" or \"csh\" or \"zsh\" or \"ksh\" or \"fish\") and not (\n  process.executable:(\n    /bin/* or /usr/bin/* or /sbin/* or /usr/sbin/* or /snap/* or /tmp/newroot/* or /var/lib/docker/* or /usr/local/* or\n    /opt/psa/admin/* or /usr/lib/snapd/snap-confine or /opt/dynatrace/* or /opt/microsoft/* or\n    /var/lib/snapd/snap/bin/node or /opt/gitlab/embedded/sbin/logrotate or /etc/apt/universal-hooks/* or\n    /opt/puppetlabs/puppet/bin/puppet or /opt/cisco/* or /run/k3s/containerd/* or /usr/lib/postfix/sbin/master or\n    /usr/libexec/postfix/local or /var/lib/snapd/snap/bin/postgresql* or /opt/puppetlabs/puppet/bin/ruby\n  ) or\n  process.name:(\n    \"bash\" or \"dash\" or \"sh\" or \"tcsh\" or \"csh\" or \"zsh\" or \"ksh\" or \"fish\" or \"sudo\" or \"su\" or \"apt\" or \"apt-get\" or\n    \"aptitude\" or \"squid\" or \"snap\" or \"fusermount\" or \"pkexec\" or \"umount\" or \"master\" or \"omsbaseline\" or \"dzdo\" or\n    \"sandfly\" or \"logrotate\" or \"nix-installer\" or \"sapstartsrv\" or \"microk8s\" or \"vrns_watchdog\" or \"sdbgloballistener\" or\n    \"clean_user_php_sessions\" or \"nsca_wrapper\"\n  ) or\n  process.args:/usr/bin/python*\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "sudo",
+        "apt",
+        "apt-get",
+        "aptitude",
+        "squid",
+        "snap",
+        "fusermount",
+        "pkexec",
+        "umount",
+        "master",
+        "omsbaseline",
+        "dzdo",
+        "sandfly",
+        "logrotate",
+        "nix-installer",
+        "sapstartsrv",
+        "microk8s",
+        "vrns_watchdog",
+        "sdbgloballistener",
+        "clean_user_php_sessions",
+        "nsca_wrapper"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "sudo",
+        "su",
+        "apt",
+        "apt-get",
+        "aptitude",
+        "squid",
+        "snap",
+        "fusermount",
+        "pkexec",
+        "umount",
+        "master",
+        "omsbaseline",
+        "dzdo",
+        "sandfly",
+        "logrotate",
+        "nix-installer",
+        "sapstartsrv",
+        "microk8s",
+        "vrns_watchdog",
+        "sdbgloballistener",
+        "clean_user_php_sessions",
+        "nsca_wrapper"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "uid_change"
+      ],
+      "raw_values": [
+        "uid_change"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    }
+  ]
+}

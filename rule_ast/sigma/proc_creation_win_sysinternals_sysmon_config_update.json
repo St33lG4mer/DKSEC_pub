@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_sysmon_config_update",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_sysmon_config_update.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\Sysmon64.exe\", \"*\\\\Sysmon.exe\")) or process.pe.description:\"System activity monitor\") and process.command_line like~ (\"*-c*\", \"*/c*\", \"*\u2013c*\", \"*\u2014c*\", \"*\u2015c*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "sysmon64.exe",
+        "sysmon.exe"
+      ],
+      "raw_values": [
+        "*\\\\Sysmon64.exe",
+        "*\\\\Sysmon.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "system activity monitor"
+      ],
+      "raw_values": [
+        "System activity monitor"
+      ]
+    }
+  ]
+}

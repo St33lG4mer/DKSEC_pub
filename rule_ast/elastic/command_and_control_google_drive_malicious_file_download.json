@@ -1,0 +1,101 @@
+{
+  "source": "elastic",
+  "name": "Suspicious File Downloaded from Google Drive",
+  "slug": "command_and_control_google_drive_malicious_file_download",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: Windows",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Windows Security Event Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/command_and_control_google_drive_malicious_file_download.toml",
+  "raw_query": "process where\n\n    /* common browser processes  */\n    event.action in (\"exec\", \"fork\", \"start\") and\n\n    process.name : (\"Microsoft Edge\", \"chrome.exe\", \"Google Chrome\", \"google-chrome-stable\",\n                    \"google-chrome-beta\", \"google-chrome\", \"msedge.exe\", \"firefox.exe\", \"brave.exe\",\n                    \"whale.exe\", \"browser.exe\", \"dragon.exe\", \"vivaldi.exe\", \"opera.exe\", \"firefox\",\n                    \"powershell.exe\", \"curl\", \"curl.exe\", \"wget\", \"wget.exe\") and\n\n    /* Look for Google Drive download URL with AV flag skipping */\n    (process.command_line : \"*drive.google.com*\" and process.command_line : \"*export=download*\" and process.command_line : \"*confirm=no_antivirus*\")\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "microsoft edge",
+        "chrome.exe",
+        "google chrome",
+        "google-chrome-stable",
+        "google-chrome-beta",
+        "google-chrome",
+        "msedge.exe",
+        "firefox.exe",
+        "brave.exe",
+        "whale.exe",
+        "browser.exe",
+        "dragon.exe",
+        "vivaldi.exe",
+        "opera.exe",
+        "firefox",
+        "powershell.exe",
+        "curl",
+        "curl.exe",
+        "wget",
+        "wget.exe"
+      ],
+      "raw_values": [
+        "Microsoft Edge",
+        "chrome.exe",
+        "Google Chrome",
+        "google-chrome-stable",
+        "google-chrome-beta",
+        "google-chrome",
+        "msedge.exe",
+        "firefox.exe",
+        "brave.exe",
+        "whale.exe",
+        "browser.exe",
+        "dragon.exe",
+        "vivaldi.exe",
+        "opera.exe",
+        "firefox",
+        "powershell.exe",
+        "curl",
+        "curl.exe",
+        "wget",
+        "wget.exe"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "fork",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "fork",
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "drive.google.com",
+        "export=download",
+        "confirm=no_antivirus"
+      ],
+      "raw_values": [
+        "*drive.google.com*",
+        "*export=download*",
+        "*confirm=no_antivirus*"
+      ]
+    }
+  ]
+}

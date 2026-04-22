@@ -1,0 +1,125 @@
+{
+  "source": "elastic",
+  "name": "Unusual Parent Process for cmd.exe",
+  "slug": "execution_command_shell_started_by_unusual_process",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/execution_command_shell_started_by_unusual_process.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : \"cmd.exe\" and\n  process.parent.name : (\"lsass.exe\",\n                         \"csrss.exe\",\n                         \"epad.exe\",\n                         \"regsvr32.exe\",\n                         \"dllhost.exe\",\n                         \"LogonUI.exe\",\n                         \"wermgr.exe\",\n                         \"spoolsv.exe\",\n                         \"jucheck.exe\",\n                         \"jusched.exe\",\n                         \"ctfmon.exe\",\n                         \"taskhostw.exe\",\n                         \"GoogleUpdate.exe\",\n                         \"sppsvc.exe\",\n                         \"sihost.exe\",\n                         \"slui.exe\",\n                         \"SIHClient.exe\",\n                         \"SearchIndexer.exe\",\n                         \"SearchProtocolHost.exe\",\n                         \"FlashPlayerUpdateService.exe\",\n                         \"WerFault.exe\",\n                         \"WUDFHost.exe\",\n                         \"unsecapp.exe\",\n                         \"wlanext.exe\" ) and\n  not (process.parent.name : \"dllhost.exe\" and process.parent.args : \"/Processid:{CA8C87C1-929D-45BA-94DB-EF8E6CB346AD}\")\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "lsass.exe",
+        "csrss.exe",
+        "epad.exe",
+        "regsvr32.exe",
+        "dllhost.exe",
+        "logonui.exe",
+        "wermgr.exe",
+        "spoolsv.exe",
+        "jucheck.exe",
+        "jusched.exe",
+        "ctfmon.exe",
+        "taskhostw.exe",
+        "googleupdate.exe",
+        "sppsvc.exe",
+        "sihost.exe",
+        "slui.exe",
+        "sihclient.exe",
+        "searchindexer.exe",
+        "searchprotocolhost.exe",
+        "flashplayerupdateservice.exe",
+        "werfault.exe",
+        "wudfhost.exe",
+        "unsecapp.exe",
+        "wlanext.exe"
+      ],
+      "raw_values": [
+        "lsass.exe",
+        "csrss.exe",
+        "epad.exe",
+        "regsvr32.exe",
+        "dllhost.exe",
+        "LogonUI.exe",
+        "wermgr.exe",
+        "spoolsv.exe",
+        "jucheck.exe",
+        "jusched.exe",
+        "ctfmon.exe",
+        "taskhostw.exe",
+        "GoogleUpdate.exe",
+        "sppsvc.exe",
+        "sihost.exe",
+        "slui.exe",
+        "SIHClient.exe",
+        "SearchIndexer.exe",
+        "SearchProtocolHost.exe",
+        "FlashPlayerUpdateService.exe",
+        "WerFault.exe",
+        "WUDFHost.exe",
+        "unsecapp.exe",
+        "wlanext.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "cmd.exe"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/processid:{ca8c87c1-929d-45ba-94db-ef8e6cb346ad}"
+      ],
+      "raw_values": [
+        "/Processid:{CA8C87C1-929D-45BA-94DB-EF8E6CB346AD}"
+      ]
+    }
+  ]
+}

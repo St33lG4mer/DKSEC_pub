@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "MFA Disabled for Google Workspace Organization",
+  "slug": "persistence_mfa_disabled_for_google_workspace_organization",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Google Workspace",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/google_workspace/persistence_mfa_disabled_for_google_workspace_organization.toml",
+  "raw_query": "data_stream.dataset:google_workspace.admin and event.provider:admin and event.category:iam and event.action:(ENFORCE_STRONG_AUTHENTICATION or ALLOW_STRONG_AUTHENTICATION) and google_workspace.admin.new_value:false\n",
+  "conditions": []
+}

@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_ultravnc",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_ultravnc.eql",
+  "raw_query": "any where process.pe.description:\"VNCViewer\" or process.pe.product:\"UltraVNC VNCViewer\" or process.pe.company:\"UltraVNC\" or process.pe.original_file_name:\"VNCViewer.exe\"",
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "vncviewer"
+      ],
+      "raw_values": [
+        "VNCViewer"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "ultravnc vncviewer"
+      ],
+      "raw_values": [
+        "UltraVNC VNCViewer"
+      ]
+    },
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "ultravnc"
+      ],
+      "raw_values": [
+        "UltraVNC"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "vncviewer.exe"
+      ],
+      "raw_values": [
+        "VNCViewer.exe"
+      ]
+    }
+  ]
+}

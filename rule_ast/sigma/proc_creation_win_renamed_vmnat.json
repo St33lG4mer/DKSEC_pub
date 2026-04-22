@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_vmnat",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_vmnat.eql",
+  "raw_query": "any where process.pe.original_file_name:\"vmnat.exe\" and (not process.executable:\"*vmnat.exe\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "vmnat.exe"
+      ],
+      "raw_values": [
+        "vmnat.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmnat.exe"
+      ],
+      "raw_values": [
+        "*vmnat.exe"
+      ]
+    }
+  ]
+}

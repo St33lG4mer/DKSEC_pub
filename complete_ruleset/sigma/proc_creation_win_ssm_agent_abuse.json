@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_ssm_agent_abuse",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_ssm_agent_abuse.eql",
+  "raw_query": "any where process.executable:\"*\\\\amazon-ssm-agent.exe\" and (process.command_line:\"*-register *\" and process.command_line:\"*-code *\" and process.command_line:\"*-id *\" and process.command_line:\"*-region *\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "amazon-ssm-agent.exe"
+      ],
+      "raw_values": [
+        "*\\\\amazon-ssm-agent.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-register",
+        "-code",
+        "-id",
+        "-region"
+      ],
+      "raw_values": [
+        "*-register *",
+        "*-code *",
+        "*-id *",
+        "*-region *"
+      ]
+    }
+  ]
+}

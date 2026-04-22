@@ -1,0 +1,146 @@
+{
+  "source": "elastic",
+  "name": "Entra ID OAuth PRT Issuance to Non-Managed Device Detected",
+  "slug": "persistence_entra_id_rt_to_prt_transition_from_user_device",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Use Case: Threat Detection",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Data Source: Microsoft Entra ID Sign-In Logs",
+    "Tactic: Persistence",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_entra_id_rt_to_prt_transition_from_user_device.toml",
+  "raw_query": "sequence by azure.signinlogs.properties.user_id, azure.signinlogs.properties.device_detail.device_id with maxspan=1h\n  [authentication where\n    data_stream.dataset == \"azure.signinlogs\" and\n    azure.signinlogs.category == \"NonInteractiveUserSignInLogs\" and\n    azure.signinlogs.properties.app_id == \"29d9ed98-a469-4536-ade2-f981bc1d605e\" and\n    azure.signinlogs.properties.incoming_token_type == \"refreshToken\" and\n    azure.signinlogs.properties.device_detail.trust_type == \"Azure AD joined\" and\n    azure.signinlogs.properties.device_detail.device_id != null and\n    azure.signinlogs.properties.token_protection_status_details.sign_in_session_status == \"unbound\" and\n    azure.signinlogs.properties.user_type == \"Member\" and\n    azure.signinlogs.result_signature == \"SUCCESS\"\n  ]\n  [authentication where\n    data_stream.dataset == \"azure.signinlogs\" and\n    azure.signinlogs.properties.incoming_token_type == \"primaryRefreshToken\" and\n    azure.signinlogs.properties.resource_display_name != \"Device Registration Service\" and\n    azure.signinlogs.result_signature == \"SUCCESS\" and\n    azure.signinlogs.properties.device_detail.is_managed != true\n    and not (\n        azure.signinlogs.properties.app_display_name == \"Windows Sign In\" or\n        user_agent.original == \"Windows-AzureAD-Authentication-Provider/1.0\"\n    )\n  ]\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "azure.signinlogs"
+      ],
+      "raw_values": [
+        "azure.signinlogs"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.category",
+      "raw_field": "azure.signinlogs.category",
+      "operator": "==",
+      "values": [
+        "noninteractiveusersigninlogs"
+      ],
+      "raw_values": [
+        "NonInteractiveUserSignInLogs"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.app_id",
+      "raw_field": "azure.signinlogs.properties.app_id",
+      "operator": "==",
+      "values": [
+        "29d9ed98-a469-4536-ade2-f981bc1d605e"
+      ],
+      "raw_values": [
+        "29d9ed98-a469-4536-ade2-f981bc1d605e"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.incoming_token_type",
+      "raw_field": "azure.signinlogs.properties.incoming_token_type",
+      "operator": "==",
+      "values": [
+        "refreshtoken",
+        "primaryrefreshtoken"
+      ],
+      "raw_values": [
+        "refreshToken",
+        "primaryRefreshToken"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.device_detail.trust_type",
+      "raw_field": "azure.signinlogs.properties.device_detail.trust_type",
+      "operator": "==",
+      "values": [
+        "azure ad joined"
+      ],
+      "raw_values": [
+        "Azure AD joined"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.token_protection_status_details.sign_in_session_status",
+      "raw_field": "azure.signinlogs.properties.token_protection_status_details.sign_in_session_status",
+      "operator": "==",
+      "values": [
+        "unbound"
+      ],
+      "raw_values": [
+        "unbound"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.user_type",
+      "raw_field": "azure.signinlogs.properties.user_type",
+      "operator": "==",
+      "values": [
+        "member"
+      ],
+      "raw_values": [
+        "Member"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.result_signature",
+      "raw_field": "azure.signinlogs.result_signature",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.resource_display_name",
+      "raw_field": "azure.signinlogs.properties.resource_display_name",
+      "operator": "!=",
+      "values": [
+        "device registration service"
+      ],
+      "raw_values": [
+        "Device Registration Service"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.app_display_name",
+      "raw_field": "azure.signinlogs.properties.app_display_name",
+      "operator": "==",
+      "values": [
+        "windows sign in"
+      ],
+      "raw_values": [
+        "Windows Sign In"
+      ]
+    },
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": "==",
+      "values": [
+        "windows-azuread-authentication-provider/1.0"
+      ],
+      "raw_values": [
+        "Windows-AzureAD-Authentication-Provider/1.0"
+      ]
+    }
+  ]
+}

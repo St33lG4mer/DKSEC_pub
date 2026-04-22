@@ -1,0 +1,89 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Apple Mail Rule Plist Modification",
+  "slug": "persistence_apple_mail_rule_modification",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_apple_mail_rule_modification.toml",
+  "raw_query": "file where host.os.type == \"macos\" and event.type != \"deletion\" and\n  file.name == \"SyncedRules.plist\" and\n  file.path like (\"/Users/*/Library/Mail/*/MailData/SyncedRules.plist\",\n                  \"/Users/*/Library/Mobile Documents/com.apple.mail/Data/*/MailData/SyncedRules.plist\") and\n  not process.executable like (\"/System/Applications/Mail.app/Contents/MacOS/Mail\",\n                               \"/Applications/Mail.app/Contents/MacOS/Mail\",\n                               \"/System/Library/CoreServices/backupd.bundle/Contents/Resources/backupd\",\n                               \"/usr/libexec/xpcproxy\",\n                               \"/System/Library/Frameworks/FileProvider.framework/Support/fileproviderd\",\n                               \"/System/Library/PrivateFrameworks/CloudDocsDaemon.framework/Versions/A/Support/bird\",\n                               \"/sbin/launchd\",\n                               \"/System/Library/CoreServices/Finder.app/Contents/MacOS/Finder\")\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "syncedrules.plist"
+      ],
+      "raw_values": [
+        "/Users/*/Library/Mail/*/MailData/SyncedRules.plist",
+        "/Users/*/Library/Mobile Documents/com.apple.mail/Data/*/MailData/SyncedRules.plist"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mail",
+        "backupd",
+        "xpcproxy",
+        "fileproviderd",
+        "bird",
+        "launchd",
+        "finder"
+      ],
+      "raw_values": [
+        "/System/Applications/Mail.app/Contents/MacOS/Mail",
+        "/Applications/Mail.app/Contents/MacOS/Mail",
+        "/System/Library/CoreServices/backupd.bundle/Contents/Resources/backupd",
+        "/usr/libexec/xpcproxy",
+        "/System/Library/Frameworks/FileProvider.framework/Support/fileproviderd",
+        "/System/Library/PrivateFrameworks/CloudDocsDaemon.framework/Versions/A/Support/bird",
+        "/sbin/launchd",
+        "/System/Library/CoreServices/Finder.app/Contents/MacOS/Finder"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "==",
+      "values": [
+        "syncedrules.plist"
+      ],
+      "raw_values": [
+        "SyncedRules.plist"
+      ]
+    }
+  ]
+}

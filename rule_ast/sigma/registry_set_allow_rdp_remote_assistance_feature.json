@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "registry_set_allow_rdp_remote_assistance_feature",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_allow_rdp_remote_assistance_feature.eql",
+  "raw_query": "any where registry.path:\"*System\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\fAllowToGetHelp\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "system\\\\currentcontrolset\\\\control\\\\terminal server\\\\fallowtogethelp"
+      ],
+      "raw_values": [
+        "*System\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\fAllowToGetHelp"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_browsers_chromium_headless_debugging",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_browsers_chromium_headless_debugging.eql",
+  "raw_query": "any where process.command_line:\"*--remote-debugging-*\" and process.command_line:\"*--user-data-dir*\" and process.command_line:\"*--headless*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--remote-debugging-",
+        "--user-data-dir",
+        "--headless"
+      ],
+      "raw_values": [
+        "*--remote-debugging-*",
+        "*--user-data-dir*",
+        "*--headless*"
+      ]
+    }
+  ]
+}

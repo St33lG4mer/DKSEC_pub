@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_event_portproxy_registry_key",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_event_portproxy_registry_key.eql",
+  "raw_query": "any where registry.path:\"*\\\\Services\\\\PortProxy\\\\v4tov4\\\\tcp\\\\*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\services\\\\portproxy\\\\v4tov4\\\\tcp\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\PortProxy\\\\v4tov4\\\\tcp\\\\*"
+      ]
+    }
+  ]
+}

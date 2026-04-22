@@ -1,0 +1,84 @@
+{
+  "source": "sigma",
+  "name": "win_security_disable_event_auditing",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_disable_event_auditing.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4719\" and (winlog.event_data.AuditPolicyChanges like~ (\"*%%8448*\", \"*%%8450*\"))) and (not (winlog.event_data.SubcategoryGuid like~ (\"{0CCE9210-69AE-11D9-BED3-505054503030}\", \"{0CCE9211-69AE-11D9-BED3-505054503030}\", \"{0CCE9212-69AE-11D9-BED3-505054503030}\", \"{0CCE9215-69AE-11D9-BED3-505054503030}\", \"{0CCE9217-69AE-11D9-BED3-505054503030}\", \"{0CCE921B-69AE-11D9-BED3-505054503030}\", \"{0CCE922B-69AE-11D9-BED3-505054503030}\", \"{0CCE922F-69AE-11D9-BED3-505054503030}\", \"{0CCE9230-69AE-11D9-BED3-505054503030}\", \"{0CCE9235-69AE-11D9-BED3-505054503030}\", \"{0CCE9236-69AE-11D9-BED3-505054503030}\", \"{0CCE9237-69AE-11D9-BED3-505054503030}\", \"{0CCE923F-69AE-11D9-BED3-505054503030}\", \"{0CCE9240-69AE-11D9-BED3-505054503030}\", \"{0CCE9242-69AE-11D9-BED3-505054503030}\"))))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.auditpolicychanges",
+      "raw_field": "winlog.event_data.AuditPolicyChanges",
+      "operator": "like~",
+      "values": [
+        "%%8448",
+        "%%8450"
+      ],
+      "raw_values": [
+        "*%%8448*",
+        "*%%8450*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.subcategoryguid",
+      "raw_field": "winlog.event_data.SubcategoryGuid",
+      "operator": "like~",
+      "values": [
+        "{0cce9210-69ae-11d9-bed3-505054503030}",
+        "{0cce9211-69ae-11d9-bed3-505054503030}",
+        "{0cce9212-69ae-11d9-bed3-505054503030}",
+        "{0cce9215-69ae-11d9-bed3-505054503030}",
+        "{0cce9217-69ae-11d9-bed3-505054503030}",
+        "{0cce921b-69ae-11d9-bed3-505054503030}",
+        "{0cce922b-69ae-11d9-bed3-505054503030}",
+        "{0cce922f-69ae-11d9-bed3-505054503030}",
+        "{0cce9230-69ae-11d9-bed3-505054503030}",
+        "{0cce9235-69ae-11d9-bed3-505054503030}",
+        "{0cce9236-69ae-11d9-bed3-505054503030}",
+        "{0cce9237-69ae-11d9-bed3-505054503030}",
+        "{0cce923f-69ae-11d9-bed3-505054503030}",
+        "{0cce9240-69ae-11d9-bed3-505054503030}",
+        "{0cce9242-69ae-11d9-bed3-505054503030}"
+      ],
+      "raw_values": [
+        "{0CCE9210-69AE-11D9-BED3-505054503030}",
+        "{0CCE9211-69AE-11D9-BED3-505054503030}",
+        "{0CCE9212-69AE-11D9-BED3-505054503030}",
+        "{0CCE9215-69AE-11D9-BED3-505054503030}",
+        "{0CCE9217-69AE-11D9-BED3-505054503030}",
+        "{0CCE921B-69AE-11D9-BED3-505054503030}",
+        "{0CCE922B-69AE-11D9-BED3-505054503030}",
+        "{0CCE922F-69AE-11D9-BED3-505054503030}",
+        "{0CCE9230-69AE-11D9-BED3-505054503030}",
+        "{0CCE9235-69AE-11D9-BED3-505054503030}",
+        "{0CCE9236-69AE-11D9-BED3-505054503030}",
+        "{0CCE9237-69AE-11D9-BED3-505054503030}",
+        "{0CCE923F-69AE-11D9-BED3-505054503030}",
+        "{0CCE9240-69AE-11D9-BED3-505054503030}",
+        "{0CCE9242-69AE-11D9-BED3-505054503030}"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4719"
+      ],
+      "raw_values": [
+        "4719"
+      ]
+    }
+  ]
+}

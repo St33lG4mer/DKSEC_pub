@@ -1,0 +1,214 @@
+{
+  "source": "elastic",
+  "name": "Potential Linux Tunneling and/or Port Forwarding",
+  "slug": "command_and_control_linux_tunneling_and_port_forwarding",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Data Source: Auditd Manager",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/command_and_control_linux_tunneling_and_port_forwarding.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and (\n  (\n    // gost & pivotnacci - spawned without process.parent.name\n    (process.name == \"gost\" and process.args : (\"-L*\", \"-C*\", \"-R*\")) or (process.name == \"pivotnacci\")) or (\n    // ssh\n    (process.name == \"ssh\" and (\n      (\n        /* exact tunnel argument matching */\n        process.args in (\"-R\", \"-L\", \"-D\", \"-w\") or\n        /* single-dash token, first letter is NOT o/O, contains one of R/L/D/w/W somewhere later */\n        process.args regex \"-[A-NP-Za-np-z][A-Za-z]*[RLDwW][A-Za-z]*\"\n      ) and\n      process.args_count >= 4 and \n      not (\n        process.args == \"chmod\" or process.command_line like \"*rungencmd*\"\n      )\n    )) or\n    (process.name == \"ssh\" and process.args == \"-J\") or\n    // sshuttle\n    (process.name == \"sshuttle\" and process.args in (\"-r\", \"--remote\", \"-l\", \"--listen\") and process.args_count >= 4) or\n    // socat\n    (process.name == \"socat\" and process.args : (\"TCP4-LISTEN:*\", \"SOCKS*\") and process.args_count >= 3) or\n    // chisel\n    (process.name : \"chisel*\" and process.args in (\"client\", \"server\")) or\n    // iodine(d), dnscat, hans, ptunnel-ng, ssf, 3proxy & ngrok \n    (process.name in (\"iodine\", \"iodined\", \"dnscat\", \"hans\", \"hans-ubuntu\", \"ptunnel-ng\", \"ssf\", \"3proxy\", \"ngrok\", \"wstunnel\"))\n  ) and process.parent.name in (\"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "tcp4-listen:",
+        "socks"
+      ],
+      "raw_values": [
+        "-L*",
+        "-C*",
+        "-R*",
+        "TCP4-LISTEN:*",
+        "SOCKS*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--remote",
+        "--listen",
+        "client",
+        "server"
+      ],
+      "raw_values": [
+        "-R",
+        "-L",
+        "-D",
+        "-w",
+        "-r",
+        "--remote",
+        "-l",
+        "--listen",
+        "client",
+        "server"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "iodine",
+        "iodined",
+        "dnscat",
+        "hans",
+        "hans-ubuntu",
+        "ptunnel-ng",
+        "ssf",
+        "3proxy",
+        "ngrok",
+        "wstunnel"
+      ],
+      "raw_values": [
+        "iodine",
+        "iodined",
+        "dnscat",
+        "hans",
+        "hans-ubuntu",
+        "ptunnel-ng",
+        "ssf",
+        "3proxy",
+        "ngrok",
+        "wstunnel"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "gost",
+        "pivotnacci",
+        "ssh",
+        "sshuttle",
+        "socat"
+      ],
+      "raw_values": [
+        "gost",
+        "pivotnacci",
+        "ssh",
+        "sshuttle",
+        "socat"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "chmod"
+      ],
+      "raw_values": [
+        "chmod",
+        "-J"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like",
+      "values": [
+        "rungencmd"
+      ],
+      "raw_values": [
+        "*rungencmd*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "chisel"
+      ],
+      "raw_values": [
+        "chisel*"
+      ]
+    }
+  ]
+}

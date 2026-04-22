@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_sysinternals_psexec_service",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_sysinternals_psexec_service.eql",
+  "raw_query": "any where process.pe.original_file_name:\"psexesvc.exe\" and (not process.executable:\"C:\\\\Windows\\\\PSEXESVC.exe\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "psexesvc.exe"
+      ],
+      "raw_values": [
+        "psexesvc.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "psexesvc.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\PSEXESVC.exe"
+      ]
+    }
+  ]
+}

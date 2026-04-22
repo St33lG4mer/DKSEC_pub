@@ -1,0 +1,24 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_registry_ie_security_zone_protocol_defaults_downgrade",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_registry_ie_security_zone_protocol_defaults_downgrade.eql",
+  "raw_query": "any where process.command_line:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\ZoneMap\\\\ProtocolDefaults*\" and process.command_line:\"*http*\" and process.command_line:\"* 0*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "protocoldefaults",
+        "http"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\ZoneMap\\\\ProtocolDefaults*",
+        "*http*",
+        "* 0*"
+      ]
+    }
+  ]
+}

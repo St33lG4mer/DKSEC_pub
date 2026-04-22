@@ -1,0 +1,99 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wermgr_susp_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wermgr_susp_child_process.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\wermgr.exe\" and (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\ipconfig.exe\", \"*\\\\mshta.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\netstat.exe\", \"*\\\\nslookup.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\systeminfo.exe\", \"*\\\\whoami.exe\", \"*\\\\wscript.exe\"))) and (not (process.executable:\"*\\\\rundll32.exe\" and (process.command_line:\"*C:\\\\Windows\\\\system32\\\\WerConCpl.dll*\" and process.command_line:\"*LaunchErcApp *\") and (process.command_line like~ (\"*-queuereporting*\", \"*-responsepester*\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "ipconfig.exe",
+        "mshta.exe",
+        "net.exe",
+        "net1.exe",
+        "netstat.exe",
+        "nslookup.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "systeminfo.exe",
+        "whoami.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\ipconfig.exe",
+        "*\\\\mshta.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\netstat.exe",
+        "*\\\\nslookup.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\systeminfo.exe",
+        "*\\\\whoami.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-queuereporting",
+        "-responsepester"
+      ],
+      "raw_values": [
+        "*-queuereporting*",
+        "*-responsepester*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wermgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\wermgr.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "werconcpl.dll",
+        "launchercapp"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\system32\\\\WerConCpl.dll*",
+        "*LaunchErcApp *"
+      ]
+    }
+  ]
+}

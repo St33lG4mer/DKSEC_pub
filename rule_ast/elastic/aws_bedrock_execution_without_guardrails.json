@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "AWS Bedrock Invocations without Guardrails Detected by a Single User Over a Session",
+  "slug": "aws_bedrock_execution_without_guardrails",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: LLM",
+    "Data Source: AWS Bedrock",
+    "Data Source: AWS S3",
+    "Resources: Investigation Guide",
+    "Use Case: Policy Violation",
+    "Mitre Atlas: T0051",
+    "Mitre Atlas: T0054"
+  ],
+  "elastic_path": "rules/integrations/aws_bedrock/aws_bedrock_execution_without_guardrails.toml",
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Create 1-minute time buckets\n| eval Esql.time_window_date_trunc = date_trunc(1 minute, @timestamp)\n\n// Filter for invocations without guardrails\n| where gen_ai.guardrail_id is null and user.id is not null\n\n// keep only relevant fields\n| keep\n  @timestamp,\n  Esql.time_window_date_trunc,\n  gen_ai.guardrail_id,\n  user.id\n\n// count number of unsafe invocations per user\n| stats\n    Esql.ml_invocations_no_guardrails_count = count()\n  by user.id\n\n// Filter for suspicious volume\n| where Esql.ml_invocations_no_guardrails_count > 5\n\n// sort descending\n| sort Esql.ml_invocations_no_guardrails_count desc\n",
+  "conditions": []
+}

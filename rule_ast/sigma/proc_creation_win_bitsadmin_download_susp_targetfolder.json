@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_bitsadmin_download_susp_targetfolder",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_bitsadmin_download_susp_targetfolder.eql",
+  "raw_query": "any where (process.executable:\"*\\\\bitsadmin.exe\" or process.pe.original_file_name:\"bitsadmin.exe\") and (process.command_line like~ (\"* /transfer *\", \"* /create *\", \"* /addfile *\")) and (process.command_line like~ (\"*:\\\\Perflogs*\", \"*:\\\\ProgramData\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\*\", \"*\\\\$Recycle.Bin\\\\*\", \"*\\\\AppData\\\\Local\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*\\\\Contacts\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Favorites\\\\*\", \"*\\\\Favourites\\\\*\", \"*\\\\inetpub\\\\wwwroot\\\\*\", \"*\\\\Music\\\\*\", \"*\\\\Pictures\\\\*\", \"*\\\\Start Menu\\\\Programs\\\\Startup\\\\*\", \"*\\\\Users\\\\Default\\\\*\", \"*\\\\Videos\\\\*\", \"*%ProgramData%*\", \"*%public%*\", \"*%temp%*\", \"*%tmp%*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "transfer",
+        "create",
+        "addfile",
+        "perflogs",
+        "%programdata%",
+        "%public%",
+        "%temp%",
+        "%tmp%"
+      ],
+      "raw_values": [
+        "* /transfer *",
+        "* /create *",
+        "* /addfile *",
+        "*:\\\\Perflogs*",
+        "*:\\\\ProgramData\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\*",
+        "*\\\\$Recycle.Bin\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*\\\\Contacts\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Favorites\\\\*",
+        "*\\\\Favourites\\\\*",
+        "*\\\\inetpub\\\\wwwroot\\\\*",
+        "*\\\\Music\\\\*",
+        "*\\\\Pictures\\\\*",
+        "*\\\\Start Menu\\\\Programs\\\\Startup\\\\*",
+        "*\\\\Users\\\\Default\\\\*",
+        "*\\\\Videos\\\\*",
+        "*%ProgramData%*",
+        "*%public%*",
+        "*%temp%*",
+        "*%tmp%*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\bitsadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "bitsadmin.exe"
+      ]
+    }
+  ]
+}

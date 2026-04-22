@@ -1,0 +1,180 @@
+{
+  "source": "elastic",
+  "name": "Git Hook Child Process",
+  "slug": "persistence_git_hook_process_execution",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Execution",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_git_hook_process_execution.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\nprocess.parent.name in (\n  \"applypatch-msg\", \"commit-msg\", \"fsmonitor-watchman\", \"post-update\", \"post-checkout\", \"post-commit\",\n  \"pre-applypatch\", \"pre-commit\", \"pre-merge-commit\", \"prepare-commit-msg\", \"pre-push\", \"pre-rebase\", \"pre-receive\",\n  \"push-to-checkout\", \"update\", \"post-receive\", \"pre-auto-gc\", \"post-rewrite\", \"sendemail-validate\", \"p4-pre-submit\",\n  \"post-index-change\", \"post-merge\", \"post-applypatch\"\n) and\n(\n  process.name in (\"nohup\", \"setsid\", \"disown\", \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") or\n  process.name like (\"php*\", \"perl*\", \"ruby*\", \"lua*\") or\n  process.executable like (\n    \"/boot/*\", \"/dev/shm/*\", \"/etc/cron.*/*\", \"/etc/init.d/*\", \"/etc/update-motd.d/*\",\n    \"/run/*\", \"/srv/*\", \"/tmp/*\", \"/var/tmp/*\", \"/var/log/*\"\n  )\n) and\nnot process.name in (\"git\", \"dirname\")\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "php",
+        "perl",
+        "ruby",
+        "lua"
+      ],
+      "raw_values": [
+        "php*",
+        "perl*",
+        "ruby*",
+        "lua*",
+        "/boot/*",
+        "/dev/shm/*",
+        "/etc/cron.*/*",
+        "/etc/init.d/*",
+        "/etc/update-motd.d/*",
+        "/run/*",
+        "/srv/*",
+        "/tmp/*",
+        "/var/tmp/*",
+        "/var/log/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "applypatch-msg",
+        "commit-msg",
+        "fsmonitor-watchman",
+        "post-update",
+        "post-checkout",
+        "post-commit",
+        "pre-applypatch",
+        "pre-commit",
+        "pre-merge-commit",
+        "prepare-commit-msg",
+        "pre-push",
+        "pre-rebase",
+        "pre-receive",
+        "push-to-checkout",
+        "update",
+        "post-receive",
+        "pre-auto-gc",
+        "post-rewrite",
+        "sendemail-validate",
+        "p4-pre-submit",
+        "post-index-change",
+        "post-merge",
+        "post-applypatch"
+      ],
+      "raw_values": [
+        "applypatch-msg",
+        "commit-msg",
+        "fsmonitor-watchman",
+        "post-update",
+        "post-checkout",
+        "post-commit",
+        "pre-applypatch",
+        "pre-commit",
+        "pre-merge-commit",
+        "prepare-commit-msg",
+        "pre-push",
+        "pre-rebase",
+        "pre-receive",
+        "push-to-checkout",
+        "update",
+        "post-receive",
+        "pre-auto-gc",
+        "post-rewrite",
+        "sendemail-validate",
+        "p4-pre-submit",
+        "post-index-change",
+        "post-merge",
+        "post-applypatch"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "nohup",
+        "setsid",
+        "disown",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "git",
+        "dirname"
+      ],
+      "raw_values": [
+        "nohup",
+        "setsid",
+        "disown",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "git",
+        "dirname"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

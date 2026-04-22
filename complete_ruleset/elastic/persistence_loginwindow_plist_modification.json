@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "Potential Persistence via Login Hook",
+  "slug": "persistence_loginwindow_plist_modification",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_loginwindow_plist_modification.toml",
+  "raw_query": "event.category:file and host.os.type:macos and not event.type:\"deletion\" and\n file.name:\"com.apple.loginwindow.plist\" and\n not process.name: (systemmigrationd or DesktopServicesHelper or diskmanagementd or rsync or launchd or cfprefsd or xpcproxy or ManagedClient or MCXCompositor or backupd or \"iMazing Profile Editor\" or storagekitd or CloneKitService)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "imazing profile editor"
+      ],
+      "raw_values": [
+        "iMazing Profile Editor"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "com.apple.loginwindow.plist"
+      ],
+      "raw_values": [
+        "com.apple.loginwindow.plist"
+      ]
+    }
+  ]
+}

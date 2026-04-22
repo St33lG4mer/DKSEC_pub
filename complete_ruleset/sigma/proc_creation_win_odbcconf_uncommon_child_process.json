@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_odbcconf_uncommon_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_odbcconf_uncommon_child_process.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\odbcconf.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "odbcconf.exe"
+      ],
+      "raw_values": [
+        "*\\\\odbcconf.exe"
+      ]
+    }
+  ]
+}

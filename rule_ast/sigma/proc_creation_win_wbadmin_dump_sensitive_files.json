@@ -1,0 +1,53 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wbadmin_dump_sensitive_files",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wbadmin_dump_sensitive_files.eql",
+  "raw_query": "any where (process.executable:\"*\\\\wbadmin.exe\" or process.pe.original_file_name:\"WBADMIN.EXE\") and (process.command_line like~ (\"*start*\", \"*backup*\")) and (process.command_line like~ (\"*\\\\config\\\\SAM*\", \"*\\\\config\\\\SECURITY*\", \"*\\\\config\\\\SYSTEM*\", \"*\\\\Windows\\\\NTDS\\\\NTDS.dit*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "start",
+        "backup",
+        "sam",
+        "security",
+        "system",
+        "ntds.dit"
+      ],
+      "raw_values": [
+        "*start*",
+        "*backup*",
+        "*\\\\config\\\\SAM*",
+        "*\\\\config\\\\SECURITY*",
+        "*\\\\config\\\\SYSTEM*",
+        "*\\\\Windows\\\\NTDS\\\\NTDS.dit*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wbadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\wbadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wbadmin.exe"
+      ],
+      "raw_values": [
+        "WBADMIN.EXE"
+      ]
+    }
+  ]
+}

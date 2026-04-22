@@ -1,0 +1,90 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_disable_defender_av_security_monitoring",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_disable_defender_av_security_monitoring.eql",
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"*-DisableBehaviorMonitoring $true*\", \"*-DisableRuntimeMonitoring $true*\"))) or ((process.executable:\"*\\\\sc.exe\" or process.pe.original_file_name:\"sc.exe\") and ((process.command_line:\"*stop*\" and process.command_line:\"*WinDefend*\") or (process.command_line:\"*delete*\" and process.command_line:\"*WinDefend*\") or (process.command_line:\"*config*\" and process.command_line:\"*WinDefend*\" and process.command_line:\"*start=disabled*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-disablebehaviormonitoring $true",
+        "-disableruntimemonitoring $true"
+      ],
+      "raw_values": [
+        "*-DisableBehaviorMonitoring $true*",
+        "*-DisableRuntimeMonitoring $true*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "*\\\\sc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "sc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "stop",
+        "windefend",
+        "delete",
+        "config",
+        "start=disabled"
+      ],
+      "raw_values": [
+        "*stop*",
+        "*WinDefend*",
+        "*delete*",
+        "*config*",
+        "*start=disabled*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "source": "sigma",
+  "name": "posh_pm_susp_invocation_generic",
+  "subtree": "rules",
+  "category": "powershell",
+  "sigma_path": "rules/windows/powershell/powershell_module/posh_pm_susp_invocation_generic.eql",
+  "raw_query": "any where (winlog.event_data.ContextInfo like~ (\"* -enc *\", \"* -EncodedCommand *\", \"* -ec *\")) and (winlog.event_data.ContextInfo like~ (\"* -w hidden *\", \"* -window hidden *\", \"* -windowstyle hidden *\", \"* -w 1 *\")) and (winlog.event_data.ContextInfo like~ (\"* -noni *\", \"* -noninteractive *\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": "like~",
+      "values": [
+        "-enc",
+        "-encodedcommand",
+        "-ec",
+        "-w hidden",
+        "-window hidden",
+        "-windowstyle hidden",
+        "-w 1",
+        "-noni",
+        "-noninteractive"
+      ],
+      "raw_values": [
+        "* -enc *",
+        "* -EncodedCommand *",
+        "* -ec *",
+        "* -w hidden *",
+        "* -window hidden *",
+        "* -windowstyle hidden *",
+        "* -w 1 *",
+        "* -noni *",
+        "* -noninteractive *"
+      ]
+    }
+  ]
+}

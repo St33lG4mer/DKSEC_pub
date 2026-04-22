@@ -1,0 +1,117 @@
+{
+  "source": "elastic",
+  "name": "Potential Upgrade of Non-interactive Shell",
+  "slug": "execution_interpreter_tty_upgrade",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_interpreter_tty_upgrade.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\n(\n  (process.name == \"stty\" and process.args == \"raw\" and process.args == \"-echo\" and process.args_count >= 3) or\n  (\n    process.name == \"script\" and process.args in (\"-qc\", \"-c\") and process.args == \"/dev/null\" and process.args_count == 4\n  )\n) and\nnot process.parent.command_line like (\"linode-longview\", \"*bootstrap*\", \"*homebrew*\")\n",
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "linode-longview",
+        "bootstrap",
+        "homebrew"
+      ],
+      "raw_values": [
+        "linode-longview",
+        "*bootstrap*",
+        "*homebrew*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "-qc"
+      ],
+      "raw_values": [
+        "-qc",
+        "-c"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "stty",
+        "script"
+      ],
+      "raw_values": [
+        "stty",
+        "script"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "raw",
+        "-echo",
+        "null"
+      ],
+      "raw_values": [
+        "raw",
+        "-echo",
+        "/dev/null"
+      ]
+    }
+  ]
+}

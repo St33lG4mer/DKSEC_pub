@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_pubprn",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_pubprn.eql",
+  "raw_query": "any where process.command_line:\"*\\\\pubprn.vbs*\" and process.command_line:\"*script:*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "pubprn.vbs",
+        "script:"
+      ],
+      "raw_values": [
+        "*\\\\pubprn.vbs*",
+        "*script:*"
+      ]
+    }
+  ]
+}

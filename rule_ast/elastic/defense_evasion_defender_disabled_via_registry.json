@@ -1,0 +1,113 @@
+{
+  "source": "elastic",
+  "name": "Windows Defender Disabled via Registry Modification",
+  "slug": "defense_evasion_defender_disabled_via_registry",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_defender_disabled_via_registry.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  (\n    (\n      registry.path: (\n        \"HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\DisableAntiSpyware\",\n        \"\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\DisableAntiSpyware\"\n      ) and\n      registry.data.strings: (\"1\", \"0x00000001\")\n   ) or\n   (\n      registry.path: (\n        \"HKLM\\\\System\\\\*ControlSet*\\\\Services\\\\WinDefend\\\\Start\",\n        \"\\\\REGISTRY\\\\MACHINE\\\\System\\\\*ControlSet*\\\\Services\\\\WinDefend\\\\Start\"\n      ) and\n      registry.data.strings in (\"3\", \"4\", \"0x00000003\", \"0x00000004\")\n   )\n  ) and\n\n  not\n    (\n      process.executable : (\n          \"?:\\\\WINDOWS\\\\system32\\\\services.exe\",\n          \"?:\\\\Windows\\\\System32\\\\svchost.exe\",\n          \"?:\\\\Program Files (x86)\\\\Trend Micro\\\\Security Agent\\\\NTRmv.exe\"\n      ) and user.id : \"S-1-5-18\"\n    )\n",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\software\\\\policies\\\\microsoft\\\\windows defender\\\\disableantispyware",
+        "\\\\registry\\\\machine\\\\software\\\\policies\\\\microsoft\\\\windows defender\\\\disableantispyware",
+        "hklm\\\\system\\\\*controlset*\\\\services\\\\windefend\\\\start",
+        "\\\\registry\\\\machine\\\\system\\\\*controlset*\\\\services\\\\windefend\\\\start"
+      ],
+      "raw_values": [
+        "HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\DisableAntiSpyware",
+        "\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\DisableAntiSpyware",
+        "HKLM\\\\System\\\\*ControlSet*\\\\Services\\\\WinDefend\\\\Start",
+        "\\\\REGISTRY\\\\MACHINE\\\\System\\\\*ControlSet*\\\\Services\\\\WinDefend\\\\Start"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000001"
+      ],
+      "raw_values": [
+        "1",
+        "0x00000001"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "services.exe",
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "?:\\\\WINDOWS\\\\system32\\\\services.exe",
+        "?:\\\\Windows\\\\System32\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": "in",
+      "values": [
+        "0x00000003",
+        "0x00000004"
+      ],
+      "raw_values": [
+        "3",
+        "4",
+        "0x00000003",
+        "0x00000004"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "source": "elastic",
+  "name": "Third-party Backup Files Deleted via Unexpected Process",
+  "slug": "impact_backup_file_deletion",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/windows/impact_backup_file_deletion.toml",
+  "raw_query": "file where host.os.type == \"windows\" and event.type == \"deletion\" and\n  (\n    /* Veeam Related Backup Files */\n    (\n      file.extension : (\"VBK\", \"VIB\", \"VBM\") and\n      not (\n        process.executable : (\"?:\\\\Windows\\\\*\", \"?:\\\\Program Files\\\\*\", \"?:\\\\Program Files (x86)\\\\*\") and\n        (process.code_signature.trusted == true and process.code_signature.subject_name : (\"Veeam Software Group GmbH\", \"Veeam Software AG\"))\n      )\n    ) or\n    /* Veritas Backup Exec Related Backup File */\n    (\n      file.extension : \"BKF\" and\n        not process.executable : (\n          \"?:\\\\Program Files\\\\Veritas\\\\Backup Exec\\\\*\",\n          \"?:\\\\Program Files (x86)\\\\Veritas\\\\Backup Exec\\\\*\"\n        )\n    )\n  ) and\n  not (\n    process.name : (\"MSExchangeMailboxAssistants.exe\", \"Microsoft.PowerBI.EnterpriseGateway.exe\") and\n      (process.code_signature.subject_name : \"Microsoft Corporation\" and process.code_signature.trusted == true)\n  ) and\n  not file.path : (\n    \"?:\\\\ProgramData\\\\Trend Micro\\\\*\",\n    \"?:\\\\Program Files (x86)\\\\Trend Micro\\\\*\",\n    \"?:\\\\$RECYCLE.BIN\\\\*\"\n  )\n",
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "vbk",
+        "vib",
+        "vbm",
+        "bkf"
+      ],
+      "raw_values": [
+        "VBK",
+        "VIB",
+        "VBM",
+        "BKF"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msexchangemailboxassistants.exe",
+        "microsoft.powerbi.enterprisegateway.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\*",
+        "?:\\\\Program Files\\\\*",
+        "?:\\\\Program Files\\\\Veritas\\\\Backup Exec\\\\*",
+        "MSExchangeMailboxAssistants.exe",
+        "Microsoft.PowerBI.EnterpriseGateway.exe"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": ":",
+      "values": [
+        "veeam software group gmbh",
+        "veeam software ag",
+        "microsoft corporation"
+      ],
+      "raw_values": [
+        "Veeam Software Group GmbH",
+        "Veeam Software AG",
+        "Microsoft Corporation"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ]
+}

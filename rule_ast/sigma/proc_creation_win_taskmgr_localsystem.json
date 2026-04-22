@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_taskmgr_localsystem",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_taskmgr_localsystem.eql",
+  "raw_query": "any where (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) and process.executable:\"*\\\\taskmgr.exe\"",
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "taskmgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\taskmgr.exe"
+      ]
+    }
+  ]
+}

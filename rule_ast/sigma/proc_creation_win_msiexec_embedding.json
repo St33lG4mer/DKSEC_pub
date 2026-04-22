@@ -1,0 +1,65 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msiexec_embedding",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msiexec_embedding.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\cmd.exe\")) and (process.parent.command_line:\"*MsiExec.exe*\" and process.parent.command_line:\"*-Embedding *\")) and (not ((process.executable:\"*:\\\\Windows\\\\System32\\\\cmd.exe\" and process.command_line:\"*C:\\\\Program Files\\\\SplunkUniversalForwarder\\\\bin\\\\*\") or (process.command_line:\"*\\\\DismFoDInstall.cmd*\" or (process.parent.command_line:\"*\\\\MsiExec.exe -Embedding *\" and process.parent.command_line:\"*Global\\\\MSI0000*\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "msiexec.exe",
+        "-embedding",
+        "msiexec.exe -embedding",
+        "msi0000"
+      ],
+      "raw_values": [
+        "*MsiExec.exe*",
+        "*-Embedding *",
+        "*\\\\MsiExec.exe -Embedding *",
+        "*Global\\\\MSI0000*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dismfodinstall.cmd"
+      ],
+      "raw_values": [
+        "*C:\\\\Program Files\\\\SplunkUniversalForwarder\\\\bin\\\\*",
+        "*\\\\DismFoDInstall.cmd*"
+      ]
+    }
+  ]
+}

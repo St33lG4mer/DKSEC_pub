@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_parents",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_parents.eql",
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\minesweeper.exe\", \"*\\\\winver.exe\", \"*\\\\bitsadmin.exe\")) or ((process.parent.executable like~ (\"*\\\\csrss.exe\", \"*\\\\certutil.exe\", \"*\\\\eventvwr.exe\", \"*\\\\calc.exe\", \"*\\\\notepad.exe\")) and (not ((process.executable like~ (\"*\\\\WerFault.exe\", \"*\\\\wermgr.exe\", \"*\\\\conhost.exe\", \"*\\\\mmc.exe\", \"*\\\\win32calc.exe\", \"*\\\\notepad.exe\")) or (?process.executable == null))))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "minesweeper.exe",
+        "winver.exe",
+        "bitsadmin.exe",
+        "csrss.exe",
+        "certutil.exe",
+        "eventvwr.exe",
+        "calc.exe",
+        "notepad.exe"
+      ],
+      "raw_values": [
+        "*\\\\minesweeper.exe",
+        "*\\\\winver.exe",
+        "*\\\\bitsadmin.exe",
+        "*\\\\csrss.exe",
+        "*\\\\certutil.exe",
+        "*\\\\eventvwr.exe",
+        "*\\\\calc.exe",
+        "*\\\\notepad.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "werfault.exe",
+        "wermgr.exe",
+        "conhost.exe",
+        "mmc.exe",
+        "win32calc.exe",
+        "notepad.exe"
+      ],
+      "raw_values": [
+        "*\\\\WerFault.exe",
+        "*\\\\wermgr.exe",
+        "*\\\\conhost.exe",
+        "*\\\\mmc.exe",
+        "*\\\\win32calc.exe",
+        "*\\\\notepad.exe"
+      ]
+    }
+  ]
+}

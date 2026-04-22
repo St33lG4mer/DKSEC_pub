@@ -1,0 +1,46 @@
+{
+  "source": "elastic",
+  "name": "Multiple Elastic Defend Alerts from a Single Process Tree",
+  "slug": "multiple_alerts_edr_elastic_same_process_tree",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/cross-platform/multiple_alerts_edr_elastic_same_process_tree.toml",
+  "raw_query": "from logs-endpoint.alerts-*\n\n// process.Ext.ancestry is an array of all unique process IDs ancestors of the alert actor process ID\n| where event.code in (\"malicious_file\", \"memory_signature\", \"shellcode_thread\", \"behavior\") and\n        agent.id is not null and not rule.name in (\"Multi.EICAR.Not-a-virus\") and process.Ext.ancestry is not null\n\n// aggregate alerts by process.Ext.ancestry and agent.id\n| stats Esql.alerts_count = COUNT(*),\n        Esql.rule_name_distinct_count = COUNT_DISTINCT(rule.name),\n        Esql.event_code_distinct_count = COUNT_DISTINCT(event.code),\n        Esql.process_id_distinct_count = COUNT_DISTINCT(process.entity_id),\n        Esql.message_values = VALUES(message),\n        Esql.user_name_values = VALUES(user.name),\n        Esql.threat_tactic_name_values = VALUES(threat.tactic.name),\n        Esql.threat_technique_name_values = VALUES(threat.technique.name),\n        Esql.process_command_line_values = VALUES(process.command_line),\n        Esql.process_parent_executable_values = values(process.parent.executable),\n        Esql.file_path_values = VALUES(file.path),\n        Esql.file_hash_sha256_values = VALUES(file.hash.sha256),\n        Esql.process_hash_sha256_values = VALUES(process.hash.sha256),\n        Esql.dns_question_name_values = VALUES(dns.question.name) by process.Ext.ancestry, agent.id\n\n// filter for at least 3 unique process IDs and 2 or more alert types or rule names.\n| where Esql.process_id_distinct_count >= 3 and (Esql.rule_name_distinct_count >= 2 or Esql.event_code_distinct_count >= 2)\n\n// keep unique values\n| stats Esql.alert_names = values(Esql.message_values),\n        Esql.alerts_process_cmdline_values = VALUES(Esql.process_command_line_values),\n        Esql.alerts_user_names = VALUES(Esql.user_name_values),\n        Esql.alerts_mitre_tactics = values(Esql.threat_tactic_name_values),\n        Esql.alerts_mitre_techniques = VALUES(Esql.threat_technique_name_values),\n        Esql.alerts_process_parent_executable = values(Esql.process_parent_executable_values),\n        Esql.alerts_file_paths = VALUES(Esql.file_path_values),\n        Esql.alerts_file_hash_sha256 = VALUES(Esql.file_hash_sha256_values),\n        Esql.alerts_process_hash_sha256 = VALUES(Esql.process_hash_sha256_values),\n        Esql.alerts_dns_question_names = VALUES(Esql.dns_question_name_values) by agent.id\n| keep Esql.*, agent.id\n",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "in",
+      "values": [
+        "malicious_file",
+        "memory_signature",
+        "shellcode_thread",
+        "behavior"
+      ],
+      "raw_values": [
+        "malicious_file",
+        "memory_signature",
+        "shellcode_thread",
+        "behavior"
+      ]
+    },
+    {
+      "field": "rule.name",
+      "raw_field": "rule.name",
+      "operator": "in",
+      "values": [
+        "multi.eicar.not-a-virus"
+      ],
+      "raw_values": [
+        "Multi.EICAR.Not-a-virus"
+      ]
+    }
+  ]
+}

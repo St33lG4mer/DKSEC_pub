@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_procdump_lsass",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_procdump_lsass.eql",
+  "raw_query": "any where (process.command_line like~ (\"* -ma *\", \"* /ma *\", \"* \u2013ma *\", \"* \u2014ma *\", \"* \u2015ma *\") or process.command_line like~ (\"* -mm *\", \"* /mm *\", \"* \u2013mm *\", \"* \u2014mm *\", \"* \u2015mm *\") or process.command_line like~ (\"* -mp *\", \"* /mp *\", \"* \u2013mp *\", \"* \u2014mp *\", \"* \u2015mp *\")) and (process.command_line like~ (\"* ls*\", \"* keyiso*\", \"* samss*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-ma",
+        "\u2013ma",
+        "\u2014ma",
+        "\u2015ma",
+        "-mm",
+        "\u2013mm",
+        "\u2014mm",
+        "\u2015mm",
+        "-mp",
+        "\u2013mp",
+        "\u2014mp",
+        "\u2015mp",
+        "keyiso",
+        "samss"
+      ],
+      "raw_values": [
+        "* -ma *",
+        "* /ma *",
+        "* \u2013ma *",
+        "* \u2014ma *",
+        "* \u2015ma *",
+        "* -mm *",
+        "* /mm *",
+        "* \u2013mm *",
+        "* \u2014mm *",
+        "* \u2015mm *",
+        "* -mp *",
+        "* /mp *",
+        "* \u2013mp *",
+        "* \u2014mp *",
+        "* \u2015mp *",
+        "* ls*",
+        "* keyiso*",
+        "* samss*"
+      ]
+    }
+  ]
+}

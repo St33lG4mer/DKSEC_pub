@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_extrac32_ads",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_extrac32_ads.eql",
+  "raw_query": "any where (process.command_line:\"*extrac32.exe*\" and process.command_line:\"*.cab*\") and process.command_line:\"SigmaRegularExpression(regexp=SigmaString([':[^\\\\\\\\]']), flags=set())\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "extrac32.exe",
+        ".cab",
+        "]']), flags=set())"
+      ],
+      "raw_values": [
+        "*extrac32.exe*",
+        "*.cab*",
+        "SigmaRegularExpression(regexp=SigmaString([':[^\\\\\\\\]']), flags=set())"
+      ]
+    }
+  ]
+}

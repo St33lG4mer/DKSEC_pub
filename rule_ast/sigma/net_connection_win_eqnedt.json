@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_eqnedt",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_eqnedt.eql",
+  "raw_query": "any where process.executable:\"*\\\\eqnedt32.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "eqnedt32.exe"
+      ],
+      "raw_values": [
+        "*\\\\eqnedt32.exe"
+      ]
+    }
+  ]
+}

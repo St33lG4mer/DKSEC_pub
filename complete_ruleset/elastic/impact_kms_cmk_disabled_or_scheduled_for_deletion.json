@@ -1,0 +1,67 @@
+{
+  "source": "elastic",
+  "name": "AWS KMS Customer Managed Key Disabled or Scheduled for Deletion",
+  "slug": "impact_kms_cmk_disabled_or_scheduled_for_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS KMS",
+    "Use Case: Log Auditing",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/impact_kms_cmk_disabled_or_scheduled_for_deletion.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"kms.amazonaws.com\" \n    and event.action: (\"DisableKey\" or \"ScheduleKeyDeletion\") \n    and event.outcome: \"success\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "disablekey",
+        "schedulekeydeletion"
+      ],
+      "raw_values": [
+        "DisableKey",
+        "ScheduleKeyDeletion"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "kms.amazonaws.com"
+      ],
+      "raw_values": [
+        "kms.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

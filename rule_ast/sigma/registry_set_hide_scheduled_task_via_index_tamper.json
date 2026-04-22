@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_set_hide_scheduled_task_via_index_tamper",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_hide_scheduled_task_via_index_tamper.eql",
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*\" and registry.path:\"*Index*\") and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tree\\\\",
+        "index"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*",
+        "*Index*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ]
+}

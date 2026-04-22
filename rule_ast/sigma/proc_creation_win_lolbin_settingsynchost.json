@@ -1,0 +1,24 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_settingsynchost",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_settingsynchost.eql",
+  "raw_query": "any where (not (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\"))) and (process.parent.command_line:\"*cmd.exe /c*\" and process.parent.command_line:\"*RoamDiag.cmd*\" and process.parent.command_line:\"*-outputpath*\")",
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "roamdiag.cmd",
+        "-outputpath"
+      ],
+      "raw_values": [
+        "*cmd.exe /c*",
+        "*RoamDiag.cmd*",
+        "*-outputpath*"
+      ]
+    }
+  ]
+}

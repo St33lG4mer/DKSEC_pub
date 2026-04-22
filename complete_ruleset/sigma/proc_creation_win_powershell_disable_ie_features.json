@@ -1,0 +1,31 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_disable_ie_features",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_disable_ie_features.eql",
+  "raw_query": "any where (process.command_line:\"* -name IEHarden *\" and process.command_line:\"* -value 0 *\") or (process.command_line:\"* -name DEPOff *\" and process.command_line:\"* -value 1 *\") or (process.command_line:\"* -name DisableFirstRunCustomize *\" and process.command_line:\"* -value 2 *\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-name ieharden",
+        "-value 0",
+        "-name depoff",
+        "-value 1",
+        "-name disablefirstruncustomize",
+        "-value 2"
+      ],
+      "raw_values": [
+        "* -name IEHarden *",
+        "* -value 0 *",
+        "* -name DEPOff *",
+        "* -value 1 *",
+        "* -name DisableFirstRunCustomize *",
+        "* -value 2 *"
+      ]
+    }
+  ]
+}

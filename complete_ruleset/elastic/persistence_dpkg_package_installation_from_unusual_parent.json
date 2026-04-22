@@ -1,0 +1,32 @@
+{
+  "source": "elastic",
+  "name": "DPKG Package Installed by Unusual Parent Process",
+  "slug": "persistence_dpkg_package_installation_from_unusual_parent",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_dpkg_package_installation_from_unusual_parent.toml",
+  "raw_query": "host.os.type:linux and event.category:process and event.type:start and event.action:exec and process.name:dpkg and\nprocess.args:(\"-i\" or \"--install\")\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--install"
+      ],
+      "raw_values": [
+        "-i",
+        "--install"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_susp_grpconv",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_susp_grpconv.eql",
+  "raw_query": "any where process.command_line like~ (\"*grpconv.exe -o*\", \"*grpconv -o*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "grpconv.exe -o",
+        "grpconv -o"
+      ],
+      "raw_values": [
+        "*grpconv.exe -o*",
+        "*grpconv -o*"
+      ]
+    }
+  ]
+}

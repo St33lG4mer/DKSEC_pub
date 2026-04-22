@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "image_load_dll_rstrtmgr_suspicious_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_dll_rstrtmgr_suspicious_load.eql",
+  "raw_query": "any where (file.path:\"*\\\\RstrtMgr.dll\" or file.pe.original_file_name:\"RstrtMgr.dll\") and ((process.executable like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*\\\\Temporary Internet*\")) or ((process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\Favorites\\\\*\") or (process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\Favourites\\\\*\") or (process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\Contacts\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "temporary internet"
+      ],
+      "raw_values": [
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*\\\\Temporary Internet*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "rstrtmgr.dll"
+      ],
+      "raw_values": [
+        "*\\\\RstrtMgr.dll"
+      ]
+    },
+    {
+      "field": "file.pe.original_file_name",
+      "raw_field": "file.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rstrtmgr.dll"
+      ],
+      "raw_values": [
+        "RstrtMgr.dll"
+      ]
+    }
+  ]
+}

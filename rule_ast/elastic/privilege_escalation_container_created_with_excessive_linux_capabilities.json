@@ -1,0 +1,69 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Container Created with Excessive Linux Capabilities",
+  "slug": "privilege_escalation_container_created_with_excessive_linux_capabilities",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/privilege_escalation_container_created_with_excessive_linux_capabilities.toml",
+  "raw_query": "data_stream.dataset: kubernetes.audit_logs and kubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.verb: create and kubernetes.audit.objectRef.resource: pods and\nkubernetes.audit.requestObject.spec.containers.securityContext.capabilities.add: (\"BPF\" or \"DAC_READ_SEARCH\"  or \"NET_ADMIN\" or \"SYS_ADMIN\" or \"SYS_BOOT\" or \"SYS_MODULE\" or \"SYS_PTRACE\" or \"SYS_RAWIO\"  or \"SYSLOG\") and\nnot (\n  kubernetes.audit.requestObject.spec.containers.image : (docker.elastic.co/beats/elastic-agent* or rancher/klipper-lb* or \"\") or\n  kubernetes.audit.objectRef.namespace:\"kube-system\" or\n  (kubernetes.audit.objectRef.namespace:datadog and kubernetes.audit.requestObject.spec.containers.image:*datadog-agent*) or\n  (kubernetes.audit.objectRef.namespace:kubearmor and kubernetes.audit.requestObject.spec.containers.image:(*kubearmor\\:kubearmor* or kubearmor/kubearmor-snitch*)) or\n  (kubernetes.audit.objectRef.namespace:defender and kubernetes.audit.requestObject.spec.containers.image:*fp-prisma\\:defender-defender*) or\n  (kubernetes.audit.objectRef.namespace:metallb-system and kubernetes.audit.requestObject.spec.containers.image:(quay.io/frrouting* or quay.io/metallb/speaker*)) or\n  (kubernetes.audit.objectRef.namespace:longhorn-system and kubernetes.audit.requestObject.spec.containers.image:rancher/mirrored-longhornio*)\n)\n",
+  "conditions": [
+    {
+      "field": "kubernetes.audit.requestobject.spec.containers.securitycontext.capabilities.add",
+      "raw_field": "kubernetes.audit.requestObject.spec.containers.securityContext.capabilities.add",
+      "operator": ":",
+      "values": [
+        "bpf",
+        "dac_read_search",
+        "net_admin",
+        "sys_admin",
+        "sys_boot",
+        "sys_module",
+        "sys_ptrace",
+        "sys_rawio",
+        "syslog"
+      ],
+      "raw_values": [
+        "BPF",
+        "DAC_READ_SEARCH",
+        "NET_ADMIN",
+        "SYS_ADMIN",
+        "SYS_BOOT",
+        "SYS_MODULE",
+        "SYS_PTRACE",
+        "SYS_RAWIO",
+        "SYSLOG"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.namespace",
+      "raw_field": "kubernetes.audit.objectRef.namespace",
+      "operator": ":",
+      "values": [
+        "kube-system"
+      ],
+      "raw_values": [
+        "kube-system"
+      ]
+    }
+  ]
+}

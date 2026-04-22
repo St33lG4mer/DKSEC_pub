@@ -1,0 +1,80 @@
+{
+  "source": "elastic",
+  "name": "Potential Application Shimming via Sdbinst",
+  "slug": "persistence_via_application_shimming",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_via_application_shimming.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and process.name : \"sdbinst.exe\" and\n  process.args : \"?*\" and\n  not (process.args : \"-m\" and process.args : \"-bg\") and\n  not process.args : (\n    \"-mm\",\n    \"?:\\\\Program Files\\\\WindowsApps\\\\Microsoft.ApplicationCompatibilityEnhancements_*\\\\sdb\\\\sysMergeInboxStoreApp.sdb\",\n    \"\\\"?:\\\\Program Files\\\\WindowsApps\\\\Microsoft.ApplicationCompatibilityEnhancements_*\\\\sdb\\\\sysMergeInboxStoreApp.sdb\\\"\",\n    \"?:\\\\Program Files\\\\WindowsApps\\\\Microsoft.ApplicationCompatibilityEnhancements_*\\\\sdb\\\\msiMergeInboxStoreApp.sdb\",\n    \"\\\"?:\\\\Program Files\\\\WindowsApps\\\\Microsoft.ApplicationCompatibilityEnhancements_*\\\\sdb\\\\msiMergeInboxStoreApp.sdb\\\"\",\n    \"?:\\\\Program Files (x86)\\\\Citrix\\\\ICA Client\\\\CitrixWorkspaceLegacySWDA.sdb\",\n    \"Citrix Workspace\",\n    \"C:\\\\Program Files\\\\IIS Express\\\\iisexpressshim.sdb\",\n    \"C:\\\\Program Files (x86)\\\\IIS Express\\\\iisexpressshim.sdb\"\n  )\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-mm",
+        "sysmergeinboxstoreapp.sdb",
+        "msimergeinboxstoreapp.sdb",
+        "-bg"
+      ],
+      "raw_values": [
+        "-mm",
+        "?:\\\\Program Files\\\\WindowsApps\\\\Microsoft.ApplicationCompatibilityEnhancements_*\\\\sdb\\\\sysMergeInboxStoreApp.sdb",
+        "\\",
+        "",
+        "?:\\\\Program Files\\\\WindowsApps\\\\Microsoft.ApplicationCompatibilityEnhancements_*\\\\sdb\\\\msiMergeInboxStoreApp.sdb",
+        "?*",
+        "-m",
+        "-bg"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "sdbinst.exe"
+      ],
+      "raw_values": [
+        "sdbinst.exe"
+      ]
+    }
+  ]
+}

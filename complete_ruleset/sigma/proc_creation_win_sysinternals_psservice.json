@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_psservice",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_psservice.eql",
+  "raw_query": "any where process.pe.original_file_name:\"psservice.exe\" or (process.executable like~ (\"*\\\\PsService.exe\", \"*\\\\PsService64.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "psservice.exe",
+        "psservice64.exe"
+      ],
+      "raw_values": [
+        "*\\\\PsService.exe",
+        "*\\\\PsService64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "psservice.exe"
+      ],
+      "raw_values": [
+        "psservice.exe"
+      ]
+    }
+  ]
+}

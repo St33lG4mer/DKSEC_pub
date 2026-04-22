@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_netsh_fw_set_rule",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_netsh_fw_set_rule.eql",
+  "raw_query": "any where (process.executable:\"*\\\\netsh.exe\" or process.pe.original_file_name:\"netsh.exe\") and (process.command_line:\"* firewall *\" and process.command_line:\"* set *\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "firewall",
+        "set"
+      ],
+      "raw_values": [
+        "* firewall *",
+        "* set *"
+      ]
+    }
+  ]
+}

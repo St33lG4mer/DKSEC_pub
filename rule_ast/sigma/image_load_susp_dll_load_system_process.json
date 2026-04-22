@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "image_load_susp_dll_load_system_process",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_susp_dll_load_system_process.eql",
+  "raw_query": "any where process.executable:\"C:\\\\Windows\\\\*\" and (file.path like~ (\"C:\\\\Users\\\\Public\\\\*\", \"C:\\\\PerfLogs\\\\*\"))",
+  "conditions": []
+}

@@ -1,0 +1,75 @@
+{
+  "source": "elastic",
+  "name": "File System Debugger Launched Inside a Container",
+  "slug": "privilege_escalation_debugfs_launched_inside_container",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_debugfs_launched_inside_container.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.entry_leader.entry_meta.type == \"container\" and process.name == \"debugfs\" and\nprocess.command_line like~ \"/dev/sd*\" and not process.args == \"-R\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.entry_leader.entry_meta.type",
+      "raw_field": "process.entry_leader.entry_meta.type",
+      "operator": "==",
+      "values": [
+        "container"
+      ],
+      "raw_values": [
+        "container"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "debugfs"
+      ],
+      "raw_values": [
+        "debugfs"
+      ]
+    }
+  ]
+}

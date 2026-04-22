@@ -1,0 +1,112 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_schedule_via_masqueraded_xml_file",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_schedule_via_masqueraded_xml_file.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\schtasks.exe\" or process.pe.original_file_name:\"schtasks.exe\") and (process.command_line like~ (\"*/create*\", \"*-create*\")) and (process.command_line like~ (\"*/xml*\", \"*-xml*\"))) and (not (process.command_line:\"*.xml*\" or (winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\")) or (process.parent.executable:\"*\\\\rundll32.exe\" and (process.parent.command_line:\"*:\\\\WINDOWS\\\\Installer\\\\MSI*\" and process.parent.command_line:\"*.tmp,zzzzInvokeManagedCustomActionOutOfProc*\")))) and (not (process.parent.executable like~ (\"*:\\\\ProgramData\\\\OEM\\\\UpgradeTool\\\\CareCenter_*\\\\BUnzip\\\\Setup_msi.exe\", \"*:\\\\Program Files\\\\Axis Communications\\\\AXIS Camera Station\\\\SetupActions.exe\", \"*:\\\\Program Files\\\\Axis Communications\\\\AXIS Device Manager\\\\AdmSetupActions.exe\", \"*:\\\\Program Files (x86)\\\\Zemana\\\\AntiMalware\\\\AntiMalware.exe\", \"*:\\\\Program Files\\\\Dell\\\\SupportAssist\\\\pcdrcui.exe\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "create",
+        "-create",
+        "xml",
+        "-xml"
+      ],
+      "raw_values": [
+        "*/create*",
+        "*-create*",
+        "*/xml*",
+        "*-xml*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "setup_msi.exe",
+        "setupactions.exe",
+        "admsetupactions.exe"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\OEM\\\\UpgradeTool\\\\CareCenter_*\\\\BUnzip\\\\Setup_msi.exe",
+        "*:\\\\Program Files\\\\Axis Communications\\\\AXIS Camera Station\\\\SetupActions.exe",
+        "*:\\\\Program Files\\\\Axis Communications\\\\AXIS Device Manager\\\\AdmSetupActions.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".xml"
+      ],
+      "raw_values": [
+        "*.xml*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "msi",
+        ".tmp,zzzzinvokemanagedcustomactionoutofproc"
+      ],
+      "raw_values": [
+        "*:\\\\WINDOWS\\\\Installer\\\\MSI*",
+        "*.tmp,zzzzInvokeManagedCustomActionOutOfProc*"
+      ]
+    }
+  ]
+}

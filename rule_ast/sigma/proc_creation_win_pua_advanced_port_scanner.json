@@ -1,0 +1,56 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_advanced_port_scanner",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_advanced_port_scanner.eql",
+  "raw_query": "any where (process.executable:\"*\\\\advanced_port_scanner*\" or process.pe.original_file_name:\"*advanced_port_scanner*\" or process.pe.description:\"*Advanced Port Scanner*\") or (process.command_line:\"*/portable*\" and process.command_line:\"*/lng*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "advanced_port_scanner"
+      ],
+      "raw_values": [
+        "*\\\\advanced_port_scanner*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "advanced_port_scanner"
+      ],
+      "raw_values": [
+        "*advanced_port_scanner*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "advanced port scanner"
+      ],
+      "raw_values": [
+        "*Advanced Port Scanner*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "portable",
+        "lng"
+      ],
+      "raw_values": [
+        "*/portable*",
+        "*/lng*"
+      ]
+    }
+  ]
+}

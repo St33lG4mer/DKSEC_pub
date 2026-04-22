@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "zeek_dns_nkn",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/network/zeek/zeek_dns_nkn.eql",
+  "raw_query": "any where query:\"*seed*\" and query:\"*.nkn.org*\"",
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        "seed",
+        ".nkn.org"
+      ],
+      "raw_values": [
+        "*seed*",
+        "*.nkn.org*"
+      ]
+    }
+  ]
+}

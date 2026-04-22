@@ -1,0 +1,123 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Startup Shell Folder Modification",
+  "slug": "persistence_evasion_registry_startup_shell_folder_modified",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/persistence_evasion_registry_startup_shell_folder_modified.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n registry.value : (\"Common Startup\", \"Startup\") and\n registry.path : (\n     \"HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Common Startup\",\n     \"HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Common Startup\",\n     \"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup\",\n     \"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup\",\n     \"HKU\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup\",\n     \"HKU\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup\",\n     \"HKCU\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup\",\n     \"HKCU\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup\",\n     \"\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Common Startup\",\n     \"\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Common Startup\",\n     \"\\\\REGISTRY\\\\USER\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup\",\n     \"\\\\REGISTRY\\\\USER\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup\",\n     \"MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Common Startup\",\n     \"MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Common Startup\",\n     \"USER\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup\",\n     \"USER\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup\"\n     ) and\n  registry.data.strings != null and\n  /* Normal Startup Folder Paths */\n  not registry.data.strings : (\n           \"C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\",\n           \"%ProgramData%\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\",\n           \"%USERPROFILE%\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\",\n           \"%%USERPROFILE%%\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\",\n           \"C:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\",\n           \"\\\\\\\\*\"\n           )\n",
+  "conditions": [
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "common startup",
+        "startup"
+      ],
+      "raw_values": [
+        "Common Startup",
+        "Startup"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders\\\\common startup",
+        "hklm\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders\\\\common startup",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders\\\\startup",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders\\\\startup",
+        "hku\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders\\\\startup",
+        "hku\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders\\\\startup",
+        "hkcu\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders\\\\startup",
+        "hkcu\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders\\\\startup",
+        "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders\\\\common startup",
+        "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders\\\\common startup",
+        "\\\\registry\\\\user\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders\\\\startup",
+        "\\\\registry\\\\user\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders\\\\startup",
+        "machine\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders\\\\common startup",
+        "machine\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders\\\\common startup",
+        "user\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders\\\\startup",
+        "user\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders\\\\startup"
+      ],
+      "raw_values": [
+        "HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Common Startup",
+        "HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Common Startup",
+        "HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup",
+        "HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup",
+        "HKU\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup",
+        "HKU\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup",
+        "HKCU\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup",
+        "HKCU\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup",
+        "\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Common Startup",
+        "\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Common Startup",
+        "\\\\REGISTRY\\\\USER\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup",
+        "\\\\REGISTRY\\\\USER\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup",
+        "MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Common Startup",
+        "MACHINE\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Common Startup",
+        "USER\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\\\\Startup",
+        "USER\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders\\\\Startup"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "c:\\\\programdata\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup",
+        "%programdata%\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup",
+        "%userprofile%\\\\appdata\\\\roaming\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup",
+        "%%userprofile%%\\\\appdata\\\\roaming\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup",
+        "c:\\\\users\\\\*\\\\appdata\\\\roaming\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup",
+        "\\\\\\\\"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup",
+        "%ProgramData%\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup",
+        "%USERPROFILE%\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup",
+        "%%USERPROFILE%%\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup",
+        "C:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup",
+        "\\\\\\\\*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_set_comhijack_sdclt",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_comhijack_sdclt.eql",
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Classes\\\\Folder\\\\shell\\\\open\\\\command\\\\DelegateExecute*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\classes\\\\folder\\\\shell\\\\open\\\\command\\\\delegateexecute"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Classes\\\\Folder\\\\shell\\\\open\\\\command\\\\DelegateExecute*"
+      ]
+    }
+  ]
+}

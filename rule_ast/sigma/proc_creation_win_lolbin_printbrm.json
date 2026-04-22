@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_printbrm",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_printbrm.eql",
+  "raw_query": "any where process.executable:\"*\\\\PrintBrm.exe\" and (process.command_line:\"* -f*\" and process.command_line:\"*.zip*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "printbrm.exe"
+      ],
+      "raw_values": [
+        "*\\\\PrintBrm.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".zip"
+      ],
+      "raw_values": [
+        "* -f*",
+        "*.zip*"
+      ]
+    }
+  ]
+}

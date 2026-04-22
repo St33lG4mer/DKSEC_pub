@@ -1,0 +1,52 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_crackmapexec_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_crackmapexec_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\crackmapexec.exe\" or process.command_line:\"* -M pe_inject *\" or (process.command_line:\"* --local-auth*\" and process.command_line:\"* -u *\" and process.command_line:\"* -x *\") or (process.command_line:\"* --local-auth*\" and process.command_line:\"* -u *\" and process.command_line:\"* -p *\" and process.command_line:\"* -H 'NTHASH'*\") or (process.command_line:\"* mssql *\" and process.command_line:\"* -u *\" and process.command_line:\"* -p *\" and process.command_line:\"* -M *\" and process.command_line:\"* -d *\") or (process.command_line:\"* smb *\" and process.command_line:\"* -u *\" and process.command_line:\"* -H *\" and process.command_line:\"* -M *\" and process.command_line:\"* -o *\") or (process.command_line:\"* smb *\" and process.command_line:\"* -u *\" and process.command_line:\"* -p *\" and process.command_line:\"* --local-auth*\")) or ((process.command_line:\"* --local-auth*\" and process.command_line:\"* -u *\" and process.command_line:\"* -p *\") and (process.command_line:\"* 10.*\" and process.command_line:\"* 192.168.*\" and process.command_line:\"*/24 *\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "crackmapexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\crackmapexec.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-m pe_inject",
+        "--local-auth",
+        "-h 'nthash'",
+        "mssql",
+        "smb",
+        "10.",
+        "192.168."
+      ],
+      "raw_values": [
+        "* -M pe_inject *",
+        "* --local-auth*",
+        "* -u *",
+        "* -x *",
+        "* -p *",
+        "* -H 'NTHASH'*",
+        "* mssql *",
+        "* -M *",
+        "* -d *",
+        "* smb *",
+        "* -H *",
+        "* -o *",
+        "* 10.*",
+        "* 192.168.*",
+        "*/24 *"
+      ]
+    }
+  ]
+}

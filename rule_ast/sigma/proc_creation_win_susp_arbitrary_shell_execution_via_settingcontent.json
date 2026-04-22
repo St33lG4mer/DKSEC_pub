@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_arbitrary_shell_execution_via_settingcontent",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_arbitrary_shell_execution_via_settingcontent.eql",
+  "raw_query": "any where process.command_line:\"*.SettingContent-ms*\" and (not process.command_line:\"*immersivecontrolpanel*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".settingcontent-ms",
+        "immersivecontrolpanel"
+      ],
+      "raw_values": [
+        "*.SettingContent-ms*",
+        "*immersivecontrolpanel*"
+      ]
+    }
+  ]
+}

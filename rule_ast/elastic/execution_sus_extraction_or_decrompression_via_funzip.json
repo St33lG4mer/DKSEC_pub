@@ -1,0 +1,113 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Content Extracted or Decompressed via Funzip",
+  "slug": "execution_sus_extraction_or_decrompression_via_funzip",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_sus_extraction_or_decrompression_via_funzip.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\n((process.args == \"tail\" and process.args == \"-c\" and process.args == \"funzip\")) and\nnot process.args : \"/var/log/messages\" and\nnot ?process.parent.executable : (\"/usr/bin/dracut\", \"/sbin/dracut\", \"/usr/bin/xargs\") and\nnot (process.parent.name in (\"sh\", \"sudo\") and ?process.parent.command_line : \"*nessus_su*\")\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dracut",
+        "xargs"
+      ],
+      "raw_values": [
+        "/usr/bin/dracut",
+        "/sbin/dracut",
+        "/usr/bin/xargs"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "sudo"
+      ],
+      "raw_values": [
+        "sh",
+        "sudo"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "tail",
+        "funzip"
+      ],
+      "raw_values": [
+        "tail",
+        "-c",
+        "funzip"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "messages"
+      ],
+      "raw_values": [
+        "/var/log/messages"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "nessus_su"
+      ],
+      "raw_values": [
+        "*nessus_su*"
+      ]
+    }
+  ]
+}

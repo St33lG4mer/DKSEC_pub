@@ -1,0 +1,37 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_print_remote_file_copy",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_print_remote_file_copy.eql",
+  "raw_query": "any where (process.executable:\"*\\\\print.exe\" and process.command_line:\"print*\" and (process.command_line:\"*/D*\" and process.command_line:\"*.exe*\")) and (not process.command_line:\"*print.exe*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "print.exe"
+      ],
+      "raw_values": [
+        "*\\\\print.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "print",
+        ".exe",
+        "print.exe"
+      ],
+      "raw_values": [
+        "print*",
+        "*/D*",
+        "*.exe*",
+        "*print.exe*"
+      ]
+    }
+  ]
+}

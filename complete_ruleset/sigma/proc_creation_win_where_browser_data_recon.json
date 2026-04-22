@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_where_browser_data_recon",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_where_browser_data_recon.eql",
+  "raw_query": "any where (process.executable:\"*\\\\where.exe\" or process.pe.original_file_name:\"where.exe\") and (process.command_line like~ (\"*places.sqlite*\", \"*cookies.sqlite*\", \"*formhistory.sqlite*\", \"*logins.json*\", \"*key4.db*\", \"*key3.db*\", \"*sessionstore.jsonlz4*\", \"*History*\", \"*Bookmarks*\", \"*Cookies*\", \"*Login Data*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "places.sqlite",
+        "cookies.sqlite",
+        "formhistory.sqlite",
+        "logins.json",
+        "key4.db",
+        "key3.db",
+        "sessionstore.jsonlz4",
+        "history",
+        "bookmarks",
+        "cookies",
+        "login data"
+      ],
+      "raw_values": [
+        "*places.sqlite*",
+        "*cookies.sqlite*",
+        "*formhistory.sqlite*",
+        "*logins.json*",
+        "*key4.db*",
+        "*key3.db*",
+        "*sessionstore.jsonlz4*",
+        "*History*",
+        "*Bookmarks*",
+        "*Cookies*",
+        "*Login Data*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "where.exe"
+      ],
+      "raw_values": [
+        "*\\\\where.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "where.exe"
+      ],
+      "raw_values": [
+        "where.exe"
+      ]
+    }
+  ]
+}

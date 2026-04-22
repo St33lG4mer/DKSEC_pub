@@ -1,0 +1,151 @@
+{
+  "source": "elastic",
+  "name": "Unusual Base64 Encoding/Decoding Activity",
+  "slug": "defense_evasion_base64_decoding_activity",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_base64_decoding_activity.toml",
+  "raw_query": "from logs-endpoint.events.process-* metadata _id, _index, _version\n| mv_expand event.action \n| where\n    host.os.type == \"linux\" and\n    event.type == \"start\" and\n    event.action == \"exec\" and (\n        (\n            process.name in (\"base64\", \"base64plain\", \"base64url\", \"base64mime\", \"base64pem\", \"base32\", \"base16\") and\n            process.command_line like \"*-*d*\"\n        ) or\n        (\n            process.name == \"openssl\" and\n            process.args == \"enc\" and\n            process.args in (\"-d\", \"-base64\", \"-a\")\n        ) or\n        (\n            process.name like \"python*\" and (\n                (\n                    process.args == \"base64\" and\n                    process.args in (\"-d\", \"-u\", \"-t\")\n                ) or\n                (\n                    process.args == \"-c\" and\n                    process.command_line like \"*base64*\" and\n                    process.command_line like \"*b64decode*\"\n                )\n            )\n        ) or\n        (\n            process.name like \"perl*\" and\n            process.command_line like \"*decode_base64*\"\n        ) or\n        (\n            process.name like \"ruby*\" and\n            process.args == \"-e\" and\n            process.command_line like \"*Base64.decode64*\"\n        )\n    )\n| keep\n    @timestamp,\n    _id,\n    _index,\n    _version,\n    host.os.type,\n    event.type,\n    event.action,\n    process.name,\n    process.args,\n    process.command_line,\n    process.parent.name,\n    process.parent.command_line,\n    agent.id,\n    host.name,\n    data_stream.dataset,\n    data_stream.namespace\n| stats\n    Esql.event_count = count(),\n    Esql.process_parent_name_values = values(process.parent.name),\n    Esql.process_parent_command_line_values = values(process.parent.command_line),\n    Esql.agent_id_count_distinct = count_distinct(agent.id),\n    Esql.host_name_values = values(host.name),\n    Esql.agent_id_values = values(agent.id),\n    Esql.data_stream_dataset_values = values(data_stream.dataset),\n    Esql.data_stream_namespace_values = values(data_stream.namespace)\n    by process.name, process.command_line\n| where\n    Esql.agent_id_count_distinct == 1 and\n    Esql.event_count < 15\n| sort Esql.event_count asc\n\n// Extract unique values to ECS fields for alerts exclusion\n| eval agent.id = mv_min(Esql.agent_id_values),\n       host.name = mv_min(Esql.host_name_values)\n\n| keep agent.id, host.name, process.name, process.command_line, Esql.*\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "base64",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "base32",
+        "base16"
+      ],
+      "raw_values": [
+        "base64",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "base32",
+        "base16"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "-base64"
+      ],
+      "raw_values": [
+        "-d",
+        "-base64",
+        "-a",
+        "-u",
+        "-t"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like",
+      "values": [
+        "-*d",
+        "base64",
+        "b64decode",
+        "decode_base64",
+        "base64.decode64"
+      ],
+      "raw_values": [
+        "*-*d*",
+        "*base64*",
+        "*b64decode*",
+        "*decode_base64*",
+        "*Base64.decode64*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "openssl"
+      ],
+      "raw_values": [
+        "openssl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "enc",
+        "base64"
+      ],
+      "raw_values": [
+        "enc",
+        "base64",
+        "-c",
+        "-e"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python",
+        "perl",
+        "ruby"
+      ],
+      "raw_values": [
+        "python*",
+        "perl*",
+        "ruby*"
+      ]
+    }
+  ]
+}

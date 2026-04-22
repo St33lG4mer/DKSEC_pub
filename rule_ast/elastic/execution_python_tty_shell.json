@@ -1,0 +1,136 @@
+{
+  "source": "elastic",
+  "name": "Interactive Terminal Spawned via Python",
+  "slug": "execution_python_tty_shell",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_python_tty_shell.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\") and\n(\n  (process.parent.name : \"python*\" and process.name in (\"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\",\n   \"fish\") and process.parent.args_count >= 3 and process.parent.args : \"*pty.spawn*\" and process.parent.args : \"-c\") or\n  (process.parent.name : \"python*\" and process.name in (\"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and\n   process.args in (\n     \"sh\", \"dash\", \"bash\", \"zsh\",\n     \"/bin/sh\", \"/bin/dash\", \"/bin/bash\", \"/bin/zsh\",\n     \"/usr/bin/sh\", \"/usr/bin/dash\", \"/usr/bin/bash\", \"/usr/bin/zsh\",\n     \"/usr/local/bin/sh\", \"/usr/local/bin/dash\", \"/usr/local/bin/bash\", \"/usr/local/bin/zsh\"\n   ) and process.args_count == 1 and process.parent.args_count == 1\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "dash",
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "sh",
+        "dash",
+        "bash",
+        "zsh",
+        "/bin/sh",
+        "/bin/dash",
+        "/bin/bash",
+        "/bin/zsh",
+        "/usr/bin/sh",
+        "/usr/bin/dash",
+        "/usr/bin/bash",
+        "/usr/bin/zsh",
+        "/usr/local/bin/sh",
+        "/usr/local/bin/dash",
+        "/usr/local/bin/bash",
+        "/usr/local/bin/zsh"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "pty.spawn"
+      ],
+      "raw_values": [
+        "*pty.spawn*",
+        "-c"
+      ]
+    }
+  ]
+}

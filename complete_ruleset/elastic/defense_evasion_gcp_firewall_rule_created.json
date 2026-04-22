@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "GCP Firewall Rule Creation",
+  "slug": "defense_evasion_gcp_firewall_rule_created",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: GCP",
+    "Data Source: Google Cloud Platform",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/gcp/defense_evasion_gcp_firewall_rule_created.toml",
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:(*.compute.firewalls.insert or google.appengine.*.Firewall.Create*Rule)\n",
+  "conditions": []
+}

@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_dbgcore",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_dbgcore.eql",
+  "raw_query": "any where file.path:\"*\\\\dbgcore.dll\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Program Files\\\\*\", \"C:\\\\Windows\\\\SoftwareDistribution\\\\*\", \"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SystemTemp\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\"))) and (not (file.path:\"*\\\\Steam\\\\bin\\\\cef\\\\cef.win7x64\\\\dbgcore.dll\" or (file.path:\"*opera\\\\Opera Installer Temp\\\\opera_package*\" and file.path:\"*\\\\assistant\\\\dbgcore.dll\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "dbgcore.dll",
+        "opera_package"
+      ],
+      "raw_values": [
+        "*\\\\dbgcore.dll",
+        "*\\\\Steam\\\\bin\\\\cef\\\\cef.win7x64\\\\dbgcore.dll",
+        "*opera\\\\Opera Installer Temp\\\\opera_package*",
+        "*\\\\assistant\\\\dbgcore.dll"
+      ]
+    }
+  ]
+}

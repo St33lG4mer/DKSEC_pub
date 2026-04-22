@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_java_susp_child_process_2",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_java_susp_child_process_2.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\java.exe\" and (process.executable like~ (\"*\\\\bash.exe\", \"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\"))) and (not (process.parent.executable:\"*build*\" and process.command_line:\"*build*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bash.exe",
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\bash.exe",
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "java.exe",
+        "build"
+      ],
+      "raw_values": [
+        "*\\\\java.exe",
+        "*build*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "build"
+      ],
+      "raw_values": [
+        "*build*"
+      ]
+    }
+  ]
+}

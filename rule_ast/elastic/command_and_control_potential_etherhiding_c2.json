@@ -1,0 +1,106 @@
+{
+  "source": "elastic",
+  "name": "Potential Etherhiding C2 via Blockchain Connection",
+  "slug": "command_and_control_potential_etherhiding_c2",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/command_and_control_potential_etherhiding_c2.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=15s\n  [network where host.os.type == \"macos\" and event.type == \"start\" and\n    (process.name in (\"bash\", \"sh\", \"zsh\", \"osascript\", \"node\", \"Cursor\") or\n    process.name like (\"python*\", \"ruby*\", \"perl*\", \"tclsh*\")) and\n    destination.domain like (\"eth-mainnet*\", \"ethereum*\", \"eth.*.com\")]\n  [file where host.os.type == \"macos\" and event.action == \"modification\" and file.extension in (\"js\", \"py\", \"sh\")]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "python",
+        "ruby",
+        "perl",
+        "tclsh"
+      ],
+      "raw_values": [
+        "python*",
+        "ruby*",
+        "perl*",
+        "tclsh*"
+      ]
+    },
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        "eth-mainnet",
+        "ethereum",
+        "eth.*.com"
+      ],
+      "raw_values": [
+        "eth-mainnet*",
+        "ethereum*",
+        "eth.*.com"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh",
+        "osascript",
+        "node",
+        "cursor"
+      ],
+      "raw_values": [
+        "bash",
+        "sh",
+        "zsh",
+        "osascript",
+        "node",
+        "Cursor"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modification"
+      ],
+      "raw_values": [
+        "modification"
+      ]
+    }
+  ]
+}

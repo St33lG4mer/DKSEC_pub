@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rasdial_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rasdial_execution.eql",
+  "raw_query": "any where process.executable:\"*rasdial.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rasdial.exe"
+      ],
+      "raw_values": [
+        "*rasdial.exe"
+      ]
+    }
+  ]
+}

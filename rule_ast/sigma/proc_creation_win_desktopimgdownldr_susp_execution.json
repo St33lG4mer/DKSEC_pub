@@ -1,0 +1,40 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_desktopimgdownldr_susp_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_desktopimgdownldr_susp_execution.eql",
+  "raw_query": "any where (process.command_line:\"* /lockscreenurl:*\" and (not (process.command_line like~ (\"*.jpg*\", \"*.jpeg*\", \"*.png*\")))) or (process.command_line:\"*reg delete*\" and process.command_line:\"*\\\\PersonalizationCSP*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".jpg",
+        ".jpeg",
+        ".png"
+      ],
+      "raw_values": [
+        "*.jpg*",
+        "*.jpeg*",
+        "*.png*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "lockscreenurl:",
+        "reg delete",
+        "personalizationcsp"
+      ],
+      "raw_values": [
+        "* /lockscreenurl:*",
+        "*reg delete*",
+        "*\\\\PersonalizationCSP*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_time_modification",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_time_modification.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4616\" and (not (process.executable:\"C:\\\\Windows\\\\System32\\\\svchost.exe\" and user.id:\"S-1-5-19\")) and (not (process.executable like~ (\"C:\\\\Program Files\\\\VMware\\\\VMware Tools\\\\vmtoolsd.exe\", \"C:\\\\Program Files (x86)\\\\VMware\\\\VMware Tools\\\\vmtoolsd.exe\", \"C:\\\\Windows\\\\System32\\\\VBoxService.exe\", \"C:\\\\Windows\\\\System32\\\\oobe\\\\msoobe.exe\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "vmtoolsd.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\VMware\\\\VMware Tools\\\\vmtoolsd.exe"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4616"
+      ],
+      "raw_values": [
+        "4616"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-19"
+      ],
+      "raw_values": [
+        "S-1-5-19"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "source": "sigma",
+  "name": "win_system_service_terminated_error_important",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/service_control_manager/win_system_service_terminated_error_important.eql",
+  "raw_query": "any where winlog.channel:\"System\" and ((winlog.provider_name:\"Service Control Manager\" and event.code:\"7023\") and ((winlog.event_data.param1 like~ (\"* Antivirus*\", \"* Firewall*\", \"*Application Guard*\", \"*BitLocker Drive Encryption Service*\", \"*Encrypting File System*\", \"*Microsoft Defender*\", \"*Threat Protection*\", \"*Windows Event Log*\")) or (winlog.event_data.Binary like~ (\"*770069006e0064006500660065006e006400*\", \"*4500760065006e0074004c006f006700*\", \"*6d0070007300730076006300*\", \"*530065006e0073006500*\", \"*450046005300*\", \"*420044004500530056004300*\"))))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.param1",
+      "raw_field": "winlog.event_data.param1",
+      "operator": "like~",
+      "values": [
+        "antivirus",
+        "firewall",
+        "application guard",
+        "bitlocker drive encryption service",
+        "encrypting file system",
+        "microsoft defender",
+        "threat protection",
+        "windows event log"
+      ],
+      "raw_values": [
+        "* Antivirus*",
+        "* Firewall*",
+        "*Application Guard*",
+        "*BitLocker Drive Encryption Service*",
+        "*Encrypting File System*",
+        "*Microsoft Defender*",
+        "*Threat Protection*",
+        "*Windows Event Log*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.binary",
+      "raw_field": "winlog.event_data.Binary",
+      "operator": "like~",
+      "values": [
+        "770069006e0064006500660065006e006400",
+        "4500760065006e0074004c006f006700",
+        "6d0070007300730076006300",
+        "530065006e0073006500",
+        "450046005300",
+        "420044004500530056004300"
+      ],
+      "raw_values": [
+        "*770069006e0064006500660065006e006400*",
+        "*4500760065006e0074004c006f006700*",
+        "*6d0070007300730076006300*",
+        "*530065006e0073006500*",
+        "*450046005300*",
+        "*420044004500530056004300*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7023"
+      ],
+      "raw_values": [
+        "7023"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_remove_mppreference",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_remove_mppreference.eql",
+  "raw_query": "any where process.command_line:\"*Remove-MpPreference*\" and (process.command_line like~ (\"*-ControlledFolderAccessProtectedFolders *\", \"*-AttackSurfaceReductionRules_Ids *\", \"*-AttackSurfaceReductionRules_Actions *\", \"*-CheckForSignaturesBeforeRunningScan *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-controlledfolderaccessprotectedfolders",
+        "-attacksurfacereductionrules_ids",
+        "-attacksurfacereductionrules_actions",
+        "-checkforsignaturesbeforerunningscan"
+      ],
+      "raw_values": [
+        "*-ControlledFolderAccessProtectedFolders *",
+        "*-AttackSurfaceReductionRules_Ids *",
+        "*-AttackSurfaceReductionRules_Actions *",
+        "*-CheckForSignaturesBeforeRunningScan *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "remove-mppreference"
+      ],
+      "raw_values": [
+        "*Remove-MpPreference*"
+      ]
+    }
+  ]
+}

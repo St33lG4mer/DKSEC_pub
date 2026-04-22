@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_add_sid_history",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_add_sid_history.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"4765\", \"4766\")) or (event.code:\"4738\" and (not (winlog.event_data.SidHistory like~ (\"-\", \"%%1793\"))) and ?winlog.event_data.SidHistory != null))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4765",
+        "4766"
+      ],
+      "raw_values": [
+        "4765",
+        "4766"
+      ]
+    },
+    {
+      "field": "winlog.event_data.sidhistory",
+      "raw_field": "winlog.event_data.SidHistory",
+      "operator": "like~",
+      "values": [
+        "%%1793"
+      ],
+      "raw_values": [
+        "-",
+        "%%1793"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4738"
+      ],
+      "raw_values": [
+        "4738"
+      ]
+    }
+  ]
+}

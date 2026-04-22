@@ -1,0 +1,71 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_fltmc_unload_driver",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_fltmc_unload_driver.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\fltMC.exe\" or process.pe.original_file_name:\"fltMC.exe\") and process.command_line:\"*unload*\") and (not (((process.parent.executable like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\")) and process.parent.executable:\"*\\\\endpoint-protection-installer-x64.tmp\" and (process.command_line like~ (\"*unload rtp_filesystem_filter\", \"*unload rtp_filter\"))) or (process.parent.executable:\"C:\\\\Program Files (x86)\\\\ManageEngine\\\\uems_agent\\\\bin\\\\dcfaservice64.exe\" and process.command_line:\"*unload DFMFilter\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "unload rtp_filesystem_filter",
+        "unload rtp_filter"
+      ],
+      "raw_values": [
+        "*unload rtp_filesystem_filter",
+        "*unload rtp_filter"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "fltmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\fltMC.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "fltmc.exe"
+      ],
+      "raw_values": [
+        "fltMC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "unload",
+        "unload dfmfilter"
+      ],
+      "raw_values": [
+        "*unload*",
+        "*unload DFMFilter"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "endpoint-protection-installer-x64.tmp",
+        "dcfaservice64.exe"
+      ],
+      "raw_values": [
+        "*\\\\endpoint-protection-installer-x64.tmp",
+        "C:\\\\Program Files (x86)\\\\ManageEngine\\\\uems_agent\\\\bin\\\\dcfaservice64.exe"
+      ]
+    }
+  ]
+}

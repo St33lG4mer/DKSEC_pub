@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_ie4uinit",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_ie4uinit.eql",
+  "raw_query": "any where (process.executable:\"*\\\\ie4uinit.exe\" or process.pe.original_file_name:\"IE4UINIT.EXE\") and (not ((process.working_directory like~ (\"c:\\\\windows\\\\system32\\\\\", \"c:\\\\windows\\\\sysWOW64\\\\\")) or (?process.working_directory == null)))",
+  "conditions": [
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "like~",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\",
+        "c:\\\\windows\\\\syswow64\\\\"
+      ],
+      "raw_values": [
+        "c:\\\\windows\\\\system32\\\\",
+        "c:\\\\windows\\\\sysWOW64\\\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ie4uinit.exe"
+      ],
+      "raw_values": [
+        "*\\\\ie4uinit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ie4uinit.exe"
+      ],
+      "raw_values": [
+        "IE4UINIT.EXE"
+      ]
+    }
+  ]
+}

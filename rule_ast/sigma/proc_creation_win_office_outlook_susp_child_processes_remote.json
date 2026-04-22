@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_office_outlook_susp_child_processes_remote",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_office_outlook_susp_child_processes_remote.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\outlook.exe\" and process.executable:\"\\\\\\\\*\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\outlook.exe"
+      ]
+    }
+  ]
+}

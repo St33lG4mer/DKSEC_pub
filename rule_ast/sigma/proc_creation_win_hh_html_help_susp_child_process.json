@@ -1,0 +1,60 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hh_html_help_susp_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hh_html_help_susp_child_process.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\hh.exe\" and (process.executable like~ (\"*\\\\CertReq.exe\", \"*\\\\CertUtil.exe\", \"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\installutil.exe\", \"*\\\\MSbuild.exe\", \"*\\\\MSHTA.EXE\", \"*\\\\msiexec.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\schtasks.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "certreq.exe",
+        "certutil.exe",
+        "cmd.exe",
+        "cscript.exe",
+        "installutil.exe",
+        "msbuild.exe",
+        "mshta.exe",
+        "msiexec.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "schtasks.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\CertReq.exe",
+        "*\\\\CertUtil.exe",
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\installutil.exe",
+        "*\\\\MSbuild.exe",
+        "*\\\\MSHTA.EXE",
+        "*\\\\msiexec.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "hh.exe"
+      ],
+      "raw_values": [
+        "*\\\\hh.exe"
+      ]
+    }
+  ]
+}

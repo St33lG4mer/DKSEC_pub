@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_susp_diagcab",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_susp_diagcab.eql",
+  "raw_query": "any where file.path:\"*.diagcab\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".diagcab"
+      ],
+      "raw_values": [
+        "*.diagcab"
+      ]
+    }
+  ]
+}

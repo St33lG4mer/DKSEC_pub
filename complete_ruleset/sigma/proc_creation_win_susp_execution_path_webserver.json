@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_execution_path_webserver",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_execution_path_webserver.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\wwwroot\\\\*\", \"*\\\\wmpub\\\\*\", \"*\\\\htdocs\\\\*\")) and (not ((process.executable like~ (\"*bin\\\\*\", \"*\\\\Tools\\\\*\", \"*\\\\SMSComponent\\\\*\")) and process.parent.executable:\"*\\\\services.exe\"))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "services.exe"
+      ],
+      "raw_values": [
+        "*\\\\services.exe"
+      ]
+    }
+  ]
+}

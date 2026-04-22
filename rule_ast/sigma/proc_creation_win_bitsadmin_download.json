@@ -1,0 +1,58 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_bitsadmin_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_bitsadmin_download.eql",
+  "raw_query": "any where (process.executable:\"*\\\\bitsadmin.exe\" or process.pe.original_file_name:\"bitsadmin.exe\") and (process.command_line:\"* /transfer *\" or ((process.command_line like~ (\"* /create *\", \"* /addfile *\")) and process.command_line:\"*http*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "create",
+        "addfile"
+      ],
+      "raw_values": [
+        "* /create *",
+        "* /addfile *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\bitsadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "bitsadmin.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "transfer",
+        "http"
+      ],
+      "raw_values": [
+        "* /transfer *",
+        "*http*"
+      ]
+    }
+  ]
+}

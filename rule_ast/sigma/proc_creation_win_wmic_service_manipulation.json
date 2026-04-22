@@ -1,0 +1,58 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wmic_service_manipulation",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wmic_service_manipulation.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"wmic.exe\" or process.executable:\"*\\\\WMIC.exe\") and ((process.command_line:\"* service *\" and process.command_line:\"* call *\") and (process.command_line like~ (\"*stopservice*\", \"*startservice*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "stopservice",
+        "startservice"
+      ],
+      "raw_values": [
+        "*stopservice*",
+        "*startservice*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "service",
+        "call"
+      ],
+      "raw_values": [
+        "* service *",
+        "* call *"
+      ]
+    }
+  ]
+}

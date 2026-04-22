@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "win_certificateservicesclient_lifecycle_system_cert_exported",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/certificate_services_client_lifecycle_system/win_certificateservicesclient_lifecycle_system_cert_exported.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CertificateServicesClient-Lifecycle-System/Operational\" and event.code:\"1007\"",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-certificateservicesclient-lifecycle-system/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CertificateServicesClient-Lifecycle-System/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "1007"
+      ],
+      "raw_values": [
+        "1007"
+      ]
+    }
+  ]
+}

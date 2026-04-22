@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wmic_eventconsumer_creation",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wmic_eventconsumer_creation.eql",
+  "raw_query": "any where process.command_line:\"*ActiveScriptEventConsumer*\" and process.command_line:\"* CREATE *\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "activescripteventconsumer",
+        "create"
+      ],
+      "raw_values": [
+        "*ActiveScriptEventConsumer*",
+        "* CREATE *"
+      ]
+    }
+  ]
+}

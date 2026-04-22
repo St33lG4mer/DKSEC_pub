@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_vscode_tunnel_indicators",
+  "subtree": "rules-threat-hunting",
+  "category": "file",
+  "sigma_path": "rules-threat-hunting/windows/file/file_event/file_event_win_vscode_tunnel_indicators.eql",
+  "raw_query": "any where file.path:\"*\\\\code_tunnel.json\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "code_tunnel.json"
+      ],
+      "raw_values": [
+        "*\\\\code_tunnel.json"
+      ]
+    }
+  ]
+}

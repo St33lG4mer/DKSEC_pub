@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_create_non_existent_dlls",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_create_non_existent_dlls.eql",
+  "raw_query": "any where file.path like~ (\"*:\\\\Windows\\\\System32\\\\axeonoffhelper.dll\", \"*:\\\\Windows\\\\System32\\\\cdpsgshims.dll\", \"*:\\\\Windows\\\\System32\\\\oci.dll\", \"*:\\\\Windows\\\\System32\\\\offdmpsvc.dll\", \"*:\\\\Windows\\\\System32\\\\shellchromeapi.dll\", \"*:\\\\Windows\\\\System32\\\\TSMSISrv.dll\", \"*:\\\\Windows\\\\System32\\\\TSVIPSrv.dll\", \"*:\\\\Windows\\\\System32\\\\wbem\\\\wbemcomn.dll\", \"*:\\\\Windows\\\\System32\\\\WLBSCTRL.dll\", \"*:\\\\Windows\\\\System32\\\\wow64log.dll\", \"*:\\\\Windows\\\\System32\\\\WptsExtensions.dll\", \"*\\\\SprintCSP.dll\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "axeonoffhelper.dll",
+        "cdpsgshims.dll",
+        "oci.dll",
+        "offdmpsvc.dll",
+        "shellchromeapi.dll",
+        "tsmsisrv.dll",
+        "tsvipsrv.dll",
+        "wbemcomn.dll",
+        "wlbsctrl.dll",
+        "wow64log.dll",
+        "wptsextensions.dll",
+        "sprintcsp.dll"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\axeonoffhelper.dll",
+        "*:\\\\Windows\\\\System32\\\\cdpsgshims.dll",
+        "*:\\\\Windows\\\\System32\\\\oci.dll",
+        "*:\\\\Windows\\\\System32\\\\offdmpsvc.dll",
+        "*:\\\\Windows\\\\System32\\\\shellchromeapi.dll",
+        "*:\\\\Windows\\\\System32\\\\TSMSISrv.dll",
+        "*:\\\\Windows\\\\System32\\\\TSVIPSrv.dll",
+        "*:\\\\Windows\\\\System32\\\\wbem\\\\wbemcomn.dll",
+        "*:\\\\Windows\\\\System32\\\\WLBSCTRL.dll",
+        "*:\\\\Windows\\\\System32\\\\wow64log.dll",
+        "*:\\\\Windows\\\\System32\\\\WptsExtensions.dll",
+        "*\\\\SprintCSP.dll"
+      ]
+    }
+  ]
+}

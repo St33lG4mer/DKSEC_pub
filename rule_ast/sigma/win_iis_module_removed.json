@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "win_iis_module_removed",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/iis-configuration/win_iis_module_removed.eql",
+  "raw_query": "any where event.code:\"29\" and winlog.event_data.Configuration:\"*/system.webServer/modules/remove*\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.configuration",
+      "raw_field": "winlog.event_data.Configuration",
+      "operator": ":",
+      "values": [
+        "/system.webserver/modules/remove"
+      ],
+      "raw_values": [
+        "*/system.webServer/modules/remove*"
+      ]
+    }
+  ]
+}

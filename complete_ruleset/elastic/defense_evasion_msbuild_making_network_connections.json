@@ -1,0 +1,105 @@
+{
+  "source": "elastic",
+  "name": "MsBuild Making Network Connections",
+  "slug": "defense_evasion_msbuild_making_network_connections",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_msbuild_making_network_connections.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=30s\n\n  /* Look for MSBuild.exe process execution */\n  /* The events for this first sequence may be noisy, consider adding exceptions */\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n    (\n      process.pe.original_file_name: \"MSBuild.exe\" or\n      process.name: \"MSBuild.exe\"\n    ) and\n    not user.id == \"S-1-5-18\"]\n\n  /* Followed by a network connection to an external address */\n  /* Exclude domains that are known to be benign */\n  [network where host.os.type == \"windows\" and\n    event.action: (\"connection_attempted\", \"lookup_requested\") and\n    (\n      process.pe.original_file_name: \"MSBuild.exe\" or\n      process.name: \"MSBuild.exe\"\n    ) and\n    not user.id == \"S-1-5-18\" and\n    not cidrmatch(destination.ip, \"127.0.0.1\", \"::1\") and\n    not dns.question.name : (\n      \"localhost\",\n      \"dc.services.visualstudio.com\",\n      \"vortex.data.microsoft.com\",\n      \"api.nuget.org\")]\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "connection_attempted",
+        "lookup_requested"
+      ],
+      "raw_values": [
+        "connection_attempted",
+        "lookup_requested"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "localhost",
+        "dc.services.visualstudio.com",
+        "vortex.data.microsoft.com",
+        "api.nuget.org"
+      ],
+      "raw_values": [
+        "localhost",
+        "dc.services.visualstudio.com",
+        "vortex.data.microsoft.com",
+        "api.nuget.org"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "MSBuild.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "MSBuild.exe"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "==",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ]
+}

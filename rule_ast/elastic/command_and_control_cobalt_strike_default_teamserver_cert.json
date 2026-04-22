@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "Default Cobalt Strike Team Server Certificate",
+  "slug": "command_and_control_cobalt_strike_default_teamserver_cert",
+  "category": "network",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Tactic: Command and Control",
+    "Threat: Cobalt Strike",
+    "Use Case: Threat Detection",
+    "Domain: Endpoint",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/network/command_and_control_cobalt_strike_default_teamserver_cert.toml",
+  "raw_query": "(data_stream.dataset: network_traffic.tls or event.category: (network or network_traffic))\n  and (tls.server.hash.md5:950098276A495286EB2A2556FBAB6D83\n  or tls.server.hash.sha1:6ECE5ECE4192683D2D84E25B0BA7E04F9CB7EB7C\n  or tls.server.hash.sha256:87F2085C32B6A2CC709B365F55873E207A9CAA10BFFECF2FD16D3CF9D94D390C)\n",
+  "conditions": []
+}

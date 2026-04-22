@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msdt_susp_parent",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msdt_susp_parent.eql",
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\schtasks.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\", \"*\\\\wsl.exe\")) and (process.executable:\"*\\\\msdt.exe\" or process.pe.original_file_name:\"msdt.exe\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "schtasks.exe",
+        "wmic.exe",
+        "wscript.exe",
+        "wsl.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe",
+        "*\\\\wsl.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "msdt.exe"
+      ]
+    }
+  ]
+}

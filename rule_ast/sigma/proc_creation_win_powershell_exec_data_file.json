@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_exec_data_file",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_exec_data_file.eql",
+  "raw_query": "any where (process.command_line like~ (\"*iex *\", \"*Invoke-Expression *\", \"*Invoke-Command *\", \"*icm *\")) and (process.command_line like~ (\"*cat *\", \"*get-content *\", \"*type *\")) and process.command_line:\"* -raw*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "iex",
+        "invoke-expression",
+        "invoke-command",
+        "icm",
+        "cat",
+        "get-content",
+        "type"
+      ],
+      "raw_values": [
+        "*iex *",
+        "*Invoke-Expression *",
+        "*Invoke-Command *",
+        "*icm *",
+        "*cat *",
+        "*get-content *",
+        "*type *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-raw"
+      ],
+      "raw_values": [
+        "* -raw*"
+      ]
+    }
+  ]
+}

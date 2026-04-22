@@ -1,0 +1,26 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_evilnum_jul20",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2020/TA/Evilnum/proc_creation_win_apt_evilnum_jul20.eql",
+  "raw_query": "any where process.command_line:\"*regsvr32*\" and process.command_line:\"*/s*\" and process.command_line:\"*/i*\" and process.command_line:\"*\\\\AppData\\\\Roaming\\\\*\" and process.command_line:\"*.ocx*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "regsvr32",
+        ".ocx"
+      ],
+      "raw_values": [
+        "*regsvr32*",
+        "*/s*",
+        "*/i*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*.ocx*"
+      ]
+    }
+  ]
+}

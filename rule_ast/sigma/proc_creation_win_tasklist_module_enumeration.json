@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_tasklist_module_enumeration",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_tasklist_module_enumeration.eql",
+  "raw_query": "any where (process.executable:\"*\\\\tasklist.exe\" or process.pe.original_file_name:\"tasklist.exe\") and process.command_line like~ (\"*-m*\", \"*/m*\", \"*\u2013m*\", \"*\u2014m*\", \"*\u2015m*\") and process.command_line:\"*rdpcorets.dll*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tasklist.exe"
+      ],
+      "raw_values": [
+        "*\\\\tasklist.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "tasklist.exe"
+      ],
+      "raw_values": [
+        "tasklist.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rdpcorets.dll"
+      ],
+      "raw_values": [
+        "*rdpcorets.dll*"
+      ]
+    }
+  ]
+}

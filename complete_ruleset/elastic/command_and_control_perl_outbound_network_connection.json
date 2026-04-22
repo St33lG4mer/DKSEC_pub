@@ -1,0 +1,76 @@
+{
+  "source": "elastic",
+  "name": "Perl Outbound Network Connection",
+  "slug": "command_and_control_perl_outbound_network_connection",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/command_and_control_perl_outbound_network_connection.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=30s\n  [process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and\n    process.name == \"perl\" and not process.args like \"/usr/bin/xpath\"]\n  [network where host.os.type == \"macos\" and event.type == \"start\" and process.name == \"perl\" and\n    not cidrmatch(destination.ip, \n        \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\", \n        \"192.0.0.0/24\", \"192.0.2.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\",\n        \"224.0.0.0/4\", \"240.0.0.0/4\", \"::1\", \"FE80::/10\", \"FF00::/8\")]\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "perl"
+      ],
+      "raw_values": [
+        "perl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "xpath"
+      ],
+      "raw_values": [
+        "/usr/bin/xpath"
+      ]
+    }
+  ]
+}

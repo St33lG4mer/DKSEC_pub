@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_ldap_dataexchange",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_ldap_dataexchange.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"5136\" and winlog.event_data.AttributeValue:\"*\" and (winlog.event_data.AttributeLDAPDisplayName like~ (\"primaryInternationalISDNNumber\", \"otherFacsimileTelephoneNumber\", \"primaryTelexNumber\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": "like~",
+      "values": [
+        "primaryinternationalisdnnumber",
+        "otherfacsimiletelephonenumber",
+        "primarytelexnumber"
+      ],
+      "raw_values": [
+        "primaryInternationalISDNNumber",
+        "otherFacsimileTelephoneNumber",
+        "primaryTelexNumber"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5136"
+      ],
+      "raw_values": [
+        "5136"
+      ]
+    }
+  ]
+}

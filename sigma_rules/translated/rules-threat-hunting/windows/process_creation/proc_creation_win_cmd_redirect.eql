@@ -1,0 +1,1 @@
+any where ((process.pe.original_file_name:"Cmd.Exe" or process.executable:"*\\cmd.exe") and process.command_line:"*>*") and (not (process.command_line like~ ("*C:\\Program Files (x86)\\Internet Download Manager\\IDMMsgHost.exe*", "*chrome-extension://*", "*\\.\\pipe\\chrome.nativeMessaging*")))

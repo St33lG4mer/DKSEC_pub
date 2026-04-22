@@ -1,0 +1,1 @@
+any where (file.path:"\\*" and (file.path:"*\\sysvol\\*" and file.path:"*\\Policies\\*")) and (not (process.executable like~ ("*:\\Program Files (x86)\\*", "*:\\Program Files\\*", "*:\\Windows\\explorer.exe*", "*:\\Windows\\system32\\*", "*:\\Windows\\SysWOW64\\*")))

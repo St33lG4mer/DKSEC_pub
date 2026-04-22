@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "registry_event_apt_oilrig_mar18",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2018/TA/OilRig/registry_event_apt_oilrig_mar18.eql",
+  "raw_query": "any where registry.path like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\UMe\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\UT\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\ume",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\ut"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\UMe",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\UT"
+      ]
+    }
+  ]
+}

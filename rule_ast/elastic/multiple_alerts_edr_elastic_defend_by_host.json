@@ -1,0 +1,46 @@
+{
+  "source": "elastic",
+  "name": "Multiple Elastic Defend Alerts by Agent",
+  "slug": "multiple_alerts_edr_elastic_defend_by_host",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/cross-platform/multiple_alerts_edr_elastic_defend_by_host.toml",
+  "raw_query": "from logs-endpoint.alerts-* metadata _id\n| eval target_time_window = DATE_TRUNC(24 hours, @timestamp)\n| where event.code in (\"malicious_file\", \"memory_signature\", \"shellcode_thread\", \"behavior\") and\n        agent.id is not null and not rule.name in (\"Multi.EICAR.Not-a-virus\")\n| stats Esql.alerts_count = COUNT(*),\n        Esql.event_code_distinct_count = count_distinct(event.code),\n        Esql.rule_name_distinct_count = COUNT_DISTINCT(rule.name),\n        Esql.file_hash_distinct_count = COUNT_DISTINCT(file.hash.sha256),\n        Esql.process_name_distinct_count = COUNT_DISTINCT(process.entity_id),\n        Esql.event_code_values = VALUES(event.code),\n        Esql.rule_name_values = VALUES(rule.name),\n        Esql.message_values = VALUES(message),\n        Esql.file_path_values = VALUES(file.path),\n        Esql.dll_path_values = VALUES(dll.path),\n        Esql.process_executable_values = VALUES(process.executable),\n        Esql.process_parent_executable_values = VALUES(process.parent.executable),\n        Esql.process_command_line_values = VALUES(process.command_line),\n        Esql.process_hash_sha256_values = VALUES(process.hash.sha256),\n        Esql.file_hash_sha256_values = VALUES(file.hash.sha256),\n        Esql.dll_hash_sha256_values = VALUES(dll.hash.sha256) by agent.id\n| where (Esql.event_code_distinct_count >= 2 or Esql.rule_name_distinct_count >= 3 or Esql.file_hash_distinct_count >= 2)\n| keep agent.id,\n       Esql.alerts_count,\n       Esql.event_code_distinct_count,\n       Esql.rule_name_distinct_count,\n       Esql.message_values,\n       Esql.event_code_values,\n       Esql.rule_name_values,\n       Esql.process_executable_values,\n       Esql.process_parent_executable_values,\n       Esql.process_command_line_values,\n       Esql.file_path_values,\n       Esql.dll_path_values,\n       Esql.process_hash_sha256_values,\n       Esql.file_hash_sha256_values,\n       Esql.dll_hash_sha256_values\n",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "in",
+      "values": [
+        "malicious_file",
+        "memory_signature",
+        "shellcode_thread",
+        "behavior"
+      ],
+      "raw_values": [
+        "malicious_file",
+        "memory_signature",
+        "shellcode_thread",
+        "behavior"
+      ]
+    },
+    {
+      "field": "rule.name",
+      "raw_field": "rule.name",
+      "operator": "in",
+      "values": [
+        "multi.eicar.not-a-virus"
+      ],
+      "raw_values": [
+        "Multi.EICAR.Not-a-virus"
+      ]
+    }
+  ]
+}

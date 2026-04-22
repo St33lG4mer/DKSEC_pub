@@ -1,0 +1,56 @@
+{
+  "source": "elastic",
+  "name": "Dynamic Linker Modification Detected via Defend for Containers",
+  "slug": "defense_evasion_ld_preload_shared_object_modified_inside_a_container",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cloud_defend/defense_evasion_ld_preload_shared_object_modified_inside_a_container.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.type != \"deletion\" and\nfile.path like (\"/etc/ld.so.preload\", \"/etc/ld.so.conf.d/*\", \"/etc/ld.so.conf\") and\nprocess.interactive == true and container.id like \"*\" \n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "ld.so.preload",
+        "ld.so.conf"
+      ],
+      "raw_values": [
+        "/etc/ld.so.preload",
+        "/etc/ld.so.conf.d/*",
+        "/etc/ld.so.conf"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ]
+}

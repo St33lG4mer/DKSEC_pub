@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_csc_compilation",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_csc_compilation.eql",
+  "raw_query": "any where process.executable:\"*\\\\csc.exe\" and process.command_line:\"*/noconfig /fullpaths @*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csc.exe"
+      ],
+      "raw_values": [
+        "*\\\\csc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "fullpaths @"
+      ],
+      "raw_values": [
+        "*/noconfig /fullpaths @*"
+      ]
+    }
+  ]
+}

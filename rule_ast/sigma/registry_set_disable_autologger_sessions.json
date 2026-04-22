@@ -1,0 +1,66 @@
+{
+  "source": "sigma",
+  "name": "registry_set_disable_autologger_sessions",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_disable_autologger_sessions.eql",
+  "raw_query": "any where (registry.path:\"*\\\\System\\\\CurrentControlSet\\\\Control\\\\WMI\\\\Autologger\\\\*\" and ((registry.path like~ (\"*\\\\EventLog-*\", \"*\\\\Defender*\")) and (registry.path like~ (\"*\\\\Enable\", \"*\\\\Start\")) and winlog.event_data.Details:\"DWORD (0x00000000)\")) and (not (process.executable:\"C:\\\\Windows\\\\system32\\\\wevtutil.exe\" or ((process.executable like~ (\"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\", \"C:\\\\Program Files\\\\Windows Defender\\\\*\", \"C:\\\\Program Files (x86)\\\\Windows Defender\\\\*\")) and process.executable:\"*\\\\MsMpEng.exe\" and (registry.path like~ (\"*\\\\DefenderApiLogger\\\\*\", \"*\\\\DefenderAuditLogger\\\\*\")))))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\eventlog-",
+        "\\\\defender",
+        "\\\\enable",
+        "\\\\start",
+        "\\\\defenderapilogger\\\\",
+        "\\\\defenderauditlogger\\\\"
+      ],
+      "raw_values": [
+        "*\\\\EventLog-*",
+        "*\\\\Defender*",
+        "*\\\\Enable",
+        "*\\\\Start",
+        "*\\\\DefenderApiLogger\\\\*",
+        "*\\\\DefenderAuditLogger\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\control\\\\wmi\\\\autologger\\\\"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Control\\\\WMI\\\\Autologger\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wevtutil.exe",
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\wevtutil.exe",
+        "*\\\\MsMpEng.exe"
+      ]
+    }
+  ]
+}

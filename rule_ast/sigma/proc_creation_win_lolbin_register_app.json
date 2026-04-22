@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_register_app",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_register_app.eql",
+  "raw_query": "any where process.command_line:\"*\\\\register_app.vbs*\" and process.command_line:\"*-register*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "register_app.vbs",
+        "-register"
+      ],
+      "raw_values": [
+        "*\\\\register_app.vbs*",
+        "*-register*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "source": "elastic",
+  "name": "Openssl Client or Server Activity",
+  "slug": "execution_shell_openssl_client_or_server",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_shell_openssl_client_or_server.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\") and\nprocess.name == \"openssl\" and (\n  (\n    process.args == \"s_client\" and process.args : (\"-connect\", \"*:*\") and\n    process.args in (\n      \"sh\", \"dash\", \"bash\", \"zsh\",\n      \"/bin/sh\", \"/bin/dash\", \"/bin/bash\", \"/bin/zsh\",\n      \"/usr/bin/sh\", \"/usr/bin/dash\", \"/usr/bin/bash\", \"/usr/bin/zsh\",\n      \"/usr/local/bin/sh\", \"/usr/local/bin/dash\", \"/usr/local/bin/bash\", \"/usr/local/bin/zsh\"\n    ) and not process.args == \"-showcerts\"\n  ) or\n  (process.args == \"s_server\" and process.args == \"-port\")\n) and\nnot process.parent.executable in (\n  \"/pro/xymon/client/ext/awsXymonCheck.sh\", \"/opt/antidot-svc/nrpe/plugins/check_cert\", \"/etc/zabbix/scripts/check_dane_tlsa.sh\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-connect"
+      ],
+      "raw_values": [
+        "-connect",
+        "*:*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "dash",
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "sh",
+        "dash",
+        "bash",
+        "zsh",
+        "/bin/sh",
+        "/bin/dash",
+        "/bin/bash",
+        "/bin/zsh",
+        "/usr/bin/sh",
+        "/usr/bin/dash",
+        "/usr/bin/bash",
+        "/usr/bin/zsh",
+        "/usr/local/bin/sh",
+        "/usr/local/bin/dash",
+        "/usr/local/bin/bash",
+        "/usr/local/bin/zsh"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "awsxymoncheck.sh",
+        "check_cert",
+        "check_dane_tlsa.sh"
+      ],
+      "raw_values": [
+        "/pro/xymon/client/ext/awsXymonCheck.sh",
+        "/opt/antidot-svc/nrpe/plugins/check_cert",
+        "/etc/zabbix/scripts/check_dane_tlsa.sh"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "openssl"
+      ],
+      "raw_values": [
+        "openssl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "s_client",
+        "-showcerts",
+        "s_server",
+        "-port"
+      ],
+      "raw_values": [
+        "s_client",
+        "-showcerts",
+        "s_server",
+        "-port"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_taskkill_execution",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_taskkill_execution.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\taskkill.exe\" or process.pe.original_file_name:\"taskkill.exe\") and (process.command_line like~ (\"* -f *\", \"* /f *\", \"* \u2013f *\", \"* \u2014f *\", \"* \u2015f *\") or process.command_line like~ (\"* -f\", \"* /f\", \"* \u2013f\", \"* \u2014f\", \"* \u2015f\")) and (process.command_line like~ (\"* -im *\", \"* /im *\", \"* \u2013im *\", \"* \u2014im *\", \"* \u2015im *\") or process.command_line like~ (\"* -pid *\", \"* /pid *\", \"* \u2013pid *\", \"* \u2014pid *\", \"* \u2015pid *\"))) and (not ((process.parent.executable like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*:\\\\Windows\\\\Temp*\")) and process.parent.executable:\"*.tmp\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-im",
+        "\u2013im",
+        "\u2014im",
+        "\u2015im",
+        "-pid",
+        "pid",
+        "\u2013pid",
+        "\u2014pid",
+        "\u2015pid"
+      ],
+      "raw_values": [
+        "* -f *",
+        "* /f *",
+        "* \u2013f *",
+        "* \u2014f *",
+        "* \u2015f *",
+        "* -f",
+        "* /f",
+        "* \u2013f",
+        "* \u2014f",
+        "* \u2015f",
+        "* -im *",
+        "* /im *",
+        "* \u2013im *",
+        "* \u2014im *",
+        "* \u2015im *",
+        "* -pid *",
+        "* /pid *",
+        "* \u2013pid *",
+        "* \u2014pid *",
+        "* \u2015pid *"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "temp"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\Temp*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "taskkill.exe"
+      ],
+      "raw_values": [
+        "*\\\\taskkill.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "taskkill.exe"
+      ],
+      "raw_values": [
+        "taskkill.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        ".tmp"
+      ],
+      "raw_values": [
+        "*.tmp"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_ieexec_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_ieexec_download.eql",
+  "raw_query": "any where (process.executable:\"*\\\\IEExec.exe\" or process.pe.original_file_name:\"IEExec.exe\") and (process.command_line like~ (\"*http://*\", \"*https://*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ieexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\IEExec.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ieexec.exe"
+      ],
+      "raw_values": [
+        "IEExec.exe"
+      ]
+    }
+  ]
+}

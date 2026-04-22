@@ -1,0 +1,97 @@
+{
+  "source": "elastic",
+  "name": "SELinux Configuration Creation or Renaming",
+  "slug": "defense_evasion_selinux_configuration_creation_or_renaming",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_selinux_configuration_creation_or_renaming.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"creation\", \"file_create_event\", \"rename\", \"file_rename_event\")\nand file.path : \"/etc/selinux/config\" and not (\n  process.name in (\"dockerd\", \"platform-python\") or\n  process.executable like (\n    \"/usr/libexec/platform-python*\", \"/dev/fd/3\", \"/usr/bin/podman\", \"/usr/local/cpanel/3rdparty/perl/*/bin/perl\",\n    \"/kaniko/executor\", \"/usr/lib/systemd/systemd\", \"/usr/bin/insights-client\", \"/bin/podman\"\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "platform-python",
+        "podman",
+        "perl",
+        "executor",
+        "systemd",
+        "insights-client"
+      ],
+      "raw_values": [
+        "/usr/libexec/platform-python*",
+        "/dev/fd/3",
+        "/usr/bin/podman",
+        "/usr/local/cpanel/3rdparty/perl/*/bin/perl",
+        "/kaniko/executor",
+        "/usr/lib/systemd/systemd",
+        "/usr/bin/insights-client",
+        "/bin/podman"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "creation",
+        "file_create_event",
+        "rename",
+        "file_rename_event"
+      ],
+      "raw_values": [
+        "creation",
+        "file_create_event",
+        "rename",
+        "file_rename_event"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dockerd",
+        "platform-python"
+      ],
+      "raw_values": [
+        "dockerd",
+        "platform-python"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "config"
+      ],
+      "raw_values": [
+        "/etc/selinux/config"
+      ]
+    }
+  ]
+}

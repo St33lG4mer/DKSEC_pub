@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_wsreset_integrity_level",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_wsreset_integrity_level.eql",
+  "raw_query": "any where process.executable:\"*\\\\wsreset.exe\" and (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wsreset.exe"
+      ],
+      "raw_values": [
+        "*\\\\wsreset.exe"
+      ]
+    }
+  ]
+}

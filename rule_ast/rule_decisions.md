@@ -1,0 +1,4497 @@
+# Rule Decision List
+
+Generated from `rule_ast/comparison_report.md`.
+
+## Summary
+
+| Action | Count | Details |
+|--------|-------|---------|
+| 🗑️ **Delete from Elastic** | **0** | Replaced by their Sigma equivalents |
+| ✅ **Keep in Elastic** | **1652** | No Sigma equivalent, or Elastic is superior |
+| ➕ **Add Sigma rules to Elastic** | **1892** | New coverage + replacements for deleted rules |
+| ⏭️ **Skip Sigma import** | **858** | Elastic already covers these |
+| 🔍 **Manual review** | **38** | Unparseable Sigma conditions |
+
+---
+
+## 1. Elastic Rules to DELETE
+
+These are replaced by their Sigma equivalents from the 'Pick one' section.
+Delete these from Kibana after importing the corresponding Sigma rules.
+
+| Elastic Rule | Slug | Risk | Replaced by Sigma Rule(s) |
+|-------------|------|------|--------------------------|
+
+---
+
+## 2. Elastic Rules to KEEP
+
+**1652 rules** — these stay in Elastic.
+Includes rules with no Sigma overlap and rules where Elastic coverage is superior.
+
+- `persistence_scheduled_task_creation_winlog` — A scheduled task was created
+- `execution_abnormal_process_id_file_created` — Abnormal Process ID or Lock File Created
+- `lateral_movement_dns_server_overflow` — Abnormally Large DNS Response
+- `command_and_control_accepted_default_telnet_port_connection` — Accepted Default Telnet Port Connection
+- `defense_evasion_acl_modification_via_setfacl` — Access Control List Modification via setfacl
+- `credential_access_ldap_attributes` — Access to a Sensitive LDAP Attribute
+- `persistence_dontexpirepasswd_account` — Account Configured with Never-Expiring Password *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_command_system_account` — Account Discovery Command via SYSTEM Account *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_remote_password_reset` — Account Password Reset Remotely
+- `discovery_ad_explorer_execution` — Active Directory Discovery using AdExplorer *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_forced_authentication_pipes` — Active Directory Forced Authentication from Linux Host - SMB Named Pipes *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_group_modification_by_system` — Active Directory Group Modification by SYSTEM *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_adding_the_hidden_file_attribute_with_via_attribexe` — Adding Hidden File Attribute via Attrib *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_adfind_command_activity` — AdFind Command Activity
+- `persistence_administrator_privileges_assigned_to_okta_group` — Administrator Privileges Assigned to an Okta Group
+- `persistence_ad_adminsdholder` — AdminSDHolder Backdoor
+- `persistence_sdprop_exclusion_dsheuristics` — AdminSDHolder SDProp Exclusion Added *(Skip — Sigma equivalent exists but Elastic is better)*
+- `endgame_adversary_behavior_detected` — Adversary Behavior - Detected - Elastic Endgame
+- `defense_evasion_agent_spoofing_multiple_hosts` — Agent Spoofing - Multiple Hosts Using Same Agent
+- `multiple_alerts_from_different_modules_by_dstip` — Alerts From Multiple Integrations by Destination Address
+- `multiple_alerts_from_different_modules_by_srcip` — Alerts From Multiple Integrations by Source Address
+- `multiple_alerts_from_different_modules_by_user` — Alerts From Multiple Integrations by User Name
+- `multiple_alerts_risky_host_esql` — Alerts in Different ATT&CK Tactics by Host
+- `defense_evasion_root_dir_ads_creation` — Alternate Data Stream Creation/Execution at Volume Root Directory
+- `resource_development_ml_linux_anomalous_compiler_activity` — Anomalous Linux Compiler Activity
+- `persistence_ml_linux_anomalous_process_all_hosts` — Anomalous Process For a Linux Population
+- `persistence_ml_windows_anomalous_process_all_hosts` — Anomalous Process For a Windows Population
+- `persistence_ml_windows_anomalous_process_creation` — Anomalous Windows Process Creation
+- `defense_evasion_apparmor_policy_access` — AppArmor Policy Interface Access
+- `defense_evasion_apparmor_policy_violation` — AppArmor Policy Violation Detected
+- `defense_evasion_apparmor_profile_compilation` — AppArmor Profile Compilation via apparmor_parser
+- `execution_scripting_osascript_exec_followed_by_netcon` — Apple Script Execution followed by Network Connection
+- `privilege_escalation_applescript_with_admin_privs` — Apple Scripting Execution with Administrator Privileges
+- `persistence_application_added_to_google_workspace_domain` — Application Added to Google Workspace Domain
+- `defense_evasion_application_removed_from_blocklist_in_google_workspace` — Application Removed from Blocklist in Google Workspace
+- `persistence_apt_package_manager_file_creation` — APT Package Manager Configuration File Creation
+- `persistence_at_job_creation` — At Job Created or Modified
+- `defense_evasion_clear_kernel_ring_buffer` — Attempt to Clear Kernel Ring Buffer
+- `defense_evasion_journalctl_clear_logs` — Attempt to Clear Logs via Journalctl
+- `persistence_attempt_to_create_okta_api_token` — Attempt to Create Okta API Token
+- `impact_okta_attempt_to_deactivate_okta_application` — Attempt to Deactivate an Okta Application
+- `defense_evasion_attempt_to_deactivate_okta_network_zone` — Attempt to Deactivate an Okta Network Zone
+- `defense_evasion_okta_attempt_to_deactivate_okta_policy` — Attempt to Deactivate an Okta Policy
+- `defense_evasion_okta_attempt_to_deactivate_okta_policy_rule` — Attempt to Deactivate an Okta Policy Rule
+- `impact_okta_attempt_to_delete_okta_application` — Attempt to Delete an Okta Application
+- `defense_evasion_attempt_to_delete_okta_network_zone` — Attempt to Delete an Okta Network Zone
+- `defense_evasion_okta_attempt_to_delete_okta_policy` — Attempt to Delete an Okta Policy
+- `defense_evasion_okta_attempt_to_delete_okta_policy_rule` — Attempt to Delete an Okta Policy Rule
+- `defense_evasion_attempt_to_disable_auditd_service` — Attempt to Disable Auditd Service *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_attempt_to_disable_gatekeeper` — Attempt to Disable Gatekeeper
+- `defense_evasion_attempt_to_disable_iptables_or_firewall` — Attempt to Disable IPTables or Firewall *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_attempt_to_disable_syslog_service` — Attempt to Disable Syslog Service
+- `persistence_enable_root_account` — Attempt to Enable the Root Account
+- `command_and_control_tunnel_vscode` — Attempt to Establish VScode Remote Tunnel *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_wsl_kalilinux` — Attempt to Install Kali Linux via WSL *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_install_root_certificate` — Attempt to Install Root Certificate
+- `impact_okta_attempt_to_modify_okta_application` — Attempt to Modify an Okta Application
+- `defense_evasion_okta_attempt_to_modify_okta_network_zone` — Attempt to Modify an Okta Network Zone
+- `defense_evasion_okta_attempt_to_modify_okta_policy` — Attempt to Modify an Okta Policy
+- `defense_evasion_okta_attempt_to_modify_okta_policy_rule` — Attempt to Modify an Okta Policy Rule
+- `lateral_movement_mounting_smb_share` — Attempt to Mount SMB Share via Command Line
+- `persistence_attempt_to_reset_mfa_factors_for_okta_user_account` — Attempt to Reset MFA Factors for an Okta User Account
+- `impact_attempt_to_revoke_okta_api_token` — Attempt to Revoke Okta API Token
+- `defense_evasion_unload_endpointsecurity_kext` — Attempt to Unload Elastic Endpoint Security Kernel Extension
+- `credential_access_attempted_bypass_of_okta_mfa` — Attempted Bypass of Okta MFA
+- `credential_access_attempts_to_brute_force_okta_user_account` — Attempts to Brute Force an Okta User Account
+- `persistence_unusual_pam_grantor` — Authentication via Unusual PAM Grantor
+- `persistence_credential_access_authorization_plugin_creation` — Authorization Plugin Modification
+- `initial_access_iam_session_token_used_from_multiple_addresses` — AWS Access Token Used from Multiple Addresses
+- `discovery_organization_discovery_by_rare_user` — AWS Account Discovery By Rare User *(Skip — Sigma equivalent exists but Elastic is better)*
+- `exfiltration_s3_uncommon_client_user_agent` — AWS API Activity from Uncommon S3 Client by Rare User
+- `aws_bedrock_multiple_attempts_to_use_denied_models_by_user` — AWS Bedrock Detected Multiple Attempts to use Denied Models by a Single User
+- `aws_bedrock_multiple_validation_exception_errors_by_single_user` — AWS Bedrock Detected Multiple Validation Exception Errors by a Single User
+- `aws_bedrock_guardrails_multiple_violations_in_single_request` — AWS Bedrock Guardrails Detected Multiple Policy Violations Within a Single Blocked Request
+- `aws_bedrock_guardrails_multiple_violations_by_single_user` — AWS Bedrock Guardrails Detected Multiple Violations by a Single User Over a Session
+- `aws_bedrock_execution_without_guardrails` — AWS Bedrock Invocations without Guardrails Detected by a Single User Over a Session
+- `command_and_control_aws_cli_endpoint_url_used` — AWS CLI Command with Custom Endpoint URL
+- `execution_cloudshell_environment_created` — AWS CloudShell Environment Created
+- `collection_cloudtrail_logging_created` — AWS CloudTrail Log Created
+- `defense_evasion_cloudtrail_logging_deleted` — AWS CloudTrail Log Deleted
+- `defense_evasion_cloudtrail_logging_evasion` — AWS CloudTrail Log Evasion
+- `defense_evasion_cloudtrail_logging_suspended` — AWS CloudTrail Log Suspended
+- `impact_cloudtrail_logging_updated` — AWS CloudTrail Log Updated
+- `defense_evasion_cloudwatch_alarm_deletion` — AWS CloudWatch Alarm Deletion
+- `impact_cloudwatch_log_group_deletion` — AWS CloudWatch Log Group Deletion
+- `impact_cloudwatch_log_stream_deletion` — AWS CloudWatch Log Stream Deletion
+- `defense_evasion_config_service_rule_deletion` — AWS Config Resource Deletion
+- `defense_evasion_configuration_recorder_stopped` — AWS Configuration Recorder Stopped
+- `credential_access_aws_creds_search_inside_container` — AWS Credentials Searched For Inside A Container
+- `discovery_multiple_discovery_api_calls_via_cli` — AWS Discovery API Calls via CLI from a Single Resource
+- `exfiltration_dynamodb_scan_by_unusual_user` — AWS DynamoDB Scan by Unusual User
+- `exfiltration_dynamodb_table_exported_to_s3` — AWS DynamoDB Table Exported to S3
+- `exfiltration_ec2_ami_shared_with_separate_account` — AWS EC2 AMI Shared with Another Account
+- `impact_ec2_ebs_snapshot_access_removed` — AWS EC2 EBS Snapshot Access Removed
+- `exfiltration_ec2_ebs_snapshot_shared_with_another_account` — AWS EC2 EBS Snapshot Shared or Made Public
+- `impact_ec2_disable_ebs_encryption` — AWS EC2 Encryption Disabled
+- `exfiltration_ec2_export_task` — AWS EC2 Export Task
+- `exfiltration_ec2_full_network_packet_capture_detected` — AWS EC2 Full Network Packet Capture Detected
+- `lateral_movement_ec2_instance_connect_ssh_public_key_uploaded` — AWS EC2 Instance Connect SSH Public Key Uploaded
+- `lateral_movement_ec2_instance_console_login` — AWS EC2 Instance Console Login via Assumed Role
+- `execution_aws_ec2_lolbin_via_ssm` — AWS EC2 LOLBin Execution via SSM SendCommand *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_ec2_network_acl_creation` — AWS EC2 Network Access Control List Creation
+- `defense_evasion_ec2_network_acl_deletion` — AWS EC2 Network Access Control List Deletion
+- `persistence_route_table_created` — AWS EC2 Route Table Created
+- `persistence_ec2_route_table_modified_or_deleted` — AWS EC2 Route Table Modified or Deleted
+- `persistence_ec2_security_group_configuration_change_detection` — AWS EC2 Security Group Configuration Change
+- `defense_evasion_ec2_serial_console_access_enabled` — AWS EC2 Serial Console Access Enabled
+- `credential_access_aws_getpassword_for_ec2_instance` — AWS EC2 Unauthorized Admin Credential Fetch via Assumed Role
+- `discovery_ec2_userdata_request_for_ec2_instance` — AWS EC2 User Data Retrieval for EC2 Instance
+- `impact_efs_filesystem_deleted` — AWS EFS File System Deleted
+- `impact_aws_eventbridge_rule_disabled_or_deleted` — AWS EventBridge Rule Disabled or Deleted
+- `defense_evasion_sts_get_federation_token` — AWS First Occurrence of STS GetFederationToken Request by User
+- `defense_evasion_guardduty_detector_deletion` — AWS GuardDuty Detector Deletion
+- `defense_evasion_guardduty_member_manipulation` — AWS GuardDuty Member Account Manipulation
+- `privilege_escalation_iam_administratoraccess_policy_attached_to_group` — AWS IAM AdministratorAccess Policy Attached to Group
+- `privilege_escalation_iam_administratoraccess_policy_attached_to_role` — AWS IAM AdministratorAccess Policy Attached to Role
+- `privilege_escalation_iam_administratoraccess_policy_attached_to_user` — AWS IAM AdministratorAccess Policy Attached to User
+- `persistence_iam_api_calls_via_user_session_token` — AWS IAM API Calls via Temporary Session Tokens
+- `privilege_escalation_iam_update_assume_role_policy` — AWS IAM Assume Role Policy Update
+- `credential_access_iam_compromisedkeyquarantine_policy_attached_to_user` — AWS IAM CompromisedKeyQuarantine Policy Attached to User
+- `persistence_iam_create_user_via_assumed_role_on_ec2_instance` — AWS IAM Create User via Assumed Role on EC2 Instance
+- `privilege_escalation_iam_customer_managed_policy_attached_to_role` — AWS IAM Customer-Managed Policy Attached to Role by Rare User
+- `impact_iam_deactivate_mfa_device` — AWS IAM Deactivation of MFA Device
+- `persistence_iam_group_creation` — AWS IAM Group Creation
+- `impact_iam_group_deletion` — AWS IAM Group Deletion
+- `persistence_iam_create_login_profile_for_root` — AWS IAM Login Profile Added for Root
+- `credential_access_iam_long_term_access_key_correlated_with_elevated_detection_alerts` — AWS IAM Long-Term Access Key Correlated with Elevated Detection Alerts
+- `credential_access_iam_long_term_access_key_first_seen_from_source_ip` — AWS IAM Long-Term Access Key First Seen from Source IP
+- `persistence_iam_oidc_provider_created` — AWS IAM OIDC Provider Created by Rare User
+- `discovery_iam_principal_enumeration_via_update_assume_role_policy` — AWS IAM Principal Enumeration via UpdateAssumeRolePolicy
+- `persistence_iam_roles_anywhere_profile_created` — AWS IAM Roles Anywhere Profile Creation
+- `persistence_iam_roles_anywhere_trusted_anchor_created_with_external_ca` — AWS IAM Roles Anywhere Trust Anchor Created with External CA
+- `persistence_iam_saml_provider_created` — AWS IAM SAML Provider Created
+- `privilege_escalation_iam_saml_provider_updated` — AWS IAM SAML Provider Updated
+- `credential_access_iam_user_addition_to_group` — AWS IAM User Addition to Group
+- `persistence_iam_user_created_access_keys_for_another_user` — AWS IAM User Created Access Keys For Another User
+- `persistence_aws_attempt_to_register_virtual_mfa_device` — AWS IAM Virtual MFA Device Registration Attempt with Session Token
+- `impact_kms_cmk_disabled_or_scheduled_for_deletion` — AWS KMS Customer Managed Key Disabled or Scheduled for Deletion
+- `persistence_lambda_backdoor_invoke_function_for_any_principal` — AWS Lambda Function Policy Updated to Allow Public Invocation
+- `execution_lambda_external_layer_added_to_function` — AWS Lambda Layer Added to Existing Function
+- `credential_access_root_console_failure_brute_force` — AWS Management Console Brute Force of Root User Identity
+- `initial_access_console_login_root` — AWS Management Console Root Login
+- `persistence_rds_instance_made_public` — AWS RDS DB Instance Made Public
+- `impact_rds_instance_cluster_deletion` — AWS RDS DB Instance or Cluster Deleted
+- `impact_rds_instance_cluster_deletion_protection_disabled` — AWS RDS DB Instance or Cluster Deletion Protection Disabled
+- `persistence_rds_db_instance_password_modified` — AWS RDS DB Instance or Cluster Password Modified
+- `defense_evasion_rds_instance_restored` — AWS RDS DB Instance Restored
+- `exfiltration_rds_snapshot_shared_with_another_account` — AWS RDS DB Snapshot Shared with Another Account
+- `impact_rds_snapshot_deleted` — AWS RDS Snapshot Deleted
+- `exfiltration_rds_snapshot_export` — AWS RDS Snapshot Export
+- `persistence_route_53_domain_transfer_lock_disabled` — AWS Route 53 Domain Transfer Lock Disabled
+- `persistence_route_53_domain_transferred_to_another_account` — AWS Route 53 Domain Transferred to Another Account
+- `persistence_route_53_hosted_zone_associated_with_a_vpc` — AWS Route 53 Private Hosted Zone Associated With a VPC
+- `defense_evasion_route53_dns_query_resolver_config_deletion` — AWS Route 53 Resolver Query Log Configuration Deleted
+- `defense_evasion_s3_bucket_configuration_deletion` — AWS S3 Bucket Configuration Deletion
+- `impact_aws_s3_bucket_enumeration_or_brute_force` — AWS S3 Bucket Enumeration or Brute Force *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_s3_bucket_lifecycle_expiration_added` — AWS S3 Bucket Expiration Lifecycle Configuration Added
+- `exfiltration_s3_bucket_policy_added_for_public_access` — AWS S3 Bucket Policy Added to Allow Public Access
+- `exfiltration_s3_bucket_policy_added_for_external_account_access` — AWS S3 Bucket Policy Added to Share with External Account
+- `exfiltration_s3_bucket_replicated_to_external_account` — AWS S3 Bucket Replicated to Another Account
+- `defense_evasion_s3_bucket_server_access_logging_disabled` — AWS S3 Bucket Server Access Logging Disabled
+- `impact_s3_object_encryption_with_external_key` — AWS S3 Object Encryption Using External KMS Key
+- `impact_s3_object_versioning_disabled` — AWS S3 Object Versioning Suspended
+- `discovery_s3_rapid_bucket_posture_api_calls` — AWS S3 Rapid Bucket Posture API Calls from a Single Principal
+- `impact_s3_static_site_js_file_uploaded` — AWS S3 Static Site JavaScript File Uploaded
+- `collection_s3_unauthenticated_bucket_access_by_rare_source` — AWS S3 Unauthenticated Bucket Access by Rare Source
+- `credential_access_rapid_secret_retrieval_attempts_from_secretsmanager` — AWS Secrets Manager Rapid Secrets Retrieval
+- `persistence_sensitive_operations_via_cloudshell` — AWS Sensitive IAM Operations Performed via CloudShell
+- `discovery_servicequotas_multi_region_service_quota_requests` — AWS Service Quotas Multi-Region GetServiceQuota Requests
+- `initial_access_signin_console_login_federated_user` — AWS Sign-In Console Login with Federated User
+- `initial_access_password_recovery` — AWS Sign-In Root Password Recovery Requested
+- `exfiltration_sns_rare_protocol_subscription_by_user` — AWS SNS Rare Protocol Subscription by User
+- `resource_development_sns_topic_created_by_rare_user` — AWS SNS Topic Created by Rare User
+- `lateral_movement_sns_topic_message_publish_by_rare_user` — AWS SNS Topic Message Publish by Rare User
+- `defense_evasion_sqs_purge_queue` — AWS SQS Queue Purge
+- `execution_ssm_sendcommand_by_rare_user` — AWS SSM `SendCommand` Execution by Rare User
+- `execution_aws_ssm_sendcommand_with_command_parameters` — AWS SSM `SendCommand` with Run Shell Command Parameters
+- `execution_ssm_command_document_created_by_rare_user` — AWS SSM Command Document Created by Rare User
+- `discovery_ssm_inventory_reconnaissance` — AWS SSM Inventory Reconnaissance by Rare User
+- `lateral_movement_aws_ssm_start_session_to_ec2_instance` — AWS SSM Session Started to EC2 Instance
+- `persistence_sts_assume_role_with_new_mfa` — AWS STS AssumeRole with New MFA Device
+- `privilege_escalation_sts_assume_root_from_rare_user_and_member_account` — AWS STS AssumeRoot by Rare User and Member Account
+- `discovery_new_terms_sts_getcalleridentity` — AWS STS GetCallerIdentity API Called for the First Time
+- `privilege_escalation_role_assumption_by_service` — AWS STS Role Assumption by Service
+- `privilege_escalation_role_assumption_by_user` — AWS STS Role Assumption by User
+- `privilege_escalation_sts_role_chaining` — AWS STS Role Chaining
+- `initial_access_suspicious_user_agent_detected_in_cloudtrail` — AWS Suspicious User Agent Fingerprint
+- `credential_access_retrieve_secure_string_parameters_via_ssm` — AWS Systems Manager SecureString Parameter Request with Decryption Flag
+- `defense_evasion_ec2_flow_log_deletion` — AWS VPC Flow Logs Deletion
+- `defense_evasion_waf_acl_deletion` — AWS WAF Access Control List Deletion
+- `defense_evasion_waf_rule_or_rule_group_deletion` — AWS WAF Rule or Rule Group Deletion
+- `initial_access_azure_arc_cluster_credential_access_unusual_source` — Azure Arc Cluster Credential Access by Identity from Unusual Source
+- `persistence_automation_account_created` — Azure Automation Account Created
+- `execution_automation_runbook_created_or_modified` — Azure Automation Runbook Created or Modified
+- `defense_evasion_automation_runbook_deleted` — Azure Automation Runbook Deleted
+- `persistence_automation_webhook_created` — Azure Automation Webhook Created
+- `discovery_storage_blob_container_access_modification` — Azure Blob Storage Container Access Level Modified
+- `defense_evasion_storage_blob_permissions_modified` — Azure Blob Storage Permissions Modified
+- `impact_azure_compute_restore_point_collection_deleted` — Azure Compute Restore Point Collection Deleted by Unusual User
+- `impact_azure_compute_restore_point_collections_deleted` — Azure Compute Restore Point Collections Deleted
+- `impact_azure_compute_vm_snapshot_deletion` — Azure Compute Snapshot Deletion by Unusual User and Resource Group
+- `impact_azure_compute_vm_snapshot_deletions` — Azure Compute Snapshot Deletions by User
+- `execution_compute_vm_command_executed` — Azure Compute VM Command Executed
+- `defense_evasion_security_alert_suppression_rule_created` — Azure Diagnostic Settings Alert Suppression Rule Created or Modified
+- `defense_evasion_insights_diagnostic_settings_deletion` — Azure Diagnostic Settings Deleted
+- `persistence_event_hub_created_or_updated` — Azure Event Hub Authorization Rule Created or Updated
+- `defense_evasion_event_hub_deletion` — Azure Event Hub Deleted
+- `credential_access_key_vault_excessive_retrieval` — Azure Key Vault Excessive Secret or Key Retrieved
+- `impact_key_vault_modified_by_unusual_user` — Azure Key Vault Modified
+- `credential_access_key_vault_retrieval_from_rare_identity` — Azure Key Vault Unusual Secret Key Usage
+- `defense_evasion_kubernetes_events_deleted` — Azure Kubernetes Services (AKS) Kubernetes Events Deleted
+- `impact_kubernetes_pod_deleted` — Azure Kubernetes Services (AKS) Kubernetes Pods Deleted
+- `privilege_escalation_kubernetes_aks_rolebinding_created` — Azure Kubernetes Services (AKS) Kubernetes Rolebindings Created
+- `azure_openai_insecure_output_handling_detection` — Azure OpenAI Insecure Output Handling
+- `privilege_escalation_azure_rbac_administrator_roles_assigned` — Azure RBAC Built-In Administrator Roles Assigned
+- `impact_resources_resource_group_deletion` — Azure Resource Group Deleted
+- `credential_access_azure_service_principal_signin_then_arc_credential_listing` — Azure Service Principal Sign-In Followed by Arc Cluster Credential Access
+- `collection_azure_storage_account_blob_public_access_enabled` — Azure Storage Account Blob Public Access Enabled
+- `impact_azure_storage_account_deletion` — Azure Storage Account Deletion by Unusual User
+- `impact_azure_storage_account_deletion_multiple` — Azure Storage Account Deletions by User
+- `credential_access_storage_account_key_regenerated` — Azure Storage Account Key Regenerated
+- `credential_access_azure_storage_account_keys_accessed` — Azure Storage Account Keys Accessed by Privileged User
+- `exfiltration_azure_storage_blob_download_azcopy_sas_token` — Azure Storage Blob Retrieval via AzCopy
+- `defense_evasion_network_frontdoor_firewall_policy_deletion` — Azure VNet Firewall Front Door WAF Policy Deleted
+- `defense_evasion_network_firewall_policy_deletion` — Azure VNet Firewall Policy Deleted
+- `credential_access_network_full_network_packet_capture_detected` — Azure VNet Full Network Packet Capture Enabled
+- `defense_evasion_network_watcher_deletion` — Azure VNet Network Watcher Deleted
+- `impact_deleting_backup_catalogs_with_wbadmin` — Backup Deletion with Wbadmin *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_base16_or_base32_encoding_or_decoding_activity` — Base16 or Base32 Encoding/Decoding Activity
+- `defense_evasion_interpreter_launched_from_decoded_payload` — Base64 Decoded Payload Piped to Interpreter
+- `persistence_shell_profile_modification` — Bash Shell Profile Modification
+- `elastic_endpoint_security_behavior_detected` — Behavior - Detected - Elastic Defend
+- `elastic_endpoint_security_behavior_prevented` — Behavior - Prevented - Elastic Defend
+- `execution_process_started_in_shared_memory_directory` — Binary Executed from Shared Memory Directory
+- `persistence_boot_file_copy` — Boot File Copy
+- `execution_tc_bpf_filter` — BPF filter applied using TC *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_bpf_program_or_map_load` — BPF Program or Map Load via bpftool
+- `defense_evasion_bpf_program_tampering` — BPF Program Tampering via bpftool
+- `persistence_browser_extension_install` — Browser Extension Install *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_browsers_unusual_parent` — Browser Process Spawned from an Unusual Parent *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_uac_bypass_event_viewer` — Bypass UAC via Event Viewer *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_chkconfig_service_add` — Chkconfig Service Add *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_chroot_execution_detected_inside_container` — Chroot Execution Detected via Defend for Containers
+- `defense_evasion_clearing_windows_console_history` — Clearing Windows Console History *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_clearing_windows_event_logs` — Clearing Windows Event Logs *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_cloud_creds_search_inside_a_container` — Cloud Credential Search Detected via Defend for Containers
+- `command_and_control_cobalt_strike_beacon` — Cobalt Strike Command and Control Beacon
+- `defense_evasion_code_signing_policy_modification_builtin_tools` — Code Signing Policy Modification Through Built-in tools
+- `defense_evasion_code_signing_policy_modification_registry` — Code Signing Policy Modification Through Registry
+- `execution_powershell_susp_args_via_winscript` — Command and Scripting Interpreter via Windows Scripts *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_indirect_exec_forfiles` — Command Execution via ForFiles *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_apt_solarwinds_backdoor_child_cmd_powershell` — Command Execution via SolarWinds Process
+- `defense_evasion_whitespace_padding_command_line` — Command Line Obfuscation via Whitespace Padding
+- `defense_evasion_obf_args_unicode_modified_letters` — Command Obfuscation via Unicode Modifier Letters *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_command_shell_via_rundll32` — Command Shell Activity Started via RunDLL32
+- `persistence_suspicious_com_hijack_registry` — Component Object Model Hijacking
+- `execution_via_hidden_shell_conhost` — Conhost Spawned By Suspicious Parent Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_common_llm_endpoint` — Connection to Common Large Language Model Endpoints
+- `command_and_control_encrypted_channel_freesslcert` — Connection to Commonly Abused Free SSL Certificate Providers *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_common_webservices` — Connection to Commonly Abused Web Services *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_telnet_network_activity_external` — Connection to External Network via Telnet
+- `lateral_movement_telnet_network_activity_internal` — Connection to Internal Network via Telnet
+- `execution_container_management_binary_launched_inside_a_container` — Container Management Utility Execution Detected via Defend for Containers
+- `execution_container_management_binary_launched_inside_container` — Container Management Utility Run Inside A Container
+- `container_workload_protection` — Container Workload Protection
+- `defense_evasion_execution_control_panel_suspicious_args` — Control Panel Process with Unusual Arguments *(Skip — Sigma equivalent exists but Elastic is better)*
+- `multiple_alerts_llm_by_user_entity` — Correlated Alerts on Similar User Identities
+- `credential_access_dnsnode_creation` — Creation of a DNS-Named Record
+- `persistence_evasion_hidden_local_account_creation` — Creation of a Hidden Local User Account *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_hidden_file_dir_tmp` — Creation of Hidden Files and Directories via CommandLine
+- `persistence_evasion_hidden_launch_agent_deamon_creation` — Creation of Hidden Launch Agent or Daemon
+- `persistence_creation_hidden_login_item_osascript` — Creation of Hidden Login Item via Apple Script
+- `defense_evasion_hidden_shared_object` — Creation of Hidden Shared Object File
+- `privilege_escalation_gpo_schtask_service_creation` — Creation or Modification of a new GPO Scheduled Task or Service *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_domain_backup_dpapi_private_keys` — Creation or Modification of Domain Backup DPAPI private key
+- `defense_evasion_create_mod_root_certificate` — Creation or Modification of Root Certificate *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_trufflehog_execution` — Credential Access via TruffleHog Execution
+- `credential_access_dump_registry_hives` — Credential Acquisition via Registry Hive Dumping *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_endgame_cred_dumping_detected` — Credential Dumping - Detected - Elastic Endgame
+- `credential_access_endgame_cred_dumping_prevented` — Credential Dumping - Prevented - Elastic Endgame
+- `privilege_escalation_endgame_cred_manipulation_detected` — Credential Manipulation - Detected - Elastic Endgame
+- `privilege_escalation_endgame_cred_manipulation_prevented` — Credential Manipulation - Prevented - Elastic Endgame
+- `persistence_cron_job_creation` — Cron Job Created or Modified
+- `crowdstrike_external_alerts` — CrowdStrike External Alerts
+- `execution_cupsd_foomatic_rip_shell_execution` — Cupsd or Foomatic-rip Shell Execution
+- `persistence_curl_execution_via_shell_profile` — Curl Execution via Shell Profile *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_curl_or_wget_executed_via_lolbin` — Curl or Wget Egress Network Connection via LoLBin
+- `command_and_control_curl_wget_spawn_via_nodejs_parent` — Curl or Wget Spawned via Node.js
+- `command_and_control_curl_socks_proxy_detected` — Curl SOCKS Proxy Activity from Unusual Parent
+- `command_and_control_curl_socks_proxy_detected_inside_container` — Curl SOCKS Proxy Detected via Defend for Containers
+- `privilege_escalation_cyberarkpas_error_audit_event_promotion` — CyberArk Privileged Access Security Error
+- `privilege_escalation_cyberarkpas_recommended_events_to_monitor_promotion` — CyberArk Privileged Access Security Recommended Monitor
+- `persistence_dbus_service_creation` — D-Bus Service Created
+- `defense_evasion_data_encrypted_via_openssl` — Data Encrypted via OpenSSL Utility
+- `privilege_escalation_debugfs_launched_inside_a_privileged_container` — DebugFS Execution Detected via Defend for Containers
+- `ml_low_count_events_for_a_host_name` — Decline in host-based traffic
+- `defense_evasion_decoded_payload_piped_to_interpreter` — Decoded Payload Piped to Interpreter Detected via Defend for Containers
+- `command_and_control_cobalt_strike_default_teamserver_cert` — Default Cobalt Strike Team Server Certificate
+- `execution_delayed_via_ping_lolbas_unsigned` — Delayed Execution via Ping *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_badsuccessor_dmsa_abuse` — Delegated Managed Service Account Modification by an Unusual User
+- `defense_evasion_delete_volume_usn_journal_with_fsutil` — Delete Volume USN Journal with Fsutil *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_adobe_hijack_persistence` — Deprecated - Adobe Hijack Persistence
+- `execution_pentest_eggshell_remote_admin_tool` — Deprecated - EggShell Backdoor Execution
+- `defense_evasion_hide_encoded_executable_registry` — Deprecated - Encoded Executable Stored in the Registry
+- `defense_evasion_exchange_dlp_policy_removed` — Deprecated - M365 Exchange DLP Policy Deleted
+- `initial_access_security_compliance_user_reported_phish_malware` — Deprecated - M365 Security Compliance Email Reported by User as Malware or Phish
+- `impact_security_compliance_potential_ransomware_activity` — Deprecated - M365 Security Compliance Potential Ransomware Activity
+- `impact_security_compliance_unusual_volume_of_file_deletion` — Deprecated - M365 Security Compliance Unusual Volume of File Deletion
+- `initial_access_security_compliance_user_restricted_from_sending_email` — Deprecated - M365 Security Compliance User Restricted from Sending Email
+- `defense_evasion_teams_external_access_enabled` — Deprecated - M365 Teams External Access Enabled
+- `persistence_teams_guest_access_enabled` — Deprecated - M365 Teams Guest Access Enabled
+- `defense_evasion_posh_obfuscation` — Deprecated - Potential PowerShell Obfuscated Script
+- `privilege_escalation_sudo_buffer_overflow` — Deprecated - Sudo Heap-Based Buffer Overflow Attempt
+- `command_and_control_sunburst_c2_activity_detected` — Deprecated - SUNBURST Command and Control Activity
+- `privilege_escalation_printspooler_service_suspicious_file` — Deprecated - Suspicious PrintSpooler Service Executable File Creation
+- `impact_alert_from_a_process_with_cpu_spike` — Detection Alert on a Process Exhibiting CPU Spike
+- `execution_d4c_k8s_mda_direct_interactive_kubernetes_api_request_by_usual_utilities` — Direct Interactive Kubernetes API Request by Common Utilities
+- `execution_d4c_k8s_mda_kubernetes_api_activity_by_unusual_utilities` — Direct Interactive Kubernetes API Request by Unusual Utilities
+- `execution_direct_interactive_kubernetes_api_request` — Direct Interactive Kubernetes API Request Detected via Defend for Containers
+- `defense_evasion_directory_creation_in_bin` — Directory Creation in /bin directory
+- `defense_evasion_disabling_windows_logs` — Disable Windows Event and Security Logs Using Built-in Tools *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_disable_windows_firewall_rules_with_netsh` — Disable Windows Firewall Rules via Netsh *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_lsass_ppl_disabled_registry` — Disabling Lsa Protection via Registry Modification
+- `privilege_escalation_disable_uac_registry` — Disabling User Account Control via Registry Modification
+- `defense_evasion_disabling_windows_defender_powershell` — Disabling Windows Defender Security Settings via PowerShell *(Skip — Sigma equivalent exists but Elastic is better)*
+- `collection_discovery_output_written_to_suspicious_file` — Discovery Command Output Written to Suspicious File
+- `privilege_escalation_dmsa_creation_by_unusual_user` — dMSA Account Creation by an Unusual User
+- `persistence_dnf_package_manager_plugin_file_creation` — DNF Package Manager Plugin File Creation
+- `discovery_dns_enumeration` — DNS Enumeration Detected via Defend for Containers
+- `defense_evasion_reg_disable_enableglobalqueryblocklist` — DNS Global Query Block List Modified or Disabled
+- `defense_evasion_dns_over_https_enabled` — DNS-over-HTTPS Enabled via Registry *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_dns_request_for_ip_lookup_service` — DNS Request for IP Lookup Service via Unsigned Binary *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_ml_packetbeat_dns_tunneling` — DNS Tunneling
+- `privilege_escalation_docker_release_file_creation` — Docker Release File Creation
+- `discovery_docker_socket_discovery` — Docker Socket Enumeration
+- `defense_evasion_domain_added_to_google_workspace_trusted_domains` — Domain Added to Google Workspace Trusted Domains
+- `execution_downloaded_shortcut_files` — Downloaded Shortcut Files
+- `execution_downloaded_url_file` — Downloaded URL Files
+- `persistence_dpkg_package_installation_from_unusual_parent` — DPKG Package Installed by Unusual Parent Process
+- `persistence_dracut_module_creation` — Dracut Module Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_dumping_hashes_bi_cmds` — Dumping Account Hashes via Built-In Commands
+- `credential_access_dumping_keychain_security` — Dumping of Keychain Content via Security Command
+- `defense_evasion_dylib_injection_via_env_vars` — Dylib Injection via Process Environment Variables
+- `defense_evasion_posh_obfuscation_iex_string_reconstruction` — Dynamic IEX Reconstruction via Method String Access
+- `persistence_dynamic_linker_backup` — Dynamic Linker Copy
+- `defense_evasion_dynamic_linker_file_creation` — Dynamic Linker Creation
+- `defense_evasion_ld_so_creation` — Dynamic Linker (ld.so) Creation
+- `defense_evasion_ld_preload_shared_object_modified_inside_a_container` — Dynamic Linker Modification Detected via Defend for Containers
+- `execution_egress_connection_from_entrypoint_in_container` — Egress Connection from Entrypoint in Container
+- `defense_evasion_elastic_agent_service_terminated` — Elastic Agent Service Terminated *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_missing_events_after_alert` — Elastic Defend Alert Followed by Telemetry Loss
+- `initial_access_elastic_defend_alert_genai_utility_descendant` — Elastic Defend Alert from GenAI Utility or Descendant *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_elastic_defend_alert_package_manager_ancestor` — Elastic Defend Alert from Package Manager Install Ancestry
+- `multiple_alerts_email_elastic_defend_correlation` — Elastic Defend and Email Alerts Correlation
+- `multiple_alerts_elastic_defend_netsecurity_by_host` — Elastic Defend and Network Security Alerts Correlation
+- `elastic_security_external_alerts` — Elastic Security External Alerts
+- `persistence_emond_rules_file_creation` — Emond Rules Creation or Modification
+- `defense_evasion_enable_network_discovery_with_netsh` — Enable Host Network Discovery via Netsh
+- `defense_evasion_potential_evasion_via_encoded_payload` — Encoded Payload Detected via Defend for Containers
+- `collection_winrar_encryption` — Encrypting Files with WinRar or 7z *(Skip — Sigma equivalent exists but Elastic is better)*
+- `elastic_endpoint_security` — Endpoint Security (Elastic Defend)
+- `initial_access_entra_id_actor_token_user_impersonation_abuse` — Entra ID Actor Token User Impersonation Abuse
+- `persistence_entra_id_suspicious_adrs_token_request` — Entra ID ADRS Token Request by Microsoft Authentication Broker
+- `persistence_entra_id_application_credential_modification` — Entra ID Application Credential Modified
+- `credential_access_entra_id_suspicious_signin` — Entra ID Concurrent Sign-in with Suspicious Properties
+- `persistence_entra_id_conditional_access_policy_modified` — Entra ID Conditional Access Policy (CAP) Modified
+- `resource_development_entra_id_custom_domain_added_and_verified` — Entra ID Custom Domain Added or Verified
+- `privilege_escalation_entra_id_tenant_domain_federation_via_audit_logs` — Entra ID Domain Federation Configuration Change
+- `privilege_escalation_entra_id_elevate_to_user_administrator_access` — Entra ID Elevated Access to User Access Administrator
+- `credential_access_entra_id_excessive_account_lockouts` — Entra ID Excessive Account Lockouts Detected
+- `persistence_graph_eam_addition_or_modification` — Entra ID External Authentication Methods (EAM) Modified
+- `initial_access_entra_id_external_guest_user_invite` — Entra ID External Guest User Invited
+- `persistence_entra_id_service_principal_federated_issuer_modified` — Entra ID Federated Identity Credential Issuer Modified
+- `persistence_entra_id_global_administrator_role_assigned` — Entra ID Global Administrator Role Assigned
+- `persistence_entra_id_pim_user_added_global_admin` — Entra ID Global Administrator Role Assigned (PIM User)
+- `initial_access_entra_id_high_risk_signin` — Entra ID High Risk Sign-in
+- `initial_access_entra_id_risky_user_or_compromised_sign_in` — Entra ID High Risk User Sign-in Heuristic
+- `initial_access_entra_id_illicit_consent_grant_via_registered_application` — Entra ID Illicit Consent Grant via Registered Application
+- `persistence_entra_id_mfa_disabled_for_user` — Entra ID MFA Disabled for User
+- `credential_access_entra_id_totp_brute_force_attempts` — Entra ID MFA TOTP Brute Force Attempted
+- `initial_access_entra_id_oauth_auth_code_grant_unusual_app_resource_user` — Entra ID OAuth Authorization Code Grant for Unusual User, App, and Resource
+- `credential_access_azure_entra_susp_device_code_signin` — Entra ID OAuth Device Code Flow with Concurrent Sign-ins
+- `initial_access_entra_id_device_code_auth_with_broker_client` — Entra ID OAuth Device Code Grant by Microsoft Authentication Broker
+- `initial_access_entra_id_first_time_seen_device_code_auth` — Entra ID OAuth Device Code Grant by Unusual User
+- `initial_access_entra_id_suspicious_oauth_flow_via_auth_broker_to_drs` — Entra ID OAuth Flow by Microsoft Authentication Broker to Device Registration Service (DRS)
+- `initial_access_entra_id_oauth_phishing_via_first_party_microsoft_application` — Entra ID OAuth Phishing via First-Party Microsoft Application
+- `persistence_entra_id_rt_to_prt_transition_from_user_device` — Entra ID OAuth PRT Issuance to Non-Managed Device Detected
+- `initial_access_entra_id_unusual_ropc_login_attempt` — Entra ID OAuth ROPC Grant Login Detected
+- `initial_access_entra_id_graph_single_session_from_multiple_addresses` — Entra ID OAuth User Impersonation to Microsoft Graph
+- `initial_access_entra_id_oauth_user_impersonation_scope` — Entra ID OAuth user_impersonation Scope for Unusual User and Client
+- `initial_access_entra_id_powershell_signin` — Entra ID PowerShell Sign-in
+- `persistence_entra_id_privileged_identity_management_role_modified` — Entra ID Privileged Identity Management (PIM) Role Modified
+- `initial_access_entra_id_protection_confirmed_compromise` — Entra ID Protection Admin Confirmed Compromise
+- `initial_access_entra_id_protection_alerts_for_user` — Entra ID Protection Alerts for User Detected
+- `initial_access_entra_id_protection_sign_in_risk_detected` — Entra ID Protection - Risk Detection - Sign-in Risk
+- `initial_access_entra_id_protection_user_risk_detected` — Entra ID Protection - Risk Detection - User Risk
+- `persistence_identity_protect_alert_followed_by_device_reg` — Entra ID Protection User Alert and Device Registration
+- `persistence_entra_id_service_principal_created` — Entra ID Service Principal Created
+- `persistence_entra_id_service_principal_credentials_added` — Entra ID Service Principal Credentials Created by Unusual User
+- `initial_access_entra_id_federated_login_by_unusual_client` — Entra ID Service Principal Federated Credential Authentication by Unusual Client
+- `initial_access_entra_id_service_principal_signin_unusual_source_asn` — Entra ID Service Principal with Unusual Source ASN
+- `collection_entra_id_sharepoint_access_from_unusual_application` — Entra ID Sharepoint or OneDrive Accessed by Unusual Client
+- `discovery_bloodhound_user_agents_detected` — Entra ID Sign-in BloodHound Suite User-Agent Detected
+- `credential_access_entra_id_signin_brute_force_microsoft_365` — Entra ID Sign-in Brute Force Attempted (Microsoft 365)
+- `discovery_entra_id_teamfiltration_user_agents_detected` — Entra ID Sign-in TeamFiltration User-Agent Detected
+- `persistence_entra_id_suspicious_cloud_device_registration` — Entra ID Unusual Cloud Device Registration
+- `persistence_entra_id_user_added_as_owner_for_azure_application` — Entra ID User Added as Registered Application Owner
+- `persistence_entra_id_user_added_as_owner_for_azure_service_principal` — Entra ID User Added as Service Principal Owner
+- `initial_access_entra_id_user_reported_risk` — Entra ID User Reported Suspicious Activity
+- `credential_access_entra_id_brute_force_activity` — Entra ID User Sign-in Brute Force Attempted
+- `initial_access_entra_id_rare_authentication_requirement_for_principal_user` — Entra ID User Sign-in with Unusual Authentication Type
+- `initial_access_entra_id_rare_app_id_for_principal_auth` — Entra ID User Sign-in with Unusual Client
+- `persistence_entra_id_user_signed_in_from_unusual_device` — Entra ID User Sign-in with Unusual Non-Managed Device
+- `discovery_enumerating_domain_trusts_via_dsquery` — Enumerating Domain Trusts via DSQUERY.EXE *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_enumerating_domain_trusts_via_nltest` — Enumerating Domain Trusts via NLTEST.EXE
+- `execution_enumeration_via_wmiprvse` — Enumeration Command Spawned via WMIPrvSE *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_admin_recon` — Enumeration of Administrator Accounts *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_privileged_localgroup_membership` — Enumeration of Privileged Local Groups Membership
+- `discovery_users_domain_built_in_commands` — Enumeration of Users or Groups via Built-in Commands *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_environment_enumeration` — Environment Variable Enumeration Detected via Defend for Containers
+- `discovery_esxi_software_via_find` — ESXI Discovery via Find
+- `discovery_esxi_software_via_grep` — ESXI Discovery via Grep
+- `defense_evasion_esxi_suspicious_timestomp_touch` — ESXI Timestomping using Touch Command
+- `impact_s3_excessive_object_encryption_with_sse_c` — Excessive AWS S3 Object Encryption with SSE-C
+- `collection_mailbox_export_winlog` — Exchange Mailbox Export via PowerShell *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_potential_persistence_script_executable_bit_set` — Executable Bit Set for Potential Persistence Script *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_file_creation_mult_extension` — Executable File Creation with Multiple Extensions *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_executable_download_via_wget` — Executable File Download via Wget *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_kthreadd_masquerading` — Executable Masquerading as Kernel Process
+- `initial_access_execution_from_removable_media` — Execution from a Removable Media with Network Connection
+- `execution_from_unusual_path_cmdline` — Execution from Unusual Directory - Command Line
+- `execution_windows_script_from_internet` — Execution of a Downloaded Windows Script
+- `execution_com_object_xwizard` — Execution of COM object via Xwizard *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_ms_office_written_file` — Execution of File Written or Modified by Microsoft Office *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_runtime_run_key_startup_susp_procs` — Execution of Persistent Suspicious Program
+- `execution_defense_evasion_electron_app_childproc_node_js` — Execution via Electron Child Process Node.js Module
+- `execution_via_github_actions_runner` — Execution via GitHub Actions Runner
+- `execution_shared_modules_local_sxs_dll` — Execution via local SxS Shared Module
+- `persistence_via_xp_cmdshell_mssql_stored_procedure` — Execution via MSSQL xp_cmdshell Stored Procedure
+- `execution_openclaw_agent_child_process` — Execution via OpenClaw Agent
+- `lateral_movement_execution_from_tsclient_mup` — Execution via TSClient Mountpoint
+- `defense_evasion_lolbas_win_cdb_utility` — Execution via Windows Command Debugging Utility *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_wsl_child_process` — Execution via Windows Subsystem for Linux *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_explicit_creds_via_scripting` — Execution with Explicit Credentials via Scripting *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_expired_driver_loaded` — Expired or Revoked Driver Loaded *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_endgame_exploit_detected` — Exploit - Detected - Elastic Endgame
+- `execution_endgame_exploit_prevented` — Exploit - Prevented - Elastic Endgame
+- `collection_email_powershell_exchange_mailbox` — Exporting Exchange Mailbox via PowerShell
+- `external_alerts` — External Alerts
+- `discovery_external_ip_address_discovery_via_curl` — External IP Address Discovery via Curl
+- `initial_access_external_user_added_to_google_workspace_group` — External User Added to Google Workspace Group
+- `execution_interactive_file_creation_followed_by_execution` — File Creation and Execution Detected via Defend for Containers
+- `execution_cupsd_foomatic_rip_file_creation` — File Creation by Cups or Foomatic-rip Child
+- `execution_file_execution_followed_by_deletion` — File Creation, Execution and Self-Deletion in Suspicious Directory
+- `defense_evasion_var_log_file_creation_by_unsual_process` — File Creation in /var/log via Suspicious Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_file_deletion_via_shred` — File Deletion via Shred *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_interactive_file_download_from_internet` — File Download Detected via Defend for Containers *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_suspicious_file_made_executable_via_chmod_inside_a_container` — File Execution Permission Modification Detected via Defend for Containers
+- `defense_evasion_chattr_immutable_file` — File made Immutable by Chattr
+- `defense_evasion_file_mod_writable_dir` — File Permission Modification in Writable Directory
+- `privilege_escalation_debugfs_launched_inside_container` — File System Debugger Launched Inside a Container
+- `execution_file_transfer_or_listener_established_via_netcat` — File Transfer or Listener Established via Netcat
+- `exfiltration_unusual_file_transfer_utility_launched` — File Transfer Utility Launched from Unusual Parent
+- `defense_evasion_right_to_left_override` — File with Right-to-Left Override Character (RTLO) Created/Executed
+- `persistence_finder_sync_plugin_pluginkit` — Finder Sync Plugin Registered and Enabled
+- `initial_access_first_occurrence_user_session_started_via_proxy` — First Occurrence of Okta User Session Started via Proxy
+- `execution_new_terms_cloudformation_createstack` — First Time AWS CloudFormation Stack Creation
+- `initial_access_newly_observed_fortigate_admin_logon` — First-Time FortiGate Administrator Login
+- `credential_access_python_sensitive_file_access_first_occurrence` — First Time Python Accessed Sensitive Credential Files
+- `persistence_python_launch_agent_or_daemon_creation_first_occurrence` — First Time Python Created a LaunchAgent or LaunchDaemon
+- `execution_python_shell_spawn_first_occurrence` — First Time Python Spawned a Shell on Host
+- `credential_access_new_terms_secretsmanager_getsecretvalue` — First Time Seen AWS Secret Value Accessed in Secrets Manager
+- `command_and_control_dns_rmm_domains_non_browser` — First Time Seen DNS Query to RMM Domain *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_driver_newterm_imphash` — First Time Seen Driver Loaded
+- `defense_evasion_google_workspace_new_oauth_login_from_third_party_application` — First Time Seen Google Workspace OAuth Login from Third-Party Application
+- `privilege_escalation_newcreds_logon_rare_process` — First Time Seen NewCredentials Logon Process
+- `command_and_control_new_terms_commonly_abused_rmm` — First Time Seen Remote Monitoring and Management Tool
+- `initial_access_exfiltration_first_time_seen_usb` — First Time Seen Removable Device
+- `credential_access_dcsync_newterm_subjectuser` — FirstTime Seen Account Performing DCSync
+- `execution_d4c_k8s_mda_forbidden_direct_interactive_kubernetes_api_request` — Forbidden Direct Interactive Kubernetes API Request
+- `persistence_fortigate_admin_creation_unusual_source` — FortiGate Administrator Account Creation from Unusual Source
+- `initial_access_fortigate_admin_login_multi_srcip` — FortiGate Administrator Login from Multiple IP Addresses
+- `collection_fortigate_config_download` — FortiGate Configuration File Downloaded
+- `initial_access_fortigate_sso_login_from_unusual_source` — FortiGate FortiCloud SSO Login from Unusual Source
+- `defense_evasion_fortigate_overly_permissive_firewall_policy` — FortiGate Overly Permissive Firewall Policy Created
+- `command_and_control_socks_fortigate_endpoint` — FortiGate SOCKS Traffic from an Unusual Process
+- `initial_access_fortigate_ssl_vpn_login_followed_by_siem_alert` — FortiGate SSL VPN Login Followed by SIEM Alert by User
+- `persistence_fortigate_sso_login_followed_by_admin_creation` — FortiGate SSO Login Followed by Administrator Account Creation
+- `persistence_fortigate_super_admin_account_creation` — FortiGate Super Admin Account Creation
+- `google_workspace_alert_center_promotion` — Forwarded Google Workspace Security Alert
+- `discovery_full_disk_access_check` — Full Disk Access Permission Check
+- `credential_access_generic_localdumps` — Full User-Mode Dumps Enabled System-Wide *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_gatekeeper_override_and_execution` — Gatekeeper Override and Execution
+- `defense_evasion_gcp_firewall_rule_created` — GCP Firewall Rule Creation
+- `defense_evasion_gcp_firewall_rule_deleted` — GCP Firewall Rule Deletion
+- `defense_evasion_gcp_firewall_rule_modified` — GCP Firewall Rule Modification
+- `initial_access_gcp_iam_custom_role_creation` — GCP IAM Custom Role Creation
+- `impact_gcp_iam_role_deletion` — GCP IAM Role Deletion
+- `persistence_gcp_iam_service_account_key_deletion` — GCP IAM Service Account Key Deletion
+- `defense_evasion_gcp_logging_bucket_deletion` — GCP Logging Bucket Deletion
+- `defense_evasion_gcp_logging_sink_deletion` — GCP Logging Sink Deletion
+- `exfiltration_gcp_logging_sink_modification` — GCP Logging Sink Modification
+- `collection_gcp_pub_sub_subscription_creation` — GCP Pub/Sub Subscription Creation
+- `defense_evasion_gcp_pub_sub_subscription_deletion` — GCP Pub/Sub Subscription Deletion
+- `collection_gcp_pub_sub_topic_creation` — GCP Pub/Sub Topic Creation
+- `defense_evasion_gcp_pub_sub_topic_deletion` — GCP Pub/Sub Topic Deletion
+- `persistence_gcp_service_account_created` — GCP Service Account Creation
+- `impact_gcp_service_account_deleted` — GCP Service Account Deletion
+- `impact_gcp_service_account_disabled` — GCP Service Account Disabled
+- `persistence_gcp_key_created_for_service_account` — GCP Service Account Key Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_gcp_storage_bucket_configuration_modified` — GCP Storage Bucket Configuration Modification
+- `impact_gcp_storage_bucket_deleted` — GCP Storage Bucket Deletion
+- `defense_evasion_gcp_storage_bucket_permissions_modified` — GCP Storage Bucket Permissions Modification
+- `defense_evasion_gcp_virtual_private_cloud_network_deleted` — GCP Virtual Private Cloud Network Deletion
+- `defense_evasion_gcp_virtual_private_cloud_route_created` — GCP Virtual Private Cloud Route Creation
+- `defense_evasion_gcp_virtual_private_cloud_route_deleted` — GCP Virtual Private Cloud Route Deletion
+- `credential_access_genai_process_sensitive_file_access` — GenAI Process Accessing Sensitive Files
+- `defense_evasion_genai_process_compiling_executables` — GenAI Process Compiling or Generating Executables
+- `command_and_control_genai_process_suspicious_tld_connection` — GenAI Process Connection to Suspicious Top Level Domain
+- `command_and_control_genai_process_unusual_domain` — GenAI Process Connection to Unusual Domain
+- `defense_evasion_genai_process_encoding_prior_to_network_activity` — GenAI Process Performing Encoding/Chunking Prior to Network Activity *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_git_hook_process_execution` — Git Hook Child Process
+- `persistence_git_hook_execution` — Git Hook Command Execution
+- `persistence_git_hook_file_creation` — Git Hook Created or Modified
+- `persistence_git_hook_netcon` — Git Hook Egress Network Connection
+- `command_and_control_git_repo_or_file_download_to_sus_dir` — Git Repository or File Download to Suspicious Directory *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_github_actions_bot_first_push_to_repo` — GitHub Actions Unusual Bot Push to Repository
+- `initial_access_github_actions_workflow_injection_blocked` — GitHub Actions Workflow Modification Blocked
+- `impact_github_repository_activity_from_unusual_ip` — Github Activity on a Private Repository from an Unusual IP
+- `execution_github_app_deleted` — GitHub App Deleted
+- `credential_access_gh_auth_via_nodejs` — GitHub Authentication Token Access via Node.js
+- `exfiltration_high_number_of_cloning_by_user` — GitHub Exfiltration via High Number of Repository Clones by User
+- `persistence_organization_owner_role_granted` — GitHub Owner Role Granted To User
+- `exfiltration_github_private_repository_turned_public` — GitHub Private Repository Turned Public
+- `defense_evasion_github_protected_branch_settings_changed` — GitHub Protected Branch Settings Changed
+- `impact_github_repository_deleted` — GitHub Repository Deleted
+- `defense_evasion_secret_scanning_disabled` — GitHub Secret Scanning Disabled
+- `execution_github_ueba_multiple_behavior_alerts_from_account` — GitHub UEBA - Multiple Alerts from a GitHub Account
+- `command_and_control_google_calendar_c2_via_script` — Google Calendar C2 via Script Interpreter
+- `collection_google_drive_ownership_transferred_via_google_workspace` — Google Drive Ownership Transferred via Google Workspace
+- `google_secops_external_alerts` — Google SecOps External Alerts
+- `persistence_google_workspace_2sv_policy_disabled` — Google Workspace 2SV Policy Disabled
+- `persistence_google_workspace_admin_role_assigned_to_user` — Google Workspace Admin Role Assigned to a User
+- `impact_google_workspace_admin_role_deletion` — Google Workspace Admin Role Deletion
+- `persistence_google_workspace_api_access_granted_via_dwd` — Google Workspace API Access Granted via Domain-Wide Delegation
+- `defense_evasion_google_workspace_bitlocker_setting_disabled` — Google Workspace Bitlocker Setting Disabled
+- `persistence_google_workspace_custom_admin_role_created` — Google Workspace Custom Admin Role Created
+- `collection_google_workspace_custom_gmail_route_created_or_modified` — Google Workspace Custom Gmail Route Created or Modified
+- `credential_access_google_workspace_drive_encryption_key_accessed_by_anonymous_user` — Google Workspace Drive Encryption Key(s) Accessed from Anonymous User
+- `impact_google_workspace_mfa_enforcement_disabled` — Google Workspace MFA Enforcement Disabled
+- `initial_access_object_copied_to_external_drive_with_app_consent` — Google Workspace Object Copied to External Drive with App Consent
+- `persistence_google_workspace_password_policy_modified` — Google Workspace Password Policy Modified
+- `defense_evasion_restrictions_for_marketplace_modified_to_allow_any_app` — Google Workspace Restrictions for Marketplace Modified to Allow Any App
+- `persistence_google_workspace_role_modified` — Google Workspace Role Modified
+- `initial_access_google_workspace_suspended_user_renewed` — Google Workspace Suspended User Account Renewed
+- `persistence_google_workspace_user_organizational_unit_changed` — Google Workspace User Organizational Unit Changed
+- `privilege_escalation_group_policy_privileged_groups` — Group Policy Abuse for Privilege Addition *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_group_policy_object_discovery` — Group Policy Discovery via Microsoft GPResult Utility
+- `persistence_grub_configuration_creation` — GRUB Configuration File Creation
+- `persistence_grub_makeconfig` — GRUB Configuration Generation through Built-in Utilities
+- `command_and_control_halfbaked_beacon` — Halfbaked Command and Control Beacon
+- `defense_evasion_hidden_directory_creation` — Hidden Directory Creation via Unusual Parent
+- `defense_evasion_creation_of_hidden_files_directories` — Hidden Files and Directories via Hidden Flag
+- `privileged_access_ml_linux_high_median_process_command_line_entropy_by_user` — High Command Line Entropy Detected for Privileged Commands
+- `lateral_movement_ml_high_mean_rdp_process_args` — High Mean of Process Arguments in an RDP Session
+- `lateral_movement_ml_high_mean_rdp_session_duration` — High Mean of RDP Session Duration
+- `execution_github_high_number_of_cloned_repos_from_pat` — High Number of Cloned GitHub Repos From PAT
+- `impact_high_number_of_closed_pull_requests_by_user` — High Number of Closed Pull Requests by User
+- `command_and_control_frequent_egress_netcon_from_sus_executable` — High Number of Egress Network Connections from Unusual Executable
+- `defense_evasion_suspicious_okta_user_password_reset_or_unlock_attempts` — High Number of Okta User Password Reset or Unlock Attempts
+- `impact_stop_process_service_threshold` — High Number of Process and/or Service Terminations *(Skip — Sigma equivalent exists but Elastic is better)*
+- `impact_process_kill_threshold` — High Number of Process Terminations
+- `impact_high_number_of_protected_branch_force_pushes_by_user` — High Number of Protected Branch Force Pushes by User
+- `lateral_movement_ml_high_variance_rdp_session_duration` — High Variance in RDP Session Duration
+- `defense_evasion_ml_suspicious_windows_process_cluster_from_host` — Host Detected with Suspicious Windows Process(es)
+- `defense_evasion_wsl_filesystem` — Host File System Changes via Windows Subsystem for Linux *(Skip — Sigma equivalent exists but Elastic is better)*
+- `impact_hosts_file_modified` — Hosts File Modified
+- `discovery_linux_hping_activity` — Hping Process Activity
+- `ibm_qradar_external_alerts` — IBM QRadar External Alerts
+- `defense_evasion_iis_httplogging_disabled` — IIS HTTP Logging Disabled
+- `persistence_evasion_registry_ifeo_injection` — Image File Execution Options Injection
+- `defense_evasion_execution_lolbas_wuauclt` — ImageLoad via Windows Update Auto Update Client *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_unsecure_elasticsearch_node` — Inbound Connection to an Unsecure Elasticsearch Node
+- `lateral_movement_dcom_hta` — Incoming DCOM Lateral Movement via MSHTA
+- `lateral_movement_dcom_mmc20` — Incoming DCOM Lateral Movement with MMC
+- `lateral_movement_dcom_shellwindow_shellbrowserwindow` — Incoming DCOM Lateral Movement with ShellBrowserWindow or ShellWindows
+- `lateral_movement_powershell_remoting_target` — Incoming Execution via PowerShell Remoting *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_incoming_winrm_shell_execution` — Incoming Execution via WinRM Remote Shell
+- `defense_evasion_file_creation_execution_deletion_cradle` — Ingress Tool Transfer Followed by Execution and Deletion Detected via Defend for Containers
+- `command_and_control_ingress_transfer_bits` — Ingress Transfer via Windows BITS
+- `initial_access_file_upload_followed_by_get_request` — Initial Access via File Upload Followed by GET Request
+- `persistence_extract_initramfs_via_cpio` — Initramfs Extraction via CPIO
+- `persistence_unpack_initramfs_via_unmkinitramfs` — Initramfs Unpacking via unmkinitramfs
+- `defense_evasion_vpc_security_group_ingress_rule_added_for_remote_connections` — Insecure AWS EC2 VPC Security Group Ingress Rule Added
+- `persistence_app_compat_shim` — Installation of Custom Shim Databases
+- `persistence_via_lsa_security_support_provider_registry` — Installation of Security Support Provider
+- `defense_evasion_installutil_beacon` — InstallUtil Process Making Network Connections *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_interactive_exec_to_container` — Interactive Exec Into Container Detected via Defend for Containers
+- `privilege_escalation_make_token_local` — Interactive Logon by an Unusual Process
+- `discovery_privilege_boundary_enumeration_from_interactive_process` — Interactive Privilege Boundary Enumeration Detected via Defend for Containers
+- `execution_unusual_interactive_process_inside_container` — Interactive Shell Launched via Unusual Parent Process in a Container
+- `execution_interactive_shell_spawned_from_inside_a_container` — Interactive Shell Spawn Detected via Defend for Containers
+- `execution_perl_tty_shell` — Interactive Terminal Spawned via Perl *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_python_tty_shell` — Interactive Terminal Spawned via Python
+- `command_and_control_nat_traversal_port_activity` — IPSEC NAT Traversal Port Activity
+- `command_and_control_ip_forwarding_activity` — IPv4/IPv6 Forwarding Activity
+- `persistence_kde_autostart_modification` — KDE AutoStart Script or Desktop File Creation
+- `credential_access_kerberosdump_kcc` — Kerberos Cached Credentials Dumping
+- `credential_access_disable_kerberos_preauth` — Kerberos Pre-authentication Disabled for User *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_kerberoasting_unusual_process` — Kerberos Traffic from Unusual Process
+- `persistence_kernel_driver_load` — Kernel Driver Load *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_kernel_driver_load_by_non_root` — Kernel Driver Load by non-root User
+- `discovery_kernel_instrumentation_discovery_via_kprobes_and_tracefs` — Kernel Instrumentation Discovery via kprobes and tracefs
+- `privilege_escalation_load_and_unload_of_kernel_via_kexec` — Kernel Load or Unload via Kexec Detected *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_kernel_module_load_from_unusual_location` — Kernel Module Load from Unusual Location
+- `persistence_insmod_kernel_module_load` — Kernel Module Load via Built-in Utility
+- `defense_evasion_kernel_module_removal` — Kernel Module Removal
+- `persistence_kernel_object_file_creation` — Kernel Object File Creation
+- `discovery_kernel_seeking` — Kernel Seeking Activity
+- `discovery_kernel_unpacking` — Kernel Unpacking Activity
+- `credential_access_credentials_keychains` — Keychain CommandLine Interaction via Unsigned or Untrusted Process
+- `credential_access_keychain_pwd_retrieval_security_cmd` — Keychain Password Retrieval via Command Line
+- `defense_evasion_kill_command_executed` — Kill Command Execution
+- `credential_access_kirbi_file` — Kirbi File Creation
+- `persistence_msds_alloweddelegateto_krbtgt` — KRBTGT Delegation Backdoor
+- `lateral_movement_kubeconfig_file_activity` — Kubeconfig File Creation or Modification
+- `discovery_kubeconfig_file_discovery` — Kubeconfig File Discovery
+- `execution_kubectl_apply_pod_from_url` — Kubectl Apply Pod from URL
+- `command_and_control_kubectl_networking_modification` — Kubectl Network Configuration Modification
+- `discovery_kubectl_permission_discovery` — Kubectl Permission Discovery
+- `discovery_kubectl_secrets_all_namespaces` — Kubectl Secrets Enumeration Across All Namespaces
+- `discovery_kubelet_certificate_file_access` — Kubelet Certificate File Access Detected via Defend for Containers
+- `discovery_kubelet_pod_discovery_via_builtin_utilities` — Kubelet Pod Discovery Detected via Defend for Containers
+- `initial_access_anonymous_request_authorized` — Kubernetes Anonymous Request Authorized by Unusual User Agent
+- `execution_anonymous_create_update_patch_pod_request` — Kubernetes Anonymous User Create/Update/Patch Pods Request
+- `persistence_cluster_admin_rolebinding_created` — Kubernetes Cluster-Admin Role Binding Created
+- `privilege_escalation_container_created_with_excessive_linux_capabilities` — Kubernetes Container Created with Excessive Linux Capabilities
+- `persistence_service_account_bound_to_clusterrole` — Kubernetes Creation of a RoleBinding Referencing a ServiceAccount
+- `persistence_sensitive_role_creation_or_modification` — Kubernetes Creation or Modification of Sensitive Role
+- `discovery_denied_service_account_request` — Kubernetes Denied Service Account Request via Unusual User Agent
+- `execution_kubernetes_direct_api_request_via_curl_or_wget` — Kubernetes Direct API Request via Curl or Wget
+- `defense_evasion_events_deleted` — Kubernetes Events Deleted
+- `persistence_exposed_service_created_with_type_nodeport` — Kubernetes Exposed Service Created With Type NodePort
+- `execution_forbidden_creation_request` — Kubernetes Forbidden Creation Request
+- `execution_forbidden_request_from_unsual_user_agent` — Kubernetes Forbidden Request from Unusual User Agent
+- `privilege_escalation_pod_created_with_sensitive_hostpath_volume` — Kubernetes Pod Created with a Sensitive hostPath Volume
+- `privilege_escalation_pod_created_with_hostipc` — Kubernetes Pod Created With HostIPC
+- `privilege_escalation_pod_created_with_hostnetwork` — Kubernetes Pod Created With HostNetwork
+- `privilege_escalation_pod_created_with_hostpid` — Kubernetes Pod Created With HostPID
+- `discovery_endpoint_permission_enumeration_by_anonymous_user` — Kubernetes Potential Endpoint Permission Enumeration Attempt by Anonymous User Detected
+- `discovery_endpoint_permission_enumeration_by_user_and_srcip` — Kubernetes Potential Endpoint Permission Enumeration Attempt Detected
+- `privilege_escalation_privileged_pod_created` — Kubernetes Privileged Pod Created
+- `credential_access_get_secrets_access` — Kubernetes Secret Access via Unusual User Agent
+- `credential_access_azure_arc_proxy_secret_configmap_access` — Kubernetes Secret or ConfigMap Access via Azure Arc Proxy
+- `persistence_kubernetes_sensitive_file_activity` — Kubernetes Sensitive Configuration File Activity
+- `privilege_escalation_sensitive_rbac_change_followed_by_workload_modification` — Kubernetes Sensitive RBAC Change Followed by Workload Modification
+- `privilege_escalation_service_account_rbac_write_operation` — Kubernetes Service Account Modified RBAC Objects
+- `credential_access_kubernetes_service_account_secret_access` — Kubernetes Service Account Secret Access
+- `privilege_escalation_suspicious_assignment_of_controller_service_account` — Kubernetes Suspicious Assignment of Controller Service Account
+- `discovery_suspicious_self_subject_review` — Kubernetes Suspicious Self-Subject Review via Unusual User Agent
+- `execution_unusual_request_response_by_user_agent` — Kubernetes Unusual Decision by User Agent
+- `execution_user_exec_to_pod` — Kubernetes User Exec into Pod
+- `lateral_movement_multi_alerts_new_srcip` — Lateral Movement Alerts from a Newly Observed Source Address
+- `lateral_movement_multi_alerts_new_userid` — Lateral Movement Alerts from a Newly Observed User
+- `lateral_movement_via_startup_folder_rdp_smb` — Lateral Movement via Startup Folder *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_creation_change_launch_agents_file` — Launch Service Creation and Immediate Loading
+- `collection_potential_audio_recording_activity` — Linux Audio Recording Activity Detected
+- `collection_linux_clipboard_activity` — Linux Clipboard Activity Detected
+- `persistence_linux_group_creation` — Linux Group Creation
+- `credential_access_gdb_init_process_hooking` — Linux init (PID 1) Secret Dump via GDB *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_gdb_process_hooking` — Linux Process Hooking via GDB
+- `execution_shell_evasion_linux_binary` — Linux Restricted Shell Breakout via Linux Binary(s)
+- `command_and_control_linux_ssh_x11_forwarding` — Linux SSH X11 Forwarding
+- `command_and_control_telegram_api_request` — Linux Telegram API Request
+- `persistence_linux_user_account_creation` — Linux User Account Creation
+- `persistence_user_credential_modification_via_echo` — Linux User Account Credential Modification
+- `persistence_linux_user_added_to_privileged_group` — Linux User Added to Privileged Group
+- `defense_evasion_user_or_group_deletion` — Linux User or Group Deletion
+- `collection_potential_video_recording_or_screenshot_activity` — Linux Video Recording or Screenshot Activity Detected
+- `multiple_alerts_llm_attack_chain_triage_by_host` — LLM-Based Attack Chain Triage by Host
+- `multiple_alerts_llm_compromised_user_triage` — LLM-Based Compromised User Triage by User
+- `persistence_lkm_configuration_file_creation` — Loadable Kernel Module Configuration File Creation
+- `defense_evasion_persistence_account_tokenfilterpolicy` — Local Account TokenFilter Policy Disabled
+- `persistence_local_scheduled_task_creation` — Local Scheduled Task Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_lsass_memdump_file_created` — LSASS Memory Dump Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_lsass_memdump_handle_access` — LSASS Memory Dump Handle Access *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_lsass_openprocess_api` — LSASS Process Access via Windows API *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_azure_monitor_callback_phishing_email` — M365 Azure Monitor Alert Email with Financial or Billing Theme
+- `defense_evasion_exchange_anti_phish_policy_deletion` — M365 Exchange Anti-Phish Policy Deleted
+- `defense_evasion_exchange_anti_phish_rule_modification` — M365 Exchange Anti-Phish Rule Modification
+- `defense_evasion_exchange_dkim_signing_config_disabled` — M365 Exchange DKIM Signing Configuration Disabled
+- `defense_evasion_exchange_safe_attach_rule_disabled` — M365 Exchange Email Safe Attachment Rule Disabled
+- `defense_evasion_exchange_exchange_safelinks_disabled` — M365 Exchange Email Safe Link Policy Disabled
+- `privilege_escalation_exchange_new_or_modified_federation_domain` — M365 Exchange Federated Domain Created or Modified
+- `collection_exchange_new_inbox_rule` — M365 Exchange Inbox Forwarding Rule Created
+- `defense_evasion_exchange_new_inbox_rule_delete_or_move` — M365 Exchange Inbox Phishing Evasion Rule Created
+- `exfiltration_exchange_transport_rule_creation` — M365 Exchange Mail Flow Transport Rule Created
+- `exfiltration_exchange_transport_rule_modification` — M365 Exchange Mail Flow Transport Rule Modified
+- `collection_exchange_mailbox_access_by_unusual_client_app_id` — M365 Exchange Mailbox Accessed by Unusual Client
+- `defense_evasion_exchange_mailbox_audit_bypass_association` — M365 Exchange Mailbox Audit Logging Bypass Added
+- `persistence_exchange_suspicious_mailbox_permission_delegation` — M365 Exchange Mailbox High-Risk Permission Delegated
+- `collection_exchange_excessive_mail_items_accessed` — M365 Exchange Mailbox Items Accessed Excessively
+- `defense_evasion_exchange_malware_filter_policy_deletion` — M365 Exchange Malware Filter Policy Deleted
+- `defense_evasion_exchange_malware_filter_rule_mod` — M365 Exchange Malware Filter Rule Modified
+- `persistence_exchange_management_role_assignment` — M365 Exchange Management Group Role Assigned
+- `defense_evasion_mfa_notification_email_deleted` — M365 Exchange MFA Notification Email Deleted or Moved
+- `persistence_entra_id_global_administrator_role_assign` — M365 Identity Global Administrator Role Assigned
+- `initial_access_entra_id_portal_login_atypical_travel` — M365 Identity Login from Atypical Travel Location
+- `initial_access_entra_id_portal_login_impossible_travel` — M365 Identity Login from Impossible Travel Location
+- `defense_evasion_entra_id_susp_oauth2_authorization` — M365 Identity OAuth Flow by First-Party Microsoft App from Multiple IPs
+- `credential_access_entra_id_device_reg_via_oauth_redirection` — M365 Identity OAuth Flow by User Sign-in to Device Registration
+- `initial_access_identity_illicit_consent_grant_via_registered_application` — M365 Identity OAuth Illicit Consent Grant by Rare Client and User
+- `initial_access_identity_oauth_phishing_via_first_party_microsoft_application` — M365 Identity OAuth Phishing via First-Party Microsoft Application
+- `initial_access_identity_unusual_sso_errors_for_user` — M365 Identity Unusual SSO Authentication Errors for User
+- `credential_access_identity_user_account_lockouts` — M365 Identity User Account Lockouts
+- `credential_access_entra_id_potential_user_account_brute_force` — M365 Identity User Brute Force Attempted
+- `lateral_movement_onedrive_malware_uploaded` — M365 OneDrive Malware File Upload
+- `collection_onedrive_excessive_file_downloads` — M365 OneDrive/SharePoint Excessive File Downloads
+- `initial_access_azure_o365_with_network_alert` — M365 or Entra ID Identity Sign-in from a Suspicious Source
+- `lateral_movement_sharepoint_malware_uploaded` — M365 SharePoint Malware File Detected
+- `collection_sharepoint_file_download_via_powershell` — M365 SharePoint/OneDrive File Access via PowerShell
+- `discovery_sharepoint_sensitive_term_search` — M365 SharePoint Search for Sensitive Content
+- `privilege_escalation_sharepoint_site_collection_admin_added` — M365 SharePoint Site Administrator Added
+- `defense_evasion_sharepoint_sharing_policy_weakened` — M365 SharePoint Site Sharing Policy Weakened
+- `defense_evasion_teams_custom_app_interaction_allowed` — M365 Teams Custom Application Interaction Enabled
+- `command_and_control_ml_dns_request_predicted_to_be_a_dga_domain` — Machine Learning Detected a DNS Request Predicted to be a DGA Domain
+- `command_and_control_ml_dns_request_high_dga_probability` — Machine Learning Detected a DNS Request With a High DGA Probability Score
+- `defense_evasion_ml_suspicious_windows_event_high_probability` — Machine Learning Detected a Suspicious Windows Event with a High Malicious Probability Score
+- `defense_evasion_ml_suspicious_windows_event_low_probability` — Machine Learning Detected a Suspicious Windows Event with a Low Malicious Probability Score
+- `command_and_control_ml_dga_activity_using_sunburst_domain` — Machine Learning Detected DGA activity using a known SUNBURST DNS domain
+- `execution_elastic_malicious_file_detected` — Malicious File - Detected - Elastic Defend
+- `execution_elastic_malicious_file_prevented` — Malicious File - Prevented - Elastic Defend
+- `endgame_malware_detected` — Malware - Detected - Elastic Endgame
+- `endgame_malware_prevented` — Malware - Prevented - Elastic Endgame
+- `persistence_manual_dracut_execution` — Manual Dracut Execution
+- `persistence_manual_chromium_extension_loading` — Manual Loading of a Suspicious Chromium Extension
+- `credential_access_manual_memory_dumping` — Manual Memory Dumping via Proc Filesystem
+- `discovery_manual_mount_discovery_via_exports_or_fstab` — Manual Mount Discovery via /etc/exports or /etc/fstab
+- `defense_evasion_masquerading_space_after_filename` — Masquerading Space After Filename
+- `impact_memory_swap_modification` — Memory Swap Modification
+- `defense_evasion_elastic_memory_threat_detected` — Memory Threat - Detected - Elastic Defend
+- `defense_evasion_elastic_memory_threat_prevented` — Memory Threat - Prevented- Elastic Defend
+- `persistence_message_of_the_day_creation` — Message-of-the-Day (MOTD) File Creation
+- `persistence_mfa_deactivation_with_no_reactivation` — MFA Deactivation with no Re-Activation for Okta User Account
+- `persistence_mfa_disabled_for_google_workspace_organization` — MFA Disabled for Google Workspace Organization
+- `defense_evasion_execution_msbuild_started_unusal_process` — Microsoft Build Engine Started an Unusual Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_execution_msbuild_started_by_script` — Microsoft Build Engine Started by a Script Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_execution_msbuild_started_by_system_process` — Microsoft Build Engine Started by a System Process
+- `defense_evasion_execution_msbuild_started_by_office_app` — Microsoft Build Engine Started by an Office Application *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_execution_msbuild_started_renamed` — Microsoft Build Engine Using an Alternate Name
+- `initial_access_suspicious_ms_exchange_process` — Microsoft Exchange Server UM Spawning Suspicious Processes *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_suspicious_ms_exchange_files` — Microsoft Exchange Server UM Writing Suspicious Files
+- `initial_access_suspicious_ms_exchange_worker_child_process` — Microsoft Exchange Worker Spawning Suspicious Processes *(Skip — Sigma equivalent exists but Elastic is better)*
+- `collection_graph_email_access_by_unusual_public_client_via_graph` — Microsoft Graph Request Email Access by Unusual User and Client
+- `initial_access_graph_first_occurrence_of_client_request` — Microsoft Graph Request User Impersonation by Unusual Client
+- `credential_access_iis_connectionstrings_dumping` — Microsoft IIS Connection Strings Decryption *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_via_mmc_console_file_unusual_path` — Microsoft Management Console File from Unusual Path
+- `microsoft_sentinel_external_alerts` — Microsoft Sentinel External Alerts
+- `defense_evasion_microsoft_defender_tampering` — Microsoft Windows Defender Tampering
+- `credential_access_mimikatz_memssp_default_logs` — Mimikatz Memssp Log File Detected
+- `defense_evasion_amsienable_key_mod` — Modification of AmsiEnable Registry Key
+- `impact_modification_of_boot_config` — Modification of Boot Configuration *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_ld_preload_shared_object_modif` — Modification of Dynamic Linker Preload Shared Object
+- `defense_evasion_modify_environment_launchctl` — Modification of Environment Variable via Unsigned or Untrusted Parent
+- `persistence_modification_of_persistence_relevant_files` — Modification of Persistence Relevant Files Detected via Defend for Containers
+- `defense_evasion_safari_config_change` — Modification of Safari Settings via Defaults Command
+- `privilege_escalation_credroaming_ldap` — Modification of the msPKIAccountCredentials
+- `credential_access_mod_wdigest_security_provider` — Modification of WDigest Security Provider
+- `persistence_okta_attempt_to_modify_or_delete_application_sign_on_policy` — Modification or Removal of an Okta Application Sign-On Policy
+- `execution_mofcomp` — Mofcomp Activity
+- `privilege_escalation_mount_launched_inside_a_privileged_container` — Mount Execution Detected via Defend for Containers
+- `privilege_escalation_mount_launched_inside_container` — Mount Launched Inside a Container
+- `lateral_movement_mount_hidden_or_webdav_share_net` — Mounting Hidden or WebDav Remote Shares *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_ms_office_suspicious_regmod` — MS Office Macro Security Registry Modifications *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_msbuild_making_network_connections` — MsBuild Making Network Connections
+- `defense_evasion_mshta_beacon` — Mshta Making Network Connections
+- `defense_evasion_msiexec_child_proc_netcon` — MsiExec Service Child Process With Network Connection *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_multi_base64_decoding_attempt` — Multi-Base64 Decoding Attempt from Suspicious Location
+- `multiple_alerts_different_tactics_host` — Multiple Alerts in Different ATT&CK Tactics on a Single Host
+- `multiple_alerts_same_tactic_by_host` — Multiple Alerts in Same ATT&CK Tactic by Host
+- `multiple_alerts_involving_user` — Multiple Alerts Involving a User
+- `impact_alerts_on_host_with_cpu_spike` — Multiple Alerts on a Host Exhibiting CPU Spike
+- `credential_access_multi_could_secrets_via_api` — Multiple Cloud Secrets Accessed by Source Address
+- `credential_access_multiple_device_token_hashes_for_single_okta_session` — Multiple Device Token Hashes for Single Okta Session
+- `multiple_alerts_edr_elastic_defend_by_host` — Multiple Elastic Defend Alerts by Agent
+- `multiple_alerts_edr_elastic_same_process_tree` — Multiple Elastic Defend Alerts from a Single Process Tree
+- `multiple_external_edr_alerts_by_host` — Multiple External EDR Alerts by Host
+- `credential_access_bruteforce_multiple_logon_failure_followed_by_success` — Multiple Logon Failure Followed by Logon Success
+- `credential_access_bruteforce_multiple_logon_failure_same_srcip` — Multiple Logon Failure from the same Source Address
+- `multiple_machine_learning_jobs_by_entity` — Multiple Machine Learning Alerts by Influencer Field
+- `lateral_movement_multiple_sessions_for_single_user` — Multiple Okta Sessions Detected for a Single User
+- `credential_access_multiple_auth_events_from_single_device_behind_proxy` — Multiple Okta User Auth Events with Same Device Token Hash Behind a Proxy
+- `credential_access_okta_authentication_for_multiple_users_with_the_same_device_token_hash` — Multiple Okta User Authentication Events with Same Device Token Hash
+- `multiple_elastic_defend_behavior_rules_same_host_prevalence` — Multiple Rare Elastic Defend Behavior Rules by Host
+- `command_and_control_multiple_rmm_vendors_same_host` — Multiple Remote Management Tool Vendors on Same Host
+- `credential_access_saved_creds_vault_winlog` — Multiple Vault Web Credentials Read
+- `multiple_vulnerabilities_wiz_by_container` — Multiple Vulnerabilities by Asset via Wiz
+- `guided_onboarding_sample_rule` — My First Rule
+- `privilege_escalation_unshare_namespace_manipulation` — Namespace Manipulation Using Unshare
+- `execution_netcat_listener_established_inside_a_container` — Netcat File Transfer or Listener Detected via Defend for Containers
+- `execution_nc_listener_via_rlwrap` — Netcat Listener Established via rlwrap
+- `persistence_netsh_helper_dll` — Netsh Helper DLL
+- `command_and_control_rmm_netsupport_susp_path` — NetSupport Manager Execution from an Unusual Path
+- `command_and_control_cat_network_activity` — Network Activity Detected via cat
+- `command_and_control_linux_kworker_netcon` — Network Activity Detected via Kworker
+- `command_and_control_dns_susp_tld` — Network Activity to a Suspicious Top Level Domain *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_cupsd_foomatic_rip_netcon` — Network Connection by Cups or Foomatic-rip Child
+- `execution_netcon_from_rwx_mem_region_binary` — Network Connection from Binary with RWX Memory Region
+- `persistence_ssh_netcon` — Network Connection Initiated by Suspicious SSHD Child Process
+- `command_and_control_network_connection_to_oast_domain` — Network Connection to OAST Domain via Script Interpreter
+- `execution_html_help_executable_program_connecting_to_the_internet` — Network Connection via Compiled HTML File *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_msxsl_network` — Network Connection via MsXsl *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_network_event_post_compilation` — Network Connection via Recently Compiled Executable
+- `execution_register_server_program_connecting_to_the_internet` — Network Connection via Registration Utility *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_misc_lolbin_connecting_to_the_internet` — Network Connection via Signed Binary *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_xdg_autostart_netcon` — Network Connections Initiated Through XDG Autostart Entry
+- `defense_evasion_disable_nla` — Network-Level Authentication (NLA) Disabled
+- `credential_access_persistence_network_logon_provider_modification` — Network Logon Provider Registry Modification *(Skip — Sigma equivalent exists but Elastic is better)*
+- `ml_rare_destination_country` — Network Traffic to Rare Destination Country
+- `persistence_network_manager_dispatcher_persistence` — NetworkManager Dispatcher Script Creation
+- `persistence_powershell_exch_mailbox_activesync_add_device` — New ActiveSyncAllowedDeviceID Added via PowerShell
+- `execution_new_github_app_installed` — New GitHub App Installed
+- `persistence_github_org_owner_added` — New GitHub Owner Added
+- `persistence_new_pat_created` — New GitHub Personal Access Token (PAT) Added
+- `initial_access_github_register_self_hosted_runner` — New GitHub Self Hosted Action Runner
+- `persistence_new_idp_successfully_added_by_admin` — New Okta Identity Provider (IdP) Added by Admin
+- `initial_access_exfiltration_new_usb_device_mounted` — New USB Storage Device Mounted
+- `newly_observed_elastic_defend_alert` — Newly Observed Elastic Defend Behavior Alert
+- `newly_observed_fortigate_alert` — Newly Observed FortiGate Alert
+- `newly_observed_elastic_detection_rule` — Newly Observed High Severity Detection Alert
+- `newly_observed_suricata_alert` — Newly Observed High Severity Suricata Alert
+- `newly_observed_panos_alert` — Newly Observed Palo Alto Network Alert
+- `impact_newly_observed_process_with_high_cpu` — Newly Observed Process Exhibiting High CPU Usage
+- `command_and_control_newly_observed_screenconnect_host_server` — Newly Observed ScreenConnect Host Server
+- `execution_nodejs_pre_or_post_install_script_execution` — Node.js Pre or Post-Install Script Execution *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_linux_nping_activity` — Nping Process Activity
+- `credential_access_wbadmin_ntds` — NTDS Dump via Wbadmin *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_copy_ntds_sam_volshadowcp_cmdline` — NTDS or SAM Database File Copied *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_defense_evasion_lanman_nullsessionpipe_modification` — NullSessionPipe Registry Modification *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_msoffice_startup_registry` — Office Test Registry Persistence *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_okta_aitm_session_cookie_replay` — Okta AiTM Session Cookie Replay
+- `initial_access_okta_suspicious_activity_after_proxy_authentication` — Okta Alerts Following Unusual Proxy Authentication
+- `initial_access_okta_fastpass_phishing` — Okta FastPass Phishing Detection
+- `credential_access_multiple_user_agent_os_authentication` — Okta Multiple OS Names Detected for a Single DT Hash
+- `initial_access_sign_in_events_via_third_party_idp` — Okta Sign-In Events via Third-Party IdP
+- `credential_access_okta_successful_login_after_credential_attack` — Okta Successful Login After Credential Attack
+- `okta_threatinsight_threat_suspected_promotion` — Okta ThreatInsight Threat Suspected Promotion
+- `persistence_administrator_role_assigned_to_okta_user` — Okta User Assigned Administrator Role
+- `credential_access_user_impersonation_access` — Okta User Session Impersonation
+- `initial_access_okta_user_sessions_started_from_different_geolocations` — Okta User Sessions Started from Different Geolocations
+- `initial_access_ollama_api_external_access` — Ollama API Accessed from External Network
+- `execution_shell_openssl_client_or_server` — Openssl Client or Server Activity
+- `persistence_openssl_passwd_hash_generation` — OpenSSL Password Hash Generation
+- `execution_scheduled_task_powershell_source` — Outbound Scheduled Task Activity via PowerShell
+- `command_and_control_outlook_home_page` — Outlook Home Page Registry Modification
+- `command_and_control_pan_elastic_defend_c2` — PANW and Elastic Defend - Command and Control Correlation
+- `defense_evasion_ml_suspicious_windows_process_cluster_from_parent_process` — Parent Process Detected with Suspicious Windows Process(es)
+- `defense_evasion_parent_process_pid_spoofing` — Parent Process PID Spoofing
+- `execution_payload_downloaded_and_piped_to_shell` — Payload Execution via Shell Pipe Detected by Defend for Containers
+- `collection_pbpaste_execution_via_unusual_parent` — Pbpaste Execution via Unusual Parent Process
+- `discovery_peripheral_device` — Peripheral Device Discovery *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_perl_outbound_network_connection` — Perl Outbound Network Connection *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_endgame_permission_theft_detected` — Permission Theft - Detected - Elastic Endgame
+- `privilege_escalation_endgame_permission_theft_prevented` — Permission Theft - Prevented - Elastic Endgame
+- `persistence_hidden_plist_filename` — Persistence via a Hidden Plist Filename
+- `persistence_msi_installer_task_startup` — Persistence via a Windows Installer
+- `persistence_via_bits_job_notify_command` — Persistence via BITS Job Notify Cmdline
+- `persistence_directory_services_plugins_modification` — Persistence via DirectoryService Plugin Modification
+- `persistence_docker_shortcuts_plist_modification` — Persistence via Docker Shortcut Modification
+- `persistence_folder_action_scripts_runtime` — Persistence via Folder Action Script
+- `persistence_via_hidden_run_key_valuename` — Persistence via Hidden Run Key Detected
+- `persistence_login_logout_hooks_defaults` — Persistence via Login or Logout Hook
+- `persistence_ms_office_addins_file` — Persistence via Microsoft Office AddIns *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_ms_outlook_vba_template` — Persistence via Microsoft Outlook VBA *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_powershell_profiles` — Persistence via PowerShell profile *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_local_scheduled_job_creation` — Persistence via Scheduled Job Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_suspicious_launch_agent_or_launch_daemon` — Persistence via Suspicious Launch Agent or Launch Daemon
+- `persistence_via_telemetrycontroller_scheduledtask_hijack` — Persistence via TelemetryController Scheduled Task Hijack
+- `persistence_via_update_orchestrator_service_hijack` — Persistence via Update Orchestrator Service Hijack
+- `persistence_via_windows_management_instrumentation_event_subscription` — Persistence via WMI Event Subscription *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_via_wmi_stdregprov_run_services` — Persistence via WMI Standard Registry Provider
+- `persistence_startup_folder_scripts` — Persistent Scripts in the Startup Directory
+- `persistence_pluggable_authentication_module_creation` — Pluggable Authentication Module or Configuration Creation
+- `persistence_pluggable_authentication_module_creation_in_unusual_dir` — Pluggable Authentication Module (PAM) Creation in Unusual Directory
+- `persistence_pluggable_authentication_module_source_download` — Pluggable Authentication Module (PAM) Source Download
+- `discovery_pam_version_discovery` — Pluggable Authentication Module (PAM) Version Discovery
+- `execution_suspicious_pod_or_container_creation_command_execution` — Pod or Container Creation with Suspicious Command-Line
+- `persistence_polkit_policy_creation` — Polkit Policy Creation
+- `discovery_polkit_version_discovery` — Polkit Version Discovery
+- `command_and_control_port_forwarding_added_registry` — Port Forwarding Rule Addition *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_fin7_c2_behavior` — Possible FIN7 DGA Command and Control Behavior
+- `impact_possible_okta_dos_attack` — Possible Okta DoS Attack
+- `aws_bedrock_high_resource_consumption_detection` — Potential Abuse of Resources by High Token Count and Large Response Sizes
+- `privilege_escalation_takeover_new_source_ip` — Potential Account Takeover - Logon from New Source IP *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_account_takeover_mixed_logon_types` — Potential Account Takeover - Mixed Logon Types
+- `credential_access_dcsync_user_backdoor` — Potential Active Directory Replication Account Backdoor *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_adidns_wildcard` — Potential ADIDNS Poisoning via Wildcard Record Creation
+- `privilege_escalation_local_user_added_to_admin` — Potential Admin Group Account Addition
+- `defense_evasion_amsi_bypass_powershell` — Potential Antimalware Scan Interface Bypass via PowerShell *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_via_application_shimming` — Potential Application Shimming via Sdbinst
+- `impact_s3_bucket_object_uploaded_with_ransom_keyword` — Potential AWS S3 Bucket Ransomware Note Uploaded
+- `azure_openai_model_theft_detection` — Potential Azure OpenAI Model Theft
+- `persistence_pluggable_authentication_module_pam_exec_backdoor_exec` — Potential Backdoor Execution Through PAM_EXEC
+- `privilege_escalation_potential_bufferoverflow_attack` — Potential Buffer Overflow Attack Detected
+- `privilege_escalation_docker_mount_chroot_container_escape` — Potential Chroot Container Escape via Mount
+- `discovery_potential_cluster_enumeration_via_jq` — Potential Cluster Enumeration via jq Detected via Defend for Containers
+- `execution_remote_code_execution_via_postgresql` — Potential Code Execution via Postgresql
+- `command_and_control_iexplore_via_com` — Potential Command and Control via Internet Explorer *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_revshell_cmd_via_netcat` — Potential Command Shell via NetCat
+- `credential_access_dollar_account_relay` — Potential Computer Account NTLM Relay Activity *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_cookies_chromium_browsers_debugging` — Potential Cookies Theft via Browser Debugging
+- `credential_access_dcsync_replication_rights` — Potential Credential Access via DCSync *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_potential_lsa_memdump_via_mirrordump` — Potential Credential Access via DuplicateHandle in LSASS
+- `credential_access_suspicious_lsass_access_memdump` — Potential Credential Access via LSASS Memory Dump *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_suspicious_comsvcs_imageload` — Potential Credential Access via Renamed COM+ Services DLL
+- `credential_access_credential_dumping_msbuild` — Potential Credential Access via Trusted Developer Utility
+- `credential_access_cmdline_dump_tool` — Potential Credential Access via Windows Utilities *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_grep_recursive_credential_discovery` — Potential Credential Discovery via Recursive Grep
+- `privilege_escalation_cve_2025_32463_nsswitch_file_creation` — Potential CVE-2025-32463 Nsswitch File Creation
+- `privilege_escalation_cve_2025_32463_sudo_chroot_execution` — Potential CVE-2025-32463 Sudo Chroot Execution Attempt
+- `initial_access_url_cve_2025_33053` — Potential CVE-2025-33053 Exploitation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_cve_2025_41244_vmtoolsd_lpe` — Potential CVE-2025-41244 vmtoolsd LPE Exploitation Attempt
+- `exfiltration_ml_high_bytes_destination_port` — Potential Data Exfiltration Activity to an Unusual Destination Port
+- `exfiltration_ml_high_bytes_destination_ip` — Potential Data Exfiltration Activity to an Unusual IP Address
+- `exfiltration_ml_high_bytes_destination_geo_country_iso_code` — Potential Data Exfiltration Activity to an Unusual ISO Code
+- `exfiltration_ml_high_bytes_destination_region_name` — Potential Data Exfiltration Activity to an Unusual Region
+- `exfiltration_potential_curl_data_exfiltration` — Potential Data Exfiltration Through Curl
+- `exfiltration_potential_wget_data_exfiltration` — Potential Data Exfiltration Through Wget
+- `exfiltration_rclone_cloud_upload` — Potential Data Exfiltration via Rclone *(Skip — Sigma equivalent exists but Elastic is better)*
+- `exfiltration_potential_data_splitting_for_exfiltration` — Potential Data Splitting Detected
+- `exfiltration_potential_database_dumping` — Potential Database Dumping Activity
+- `defense_evasion_doas_configuration_creation_or_rename` — Potential Defense Evasion via Doas
+- `defense_evasion_potential_proot_exploits` — Potential Defense Evasion via PRoot
+- `azure_openai_denial_of_ml_service_detection` — Potential Denial of Azure OpenAI ML Service
+- `command_and_control_ml_dga_high_sum_probability` — Potential DGA Activity
+- `execution_potential_direct_kubelet_access_via_process_args` — Potential Direct Kubelet Access via Process Arguments Detected via Defend for Containers
+- `defense_evasion_disable_apparmor_attempt` — Potential Disabling of AppArmor
+- `defense_evasion_disable_selinux_attempt` — Potential Disabling of SELinux
+- `defense_evasion_execution_suspicious_explorer_winword` — Potential DLL Side-Loading via Trusted Microsoft Programs *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_dns_tunneling_nslookup` — Potential DNS Tunneling via NsLookup
+- `privilege_escalation_docker_escape_via_nsenter` — Potential Docker Escape via Nsenter
+- `defense_evasion_posh_obfuscation_iex_env_vars_reconstruction` — Potential Dynamic IEX Reconstruction via Environment Variables
+- `discovery_active_directory_webservice` — Potential Enumeration via Active Directory Web Service *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_msi_repair_via_mshelp_link` — Potential Escalation via Vulnerable MSI Repair *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_potential_etherhiding_c2` — Potential Etherhiding C2 via Blockchain Connection
+- `defense_evasion_via_filter_manager` — Potential Evasion via Filter Manager *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_windows_filtering_platform` — Potential Evasion via Windows Filtering Platform *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_rc_local_service_already_running` — Potential Execution of rc.local Script
+- `execution_windows_phish_clickfix` — Potential Execution via FileFix Phishing Attack *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_suspicious_ssh_execution_xzbackdoor` — Potential Execution via SSH Backdoor
+- `privilege_escalation_unquoted_service_path` — Potential Exploitation of an Unquoted Service Path Vulnerability *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_potential_linux_ssh_bruteforce_external` — Potential External Linux SSH Brute Force Detected
+- `execution_windows_fakecaptcha_cmd_ps` — Potential Fake CAPTCHA Phishing Attack
+- `command_and_control_headless_browser` — Potential File Download via a Headless Browser *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_certreq_postdata` — Potential File Transfer via Certreq
+- `command_and_control_tool_transfer_via_curl` — Potential File Transfer via Curl for Windows *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_initial_access_foxmail_exploit` — Potential Foxmail Exploitation
+- `execution_git_exploit_cve_2025_48384` — Potential Git CVE-2025-48384 Exploitation
+- `defense_evasion_hex_payload_execution_via_commandline` — Potential Hex Payload Execution via Command-Line
+- `defense_evasion_hex_payload_execution_via_utility` — Potential Hex Payload Execution via Common Utility
+- `persistence_account_creation_hide_at_logon` — Potential Hidden Local User Account Creation
+- `defense_evasion_mount_execution` — Potential Hidden Process via Mount Hidepid
+- `defense_evasion_potential_http_downgrade_attack` — Potential HTTP Downgrade Attack *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_potential_kubectl_impersonation` — Potential Impersonation Attempt via Kubectl
+- `credential_access_potential_linux_ssh_bruteforce_internal` — Potential Internal Linux SSH Brute Force Detected
+- `credential_access_mimikatz_powershell_module` — Potential Invoke-Mimikatz PowerShell Script
+- `execution_suspicious_java_netcon_childproc` — Potential JAVA/JNDI Exploitation Attempt
+- `lateral_movement_credential_access_kerberos_bifrostconsole` — Potential Kerberos Attack via Bifrost
+- `credential_access_kerberos_coerce` — Potential Kerberos Coercion via DNS-Based SPN Spoofing
+- `credential_access_dollar_account_relay_kerberos` — Potential Kerberos Relay Attack against a Computer Account
+- `credential_access_kerberos_coerce_dns` — Potential Kerberos SPN Spoofing via Suspicious DNS Query
+- `defense_evasion_potential_kubectl_masquerading` — Potential Kubectl Masquerading via Unexpected Process
+- `execution_kubeletctl_execution` — Potential Kubeletctl Execution Detected via Defend for Containers
+- `lateral_movement_executable_tool_transfer_smb` — Potential Lateral Tool Transfer via SMB Share
+- `persistence_linux_backdoor_user_creation` — Potential Linux Backdoor User Account Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_proc_credential_dumping` — Potential Linux Credential Dumping via Proc Filesystem *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_credential_dumping` — Potential Linux Credential Dumping via Unshadow
+- `execution_potential_hack_tool_executed` — Potential Linux Hack Tool Launched
+- `credential_access_potential_linux_local_account_bruteforce` — Potential Linux Local Account Brute Force Detected
+- `impact_potential_linux_ransomware_note_detected` — Potential Linux Ransomware Note Creation Detected
+- `command_and_control_linux_tunneling_and_port_forwarding` — Potential Linux Tunneling and/or Port Forwarding
+- `command_and_control_potential_tunneling_command_line` — Potential Linux Tunneling and/or Port Forwarding via Command Line
+- `command_and_control_linux_tunneling_via_ssh_option` — Potential Linux Tunneling and/or Port Forwarding via SSH Option
+- `credential_access_relay_ntlm_auth_via_http_spoolss` — Potential Local NTLM Relay via HTTP
+- `privilege_escalation_lsa_auth_package` — Potential LSA Authentication Package Abuse *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_via_snapshot_lsass_clone_creation` — Potential LSASS Clone Creation via PssCaptureSnapShot
+- `credential_access_suspicious_lsass_access_via_snapshot` — Potential LSASS Memory Dump via PssCaptureSnapShot
+- `credential_access_machine_account_smb_relay` — Potential Machine Account Relay Attack via SMB *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_potential_macos_ssh_bruteforce` — Potential macOS SSH Brute Force Detected
+- `execution_posh_malicious_script_agg` — Potential Malicious PowerShell Based on Alert Correlation
+- `impact_potential_bruteforce_malware_infection` — Potential Malware-Driven SSH Brute Force Attempt
+- `defense_evasion_masquerading_business_apps_installer` — Potential Masquerading as Business App Installer
+- `defense_evasion_masquerading_communication_apps` — Potential Masquerading as Communication Apps *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_masquerading_as_svchost` — Potential Masquerading as Svchost
+- `execution_shell_via_meterpreter_linux` — Potential Meterpreter Reverse Shell
+- `defense_evasion_sandboxed_office_app_suspicious_zip_file` — Potential Microsoft Office Sandbox Evasion
+- `persistence_priv_escalation_via_accessibility_features` — Potential Modification of Accessibility Binaries
+- `defense_evasion_ntlm_downgrade` — Potential NetNTLMv1 Downgrade Attack
+- `discovery_potential_port_scan_detected` — Potential Network Scan Detected *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_ping_sweep_detected` — Potential Network Scan Executed From Host
+- `discovery_potential_network_sweep_detected` — Potential Network Sweep Detected
+- `execution_notepad_markdown_child_process` — Potential Notepad Markdown RCE Exploitation
+- `privilege_escalation_potential_container_escape_via_modified_notify_on_release_file` — Potential notify_on_release Container Escape Detected via Defend for Containers
+- `credential_access_dollar_account_relay_ntlm` — Potential NTLM Relay Attack against a Computer Account *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_okta_brute_force_device_token_rotation` — Potential Okta Brute Force (Device Token Rotation)
+- `credential_access_okta_brute_force_multi_source` — Potential Okta Brute Force (Multi-Source)
+- `credential_access_okta_credential_stuffing_single_source` — Potential Okta Credential Stuffing (Single Source)
+- `credential_access_okta_mfa_bombing_via_push_notifications` — Potential Okta MFA Bombing via Push Notifications
+- `credential_access_okta_password_spray_multi_source` — Potential Okta Password Spray (Multi-Source)
+- `credential_access_okta_password_spray_single_source` — Potential Okta Password Spray (Single Source)
+- `credential_access_ssh_backdoor_log` — Potential OpenSSH Backdoor Logging Activity
+- `lateral_movement_alternate_creds_pth` — Potential Pass-the-Hash (PtH) Attempt
+- `credential_access_potential_password_spraying_attack` — Potential Password Spraying Attack via SSH
+- `persistence_via_atom_init_file_modification` — Potential Persistence via Atom Init Script Modification
+- `persistence_suspicious_file_modifications` — Potential Persistence via File Modification *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_loginwindow_plist_modification` — Potential Persistence via Login Hook
+- `persistence_suspicious_user_mandatory_profile_file` — Potential Persistence via Mandatory User Profile
+- `persistence_periodic_tasks_file_mdofiy` — Potential Persistence via Periodic Tasks
+- `persistence_time_provider_mod` — Potential Persistence via Time Provider Modification *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_port_monitor_print_processor_abuse` — Potential Port Monitor or Print Processor Registration Abuse
+- `discovery_port_scanning_activity_from_compromised_host` — Potential Port Scanning Activity from Compromised Host
+- `execution_posh_hacktool_authors` — Potential PowerShell HackTool Script by Author
+- `execution_posh_hacktool_functions` — Potential PowerShell HackTool Script by Function Names
+- `defense_evasion_posh_high_entropy` — Potential PowerShell Obfuscated Script via High Entropy
+- `defense_evasion_posh_obfuscation_backtick_var` — Potential PowerShell Obfuscation via Backtick-Escaped Variable Expansion
+- `defense_evasion_posh_obfuscation_char_arrays` — Potential PowerShell Obfuscation via Character Array Reconstruction
+- `defense_evasion_posh_obfuscation_concat_dynamic` — Potential PowerShell Obfuscation via Concatenated Dynamic Command Invocation
+- `defense_evasion_posh_obfuscation_high_number_proportion` — Potential PowerShell Obfuscation via High Numeric Character Proportion
+- `defense_evasion_posh_obfuscation_backtick` — Potential PowerShell Obfuscation via Invalid Escape Sequences
+- `defense_evasion_posh_obfuscation_reverse_keyword` — Potential PowerShell Obfuscation via Reverse Keywords
+- `defense_evasion_posh_obfuscation_whitespace_special_proportion` — Potential PowerShell Obfuscation via Special Character Overuse
+- `defense_evasion_posh_obfuscation_string_concat` — Potential PowerShell Obfuscation via String Concatenation
+- `defense_evasion_posh_obfuscation_string_format` — Potential PowerShell Obfuscation via String Reordering
+- `credential_access_posh_relay_tools` — Potential PowerShell Pass-the-Hash/Relay Script
+- `defense_evasion_privilege_escalation_privacy_pref_sshd_fulldiskaccess` — Potential Privacy Control Bypass via Localhost Secure Copy
+- `defense_evasion_privacy_controls_tcc_database_modification` — Potential Privacy Control Bypass via TCCDB Modification
+- `privilege_escalation_writable_docker_socket` — Potential Privilege Escalation through Writable Docker Socket
+- `privilege_escalation_container_util_misconfiguration` — Potential Privilege Escalation via Container Misconfiguration *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_exploit_cve_202238028` — Potential privilege escalation via CVE-2022-38028
+- `privilege_escalation_looney_tunables_cve_2023_4911` — Potential Privilege Escalation via CVE-2023-4911
+- `privilege_escalation_enlightenment_window_manager` — Potential Privilege Escalation via Enlightenment
+- `privilege_escalation_installertakeover` — Potential Privilege Escalation via InstallerFileTakeOver
+- `privilege_escalation_dac_permissions` — Potential Privilege Escalation via Linux DAC permissions
+- `privilege_escalation_overlayfs_local_privesc` — Potential Privilege Escalation via OverlayFS
+- `privilege_escalation_pkexec_envar_hijack` — Potential Privilege Escalation via PKEXEC
+- `privilege_escalation_suspicious_cap_setuid_python_execution` — Potential Privilege Escalation via Python cap_setuid
+- `privilege_escalation_uid_change_post_compilation` — Potential Privilege Escalation via Recently Compiled Executable
+- `privilege_escalation_reg_service_imagepath_mod` — Potential Privilege Escalation via Service ImagePath Modification *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_echo_nopasswd_sudoers` — Potential Privilege Escalation via Sudoers File Modification
+- `privilege_escalation_potential_suid_sgid_proxy_execution` — Potential Privilege Escalation via SUID/SGID Proxy Execution
+- `privilege_escalation_samaccountname_spoofing_attack` — Potential Privileged Escalation via SamAccountName Spoofing
+- `defense_evasion_posh_process_injection` — Potential Process Injection via PowerShell
+- `defense_evasion_prctl_process_name_tampering` — Potential Process Name Stomping with Prctl
+- `command_and_control_linux_chisel_client_activity` — Potential Protocol Tunneling via Chisel Client
+- `command_and_control_tunnel_cloudflared` — Potential Protocol Tunneling via Cloudflared
+- `command_and_control_tunneling_via_earthworm` — Potential Protocol Tunneling via EarthWorm
+- `command_and_control_tunnel_yuze` — Potential Protocol Tunneling via Yuze
+- `impact_high_freq_file_renames_by_kernel` — Potential Ransomware Behavior - Note Files by System
+- `impact_ransomware_note_file_over_smb` — Potential Ransomware Note File Dropped via SMB
+- `privilege_escalation_potential_container_escape_via_modified_release_agent_file` — Potential release_agent Container Escape Detected via Defend for Containers
+- `command_and_control_remcos_rat_iocs` — Potential REMCOS Trojan Execution
+- `credential_access_remote_sam_secretsdump` — Potential Remote Credential Access via Registry
+- `lateral_movement_evasion_rdp_shadowing` — Potential Remote Desktop Shadowing Activity
+- `command_and_control_rdp_tunnel_plink` — Potential Remote Desktop Tunneling Detected *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_execution_remote_via_msiexec` — Potential Remote File Execution via MSIEXEC
+- `defense_evasion_msiexec_remote_payload` — Potential Remote Install via MsiExec *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_regmod_remotemonologue` — Potential RemoteMonologue Attack
+- `execution_shell_via_tcp_cli_utility_linux` — Potential Reverse Shell
+- `execution_revershell_via_shell_cmd` — Potential Reverse Shell Activity via Terminal
+- `execution_shell_via_background_process` — Potential Reverse Shell via Background Process
+- `execution_shell_via_child_tcp_utility_linux` — Potential Reverse Shell via Child
+- `execution_shell_via_java_revshell_linux` — Potential Reverse Shell via Java
+- `execution_shell_via_suspicious_binary` — Potential Reverse Shell via Suspicious Binary
+- `execution_shell_via_lolbin_interpreter_linux` — Potential Reverse Shell via Suspicious Child Process
+- `execution_shell_via_udp_cli_utility_linux` — Potential Reverse Shell via UDP
+- `execution_sap_netweaver_webshell_exec` — Potential SAP NetWeaver Exploitation
+- `execution_sap_netweaver_jsp_webshell` — Potential SAP NetWeaver WebShell Creation
+- `credential_access_gitleaks_execution` — Potential Secret Scanning via Gitleaks
+- `defense_evasion_sdelete_like_filename_rename` — Potential Secure File Deletion via SDelete Utility *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_shadow_credentials` — Potential Shadow Credentials added to AD Object *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_shadow_file_read` — Potential Shadow File Read via Command Line Utilities
+- `lateral_movement_rdp_sharprdp_target` — Potential SharpRDP Behavior
+- `privilege_escalation_potential_wildcard_shell_spawn` — Potential Shell via Wildcard Injection Detected
+- `privilege_escalation_snap_confine_lpe_via_cve_2026_3888` — Potential snap-confine Privilege Escalation via CVE-2026-3888
+- `reconnaissance_web_server_unusual_spike_in_error_logs` — Potential Spike in Web Server Error Logs
+- `credential_access_ssh_password_grabbing_via_strace` — Potential SSH Password Grabbing via strace
+- `discovery_subnet_scanning_activity_from_compromised_host` — Potential Subnet Scanning Activity from Compromised Host
+- `credential_access_potential_successful_linux_ssh_bruteforce` — Potential Successful SSH Brute Force Attack
+- `privilege_escalation_sudo_hijacking` — Potential Sudo Hijacking
+- `privilege_escalation_sudo_cve_2019_14287` — Potential Sudo Privilege Escalation via CVE-2019-14287
+- `privilege_escalation_sudo_token_via_process_injection` — Potential Sudo Token Manipulation via Process Injection
+- `privilege_escalation_sda_disk_mount_non_root` — Potential Suspicious DebugFS Root Device Access
+- `persistence_suspicious_file_opened_through_editor` — Potential Suspicious File Edit
+- `discovery_potential_syn_port_scan_detected` — Potential SYN-Based Port Scan Detected
+- `impact_mod_critical_os_files` — Potential System Tampering via File Modification *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_telnet_auth_bypass_via_user_envar` — Potential Telnet Authentication Bypass (CVE-2026-24061)
+- `lateral_movement_ssh_it_worm_download` — Potential THC Tool Downloaded
+- `defense_evasion_timestomp_sysmon` — Potential Timestomp in Executable Files *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_tunnel_qemu` — Potential Traffic Tunneling using QEMU *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_chown_chmod_unauthorized_file_read` — Potential Unauthorized Access via Wildcard Injection Detected
+- `execution_interpreter_tty_upgrade` — Potential Upgrade of Non-interactive Shell *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_veeam_commands` — Potential Veeam Credential Access Command *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_web_shell_aspx_write` — Potential Web Shell ASPX File Creation
+- `initial_access_apache_struts_cve_2023_50164_exploitation_to_webshell` — Potential Webshell Deployed via Apache Struts CVE-2023-50164 Exploitation
+- `execution_potential_widespread_malware_infection` — Potential Widespread Malware Infection Across Multiple Hosts
+- `defense_evasion_masquerading_werfault` — Potential Windows Error Manager Masquerading *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_sccm_scnotification_dll` — Potential Windows Session Hijacking via CcmExec
+- `credential_access_adidns_wpad_record` — Potential WPAD Spoofing via DNS Record Creation
+- `lateral_movement_via_wsus_update` — Potential WSUS Abuse for Lateral Movement
+- `credential_access_okta_potentially_successful_okta_bombing_via_push_notifications` — Potentially Successful Okta MFA Bombing via Push Notifications
+- `defense_evasion_sus_utility_executed_via_tmux_or_screen` — Potentially Suspicious Process Started via tmux or screen
+- `credential_access_posh_invoke_ninjacopy` — PowerShell Invoke-NinjaCopy script
+- `credential_access_posh_kerb_ticket_dump` — PowerShell Kerberos Ticket Dump
+- `credential_access_posh_request_ticket` — PowerShell Kerberos Ticket Request
+- `collection_posh_keylogger` — PowerShell Keylogging Script
+- `collection_posh_mailbox` — PowerShell Mailbox Collection Script *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_posh_minidump` — PowerShell MiniDump Script
+- `defense_evasion_posh_obfuscation_index_reversal` — PowerShell Obfuscation via Negative Index String Reversal
+- `execution_posh_psreflect` — PowerShell PSReflect Script
+- `defense_evasion_disable_posh_scriptblocklogging` — PowerShell Script Block Logging Disabled *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_posh_encryption` — PowerShell Script with Encryption/Decryption Capabilities
+- `privilege_escalation_posh_token_impersonation` — PowerShell Script with Token Impersonation Capabilities
+- `credential_access_posh_veeam_sql` — PowerShell Script with Veeam Credential Access Capabilities *(Skip — Sigma equivalent exists but Elastic is better)*
+- `collection_posh_webcam_video_capture` — PowerShell Script with Webcam Video Capture Capabilities
+- `defense_evasion_posh_defender_tampering` — PowerShell Script with Windows Defender Tampering Capabilities
+- `discovery_posh_invoke_sharefinder` — PowerShell Share Enumeration Script *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_posh_suspicious_api_functions` — PowerShell Suspicious Discovery Related Windows API Functions
+- `defense_evasion_posh_compressed` — PowerShell Suspicious Payload Encoded and Compressed
+- `collection_posh_audio_capture` — PowerShell Suspicious Script with Audio Capture Capabilities *(Skip — Sigma equivalent exists but Elastic is better)*
+- `collection_posh_clipboard_capture` — PowerShell Suspicious Script with Clipboard Retrieval Capabilities
+- `collection_posh_screen_grabber` — PowerShell Suspicious Script with Screenshot Capabilities
+- `execution_cupsd_foomatic_rip_lp_user_execution` — Printer User (lp) Shell Execution
+- `discovery_private_key_password_searching_activity` — Private Key Searching Activity
+- `privilege_escalation_suspicious_chown_fowner_elevation` — Privilege Escalation via CAP_CHOWN/CAP_FOWNER Capabilities
+- `privilege_escalation_suspicious_uid_guid_elevation` — Privilege Escalation via CAP_SETUID/SETGID Capabilities
+- `privilege_escalation_gdb_sys_ptrace_elevation` — Privilege Escalation via GDB CAP_SYS_PTRACE
+- `privilege_escalation_named_pipe_impersonation` — Privilege Escalation via Named Pipe Impersonation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_via_rogue_named_pipe` — Privilege Escalation via Rogue Named Pipe Impersonation
+- `privilege_escalation_root_crontab_filemod` — Privilege Escalation via Root Crontab File Modification
+- `privilege_escalation_potential_suid_sgid_exploitation` — Privilege Escalation via SUID/SGID
+- `privilege_escalation_rogue_windir_environment_var` — Privilege Escalation via Windir Environment Variable *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_bruteforce_admin_account` — Privileged Accounts Brute Force
+- `execution_privileged_container_creation_with_host_reference` — Privileged Container Creation with Host Directory Mount
+- `execution_potentially_overly_permissive_container_creation` — Privileged Docker Container Creation
+- `privilege_escalation_via_ppid_spoofing` — Privileges Elevation via Parent Process PID Spoofing
+- `execution_via_compiled_html_file` — Process Activity via Compiled HTML File
+- `execution_process_backgrounded_by_unusual_parent` — Process Backgrounded by Unusual Parent
+- `discovery_process_capabilities` — Process Capability Enumeration
+- `persistence_process_capability_set_via_setcap` — Process Capability Set via setcap Utility
+- `privilege_escalation_create_process_with_token_unpriv` — Process Created with a Duplicated Token *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_via_token_theft` — Process Created with an Elevated Token
+- `privilege_escalation_create_process_as_different_user` — Process Creation via Secondary Logon
+- `defense_evasion_from_unusual_directory` — Process Execution from an Unusual Directory *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_injection_msbuild` — Process Injection by the Microsoft Build Engine
+- `privilege_escalation_endgame_process_injection_detected` — Process Injection - Detected - Elastic Endgame
+- `privilege_escalation_endgame_process_injection_prevented` — Process Injection - Prevented - Elastic Endgame
+- `impact_process_killing` — Process Killing Detected via Defend for Containers
+- `persistence_message_of_the_day_execution` — Process Spawned from Message-of-the-Day (MOTD)
+- `execution_process_started_from_process_id_file` — Process Started from Process ID (PID) File
+- `execution_executable_stack_execution` — Process Started with Executable Stack
+- `defense_evasion_processes_with_trailing_spaces` — Processes with Trailing Spaces
+- `defense_evasion_masquerading_trusted_directory` — Program Files Directory Masquerading
+- `credential_access_promt_for_pwd_via_osascript` — Prompt for Credentials with Osascript
+- `defense_evasion_indirect_exec_conhost` — Proxy Execution via Console Window Host *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_indirect_exec_openssh` — Proxy Execution via Windows OpenSSH
+- `defense_evasion_busybox_indirect_shell_spawn` — Proxy Shell Execution via Busybox
+- `command_and_control_linux_proxychains_activity` — ProxyChains Activity
+- `execution_psexec_lateral_movement_command` — PsExec Network Connection *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_pth_file_creation` — Python Path File (pth) Creation
+- `persistence_site_and_user_customize_file_creation` — Python Site or User Customize File Creation
+- `defense_evasion_attempt_del_quarantine_attrib` — Quarantine Attrib Removed by Unsigned or Untrusted Process
+- `impact_elastic_ransomware_detected` — Ransomware - Detected - Elastic Defend
+- `endgame_ransomware_detected` — Ransomware - Detected - Elastic Endgame
+- `impact_elastic_ransomware_prevented` — Ransomware - Prevented - Elastic Defend
+- `endgame_ransomware_prevented` — Ransomware - Prevented - Elastic Endgame
+- `threat_intel_rapid7_threat_command` — Rapid7 Threat Command CVEs Correlation
+- `ml_cloudtrail_rare_error_code` — Rare AWS Error Code
+- `ml_azure_rare_event_failures` — Rare Azure Activity Logs Event Failures
+- `credential_access_rare_webdav_destination` — Rare Connection to WebDAV Target
+- `ml_gcp_rare_error_code` — Rare GCP Audit Failure Event Code
+- `execution_ml_windows_rare_script` — Rare Powershell Script
+- `exfiltration_smb_rare_destination` — Rare SMB Connection to the Internet
+- `initial_access_ml_auth_rare_user_logon` — Rare User Logon
+- `persistence_rc_script_creation` — rc.local/rc.common File Creation
+- `lateral_movement_rdp_enabled_registry` — RDP Enabled via Registry *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_rdp_remote_desktop_protocol_from_the_internet` — RDP (Remote Desktop Protocol) from the Internet
+- `initial_access_react_server_components_rce_attempt` — React2Shell (CVE-2025-55182) Exploitation Attempt
+- `initial_access_react_server_rce_network_alerts` — React2Shell Network Security Alert
+- `persistence_appcertdlls_registry` — Registry Persistence via AppCert DLL *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_appinitdlls_registry` — Registry Persistence via AppInit DLL
+- `privilege_escalation_suspicious_dnshostname_update` — Remote Computer Account DnsHostName Update
+- `defense_evasion_enable_inbound_rdp_with_netsh` — Remote Desktop Enabled in Windows Firewall by Netsh *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_rdp_file_mail_attachment` — Remote Desktop File Opened from Suspicious Path
+- `lateral_movement_execution_via_file_shares_sequence` — Remote Execution via File Shares *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_remote_file_copy_hidden_share` — Remote File Copy to a Hidden Share *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_teamviewer_remote_file_copy` — Remote File Copy via TeamViewer *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_remote_file_creation_world_writeable_dir` — Remote File Creation in World Writeable Directory
+- `command_and_control_remote_file_copy_desktopimgdownldr` — Remote File Download via Desktopimgdownldr Utility *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_remote_file_copy_mpcmdrun` — Remote File Download via MpCmdRun *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_remote_file_copy_powershell` — Remote File Download via PowerShell *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_remote_file_copy_scripts` — Remote File Download via Script Interpreter
+- `execution_register_github_actions_runner` — Remote GitHub Actions Runner Registration
+- `command_and_control_rmm_after_msi_install` — Remote Management Access Launch After MSI Install *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_scheduled_task_target` — Remote Scheduled Task Creation
+- `lateral_movement_remote_task_creation_winlog` — Remote Scheduled Task Creation via RPC *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_remote_ssh_login_enabled` — Remote SSH Login Enabled via systemsetup Command
+- `lateral_movement_remote_service_installed_winlog` — Remote Windows Service Installed
+- `initial_access_xsl_script_execution_via_com` — Remote XSL Script Execution via COM
+- `lateral_movement_remote_services` — Remotely Started Services via RPC
+- `defense_evasion_masquerading_renamed_autoit` — Renamed Automation Script Interpreter
+- `defense_evasion_suspicious_short_program_name` — Renamed Utility Executed with Short Program Name
+- `persistence_credential_access_modify_ssh_binaries` — Renaming of OpenSSH Binaries
+- `defense_evasion_root_certificate_installation` — Root Certificate Installation
+- `privilege_escalation_gdb_sys_ptrace_netcon` — Root Network Connection via GDB CAP_SYS_PTRACE
+- `command_and_control_download_rar_powershell_from_internet` — Roshal Archive (RAR) or PowerShell File Downloaded from the Internet
+- `defense_evasion_encoding_rot13_python_script` — ROT Encoded Python Script Execution
+- `initial_access_rpc_remote_procedure_call_from_the_internet` — RPC (Remote Procedure Call) from the Internet
+- `initial_access_rpc_remote_procedure_call_to_the_internet` — RPC (Remote Procedure Call) to the Internet
+- `persistence_rpm_package_installation_from_unusual_parent` — RPM Package Installed by Unusual Parent Process
+- `persistence_local_scheduled_task_scripting` — Scheduled Task Created by a Windows Script
+- `privilege_escalation_group_policy_scheduled_task` — Scheduled Task Execution at Scale via GPO *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_scheduledjobs_at_protocol_enabled` — Scheduled Tasks AT Command Enabled *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_webshell_screenconnect_server` — ScreenConnect Server Spawning Suspicious Processes *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_screensaver_plist_file_modification` — Screensaver Plist File Modified by Unexpected Process
+- `defense_evasion_script_via_html_app` — Script Execution via Microsoft HTML Application *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_script_interpreter_connection_to_non_standard_port` — Script Interpreter Connection to Non-Standard Port
+- `credential_access_saved_creds_vaultcmd` — Searching for Saved Credentials via VaultCmd *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_security_file_access_via_common_utility` — Security File Access via Common Utilities
+- `discovery_security_software_grep` — Security Software Discovery via Grep
+- `privilege_escalation_tokenmanip_sedebugpriv_enabled` — SeDebugPrivilege Enabled by a Suspicious Process
+- `defense_evasion_selinux_configuration_creation_or_renaming` — SELinux Configuration Creation or Renaming *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_audit_policy_disabled_winlog` — Sensitive Audit Policy Sub-Category Disabled *(Skip — Sigma equivalent exists but Elastic is better)*
+- `collection_sensitive_file_access_followed_by_compression` — Sensitive File Access followed by Compression
+- `credential_access_collection_sensitive_files_compression_inside_a_container` — Sensitive File Compression Detected via Defend for Containers
+- `credential_access_collection_sensitive_files` — Sensitive Files Compression
+- `credential_access_collection_sensitive_files_compression_inside_container` — Sensitive Files Compression Inside A Container
+- `credential_access_sensitive_keys_or_passwords_search_inside_a_container` — Sensitive Keys Or Passwords Search Detected via Defend for Containers
+- `credential_access_sensitive_keys_or_passwords_search_inside_container` — Sensitive Keys Or Passwords Searched For Inside A Container
+- `credential_access_seenabledelegationprivilege_assigned_to_user` — Sensitive Privilege SeEnableDelegationPrivilege assigned to a User
+- `credential_access_regback_sam_security_hives` — Sensitive Registry Hive Access via RegBack
+- `sentinelone_alert_external_alerts` — SentinelOne Alert External Alerts
+- `sentinelone_threat_external_alerts` — SentinelOne Threat External Alerts
+- `discovery_service_account_namespace_read` — Service Account Namespace Read Detected via Defend for Containers
+- `execution_d4c_k8s_mda_service_account_token_access_followed_by_kubernetes_api_request` — Service Account Token or Certificate Access Followed by Kubernetes API Request
+- `credential_access_service_account_token_or_cert_read` — Service Account Token or Certificate Read Detected via Defend for Containers
+- `lateral_movement_cmd_service` — Service Command Lateral Movement *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_service_control_spawned_script_int` — Service Control Spawned via Script Interpreter *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_krbrelayup_service_creation` — Service Creation via Local Kerberos Authentication
+- `defense_evasion_sc_sdset` — Service DACL Modification via sc.exe *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_setuid_setgid_capability_set` — Setcap setuid/setgid Capability Set
+- `impact_high_number_of_failed_protected_branch_force_pushes_by_user` — Several Failed Protected Branch Force Pushes by User
+- `persistence_shadow_file_modification` — Shadow File Modification by Unusual Process
+- `persistence_shared_object_creation` — Shared Object Created by Previously Unknown Process
+- `defense_evasion_deletion_of_shell_cmdline_history` — Shell Command-Line History Deletion Detected via Defend for Containers
+- `persistence_shell_configuration_modification` — Shell Configuration Creation
+- `execution_shell_execution_via_apple_scripting` — Shell Execution via Apple Scripting *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_workfolders_control_execution` — Signed Proxy Execution via MS Work Folders *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_simple_web_server_connection_accepted` — Simple HTTP Web Server Connection *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_simple_web_server_creation` — Simple HTTP Web Server Creation
+- `defense_evasion_sip_provider_mod` — SIP Provider Modification *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_direct_outbound_smb_connection` — SMB Connections via LOLBin or Untrusted Process
+- `initial_access_smb_windows_file_sharing_activity_to_the_internet` — SMB (Windows File Sharing) Activity to the Internet
+- `command_and_control_port_26_activity` — SMTP on Port 26/TCP
+- `defense_evasion_apple_softupdates_modification` — SoftwareUpdate Preferences Modification
+- `defense_evasion_solarwinds_backdoor_service_disabled_via_registry` — SolarWinds Process Disabling Services via Registry *(Skip — Sigma equivalent exists but Elastic is better)*
+- `ml_cloudtrail_error_message_spike` — Spike in AWS Error Messages
+- `ml_azure_event_failures` — Spike in Azure Activity Logs Failed Messages
+- `exfiltration_ml_high_bytes_written_to_external_device` — Spike in Bytes Sent to an External Device *(Skip — Sigma equivalent exists but Elastic is better)*
+- `exfiltration_ml_high_bytes_written_to_external_device_airdrop` — Spike in Bytes Sent to an External Device via Airdrop
+- `credential_access_ml_auth_spike_in_failed_logon_events` — Spike in Failed Logon Events *(Skip — Sigma equivalent exists but Elastic is better)*
+- `ml_high_count_network_denies` — Spike in Firewall Denies
+- `ml_gcp_error_message_spike` — Spike in GCP Audit Failed Messages
+- `privileged_access_ml_okta_spike_in_group_application_assignment_changes` — Spike in Group Application Assignment Change Events
+- `privileged_access_ml_okta_spike_in_group_lifecycle_changes` — Spike in Group Lifecycle Change Events
+- `privileged_access_ml_windows_high_count_group_management_events` — Spike in Group Management Events
+- `privileged_access_ml_okta_spike_in_group_membership_changes` — Spike in Group Membership Events
+- `privileged_access_ml_okta_spike_in_group_privilege_changes` — Spike in Group Privilege Change Events
+- `ml_high_count_events_for_a_host_name` — Spike in host-based traffic
+- `credential_access_ml_auth_spike_in_logon_events` — Spike in Logon Events
+- `ml_high_count_network_events` — Spike in Network Traffic
+- `ml_spike_in_traffic_to_a_country` — Spike in Network Traffic To a Country
+- `lateral_movement_ml_spike_in_connections_from_a_source_ip` — Spike in Number of Connections Made from a Source IP
+- `lateral_movement_ml_spike_in_connections_to_a_destination_ip` — Spike in Number of Connections Made to a Destination IP
+- `lateral_movement_ml_spike_in_rdp_processes` — Spike in Number of Processes in an RDP Session
+- `privileged_access_ml_linux_high_count_privileged_process_events_by_user` — Spike in Privileged Command Execution by a User
+- `lateral_movement_ml_spike_in_remote_file_transfers` — Spike in Remote File Transfers
+- `privileged_access_ml_windows_high_count_special_logon_events` — Spike in Special Logon Events
+- `privileged_access_ml_windows_high_count_special_privilege_use_events` — Spike in Special Privilege Use Events
+- `credential_access_ml_auth_spike_in_logon_events_from_a_source_ip` — Spike in Successful Logon Events from a Source IP
+- `privileged_access_ml_windows_high_count_user_account_management_events` — Spike in User Account Management Events
+- `privileged_access_ml_okta_spike_in_user_lifecycle_management_changes` — Spike in User Lifecycle Management Change Events
+- `splunk_external_alerts` — Splunk External Alerts
+- `persistence_ssh_authorized_keys_modification_inside_a_container` — SSH Authorized Key File Activity Detected via Defend for Containers
+- `persistence_ssh_authorized_keys_modification` — SSH Authorized Keys File Activity
+- `defense_evasion_authorized_keys_file_deletion` — SSH Authorized Keys File Deletion
+- `persistence_ssh_key_generation` — SSH Key Generated via ssh-keygen
+- `defense_evasion_ssl_certificate_deletion` — SSL Certificate Deletion
+- `persistence_startup_folder_file_written_by_unsigned_process` — Startup Folder Persistence via Unsigned Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_group_policy_iniscript` — Startup/Logon Script added to Group Policy Object *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_run_key_and_startup_broad` — Startup or Run Key Registry Modification
+- `persistence_startup_folder_file_written_by_suspicious_process` — Startup Persistence by a Suspicious Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_beaconing` — Statistical Model Detected C2 Beaconing Activity *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_beaconing_high_confidence` — Statistical Model Detected C2 Beaconing Activity with High Confidence
+- `persistence_stolen_credentials_used_to_login_to_okta_account_after_mfa_reset` — Stolen Credentials Used to Login to Okta Account After MFA Reset
+- `persistence_modification_sublime_app_plugin_or_script` — Sublime Plugin or Application Script Modification
+- `initial_access_successful_application_sso_from_unknown_client_device` — Successful Application SSO from Rare Unknown Client Device
+- `initial_access_successful_ssh_authentication_by_unusual_ip` — Successful SSH Authentication from Unusual IP Address
+- `initial_access_first_time_public_key_authentication` — Successful SSH Authentication from Unusual SSH Public Key
+- `initial_access_successful_ssh_authentication_by_unusual_user` — Successful SSH Authentication from Unusual User
+- `discovery_sudo_allowed_command_enumeration` — Sudo Command Enumeration Detected
+- `privilege_escalation_sudoers_file_mod` — Sudoers File Activity *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_setuid_setgid_bit_set_via_chmod` — SUID/SGID Bit Set
+- `discovery_suid_sguid_enumeration` — SUID/SGUID Enumeration Detected
+- `command_and_control_suricata_elastic_defend_c2` — Suricata and Elastic Defend Network Correlation
+- `multiple_alerts_by_host_ip_and_source_ip` — Suspected Lateral Movement from Compromised Host
+- `defense_evasion_dotnet_compiler_parent_process` — Suspicious .NET Code Compilation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_posh_assembly_load` — Suspicious .NET Reflection via PowerShell *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_high_number_ad_properties` — Suspicious Access to LDAP Attributes
+- `initial_access_suspicious_activity_reported_by_okta_user` — Suspicious Activity Reported by Okta User
+- `defense_evasion_amsi_bypass_dllhijack` — Suspicious Antimalware Scan Interface DLL
+- `persistence_apple_mail_rule_modification` — Suspicious Apple Mail Rule Plist Modification
+- `persistence_apt_package_manager_execution` — Suspicious APT Package Manager Execution
+- `persistence_apt_package_manager_netcon` — Suspicious APT Package Manager Network Connection
+- `execution_script_via_automator_workflows` — Suspicious Automator Workflows Execution
+- `command_and_control_aws_s3_connection_via_script` — Suspicious AWS S3 Connection via Script Interpreter
+- `execution_initial_access_suspicious_browser_childproc` — Suspicious Browser Child Process
+- `persistence_suspicious_calendar_modification` — Suspicious Calendar File Modification
+- `defense_evasion_suspicious_certutil_commands` — Suspicious CertUtil Commands *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_linux_shell_activity_via_web_server` — Suspicious Child Execution via Web Server
+- `privilege_escalation_exploit_adobe_acrobat_updater` — Suspicious Child Process of Adobe Acrobat Reader Update Service
+- `execution_suspicious_cmd_wmi` — Suspicious Cmd Execution via WMI *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_command_prompt_connecting_to_the_internet` — Suspicious Command Prompt Network Connection *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_communication_apps_suspicious_child_process` — Suspicious Communication App Child Process
+- `execution_sus_extraction_or_decrompression_via_funzip` — Suspicious Content Extracted or Decompressed via Funzip
+- `persistence_crontab_creation` — Suspicious CronTab Creation or Modification
+- `command_and_control_suspicious_curl_from_macos_application` — Suspicious Curl from macOS Application
+- `command_and_control_suspicious_curl_to_google_app_script` — Suspicious Curl to Google App Script Endpoint *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_suspicious_curl_to_jamf_endpoint` — Suspicious Curl to Jamf Endpoint
+- `impact_data_encrypted_via_openssl` — Suspicious Data Encryption via OpenSSL Utility
+- `privilege_escalation_persistence_phantom_dll` — Suspicious DLL Loaded for Persistence or Privilege Escalation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_dynamic_linker_via_od` — Suspicious Dynamic Linker Discovery via od
+- `persistence_suspicious_echo_or_printf_execution` — Suspicious Echo or Printf Execution Detected via Defend for Containers
+- `persistence_emond_rules_process_execution` — Suspicious Emond Child Process
+- `defense_evasion_masquerading_as_elastic_endpoint_process` — Suspicious Endpoint Security Parent Process
+- `defense_evasion_suspicious_execution_from_mounted_device` — Suspicious Execution from a Mounted Device *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_scripting_remote_webdav` — Suspicious Execution from a WebDav Share *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_cupsd_foomatic_rip_suspicious_child_execution` — Suspicious Execution from Foomatic-rip or Cupsd Parent
+- `initial_access_execution_from_inetcache` — Suspicious Execution from INET Cache
+- `initial_access_suspicious_execution_from_vscode_extension` — Suspicious Execution from VS Code Extension *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_execution_via_office_addins` — Suspicious Execution via Microsoft Office Add-Ins *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_suspicious_scheduled_task_runtime` — Suspicious Execution via Scheduled Task *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_wsl_bash_exec` — Suspicious Execution via Windows Subsystem for Linux *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_nodejs_susp_patterns` — Suspicious Execution with NodeJS *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_via_explorer_suspicious_child_parent_args` — Suspicious Explorer Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_kworker_file_creation` — Suspicious File Creation via Kworker
+- `persistence_suspicious_file_creation_via_pkg_install_script` — Suspicious File Creation via Pkg Install Script
+- `command_and_control_google_drive_malicious_file_download` — Suspicious File Downloaded from Google Drive *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_file_made_executable_via_chmod_inside_container` — Suspicious File Made Executable via Chmod Inside A Container
+- `impact_ransomware_file_rename_smb` — Suspicious File Renamed via SMB *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_defense_evasion_hidden_launch_agent_deamon_logonitem_process` — Suspicious Hidden Child Process of Launchd
+- `initial_access_evasion_suspicious_htm_file_creation` — Suspicious HTML File Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_suspicious_image_load_scheduled_task_ms_office` — Suspicious Image Load (taskschd.dll) from MS Office *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_suspicious_service_created_registry` — Suspicious ImagePath Service Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_installer_package_spawned_network_event` — Suspicious Installer Package Spawns Network Event *(Skip — Sigma equivalent exists but Elastic is better)*
+- `collection_email_outlook_mailbox_via_com` — Suspicious Inter-Process Communication via Outlook *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_suspicious_interactive_interpreter_command_execution` — Suspicious Interpreter Execution Detected via Defend for Containers
+- `execution_susp_javascript_via_deno` — Suspicious JavaScript Execution via Deno
+- `initial_access_exploit_jetbrains_teamcity` — Suspicious JetBrains TeamCity Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_credential_access_kerberos_correlation` — Suspicious Kerberos Authentication Ticket Request *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_sysctl_kernel_feature_activity` — Suspicious Kernel Feature Activity
+- `privilege_escalation_kworker_uid_elevation` — Suspicious Kworker UID Elevation
+- `credential_access_lsass_handle_via_malseclogon` — Suspicious LSASS Access via MalSecLogon *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_suspicious_lsass_access_generic` — Suspicious Lsass Process Access *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_suspicious_mac_ms_office_child_process` — Suspicious macOS MS Office Child Process
+- `defense_evasion_suspicious_managedcode_host_process` — Suspicious Managed Code Hosting Process
+- `discovery_suspicious_memory_grep_activity` — Suspicious Memory grep Activity
+- `defense_evasion_execution_windefend_unusual_path` — Suspicious Microsoft Antimalware Service Execution
+- `defense_evasion_proxy_execution_via_msdt` — Suspicious Microsoft Diagnostics Wizard Execution *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_mshta_susp_child` — Suspicious Microsoft HTML Application Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_suspicious_mining_process_creation_events` — Suspicious Mining Process Creation Event
+- `credential_access_lsass_loaded_susp_dll` — Suspicious Module Loaded by LSASS
+- `initial_access_suspicious_ms_office_child_process` — Suspicious MS Office Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_suspicious_ms_outlook_child_process` — Suspicious MS Outlook Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_suspicious_mkfifo_execution` — Suspicious Named Pipe Creation
+- `command_and_control_suspicious_network_activity_from_unknown_executable` — Suspicious Network Activity to the Internet by Previously Unknown Executable
+- `persistence_systemd_netcon` — Suspicious Network Connection via systemd *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_suspicious_network_tool_launched_inside_a_container` — Suspicious Network Tool Launch Detected via Defend for Containers
+- `discovery_suspicious_network_tool_launched_inside_container` — Suspicious Network Tool Launched Inside A Container *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_suspicious_outbound_network_via_unsigned_binary` — Suspicious Outbound Network Connection via Unsigned Binary
+- `privilege_escalation_suspicious_passwd_file_write` — Suspicious Passwd File Event Action
+- `execution_unusual_path_invocation_from_command_line` — Suspicious Path Invocation from Command Line
+- `defense_evasion_suspicious_path_mounted` — Suspicious Path Mounted *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_high_volume_of_pbpaste` — Suspicious pbpaste High Volume Activity
+- `execution_suspicious_pdf_reader` — Suspicious PDF Reader Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_posh_portable_executable` — Suspicious Portable Executable Encoded in Powershell Script
+- `execution_suspicious_powershell_imgload` — Suspicious PowerShell Engine ImageLoad
+- `execution_ml_windows_anomalous_script` — Suspicious Powershell Script *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_printspooler_suspicious_file_deletion` — Suspicious Print Spooler File Deletion *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_printspooler_registry_copyfiles` — Suspicious Print Spooler Point and Print DLL
+- `privilege_escalation_printspooler_suspicious_spl_file` — Suspicious Print Spooler SPL File Created *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_proc_maps_read` — Suspicious /proc/maps Discovery
+- `defense_evasion_suspicious_process_access_direct_syscall` — Suspicious Process Access via Direct System Call
+- `defense_evasion_suspicious_process_creation_calltrace` — Suspicious Process Creation CallTrace
+- `defense_evasion_interactive_process_execution_from_suspicious_directory` — Suspicious Process Execution Detected via Defend for Containers
+- `execution_suspicious_psexesvc` — Suspicious Process Execution via Renamed PsExec Executable *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_suspicious_python_command_execution` — Suspicious Python Shell Command Execution *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_rc_local_error_via_syslog` — Suspicious rc.local Error Message
+- `lateral_movement_suspicious_rdp_client_imageload` — Suspicious RDP ActiveX Client Loaded
+- `initial_access_execution_susp_react_serv_child` — Suspicious React Server Child Process
+- `credential_access_suspicious_winreg_access_via_sebackup_priv` — Suspicious Remote Registry Access via SeBackupPrivilege
+- `defense_evasion_rename_esxi_files` — Suspicious Renaming of ESXI Files
+- `command_and_control_screenconnect_childproc` — Suspicious ScreenConnect Client Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_suspicious_scrobj_load` — Suspicious Script Object Execution *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_thread_cpu_priority_hijack` — Suspicious SeIncreaseBasePriorityPrivilege Use
+- `persistence_service_windows_service_winlog` — Suspicious Service was Installed in the System *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_velociraptor_shell_execution` — Suspicious Shell Execution via Velociraptor
+- `discovery_suspicious_sip_check` — Suspicious SIP Check by macOS Application
+- `execution_apt_solarwinds_backdoor_unusual_child_processes` — Suspicious SolarWinds Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_potential_webhelpdesk_exploit` — Suspicious SolarWinds Web Help Desk Java Module Load or Child Process
+- `persistence_evasion_registry_startup_shell_folder_modified` — Suspicious Startup Shell Folder Modification
+- `persistence_startup_item_plist_creation` — Suspicious StartupItem Plist Creation
+- `privilege_escalation_linux_suspicious_symbolic_link` — Suspicious Symbolic Link Created
+- `execution_suspicious_executable_running_system_commands` — Suspicious System Commands Executed by Previously Unknown Executable
+- `defense_evasion_suspicious_tcc_access_granted` — Suspicious TCC Access Granted for User Folders
+- `impact_esxi_process_kill` — Suspicious Termination of ESXI Process
+- `persistence_bpf_probe_write_user` — Suspicious Usage of bpf_probe_write_user Helper
+- `command_and_control_linux_suspicious_proxychains_activity` — Suspicious Utility Launched via ProxyChains
+- `credential_access_suspicious_web_browser_sensitive_file_access` — Suspicious Web Browser Sensitive File Access
+- `defense_evasion_masquerading_suspicious_werfault_childproc` — Suspicious WerFault Child Process
+- `discovery_suspicious_which_command_execution` — Suspicious which Enumeration
+- `execution_windows_cmd_shell_susp_args` — Suspicious Windows Command Shell Arguments
+- `execution_windows_powershell_susp_args` — Suspicious Windows Powershell Arguments *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_sysmon_wmi_event_subscription` — Suspicious WMI Event Subscription Created
+- `execution_suspicious_image_load_wmi_ms_office` — Suspicious WMI Image Load from MS Office *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_suspicious_wmi_script` — Suspicious WMIC XSL Script Execution
+- `defense_evasion_apparmor_exploitation_via_sys_fs` — Suspicious Write Attempt to AppArmor Policy Management Files
+- `defense_evasion_suspicious_zoom_child_process` — Suspicious Zoom Child Process
+- `execution_command_shell_started_by_svchost` — Svchost spawning Cmd
+- `credential_access_symbolic_link_to_shadow_copy_created` — Symbolic Link to Shadow Copy Created *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_system_and_network_configuration_check` — System and Network Configuration Check
+- `defense_evasion_binary_copied_to_suspicious_directory` — System Binary Moved or Copied
+- `execution_system_binary_file_permission_change` — System Binary Path File Permission Modification
+- `defense_evasion_symlink_binary_to_writable_dir` — System Binary Symlink to Suspicious Location
+- `defense_evasion_modify_ownership_os_files` — System File Ownership Change *(Skip — Sigma equivalent exists but Elastic is better)*
+- `discovery_dmidecode_system_discovery` — System Information Discovery via dmidecode from Parent Shell
+- `defense_evasion_log_files_deleted` — System Log File Deletion
+- `execution_interactive_file_creation_in_system_binary_locations` — System Path File Creation and Execution Detected via Defend for Containers
+- `discovery_host_public_ip_address_lookup` — System Public IP Discovery via DNS Query
+- `persistence_system_shells_via_services` — System Shells via Services
+- `persistence_init_d_file_creation` — System V Init Script Created
+- `persistence_systemd_generator_creation` — Systemd Generator Created
+- `persistence_systemd_service_creation` — Systemd Service Created
+- `persistence_systemd_service_started` — Systemd Service Started by Unusual Parent Process
+- `persistence_systemd_shell_execution` — Systemd Shell Execution During Boot
+- `persistence_systemd_scheduled_timer_created` — Systemd Timer Created
+- `persistence_udev_rule_creation` — Systemd-udevd Rule File Creation
+- `credential_access_systemkey_dumping` — SystemKey Access via Command Line *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_tainted_kernel_module_load` — Tainted Kernel Module Load
+- `persistence_tainted_kernel_module_out_of_tree_load` — Tainted Out-Of-Tree Kernel Module Load
+- `defense_evasion_deletion_of_bash_command_line_history` — Tampering of Shell Command-Line History
+- `execution_via_github_runner_with_runner_tracking_id_tampering_via_env_vars` — Tampering with RUNNER_TRACKING_ID in GitHub Actions Runners
+- `defense_evasion_tcc_bypass_mounted_apfs_access` — TCC Bypass via Mounted APFS Snapshot Access
+- `initial_access_telnet_auth_bypass_envar_auditd` — Telnet Authentication Bypass via User Environment Variable
+- `persistence_temp_scheduled_task` — Temporarily Scheduled Task Creation
+- `impact_backup_file_deletion` — Third-party Backup Files Deleted via Unexpected Process
+- `threat_intel_indicator_match_email` — Threat Intel Email Indicator Match
+- `threat_intel_indicator_match_hash` — Threat Intel Hash Indicator Match
+- `threat_intel_indicator_match_address` — Threat Intel IP Address Indicator Match
+- `threat_intel_indicator_match_url` — Threat Intel URL Indicator Match
+- `threat_intel_indicator_match_registry` — Threat Intel Windows Registry Indicator Match
+- `defense_evasion_timestomp_touch` — Timestomping using Touch Command
+- `discovery_tool_enumeration` — Tool Enumeration Detected via Defend for Containers
+- `execution_tool_installation` — Tool Installation Detected via Defend for Containers
+- `privilege_escalation_trap_execution` — Trap Signals Execution
+- `command_and_control_tunneling_and_port_forwarding` — Tunneling and/or Port Forwarding Detected via Defend for Containers
+- `privilege_escalation_uac_bypass_com_ieinstal` — UAC Bypass Attempt via Elevated COM Internet Explorer Add-On Installer
+- `privilege_escalation_uac_bypass_dll_sideloading` — UAC Bypass Attempt via Privileged IFileOperation COM Interface
+- `privilege_escalation_uac_bypass_mock_windir` — UAC Bypass Attempt via Windows Directory Masquerading
+- `privilege_escalation_uac_bypass_com_clipup` — UAC Bypass Attempt with IEditionUpgradeManager Elevated COM Interface *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_uac_bypass_diskcleanup_hijack` — UAC Bypass via DiskCleanup Scheduled Task Hijack *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_uac_bypass_com_interface_icmluautil` — UAC Bypass via ICMLuaUtil Elevated COM Interface *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_uac_bypass_winfw_mmc_hijack` — UAC Bypass via Windows Firewall Snap-In Hijack *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_uid_elevation_from_unknown_executable` — UID Elevation from Previously Unknown Executable
+- `initial_access_okta_user_attempted_unauthorized_access` — Unauthorized Access to an Okta Application
+- `defense_evasion_first_occurence_public_app_client_credential_token_exchange` — Unauthorized Scope for Public App OAuth2 Token Grant with Client Credentials
+- `persistence_web_server_sus_destination_port` — Uncommon Destination Port Connection by Web Server
+- `persistence_registry_uncommon` — Uncommon Registry Persistence Change *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_screensaver_engine_unexpected_child_process` — Unexpected Child Process of macOS Screensaver Engine
+- `execution_unix_socket_communication` — Unix Socket Connection
+- `execution_unknown_rwx_mem_region_binary_executed` — Unknown Execution of Binary with RWX Memory Region
+- `privilege_escalation_dns_serverlevelplugindll` — Unsigned DLL loaded by DNS Service
+- `persistence_service_dll_unsigned` — Unsigned DLL Loaded by Svchost *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_unsigned_dll_loaded_from_suspdir` — Unsigned DLL Side-Loading from a Suspicious Folder
+- `credential_access_imageload_azureadconnectauthsvc` — Untrusted DLL Loaded by Azure AD Sync Service *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_untrusted_driver_loaded` — Untrusted Driver Loaded *(Skip — Sigma equivalent exists but Elastic is better)*
+- `ml_cloudtrail_rare_method_by_user` — Unusual AWS Command for a User
+- `impact_s3_unusual_object_encryption_with_sse_c` — Unusual AWS S3 Object Encryption with SSE-C
+- `ml_azure_rare_method_by_user` — Unusual Azure Activity Logs Event for a User
+- `defense_evasion_base64_decoding_activity` — Unusual Base64 Encoding/Decoding Activity *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_unusual_system_vp_child_program` — Unusual Child Process from a System Virtual Process
+- `lateral_movement_unusual_dns_service_children` — Unusual Child Process of dns.exe *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_rundll32_no_arguments` — Unusual Child Processes of RunDLL32 *(Skip — Sigma equivalent exists but Elastic is better)*
+- `ml_gcp_rare_method_by_city` — Unusual City For a GCP Event
+- `ml_cloudtrail_rare_method_by_city` — Unusual City For an AWS Command
+- `ml_azure_rare_method_by_city` — Unusual City for an Azure Activity Logs Event
+- `persistence_web_server_sus_command_execution` — Unusual Command Execution from Web Server Parent
+- `ml_gcp_rare_method_by_country` — Unusual Country For a GCP Event
+- `ml_cloudtrail_rare_method_by_country` — Unusual Country For an AWS Command
+- `ml_azure_rare_method_by_country` — Unusual Country for an Azure Activity Logs Event
+- `persistence_dbus_unsual_daemon_parent_execution` — Unusual D-Bus Daemon Child Process
+- `discovery_signal_unusual_discovery_signal_proc_cmdline` — Unusual Discovery Signal Alert with Unusual Process Command Line
+- `discovery_signal_unusual_discovery_signal_proc_executable` — Unusual Discovery Signal Alert with Unusual Process Executable
+- `command_and_control_ml_packetbeat_rare_dns_question` — Unusual DNS Activity
+- `persistence_dpkg_unusual_execution` — Unusual DPKG Execution
+- `defense_evasion_system_critical_proc_abnormal_file_activity` — Unusual Executable File Creation by a System Critical Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_unusual_kthreadd_execution` — Unusual Execution from Kernel Thread (kthreadd) Parent
+- `execution_initial_access_via_msc_file` — Unusual Execution via Microsoft Common Console File *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_unusual_exim4_child_process` — Unusual Exim4 Child Process
+- `defense_evasion_unusual_ads_file_creation` — Unusual File Creation - Alternate Data Stream *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_unusual_dns_service_file_writes` — Unusual File Operation by dns.exe *(Skip — Sigma equivalent exists but Elastic is better)*
+- `ml_gcp_rare_method_by_user` — Unusual GCP Event for a User
+- `privileged_access_ml_windows_rare_group_name_by_user` — Unusual Group Name Accessed by a User
+- `aws_bedrock_high_confidence_misconduct_blocks_detected` — Unusual High Confidence Content Filter Blocks Detected
+- `aws_bedrock_multiple_sensitive_information_policy_blocks_detected` — Unusual High Denied Sensitive Information Policy Blocks Detected
+- `aws_bedrock_multiple_topic_policy_blocks_detected` — Unusual High Denied Topic Blocks Detected
+- `aws_bedrock_multiple_word_policy_blocks_detected` — Unusual High Word Policy Blocks Detected
+- `privileged_access_ml_okta_rare_host_name_by_user` — Unusual Host Name for Okta Privileged Operations Detected
+- `privileged_access_ml_windows_rare_device_by_user` — Unusual Host Name for Windows Privileged Operations Detected
+- `initial_access_ml_auth_rare_hour_for_a_user_to_logon` — Unusual Hour for a User to Logon
+- `credential_access_unusual_instance_metadata_service_api_request` — Unusual Instance Metadata Service (IMDS) API Request
+- `defense_evasion_interactive_shell_from_system_user` — Unusual Interactive Shell Launched from System User
+- `discovery_kernel_module_enumeration` — Unusual Kernel Module Enumeration *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_unsual_kill_signal` — Unusual Kill Signal
+- `privilege_escalation_sensitive_workload_modification_by_user_agent` — Unusual Kubernetes Sensitive Workload Modification
+- `defense_evasion_ld_preload_cmdline` — Unusual LD_PRELOAD/LD_LIBRARY_PATH Command Line Arguments
+- `execution_unusual_library_load_via_python` — Unusual Library Load via Python
+- `ml_linux_anomalous_network_activity` — Unusual Linux Network Activity
+- `discovery_ml_linux_system_network_configuration_discovery` — Unusual Linux Network Configuration Discovery
+- `discovery_ml_linux_system_network_connection_discovery` — Unusual Linux Network Connection Discovery
+- `ml_linux_anomalous_network_port_activity` — Unusual Linux Network Port Activity
+- `credential_access_ml_linux_anomalous_metadata_process` — Unusual Linux Process Calling the Metadata Service
+- `discovery_ml_linux_system_process_discovery` — Unusual Linux Process Discovery Activity
+- `discovery_ml_linux_system_information_discovery` — Unusual Linux System Information Discovery Activity
+- `credential_access_ml_linux_anomalous_metadata_user` — Unusual Linux User Calling the Metadata Service
+- `discovery_ml_linux_system_user_discovery` — Unusual Linux User Discovery Activity
+- `initial_access_ml_linux_anomalous_user_name` — Unusual Linux Username
+- `credential_access_ml_suspicious_login_activity` — Unusual Login Activity
+- `persistence_ssh_via_backdoored_system_user` — Unusual Login via System User
+- `defense_evasion_network_connection_from_windows_binary` — Unusual Network Activity from a Windows System Binary
+- `command_and_control_unusual_connection_to_suspicious_top_level_domain` — Unusual Network Connection to Suspicious Top Level Domain
+- `command_and_control_unusual_network_connection_to_suspicious_web_service` — Unusual Network Connection to Suspicious Web Service
+- `defense_evasion_unusual_network_connection_via_dllhost` — Unusual Network Connection via DllHost *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_unusual_network_connection_via_rundll32` — Unusual Network Connection via RunDLL32
+- `ml_packetbeat_rare_server_domain` — Unusual Network Destination Domain Name
+- `privilege_escalation_unusual_parentchild_relationship` — Unusual Parent-Child Relationship *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_command_shell_started_by_unusual_process` — Unusual Parent Process for cmd.exe *(Skip — Sigma equivalent exists but Elastic is better)*
+- `persistence_services_registry` — Unusual Persistence via Services Registry
+- `execution_unusual_pkexec_execution` — Unusual Pkexec Execution
+- `defense_evasion_unusual_preload_env_vars` — Unusual Preload Environment Variable Process Execution
+- `privilege_escalation_unusual_printspooler_childprocess` — Unusual Print Spooler Child Process *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privileged_access_ml_windows_rare_privilege_assigned_to_user` — Unusual Privilege Type assigned to a User
+- `privileged_access_ml_linux_rare_process_executed_by_user` — Unusual Process Detected for Privileged Commands by a User
+- `defense_evasion_unusual_dir_ads` — Unusual Process Execution Path - Alternate Data Stream
+- `persistence_ml_rare_process_by_host_linux` — Unusual Process For a Linux Host
+- `persistence_ml_rare_process_by_host_windows` — Unusual Process For a Windows Host
+- `defense_evasion_genai_config_modification` — Unusual Process Modifying GenAI Configuration File
+- `defense_evasion_unusual_process_network_connection` — Unusual Process Network Connection *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_ml_rare_process_for_a_host` — Unusual Process Spawned by a Host
+- `defense_evasion_ml_rare_process_for_a_parent_process` — Unusual Process Spawned by a Parent Process
+- `defense_evasion_ml_rare_process_for_a_user` — Unusual Process Spawned by a User
+- `persistence_web_server_sus_child_spawned` — Unusual Process Spawned from Web Server Parent
+- `exfiltration_ml_rare_process_writing_to_external_device` — Unusual Process Writing Data to an External Device
+- `privileged_access_ml_okta_rare_region_name_by_user` — Unusual Region Name for Okta Privileged Operations Detected
+- `privileged_access_ml_windows_rare_region_name_by_user` — Unusual Region Name for Windows Privileged Operations Detected
+- `lateral_movement_unusual_remote_file_creation` — Unusual Remote File Creation
+- `lateral_movement_ml_rare_remote_file_directory` — Unusual Remote File Directory
+- `lateral_movement_ml_rare_remote_file_extension` — Unusual Remote File Extension
+- `lateral_movement_ml_high_remote_file_size` — Unusual Remote File Size
+- `persistence_scheduled_task_updated` — Unusual Scheduled Task Update *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_unusual_svchost_childproc_childless` — Unusual Service Host Child Process - Childless Service
+- `initial_access_ml_auth_rare_source_ip_for_a_user` — Unusual Source IP for a User to Logon from
+- `privileged_access_ml_okta_rare_source_ip_by_user` — Unusual Source IP for Okta Privileged Operations Detected
+- `privileged_access_ml_windows_rare_source_ip_by_user` — Unusual Source IP for Windows Privileged Operations Detected
+- `privileged_access_ml_okta_high_sum_concurrent_sessions_by_user` — Unusual Spike in Concurrent Active Sessions by a User
+- `persistence_unusual_sshd_child_process` — Unusual SSHD Child Process
+- `privilege_escalation_ml_linux_anomalous_sudo_activity` — Unusual Sudo Activity
+- `lateral_movement_ml_unusual_time_for_an_rdp_session` — Unusual Time or Day for an RDP Session
+- `discovery_unusual_user_enumeration_via_id` — Unusual User Privilege Enumeration via id
+- `credential_access_web_config_file_access` — Unusual Web Config File Access *(Skip — Sigma equivalent exists but Elastic is better)*
+- `command_and_control_ml_packetbeat_rare_urls` — Unusual Web Request
+- `persistence_web_server_unusual_command_execution` — Unusual Web Server Command Execution
+- `command_and_control_ml_packetbeat_rare_user_agent` — Unusual Web User Agent
+- `ml_windows_anomalous_network_activity` — Unusual Windows Network Activity
+- `persistence_ml_windows_anomalous_path_activity` — Unusual Windows Path Activity
+- `credential_access_ml_windows_anomalous_metadata_process` — Unusual Windows Process Calling the Metadata Service
+- `initial_access_ml_windows_rare_user_type10_remote_login` — Unusual Windows Remote User
+- `persistence_ml_windows_anomalous_service` — Unusual Windows Service
+- `credential_access_ml_windows_anomalous_metadata_user` — Unusual Windows User Calling the Metadata Service
+- `privilege_escalation_ml_windows_rare_user_runas_event` — Unusual Windows User Privilege Elevation Activity
+- `initial_access_ml_windows_anomalous_user_name` — Unusual Windows Username
+- `persistence_user_account_creation` — User Account Creation *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_spn_attribute_modified` — User account exposed to Kerberoasting
+- `persistence_user_account_added_to_privileged_group_ad` — User Added to Privileged Group in Active Directory
+- `privilege_escalation_user_added_to_admin_group` — User Added to the Admin Group
+- `defense_evasion_ml_suspicious_windows_process_cluster_from_user` — User Detected with Suspicious Windows Process(es)
+- `persistence_user_or_group_creation_or_modification` — User or Group Creation/Modification
+- `credential_access_veeam_backup_dll_imageload` — Veeam Backup Library Loaded by Unusual Process
+- `discovery_virtual_machine_fingerprinting` — Virtual Machine Fingerprinting
+- `discovery_virtual_machine_fingerprinting_grep` — Virtual Machine Fingerprinting via Grep
+- `lateral_movement_vpn_connection_attempt` — Virtual Private Network Connection Attempt
+- `command_and_control_vnc_virtual_network_computing_from_the_internet` — VNC (Virtual Network Computing) from the Internet
+- `command_and_control_vnc_virtual_network_computing_to_the_internet` — VNC (Virtual Network Computing) to the Internet
+- `impact_volume_shadow_copy_deletion_or_resized_via_vssadmin` — Volume Shadow Copy Deleted or Resized via VssAdmin
+- `impact_volume_shadow_copy_deletion_via_powershell` — Volume Shadow Copy Deletion via PowerShell *(Skip — Sigma equivalent exists but Elastic is better)*
+- `impact_volume_shadow_copy_deletion_via_wmic` — Volume Shadow Copy Deletion via WMIC *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_wdac_policy_by_unusual_process` — WDAC Policy File by an Unusual Process
+- `apm_403_response_to_a_post` — Web Application Suspicious Activity: POST Request Declined
+- `apm_sqlmap_user_agent` — Web Application Suspicious Activity: sqlmap User Agent
+- `apm_405_response_method_not_allowed` — Web Application Suspicious Activity: Unauthorized Method
+- `reconnaissance_web_server_discovery_or_fuzzing_activity` — Web Server Discovery or Fuzzing Activity
+- `persistence_suspicious_webserver_child_process_execution` — Web Server Exploitation Detected via Defend for Containers
+- `discovery_web_server_local_file_inclusion_activity` — Web Server Local File Inclusion Activity
+- `persistence_web_server_potential_command_injection` — Web Server Potential Command Injection Request
+- `discovery_web_server_remote_file_inclusion_activity` — Web Server Potential Remote File Inclusion Activity
+- `reconnaissance_web_server_unusual_spike_in_error_response_codes` — Web Server Potential Spike in Error Response Codes
+- `execution_python_webserver_spawned` — Web Server Spawned via Python
+- `reconnaissance_web_server_unusual_user_agents` — Web Server Suspicious User Agent Requests
+- `persistence_webshell_detection` — Web Shell Detection: Script Process Child of Common Web Processes *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_mitm_localhost_webproxy` — WebProxy Settings Modification
+- `defense_evasion_deleting_websvr_access_logs` — WebServer Access Logs Deleted
+- `persistence_werfault_reflectdebugger` — Werfault ReflectDebugger Persistence
+- `discovery_whoami_command_activity` — Whoami Process Activity *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_cve_2020_0601` — Windows CryptoAPI Spoofing Vulnerability (CVE-2020-0601 - CurveBall) *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_defender_disabled_via_registry` — Windows Defender Disabled via Registry Modification *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_defender_exclusion_via_powershell` — Windows Defender Exclusions Added via PowerShell
+- `defense_evasion_clearing_windows_security_logs` — Windows Event Logs Cleared
+- `defense_evasion_powershell_windows_firewall_disabled` — Windows Firewall Disabled via PowerShell *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_moving_registry_hive_via_smb` — Windows Registry File Creation in SMB Share *(Skip — Sigma equivalent exists but Elastic is better)*
+- `defense_evasion_run_virt_windowssandbox` — Windows Sandbox with Sensitive Configuration
+- `initial_access_script_executing_powershell` — Windows Script Executing PowerShell
+- `execution_scripts_archive_file` — Windows Script Execution from Archive *(Skip — Sigma equivalent exists but Elastic is better)*
+- `initial_access_scripts_process_started_via_wmi` — Windows Script Interpreter Executing Process via WMI
+- `initial_access_suspicious_windows_server_update_svc` — Windows Server Update Service Spawning Suspicious Processes *(Skip — Sigma equivalent exists but Elastic is better)*
+- `privilege_escalation_windows_service_via_unusual_client` — Windows Service Installed via an Unusual Client
+- `defense_evasion_wsl_registry_modification` — Windows Subsystem for Linux Distribution Installed
+- `defense_evasion_wsl_enabled_via_dism` — Windows Subsystem for Linux Enabled via Dism Utility *(Skip — Sigma equivalent exists but Elastic is better)*
+- `credential_access_wireless_creds_dumping` — Wireless Credential Dumping using Netsh Command *(Skip — Sigma equivalent exists but Elastic is better)*
+- `lateral_movement_incoming_wmi` — WMI Incoming Lateral Movement *(Skip — Sigma equivalent exists but Elastic is better)*
+- `execution_initial_access_wps_dll_exploit` — WPS Office Exploitation via DLL Hijack
+- `discovery_yum_dnf_plugin_detection` — Yum/DNF Plugin Status Discovery
+- `persistence_yum_package_manager_plugin_file_creation` — Yum Package Manager Plugin File Creation
+- `initial_access_zoom_meeting_with_no_passcode` — Zoom Meeting with no Passcode
+
+---
+
+## 3. Sigma Rules to ADD to Elastic
+
+**1892 rules** to import.
+
+Includes:
+- 1331 rules with no Elastic equivalent ('Add to SIEM')
+- 576 rules with weak/partial overlap ('Weak Overlap' — safe to add)
+- 0 replacements for deleted Elastic rules ('Pick one')
+
+- `7Zip Exfil Dmp Files`
+- `Aadhealth Mon Agent Regkey Access`
+- `Aadhealth Svc Agent Regkey Access`
+- `Acccheckconsole Execution`
+- `Account Discovery`
+- `Add Remove Computer`
+- `Addinutil Initiated`
+- `Addinutil Suspicious Cmdline`
+- `Addinutil Uncommon Child Process`
+- `Addinutil Uncommon Cmdline`
+- `Addinutil Uncommon Dir Exec`
+- `Admin Share Access`
+- `Adplus Memory Dump`
+- `Adsi Cache Creation By Uncommon Tool`
+- `Advanced Ip Scanner`
+- `Agentexecutor Potential Abuse`
+- `Agentexecutor Susp Usage`
+- `Alert Active Directory User Control`
+- `Antimalware Platform Expired`
+- `Anydesk Artefact`
+- `Anydesk Writing Susp Binaries`
+- `Application Exploit Cve 2023 40477 Winrar Crash`
+- `Applocker Application Was Prevented From Running`
+- `Appvlp Uncommon Child Process`
+- `Appxdeployment Server Applocker Block`
+- `Appxdeployment Server Appx Downloaded From File Sharing Domains`
+- `Appxdeployment Server Appx Package Deployment Failed Signing Requirements`
+- `Appxdeployment Server Appx Package In Staging Directory`
+- `Appxdeployment Server Mal Appx Names`
+- `Appxdeployment Server Policy Block`
+- `Appxdeployment Server Uncommon Package Locations`
+- `Apt Actinium Persistence`
+- `Apt Apt10 Cloud Hopper`
+- `Apt Apt27 Emissary Panda`
+- `Apt Apt29 Phishing Campaign Indicators`
+- `Apt Apt31 Judgement Panda`
+- `Apt Aptc12 Bluemushroom`
+- `Apt Bear Activity Gtr19`
+- `Apt Cozy Bear Phishing Campaign Indicators`
+- `Apt Cozy Bear Scheduled Tasks Name`
+- `Apt Diamond Sleet Indicators`
+- `Apt Diamond Sleet Scheduled Task`
+- `Apt Empiremonkey`
+- `Apt Equationgroup Dll U Load`
+- `Apt Evilnum Jul20`
+- `Apt Fin7 Exploitation Indicators`
+- `Apt Fin7 Powershell Scripts Naming Convention`
+- `Apt Fin7 Powertrash Lateral Movement`
+- `Apt Forest Blizzard Activity`
+- `Apt Forest Blizzard Constrained Js`
+- `Apt Greenbug May20`
+- `Apt Hafnium`
+- `Apt Lace Tempest Cobalt Strike Download`
+- `Apt Lace Tempest Indicators`
+- `Apt Lazarus Binary Masquerading`
+- `Apt Lazarus Group Activity`
+- `Apt Mercury`
+- `Apt Mint Sandstorm Aspera Faspex Susp Child Process`
+- `Apt Mint Sandstorm Log4J Wstomcat Execution`
+- `Apt Mint Sandstorm Manage Engine Susp Child Process`
+- `Apt Muddywater Activity`
+- `Apt Mustang Panda Indicators`
+- `Apt Mustangpanda`
+- `Apt Oilrig Mar18`
+- `Apt Onyx Sleet Indicators`
+- `Apt Revil Kaseya`
+- `Apt Slingshot`
+- `Apt Sofacy`
+- `Apt Sourgrum`
+- `Apt Ta17 293A Ps`
+- `Apt Taidoor`
+- `Apt Tropictrooper`
+- `Apt Turla Commands Critical`
+- `Apt Turla Comrat May20`
+- `Apt Unc2452 Cmds`
+- `Apt Unc2452 Ps`
+- `Apt Unc2452 Vbscript Pattern`
+- `Apt Unknown Exploitation Indicators`
+- `Apt Winnti Mal Hk Jan20`
+- `Apt Winnti Pipemon`
+- `Apt Wocao`
+- `Apt Zxshell`
+- `As Failed Load Gpo`
+- `As Reset Config`
+- `As Setting Change`
+- `Aspnet Compiler Exectuion`
+- `Aspnet Compiler Susp Child Process`
+- `Aspnet Compiler Susp Paths`
+- `Aspnet Temp Files`
+- `Asr Lsass Access`
+- `Asr Psexec Wmi`
+- `At Interactive Execution`
+- `Atbroker Uncommon Ats Execution`
+- `Atera Rmm Agent Install`
+- `Attrib System Susp Paths`
+- `Audit Log Cleared`
+- `Auditpol Nt Resource Kit Usage`
+- `Auditpol Susp Execution`
+- `Backup Delete`
+- `Bcdedit Susp Execution`
+- `Bcp Export Data`
+- `Bginfo Suspicious Child Process`
+- `Bginfo Uncommon Child Process`
+- `Bitlockertogo Execution`
+- `Bitsadmin Download`
+- `Bitsadmin Download Direct Ip`
+- `Bitsadmin Download File Sharing Domains`
+- `Bitsadmin Download Susp Extensions`
+- `Bitsadmin Download Susp Targetfolder`
+- `Bitsadmin Potential Persistence`
+- `Bloodhound Collection`
+- `Boinc Execution`
+- `Browsers Chromium Headless Debugging`
+- `Browsers Chromium Load Extension`
+- `Browsers Chromium Sensitive Files`
+- `Browsers Chromium Susp Load Extension`
+- `Browsers Credential`
+- `Browsers Inline File Download`
+- `Browsers Remote Debugging`
+- `Browsers Tor Execution`
+- `Calc Uncommon Exec`
+- `Camera Microphone Access`
+- `Capi2 Acquire Certificate Private Key`
+- `Certificateservicesclient Lifecycle System Cert Exported`
+- `Certmgr Certificate Installation`
+- `Certoc Download`
+- `Certoc Download Direct Ip`
+- `Certoc Load Dll`
+- `Certoc Load Dll Susp Locations`
+- `Certutil Certificate Installation`
+- `Certutil Decode`
+- `Certutil Download File Sharing Domains`
+- `Certutil Encode`
+- `Certutil Encode Susp Extensions`
+- `Certutil Encode Susp Location`
+- `Certutil Export Pfx`
+- `Certutil Ntlm Coercion`
+- `Chcp Codepage Lookup`
+- `Chcp Codepage Switch`
+- `Cipher Overwrite Deleted Data`
+- `Citrix Trolleyexpress Procdump`
+- `Client Anonymfiles Com`
+- `Client Mal Cobaltstrike`
+- `Client Mega Nz`
+- `Client Put Io`
+- `Client Tor Onion`
+- `Client Ufile Io`
+- `Clip Execution`
+- `Cloudflared Portable Execution`
+- `Cloudflared Tunnel Cleanup`
+- `Cloudflared Tunnel Run`
+- `Cmd Assoc Execution`
+- `Cmd Assoc Tamper Exe File Association`
+- `Cmd Copy Dmp From Share`
+- `Cmd Curl Download Exec Combo`
+- `Cmd Del Execution`
+- `Cmd Dir Execution`
+- `Cmd Dosfuscation`
+- `Cmd Http Appdata`
+- `Cmd Net Use And Exec Combo`
+- `Cmd No Space Execution`
+- `Cmd Ntdllpipe Redirect`
+- `Cmd Path Traversal`
+- `Cmd Ping Del Combined Execution`
+- `Cmd Redirect`
+- `Cmd Redirection Susp Folder`
+- `Cmd Rmdir Execution`
+- `Cmd Set Prompt Abuse`
+- `Cmd Stdin Redirect`
+- `Cmd Sticky Key Like Backdoor Execution`
+- `Cmd Sticky Keys Replace`
+- `Cmd Type Arbitrary File Download`
+- `Cmdkey Adding Generic Creds`
+- `Cmdkey Recon`
+- `Cmdl32 Arbitrary File Download`
+- `Cmstp Execution By Creation`
+- `Cmstp Initiated Connection`
+- `Cobaltstrike Service Installs`
+- `Codeintegrity Blocked Protected Process File`
+- `Codeintegrity Check Failure`
+- `Codeintegrity Enforced Policy Block`
+- `Codeintegrity Revoked Driver Blocked`
+- `Codeintegrity Revoked Driver Loaded`
+- `Codeintegrity Revoked Image Blocked`
+- `Codeintegrity Revoked Image Loaded`
+- `Codeintegrity Unsigned Driver Loaded`
+- `Codeintegrity Unsigned Image Loaded`
+- `Config Modification`
+- `Config Modification Error`
+- `Configsecuritypolicy Download File`
+- `Conhost Headless Execution`
+- `Conhost Legacy Option`
+- `Conhost Path Traversal`
+- `Conhost Susp Child Process`
+- `Control Panel Item`
+- `Create Evtx Non Common Locations`
+- `Create Non Existent Dlls`
+- `Create Remote Thread Win Hktl Cobaltstrike`
+- `Create Remote Thread Win Keepass`
+- `Create Remote Thread Win Loadlibrary`
+- `Create Remote Thread Win Malware Bumblebee`
+- `Create Remote Thread Win Mstsc Susp Location`
+- `Create Remote Thread Win Powershell Lsass`
+- `Create Remote Thread Win Powershell Susp Targets`
+- `Create Remote Thread Win Susp Password Dumper Lsass`
+- `Create Remote Thread Win Susp Relevant Source Image`
+- `Create Remote Thread Win Susp Target Shell Application`
+- `Create Remote Thread Win Susp Uncommon Target Image`
+- `Create Remote Thread Win Ttdinjec`
+- `Create Stream Hash Creation Internet File`
+- `Create Stream Hash File Sharing Domains Download Susp Extension`
+- `Create Stream Hash File Sharing Domains Download Unusual Extension`
+- `Create Stream Hash Regedit Export To Ads`
+- `Create Stream Hash Susp Ip Domains`
+- `Create Stream Hash Winget Susp Package Source`
+- `Create Stream Hash Zip Tld Download`
+- `Createdump Lolbin Execution`
+- `Creation Scr Binary File`
+- `Creation System Dll Files`
+- `Creation System File`
+- `Creation Unquoted Service Path`
+- `Cred Dump Tools Dropped Files`
+- `Csc Susp Dynamic Compilation`
+- `Csc Susp Parent`
+- `Cscript Wscript Dropper`
+- `Csexec Service`
+- `Csharp Compile Artefact`
+- `Csi Execution`
+- `Csi Use Of Csharp Console`
+- `Csvde Export`
+- `Curl Cookie Hijacking`
+- `Curl Custom User Agent`
+- `Curl Download`
+- `Curl Download Direct Ip Exec`
+- `Curl Download Direct Ip Susp Extensions`
+- `Curl Download Susp File Sharing Domains`
+- `Curl Execution`
+- `Curl Fileupload`
+- `Curl Insecure Connection`
+- `Curl Insecure Proxy Or Doh`
+- `Curl Local File Read`
+- `Curl Susp Download`
+- `Curl Useragent`
+- `Customshellhost Susp Exec`
+- `Cve 2021 26858 Msexchange`
+- `Cve 2021 31979 Cve 2021 33771 Exploits`
+- `Cve 2021 41379 Msi Lpe`
+- `Cve 2021 44077 Poc Default Files`
+- `Cve 2022 24527 Lpe`
+- `Cve 2023 21554 Msmq Corrupted Packet`
+- `Cve 2023 27363 Foxit Rce`
+- `Date Changed To Another Year`
+- `Dcom Iertutil Dll Hijack`
+- `Defaultpack Uncommon Child Process`
+- `Delete Backup File`
+- `Delete Event Log Files`
+- `Delete Exchange Powershell Logs`
+- `Delete Iis Access Logs`
+- `Delete Own Image`
+- `Delete Powershell Command History`
+- `Delete Prefetch`
+- `Delete Teamviewer Logs`
+- `Delete Tomcat Logs`
+- `Desktop Ini Created By Uncommon Process`
+- `Device Credential Deployment`
+- `Device Installation Blocked`
+- `Deviceenroller Dll Sideloading`
+- `Devinit Lolbin Usage`
+- `Dfsvc Child Processes`
+- `Dfsvc Non Local Ip`
+- `Dialer Initiated Connection`
+- `Dirlister Execution`
+- `Disable Event Auditing`
+- `Disable Event Auditing Critical`
+- `Diskshadow Script Mode`
+- `Diskshadow Script Mode Susp Ext`
+- `Diskshadow Script Mode Susp Location`
+- `Dism Remove`
+- `Dll Sideload Vmware Xfer`
+- `Dll Sideloading Space Path`
+- `Dllhost Non Local Ip`
+- `Dns Exfiltration Tools Execution`
+- `Dns Nkn`
+- `Dns Torproxy`
+- `Dnscmd Discovery`
+- `Dnscmd Install New Server Level Plugin Dll`
+- `Dnx Execute Csharp Code`
+- `Domain Btunnels`
+- `Domain Cloudflared Communication`
+- `Domain Crypto Mining Pools`
+- `Domain Dead Drop Resolvers`
+- `Domain Devtunnels`
+- `Domain Dropbox Api`
+- `Domain Localtonet Tunnel`
+- `Domain Mega Nz`
+- `Domain Ngrok`
+- `Domain Ngrok Tunnel`
+- `Domain Portmap`
+- `Domain Vscode Tunnel Connection`
+- `Dotnet Arbitrary Dll Csproj Execution`
+- `Dotnet Trace Lolbin Execution`
+- `Dotnetdump Memory Dump`
+- `Dpapi Domain Masterkey Backup Attempt`
+- `Driver Load Win Mal Drivers Names`
+- `Driver Load Win Vuln Drivers Names`
+- `Driverquery Recon`
+- `Driverquery Usage`
+- `Dsacls Abuse Permissions`
+- `Dsacls Password Spray`
+- `Dsquery Domain Trust Discovery`
+- `Dtrace Kernel Dump`
+- `Dump File Creation`
+- `Dump File Susp Creation`
+- `Dump64 Defender Av Bypass Rename`
+- `Dumpminitool Execution`
+- `Dumpminitool Susp Execution`
+- `Dxcap Arbitrary Binary Execution`
+- `Eqnedt`
+- `Errorhandler Persistence`
+- `Esentutl Params`
+- `Esentutl Sensitive File Copy`
+- `Esentutl Webcache`
+- `Exchange Webshell Drop`
+- `Exchange Webshell Drop Suspicious`
+- `Expand Cabinet Files`
+- `Exploit Cve 2015 1641`
+- `Exploit Cve 2017 0261`
+- `Exploit Cve 2017 11882`
+- `Exploit Cve 2019 1378`
+- `Exploit Cve 2019 1388`
+- `Exploit Cve 2020 1048`
+- `Exploit Cve 2020 1472 Zero Poc`
+- `Exploit Cve 2021 1675 Print Nightmare`
+- `Exploit Cve 2021 1675 Printspooler`
+- `Exploit Cve 2021 26084 Atlassian Confluence`
+- `Exploit Cve 2021 35211 Servu`
+- `Exploit Cve 2021 40444`
+- `Exploit Cve 2021 44228 Vmware Horizon Log4J`
+- `Exploit Cve 2022 22954 Vmware Workspace One Rce`
+- `Exploit Cve 2022 26809 Rpcss Child Process Anomaly`
+- `Exploit Cve 2022 41120 Sysmon Eop`
+- `Exploit Cve 2023 22518 Confluence Tomcat Child Proc`
+- `Exploit Cve 2023 23397 Outlook Remote File Query`
+- `Exploit Cve 2023 34362 Moveit Transfer`
+- `Exploit Cve 2023 36874 Fake Wermgr`
+- `Exploit Cve 2023 36874 Report Creation`
+- `Exploit Cve 2023 36874 Wermgr Creation`
+- `Exploit Cve 2023 36884 Office Windows Html Rce File Patterns`
+- `Exploit Cve 2023 36884 Office Windows Html Rce Share Access Pattern`
+- `Exploit Cve 2023 38331 Winrar Susp Double Ext`
+- `Exploit Cve 2023 40477 Winrar Rev File Abuse`
+- `Exploit Cve 2024 1708 Screenconnect`
+- `Exploit Cve 2024 1709 User Database Modification Screenconnect`
+- `Exploit Other Bearlpe`
+- `Exploit Other Razorinstaller Lpe`
+- `Exploit Other Systemnightmare`
+- `Exploit Other Win Server Undocumented Rce`
+- `Explorer Break Process Tree`
+- `Explorer Child Of Shell Process`
+- `Explorer Folder Shortcut Via Shell Binary`
+- `Explorer Nouaccheck`
+- `External Device`
+- `Extexport Execution`
+- `File Access Browser Credential`
+- `File Block Executable`
+- `File Block Shredding`
+- `File Executable Detected`
+- `File Executable Detected Win Susp Embeded Sed File`
+- `Findstr Download`
+- `Findstr Gpp Passwords`
+- `Findstr Lnk`
+- `Findstr Lsass`
+- `Findstr Password Recon`
+- `Findstr Recon Everyone`
+- `Findstr Recon Pipe Output`
+- `Findstr Security Keyword Lookup`
+- `Findstr Subfolder Search`
+- `Findstr Sysmon Discovery Via Default Altitude`
+- `Finger Execution`
+- `Fltmc Unload Driver`
+- `Forfiles Child Process Masquerading`
+- `Format Uncommon Filesystem Load`
+- `Fsi Fsharp Code Execution`
+- `Ftp Arbitrary Command Execution`
+- `Gfxdownloadwrapper Arbitrary File Download`
+- `Git Susp Clone`
+- `Github Self Hosted Runner`
+- `Googleupdate Susp Child Process`
+- `Gpg4Win Decryption`
+- `Gpg4Win Encryption`
+- `Gpg4Win Portable Execution`
+- `Gpg4Win Susp Location`
+- `Gpresult Execution`
+- `Gup Arbitrary Binary Execution`
+- `Gup Download`
+- `Gup Suspicious Execution`
+- `Hh Susp Execution`
+- `Hidden User Creation`
+- `History Delete`
+- `Hktl Adcspwn`
+- `Hktl Bloodhound Sharphound`
+- `Hktl C3 Rundll32 Pattern`
+- `Hktl Certify`
+- `Hktl Certipy`
+- `Hktl Cobaltstrike Bloopers Cmd`
+- `Hktl Cobaltstrike Bloopers Modules`
+- `Hktl Cobaltstrike Load By Rundll32`
+- `Hktl Cobaltstrike Process Patterns`
+- `Hktl Covenant`
+- `Hktl Crackmapexec Execution`
+- `Hktl Crackmapexec Execution Patterns`
+- `Hktl Crackmapexec Indicators`
+- `Hktl Crackmapexec Patterns`
+- `Hktl Dinjector`
+- `Hktl Dumpert`
+- `Hktl Edr Silencer`
+- `Hktl Edrsilencer`
+- `Hktl Empire Powershell Launch`
+- `Hktl Evil Winrm`
+- `Hktl Execution Via Pe Metadata`
+- `Hktl Hashcat`
+- `Hktl Hivenightmare File Exports`
+- `Hktl Htran Or Natbypass`
+- `Hktl Hydra`
+- `Hktl Impacket Lateral Movement`
+- `Hktl Impacket Tools`
+- `Hktl Inveigh`
+- `Hktl Inveigh Artefacts`
+- `Hktl Invoke Obfuscation Clip`
+- `Hktl Invoke Obfuscation Via Compress`
+- `Hktl Invoke Obfuscation Via Use Clip`
+- `Hktl Invoke Obfuscation Via Use Mhsta`
+- `Hktl Invoke Obfuscation Via Var`
+- `Hktl Krbrelay`
+- `Hktl Krbrelay Remote`
+- `Hktl Krbrelay Remote Ioc`
+- `Hktl Krbrelayup`
+- `Hktl Meterpreter Getsystem`
+- `Hktl Mimikatz Command Line`
+- `Hktl Mimikatz Files`
+- `Hktl Nofilter`
+- `Hktl Nppspy`
+- `Hktl Powersploit Empire Default Schtasks`
+- `Hktl Powertool`
+- `Hktl Powerup Dllhijacking`
+- `Hktl Purplesharp Indicators`
+- `Hktl Pypykatz`
+- `Hktl Quarks Pwdump`
+- `Hktl Quarkspw Filedump`
+- `Hktl Redmimicry Winnti Playbook`
+- `Hktl Relay Attacks Tools`
+- `Hktl Remote Cred Dump`
+- `Hktl Rubeus`
+- `Hktl Safetykatz`
+- `Hktl Secutyxploded`
+- `Hktl Sharp Chisel`
+- `Hktl Sharp Dpapi Execution`
+- `Hktl Sharp Impersonation`
+- `Hktl Sharp Ldap Monitor`
+- `Hktl Sharpersist`
+- `Hktl Sharpevtmute`
+- `Hktl Sharpldapwhoami`
+- `Hktl Sharpmove`
+- `Hktl Sharpup`
+- `Hktl Sharpview`
+- `Hktl Sharpwsus Wsuspendu Execution`
+- `Hktl Silenttrinity Stager`
+- `Hktl Sliver C2 Execution Pattern`
+- `Hktl Soaphound Execution`
+- `Hktl Trufflesnout`
+- `Hktl Winpeas`
+- `Hktl Winpwn`
+- `Hktl Wmiexec Default Powershell`
+- `Hktl Xordump`
+- `Hktl Zipexec`
+- `Hostname Execution`
+- `Hwp Exploits`
+- `Hxtsr Masquerading`
+- `Hybridconnectionmgr Svc Installation`
+- `Icacls Deny`
+- `Iexpress Execution`
+- `Iexpress Susp Execution`
+- `Iis Appcmd Http Logging`
+- `Iis Appcmd Susp Module Install`
+- `Iis Appcmd Susp Rewrite Rule`
+- `Iis Module Removed`
+- `Ilasm Il Code Compilation`
+- `Image Load Apt Cozy Bear Graphical Proton Dlls`
+- `Image Load Apt Diamond Sleet Side Load`
+- `Image Load Apt Lazarus Side Load Activity`
+- `Image Load Cmstp Load Dll From Susp Location`
+- `Image Load Dll Amsi Suspicious Process`
+- `Image Load Dll Amsi Uncommon Process`
+- `Image Load Dll Azure Microsoft Account Token Provider Dll Load`
+- `Image Load Dll Credui Uncommon Process Load`
+- `Image Load Dll Rstrtmgr Suspicious Load`
+- `Image Load Dll Rstrtmgr Uncommon Load`
+- `Image Load Dll Sdiageng Load By Msdt`
+- `Image Load Dll System Drawing Load`
+- `Image Load Dll System Management Automation Susp Load`
+- `Image Load Dll Taskschd By Process In Potentially Suspicious Location`
+- `Image Load Dll Tttracer Module Load`
+- `Image Load Dll Vss Ps Susp Load`
+- `Image Load Dll Vssapi Susp Load`
+- `Image Load Dll Vsstrace Susp Load`
+- `Image Load Hktl Silenttrinity Stager`
+- `Image Load Malware Coldsteel Persistence Service Dll`
+- `Image Load Malware Csharp Streamer Dotnet Load`
+- `Image Load Malware Foggyweb Nobelium`
+- `Image Load Malware Kapeka Backdoor Wll`
+- `Image Load Malware Pingback Backdoor`
+- `Image Load Office Excel Xll Load`
+- `Image Load Office Excel Xll Susp Load`
+- `Image Load Office Outlook Outlvba Load`
+- `Image Load Office Word Wll Load`
+- `Image Load Rundll32 Remote Share Load`
+- `Image Load Scrcons Wmi Scripteventconsumer`
+- `Image Load Side Load 7Za`
+- `Image Load Side Load Abused Dlls Susp Paths`
+- `Image Load Side Load Antivirus`
+- `Image Load Side Load Appverifui`
+- `Image Load Side Load Aruba Networks Virtual Intranet Access`
+- `Image Load Side Load Avkkid`
+- `Image Load Side Load Ccleaner Reactivator`
+- `Image Load Side Load Chrome Frame Helper`
+- `Image Load Side Load Classicexplorer32`
+- `Image Load Side Load Comctl32`
+- `Image Load Side Load Coregen`
+- `Image Load Side Load Cpl From Non System Location`
+- `Image Load Side Load Dbgcore`
+- `Image Load Side Load Dbghelp`
+- `Image Load Side Load Dbgmodel`
+- `Image Load Side Load Eacore`
+- `Image Load Side Load Edputil`
+- `Image Load Side Load From Non System Location`
+- `Image Load Side Load Goopdate`
+- `Image Load Side Load Gup Libcurl`
+- `Image Load Side Load Iviewers`
+- `Image Load Side Load Jsschhlp`
+- `Image Load Side Load Keyscrambler`
+- `Image Load Side Load Libvlc`
+- `Image Load Side Load Mfdetours`
+- `Image Load Side Load Mfdetours Unsigned`
+- `Image Load Side Load Mpsvc`
+- `Image Load Side Load Mscorsvc`
+- `Image Load Side Load Office Dlls`
+- `Image Load Side Load Rcdll`
+- `Image Load Side Load Rjvplatform Default Location`
+- `Image Load Side Load Rjvplatform Non Default Location`
+- `Image Load Side Load Robform`
+- `Image Load Side Load Shell Chrome Api`
+- `Image Load Side Load Shelldispatch`
+- `Image Load Side Load Smadhook`
+- `Image Load Side Load Solidpdfcreator`
+- `Image Load Side Load Third Party`
+- `Image Load Side Load Ualapi`
+- `Image Load Side Load Vivaldi Elf`
+- `Image Load Side Load Vmware Xfer`
+- `Image Load Side Load Waveedit`
+- `Image Load Side Load Wazuh`
+- `Image Load Side Load Wwlib`
+- `Image Load Uac Bypass Iscsicpl`
+- `Image Load Usp Svchost Clfsw32`
+- `Image Load Wmi Module Load By Uncommon Process`
+- `Image Load Wmi Persistence Commandline Event Consumer`
+- `Image Load Wmiprvse Wbemcomn Dll Hijack`
+- `Image Load Wsman Provider Image Load`
+- `Imagingdevices Unusual Parents`
+- `Imewbdld Download`
+- `Imewdbld`
+- `Infdefaultinstall Execute Sct Scripts`
+- `Install Teamviewer Desktop`
+- `Instalutil No Log Execution`
+- `Invoke Obfuscation Clip Services Security`
+- `Invoke Obfuscation Obfuscated Iex Services Security`
+- `Invoke Obfuscation Stdin Services Security`
+- `Invoke Obfuscation Var Services Security`
+- `Invoke Obfuscation Via Compress Services Security`
+- `Invoke Obfuscation Via Rundll Services Security`
+- `Invoke Obfuscation Via Stdin Services Security`
+- `Invoke Obfuscation Via Use Clip Services Security`
+- `Invoke Obfuscation Via Use Mshta Services Security`
+- `Invoke Obfuscation Via Use Rundll32 Services Security`
+- `Invoke Obfuscation Via Var Services Security`
+- `Iphlpapi Dll Sideloading`
+- `Iso File Mount`
+- `Iso File Recent`
+- `Iso Mount`
+- `Java Remote Debugging`
+- `Java Susp Child Process 2`
+- `Java Sysaidserver Susp Child Process`
+- `Jsc Execution`
+- `Kavremover Uncommon Execution`
+- `Kd Execution`
+- `Kerberoasting Activity`
+- `Ksetup Password Change Computer`
+- `Ksetup Password Change User`
+- `Ldifde Export`
+- `Ldifde File Load`
+- `Link Uncommon Parent Process`
+- `Lodctr Performance Counter Tampering`
+- `Lolbin Data Exfiltration By Using Datasvcutil`
+- `Lolbin Devtoolslauncher`
+- `Lolbin Diantz Ads`
+- `Lolbin Diantz Remote Cab`
+- `Lolbin Extrac32`
+- `Lolbin Extrac32 Ads`
+- `Lolbin Gather Network Info`
+- `Lolbin Gather Network Info Script Output`
+- `Lolbin Gpscript`
+- `Lolbin Ie4Uinit`
+- `Lolbin Launch Vsdevshell`
+- `Lolbin Manage Bde`
+- `Lolbin Mavinject Process Injection`
+- `Lolbin Msdeploy`
+- `Lolbin Openconsole`
+- `Lolbin Openwith`
+- `Lolbin Pcalua`
+- `Lolbin Pcwrun`
+- `Lolbin Pcwrun Follina`
+- `Lolbin Pcwutl`
+- `Lolbin Pester`
+- `Lolbin Printbrm`
+- `Lolbin Pubprn`
+- `Lolbin Rasautou Dll Execution`
+- `Lolbin Register App`
+- `Lolbin Remote`
+- `Lolbin Replace`
+- `Lolbin Runexehelper`
+- `Lolbin Runscripthelper`
+- `Lolbin Scriptrunner`
+- `Lolbin Settingsynchost`
+- `Lolbin Sftp`
+- `Lolbin Susp Driver Installed By Pnputil`
+- `Lolbin Susp Grpconv`
+- `Lolbin Susp Sqldumper Activity`
+- `Lolbin Syncappvpublishingserver Execute Psh`
+- `Lolbin Syncappvpublishingserver Vbs Execute Psh`
+- `Lolbin Tracker`
+- `Lolbin Ttdinject`
+- `Lolbin Tttracer Mod Load`
+- `Lolbin Unregmp2`
+- `Lolbin Utilityfunctions`
+- `Lolbin Visual Basic Compiler`
+- `Lolbin Visualuiaverifynative`
+- `Lolbin Vsiisexelauncher`
+- `Lolbin Wfc`
+- `Lolscript Register App`
+- `Lsass Access Non System Account`
+- `Lsass Default Dump File Names`
+- `Lsass Process Clone`
+- `Lsass Shtinkering`
+- `Mal Adwind`
+- `Mal Cosmik Duke Persistence`
+- `Mal Creddumper`
+- `Mal Octopus Scanner`
+- `Mal Wceaux Dll`
+- `Malware 3Cx Compromise Beaconing Activity`
+- `Malware 3Cx Compromise Susp Children`
+- `Malware 3Cx Compromise Susp Update`
+- `Malware Adwind`
+- `Malware And Pua Scan Disabled`
+- `Malware Babyshark`
+- `Malware Blackbyte Privesc Registry`
+- `Malware Blackbyte Ransomware`
+- `Malware Blue Mockingbird`
+- `Malware Bluesky Ransomware Files Indicators`
+- `Malware Coldsteel Anonymous Process`
+- `Malware Coldsteel Cleanup`
+- `Malware Coldsteel Renamed Cmd`
+- `Malware Coldsteel Service Dll Creation`
+- `Malware Coldsteel Service Persistence`
+- `Malware Conti`
+- `Malware Conti 7Zip`
+- `Malware Conti Ransomware Commands`
+- `Malware Conti Ransomware Database Dump`
+- `Malware Darkgate Autoit3 Binary Creation`
+- `Malware Darkgate Autoit3 From Susp Parent And Location`
+- `Malware Darkgate Autoit3 Save Temp`
+- `Malware Darkside Ransomware`
+- `Malware Devil Bait Output Redirect`
+- `Malware Devil Bait Script Drop`
+- `Malware Dridex`
+- `Malware Dtrack`
+- `Malware Elise`
+- `Malware Emotet`
+- `Malware Emotet Loader Execution`
+- `Malware Emotet Rundll32 Execution`
+- `Malware Fireball`
+- `Malware Formbook`
+- `Malware Goofy Guineapig Broken Cmd`
+- `Malware Goofy Guineapig File Indicators`
+- `Malware Goofy Guineapig Googleupdate Uncommon Child Instance`
+- `Malware Griffon Patterns`
+- `Malware Hermetic Wiper Activity`
+- `Malware Icedid Rundll32 Dllregisterserver`
+- `Malware Kamikakabot Schtasks Persistence`
+- `Malware Kapeka Backdoor Indicators`
+- `Malware Kapeka Backdoor Persistence`
+- `Malware Kapeka Backdoor Rundll32 Execution`
+- `Malware Kapeka Backdoor Scheduled Task Creation`
+- `Malware Ke3Chang Tidepool`
+- `Malware Lockergoga Ransomware`
+- `Malware Maze Ransomware`
+- `Malware Pikabot Combined Commands Execution`
+- `Malware Pikabot Rundll32 Activity`
+- `Malware Pikabot Rundll32 Hollowing`
+- `Malware Pingback Backdoor`
+- `Malware Plugx Susp Exe Locations`
+- `Malware Qakbot Regsvr32 Calc Pattern`
+- `Malware Qakbot Rundll32 Execution`
+- `Malware Qakbot Rundll32 Exports`
+- `Malware Qakbot Rundll32 Fake Dll Execution`
+- `Malware Qbot`
+- `Malware Raspberry Robin Execution`
+- `Malware Raspberry Robin External Drive Exec`
+- `Malware Raspberry Robin Rundll32 Shell32 Cpl Exection`
+- `Malware Rhadamanthys Stealer Dll Launch`
+- `Malware Rorschach Ransomware Activity`
+- `Malware Serpent Backdoor Payload Execution`
+- `Malware Small Sieve Cli Arg`
+- `Malware Small Sieve Evasion Typo`
+- `Malware Snake Encrypted Payload Ioc`
+- `Malware Snake Installer Cli Args`
+- `Malware Snake Installer Exec`
+- `Malware Snake Installers Ioc`
+- `Malware Snake Werfault Creation`
+- `Malware Socgholish Fakeupdates Activity`
+- `Malware Wannacry`
+- `Member Removed Security Enabled Global Group`
+- `Metasploit Or Impacket Smb Psexec Service Install`
+- `Meterpreter Or Cobaltstrike Getsystem Service Install`
+- `Mftrace Child Process`
+- `Microsoft Workflow Compiler Execution`
+- `Mitigations Defender Load Unsigned Dll`
+- `Mode Codepage Change`
+- `Mode Codepage Russian`
+- `Mofcomp Execution`
+- `Moriya Rootkit`
+- `Mpcmdrun Download Arbitrary File`
+- `Mpcmdrun Remove Windows Defender Definition`
+- `Msdt Answer File Exec`
+- `Msdt Susp Cab Options`
+- `Msdt Susp Directories`
+- `Msedge Proxy Download`
+- `Mshta Http`
+- `Mshta Inline Vbscript`
+- `Mshta Javascript`
+- `Mshta Lethalhta Technique`
+- `Mshta Susp Execution`
+- `Mshta Susp Pattern`
+- `Msiexec Dll`
+- `Msiexec Embedding`
+- `Msiexec Execute Dll`
+- `Msiexec Install Quiet`
+- `Msiexec Install Remote`
+- `Msiexec Masquerading`
+- `Msiexec Web Install`
+- `Msohtmed Download`
+- `Mspub Download`
+- `Msra Process Injection`
+- `Mssql Failed Logon`
+- `Mssql Sp Maggie`
+- `Mssql Sqlps Susp Execution`
+- `Mssql Sqltoolsps Susp Execution`
+- `Mstsc Rdp Hijack Shadowing`
+- `Mstsc Remote Connection`
+- `Mstsc Run Local Rdp File`
+- `Mstsc Run Local Rdp File Susp Location`
+- `Msxsl Execution`
+- `Mysqld Uncommon File Creation`
+- `Net Cli Artefact`
+- `Net Dns Apt Equation Group Triangulation C2 Coms`
+- `Net Dns External Service Interaction Domains`
+- `Net Dns Mal Cobaltstrike`
+- `Net Dns Pua Cryptocoin Mining Xmr`
+- `Net Dns Susp B64 Queries`
+- `Net Dns Susp Telegram Api`
+- `Net Dns Wannacry Killswitch Domain`
+- `Net Quic`
+- `Net Share Obj Susp Desktop Ini`
+- `Net Start Service`
+- `Net Stop Service`
+- `Net View Share And Sessions Enum`
+- `Netsh Fw Allow Program In Susp Location`
+- `Netsh Fw Allow Rdp`
+- `Netsh Fw Delete Rule`
+- `Netsh Helper Dll Persistence`
+- `Netsh Packet Capture`
+- `Netsh Port Forwarding`
+- `Netsh Port Forwarding 3389`
+- `New Files In Uncommon Appdata Folder`
+- `New Or Renamed User Account With Dollar Sign`
+- `New Scr File`
+- `Nltest Execution`
+- `Nltest Recon`
+- `Node Abuse`
+- `Node Adobe Creative Cloud Abuse`
+- `Not Allowed Rdp Access`
+- `Notepad Plus Plus Persistence`
+- `Nslookup Domain Discovery`
+- `Nslookup Poweshell Download`
+- `Ntds Dit Creation`
+- `Ntds Dit Uncommon Process`
+- `Ntds Exfil Tools`
+- `Ntdsutil Susp Usage`
+- `Ntdsutil Usage`
+- `Ntlm Auth`
+- `Ntlm Brute Force`
+- `Ntlm Rdp`
+- `Odbcconf Driver Install`
+- `Odbcconf Driver Install Susp`
+- `Odbcconf Exec Susp Locations`
+- `Odbcconf Register Dll Regsvr`
+- `Odbcconf Register Dll Regsvr Susp`
+- `Odbcconf Response File`
+- `Odbcconf Response File Susp`
+- `Odbcconf Uncommon Child Process`
+- `Office Addin Persistence`
+- `Office Excel Dcom Lateral Movement`
+- `Office Exec From Trusted Locations`
+- `Office Macro Files Created`
+- `Office Macro Files From Susp Process`
+- `Office Onenote Embedded Script Execution`
+- `Office Onenote Files In Susp Locations`
+- `Office Onenote Susp Child Processes`
+- `Office Onenote Susp Dropped Files`
+- `Office Outlook Enable Unsafe Client Mail Rules`
+- `Office Outlook Mail Credential`
+- `Office Outlook Newform`
+- `Office Outlook Susp Child Processes Remote`
+- `Office Publisher Files In Susp Locations`
+- `Office Startup Persistence`
+- `Office Susp File Extension`
+- `Office Uncommon File Startup`
+- `Offlinescannershell Mpclient Sideloading`
+- `Papercut Print Management Exploitation Indicators`
+- `Password Policy Enumerated`
+- `Pcap Drivers`
+- `Pdqdeploy Execution`
+- `Perflogs Susp Files`
+- `Perl Inline Command Execution`
+- `Pfx File Creation`
+- `Php Inline Command Execution`
+- `Ping Hex Ip`
+- `Pipe Created Adfs Namedpipe Connection Uncommon Tool`
+- `Pipe Created Apt Turla Named Pipes`
+- `Pipe Created Hktl Cobaltstrike`
+- `Pipe Created Hktl Cobaltstrike Susp Pipe Patterns`
+- `Pipe Created Hktl Diagtrack Eop`
+- `Pipe Created Hktl Efspotato`
+- `Pipe Created Hktl Generic Cred Dump Tools Pipes`
+- `Pipe Created Hktl Koh Default Pipe`
+- `Pipe Created Powershell Alternate Host Pipe`
+- `Pipe Created Powershell Execution Pipe`
+- `Pipe Created Pua Csexec Default Pipe`
+- `Pipe Created Pua Paexec Default Pipe`
+- `Pipe Created Pua Remcom Default Pipe`
+- `Pipe Created Scrcons Wmi Consumer Namedpipe`
+- `Pipe Created Susp Malicious Namedpipes`
+- `Pipe Created Sysinternals Psexec Default Pipe`
+- `Pipe Created Sysinternals Psexec Default Pipe Susp Location`
+- `Pktmon Execution`
+- `Plink Port Forwarding`
+- `Plink Susp Tunneling`
+- `Posh Pm Exploit Scripts`
+- `Posh Pm Remote Powershell Session`
+- `Posh Pm Susp Download`
+- `Posh Pm Susp Get Nettcpconnection`
+- `Posh Pm Susp Invocation Generic`
+- `Posh Pm Susp Invocation Specific`
+- `Posh Pm Susp Reset Computermachinepassword`
+- `Posh Pm Susp Zip Compress`
+- `Posh Pm Syncappvpublishingserver Exe`
+- `Possible Dc Shadow`
+- `Powercfg Execution`
+- `Powershell Aadinternals Cmdlets Execution`
+- `Powershell Amsi Init Failed Bypass`
+- `Powershell Base64 Encoded Cmd`
+- `Powershell Base64 Encoded Cmd Patterns`
+- `Powershell Base64 Encoded Obfusc`
+- `Powershell Base64 Frombase64String`
+- `Powershell Base64 Hidden Flag`
+- `Powershell Base64 Iex`
+- `Powershell Base64 Mppreference`
+- `Powershell Base64 Reflection Assembly Load`
+- `Powershell Base64 Reflection Assembly Load Obfusc`
+- `Powershell Base64 Wmi Classes`
+- `Powershell Cl Invocation`
+- `Powershell Cl Loadassembly`
+- `Powershell Cl Mutexverifiers`
+- `Powershell Cmdline Reversed Strings`
+- `Powershell Create Service`
+- `Powershell Decode Gzip`
+- `Powershell Defender Disable Feature`
+- `Powershell Defender Exclusion`
+- `Powershell Disable Ie Features`
+- `Powershell Downgrade Attack`
+- `Powershell Download Com Cradles`
+- `Powershell Download Cradle Obfuscated`
+- `Powershell Download Dll`
+- `Powershell Download Iex`
+- `Powershell Download Susp File Sharing Domains`
+- `Powershell Drop Binary Or Script`
+- `Powershell Drop Powershell`
+- `Powershell Dsinternals Cmdlets`
+- `Powershell Email Exfil`
+- `Powershell Enable Susp Windows Optional Feature`
+- `Powershell Encode`
+- `Powershell Encoding Patterns`
+- `Powershell Exec Data File`
+- `Powershell Exploit Scripts`
+- `Powershell Export Certificate`
+- `Powershell Frombase64String`
+- `Powershell Get Clipboard`
+- `Powershell Get Localgroup Member Recon`
+- `Powershell Getprocess Lsass`
+- `Powershell Iex Patterns`
+- `Powershell Import Cert Susp Locations`
+- `Powershell Invocation Specific`
+- `Powershell Malicious Cmdlets`
+- `Powershell Module Creation`
+- `Powershell Module Susp Creation`
+- `Powershell Module Uncommon Creation`
+- `Powershell Msexchange Transport Agent`
+- `Powershell Network Connection`
+- `Powershell Non Interactive Execution`
+- `Powershell Obfuscation Via Utf8`
+- `Powershell Public Folder`
+- `Powershell Remotefxvgpudisablement Abuse`
+- `Powershell Remove Mppreference`
+- `Powershell Run Script From Ads`
+- `Powershell Run Script From Input Stream`
+- `Powershell Sam Access`
+- `Powershell Script Engine Parent`
+- `Powershell Script Installed As Service`
+- `Powershell Service Dacl Modification Set Service`
+- `Powershell Startup Shortcuts`
+- `Powershell Susp Parameter Variation`
+- `Powershell Susp Parent Process`
+- `Powershell Susp Ps Appdata`
+- `Powershell Token Obfuscation`
+- `Powershell Webclient Casing`
+- `Powershell X509Enrollment`
+- `Powershell Zip Compress`
+- `Presentationhost Download`
+- `Presentationhost Uncommon Location Exec`
+- `Pressanykey Lolbin Execution`
+- `Print Remote File Copy`
+- `Proc Access Win Cmstp Execution By Access`
+- `Proc Access Win Hktl Cobaltstrike Bof Injection Pattern`
+- `Proc Access Win Hktl Generic Access`
+- `Proc Access Win Hktl Handlekatz Lsass Access`
+- `Proc Access Win Hktl Littlecorporal Generated Maldoc`
+- `Proc Access Win Hktl Sysmonente`
+- `Proc Access Win Lsass Dump Comsvcs Dll`
+- `Proc Access Win Lsass Dump Keyword Image`
+- `Proc Access Win Lsass Memdump`
+- `Proc Access Win Lsass Powershell Access`
+- `Proc Access Win Lsass Python Based Tool`
+- `Proc Access Win Lsass Remote Access Trough Winrm`
+- `Proc Access Win Lsass Susp Access Flag`
+- `Proc Access Win Lsass Susp Source Process`
+- `Proc Access Win Lsass Whitelisted Process Names`
+- `Proc Access Win Malware Verclsid Shellcode`
+- `Proc Access Win Susp All Access Uncommon Target`
+- `Proc Access Win Susp Direct Ntopenprocess Call`
+- `Proc Access Win Svchost Credential Dumping`
+- `Proc Access Win Svchost Susp Access Request`
+- `Proc Access Win Uac Bypass Editionupgrademanagerobj`
+- `Proc Access Win Uac Bypass Wow64 Logger`
+- `Proc Tampering Susp Process Hollowing`
+- `Protocolhandler Download`
+- `Provlaunch Potential Abuse`
+- `Provlaunch Susp Child Process`
+- `Ps Script Policy Test Creation By Uncommon Process`
+- `Psr Capture Screenshots`
+- `Pua 3Proxy Execution`
+- `Pua Adfind Enumeration`
+- `Pua Adfind Susp Usage`
+- `Pua Advanced Ip Scanner`
+- `Pua Advanced Port Scanner`
+- `Pua Advancedrun`
+- `Pua Advancedrun Priv User`
+- `Pua Chisel`
+- `Pua Cleanwipe`
+- `Pua Crassus`
+- `Pua Csexec`
+- `Pua Defendercheck`
+- `Pua Ditsnap`
+- `Pua Mouselock Execution`
+- `Pua Netcat`
+- `Pua Netscan`
+- `Pua Ngrok`
+- `Pua Nircmd`
+- `Pua Nircmd As System`
+- `Pua Nmap Zenmap`
+- `Pua Nsudo`
+- `Pua Pingcastle Script Parent`
+- `Pua Radmin`
+- `Pua Rcedit Execution`
+- `Pua Rclone Execution`
+- `Pua Runxcmd`
+- `Pua Seatbelt`
+- `Pua Webbrowserpassview`
+- `Pua Wsudo Susp Execution`
+- `Python`
+- `Python Adidnsdump`
+- `Python Inline Command Execution`
+- `Python Path Configuration Files`
+- `Python Pty Spawn`
+- `Query Session Exfil`
+- `Query Win Anonymfiles Com`
+- `Query Win Appinstaller`
+- `Query Win Apt Diamond Steel Indicators`
+- `Query Win Apt Dprk Malicious Domains`
+- `Query Win Cloudflared Communication`
+- `Query Win Devtunnels Communication`
+- `Query Win Dns Server Discovery Via Ldap Query`
+- `Query Win Hybridconnectionmgr Servicebus`
+- `Query Win Mal Cobaltstrike`
+- `Query Win Malware 3Cx Compromise`
+- `Query Win Malware Socgholish Second Stage C2`
+- `Query Win Mega Nz`
+- `Query Win Onelaunch Update Service`
+- `Query Win Regsvr32 Dns Query`
+- `Query Win Remote Access Software Domains Non Browsers`
+- `Query Win Teamviewer Domain Query By Uncommon App`
+- `Query Win Tor Onion Domain Query`
+- `Query Win Ufile Io Query`
+- `Query Win Vscode Tunnel Communication`
+- `Rar Compress Data`
+- `Rar Compression With Password`
+- `Rasdial Execution`
+- `Raw Access Thread Susp Disk Access Using Uncommon Tools`
+- `Rdrleakdiag Process Dumping`
+- `Real Time Protection Disabled`
+- `Redmimicry Winnti Filedrop`
+- `Reg Add Run Key`
+- `Reg Add Safeboot`
+- `Reg Bitlocker`
+- `Reg Credential Access Via Password Filter`
+- `Reg Defender Exclusion`
+- `Reg Delete Safeboot`
+- `Reg Delete Services`
+- `Reg Desktop Background Change`
+- `Reg Direct Asep Registry Keys Modification`
+- `Reg Disable Sec Services`
+- `Reg Dumping Sensitive Hives`
+- `Reg Enable Windows Recall`
+- `Reg Enumeration For Credentials In Registry`
+- `Reg Import From Suspicious Paths`
+- `Reg Lsa Disable Restricted Admin`
+- `Reg Lsa Ppl Protection Disabled`
+- `Reg Machineguid`
+- `Reg Modify Group Policy Settings`
+- `Reg Nolmhash`
+- `Reg Query Registry`
+- `Reg Rdp Keys Tamper`
+- `Reg Screensaver`
+- `Reg Service Imagepath Change`
+- `Reg Software Discovery`
+- `Reg Susp Paths`
+- `Reg Volsnap Disable`
+- `Reg Windows Defender Tamper`
+- `Reg Write Protect For Storage Disabled`
+- `Regasm Network Activity`
+- `Regasm Regsvcs Uncommon Extension Execution`
+- `Regedit Export Critical Keys`
+- `Regedit Export Keys`
+- `Regedit Import Keys`
+- `Regedit Import Keys Ads`
+- `Regedit Print As Pdf`
+- `Regedit Trustedinstaller`
+- `Regini Ads`
+- `Regini Execution`
+- `Register New Logon Process By Rubeus`
+- `Registry Add Malware Netwire`
+- `Registry Add Malware Ursnif`
+- `Registry Add Persistence Disk Cleanup Handler Entry`
+- `Registry Cimprovider Dll Load`
+- `Registry Delete Enable Windows Recall`
+- `Registry Delete Exploit Guard Protected Folders`
+- `Registry Delete Mstsc History Cleared`
+- `Registry Delete Removal Amsi Registry Key`
+- `Registry Delete Removal Com Hijacking Registry Key`
+- `Registry Delete Schtasks Hide Task Via Index Value Removal`
+- `Registry Delete Schtasks Hide Task Via Sd Value Removal`
+- `Registry Enumeration For Credentials Cli`
+- `Registry Event Add Local Hidden User`
+- `Registry Event Apt Diamond Sleet Scheduled Task`
+- `Registry Event Apt Leviathan`
+- `Registry Event Apt Oceanlotus Registry`
+- `Registry Event Apt Oilrig Mar18`
+- `Registry Event Apt Pandemic`
+- `Registry Event Bypass Via Wsreset`
+- `Registry Event Cmstp Execution By Registry`
+- `Registry Event Cve 2021 1675 Mimikatz Printernightmare Drivers`
+- `Registry Event Disable Wdigest Credential Guard`
+- `Registry Event Esentutl Volume Shadow Copy Service Keys`
+- `Registry Event Hack Wce Reg`
+- `Registry Event Hybridconnectionmgr Svc Installation`
+- `Registry Event Mal Azorult`
+- `Registry Event Malware Flowcloud Markers`
+- `Registry Event Malware Qakbot Registry`
+- `Registry Event Malware Snake Covert Store Key`
+- `Registry Event Modify Screensaver Binary Path`
+- `Registry Event Narrator Feedback Persistance`
+- `Registry Event Net Ntlm Downgrade`
+- `Registry Event Office Test Regadd`
+- `Registry Event Office Trust Record Modification`
+- `Registry Event Portproxy Registry Key`
+- `Registry Event Redmimicry Winnti Reg`
+- `Registry Event Runkey Winekey`
+- `Registry Event Runonce Persistence`
+- `Registry Event Scheduled Task Creation`
+- `Registry Event Shell Open Keys Manipulation`
+- `Registry Event Silentprocessexit Lsass`
+- `Registry Event Ssp Added Lsa Config`
+- `Registry Event Stickykey Like Backdoor`
+- `Registry Event Susp Atbroker Change`
+- `Registry Event Susp Download Run Key`
+- `Registry Event Susp Lsass Dll Load`
+- `Registry Event Susp Mic Cam Access`
+- `Registry Ie Security Zone Protocol Defaults Downgrade`
+- `Registry Install Reg Debugger Backdoor`
+- `Registry Logon Script`
+- `Registry New Network Provider`
+- `Registry Office Disable Python Security Warnings`
+- `Registry Permissions Weakness Check`
+- `Registry Privilege Escalation Via Service Key`
+- `Registry Set Add Load Service In Safe Mode`
+- `Registry Set Add Port Monitor`
+- `Registry Set Aedebug Persistence`
+- `Registry Set Allow Rdp Remote Assistance Feature`
+- `Registry Set Amsi Com Hijack`
+- `Registry Set Apt Forest Blizzard Custom Protocol Handler`
+- `Registry Set Apt Forest Blizzard Custom Protocol Handler Dll`
+- `Registry Set Asep Reg Keys Modification Classes`
+- `Registry Set Asep Reg Keys Modification Common`
+- `Registry Set Asep Reg Keys Modification Currentcontrolset`
+- `Registry Set Asep Reg Keys Modification Currentversion`
+- `Registry Set Asep Reg Keys Modification Currentversion Nt`
+- `Registry Set Asep Reg Keys Modification Internet Explorer`
+- `Registry Set Asep Reg Keys Modification Office`
+- `Registry Set Asep Reg Keys Modification Session Manager`
+- `Registry Set Asep Reg Keys Modification System Scripts`
+- `Registry Set Asep Reg Keys Modification Winsock2`
+- `Registry Set Asep Reg Keys Modification Wow6432Node`
+- `Registry Set Asep Reg Keys Modification Wow6432Node Classes`
+- `Registry Set Asep Reg Keys Modification Wow6432Node Currentversion`
+- `Registry Set Bginfo Custom Db`
+- `Registry Set Bginfo Custom Vbscript`
+- `Registry Set Bginfo Custom Wmi Query`
+- `Registry Set Bypass Uac Using Eventviewer`
+- `Registry Set Change Rdp Port`
+- `Registry Set Change Security Zones`
+- `Registry Set Change Sysmon Driver Altitude`
+- `Registry Set Change Winevt Channelaccess`
+- `Registry Set Chrome Extension`
+- `Registry Set Clickonce Trust Prompt`
+- `Registry Set Cobaltstrike Service Installs`
+- `Registry Set Comhijack Sdclt`
+- `Registry Set Crashdump Disabled`
+- `Registry Set Creation Service Susp Folder`
+- `Registry Set Custom File Open Handler Powershell Execution`
+- `Registry Set Cve 2021 31979 Cve 2021 33771 Exploits`
+- `Registry Set Dbgmanageddebugger Persistence`
+- `Registry Set Defender Exclusions`
+- `Registry Set Desktop Background Change`
+- `Registry Set Devdrv Disallow Antivirus Filter`
+- `Registry Set Deviceguard Hypervisorenforcedcodeintegrity Disabled`
+- `Registry Set Deviceguard Hypervisorenforcedpagingtranslation Disabled`
+- `Registry Set Dhcp Calloutdll`
+- `Registry Set Disable Administrative Share`
+- `Registry Set Disable Autologger Sessions`
+- `Registry Set Disable Defender Firewall`
+- `Registry Set Disable Function User`
+- `Registry Set Disable Macroruntimescanscope`
+- `Registry Set Disable Privacy Settings Experience`
+- `Registry Set Disable Security Center Notifications`
+- `Registry Set Disable System Restore`
+- `Registry Set Disable Windows Defender Service`
+- `Registry Set Disable Windows Firewall`
+- `Registry Set Disable Winevt Logging`
+- `Registry Set Disabled Exploit Guard Net Protection On Ms Defender`
+- `Registry Set Disabled Microsoft Defender Eventlog`
+- `Registry Set Disabled Pua Protection On Microsoft Defender`
+- `Registry Set Disabled Tamper Protection On Microsoft Defender`
+- `Registry Set Disallowrun Execution`
+- `Registry Set Disk Cleanup Handler Autorun Persistence`
+- `Registry Set Dns Server Level Plugin Dll`
+- `Registry Set Dot Net Etw Tamper`
+- `Registry Set Dsrm Tampering`
+- `Registry Set Enable Anonymous Connection`
+- `Registry Set Enable Periodic Backup`
+- `Registry Set Enable Windows Recall`
+- `Registry Set Enabling Cor Profiler Env Variables`
+- `Registry Set Enabling Turnoffcheck`
+- `Registry Set Evtx File Key Tamper`
+- `Registry Set Exploit Cve 2020 1048 New Printer Port`
+- `Registry Set Exploit Cve 2022 30190 Msdt Follina`
+- `Registry Set Exploit Cve 2023 23397 Outlook Reminder Trigger`
+- `Registry Set Exploit Guard Susp Allowed Apps`
+- `Registry Set Fax Change Service User`
+- `Registry Set Fax Dll Persistance`
+- `Registry Set File Association Exefile`
+- `Registry Set Hangs Debugger Persistence`
+- `Registry Set Hhctrl Persistence`
+- `Registry Set Hidden Extention`
+- `Registry Set Hide File`
+- `Registry Set Hide Function User`
+- `Registry Set Hide Scheduled Task Via Index Tamper`
+- `Registry Set Hvci Disallowed Images`
+- `Registry Set Ie Security Zone Protocol Defaults Downgrade`
+- `Registry Set Ime Non Default Extension`
+- `Registry Set Ime Suspicious Paths`
+- `Registry Set Install Root Or Ca Certificat`
+- `Registry Set Internet Explorer Disable First Run Customize`
+- `Registry Set Legalnotice Susp Message`
+- `Registry Set Lolbin Onedrivestandaloneupdater`
+- `Registry Set Lsa Disablerestrictedadmin`
+- `Registry Set Lsass Usermode Dumping`
+- `Registry Set Mal Blue Mockingbird`
+- `Registry Set Malware Coldsteel Created Users`
+- `Registry Set Malware Kamikakabot Winlogon Persistence`
+- `Registry Set Malware Kapeka Backdoor Autorun Persistence`
+- `Registry Set Malware Kapeka Backdoor Configuration`
+- `Registry Set Malware Raspberry Robin Internet Settings Zonemap Tamper`
+- `Registry Set Malware Small Sieve Evasion Typo`
+- `Registry Set Malware Snake Encrypted Key`
+- `Registry Set Net Cli Ngenassemblyusagelog`
+- `Registry Set Netsh Help Dll Persistence Susp Location`
+- `Registry Set Netsh Helper Dll Potential Persistence`
+- `Registry Set New Application Appcompat`
+- `Registry Set New Network Provider`
+- `Registry Set Odbc Driver Registered`
+- `Registry Set Odbc Driver Registered Susp`
+- `Registry Set Office Access Vbom Tamper`
+- `Registry Set Office Disable Protected View Features`
+- `Registry Set Office Disable Python Security Warnings`
+- `Registry Set Office Enable Dde`
+- `Registry Set Office Outlook Enable Unsafe Client Mail Rules`
+- `Registry Set Office Outlook Security Settings`
+- `Registry Set Office Trust Record Susp Location`
+- `Registry Set Office Trusted Location`
+- `Registry Set Office Trusted Location Uncommon`
+- `Registry Set Office Vba Warnings Tamper`
+- `Registry Set Optimize File Sharing Network`
+- `Registry Set Persistence Amsi Providers`
+- `Registry Set Persistence App Cpmpat Layer Registerapprestart`
+- `Registry Set Persistence App Paths`
+- `Registry Set Persistence Appx Debugger`
+- `Registry Set Persistence Autodial Dll`
+- `Registry Set Persistence Chm`
+- `Registry Set Persistence Com Key Linking`
+- `Registry Set Persistence Comhijack Psfactorybuffer`
+- `Registry Set Persistence Custom Protocol Handler`
+- `Registry Set Persistence Event Viewer Events Asp`
+- `Registry Set Persistence Globalflags`
+- `Registry Set Persistence Ie`
+- `Registry Set Persistence Ifilter`
+- `Registry Set Persistence Logon Scripts Userinitmprlogonscript`
+- `Registry Set Persistence Lsa Extension`
+- `Registry Set Persistence Mpnotify`
+- `Registry Set Persistence Mycomputer`
+- `Registry Set Persistence Natural Language`
+- `Registry Set Persistence Office Vsto`
+- `Registry Set Persistence Outlook Homepage`
+- `Registry Set Persistence Outlook Todaypage`
+- `Registry Set Persistence Reflectdebugger`
+- `Registry Set Persistence Scrobj Dll`
+- `Registry Set Persistence Shim Database`
+- `Registry Set Persistence Shim Database Susp Application`
+- `Registry Set Persistence Shim Database Uncommon Location`
+- `Registry Set Persistence Typed Paths`
+- `Registry Set Persistence Xll`
+- `Registry Set Policies Associations Tamper`
+- `Registry Set Policies Attachments Tamper`
+- `Registry Set Powershell As Service`
+- `Registry Set Powershell Crypto Namespace`
+- `Registry Set Powershell Enablescripts Enabled`
+- `Registry Set Powershell Execution Policy`
+- `Registry Set Powershell In Run Keys`
+- `Registry Set Powershell Logging Disabled`
+- `Registry Set Provisioning Command Abuse`
+- `Registry Set Pua Sysinternals Execution Via Eula`
+- `Registry Set Pua Sysinternals Renamed Execution Via Eula`
+- `Registry Set Pua Sysinternals Susp Execution Via Eula`
+- `Registry Set Renamed Sysinternals Eula Accepted`
+- `Registry Set Rpcrt4 Etw Tamper`
+- `Registry Set Runmru Command Execution`
+- `Registry Set Runmru Susp Command Execution`
+- `Registry Set Scr File Executed By Rundll32`
+- `Registry Set Sentinelone Shell Context Tampering`
+- `Registry Set Service Image Path User Controlled Folder`
+- `Registry Set Servicedll Hijack`
+- `Registry Set Services Etw Tamper`
+- `Registry Set Set Nopolicies User`
+- `Registry Set Shell Context Menu Tampering`
+- `Registry Set Sip Persistence`
+- `Registry Set Sophos Av Tamper`
+- `Registry Set Special Accounts`
+- `Registry Set Suppress Defender Notifications`
+- `Registry Set Susp Keyboard Layout Load`
+- `Registry Set Susp Pendingfilerenameoperations`
+- `Registry Set Susp Printer Driver`
+- `Registry Set Susp Reg Persist Explorer Run`
+- `Registry Set Susp Service Installed`
+- `Registry Set Susp User Shell Folders`
+- `Registry Set Suspicious Env Variables`
+- `Registry Set System Lsa Nolmhash`
+- `Registry Set Taskcache Entry`
+- `Registry Set Telemetry Persistence`
+- `Registry Set Terminal Server Suspicious`
+- `Registry Set Terminal Server Tampering`
+- `Registry Set Timeproviders Dllname`
+- `Registry Set Tls Protocol Old Version Enabled`
+- `Registry Set Treatas Persistence`
+- `Registry Set Turn On Dev Features`
+- `Registry Set Uac Bypass Eventvwr`
+- `Registry Set Uac Bypass Sdclt`
+- `Registry Set Uac Bypass Winsat`
+- `Registry Set Uac Bypass Wmp`
+- `Registry Set Uac Disable`
+- `Registry Set Uac Disable Notification`
+- `Registry Set Uac Disable Secure Desktop Prompt`
+- `Registry Set Unsecure Powershell Policy`
+- `Registry Set Vbs Payload Stored`
+- `Registry Set Wab Dllpath Reg Change`
+- `Registry Set Wdigest Enable Uselogoncredential`
+- `Registry Set Windows Defender Tamper`
+- `Registry Set Winget Admin Settings Tampering`
+- `Registry Set Winget Enable Local Manifest`
+- `Registry Set Winlogon Allow Multiple Tssessions`
+- `Registry Set Winlogon Notify Key`
+- `Registry Special Accounts Hide User`
+- `Registry Typed Paths Persistence`
+- `Regsvr32 Dllregisterserver Exec`
+- `Regsvr32 Flags Anomaly`
+- `Regsvr32 Http Ip Pattern`
+- `Regsvr32 Network Activity`
+- `Regsvr32 Network Pattern`
+- `Regsvr32 Remote Share`
+- `Regsvr32 Susp Exec Path 1`
+- `Regsvr32 Susp Exec Path 2`
+- `Regsvr32 Susp Extensions`
+- `Regsvr32 Susp Parent`
+- `Regsvr32 Uncommon Extension`
+- `Remcom Service`
+- `Remote Access Tools Action1 Code Exec And Remote Sessions`
+- `Remote Access Tools Ammyy Admin Execution`
+- `Remote Access Tools Anydesk`
+- `Remote Access Tools Anydesk Piped Password Via Cli`
+- `Remote Access Tools Anydesk Revoked Cert`
+- `Remote Access Tools Anydesk Silent Install`
+- `Remote Access Tools Anydesk Susp Exec`
+- `Remote Access Tools Anyviewer Shell Exec`
+- `Remote Access Tools Gotoopener`
+- `Remote Access Tools Logmein`
+- `Remote Access Tools Meshagent Exec`
+- `Remote Access Tools Netsupport`
+- `Remote Access Tools Rurat Non Default Location`
+- `Remote Access Tools Screenconnect`
+- `Remote Access Tools Screenconnect Artefact`
+- `Remote Access Tools Screenconnect Child Proc`
+- `Remote Access Tools Screenconnect Installation Cli Param`
+- `Remote Access Tools Screenconnect Remote Execution`
+- `Remote Access Tools Screenconnect Remote File`
+- `Remote Access Tools Simple Help`
+- `Remote Access Tools Teamviewer Incoming Connection`
+- `Remote Access Tools Ultraviewer`
+- `Remote Time Discovery`
+- `Remove Application`
+- `Renamed Autohotkey`
+- `Renamed Binary`
+- `Renamed Boinc`
+- `Renamed Browsercore`
+- `Renamed Createdump`
+- `Renamed Ftp`
+- `Renamed Gpg4Win`
+- `Renamed Jusched`
+- `Renamed Mavinject`
+- `Renamed Megasync`
+- `Renamed Msteams`
+- `Renamed Nircmd`
+- `Renamed Office Processes`
+- `Renamed Pingcastle`
+- `Renamed Plink`
+- `Renamed Pressanykey`
+- `Renamed Rundll32 Dllregisterserver`
+- `Renamed Rurat`
+- `Renamed Sysinternals Debugview`
+- `Renamed Sysinternals Procdump`
+- `Renamed Sysinternals Sdelete`
+- `Renamed Vmnat`
+- `Renamed Whoami`
+- `Replay Attack Detected`
+- `Restored Quarantine File`
+- `Restriction Policies Block`
+- `Ripzip Attack`
+- `Rpcping Credential Capture`
+- `Ruby Inline Command Execution`
+- `Rundll32 Ads Stored Dll Execution`
+- `Rundll32 Advpack Obfuscated Ordinal Call`
+- `Rundll32 By Ordinal`
+- `Rundll32 Dllregisterserver`
+- `Rundll32 Inline Vbs`
+- `Rundll32 Installscreensaver`
+- `Rundll32 Keymgr`
+- `Rundll32 Mshtml Runhtmlapplication`
+- `Rundll32 No Params`
+- `Rundll32 Ntlmrelay`
+- `Rundll32 Obfuscated Ordinal Call`
+- `Rundll32 Parent Explorer`
+- `Rundll32 Process Dump Via Comsvcs`
+- `Rundll32 Registered Com Objects`
+- `Rundll32 Setupapi Installhinfsection`
+- `Rundll32 Shell32 Susp Execution`
+- `Rundll32 Shelldispatch Potential Abuse`
+- `Rundll32 Spawn Explorer`
+- `Rundll32 Susp Activity`
+- `Rundll32 Susp Control Dll Load`
+- `Rundll32 Susp Shellexec Execution`
+- `Rundll32 Susp Shimcache Flush`
+- `Rundll32 Sys`
+- `Rundll32 Udl Exec`
+- `Rundll32 Unc Path`
+- `Rundll32 Uncommon Dll Extension`
+- `Rundll32 User32 Dll`
+- `Rundll32 Webdav Client Execution`
+- `Rundll32 Webdav Client Susp Execution`
+- `Rundll32 Without Parameters`
+- `Runonce Execution`
+- `Sam Dump`
+- `Sam Registry Hive Handle Request`
+- `Samaccountname Spoofing Cve 2021 42287`
+- `Sc New Kernel Driver`
+- `Sc Query`
+- `Sc Query Interesting Services`
+- `Sc Service Path Modification`
+- `Sc Service Tamper For Persistence`
+- `Scheduled Task Deletion`
+- `Schtasks Appdata Local System`
+- `Schtasks Change`
+- `Schtasks Creation`
+- `Schtasks Creation From Susp Parent`
+- `Schtasks Creation Temp Folder`
+- `Schtasks Delete`
+- `Schtasks Disable`
+- `Schtasks Env Folder`
+- `Schtasks Folder Combos`
+- `Schtasks Guid Task Name`
+- `Schtasks One Time Only Midnight Task`
+- `Schtasks Persistence Windows Telemetry`
+- `Schtasks Powershell Persistence`
+- `Schtasks Reg Loader`
+- `Schtasks Reg Loader Encoded`
+- `Schtasks Schedule Type`
+- `Schtasks Schedule Type System`
+- `Schtasks Schedule Via Masqueraded Xml File`
+- `Schtasks Susp Pattern`
+- `Schtasks System`
+- `Scm Database Handle Failure`
+- `Scm Database Privileged Operation`
+- `Sdbinst Shim Persistence`
+- `Sdbinst Susp Extension`
+- `Sdclt Child Process`
+- `Sdelete Potential Secure Deletion`
+- `Secedit Execution`
+- `Security Enabled Global Group Deleted`
+- `Sed File Creation`
+- `Server Failed Dns Zone Transfer`
+- `Server Susp Server Level Plugin Dll`
+- `Service Install Remote Access Software`
+- `Setres Uncommon Child Process`
+- `Setspn Spn Enumeration`
+- `Setup16 Custom Lst Execution`
+- `Shell Write Susp Files Extensions`
+- `Shutdown Execution`
+- `Shutdown Logoff`
+- `Sndvol Susp Child Processes`
+- `Soundrecorder Audio Capture`
+- `Splwow64 Cli Anomaly`
+- `Sqlcmd Veeam Db Recon`
+- `Sqlite Chromium Profile Data`
+- `Sqlite Firefox Gecko Profile Data`
+- `Squirrel Download`
+- `Squirrel Proxy Execution`
+- `Ssh Port Forward`
+- `Ssm Agent Abuse`
+- `Startup Folder File Write`
+- `Stordiag Susp Child Process`
+- `Susp 16Bit Application`
+- `Susp Add Domain Trust`
+- `Susp Add Sid History`
+- `Susp Add User Local Admin Group`
+- `Susp Add User Privileged Group`
+- `Susp Add User Remote Desktop Group`
+- `Susp Alternate Data Streams`
+- `Susp Always Install Elevated Windows Installer`
+- `Susp Appx Execution`
+- `Susp Arbitrary Shell Execution Via Settingcontent`
+- `Susp Archiver Iso Phishing`
+- `Susp Automated Collection`
+- `Susp Azurefd Connection`
+- `Susp Bad Opsec Sacrificial Processes`
+- `Susp Binary Dropper`
+- `Susp Binary No Cmdline`
+- `Susp Browser Launch From Document Reader Process`
+- `Susp Child Process As System `
+- `Susp Cli Obfuscation Escape Char`
+- `Susp Colorcpl`
+- `Susp Compression Params`
+- `Susp Computer Name`
+- `Susp Copy Browser Data`
+- `Susp Copy System Dir Lolbin`
+- `Susp Creation By Mobsync`
+- `Susp Credhist`
+- `Susp Crypto Currency Wallets`
+- `Susp Crypto Mining Monero`
+- `Susp Data Exfiltration Via Cli`
+- `Susp Default Gpo Dir Write`
+- `Susp Desktop Txt`
+- `Susp Desktopimgdownldr File`
+- `Susp Diagcab`
+- `Susp Disable Raccine`
+- `Susp Double Extension`
+- `Susp Double Extension Parent`
+- `Susp Download Office Domain`
+- `Susp Dpapi Backup And Cert Export Ioc`
+- `Susp Dpapi Master Key Access`
+- `Susp Dsrm Password Change`
+- `Susp Dumpstack Log Evasion`
+- `Susp Electron App Children`
+- `Susp Electron Execution Proxy`
+- `Susp Embed Exe Lnk`
+- `Susp Emoji Usage In Cli 1`
+- `Susp Emoji Usage In Cli 2`
+- `Susp Emoji Usage In Cli 3`
+- `Susp Emoji Usage In Cli 4`
+- `Susp Etw Modification Cmdline`
+- `Susp Etw Trace Evasion`
+- `Susp Event Log Query`
+- `Susp Eventlog Content Recon`
+- `Susp Exchange Aspx Write`
+- `Susp Executable Creation`
+- `Susp Execution From Guid Folder Names`
+- `Susp Execution Path`
+- `Susp Execution Path Webserver`
+- `Susp Exfil And Tunneling Tool Execution`
+- `Susp Failed Logon Reasons`
+- `Susp File Permission Modifications`
+- `Susp File Sharing Domains Susp Folders`
+- `Susp Gather Network Info Execution`
+- `Susp Get Variable`
+- `Susp Gpo Files`
+- `Susp Hidden Dir Index Allocation`
+- `Susp Hiding Malware In Fonts Folder`
+- `Susp Image Missing`
+- `Susp Initiated Uncommon Or Suspicious Locations`
+- `Susp Inline Base64 Mz Header`
+- `Susp Inline Win Api Access`
+- `Susp Jwt Token Search`
+- `Susp Kerberos Manipulation`
+- `Susp Legitimate App Dropping Archive`
+- `Susp Legitimate App Dropping Exe`
+- `Susp Legitimate App Dropping Script`
+- `Susp Lnk Double Extension`
+- `Susp Local Anon Logon Created`
+- `Susp Local System Owner Account Discovery`
+- `Susp Lsass Dmp Cli Keywords`
+- `Susp Lsass Dump`
+- `Susp Lsass Dump Generic`
+- `Susp Ms Appinstaller Download`
+- `Susp Net Recon Activity`
+- `Susp Network Scan Loop`
+- `Susp Network Sniffing`
+- `Susp No Image Name`
+- `Susp Non Exe Image`
+- `Susp Non Priv Reg Or Ps`
+- `Susp Ntds`
+- `Susp Nteventlogfile Usage`
+- `Susp Ntfs Short Name Path Use Cli`
+- `Susp Ntfs Short Name Path Use Image`
+- `Susp Ntfs Short Name Use Cli`
+- `Susp Ntfs Short Name Use Image`
+- `Susp Obfuscated Ip Download`
+- `Susp Obfuscated Ip Via Cli`
+- `Susp Opened Encrypted Zip`
+- `Susp Opened Encrypted Zip Filename`
+- `Susp Opened Encrypted Zip Outlook`
+- `Susp Outbound Mobsync Connection`
+- `Susp Parents`
+- `Susp Powershell Execution Via Dll`
+- `Susp Powershell Profile`
+- `Susp Privilege Escalation Cli Patterns`
+- `Susp Progname`
+- `Susp Raccess Sensitive Fext`
+- `Susp Rc4 Kerberos`
+- `Susp Recon`
+- `Susp Reg And Hive`
+- `Susp Right To Left Override`
+- `Susp Right To Left Override Extension Spoofing`
+- `Susp Scheduled Task Creation`
+- `Susp Scheduled Task Delete Or Disable`
+- `Susp Scheduled Task Update`
+- `Susp Script Exec From Env Folder`
+- `Susp Script Exec From Temp`
+- `Susp Service Creation`
+- `Susp Service Dir`
+- `Susp Service Tamper`
+- `Susp Shadow Copies Deletion`
+- `Susp Shell Spawn Susp Program`
+- `Susp Spool Drivers Color Drop`
+- `Susp Startup Folder Persistence`
+- `Susp Sysnative`
+- `Susp System Interactive Powershell`
+- `Susp System User Anomaly`
+- `Susp Task Folder Evasion`
+- `Susp Task Write`
+- `Susp Teamviewer Remote Session`
+- `Susp Unattend Xml`
+- `Susp Use Of Te Bin`
+- `Susp Use Of Vsjitdebugger Bin`
+- `Susp Userinit Child`
+- `Susp Vscode Powershell Profile`
+- `Susp Weak Or Abused Passwords`
+- `Susp Web Request Cmd And Cmdlets`
+- `Susp Whoami As Param`
+- `Susp Windows Terminal Profile`
+- `Susp Winsxs Binary Creation`
+- `Svchost Execution With No Cli Flags`
+- `Svchost Masqueraded Execution`
+- `Svchost Uncommon Parent Process`
+- `Sysinternals Accesschk Check Permissions`
+- `Sysinternals Adexplorer Execution`
+- `Sysinternals Adexplorer Susp Execution`
+- `Sysinternals Eula Accepted`
+- `Sysinternals Livekd Default Dump Name`
+- `Sysinternals Livekd Driver`
+- `Sysinternals Livekd Driver Susp Creation`
+- `Sysinternals Livekd Execution`
+- `Sysinternals Livekd Kernel Memory Dump`
+- `Sysinternals Procdump`
+- `Sysinternals Procdump Evasion`
+- `Sysinternals Procdump Lsass`
+- `Sysinternals Procexp Driver Susp Creation`
+- `Sysinternals Procmon Driver Susp Creation`
+- `Sysinternals Psexec Paexec Escalate System`
+- `Sysinternals Psexec Remote Execution`
+- `Sysinternals Psexec Service`
+- `Sysinternals Psexec Service Key`
+- `Sysinternals Psexesvc As System`
+- `Sysinternals Psloglist`
+- `Sysinternals Psservice`
+- `Sysinternals Pssuspend Execution`
+- `Sysinternals Pssuspend Susp Execution`
+- `Sysinternals Sdelete File Deletion`
+- `Sysinternals Susp Psexec Paexec Flags`
+- `Sysinternals Sysmon Config Update`
+- `Sysinternals Sysmon Uninstall`
+- `Sysinternals Tools Masquerading`
+- `Syskey Registry Access`
+- `Sysprep Appdata`
+- `System Adcs Enrollment Request Denied`
+- `System Application Sysmon Crash`
+- `System Apt Carbonpaper Turla`
+- `System Apt Oilrig Mar18`
+- `System Apt Stonedrill`
+- `System Apt Turla Service Png`
+- `System Cobaltstrike Service Installs`
+- `System Defender Disabled`
+- `System Eventlog Cleared`
+- `System Exploit Cve 2019 0708`
+- `System Exploit Cve 2021 42278`
+- `System Exploit Cve 2021 42287`
+- `System Exploit Cve 2022 21919 Or Cve 2021 34484`
+- `System Exploit Cve 2022 37966 Kdcsvc Rc4 Downgrade`
+- `System Hack Smbexec`
+- `System Invoke Obfuscation Clip Services`
+- `System Invoke Obfuscation Obfuscated Iex Services`
+- `System Invoke Obfuscation Stdin Services`
+- `System Invoke Obfuscation Var Services`
+- `System Invoke Obfuscation Via Compress Services`
+- `System Invoke Obfuscation Via Rundll Services`
+- `System Invoke Obfuscation Via Stdin Services`
+- `System Invoke Obfuscation Via Use Clip Services`
+- `System Invoke Obfuscation Via Use Mshta Services`
+- `System Invoke Obfuscation Via Use Rundll32 Services`
+- `System Invoke Obfuscation Via Var Services`
+- `System Kdcsvc Cert Use No Strong Mapping`
+- `System Kdcsvc Tgs No Suitable Encryption Key Found`
+- `System Krbrelayup Service Installation`
+- `System Lpe Indicators Tabtip`
+- `System Lsasrv Ntlmv1`
+- `System Mal Creddumper`
+- `System Malware Coldsteel Persistence Service`
+- `System Malware Goofy Guineapig Service Persistence`
+- `System Malware Snake Persistence Service`
+- `System Meterpreter Or Cobaltstrike Getsystem Service Installation`
+- `System Moriya Rootkit`
+- `System Powershell Script Installed As Service`
+- `System Service Install Anydesk`
+- `System Service Install Csexecsvc`
+- `System Service Install Hacktools`
+- `System Service Install Mesh Agent`
+- `System Service Install Netsupport Manager`
+- `System Service Install Paexec`
+- `System Service Install Pdqdeploy`
+- `System Service Install Pdqdeploy Runner`
+- `System Service Install Pua Proceshacker`
+- `System Service Install Remcom`
+- `System Service Install Remote Access Software`
+- `System Service Install Remote Utilities`
+- `System Service Install Sliver`
+- `System Service Install Susp`
+- `System Service Install Sysinternals Psexec`
+- `System Service Install Tacticalrmm`
+- `System Service Install Tap Driver`
+- `System Service Install Uncommon`
+- `System Service Terminated Error Generic`
+- `System Service Terminated Error Important`
+- `System Service Terminated Unexpectedly`
+- `System Susp Critical Hive Location Access Bits Cleared`
+- `System Susp Dhcp Config`
+- `System Susp Dhcp Config Failed`
+- `System Susp Eventlog Cleared`
+- `System Susp Rtcore64 Service Install`
+- `System Susp Service Installation Folder`
+- `System Susp Service Installation Folder Pattern`
+- `System Susp Service Installation Script`
+- `System Susp System Update Error`
+- `System Volume Shadow Copy Mount`
+- `System Vul Cve 2020 1472`
+- `System32 Local Folder Privilege Escalation`
+- `Systeminfo Execution`
+- `Systemsettingsadminflows Turn On Dev Features`
+- `Takeown Recursive Own`
+- `Tap Driver Installation`
+- `Tapinstall Execution`
+- `Tar Compression`
+- `Tar Extraction`
+- `Taskkill Execution`
+- `Tasklist Basic Execution`
+- `Tasklist Module Enumeration`
+- `Taskmgr Localsystem`
+- `Taskmgr Lsass Dump`
+- `Taskmgr Susp Child Process`
+- `Taskscheduler Apt Cozy Bear Graphical Proton Task Names`
+- `Taskscheduler Execution From Susp Locations`
+- `Taskscheduler Lolbin Execution Via Task Scheduler`
+- `Taskscheduler Susp Schtasks Delete`
+- `Teams Sensitive Files`
+- `Teams Suspicious Command Line Cred Access`
+- `Teams Suspicious Objectaccess`
+- `Terminalservices Rdp Ngrok`
+- `Threat`
+- `Tpmvscmgr Add Virtual Smartcard`
+- `Transf Files With Cred Data Via Network Shares`
+- `Tsclient Filewrite Startup`
+- `Tscon Localsystem`
+- `Tscon Rdp Redirect`
+- `Tscon Rdp Session Hijacking`
+- `Uac Bypass Changepk Slui`
+- `Uac Bypass Cleanmgr`
+- `Uac Bypass Cmstp`
+- `Uac Bypass Cmstp Com Object Access`
+- `Uac Bypass Computerdefaults`
+- `Uac Bypass Consent Comctl32`
+- `Uac Bypass Dismhost`
+- `Uac Bypass Dotnet Profiler`
+- `Uac Bypass Eventvwr`
+- `Uac Bypass Eventvwr Recentviews`
+- `Uac Bypass Fodhelper`
+- `Uac Bypass Idiagnostic Profile`
+- `Uac Bypass Ieinstal`
+- `Uac Bypass Msconfig Gui`
+- `Uac Bypass Ntfs Reparse Point`
+- `Uac Bypass Pkgmgr Dism`
+- `Uac Bypass Sdclt`
+- `Uac Bypass Winsat`
+- `Uac Bypass Wmp`
+- `Uac Bypass Wsreset`
+- `Uac Bypass Wsreset Integrity Level`
+- `Ultravnc`
+- `Ultravnc Susp Execution`
+- `Uninstall Crowdstrike Falcon`
+- `Usb Device Plugged`
+- `User Added To Local Administrators`
+- `User Creation`
+- `User Driver Loaded`
+- `User Logoff`
+- `Userinit Uncommon Child Processes`
+- `Vaultcmd List Creds`
+- `Verclsid Runs Com`
+- `Virtualbox Execution`
+- `Virtualbox Vboxdrvinst Execution`
+- `Virus Scan Disabled`
+- `Vmware Toolbox Cmd Persistence`
+- `Vmware Toolbox Cmd Persistence Susp`
+- `Vmware Vmtoolsd Susp Child Process`
+- `Vscode Child Processes Anomalies`
+- `Vscode Tunnel Execution`
+- `Vscode Tunnel Indicators`
+- `Vscode Tunnel Remote Creation Artefacts`
+- `Vscode Tunnel Remote Shell`
+- `Vscode Tunnel Renamed Execution`
+- `Vscode Tunnel Service Install`
+- `Vsdiagnostics Execution Proxy`
+- `Vslsagent Agentextensionpath Load`
+- `Vssaudit Secevent Source Registration`
+- `W32Tm`
+- `Wab Execution From Non Default Location`
+- `Wab Unusual Parents`
+- `Webdav Lnk Execution`
+- `Webdav Tmpfile Creation`
+- `Webshell Chopper`
+- `Webshell Creation Detect`
+- `Webshell Hacking`
+- `Webshell Recon Commands And Processes`
+- `Webshell Tool Recon`
+- `Werfault Dll Hijacking`
+- `Werfault Lsass Shtinkering`
+- `Wermgr Susp Exec Location`
+- `Wfp Endpoint Agent Blocked`
+- `Wget Download Direct Ip`
+- `Wget Download Susp File Sharing Domains`
+- `Wget Download Susp Locations`
+- `Where Browser Data Recon`
+- `Whoami All Execution`
+- `Whoami Execution From High Priv Process`
+- `Whoami Groups Discovery`
+- `Whoami Output`
+- `Whoami Priv Discovery`
+- `Windows Defender Exclusions Registry Modified`
+- `Windows Defender Exclusions Write Access`
+- `Windows Terminal Susp Children`
+- `Winget Add Custom Source`
+- `Winget Add Insecure Custom Source`
+- `Winget Add Susp Custom Source`
+- `Winget Local Install Via Manifest`
+- `Winlogon Net Connections`
+- `Winrar Exfil Dmp Files`
+- `Winrm Awl Bypass`
+- `Winrm Execution Via Scripting Api Winrm Vbs`
+- `Winzip Password Compression`
+- `Wmi Backdoor Exchange Transport Agent`
+- `Wmi Persistence Script Event Consumer`
+- `Wmi Persistence Script Event Consumer Write`
+- `Wmi Susp Encoded Scripts`
+- `Wmi Susp Scripting`
+- `Wmic Namespace Defender`
+- `Wmic Recon Computersystem`
+- `Wmic Recon Csproduct`
+- `Wmic Recon Hotfix`
+- `Wmic Recon Product`
+- `Wmic Recon Product Class`
+- `Wmic Recon Service`
+- `Wmic Recon System Info`
+- `Wmic Recon System Info Uncommon`
+- `Wmic Recon Unquoted Service Search`
+- `Wmic Recon Volume`
+- `Wmic Remote Execution`
+- `Wmic Service Manipulation`
+- `Wmic Susp Execution Via Office Process`
+- `Wmic Susp Process Creation`
+- `Wmic Terminate Application`
+- `Wmic Uninstall Application`
+- `Wmic Uninstall Security Products`
+- `Wmiprvse Spawning Process`
+- `Wmiprvse Wbemcomn Dll Hijack`
+- `Workstation Was Locked`
+- `Wpbbin Persistence`
+- `Wpbbin Potential Persistence`
+- `Writing Local Admin Share`
+- `Wscript Cscript Dropper`
+- `Wscript Cscript Local Connection`
+- `Wscript Cscript Outbound Connection`
+- `Wscript Cscript Script Exec`
+- `Wscript Cscript Susp Child Processes`
+- `Wscript Cscript Uncommon Extension Exec`
+- `Wsl Arbitrary Command Execution`
+- `Wsl Windows Binaries Execution`
+- `Wuauclt Dll Loading`
+- `Wuauclt Network Connection`
+- `Wuauclt No Cli Flags Execution`
+- `Wusa Cab Files Extraction`
+- `Wusa Cab Files Extraction From Susp Paths`
+- `Wusa Susp Parent Execution`
+- `Zone Identifier Ads`
+- `Zone Identifier Ads Uncommon`
+
+---
+
+## 4. Sigma Rules to SKIP (Elastic Already Covers)
+
+**858 Sigma rules** — do NOT import, Elastic has equivalent or better coverage.
+
+- `7Zip Exfil Dmp Files`
+- `7Zip Password Compression`
+- `7Zip Password Extraction`
+- `Aadhealth Mon Agent Regkey Access`
+- `Aadhealth Svc Agent Regkey Access`
+- `Access Token Abuse`
+- `Account Backdoor Dcsync Rights`
+- `Account Discovery`
+- `Ad Object Writedac Access`
+- `Ad Replication Non Machine Account`
+- `Ad User Enumeration`
+- `Admin Rdp Login`
+- `Adplus Memory Dump`
+- `Adsi Cache Creation By Uncommon Tool`
+- `Agentexecutor Potential Abuse`
+- `Alert Ad User Backdoors`
+- `Alert Enable Weak Encryption`
+- `Alert Ruler`
+- `Apt Aptc12 Bluemushroom`
+- `Apt Diamond Sleet Scheduled Task`
+- `Apt Evilnum Jul20`
+- `Apt Fin7 Powertrash Lateral Movement`
+- `Apt Mint Sandstorm Aspera Faspex Susp Child Process`
+- `Apt Mint Sandstorm Manage Engine Susp Child Process`
+- `Apt Muddywater Activity`
+- `Apt Mustangpanda`
+- `Apt Oilrig Mar18`
+- `Apt Revil Kaseya`
+- `Apt Slingshot`
+- `Apt Sofacy`
+- `Apt Unc2452 Cmds`
+- `Attrib System`
+- `Attrib System Susp Paths`
+- `Audit Cve`
+- `Auditpol Susp Execution`
+- `Bash Command Execution`
+- `Bash File Execution`
+- `Bcdedit Boot Conf Tamper`
+- `Bcdedit Susp Execution`
+- `Bitsadmin Download`
+- `Bitsadmin Download Direct Ip`
+- `Bitsadmin Download File Sharing Domains`
+- `Bitsadmin Download Susp Extensions`
+- `Bitsadmin Download Susp Targetfolder`
+- `Browsers Chromium Headless Debugging`
+- `Browsers Chromium Headless Exec`
+- `Browsers Chromium Headless File Download`
+- `Browsers Chromium Mockbin Abuse`
+- `Browsers Chromium Sensitive Files`
+- `Browsers Credential`
+- `Browsers Remote Debugging`
+- `Browsers Tor Execution`
+- `Cdb Arbitrary Command Execution`
+- `Certoc Load Dll Susp Locations`
+- `Certutil Certificate Installation`
+- `Certutil Decode`
+- `Certutil Download`
+- `Certutil Download Direct Ip`
+- `Certutil Download File Sharing Domains`
+- `Certutil Encode`
+- `Certutil Encode Susp Extensions`
+- `Certutil Encode Susp Location`
+- `Certutil Export Pfx`
+- `Cloudflared Tunnel Run`
+- `Cmd Del Execution`
+- `Cmd Mklink Osk Cmd`
+- `Cmd Mklink Shadow Copies Access Symlink`
+- `Cmd Ping Copy Combined Execution`
+- `Cmd Unusual Parent`
+- `Codeintegrity Revoked Driver Loaded`
+- `Codeintegrity Unsigned Driver Loaded`
+- `Codeintegrity Unsigned Image Loaded`
+- `Configsecuritypolicy Download File`
+- `Conhost Headless Powershell`
+- `Conhost Uncommon Parent`
+- `Control Panel Item`
+- `Create Non Existent Dlls`
+- `Create Remote Thread Win Hktl Cactustorch`
+- `Create Remote Thread Win Susp Uncommon Target Image`
+- `Createdump Lolbin Execution`
+- `Creation System File`
+- `Creation Unquoted Service Path`
+- `Csc Compilation`
+- `Csc Susp Dynamic Compilation`
+- `Csi Use Of Csharp Console`
+- `Curl Download Direct Ip Exec`
+- `Curl Download Direct Ip Susp Extensions`
+- `Curl Download Susp File Sharing Domains`
+- `Curl Susp Download`
+- `Date Changed To Another Year`
+- `Dcom Iertutil Dll Hijack`
+- `Dcsync`
+- `Desktop Ini Created By Uncommon Process`
+- `Desktopimgdownldr Remote File Download`
+- `Desktopimgdownldr Susp Execution`
+- `Dfsvc Child Processes`
+- `Dfsvc Suspicious Child Processes`
+- `Diagtrack Eop Default Login Username`
+- `Disable Event Auditing`
+- `Disable Event Auditing Critical`
+- `Diskshadow Child Process`
+- `Diskshadow Child Process Susp`
+- `Diskshadow Script Mode`
+- `Diskshadow Script Mode Susp Location`
+- `Dism Enable Powershell Web Access Feature`
+- `Dllhost No Cli Execution`
+- `Dns Susp Child Process`
+- `Domain Azurewebsites`
+- `Domain Dead Drop Resolvers`
+- `Domain External Ip Lookup`
+- `Domain Notion Api Susp Communication`
+- `Domain Telegram Api Non Browser Access`
+- `Dotnet Arbitrary Dll Csproj Execution`
+- `Dotnetdump Memory Dump`
+- `Dpapi Domain Backupkey Extraction`
+- `Driver Load Win Mal Drivers Names`
+- `Dsquery Domain Trust Discovery`
+- `Dump File Creation`
+- `Dump File Susp Creation`
+- `Dump64 Defender Av Bypass Rename`
+- `Esentutl Params`
+- `Eventvwr Susp Child Process`
+- `Exchange Webshell Drop Suspicious`
+- `Expand Cabinet Files`
+- `Exploit Cve 2017 8759`
+- `Exploit Cve 2019 0708 Scanner Poc`
+- `Exploit Cve 2020 10189`
+- `Exploit Cve 2020 1048`
+- `Exploit Cve 2020 1350`
+- `Exploit Cve 2021 26084 Atlassian Confluence`
+- `Exploit Cve 2021 26857 Msexchange`
+- `Exploit Cve 2021 35211 Servu`
+- `Exploit Cve 2021 40444`
+- `Exploit Cve 2021 40444 Office Directory Traversal`
+- `Exploit Cve 2021 41379`
+- `Exploit Cve 2022 29072 7Zip`
+- `Exploit Cve 2023 21554 Queuejumper`
+- `Exploit Cve 2023 23397 Outlook Remote File Query`
+- `Exploit Cve 2023 34362 Moveit Transfer Exploitation Activity`
+- `Exploit Cve 2023 38331 Winrar Susp Double Ext`
+- `Exploit Cve 2023 38831 Winrar Child Proc`
+- `Exploit Cve 2023 40477 Winrar Rev File Abuse`
+- `Exploit Cve 2024 37085 Esxi Admins Group Creation`
+- `Exploit Other Win Server Undocumented Rce`
+- `Explorer Child Of Shell Process`
+- `External Device`
+- `File Access Browser Credential`
+- `File Block Executable`
+- `File Executable Detected`
+- `Findstr Lsass`
+- `Fltmc Unload Driver Sysmon`
+- `Forfiles Child Process Masquerading`
+- `Forfiles Proxy Execution`
+- `Fsi Fsharp Code Execution`
+- `Fsutil Drive Enumeration`
+- `Fsutil Symlinkevaluation`
+- `Fsutil Usage`
+- `Googleupdate Susp Child Process`
+- `Gpg4Win Decryption`
+- `Gpg4Win Encryption`
+- `Gpo Scheduledtasks`
+- `Gup Download`
+- `Hh Chm Execution`
+- `Hh Chm Remote Download Or Execution`
+- `Hh Html Help Susp Child Process`
+- `Hh Susp Execution`
+- `Hidden User Creation`
+- `Hktl Cobaltstrike Bloopers Cmd`
+- `Hktl Cobaltstrike Bloopers Modules`
+- `Hktl Cobaltstrike Process Patterns`
+- `Hktl Covenant`
+- `Hktl Crackmapexec Execution`
+- `Hktl Crackmapexec Patterns`
+- `Hktl Crackmapexec Powershell Obfuscation`
+- `Hktl Invoke Obfuscation Clip`
+- `Hktl Invoke Obfuscation Via Use Mhsta`
+- `Hktl Invoke Obfuscation Via Var`
+- `Hktl Jlaive Batch Execution`
+- `Hktl Koadic`
+- `Hktl Krbrelay`
+- `Hktl Krbrelayup`
+- `Hktl Meterpreter Getsystem`
+- `Hktl Mimikatz Command Line`
+- `Hktl Powersploit Empire Default Schtasks`
+- `Hktl Pypykatz`
+- `Hktl Sharpwsus Wsuspendu Execution`
+- `Hktl Soaphound Execution`
+- `Hktl Zipexec`
+- `Hybridconnectionmgr Svc Installation`
+- `Ieexec Download`
+- `Iexpress Susp Execution`
+- `Iis Appcmd Http Logging`
+- `Iis Appcmd Susp Module Install`
+- `Iis Appcmd Susp Rewrite Rule`
+- `Iis Connection Strings Decryption`
+- `Iis Susp Module Registration`
+- `Ilasm Il Code Compilation`
+- `Image Load Cmstp Load Dll From Susp Location`
+- `Image Load Dll Azure Microsoft Account Token Provider Dll Load`
+- `Image Load Dll Dbghelp Dbgcore Susp Load`
+- `Image Load Dll Rstrtmgr Suspicious Load`
+- `Image Load Dll Sdiageng Load By Msdt`
+- `Image Load Dll Vssapi Susp Load`
+- `Image Load Dll Vsstrace Susp Load`
+- `Image Load Exploit Cve 2021 1675 Spoolsv Dll Load`
+- `Image Load Iexplore Dcom Iertutil Dll Hijack`
+- `Image Load Office Dotnet Assembly Dll Load`
+- `Image Load Office Dotnet Clr Dll Load`
+- `Image Load Office Dotnet Gac Dll Load`
+- `Image Load Office Powershell Dll Load`
+- `Image Load Office Vbadll Load`
+- `Image Load Side Load 7Za`
+- `Image Load Side Load Ccleaner Du`
+- `Image Load Side Load Cpl From Non System Location`
+- `Image Load Side Load From Non System Location`
+- `Image Load Side Load Keyscrambler`
+- `Image Load Side Load Office Dlls`
+- `Image Load Side Load Vivaldi Elf`
+- `Image Load Side Load Windows Defender`
+- `Image Load Susp Python Image Load`
+- `Image Load Susp Script Dotnet Clr Dll Load`
+- `Image Load Uac Bypass Via Dism`
+- `Image Load Wmi Module Load By Uncommon Process`
+- `Image Load Wmic Remote Xsl Scripting Dlls`
+- `Image Load Wsman Provider Image Load`
+- `Infdefaultinstall Execute Sct Scripts`
+- `Initial Access Dll Search Order Hijacking`
+- `Installutil Download`
+- `Invoke Obfuscation Clip Services Security`
+- `Invoke Obfuscation Obfuscated Iex Services Security`
+- `Invoke Obfuscation Stdin Services Security`
+- `Invoke Obfuscation Var Services Security`
+- `Invoke Obfuscation Via Compress Services Security`
+- `Invoke Obfuscation Via Rundll Services Security`
+- `Invoke Obfuscation Via Stdin Services Security`
+- `Invoke Obfuscation Via Use Clip Services Security`
+- `Invoke Obfuscation Via Use Mshta Services Security`
+- `Invoke Obfuscation Via Var Services Security`
+- `Java Keytool Susp Child Process`
+- `Java Manageengine Susp Child Process`
+- `Java Susp Child Process`
+- `Keyscrambler Susp Child Process`
+- `Lodctr Performance Counter Tampering`
+- `Logman Disable Eventlog`
+- `Lolbin Gather Network Info Script Output`
+- `Lolbin Printbrm`
+- `Lolbin Susp Driver Installed By Pnputil`
+- `Lolbin Susp Sqldumper Activity`
+- `Lolbin Wfc`
+- `Lsass Process Clone`
+- `Lsass Shtinkering`
+- `Lsass Werfault Dump`
+- `Mal Cosmik Duke Persistence`
+- `Mal Creddumper`
+- `Malware Adwind`
+- `Malware Babyshark`
+- `Malware Bluesky Ransomware Files Indicators`
+- `Malware Chrome Loader Execution`
+- `Malware Coldsteel Service Dll Creation`
+- `Malware Darkgate Autoit3 Binary Creation`
+- `Malware Darkgate Net User Creation`
+- `Malware Dridex`
+- `Malware Emotet Loader Execution`
+- `Malware Formbook`
+- `Malware Goofy Guineapig Googleupdate Uncommon Child Instance`
+- `Malware Guloader Execution`
+- `Malware Kamikakabot Lnk Lure Execution`
+- `Malware Kamikakabot Schtasks Persistence`
+- `Malware Kapeka Backdoor Rundll32 Execution`
+- `Malware Kapeka Backdoor Scheduled Task Creation`
+- `Malware Pikabot Rundll32 Activity`
+- `Malware Pikabot Rundll32 Hollowing`
+- `Malware Pikabot Rundll32 Uncommon Extension`
+- `Malware Pingback Backdoor`
+- `Malware Raspberry Robin Execution`
+- `Malware Rorschach Ransomware Activity`
+- `Malware Serpent Backdoor Payload Execution`
+- `Malware Snake Service Execution`
+- `Malware Trickbot Wermgr`
+- `Member Added Security Enabled Global Group`
+- `Metasploit Authentication`
+- `Metasploit Or Impacket Smb Psexec Service Install`
+- `Microsoft Workflow Compiler Execution`
+- `Mmc Mmc20 Lateral Movement`
+- `Mmc Susp Child Process`
+- `Mode Codepage Change`
+- `Mode Codepage Russian`
+- `Mofcomp Execution`
+- `Mpcmdrun Dll Sideload Defender`
+- `Mpcmdrun Download Arbitrary File`
+- `Mpcmdrun Remove Windows Defender Definition`
+- `Msbuild Susp Parent Process`
+- `Msdt Arbitrary Command Execution`
+- `Msdt Susp Parent`
+- `Mshta Susp Child Processes`
+- `Mshta Susp Execution`
+- `Mshta Susp Pattern`
+- `Msiexec Execute Dll`
+- `Msiexec Install Quiet`
+- `Msiexec Web Install`
+- `Mssql Failed Logon`
+- `Mssql Sqltoolsps Susp Execution`
+- `Mssql Susp Child Process`
+- `Mssql Veaam Susp Child Processes`
+- `Mstsc Remote Connection`
+- `Mstsc Run Local Rdp File Susp Location`
+- `Mstsc Run Local Rpd File Susp Parent`
+- `Msxsl Remote Execution`
+- `Mysqld Uncommon File Creation`
+- `Net Cli Artefact`
+- `Net Execution`
+- `Net Groups And Accounts Recon`
+- `Net Quic`
+- `Net Share Unmount`
+- `Net Use Mount Admin Share`
+- `Net Use Mount Internet Share`
+- `Net Use Mount Share`
+- `Net Use Network Connections Discovery`
+- `Net Use Password Plaintext`
+- `Net User Add`
+- `Net User Add Never Expire`
+- `Net User Default Accounts Manipulation`
+- `Net View Share And Sessions Enum`
+- `Netsh Fw Add Rule`
+- `Netsh Fw Allow Program In Susp Location`
+- `Netsh Fw Disable`
+- `Netsh Fw Enable Group Rule`
+- `Netsh Fw Rules Discovery`
+- `Netsh Fw Set Rule`
+- `Netsh Port Forwarding`
+- `Netsh Wifi Credential Harvesting`
+- `New Scr File`
+- `Node Abuse`
+- `Notepad Plus Plus Persistence`
+- `Ntds Dit Uncommon Parent Process`
+- `Ntds Dit Uncommon Process`
+- `Ntlm Brute Force`
+- `Odbcconf Driver Install`
+- `Odbcconf Driver Install Susp`
+- `Odbcconf Exec Susp Locations`
+- `Odbcconf Register Dll Regsvr`
+- `Odbcconf Register Dll Regsvr Susp`
+- `Odbcconf Response File`
+- `Odbcconf Response File Susp`
+- `Office Addin Persistence`
+- `Office Arbitrary Cli Download`
+- `Office Excel Dcom Lateral Movement`
+- `Office Macro Files Downloaded`
+- `Office Onenote Embedded Script Execution`
+- `Office Outlook Macro Creation`
+- `Office Outlook Mail Credential`
+- `Office Outlook Susp Child Processes`
+- `Office Outlook Susp Child Processes Remote`
+- `Office Outlook Susp Macro Creation`
+- `Office Spawn Exe From Users Directory`
+- `Office Startup Persistence`
+- `Office Susp Child Processes`
+- `Office Svchost Parent`
+- `Office Uncommon File Startup`
+- `Office Winword Dll Load`
+- `Overpass The Hash`
+- `Papercut Print Management Exploitation Indicators`
+- `Papercut Print Management Exploitation Pc App`
+- `Pass The Hash 2`
+- `Pcap Drivers`
+- `Pdqdeploy Runner Susp Children`
+- `Petitpotam Network Share`
+- `Pfx File Creation`
+- `Ping Hex Ip`
+- `Pipe Created Adfs Namedpipe Connection Uncommon Tool`
+- `Pipe Created Hktl Efspotato`
+- `Plink Port Forwarding`
+- `Plink Susp Tunneling`
+- `Powershell Abnormal Commandline Size`
+- `Powershell Active Directory Module Dll Import`
+- `Powershell Add Windows Capability`
+- `Powershell Amsi Init Failed Bypass`
+- `Powershell Audio Capture`
+- `Powershell Base64 Hidden Flag`
+- `Powershell Base64 Invoke`
+- `Powershell Base64 Wmi Classes`
+- `Powershell Cmdline Convertto Securestring`
+- `Powershell Cmdline Reversed Strings`
+- `Powershell Cmdline Special Characters`
+- `Powershell Crypto Namespace`
+- `Powershell Decode Gzip`
+- `Powershell Disable Defender Av Security Monitoring`
+- `Powershell Disable Firewall`
+- `Powershell Downgrade Attack`
+- `Powershell Download Com Cradles`
+- `Powershell Download Dll`
+- `Powershell Download Iex`
+- `Powershell Download Patterns`
+- `Powershell Download Susp File Sharing Domains`
+- `Powershell Drop Binary Or Script`
+- `Powershell Enable Susp Windows Optional Feature`
+- `Powershell Encode`
+- `Powershell Exec Data File`
+- `Powershell Export Certificate`
+- `Powershell Frombase64String Archive`
+- `Powershell Hide Services Via Set Service`
+- `Powershell Import Module`
+- `Powershell Install Unsigned Appx Packages`
+- `Powershell Invoke Webrequest Direct Ip`
+- `Powershell Invoke Webrequest Download`
+- `Powershell Mailboxexport Share`
+- `Powershell Module Creation`
+- `Powershell Module Susp Creation`
+- `Powershell Network Connection`
+- `Powershell New Netfirewallrule Allow`
+- `Powershell Reverse Shell Connection`
+- `Powershell Run Script From Ads`
+- `Powershell Run Script From Input Stream`
+- `Powershell Sam Access`
+- `Powershell Script Engine Parent`
+- `Powershell Script Installed As Service`
+- `Powershell Set Acl`
+- `Powershell Set Acl Susp Location`
+- `Powershell Set Policies To Unsecure Level`
+- `Powershell Set Service Disabled`
+- `Powershell Shadowcopy Deletion`
+- `Powershell Snapins Hafnium`
+- `Powershell Stop Service`
+- `Powershell Susp Child Processes`
+- `Powershell Xor Commandline`
+- `Print Remote File Copy`
+- `Proc Access Win Hktl Cobaltstrike Bof Injection Pattern`
+- `Proc Access Win Lsass Python Based Tool`
+- `Proc Access Win Lsass Seclogon Access`
+- `Proc Access Win Lsass Susp Access Flag`
+- `Proc Access Win Lsass Werfault`
+- `Proc Access Win Malware Verclsid Shellcode`
+- `Proc Access Win Susp All Access Uncommon Target`
+- `Proc Access Win Susp Direct Ntopenprocess Call`
+- `Proc Access Win Susp Potential Shellcode Injection`
+- `Proc Access Win Svchost Credential Dumping`
+- `Proc Access Win Uac Bypass Wow64 Logger`
+- `Proc Tampering Susp Process Hollowing`
+- `Protected Storage Service Access`
+- `Pua Cleanwipe`
+- `Pua Nircmd`
+- `Pua Rclone Execution`
+- `Python`
+- `Python Adidnsdump`
+- `Python Inline Command Execution`
+- `Python Path Configuration Files`
+- `Python Pty Spawn`
+- `Qemu Suspicious Execution`
+- `Query Win Domain Azurewebsites`
+- `Query Win Remote Access Software Domains Non Browsers`
+- `Query Win Susp External Ip Lookup`
+- `Raw Access Thread Susp Disk Access Using Uncommon Tools`
+- `Rdp File Susp Creation`
+- `Rdrleakdiag Process Dumping`
+- `Reg Add Run Key`
+- `Reg Add Safeboot`
+- `Reg Bitlocker`
+- `Reg Defender Exclusion`
+- `Reg Desktop Background Change`
+- `Reg Direct Asep Registry Keys Modification`
+- `Reg Enable Windows Recall`
+- `Reg Import From Suspicious Paths`
+- `Reg Lsa Ppl Protection Disabled`
+- `Reg Machineguid`
+- `Reg Modify Group Policy Settings`
+- `Reg Query Registry`
+- `Reg Rdp Keys Tamper`
+- `Reg Screensaver`
+- `Reg Service Imagepath Change`
+- `Reg Software Discovery`
+- `Reg Susp Paths`
+- `Regasm Regsvcs Uncommon Location Execution`
+- `Regedit Export Critical Keys`
+- `Regedit Export Keys`
+- `Regedit Import Keys`
+- `Regedit Import Keys Ads`
+- `Registry Delete Removal Com Hijacking Registry Key`
+- `Registry Enumeration For Credentials Cli`
+- `Registry Event Add Local Hidden User`
+- `Registry Event Apt Diamond Sleet Scheduled Task`
+- `Registry Event Esentutl Volume Shadow Copy Service Keys`
+- `Registry Event Office Test Regadd`
+- `Registry Event Runonce Persistence`
+- `Registry Event Scheduled Task Creation`
+- `Registry Event Shell Open Keys Manipulation`
+- `Registry Event Susp Atbroker Change`
+- `Registry Event Susp Mic Cam Access`
+- `Registry New Network Provider`
+- `Registry Privilege Escalation Via Service Key`
+- `Registry Set Add Port Monitor`
+- `Registry Set Asep Reg Keys Modification Classes`
+- `Registry Set Asep Reg Keys Modification Currentcontrolset`
+- `Registry Set Asep Reg Keys Modification Session Manager`
+- `Registry Set Asep Reg Keys Modification System Scripts`
+- `Registry Set Asep Reg Keys Modification Winsock2`
+- `Registry Set Asep Reg Keys Modification Wow6432Node Currentversion`
+- `Registry Set Bypass Uac Using Delegateexecute`
+- `Registry Set Bypass Uac Using Silentcleanup Task`
+- `Registry Set Change Rdp Port`
+- `Registry Set Cobaltstrike Service Installs`
+- `Registry Set Crashdump Disabled`
+- `Registry Set Creation Service Susp Folder`
+- `Registry Set Dbgmanageddebugger Persistence`
+- `Registry Set Defender Exclusions`
+- `Registry Set Disable Autologger Sessions`
+- `Registry Set Disable Windows Firewall`
+- `Registry Set Disable Winevt Logging`
+- `Registry Set Disabled Exploit Guard Net Protection On Ms Defender`
+- `Registry Set Disabled Microsoft Defender Eventlog`
+- `Registry Set Disabled Pua Protection On Microsoft Defender`
+- `Registry Set Dns Over Https Enabled`
+- `Registry Set Exploit Cve 2020 1048 New Printer Port`
+- `Registry Set Hangs Debugger Persistence`
+- `Registry Set Hhctrl Persistence`
+- `Registry Set Hide File`
+- `Registry Set Malware Raspberry Robin Internet Settings Zonemap Tamper`
+- `Registry Set Netsh Helper Dll Potential Persistence`
+- `Registry Set New Network Provider`
+- `Registry Set Office Enable Dde`
+- `Registry Set Office Outlook Enable Load Macro Provider On Boot`
+- `Registry Set Office Outlook Enable Macro Execution`
+- `Registry Set Office Outlook Security Settings`
+- `Registry Set Persistence Amsi Providers`
+- `Registry Set Persistence App Paths`
+- `Registry Set Persistence Appx Debugger`
+- `Registry Set Persistence Autodial Dll`
+- `Registry Set Persistence Chm`
+- `Registry Set Persistence Com Key Linking`
+- `Registry Set Persistence Comhijack Psfactorybuffer`
+- `Registry Set Persistence Event Viewer Events Asp`
+- `Registry Set Persistence Globalflags`
+- `Registry Set Persistence Ie`
+- `Registry Set Persistence Ifilter`
+- `Registry Set Persistence Lsa Extension`
+- `Registry Set Persistence Mpnotify`
+- `Registry Set Persistence Mycomputer`
+- `Registry Set Persistence Natural Language`
+- `Registry Set Persistence Office Vsto`
+- `Registry Set Persistence Outlook Homepage`
+- `Registry Set Persistence Outlook Todaypage`
+- `Registry Set Persistence Reflectdebugger`
+- `Registry Set Persistence Scrobj Dll`
+- `Registry Set Persistence Shim Database Uncommon Location`
+- `Registry Set Persistence Typed Paths`
+- `Registry Set Persistence Xll`
+- `Registry Set Powershell Enablescripts Enabled`
+- `Registry Set Powershell Logging Disabled`
+- `Registry Set Renamed Sysinternals Eula Accepted`
+- `Registry Set Servicedll Hijack`
+- `Registry Set Services Etw Tamper`
+- `Registry Set Sip Persistence`
+- `Registry Set Susp Printer Driver`
+- `Registry Set Taskcache Entry`
+- `Registry Set Telemetry Persistence`
+- `Registry Set Timeproviders Dllname`
+- `Registry Set Tls Protocol Old Version Enabled`
+- `Registry Set Treatas Persistence`
+- `Registry Set Wab Dllpath Reg Change`
+- `Registry Set Windows Defender Tamper`
+- `Registry Special Accounts Hide User`
+- `Registry Typed Paths Persistence`
+- `Regsvr32 Flags Anomaly`
+- `Regsvr32 Susp Child Process`
+- `Remote Access Tools Anydesk Revoked Cert`
+- `Remote Access Tools Screenconnect Remote Execution`
+- `Remote Access Tools Screenconnect Remote Execution Susp`
+- `Remote Access Tools Screenconnect Remote File`
+- `Remote Access Tools Screenconnect Webshell`
+- `Remote Time Discovery`
+- `Renamed Binary Highly Relevant`
+- `Renamed Createdump`
+- `Renamed Curl`
+- `Renamed Ftp`
+- `Renamed Msdt`
+- `Renamed Msteams`
+- `Renamed Plink`
+- `Renamed Sysinternals Psexec Service`
+- `Renamed Whoami`
+- `Rundll32 Ntlmrelay`
+- `Rundll32 Susp Execution With Image Extension`
+- `Rundll32 Susp Shellexec Ordinal Execution`
+- `Sc Change Sevice Image Path By Non Admin`
+- `Sc Create Service`
+- `Sc Disable Service`
+- `Sc Query`
+- `Sc Query Interesting Services`
+- `Sc Sdset Allow Service Changes`
+- `Sc Sdset Deny Service Access`
+- `Sc Sdset Hide Sevices`
+- `Sc Sdset Modification`
+- `Sc Service Path Modification`
+- `Sc Service Tamper For Persistence`
+- `Sc Stop Service`
+- `Scheduled Task Deletion`
+- `Schtasks Appdata Local System`
+- `Schtasks Creation`
+- `Schtasks Creation From Susp Parent`
+- `Schtasks Creation Temp Folder`
+- `Schtasks Delete`
+- `Schtasks Disable`
+- `Schtasks Env Folder`
+- `Schtasks Folder Combos`
+- `Schtasks Guid Task Name`
+- `Schtasks One Time Only Midnight Task`
+- `Schtasks Powershell Persistence`
+- `Schtasks Reg Loader`
+- `Schtasks Reg Loader Encoded`
+- `Schtasks Schedule Type`
+- `Schtasks Schedule Type System`
+- `Schtasks Susp Pattern`
+- `Schtasks System`
+- `Scrcons Remote Wmi Scripteventconsumer`
+- `Scrcons Susp Child Process`
+- `Sdiagnhost Susp Child`
+- `Sed File Creation`
+- `Service Install Remote Access Software`
+- `Servu Susp Child Process`
+- `Shell Write Susp Directory`
+- `Sigverif Uncommon Child Process`
+- `Smb File Creation Admin Shares`
+- `Sndvol Susp Child Processes`
+- `Splwow64 Cli Anomaly`
+- `Spoolsv Susp Child Processes`
+- `Sqlcmd Veeam Db Recon`
+- `Sqlcmd Veeam Dump`
+- `Sqlite Chromium Profile Data`
+- `Squirrel Download`
+- `Ssh Rdp Tunneling`
+- `Susp Abusing Debug Privilege`
+- `Susp Add User Local Admin Group`
+- `Susp Add User Privileged Group`
+- `Susp Alternate Data Streams`
+- `Susp Appx Execution`
+- `Susp Binary Dropper`
+- `Susp Cli Obfuscation Unicode Img`
+- `Susp Copy Lateral Movement`
+- `Susp Copy System Dir`
+- `Susp Creation By Mobsync`
+- `Susp Desktopimgdownldr File`
+- `Susp Disable Raccine`
+- `Susp Download Office Domain`
+- `Susp Elavated Msi Spawned Shell`
+- `Susp Electron Execution Proxy`
+- `Susp Elevated System Shell`
+- `Susp Elevated System Shell Uncommon Parent`
+- `Susp Embed Exe Lnk`
+- `Susp Event Log Query`
+- `Susp Eventlog Clear`
+- `Susp Eventlog Content Recon`
+- `Susp Execution From Public Folder As Parent`
+- `Susp Execution Path`
+- `Susp Failed Logon Reasons`
+- `Susp File Sharing Domains Susp Folders`
+- `Susp Gpo Files`
+- `Susp Group Policy Abuse Privilege Addition`
+- `Susp Group Policy Startup Script Added To Gpo`
+- `Susp Hiding Malware In Fonts Folder`
+- `Susp Initiated Uncommon Or Suspicious Locations`
+- `Susp Jwt Token Search`
+- `Susp Kerberos Manipulation`
+- `Susp Ldap Dataexchange`
+- `Susp Legitimate App Dropping Exe`
+- `Susp Legitimate App Dropping Script`
+- `Susp Logon Explicit Credentials`
+- `Susp Logon Newcredentials`
+- `Susp Lolbin Exec From Non C Drive`
+- `Susp Lsass Dmp Cli Keywords`
+- `Susp Lsass Dump Generic`
+- `Susp Network Scan Loop`
+- `Susp Non Exe Image`
+- `Susp Non Priv Reg Or Ps`
+- `Susp Obfuscated Ip Download`
+- `Susp Obfuscated Ip Via Cli`
+- `Susp Outbound Mobsync Connection`
+- `Susp Possible Shadow Credentials Added`
+- `Susp Powershell Profile`
+- `Susp Priv Escalation Via Named Pipe`
+- `Susp Private Keys Recon`
+- `Susp Privilege Escalation Cli Patterns`
+- `Susp Proc Wrong Parent`
+- `Susp Procexplorer Driver Created In Tmp Folder`
+- `Susp Raccess Sensitive Fext`
+- `Susp Registry Modification Of Ms Setting Protocol Handler`
+- `Susp Remote Desktop Tunneling`
+- `Susp Scheduled Task Creation`
+- `Susp Scheduled Task Delete Or Disable`
+- `Susp Scheduled Task Update`
+- `Susp Script Exec From Env Folder`
+- `Susp Script Exec From Temp`
+- `Susp Service Creation`
+- `Susp Service Dir`
+- `Susp Shadow Copies Creation`
+- `Susp Shell Spawn Susp Program`
+- `Susp Startup Folder Persistence`
+- `Susp Sysnative`
+- `Susp System Exe Anomaly`
+- `Susp System User Anomaly`
+- `Susp Task Folder Evasion`
+- `Susp Teamviewer Remote Session`
+- `Susp Time Modification`
+- `Susp Userinit Child`
+- `Susp Vscode Powershell Profile`
+- `Susp Web Request Cmd And Cmdlets`
+- `Susp Whoami As Param`
+- `Susp Wmi Login`
+- `Susp Workfolders`
+- `Svchost Termserv Proc Spawn`
+- `Svchost Uncommon Parent Process`
+- `Sysinternals Adexplorer Execution`
+- `Sysinternals Adexplorer Susp Execution`
+- `Sysinternals Procdump`
+- `Sysinternals Procdump Evasion`
+- `Sysinternals Procmon Driver Susp Creation`
+- `Sysinternals Psexec Execution`
+- `Sysinternals Psexec Remote Execution`
+- `Sysinternals Psexesvc`
+- `Sysinternals Psloglist`
+- `Sysinternals Sdelete File Deletion`
+- `System Apt Carbonpaper Turla`
+- `System Apt Oilrig Mar18`
+- `System Apt Stonedrill`
+- `System Apt Turla Service Png`
+- `System Defender Disabled`
+- `System Hack Smbexec`
+- `System Invoke Obfuscation Clip Services`
+- `System Invoke Obfuscation Obfuscated Iex Services`
+- `System Invoke Obfuscation Stdin Services`
+- `System Invoke Obfuscation Var Services`
+- `System Invoke Obfuscation Via Compress Services`
+- `System Invoke Obfuscation Via Rundll Services`
+- `System Invoke Obfuscation Via Stdin Services`
+- `System Invoke Obfuscation Via Use Clip Services`
+- `System Invoke Obfuscation Via Use Mshta Services`
+- `System Invoke Obfuscation Via Var Services`
+- `System Krbrelayup Service Installation`
+- `System Mal Creddumper`
+- `System Malware Coldsteel Persistence Service`
+- `System Malware Goofy Guineapig Service Persistence`
+- `System Moriya Rootkit`
+- `System Powershell Script Installed As Service`
+- `System Service Install Anydesk`
+- `System Service Install Csexecsvc`
+- `System Service Install Hacktools`
+- `System Service Install Mesh Agent`
+- `System Service Install Paexec`
+- `System Service Install Pdqdeploy`
+- `System Service Install Pdqdeploy Runner`
+- `System Service Install Pua Proceshacker`
+- `System Service Install Remcom`
+- `System Service Install Remote Utilities`
+- `System Service Install Sliver`
+- `System Service Install Susp`
+- `System Service Install Tacticalrmm`
+- `System Service Install Tap Driver`
+- `System Service Install Uncommon`
+- `System Service Terminated Unexpectedly`
+- `System Susp Rtcore64 Service Install`
+- `System Susp Service Installation Folder`
+- `System Susp Service Installation Folder Pattern`
+- `System Susp Service Installation Script`
+- `System Volume Shadow Copy Mount`
+- `Systeminfo Execution`
+- `Tap Driver Installation`
+- `Taskkill Execution`
+- `Taskkill Sep`
+- `Tasklist Module Enumeration`
+- `Taskmgr Lsass Dump`
+- `Teams Sensitive Files`
+- `Teams Suspicious Command Line Cred Access`
+- `Teams Suspicious Objectaccess`
+- `Uac Bypass Changepk Slui`
+- `Uac Bypass Cmstp`
+- `Uac Bypass Computerdefaults`
+- `Uac Bypass Dismhost`
+- `Uac Bypass Hijacking Firwall Snap In`
+- `Uac Bypass Icmluautil`
+- `Uac Bypass Idiagnostic Profile`
+- `Uac Bypass Msconfig Gui`
+- `Uac Bypass Ntfs Reparse Point`
+- `Uac Bypass Winsat`
+- `Uac Bypass Wmp`
+- `Uac Bypass Wsreset Integrity Level`
+- `Unusual Deletion By Dns Exe`
+- `Unusual Modification By Dns Exe`
+- `User Creation`
+- `User Driver Loaded`
+- `Userinit Uncommon Child Processes`
+- `Vaultcmd List Creds`
+- `Verclsid Runs Com`
+- `Vhd Download Via Browsers`
+- `Vmware Toolbox Cmd Persistence Susp`
+- `Vscode Tunnel Execution`
+- `Vscode Tunnel Remote Shell`
+- `Vscode Tunnel Renamed Execution`
+- `Vsdiagnostics Execution Proxy`
+- `Wab Unusual Parents`
+- `Wbadmin Delete All Backups`
+- `Wbadmin Delete Backups`
+- `Wbadmin Dump Sensitive Files`
+- `Wbadmin Restore File`
+- `Wbadmin Restore Sensitive Files`
+- `Webshell Chopper`
+- `Webshell Hacking`
+- `Webshell Susp Process Spawned From Webserver`
+- `Werfault Lsass Shtinkering`
+- `Werfault Reflect Debugger Exec`
+- `Wermgr Susp Child Process`
+- `Wfp Endpoint Agent Blocked`
+- `Wget Download Direct Ip`
+- `Wget Download Susp File Sharing Domains`
+- `Wget Download Susp Locations`
+- `Whoami All Execution`
+- `Whoami Execution From High Priv Process`
+- `Whoami Groups Discovery`
+- `Whoami Output`
+- `Whoami Parent Anomaly`
+- `Whoami Priv Discovery`
+- `Winget Add Custom Source`
+- `Winget Add Insecure Custom Source`
+- `Winget Add Susp Custom Source`
+- `Winget Local Install Via Manifest`
+- `Winrar Exfil Dmp Files`
+- `Winrar Susp Child Process`
+- `Winrar Uncommon Folder Execution`
+- `Winrm Remote Powershell Session Process`
+- `Winrm Susp Child Process`
+- `Wmi Persistence`
+- `Wmi Persistence Script Event Consumer`
+- `Wmic Eventconsumer Creation`
+- `Wmic Namespace Defender`
+- `Wmic Process Creation`
+- `Wmic Recon Computersystem`
+- `Wmic Recon Csproduct`
+- `Wmic Recon Group`
+- `Wmic Recon Hotfix`
+- `Wmic Recon Process`
+- `Wmic Recon Product`
+- `Wmic Recon Product Class`
+- `Wmic Recon Service`
+- `Wmic Recon System Info Uncommon`
+- `Wmic Recon Unquoted Service Search`
+- `Wmic Recon Volume`
+- `Wmic Remote Execution`
+- `Wmic Service Manipulation`
+- `Wmic Susp Process Creation`
+- `Wmic Terminate Application`
+- `Wmic Uninstall Application`
+- `Wmiprvse Spawns Powershell`
+- `Wmiprvse Susp Child Processes`
+- `Wmiprvse Wbemcomn Dll Hijack`
+- `Wpbbin Potential Persistence`
+- `Wscript Cscript Dropper`
+- `Wscript Cscript Script Exec`
+- `Wsl Child Processes Anomalies`
+- `Wuauclt Network Connection`
+- `Wuauclt No Cli Flags Execution`
+- `Xwizard Execution Non Default Location`
+- `Xwizard Runwizard Com Object Exec`
+
+---
+
+## 5. Manual Review (Unparseable Sigma Conditions)
+
+**38 rules** — check these individually.
+
+- `Creation New Shim Database`
+- `Driver Load Win Susp Temp Use`
+- `Gotoopener Artefact`
+- `Hktl Empire Powershell Uac Bypass`
+- `Hktl Invoke Obfuscation Obfuscated Iex Commandline`
+- `Hktl Invoke Obfuscation Stdin`
+- `Hktl Invoke Obfuscation Var`
+- `Hktl Invoke Obfuscation Via Stdin`
+- `Image Load Dll Pcre Dotnet Dll Load`
+- `Image Load Susp Dll Load System Process`
+- `Malware Raspberry Robin Single Dot Ending File`
+- `Malware Snatch Ransomware`
+- `Office Outlook Execution From Temp`
+- `Pcre Net Temp File`
+- `Pipe Created Hktl Cobaltstrike Re`
+- `Pipe Created Hktl Coercedpotato`
+- `Powershell Amsi Null Bits Bypass`
+- `Powershell Import Module Susp Dirs`
+- `Powershell Susp Download Patterns`
+- `Rclone Config Files`
+- `Registry Provlaunch Provisioning Command`
+- `Rundll32 Run Locations`
+- `Scheduled Task Creation`
+- `Susp Cli Obfuscation Unicode`
+- `Susp Commandline Path Traversal Evasion`
+- `Susp Credential Manager Access`
+- `Susp Gpo Access Uncommon Process`
+- `Susp Homoglyph Cyrillic Lookalikes`
+- `Susp Homoglyph Filename`
+- `Susp Initaited Public Folder`
+- `Susp Network Command`
+- `Susp Recycle Bin Fake Exec`
+- `Susp Recycle Bin Fake Execution`
+- `Susp Redirect Local Admin Share`
+- `Susp Sysvol Access`
+- `Uac Bypass Trustedpath`
+- `Wmi Event Subscription`
+- `Wmiexec Default Filename`

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_systeminfo_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_systeminfo_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\systeminfo.exe\" or process.pe.original_file_name:\"sysinfo.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "systeminfo.exe"
+      ],
+      "raw_values": [
+        "*\\\\systeminfo.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sysinfo.exe"
+      ],
+      "raw_values": [
+        "sysinfo.exe"
+      ]
+    }
+  ]
+}

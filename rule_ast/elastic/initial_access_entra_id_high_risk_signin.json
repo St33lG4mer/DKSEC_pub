@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "Entra ID High Risk Sign-in",
+  "slug": "initial_access_entra_id_high_risk_signin",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Data Source: Microsoft Entra ID Sign-in Logs",
+    "Use Case: Identity and Access Audit",
+    "Resources: Investigation Guide",
+    "Tactic: Initial Access"
+  ],
+  "elastic_path": "rules/integrations/azure/initial_access_entra_id_high_risk_signin.toml",
+  "raw_query": "data_stream.dataset:azure.signinlogs and\n  (\n    azure.signinlogs.properties.risk_level_during_signin:high or\n    azure.signinlogs.properties.risk_level_aggregated:high\n  )\n",
+  "conditions": []
+}

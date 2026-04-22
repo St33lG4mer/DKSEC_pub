@@ -1,0 +1,37 @@
+{
+  "source": "sigma",
+  "name": "registry_set_change_winevt_channelaccess",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_change_winevt_channelaccess.eql",
+  "raw_query": "any where (registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\*\" and registry.path:\"*\\\\ChannelAccess\" and (winlog.event_data.Details like~ (\"*(A;;0x1;;;LA)*\", \"*(A;;0x1;;;SY)*\", \"*(A;;0x5;;;BA)*\"))) and (not (process.executable:\"C:\\\\Windows\\\\servicing\\\\TrustedInstaller.exe\" or (process.executable:\"C:\\\\Windows\\\\WinSxS\\\\*\" and process.executable:\"*\\\\TiWorker.exe\")))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\",
+        "\\\\channelaccess"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\*",
+        "*\\\\ChannelAccess"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "trustedinstaller.exe",
+        "tiworker.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\servicing\\\\TrustedInstaller.exe",
+        "C:\\\\Windows\\\\WinSxS\\\\*",
+        "*\\\\TiWorker.exe"
+      ]
+    }
+  ]
+}

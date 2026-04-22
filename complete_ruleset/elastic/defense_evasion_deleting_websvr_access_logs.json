@@ -1,0 +1,51 @@
+{
+  "source": "elastic",
+  "name": "WebServer Access Logs Deleted",
+  "slug": "defense_evasion_deleting_websvr_access_logs",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: Windows",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/defense_evasion_deleting_websvr_access_logs.toml",
+  "raw_query": "file where event.type == \"deletion\" and\n  file.path : (\"C:\\\\inetpub\\\\logs\\\\LogFiles\\\\*.log\",\n               \"/var/log/apache*/access.log\",\n               \"/etc/httpd/logs/access_log\",\n               \"/var/log/httpd/access_log\",\n               \"/var/www/*/logs/access.log\")\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".log",
+        "access.log",
+        "access_log"
+      ],
+      "raw_values": [
+        "C:\\\\inetpub\\\\logs\\\\LogFiles\\\\*.log",
+        "/var/log/apache*/access.log",
+        "/etc/httpd/logs/access_log",
+        "/var/log/httpd/access_log",
+        "/var/www/*/logs/access.log"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ]
+}

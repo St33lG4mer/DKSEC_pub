@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_security_apt_slingshot",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2018/TA/Slingshot/win_security_apt_slingshot.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4701\" and winlog.event_data.TaskName:\"\\\\Microsoft\\\\Windows\\\\Defrag\\\\ScheduledDefrag\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4701"
+      ],
+      "raw_values": [
+        "4701"
+      ]
+    },
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\defrag\\\\scheduleddefrag"
+      ],
+      "raw_values": [
+        "\\\\Microsoft\\\\Windows\\\\Defrag\\\\ScheduledDefrag"
+      ]
+    }
+  ]
+}

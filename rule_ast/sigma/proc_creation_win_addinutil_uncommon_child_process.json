@@ -1,0 +1,35 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_addinutil_uncommon_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_addinutil_uncommon_child_process.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\addinutil.exe\" and (not (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\conhost.exe\", \"*:\\\\Windows\\\\System32\\\\werfault.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\werfault.exe\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "conhost.exe",
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\conhost.exe",
+        "*:\\\\Windows\\\\System32\\\\werfault.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\werfault.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "addinutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\addinutil.exe"
+      ]
+    }
+  ]
+}

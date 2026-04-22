@@ -1,0 +1,69 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_office_macro_files_from_susp_process",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_office_macro_files_from_susp_process.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wscript.exe\")) or (process.parent.executable like~ (\"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wscript.exe\"))) and (file.path like~ (\"*.docm\", \"*.dotm\", \"*.xlsm\", \"*.xltm\", \"*.potm\", \"*.pptm\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "mshta.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "mshta.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".docm",
+        ".dotm",
+        ".xlsm",
+        ".xltm",
+        ".potm",
+        ".pptm"
+      ],
+      "raw_values": [
+        "*.docm",
+        "*.dotm",
+        "*.xlsm",
+        "*.xltm",
+        "*.potm",
+        "*.pptm"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "source": "elastic",
+  "name": "New GitHub Owner Added",
+  "slug": "persistence_github_org_owner_added",
+  "category": "iam",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Use Case: UEBA",
+    "Tactic: Persistence",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/persistence_github_org_owner_added.toml",
+  "raw_query": "iam where data_stream.dataset == \"github.audit\" and event.action == \"org.add_member\" and github.permission == \"admin\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "org.add_member"
+      ],
+      "raw_values": [
+        "org.add_member"
+      ]
+    },
+    {
+      "field": "github.permission",
+      "raw_field": "github.permission",
+      "operator": "==",
+      "values": [
+        "admin"
+      ],
+      "raw_values": [
+        "admin"
+      ]
+    }
+  ]
+}

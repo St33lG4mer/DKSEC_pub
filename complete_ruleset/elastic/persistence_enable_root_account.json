@@ -1,0 +1,55 @@
+{
+  "source": "elastic",
+  "name": "Attempt to Enable the Root Account",
+  "slug": "persistence_enable_root_account",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/persistence_enable_root_account.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.name == \"dsenableroot\" and \n not process.args == \"-d\"\n",
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "dsenableroot"
+      ],
+      "raw_values": [
+        "dsenableroot"
+      ]
+    }
+  ]
+}

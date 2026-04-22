@@ -1,0 +1,78 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_browsers_inline_file_download",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_browsers_inline_file_download.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\brave.exe\", \"*\\\\chrome.exe\", \"*\\\\msedge.exe\", \"*\\\\opera.exe\", \"*\\\\vivaldi.exe\")) and process.command_line:\"*http*\" and ((process.command_line like~ (\"*.7z\", \"*.dat\", \"*.dll\", \"*.exe\", \"*.hta\", \"*.ps1\", \"*.psm1\", \"*.txt\", \"*.vbe\", \"*.vbs\", \"*.zip\")) or (process.command_line like~ (\"*.7z\\\"*\", \"*.dat\\\"*\", \"*.dll\\\"*\", \"*.hta\\\"*\", \"*.ps1\\\"*\", \"*.psm1\\\"*\", \"*.txt\\\"*\", \"*.vbe\\\"*\", \"*.vbs\\\"*\", \"*.zip\\\"*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "brave.exe",
+        "chrome.exe",
+        "msedge.exe",
+        "opera.exe",
+        "vivaldi.exe"
+      ],
+      "raw_values": [
+        "*\\\\brave.exe",
+        "*\\\\chrome.exe",
+        "*\\\\msedge.exe",
+        "*\\\\opera.exe",
+        "*\\\\vivaldi.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".7z",
+        ".dat",
+        ".dll",
+        ".exe",
+        ".hta",
+        ".ps1",
+        ".psm1",
+        ".txt",
+        ".vbe",
+        ".vbs",
+        ".zip"
+      ],
+      "raw_values": [
+        "*.7z",
+        "*.dat",
+        "*.dll",
+        "*.exe",
+        "*.hta",
+        "*.ps1",
+        "*.psm1",
+        "*.txt",
+        "*.vbe",
+        "*.vbs",
+        "*.zip",
+        "*.7z\\",
+        ", ",
+        "*",
+        "*.dll\\",
+        "*.ps1\\",
+        "*.txt\\",
+        "*.vbs\\"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "*http*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_diskshadow_script_mode",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_diskshadow_script_mode.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"diskshadow.exe\" or process.executable:\"*\\\\diskshadow.exe\") and process.command_line like~ (\"*-s *\", \"*/s *\", \"*\u2013s *\", \"*\u2014s *\", \"*\u2015s *\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "*\\\\diskshadow.exe"
+      ]
+    }
+  ]
+}

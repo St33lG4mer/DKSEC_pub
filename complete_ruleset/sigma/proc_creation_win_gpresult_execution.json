@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_gpresult_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_gpresult_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\gpresult.exe\" and (process.command_line like~ (\"*/z*\", \"*/v*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gpresult.exe"
+      ],
+      "raw_values": [
+        "*\\\\gpresult.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "M365 Teams Custom Application Interaction Enabled",
+  "slug": "defense_evasion_teams_custom_app_interaction_allowed",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/defense_evasion_teams_custom_app_interaction_allowed.toml",
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:MicrosoftTeams and\nevent.category:web and event.action:TeamsTenantSettingChanged and\no365.audit.Name:\"Allow sideloading and interaction of custom apps\" and\no365.audit.NewValue:True and event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "o365.audit.name",
+      "raw_field": "o365.audit.Name",
+      "operator": ":",
+      "values": [
+        "allow sideloading and interaction of custom apps"
+      ],
+      "raw_values": [
+        "Allow sideloading and interaction of custom apps"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_no_image_name",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_no_image_name.eql",
+  "raw_query": "any where process.executable:\"*\\\\.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "*\\\\.exe"
+      ]
+    }
+  ]
+}

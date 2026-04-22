@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_attrib_system_susp_paths",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_attrib_system_susp_paths.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\attrib.exe\" or process.pe.original_file_name:\"ATTRIB.EXE\") and process.command_line:\"* +s*\" and (process.command_line like~ (\"* %*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\AppData\\\\Local\\\\*\", \"*\\\\ProgramData\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\")) and (process.command_line like~ (\"*.bat*\", \"*.dll*\", \"*.exe*\", \"*.hta*\", \"*.ps1*\", \"*.vbe*\", \"*.vbs*\"))) and (not (process.command_line:\"*\\\\Windows\\\\TEMP\\\\*\" and process.command_line:\"*.exe*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".dll",
+        ".exe",
+        ".hta",
+        ".ps1",
+        ".vbe",
+        ".vbs"
+      ],
+      "raw_values": [
+        "* %*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\ProgramData\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*",
+        "*.bat*",
+        "*.dll*",
+        "*.exe*",
+        "*.hta*",
+        "*.ps1*",
+        "*.vbe*",
+        "*.vbs*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "attrib.exe"
+      ],
+      "raw_values": [
+        "*\\\\attrib.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "attrib.exe"
+      ],
+      "raw_values": [
+        "ATTRIB.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "* +s*",
+        "*\\\\Windows\\\\TEMP\\\\*",
+        "*.exe*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "image_load_wmic_remote_xsl_scripting_dlls",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_wmic_remote_xsl_scripting_dlls.eql",
+  "raw_query": "any where process.executable:\"*\\\\wmic.exe\" and (file.path like~ (\"*\\\\jscript.dll\", \"*\\\\vbscript.dll\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "jscript.dll",
+        "vbscript.dll"
+      ],
+      "raw_values": [
+        "*\\\\jscript.dll",
+        "*\\\\vbscript.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\wmic.exe"
+      ]
+    }
+  ]
+}

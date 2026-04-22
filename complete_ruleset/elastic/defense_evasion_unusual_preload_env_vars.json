@@ -1,0 +1,36 @@
+{
+  "source": "elastic",
+  "name": "Unusual Preload Environment Variable Process Execution",
+  "slug": "defense_evasion_unusual_preload_env_vars",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_unusual_preload_env_vars.toml",
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:exec and process.env_vars:* and\nnot (\n  process.parent.executable:(/snap/* or \"/opt/infraonagent/infraonwindowsagent\" or \"/worker/Capa/capa\") or\n  process.parent.name:\"cmk-update-agent\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "infraonwindowsagent",
+        "capa",
+        "cmk-update-agent"
+      ],
+      "raw_values": [
+        "/opt/infraonagent/infraonwindowsagent",
+        "/worker/Capa/capa",
+        "cmk-update-agent"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_vmware_toolbox_cmd_persistence",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_vmware_toolbox_cmd_persistence.eql",
+  "raw_query": "any where (process.executable:\"*\\\\VMwareToolBoxCmd.exe\" or process.pe.original_file_name:\"toolbox-cmd.exe\") and (process.command_line:\"* script *\" and process.command_line:\"* set *\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmwaretoolboxcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\VMwareToolBoxCmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "toolbox-cmd.exe"
+      ],
+      "raw_values": [
+        "toolbox-cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "script",
+        "set"
+      ],
+      "raw_values": [
+        "* script *",
+        "* set *"
+      ]
+    }
+  ]
+}

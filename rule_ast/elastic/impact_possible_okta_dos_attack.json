@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Possible Okta DoS Attack",
+  "slug": "impact_possible_okta_dos_attack",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Identity and Access Audit",
+    "Data Source: Okta",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/impact_possible_okta_dos_attack.toml",
+  "raw_query": "data_stream.dataset:okta.system and event.action:(application.integration.rate_limit_exceeded or system.org.rate_limit.warning or system.org.rate_limit.violation or core.concurrency.org.limit.violation)\n",
+  "conditions": []
+}

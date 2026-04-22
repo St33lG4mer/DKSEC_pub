@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_cobaltstrike_bloopers_cmd",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_cobaltstrike_bloopers_cmd.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"Cmd.Exe\" or process.executable:\"*\\\\cmd.exe\") and ((process.command_line like~ (\"cmd *\", \"cmd.exe*\", \"c:\\\\windows\\\\system32\\\\cmd.exe*\")) and (process.command_line like~ (\"*psinject*\", \"*spawnas*\", \"*make_token*\", \"*remote-exec*\", \"*rev2self*\", \"*dcsync*\", \"*logonpasswords*\", \"*execute-assembly*\", \"*getsystem*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "cmd",
+        "cmd.exe",
+        "psinject",
+        "spawnas",
+        "make_token",
+        "remote-exec",
+        "rev2self",
+        "dcsync",
+        "logonpasswords",
+        "execute-assembly",
+        "getsystem"
+      ],
+      "raw_values": [
+        "cmd *",
+        "cmd.exe*",
+        "c:\\\\windows\\\\system32\\\\cmd.exe*",
+        "*psinject*",
+        "*spawnas*",
+        "*make_token*",
+        "*remote-exec*",
+        "*rev2self*",
+        "*dcsync*",
+        "*logonpasswords*",
+        "*execute-assembly*",
+        "*getsystem*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    }
+  ]
+}

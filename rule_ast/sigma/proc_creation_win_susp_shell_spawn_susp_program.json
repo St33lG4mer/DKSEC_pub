@@ -1,0 +1,137 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_shell_spawn_susp_program",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_shell_spawn_susp_program.eql",
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\rundll32.exe\", \"*\\\\cscript.exe\", \"*\\\\wscript.exe\", \"*\\\\wmiprvse.exe\", \"*\\\\regsvr32.exe\")) and (process.executable like~ (\"*\\\\schtasks.exe\", \"*\\\\nslookup.exe\", \"*\\\\certutil.exe\", \"*\\\\bitsadmin.exe\", \"*\\\\mshta.exe\"))) and (not (process.working_directory:\"*\\\\ccmcache\\\\*\" or (process.parent.command_line like~ (\"*\\\\Program Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\setup-scheduledtask.ps1*\", \"*\\\\Program Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\set-selfhealing.ps1*\", \"*\\\\Program Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\check-workspacehealth.ps1*\", \"*\\\\nessus_*\")) or process.command_line:\"*\\\\nessus_*\" or (process.parent.executable:\"*\\\\mshta.exe\" and process.executable:\"*\\\\mshta.exe\" and (process.parent.command_line:\"*C:\\\\MEM_Configmgr_*\" and process.parent.command_line:\"*\\\\splash.hta*\" and process.parent.command_line:\"*{1E460BD7-F1C3-4B2E-88BF-4E770A288AF5}*\") and (process.command_line:\"*C:\\\\MEM_Configmgr_*\" and process.command_line:\"*\\\\SMSSETUP\\\\BIN\\\\*\" and process.command_line:\"*\\\\autorun.hta*\" and process.command_line:\"*{1E460BD7-F1C3-4B2E-88BF-4E770A288AF5}*\"))))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "rundll32.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "wmiprvse.exe",
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe",
+        "*\\\\wmiprvse.exe",
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "schtasks.exe",
+        "nslookup.exe",
+        "certutil.exe",
+        "bitsadmin.exe",
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe",
+        "*\\\\nslookup.exe",
+        "*\\\\certutil.exe",
+        "*\\\\bitsadmin.exe",
+        "*\\\\mshta.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "setup-scheduledtask.ps1",
+        "set-selfhealing.ps1",
+        "check-workspacehealth.ps1",
+        "nessus_"
+      ],
+      "raw_values": [
+        "*\\\\Program Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\setup-scheduledtask.ps1*",
+        "*\\\\Program Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\set-selfhealing.ps1*",
+        "*\\\\Program Files\\\\Amazon\\\\WorkSpacesConfig\\\\Scripts\\\\check-workspacehealth.ps1*",
+        "*\\\\nessus_*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "\\\\ccmcache\\\\"
+      ],
+      "raw_values": [
+        "*\\\\ccmcache\\\\*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "nessus_",
+        "mem_configmgr_",
+        "autorun.hta",
+        "{1e460bd7-f1c3-4b2e-88bf-4e770a288af5}"
+      ],
+      "raw_values": [
+        "*\\\\nessus_*",
+        "*C:\\\\MEM_Configmgr_*",
+        "*\\\\SMSSETUP\\\\BIN\\\\*",
+        "*\\\\autorun.hta*",
+        "*{1E460BD7-F1C3-4B2E-88BF-4E770A288AF5}*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "*\\\\mshta.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "*\\\\mshta.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "mem_configmgr_",
+        "splash.hta",
+        "{1e460bd7-f1c3-4b2e-88bf-4e770a288af5}"
+      ],
+      "raw_values": [
+        "*C:\\\\MEM_Configmgr_*",
+        "*\\\\splash.hta*",
+        "*{1E460BD7-F1C3-4B2E-88BF-4E770A288AF5}*"
+      ]
+    }
+  ]
+}

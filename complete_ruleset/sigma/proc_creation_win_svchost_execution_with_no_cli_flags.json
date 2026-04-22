@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_svchost_execution_with_no_cli_flags",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_svchost_execution_with_no_cli_flags.eql",
+  "raw_query": "any where (process.command_line:\"*svchost.exe\" and process.executable:\"*\\\\svchost.exe\") and (not ((process.parent.executable like~ (\"*\\\\rpcnet.exe\", \"*\\\\rpcnetp.exe\")) or (?process.command_line == null)))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "rpcnet.exe",
+        "rpcnetp.exe"
+      ],
+      "raw_values": [
+        "*\\\\rpcnet.exe",
+        "*\\\\rpcnetp.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*svchost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_rjvplatform_default_location",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_rjvplatform_default_location.eql",
+  "raw_query": "any where process.executable:\"C:\\\\Windows\\\\System32\\\\SystemResetPlatform\\\\SystemResetPlatform.exe\" and file.path:\"C:\\\\$SysReset\\\\Framework\\\\Stack\\\\RjvPlatform.dll\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "systemresetplatform.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\SystemResetPlatform\\\\SystemResetPlatform.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "rjvplatform.dll"
+      ],
+      "raw_values": [
+        "C:\\\\$SysReset\\\\Framework\\\\Stack\\\\RjvPlatform.dll"
+      ]
+    }
+  ]
+}

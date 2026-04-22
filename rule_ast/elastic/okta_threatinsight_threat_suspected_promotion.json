@@ -1,0 +1,16 @@
+{
+  "source": "elastic",
+  "name": "Okta ThreatInsight Threat Suspected Promotion",
+  "slug": "okta_threatinsight_threat_suspected_promotion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Use Case: Identity and Access Audit",
+    "Data Source: Okta",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/okta_threatinsight_threat_suspected_promotion.toml",
+  "raw_query": "data_stream.dataset:okta.system and (event.action:security.threat.detected or okta.debug_context.debug_data.threat_suspected: true)\n",
+  "conditions": []
+}

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "image_load_susp_python_image_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_susp_python_image_load.eql",
+  "raw_query": "any where file.pe.description:\"Python Core\" and (not (process.executable:\"*Python*\" or (process.executable like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\ProgramData\\\\Anaconda3\\\\*\")))) and ?process.executable != null",
+  "conditions": [
+    {
+      "field": "file.pe.description",
+      "raw_field": "file.pe.description",
+      "operator": ":",
+      "values": [
+        "python core"
+      ],
+      "raw_values": [
+        "Python Core"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "*Python*"
+      ]
+    }
+  ]
+}

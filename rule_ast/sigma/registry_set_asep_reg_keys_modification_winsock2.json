@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_winsock2",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_winsock2.eql",
+  "raw_query": "any where registry.path:\"*\\\\System\\\\CurrentControlSet\\\\Services\\\\WinSock2\\\\Parameters*\" and (registry.path like~ (\"*\\\\Protocol_Catalog9\\\\Catalog_Entries*\", \"*\\\\NameSpace_Catalog5\\\\Catalog_Entries*\")) and (not (winlog.event_data.Details:\"(Empty)\" or process.executable:\"C:\\\\Windows\\\\System32\\\\MsiExec.exe\" or process.executable:\"C:\\\\Windows\\\\syswow64\\\\MsiExec.exe\"))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\protocol_catalog9\\\\catalog_entries",
+        "\\\\namespace_catalog5\\\\catalog_entries"
+      ],
+      "raw_values": [
+        "*\\\\Protocol_Catalog9\\\\Catalog_Entries*",
+        "*\\\\NameSpace_Catalog5\\\\Catalog_Entries*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\services\\\\winsock2\\\\parameters"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Services\\\\WinSock2\\\\Parameters*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\MsiExec.exe",
+        "C:\\\\Windows\\\\syswow64\\\\MsiExec.exe"
+      ]
+    }
+  ]
+}

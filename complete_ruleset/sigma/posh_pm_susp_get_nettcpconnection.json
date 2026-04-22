@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "posh_pm_susp_get_nettcpconnection",
+  "subtree": "rules",
+  "category": "powershell",
+  "sigma_path": "rules/windows/powershell/powershell_module/posh_pm_susp_get_nettcpconnection.eql",
+  "raw_query": "any where winlog.event_data.ContextInfo:\"*Get-NetTCPConnection*\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": ":",
+      "values": [
+        "get-nettcpconnection"
+      ],
+      "raw_values": [
+        "*Get-NetTCPConnection*"
+      ]
+    }
+  ]
+}

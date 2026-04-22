@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "pipe_created_scrcons_wmi_consumer_namedpipe",
+  "subtree": "rules",
+  "category": "pipe",
+  "sigma_path": "rules/windows/pipe_created/pipe_created_scrcons_wmi_consumer_namedpipe.eql",
+  "raw_query": "any where process.executable:\"*\\\\scrcons.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "scrcons.exe"
+      ],
+      "raw_values": [
+        "*\\\\scrcons.exe"
+      ]
+    }
+  ]
+}

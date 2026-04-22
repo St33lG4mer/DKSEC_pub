@@ -1,0 +1,29 @@
+{
+  "source": "elastic",
+  "name": "Newly Observed Elastic Defend Behavior Alert",
+  "slug": "newly_observed_elastic_defend_alert",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/cross-platform/newly_observed_elastic_defend_alert.toml",
+  "raw_query": "from logs-endpoint.alerts-*\n| WHERE event.code == \"behavior\" and rule.name is not null\n| STATS Esql.alerts_count = count(*),\n        Esql.first_time_seen = MIN(@timestamp),\n        Esql.last_time_seen = MAX(@timestamp),\n        Esql.agents_distinct_count = COUNT_DISTINCT(agent.id),\n        Esql.process_executable = VALUES(process.executable),\n        Esql.process_parent_executable = VALUES(process.parent.executable),\n        Esql.process_command_line = VALUES(process.command_line),\n        Esql.process_hash_sha256 = VALUES(process.hash.sha256),\n        Esql.host_id_values = VALUES(host.id),\n        Esql.user_name = VALUES(user.name) by rule.name\n// first time seen in the last 5 days - defined in the rule schedule Additional look-back time\n| eval Esql.recent = DATE_DIFF(\"minute\", Esql.first_time_seen, now())\n// first time seen is within 10m of the rule execution time\n| where Esql.recent <= 10 and Esql.agents_distinct_count == 1 and Esql.alerts_count <= 10 and (Esql.last_time_seen == Esql.first_time_seen)\n\n// Move single values to their corresponding ECS fields for alerts exclusion\n| eval host.id = mv_min(Esql.host_id_values)\n\n| keep host.id, rule.name, Esql.*\n",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "behavior"
+      ],
+      "raw_values": [
+        "behavior"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_local_system_owner_account_discovery",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_local_system_owner_account_discovery.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\cmd.exe\" and (process.command_line:\"* /c*\" and process.command_line:\"*dir *\" and process.command_line:\"*\\\\Users\\\\*\")) and (not process.command_line:\"* rmdir *\")) or (((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) and process.command_line:\"*user*\") and (not (process.command_line like~ (\"*/domain*\", \"*/add*\", \"*/delete*\", \"*/active*\", \"*/expires*\", \"*/passwordreq*\", \"*/scriptpath*\", \"*/times*\", \"*/workstations*\")))) or (((process.executable like~ (\"*\\\\whoami.exe\", \"*\\\\quser.exe\", \"*\\\\qwinsta.exe\")) or (process.pe.original_file_name like~ (\"whoami.exe\", \"quser.exe\", \"qwinsta.exe\"))) or (process.executable:\"*\\\\wmic.exe\" and (process.command_line:\"*useraccount*\" and process.command_line:\"*get*\")) or (process.executable:\"*\\\\cmdkey.exe\" and process.command_line:\"* /l*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe",
+        "whoami.exe",
+        "quser.exe",
+        "qwinsta.exe"
+      ],
+      "raw_values": [
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\whoami.exe",
+        "*\\\\quser.exe",
+        "*\\\\qwinsta.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "domain",
+        "add",
+        "delete",
+        "active",
+        "expires",
+        "passwordreq",
+        "scriptpath",
+        "times",
+        "workstations"
+      ],
+      "raw_values": [
+        "*/domain*",
+        "*/add*",
+        "*/delete*",
+        "*/active*",
+        "*/expires*",
+        "*/passwordreq*",
+        "*/scriptpath*",
+        "*/times*",
+        "*/workstations*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "whoami.exe",
+        "quser.exe",
+        "qwinsta.exe"
+      ],
+      "raw_values": [
+        "whoami.exe",
+        "quser.exe",
+        "qwinsta.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "wmic.exe",
+        "cmdkey.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\wmic.exe",
+        "*\\\\cmdkey.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dir",
+        "rmdir",
+        "user",
+        "useraccount",
+        "get"
+      ],
+      "raw_values": [
+        "* /c*",
+        "*dir *",
+        "*\\\\Users\\\\*",
+        "* rmdir *",
+        "*user*",
+        "*useraccount*",
+        "*get*",
+        "* /l*"
+      ]
+    }
+  ]
+}

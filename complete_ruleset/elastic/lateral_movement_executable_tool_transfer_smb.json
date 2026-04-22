@@ -1,0 +1,158 @@
+{
+  "source": "elastic",
+  "name": "Potential Lateral Tool Transfer via SMB Share",
+  "slug": "lateral_movement_executable_tool_transfer_smb",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/windows/lateral_movement_executable_tool_transfer_smb.toml",
+  "raw_query": "sequence by host.id with maxspan=30s\n  [network where host.os.type == \"windows\" and event.type == \"start\" and process.pid == 4 and destination.port == 445 and\n   network.direction : (\"incoming\", \"ingress\") and\n   network.transport == \"tcp\" and source.ip != \"127.0.0.1\" and source.ip != \"::1\"\n  ] by process.entity_id\n  /* add more executable / script extensions here if they are not noisy in your environment */\n  [file where host.os.type == \"windows\" and event.type in (\"creation\", \"change\") and process.pid == 4 and user.id like (\"S-1-5-21*\", \"S-1-12-*\") and \n   (file.Ext.header_bytes : \"4d5a*\" or file.extension : (\"exe\", \"scr\", \"pif\", \"com\", \"dll\", \"bat\", \"cmd\", \"ps1\", \"vbs\", \"vbe\", \"js\", \"jse\", \"wsh\", \"wsf\", \"sct\", \"hta\", \"cpl\"))] by process.entity_id\n",
+  "conditions": [
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": ":",
+      "values": [
+        "incoming",
+        "ingress"
+      ],
+      "raw_values": [
+        "incoming",
+        "ingress"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-21",
+        "s-1-12-"
+      ],
+      "raw_values": [
+        "S-1-5-21*",
+        "S-1-12-*"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "exe",
+        "scr",
+        "pif",
+        "com",
+        "dll",
+        "bat",
+        "cmd",
+        "ps1",
+        "vbs",
+        "vbe",
+        "jse",
+        "wsh",
+        "wsf",
+        "sct",
+        "hta",
+        "cpl"
+      ],
+      "raw_values": [
+        "exe",
+        "scr",
+        "pif",
+        "com",
+        "dll",
+        "bat",
+        "cmd",
+        "ps1",
+        "vbs",
+        "vbe",
+        "js",
+        "jse",
+        "wsh",
+        "wsf",
+        "sct",
+        "hta",
+        "cpl"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "creation",
+        "change"
+      ],
+      "raw_values": [
+        "creation",
+        "change"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "network.transport",
+      "raw_field": "network.transport",
+      "operator": "==",
+      "values": [
+        "tcp"
+      ],
+      "raw_values": [
+        "tcp"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1",
+        "::1"
+      ],
+      "raw_values": [
+        "127.0.0.1",
+        "::1"
+      ]
+    },
+    {
+      "field": "file.ext.header_bytes",
+      "raw_field": "file.Ext.header_bytes",
+      "operator": ":",
+      "values": [
+        "4d5a"
+      ],
+      "raw_values": [
+        "4d5a*"
+      ]
+    }
+  ]
+}

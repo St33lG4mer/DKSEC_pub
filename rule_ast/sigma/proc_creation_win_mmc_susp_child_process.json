@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mmc_susp_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mmc_susp_child_process.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\mmc.exe\" and ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\", \"*\\\\cscript.exe\", \"*\\\\sh.exe\", \"*\\\\bash.exe\", \"*\\\\reg.exe\", \"*\\\\regsvr32.exe\")) or process.executable:\"*\\\\BITSADMIN*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "sh.exe",
+        "bash.exe",
+        "reg.exe",
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe",
+        "*\\\\sh.exe",
+        "*\\\\bash.exe",
+        "*\\\\reg.exe",
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "mmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mmc.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bitsadmin"
+      ],
+      "raw_values": [
+        "*\\\\BITSADMIN*"
+      ]
+    }
+  ]
+}

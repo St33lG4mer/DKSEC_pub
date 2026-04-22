@@ -1,0 +1,41 @@
+{
+  "source": "elastic",
+  "name": "Svchost spawning Cmd",
+  "slug": "execution_command_shell_started_by_svchost",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne"
+  ],
+  "elastic_path": "rules/windows/execution_command_shell_started_by_svchost.toml",
+  "raw_query": "host.os.type:windows and event.category:process and event.type:start and process.parent.name:svchost.exe and \nprocess.name:(CMD.EXE or Cmd.exe or cmd.exe) and \nprocess.command_line:(* and not \"\\\"cmd.exe\\\" /C sc control hptpsmarthealthservice 211\") and \nnot process.args:(\".\\inetsrv\\iissetup.exe /keygen \" or \"C:\\Program\" or \"C:\\Program Files (x86)\\Kaspersky Lab\\NetworkAgent\\klmover.exe\" or \"C:\\Program Files (x86)\\Sentry\\SA\\adluminupdater.exe\" or \"C:\\Program Files\\WinRAR\" or \"C:\\Program Files\\WinRAR\\uninstall.exe\" or \"hpdiags://BatteryStatusTest\" or hptpsmarthealthservice or icacls or taskkill or w32tm or *.BAT* or *.CMD* or *.bat* or *.cmd*)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "c sc control hptpsmarthealthservice 211",
+        "keygen",
+        "program"
+      ],
+      "raw_values": [
+        "\\",
+        " /C sc control hptpsmarthealthservice 211",
+        ".\\inetsrv\\iissetup.exe /keygen ",
+        "C:\\Program"
+      ]
+    }
+  ]
+}

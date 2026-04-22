@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_presentationhost_uncommon_location_exec",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_presentationhost_uncommon_location_exec.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\presentationhost.exe\" or process.pe.original_file_name:\"PresentationHost.exe\") and process.command_line:\"*.xbap*\") and (not (process.command_line like~ (\"* C:\\\\Windows\\\\*\", \"* C:\\\\Program Files*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "program files"
+      ],
+      "raw_values": [
+        "* C:\\\\Windows\\\\*",
+        "* C:\\\\Program Files*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "presentationhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\presentationhost.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "presentationhost.exe"
+      ],
+      "raw_values": [
+        "PresentationHost.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".xbap"
+      ],
+      "raw_values": [
+        "*.xbap*"
+      ]
+    }
+  ]
+}

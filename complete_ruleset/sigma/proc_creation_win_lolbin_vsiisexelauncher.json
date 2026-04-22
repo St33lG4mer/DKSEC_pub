@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_vsiisexelauncher",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_vsiisexelauncher.eql",
+  "raw_query": "any where (process.executable:\"*\\\\VSIISExeLauncher.exe\" or process.pe.original_file_name:\"VSIISExeLauncher.exe\") and (process.command_line like~ (\"* -p *\", \"* -a *\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vsiisexelauncher.exe"
+      ],
+      "raw_values": [
+        "*\\\\VSIISExeLauncher.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "vsiisexelauncher.exe"
+      ],
+      "raw_values": [
+        "VSIISExeLauncher.exe"
+      ]
+    }
+  ]
+}

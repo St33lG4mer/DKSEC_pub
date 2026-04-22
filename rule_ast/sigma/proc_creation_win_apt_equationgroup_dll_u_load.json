@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_equationgroup_dll_u_load",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2019/TA/EquationGroup/proc_creation_win_apt_equationgroup_dll_u_load.eql",
+  "raw_query": "any where process.command_line:\"*-export dll_u*\" or (process.command_line like~ (\"*,dll_u\", \"* dll_u\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ",dll_u",
+        "dll_u"
+      ],
+      "raw_values": [
+        "*,dll_u",
+        "* dll_u"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-export dll_u"
+      ],
+      "raw_values": [
+        "*-export dll_u*"
+      ]
+    }
+  ]
+}

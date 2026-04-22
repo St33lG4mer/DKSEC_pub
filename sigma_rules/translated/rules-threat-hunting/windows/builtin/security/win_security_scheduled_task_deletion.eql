@@ -1,0 +1,1 @@
+any where winlog.channel:"Security" and (event.code:"4699" and (not (winlog.event_data.TaskName like~ ("\\Microsoft\\Windows\\RemovalTools\\MRT_ERROR_HB", "*\\Mozilla\\Firefox Default Browser Agent *"))))

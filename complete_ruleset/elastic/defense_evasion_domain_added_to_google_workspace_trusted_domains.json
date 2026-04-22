@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "Domain Added to Google Workspace Trusted Domains",
+  "slug": "defense_evasion_domain_added_to_google_workspace_trusted_domains",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Google Workspace",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/google_workspace/defense_evasion_domain_added_to_google_workspace_trusted_domains.toml",
+  "raw_query": "data_stream.dataset:google_workspace.admin and event.provider:admin and event.category:iam and event.action:ADD_TRUSTED_DOMAINS\n",
+  "conditions": []
+}

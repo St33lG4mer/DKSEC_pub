@@ -1,0 +1,71 @@
+{
+  "source": "elastic",
+  "name": "Multiple Alerts in Same ATT&CK Tactic by Host",
+  "slug": "multiple_alerts_same_tactic_by_host",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/multiple_alerts_same_tactic_by_host.toml",
+  "raw_query": "from .alerts-security.*  metadata _id\n\n| where kibana.alert.risk_score > 21 and\n        kibana.alert.rule.name IS NOT NULL and\n        host.id is not null and data_stream.dataset is not null and\n\n        // excluding ML and Threat Match rules as they tend to be noisy\n        not kibana.alert.rule.type in (\"threat_match\", \"machine_learning\") and\n\n        // excluding noisy tactics like Discovery, Persistence and Lateral Movement\n        kibana.alert.rule.threat.tactic.name in (\"Credential Access\", \"Defense Evasion\", \"Execution\", \"Command and Control\") and\n\n        // excluding some noisy rules\n        not kibana.alert.rule.name in (\"Agent Spoofing - Mismatched Agent ID\", \"Process Termination followed by Deletion\") and\n        not KQL(\"\"\"kibana.alert.rule.tags : \"Rule Type: Higher-Order Rule\" \"\"\")\n\n// extract unique counts and values by host.id and tactic name\n| stats Esql.alerts_count = COUNT(*),\n        Esql.kibana_alert_rule_name_distinct_count = COUNT_DISTINCT(kibana.alert.rule.name),\n        Esql.event_module_distinct_count = COUNT_DISTINCT(event.module),\n        Esql.event_module_values = VALUES(event.module),\n        Esql.kibana_alert_rule_name_values = VALUES(kibana.alert.rule.name),\n        Esql.threat_technique_id_distinct_count = COUNT_DISTINCT(kibana.alert.rule.threat.technique.id),\n        Esql.threat_technique_name_values = VALUES(kibana.alert.rule.threat.technique.name),\n        Esql.process_executable_values = VALUES(process.executable),\n        Esql.process_parent_executable_values = VALUES(process.parent.executable),\n        Esql.process_command_line_values = VALUES(process.command_line),\n        Esql.process_entity_id_distinct_count = COUNT_DISTINCT(process.entity_id) by host.id, kibana.alert.rule.threat.tactic.name\n\n// filter for at least 3 unique rules and exclude noisy patterns like high count of alerts or processes often associated with noisy FPs\n| where Esql.kibana_alert_rule_name_distinct_count >= 3 and Esql.process_entity_id_distinct_count <= 10 and Esql.alerts_count <= 20\n\n// fields populated in the resulting alerts\n| Keep host.id, kibana.alert.rule.threat.tactic.name, Esql.*\n",
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.type",
+      "raw_field": "kibana.alert.rule.type",
+      "operator": "in",
+      "values": [
+        "threat_match",
+        "machine_learning"
+      ],
+      "raw_values": [
+        "threat_match",
+        "machine_learning"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.threat.tactic.name",
+      "raw_field": "kibana.alert.rule.threat.tactic.name",
+      "operator": "in",
+      "values": [
+        "credential access",
+        "defense evasion",
+        "execution",
+        "command and control"
+      ],
+      "raw_values": [
+        "Credential Access",
+        "Defense Evasion",
+        "Execution",
+        "Command and Control"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.name",
+      "raw_field": "kibana.alert.rule.name",
+      "operator": "in",
+      "values": [
+        "agent spoofing - mismatched agent id",
+        "process termination followed by deletion"
+      ],
+      "raw_values": [
+        "Agent Spoofing - Mismatched Agent ID",
+        "Process Termination followed by Deletion"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.tags",
+      "raw_field": "kibana.alert.rule.tags",
+      "operator": ":",
+      "values": [
+        "rule type: higher-order rule"
+      ],
+      "raw_values": [
+        "Rule Type: Higher-Order Rule"
+      ]
+    }
+  ]
+}

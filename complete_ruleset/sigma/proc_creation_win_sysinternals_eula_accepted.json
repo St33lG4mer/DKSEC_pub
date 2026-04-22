@@ -1,0 +1,29 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_eula_accepted",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_eula_accepted.eql",
+  "raw_query": "any where process.command_line like~ (\"* -accepteula*\", \"* /accepteula*\", \"* \u2013accepteula*\", \"* \u2014accepteula*\", \"* \u2015accepteula*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-accepteula",
+        "accepteula",
+        "\u2013accepteula",
+        "\u2014accepteula",
+        "\u2015accepteula"
+      ],
+      "raw_values": [
+        "* -accepteula*",
+        "* /accepteula*",
+        "* \u2013accepteula*",
+        "* \u2014accepteula*",
+        "* \u2015accepteula*"
+      ]
+    }
+  ]
+}

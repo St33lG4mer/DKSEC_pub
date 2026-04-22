@@ -1,0 +1,68 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Termination of ESXI Process",
+  "slug": "impact_esxi_process_kill",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/linux/impact_esxi_process_kill.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"end\" and process.name in (\"vmware-vmx\", \"vmx\")\nand process.parent.name == \"kill\"\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "vmware-vmx",
+        "vmx"
+      ],
+      "raw_values": [
+        "vmware-vmx",
+        "vmx"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "end"
+      ],
+      "raw_values": [
+        "end"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "kill"
+      ],
+      "raw_values": [
+        "kill"
+      ]
+    }
+  ]
+}

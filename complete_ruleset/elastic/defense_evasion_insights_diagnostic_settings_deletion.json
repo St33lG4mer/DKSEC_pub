@@ -1,0 +1,31 @@
+{
+  "source": "elastic",
+  "name": "Azure Diagnostic Settings Deleted",
+  "slug": "defense_evasion_insights_diagnostic_settings_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Data Source: Azure Activity Logs",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/defense_evasion_insights_diagnostic_settings_deletion.toml",
+  "raw_query": "data_stream.dataset:azure.activitylogs\n    and azure.activitylogs.operation_name:\"MICROSOFT.INSIGHTS/DIAGNOSTICSETTINGS/DELETE\"\n    and event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.insights/diagnosticsettings/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.INSIGHTS/DIAGNOSTICSETTINGS/DELETE"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+any where process.executable:"*\\schtasks.exe" and (process.command_line like~ ("*/delete*", "*/change*")) and (process.command_line:"*/TN*" and process.command_line:"*\\Microsoft\\Windows\\Defrag\\ScheduledDefrag*")

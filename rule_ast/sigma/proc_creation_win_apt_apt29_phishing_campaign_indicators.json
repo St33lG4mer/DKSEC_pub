@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_apt29_phishing_campaign_indicators",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2018/TA/APT29-CozyBear/proc_creation_win_apt_apt29_phishing_campaign_indicators.eql",
+  "raw_query": "any where process.command_line:\"*-noni -ep bypass $*\" or (process.command_line:\"*cyzfc.dat,*\" and process.command_line:\"*PointFunctionCall*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-noni -ep bypass $",
+        "cyzfc.dat,",
+        "pointfunctioncall"
+      ],
+      "raw_values": [
+        "*-noni -ep bypass $*",
+        "*cyzfc.dat,*",
+        "*PointFunctionCall*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_greenbug_may20",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2020/TA/Greenbug/proc_creation_win_apt_greenbug_may20.eql",
+  "raw_query": "any where (process.executable like~ (\"*:\\\\ProgramData\\\\adobe\\\\Adobe.exe\", \"*:\\\\ProgramData\\\\oracle\\\\local.exe\", \"*\\\\revshell.exe\", \"*\\\\infopagesbackup\\\\ncat.exe\", \"*:\\\\ProgramData\\\\comms\\\\comms.exe\")) or (process.command_line:\"*-ExecutionPolicy Bypass -File*\" and process.command_line:\"*\\\\msf.ps1*\") or (process.command_line:\"*infopagesbackup*\" and process.command_line:\"*\\\\ncat*\" and process.command_line:\"*-e cmd.exe*\") or (process.command_line like~ (\"*system.Data.SqlClient.SqlDataAdapter($cmd); [void]$da.fill*\", \"*-nop -w hidden -c $k=new-object*\", \"*[Net.CredentialCache]::DefaultCredentials;IEX *\", \"* -nop -w hidden -c $m=new-object net.webclient;$m*\", \"*-noninteractive -executionpolicy bypass whoami*\", \"*-noninteractive -executionpolicy bypass netstat -a*\")) or process.command_line:\"*L3NlcnZlcj1*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "adobe.exe",
+        "local.exe",
+        "revshell.exe",
+        "ncat.exe",
+        "comms.exe"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\adobe\\\\Adobe.exe",
+        "*:\\\\ProgramData\\\\oracle\\\\local.exe",
+        "*\\\\revshell.exe",
+        "*\\\\infopagesbackup\\\\ncat.exe",
+        "*:\\\\ProgramData\\\\comms\\\\comms.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-executionpolicy bypass -file",
+        "msf.ps1",
+        "infopagesbackup",
+        "ncat",
+        "-e cmd.exe",
+        "l3nlcnzlcj1"
+      ],
+      "raw_values": [
+        "*-ExecutionPolicy Bypass -File*",
+        "*\\\\msf.ps1*",
+        "*infopagesbackup*",
+        "*\\\\ncat*",
+        "*-e cmd.exe*",
+        "*L3NlcnZlcj1*"
+      ]
+    }
+  ]
+}

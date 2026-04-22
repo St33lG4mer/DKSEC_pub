@@ -1,0 +1,68 @@
+{
+  "source": "elastic",
+  "name": "PowerShell Script with Windows Defender Tampering Capabilities",
+  "slug": "defense_evasion_posh_defender_tampering",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: PowerShell Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_posh_defender_tampering.toml",
+  "raw_query": "event.category: \"process\" and host.os.type:windows and\n(\n  powershell.file.script_block_text: \"Set-MpPreference\" and\n  powershell.file.script_block_text: (\n    DisableArchiveScanning or DisableBehaviorMonitoring or\n    DisableIntrusionPreventionSystem or DisableIOAVProtection or\n    DisableRemovableDriveScanning or DisableBlockAtFirstSeen or\n    DisableScanningMappedNetworkDrivesForFullScan or\n    DisableScanningNetworkFiles or DisableScriptScanning or\n    DisableRealtimeMonitoring or LowThreatDefaultAction or\n    ModerateThreatDefaultAction or HighThreatDefaultAction\n  )\n) and\nnot powershell.file.script_block_text : (\n  (\"cmdletization\" and \"cdxml-Help.xml\") or\n  (\"function Set-MpPreference\" and \"Microsoft.PowerShell.Cmdletization.GeneratedTypes.MpPreference.SubmitSamplesConsentType\")\n) and\nnot file.directory : \"C:\\ProgramData\\Microsoft\\Windows Defender Advanced Threat Protection\\SenseCM\" and\nnot user.id : \"S-1-5-18\"\n",
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "cmdletization",
+        "cdxml-help.xml",
+        "set-mppreference"
+      ],
+      "raw_values": [
+        "cmdletization",
+        "cdxml-Help.xml",
+        "Set-MpPreference"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "file.directory",
+      "raw_field": "file.directory",
+      "operator": ":",
+      "values": [
+        "c:\\programdata\\microsoft\\windows defender advanced threat protection\\sensecm"
+      ],
+      "raw_values": [
+        "C:\\ProgramData\\Microsoft\\Windows Defender Advanced Threat Protection\\SenseCM"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ]
+}

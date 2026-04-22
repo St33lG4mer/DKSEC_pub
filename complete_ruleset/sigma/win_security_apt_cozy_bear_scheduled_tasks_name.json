@@ -1,0 +1,85 @@
+{
+  "source": "sigma",
+  "name": "win_security_apt_cozy_bear_scheduled_tasks_name",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/Cozy-Bear/win_security_apt_cozy_bear_scheduled_tasks_name.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"4698\", \"4699\", \"4702\")) and (winlog.event_data.TaskName like~ (\"\\\\defender\", \"\\\\Microsoft\\\\DefenderService\", \"\\\\Microsoft\\\\Windows\\\\Application Experience\\\\StartupAppTaskCheck\", \"\\\\Microsoft\\\\Windows\\\\Application Experience\\\\StartupAppTaskCkeck\", \"\\\\Microsoft\\\\Windows\\\\ATPUpd\", \"\\\\Microsoft\\\\Windows\\\\Data Integrity Scan\\\\Data Integrity Update\", \"\\\\Microsoft\\\\Windows\\\\DefenderUPDService\", \"\\\\Microsoft\\\\Windows\\\\IISUpdateService\", \"\\\\Microsoft\\\\Windows\\\\Speech\\\\SpeechModelInstallTask\", \"\\\\Microsoft\\\\Windows\\\\WiMSDFS\", \"\\\\Microsoft\\\\Windows\\\\Windows Defender\\\\Defender Update Service\", \"\\\\Microsoft\\\\Windows\\\\Windows Defender\\\\Service Update\", \"\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\CheckReporting\", \"\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\SubmitReporting\", \"\\\\Microsoft\\\\Windows\\\\Windows Filtering Platform\\\\BfeOnServiceStart\", \"\\\\Microsoft\\\\Windows\\\\WindowsDefenderService\", \"\\\\Microsoft\\\\Windows\\\\WindowsDefenderService2\", \"\\\\Microsoft\\\\Windows\\\\WindowsUpdate\\\\Scheduled AutoCheck\", \"\\\\Microsoft\\\\Windows\\\\WindowsUpdate\\\\Scheduled Check\", \"\\\\WindowUpdate\")))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4698",
+        "4699",
+        "4702"
+      ],
+      "raw_values": [
+        "4698",
+        "4699",
+        "4702"
+      ]
+    },
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": "like~",
+      "values": [
+        "\\\\defender",
+        "\\\\microsoft\\\\defenderservice",
+        "\\\\microsoft\\\\windows\\\\application experience\\\\startupapptaskcheck",
+        "\\\\microsoft\\\\windows\\\\application experience\\\\startupapptaskckeck",
+        "\\\\microsoft\\\\windows\\\\atpupd",
+        "\\\\microsoft\\\\windows\\\\data integrity scan\\\\data integrity update",
+        "\\\\microsoft\\\\windows\\\\defenderupdservice",
+        "\\\\microsoft\\\\windows\\\\iisupdateservice",
+        "\\\\microsoft\\\\windows\\\\speech\\\\speechmodelinstalltask",
+        "\\\\microsoft\\\\windows\\\\wimsdfs",
+        "\\\\microsoft\\\\windows\\\\windows defender\\\\defender update service",
+        "\\\\microsoft\\\\windows\\\\windows defender\\\\service update",
+        "\\\\microsoft\\\\windows\\\\windows error reporting\\\\checkreporting",
+        "\\\\microsoft\\\\windows\\\\windows error reporting\\\\submitreporting",
+        "\\\\microsoft\\\\windows\\\\windows filtering platform\\\\bfeonservicestart",
+        "\\\\microsoft\\\\windows\\\\windowsdefenderservice",
+        "\\\\microsoft\\\\windows\\\\windowsdefenderservice2",
+        "\\\\microsoft\\\\windows\\\\windowsupdate\\\\scheduled autocheck",
+        "\\\\microsoft\\\\windows\\\\windowsupdate\\\\scheduled check",
+        "\\\\windowupdate"
+      ],
+      "raw_values": [
+        "\\\\defender",
+        "\\\\Microsoft\\\\DefenderService",
+        "\\\\Microsoft\\\\Windows\\\\Application Experience\\\\StartupAppTaskCheck",
+        "\\\\Microsoft\\\\Windows\\\\Application Experience\\\\StartupAppTaskCkeck",
+        "\\\\Microsoft\\\\Windows\\\\ATPUpd",
+        "\\\\Microsoft\\\\Windows\\\\Data Integrity Scan\\\\Data Integrity Update",
+        "\\\\Microsoft\\\\Windows\\\\DefenderUPDService",
+        "\\\\Microsoft\\\\Windows\\\\IISUpdateService",
+        "\\\\Microsoft\\\\Windows\\\\Speech\\\\SpeechModelInstallTask",
+        "\\\\Microsoft\\\\Windows\\\\WiMSDFS",
+        "\\\\Microsoft\\\\Windows\\\\Windows Defender\\\\Defender Update Service",
+        "\\\\Microsoft\\\\Windows\\\\Windows Defender\\\\Service Update",
+        "\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\CheckReporting",
+        "\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\SubmitReporting",
+        "\\\\Microsoft\\\\Windows\\\\Windows Filtering Platform\\\\BfeOnServiceStart",
+        "\\\\Microsoft\\\\Windows\\\\WindowsDefenderService",
+        "\\\\Microsoft\\\\Windows\\\\WindowsDefenderService2",
+        "\\\\Microsoft\\\\Windows\\\\WindowsUpdate\\\\Scheduled AutoCheck",
+        "\\\\Microsoft\\\\Windows\\\\WindowsUpdate\\\\Scheduled Check",
+        "\\\\WindowUpdate"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ]
+}

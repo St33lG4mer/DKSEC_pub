@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_fltmc_unload_driver_sysmon",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_fltmc_unload_driver_sysmon.eql",
+  "raw_query": "any where (process.executable:\"*\\\\fltMC.exe\" or process.pe.original_file_name:\"fltMC.exe\") and (process.command_line:\"*unload*\" and process.command_line:\"*sysmon*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "fltmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\fltMC.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "fltmc.exe"
+      ],
+      "raw_values": [
+        "fltMC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "unload",
+        "sysmon"
+      ],
+      "raw_values": [
+        "*unload*",
+        "*sysmon*"
+      ]
+    }
+  ]
+}

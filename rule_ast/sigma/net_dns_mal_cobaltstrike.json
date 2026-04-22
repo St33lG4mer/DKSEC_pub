@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "net_dns_mal_cobaltstrike",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/network/dns/net_dns_mal_cobaltstrike.eql",
+  "raw_query": "any where (query like~ (\"aaa.stage.*\", \"post.1*\")) or query:\"*.stage.123456.*\"",
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": "like~",
+      "values": [
+        "aaa.stage.",
+        "post.1"
+      ],
+      "raw_values": [
+        "aaa.stage.*",
+        "post.1*"
+      ]
+    },
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        ".stage.123456."
+      ],
+      "raw_values": [
+        "*.stage.123456.*"
+      ]
+    }
+  ]
+}

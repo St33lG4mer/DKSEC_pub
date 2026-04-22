@@ -1,0 +1,161 @@
+{
+  "source": "elastic",
+  "name": "Network Connection Initiated by Suspicious SSHD Child Process",
+  "slug": "persistence_ssh_netcon",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_ssh_netcon.toml",
+  "raw_query": "sequence by host.id with maxspan=1s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.parent.executable == \"/usr/sbin/sshd\" and not process.command_line like (\"*ansible*\", \"*BECOME-SUCCESS*\")] by process.entity_id\n  [network where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"connection_attempted\" and (\n     process.executable like (\n       \"/tmp/*\", \"/var/tmp/*\", \"/dev/shm/*\", \"./*\", \"/run/*\", \"/var/run/*\", \"/boot/*\", \"/sys/*\", \"/lost+found/*\",\n       \"/proc/*\", \"/var/mail/*\", \"/var/www/*\", \"/home/*\", \"/root/*\" \n     ) or\n     process.name like~ (\n       // Hidden processes\n       \".*\",\n       // Suspicious file formats\n       \"*.elf\", \"*.sh\", \"*.py\", \"*.rb\", \"*.pl\", \"*.lua*\", \"*.php*\", \".js\",\n       // Scheduled tasks\n       \"systemd\", \"cron\", \"crond\",\n       // Network utilities often used for reverse shells\n       \"nc\", \"netcat\", \"ncat\", \"telnet\", \"socat\", \"openssl\", \"nc.openbsd\", \"ngrok\", \"nc.traditional\"\n     )\n   ) and  \n   not (\n     destination.ip == null or destination.ip == \"0.0.0.0\" or cidrmatch(\n       destination.ip, \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\", \"192.0.0.0/24\", \"192.0.0.0/29\",\n       \"192.0.0.8/32\", \"192.0.0.9/32\", \"192.0.0.10/32\", \"192.0.0.170/32\", \"192.0.0.171/32\", \"192.0.2.0/24\",\n       \"192.31.196.0/24\", \"192.52.193.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\", \"224.0.0.0/4\", \"100.64.0.0/10\",\n       \"192.175.48.0/24\",\"198.18.0.0/15\", \"198.51.100.0/24\", \"203.0.113.0/24\", \"240.0.0.0/4\", \"::1\", \"FE80::/10\",\n       \"FF00::/8\", \"172.31.0.0/16\"\n     ) or\n     process.executable in (\"/bin/yum\", \"/usr/bin/yum\") or\n     process.name in (\"login_duo\", \"ssh\", \"sshd\", \"sshd-session\", \"sqlplus\")\n   )\n  ] by process.parent.entity_id\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ansible",
+        "become-success"
+      ],
+      "raw_values": [
+        "*ansible*",
+        "*BECOME-SUCCESS*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        ".elf",
+        ".sh",
+        ".py",
+        ".rb",
+        ".pl",
+        ".lua",
+        ".php",
+        ".js",
+        "systemd",
+        "cron",
+        "crond",
+        "netcat",
+        "ncat",
+        "telnet",
+        "socat",
+        "openssl",
+        "nc.openbsd",
+        "ngrok",
+        "nc.traditional"
+      ],
+      "raw_values": [
+        ".*",
+        "*.elf",
+        "*.sh",
+        "*.py",
+        "*.rb",
+        "*.pl",
+        "*.lua*",
+        "*.php*",
+        ".js",
+        "systemd",
+        "cron",
+        "crond",
+        "nc",
+        "netcat",
+        "ncat",
+        "telnet",
+        "socat",
+        "openssl",
+        "nc.openbsd",
+        "ngrok",
+        "nc.traditional"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "yum",
+        "login_duo",
+        "ssh",
+        "sshd",
+        "sshd-session",
+        "sqlplus"
+      ],
+      "raw_values": [
+        "/bin/yum",
+        "/usr/bin/yum",
+        "login_duo",
+        "ssh",
+        "sshd",
+        "sshd-session",
+        "sqlplus"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "exec",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "sshd"
+      ],
+      "raw_values": [
+        "/usr/sbin/sshd"
+      ]
+    },
+    {
+      "field": "destination.ip",
+      "raw_field": "destination.ip",
+      "operator": "==",
+      "values": [
+        "0.0.0.0"
+      ],
+      "raw_values": [
+        "0.0.0.0"
+      ]
+    }
+  ]
+}

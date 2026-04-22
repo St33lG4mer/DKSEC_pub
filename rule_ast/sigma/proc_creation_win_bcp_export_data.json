@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_bcp_export_data",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_bcp_export_data.eql",
+  "raw_query": "any where (process.executable:\"*\\\\bcp.exe\" or process.pe.original_file_name:\"BCP.exe\") and (process.command_line like~ (\"* out *\", \"* queryout *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "out",
+        "queryout"
+      ],
+      "raw_values": [
+        "* out *",
+        "* queryout *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bcp.exe"
+      ],
+      "raw_values": [
+        "*\\\\bcp.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bcp.exe"
+      ],
+      "raw_values": [
+        "BCP.exe"
+      ]
+    }
+  ]
+}

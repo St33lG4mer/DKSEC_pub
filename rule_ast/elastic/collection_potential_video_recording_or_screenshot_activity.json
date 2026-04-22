@@ -1,0 +1,122 @@
+{
+  "source": "elastic",
+  "name": "Linux Video Recording or Screenshot Activity Detected",
+  "slug": "collection_potential_video_recording_or_screenshot_activity",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/collection_potential_video_recording_or_screenshot_activity.toml",
+  "raw_query": "event.category:process and host.os.type:\"linux\" and event.type:\"start\" and event.action:(\"exec\" or \"exec_event\" or \"start\") and\nprocess.name:(\n  \"gnome-screenshot\" or \"spectacle\" or \"xfce4-screenshooter\" or \"mate-screenshot\" or \"scrot\" or \"maim\" or \"import\" or \"grim\" or\n  \"grimshot\" or \"slurp\" or \"flameshot\" or \"shutter\" or \"ksnip\" or \"deepin-screenshot\" or \"simplescreenrecorder\" or \"kazam\" or\n  \"vokoscreen\" or \"recordmydesktop\" or \"obs\" or \"obs-studio\"\n) and\nnot process.args:(\"-h\" or \"--help\" or \"--version\")\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exec",
+        "exec_event",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "gnome-screenshot",
+        "spectacle",
+        "xfce4-screenshooter",
+        "mate-screenshot",
+        "scrot",
+        "maim",
+        "import",
+        "grim",
+        "grimshot",
+        "slurp",
+        "flameshot",
+        "shutter",
+        "ksnip",
+        "deepin-screenshot",
+        "simplescreenrecorder",
+        "kazam",
+        "vokoscreen",
+        "recordmydesktop",
+        "obs",
+        "obs-studio"
+      ],
+      "raw_values": [
+        "gnome-screenshot",
+        "spectacle",
+        "xfce4-screenshooter",
+        "mate-screenshot",
+        "scrot",
+        "maim",
+        "import",
+        "grim",
+        "grimshot",
+        "slurp",
+        "flameshot",
+        "shutter",
+        "ksnip",
+        "deepin-screenshot",
+        "simplescreenrecorder",
+        "kazam",
+        "vokoscreen",
+        "recordmydesktop",
+        "obs",
+        "obs-studio"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--help",
+        "--version"
+      ],
+      "raw_values": [
+        "-h",
+        "--help",
+        "--version"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

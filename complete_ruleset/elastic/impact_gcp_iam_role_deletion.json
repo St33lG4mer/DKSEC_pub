@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "GCP IAM Role Deletion",
+  "slug": "impact_gcp_iam_role_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: GCP",
+    "Data Source: Google Cloud Platform",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/gcp/impact_gcp_iam_role_deletion.toml",
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.iam.admin.v*.DeleteRole and event.outcome:success\n",
+  "conditions": []
+}

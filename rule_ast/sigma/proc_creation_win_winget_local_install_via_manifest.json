@@ -1,0 +1,48 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_winget_local_install_via_manifest",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_winget_local_install_via_manifest.eql",
+  "raw_query": "any where (process.executable:\"*\\\\winget.exe\" or process.pe.original_file_name:\"winget.exe\") and (process.command_line like~ (\"*install*\", \"* add *\")) and (process.command_line like~ (\"*-m *\", \"*--manifest*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "install",
+        "add",
+        "--manifest"
+      ],
+      "raw_values": [
+        "*install*",
+        "* add *",
+        "*-m *",
+        "*--manifest*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winget.exe"
+      ],
+      "raw_values": [
+        "*\\\\winget.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "winget.exe"
+      ],
+      "raw_values": [
+        "winget.exe"
+      ]
+    }
+  ]
+}

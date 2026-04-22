@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_decode_gzip",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_decode_gzip.eql",
+  "raw_query": "any where process.command_line:\"*GZipStream*\" and process.command_line:\"*::Decompress*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "gzipstream",
+        "::decompress"
+      ],
+      "raw_values": [
+        "*GZipStream*",
+        "*::Decompress*"
+      ]
+    }
+  ]
+}

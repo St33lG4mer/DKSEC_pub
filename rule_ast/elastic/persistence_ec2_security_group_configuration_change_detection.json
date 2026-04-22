@@ -1,0 +1,78 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Security Group Configuration Change",
+  "slug": "persistence_ec2_security_group_configuration_change_detection",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Network Security Monitoring",
+    "Resources: Investigation Guide",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion"
+  ],
+  "elastic_path": "rules/integrations/aws/persistence_ec2_security_group_configuration_change_detection.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ec2.amazonaws.com\"  and event.outcome: \"success\"\n    and (event.action:(\n            \"AuthorizeSecurityGroupIngress\" or\n            \"AuthorizeSecurityGroupEgress\" or\n            \"CreateSecurityGroup\" or\n            \"ModifySecurityGroupRules\" or\n            \"RevokeSecurityGroupEgress\" or\n            \"RevokeSecurityGroupIngress\") or \n            (event.action: \"ModifyInstanceAttribute\" and aws.cloudtrail.flattened.request_parameters.groupSet.items.groupId:*))\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "authorizesecuritygroupingress",
+        "authorizesecuritygroupegress",
+        "createsecuritygroup",
+        "modifysecuritygrouprules",
+        "revokesecuritygroupegress",
+        "revokesecuritygroupingress",
+        "modifyinstanceattribute"
+      ],
+      "raw_values": [
+        "AuthorizeSecurityGroupIngress",
+        "AuthorizeSecurityGroupEgress",
+        "CreateSecurityGroup",
+        "ModifySecurityGroupRules",
+        "RevokeSecurityGroupEgress",
+        "RevokeSecurityGroupIngress",
+        "ModifyInstanceAttribute"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

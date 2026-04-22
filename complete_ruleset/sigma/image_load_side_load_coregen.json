@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_coregen",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_coregen.eql",
+  "raw_query": "any where process.executable:\"*\\\\coregen.exe\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Silverlight\\\\*\", \"C:\\\\Program Files\\\\Microsoft Silverlight\\\\*\", \"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "coregen.exe"
+      ],
+      "raw_values": [
+        "*\\\\coregen.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "source": "elastic",
+  "name": "AWS RDS DB Instance or Cluster Deletion Protection Disabled",
+  "slug": "impact_rds_instance_cluster_deletion_protection_disabled",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS RDS",
+    "Resources: Investigation Guide",
+    "Use Case: Threat Detection",
+    "Tactic: Impact"
+  ],
+  "elastic_path": "rules/integrations/aws/impact_rds_instance_cluster_deletion_protection_disabled.toml",
+  "raw_query": "any where data_stream.dataset == \"aws.cloudtrail\"\n    and event.provider == \"rds.amazonaws.com\"\n    and event.action in (\"ModifyDBInstance\", \"ModifyDBCluster\")\n    and event.outcome == \"success\"\n    and stringContains(aws.cloudtrail.request_parameters, \"deletionProtection=false\")\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "modifydbinstance",
+        "modifydbcluster"
+      ],
+      "raw_values": [
+        "ModifyDBInstance",
+        "ModifyDBCluster"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "rds.amazonaws.com"
+      ],
+      "raw_values": [
+        "rds.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

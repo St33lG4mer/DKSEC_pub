@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "AWS IAM AdministratorAccess Policy Attached to Group",
+  "slug": "privilege_escalation_iam_administratoraccess_policy_attached_to_group",
+  "category": "iam",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS IAM",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Privilege Escalation",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/privilege_escalation_iam_administratoraccess_policy_attached_to_group.toml",
+  "raw_query": "iam where data_stream.dataset == \"aws.cloudtrail\"\n   and event.provider == \"iam.amazonaws.com\"\n   and event.action == \"AttachGroupPolicy\"\n   and event.outcome == \"success\"\n   and stringContains(aws.cloudtrail.request_parameters, \"policyArn=arn:aws:iam::aws:policy/AdministratorAccess\")\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "attachgrouppolicy"
+      ],
+      "raw_values": [
+        "AttachGroupPolicy"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

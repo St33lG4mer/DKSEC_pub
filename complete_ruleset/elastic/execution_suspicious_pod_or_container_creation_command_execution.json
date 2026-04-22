@@ -1,0 +1,214 @@
+{
+  "source": "elastic",
+  "name": "Pod or Container Creation with Suspicious Command-Line",
+  "slug": "execution_suspicious_pod_or_container_creation_command_execution",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "Domain: Container",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Privilege Escalation",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_suspicious_pod_or_container_creation_command_execution.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and (\n  (process.name == \"kubectl\" and process.args == \"run\" and process.args == \"--restart=Never\" and process.args == \"--\") or\n  (process.name in (\"docker\", \"nerdctl\", \"ctl\") and process.args == \"run\")\n) and \nprocess.args in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and\nprocess.command_line like~ (\n  \"*atd*\", \"*cron*\", \"*/etc/rc.local*\", \"*/dev/tcp/*\", \"*/etc/init.d*\", \"*/etc/update-motd.d*\", \"*/etc/ld.so*\", \"*/etc/sudoers*\", \"*base64 *\",\n  \"*/etc/profile*\", \"*/etc/ssh*\", \"*/home/*/.ssh/*\", \"*/root/.ssh*\" , \"*~/.ssh/*\", \"*autostart*\", \"*xxd *\", \"*/etc/shadow*\", \"*./.*\",\n  \"*import*pty*spawn*\", \"*import*subprocess*call*\", \"*TCPSocket.new*\", \"*TCPSocket.open*\", \"*io.popen*\", \"*os.execute*\", \"*fsockopen*\",\n  \"*disown*\", \"* ncat *\", \"* nc *\", \"* netcat *\",  \"* nc.traditional *\", \"*socat*\", \"*telnet*\", \"*/tmp/*\", \"*/dev/shm/*\", \"*/var/tmp/*\",\n  \"*/boot/*\", \"*/sys/*\", \"*/lost+found/*\", \"*/media/*\", \"*/proc/*\", \"*/var/backups/*\", \"*/var/log/*\", \"*/var/mail/*\", \"*/var/spool/*\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "atd",
+        "cron",
+        "rc.local",
+        "init.d",
+        "update-motd.d",
+        "ld.so",
+        "sudoers",
+        "base64",
+        "profile",
+        "ssh",
+        ".ssh",
+        "autostart",
+        "xxd",
+        "shadow",
+        "import*pty*spawn",
+        "import*subprocess*call",
+        "tcpsocket.new",
+        "tcpsocket.open",
+        "io.popen",
+        "os.execute",
+        "fsockopen",
+        "disown",
+        "ncat",
+        "netcat",
+        "nc.traditional",
+        "socat",
+        "telnet"
+      ],
+      "raw_values": [
+        "*atd*",
+        "*cron*",
+        "*/etc/rc.local*",
+        "*/dev/tcp/*",
+        "*/etc/init.d*",
+        "*/etc/update-motd.d*",
+        "*/etc/ld.so*",
+        "*/etc/sudoers*",
+        "*base64 *",
+        "*/etc/profile*",
+        "*/etc/ssh*",
+        "*/home/*/.ssh/*",
+        "*/root/.ssh*",
+        "*~/.ssh/*",
+        "*autostart*",
+        "*xxd *",
+        "*/etc/shadow*",
+        "*./.*",
+        "*import*pty*spawn*",
+        "*import*subprocess*call*",
+        "*TCPSocket.new*",
+        "*TCPSocket.open*",
+        "*io.popen*",
+        "*os.execute*",
+        "*fsockopen*",
+        "*disown*",
+        "* ncat *",
+        "* nc *",
+        "* netcat *",
+        "* nc.traditional *",
+        "*socat*",
+        "*telnet*",
+        "*/tmp/*",
+        "*/dev/shm/*",
+        "*/var/tmp/*",
+        "*/boot/*",
+        "*/sys/*",
+        "*/lost+found/*",
+        "*/media/*",
+        "*/proc/*",
+        "*/var/backups/*",
+        "*/var/log/*",
+        "*/var/mail/*",
+        "*/var/spool/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "docker",
+        "nerdctl",
+        "ctl"
+      ],
+      "raw_values": [
+        "docker",
+        "nerdctl",
+        "ctl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "kubectl"
+      ],
+      "raw_values": [
+        "kubectl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "run",
+        "--restart=never"
+      ],
+      "raw_values": [
+        "run",
+        "--restart=Never",
+        "--"
+      ]
+    }
+  ]
+}

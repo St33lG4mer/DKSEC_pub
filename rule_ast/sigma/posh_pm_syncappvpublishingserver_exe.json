@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "posh_pm_syncappvpublishingserver_exe",
+  "subtree": "rules",
+  "category": "powershell",
+  "sigma_path": "rules/windows/powershell/powershell_module/posh_pm_syncappvpublishingserver_exe.eql",
+  "raw_query": "any where winlog.event_data.ContextInfo:\"*SyncAppvPublishingServer.exe*\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": ":",
+      "values": [
+        "syncappvpublishingserver.exe"
+      ],
+      "raw_values": [
+        "*SyncAppvPublishingServer.exe*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "source": "elastic",
+  "name": "GenAI Process Connection to Unusual Domain",
+  "slug": "command_and_control_genai_process_unusual_domain",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide",
+    "Domain: LLM",
+    "Mitre Atlas: T0086"
+  ],
+  "elastic_path": "rules/cross-platform/command_and_control_genai_process_unusual_domain.toml",
+  "raw_query": "event.category:network and host.os.type:macos and event.action:connection_attempted and\n(\n  process.name:(\n    Claude or \"Claude Helper\" or \"Claude Helper (Plugin)\" or Copilot or Cursor or\n    \"Cursor Helper\" or \"Cursor Helper (Plugin)\" or GPT4All or Jan or \"Jan Helper\" or\n    KoboldCpp or \"LM Studio\" or Ollama or Windsurf or \"Windsurf Helper\" or\n    \"Windsurf Helper (Plugin)\" or bunx or claude or codex or copilot or cursor or deno or\n    gemini-cli or genaiscript or gpt4all or grok or jan or koboldcpp or llama-cli or\n    llama-server or lmstudio or npx or ollama or pnpm or qwen or textgen or windsurf or yarn\n  ) or\n  (process.name:(node or node.exe) and process.command_line:(*openclaw* or *moltbot* or *clawdbot*))\n) and destination.domain:(* and not (\n    aka.ms or anthropic.com or atlassian.com or cursor.com or cursor.sh or github.com or\n    gpt4all.io or hf.co or huggingface.co or lmstudio.ai or localhost or ollama.ai or\n    ollama.com or openai.com or *.aka.ms or *.akamaized.net or *.amazonaws.com or\n    *.amplitude.com or *.anthropic.com or *.atlassian.com or *.aws.amazon.com or\n    *.azure.com or *.cdn.cloudflare.net or *.cloudflare-dns.com or *.cloudflare.com or\n    *.cloudflarestorage.com or *.codeium.com or *.cursor.com or *.cursor.sh or\n    *.datadoghq.com or *.elastic-cloud.com or *.elastic.co or *.exp-tas.com or\n    *.gemini.google.com or *.generativelanguage.googleapis.com or *.github.com or\n    *.githubcopilot.com or *.githubusercontent.com or *.gitkraken.com or *.gitkraken.dev or\n    *.google.com or *.googleapis.com or *.gpt4all.io or *.grok.x.ai or *.hf.co or\n    *.honeycomb.io or *.huggingface.co or *.intercom.io or *.jan.ai or *.launchdarkly.com or\n    *.lmstudio.ai or *.microsoft.com or *.mixpanel.com or *.msedge.net or *.npmjs.com or\n    *.npmjs.org or *.ollama.ai or *.ollama.com or *.openai.com or *.pypi.org or\n    *.r2.cloudflarestorage.com or *.segment.io or *.sentry.io or *.visualstudio.com or\n    *.vsassets.io or *.vscode-cdn.net or *.windsurf.ai or *.x.ai or *.yarnpkg.com or\n    *.cartocdn.com or *.chatgpt.com or *.claude.ai or *.claude.com or\n    *.claudeusercontent.com or *.ggpht.com or *.gstatic.com or *.googleusercontent.com or\n    *.launchpadcontent.net or *.pythonhosted.org or *.recaptcha.net or *.shields.io or\n    *.snapcraftcontent.com or *.snapcraft.io or *.stripe.com or *.travis-ci.com or\n    *.travis-ci.org or *.ubuntu.com or *.ytimg.com or\n    *.github.io or *.githubassets.com or *.jsdelivr.net or *.nodesource.com or\n    chatgpt.com or claude.ai or claude.com or flagcdn.com or gitlab.com or\n    opencollective.com or pypi.org\n))\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "claude helper"
+      ],
+      "raw_values": [
+        "Claude Helper"
+      ]
+    }
+  ]
+}

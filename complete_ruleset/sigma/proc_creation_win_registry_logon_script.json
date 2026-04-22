@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_registry_logon_script",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_registry_logon_script.eql",
+  "raw_query": "any where process.command_line:\"*UserInitMprLogonScript*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "userinitmprlogonscript"
+      ],
+      "raw_values": [
+        "*UserInitMprLogonScript*"
+      ]
+    }
+  ]
+}

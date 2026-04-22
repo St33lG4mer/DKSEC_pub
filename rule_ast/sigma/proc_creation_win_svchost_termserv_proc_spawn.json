@@ -1,0 +1,40 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_svchost_termserv_proc_spawn",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_svchost_termserv_proc_spawn.eql",
+  "raw_query": "any where (process.parent.command_line:\"*\\\\svchost.exe*\" and process.parent.command_line:\"*termsvcs*\") and (not ((process.executable like~ (\"*\\\\rdpclip.exe\", \"*:\\\\Windows\\\\System32\\\\csrss.exe\", \"*:\\\\Windows\\\\System32\\\\wininit.exe\", \"*:\\\\Windows\\\\System32\\\\winlogon.exe\")) or (?process.executable == null)))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rdpclip.exe",
+        "csrss.exe",
+        "wininit.exe",
+        "winlogon.exe"
+      ],
+      "raw_values": [
+        "*\\\\rdpclip.exe",
+        "*:\\\\Windows\\\\System32\\\\csrss.exe",
+        "*:\\\\Windows\\\\System32\\\\wininit.exe",
+        "*:\\\\Windows\\\\System32\\\\winlogon.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "svchost.exe",
+        "termsvcs"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe*",
+        "*termsvcs*"
+      ]
+    }
+  ]
+}

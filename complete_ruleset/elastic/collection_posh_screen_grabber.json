@@ -1,0 +1,44 @@
+{
+  "source": "elastic",
+  "name": "PowerShell Suspicious Script with Screenshot Capabilities",
+  "slug": "collection_posh_screen_grabber",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Resources: Investigation Guide",
+    "Data Source: PowerShell Logs"
+  ],
+  "elastic_path": "rules/windows/collection_posh_screen_grabber.toml",
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n    CopyFromScreen and\n    (\"System.Drawing.Bitmap\" or \"Drawing.Bitmap\")\n  ) and not user.id : \"S-1-5-18\"\n",
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "system.drawing.bitmap",
+        "drawing.bitmap"
+      ],
+      "raw_values": [
+        "System.Drawing.Bitmap",
+        "Drawing.Bitmap"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ]
+}

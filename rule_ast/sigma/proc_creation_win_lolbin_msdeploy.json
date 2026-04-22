@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_msdeploy",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_msdeploy.eql",
+  "raw_query": "any where (process.command_line:\"*verb:sync*\" and process.command_line:\"*-source:RunCommand*\" and process.command_line:\"*-dest:runCommand*\") and process.executable:\"*\\\\msdeploy.exe\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "verb:sync",
+        "-source:runcommand",
+        "-dest:runcommand"
+      ],
+      "raw_values": [
+        "*verb:sync*",
+        "*-source:RunCommand*",
+        "*-dest:runCommand*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdeploy.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdeploy.exe"
+      ]
+    }
+  ]
+}

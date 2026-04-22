@@ -1,0 +1,30 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_creation_system_dll_files",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_creation_system_dll_files.eql",
+  "raw_query": "any where (file.path like~ (\"*\\\\secur32.dll\", \"*\\\\tdh.dll\")) and (not (file.path like~ (\"*C:\\\\$WINDOWS.~BT\\\\*\", \"*C:\\\\$WinREAgent\\\\*\", \"*C:\\\\Windows\\\\SoftwareDistribution\\\\*\", \"*C:\\\\Windows\\\\System32\\\\*\", \"*C:\\\\Windows\\\\SysWOW64\\\\*\", \"*C:\\\\Windows\\\\WinSxS\\\\*\", \"*C:\\\\Windows\\\\uus\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "secur32.dll",
+        "tdh.dll"
+      ],
+      "raw_values": [
+        "*\\\\secur32.dll",
+        "*\\\\tdh.dll",
+        "*C:\\\\$WINDOWS.~BT\\\\*",
+        "*C:\\\\$WinREAgent\\\\*",
+        "*C:\\\\Windows\\\\SoftwareDistribution\\\\*",
+        "*C:\\\\Windows\\\\System32\\\\*",
+        "*C:\\\\Windows\\\\SysWOW64\\\\*",
+        "*C:\\\\Windows\\\\WinSxS\\\\*",
+        "*C:\\\\Windows\\\\uus\\\\*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+title = "DKSec Gitleaks Config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Ignore local virtual environment and cache artifacts"
+paths = [
+  '''(^|/)venv/''',
+  '''(^|/)__pycache__/''',
+  '''(^|/)gitleaks-.*\.json$''',
+  '''(^|/)scan_output\.txt$''',
+]

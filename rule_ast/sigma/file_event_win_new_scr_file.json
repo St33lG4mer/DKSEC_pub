@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_new_scr_file",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_new_scr_file.eql",
+  "raw_query": "any where file.path:\"*.scr\" and (not (file.path like~ (\"*:\\\\$WINDOWS.~BT\\\\NewOS\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\", \"*:\\\\Windows\\\\WinSxS\\\\*\", \"*:\\\\WUDownloadCache\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".scr"
+      ],
+      "raw_values": [
+        "*.scr"
+      ]
+    }
+  ]
+}

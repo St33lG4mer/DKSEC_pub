@@ -1,0 +1,189 @@
+{
+  "source": "elastic",
+  "name": "Kernel Module Load via Built-in Utility",
+  "slug": "persistence_insmod_kernel_module_load",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Threat: Rootkit",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_insmod_kernel_module_load.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and (\n  (process.name == \"kmod\" and process.args == \"insmod\" and process.args like~ \"*.ko*\") or\n  (process.name == \"kmod\" and process.args == \"modprobe\" and not process.args in (\"-r\", \"--remove\")) or\n  (process.name == \"insmod\" and process.args like~ \"*.ko*\") or\n  (process.name == \"modprobe\" and not process.args in (\"-r\", \"--remove\"))\n) and\nnot (\n  ?process.parent.executable like (\"/opt/ds_agent/*\", \"/opt/TrendMicro/vls_agent/*\", \"/opt/intel/oneapi/*\") or\n  ?process.working_directory in (\"/opt/vinchin/agent\", \"/var/opt/ds_agent/am\", \"/opt/ds_agent\", \"/var/opt/TrendMicro/vls_agent/am\") or\n  ?process.parent.executable in (\n    \"/usr/lib/uptrack/ksplice-apply\", \"/opt/commvault/commvault/Base/linux_drv\", \"/opt/cisco/amp/bin/cisco-amp-helper\",\n    \"/usr/bin/kcarectl\", \"/usr/share/ksplice/ksplice-apply\", \"/opt/commvault/Base/linux_drv\", \"/usr/sbin/veeamsnap-loader\",\n    \"/bin/falcoctl\"\n  ) or\n  (?process.parent.name like (\"python*\", \"platform-python*\") and ?process.parent.args in (\"--smart-update\", \"--auto-update\"))\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "python",
+        "platform-python"
+      ],
+      "raw_values": [
+        "/opt/ds_agent/*",
+        "/opt/TrendMicro/vls_agent/*",
+        "/opt/intel/oneapi/*",
+        "python*",
+        "platform-python*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--remove"
+      ],
+      "raw_values": [
+        "-r",
+        "--remove"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "in",
+      "values": [
+        "/opt/vinchin/agent",
+        "/var/opt/ds_agent/am",
+        "/opt/ds_agent",
+        "/var/opt/trendmicro/vls_agent/am"
+      ],
+      "raw_values": [
+        "/opt/vinchin/agent",
+        "/var/opt/ds_agent/am",
+        "/opt/ds_agent",
+        "/var/opt/TrendMicro/vls_agent/am"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "ksplice-apply",
+        "linux_drv",
+        "cisco-amp-helper",
+        "kcarectl",
+        "veeamsnap-loader",
+        "falcoctl"
+      ],
+      "raw_values": [
+        "/usr/lib/uptrack/ksplice-apply",
+        "/opt/commvault/commvault/Base/linux_drv",
+        "/opt/cisco/amp/bin/cisco-amp-helper",
+        "/usr/bin/kcarectl",
+        "/usr/share/ksplice/ksplice-apply",
+        "/opt/commvault/Base/linux_drv",
+        "/usr/sbin/veeamsnap-loader",
+        "/bin/falcoctl"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "--smart-update",
+        "--auto-update"
+      ],
+      "raw_values": [
+        "--smart-update",
+        "--auto-update"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "kmod",
+        "insmod",
+        "modprobe"
+      ],
+      "raw_values": [
+        "kmod",
+        "insmod",
+        "modprobe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "insmod",
+        "modprobe"
+      ],
+      "raw_values": [
+        "insmod",
+        "modprobe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        ".ko"
+      ],
+      "raw_values": [
+        "*.ko*"
+      ]
+    }
+  ]
+}

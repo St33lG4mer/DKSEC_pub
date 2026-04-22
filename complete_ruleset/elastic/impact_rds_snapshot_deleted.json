@@ -1,0 +1,100 @@
+{
+  "source": "elastic",
+  "name": "AWS RDS Snapshot Deleted",
+  "slug": "impact_rds_snapshot_deleted",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS RDS",
+    "Use Case: Asset Visibility",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/impact_rds_snapshot_deleted.toml",
+  "raw_query": "any where data_stream.dataset == \"aws.cloudtrail\"\n    and event.provider == \"rds.amazonaws.com\"\n    and event.outcome == \"success\"\n    and (\n        event.action in (\"DeleteDBSnapshot\", \"DeleteDBClusterSnapshot\") or\n        (event.action == \"ModifyDBInstance\" and stringContains(aws.cloudtrail.request_parameters, \"backupRetentionPeriod=0\"))\n    )\n    and not (\n        user_agent.original == \"backup.amazonaws.com\" \n        and source.address == \"backup.amazonaws.com\"\n    )\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "deletedbsnapshot",
+        "deletedbclustersnapshot"
+      ],
+      "raw_values": [
+        "DeleteDBSnapshot",
+        "DeleteDBClusterSnapshot"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "rds.amazonaws.com"
+      ],
+      "raw_values": [
+        "rds.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modifydbinstance"
+      ],
+      "raw_values": [
+        "ModifyDBInstance"
+      ]
+    },
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": "==",
+      "values": [
+        "backup.amazonaws.com"
+      ],
+      "raw_values": [
+        "backup.amazonaws.com"
+      ]
+    },
+    {
+      "field": "source.address",
+      "raw_field": "source.address",
+      "operator": "==",
+      "values": [
+        "backup.amazonaws.com"
+      ],
+      "raw_values": [
+        "backup.amazonaws.com"
+      ]
+    }
+  ]
+}

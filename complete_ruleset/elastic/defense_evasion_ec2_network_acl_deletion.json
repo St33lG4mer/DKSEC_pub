@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Network Access Control List Deletion",
+  "slug": "defense_evasion_ec2_network_acl_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Network Security Monitoring",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/defense_evasion_ec2_network_acl_deletion.toml",
+  "raw_query": "data_stream.dataset:aws.cloudtrail and event.provider:ec2.amazonaws.com and event.action:(DeleteNetworkAcl or DeleteNetworkAclEntry) and event.outcome:success\n",
+  "conditions": []
+}

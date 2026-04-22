@@ -1,0 +1,65 @@
+{
+  "source": "elastic",
+  "name": "Successful Application SSO from Rare Unknown Client Device",
+  "slug": "initial_access_successful_application_sso_from_unknown_client_device",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: SaaS",
+    "Data Source: Okta",
+    "Use Case: Threat Detection",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/okta/initial_access_successful_application_sso_from_unknown_client_device.toml",
+  "raw_query": "data_stream.dataset: \"okta.system\"\n    and event.action: \"user.authentication.sso\"\n    and event.outcome: \"success\"\n    and okta.client.device: (\"Unknown\" or \"unknown\")\n",
+  "conditions": [
+    {
+      "field": "okta.client.device",
+      "raw_field": "okta.client.device",
+      "operator": ":",
+      "values": [
+        "unknown"
+      ],
+      "raw_values": [
+        "Unknown",
+        "unknown"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "user.authentication.sso"
+      ],
+      "raw_values": [
+        "user.authentication.sso"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "source": "elastic",
+  "name": "AWS IAM API Calls via Temporary Session Tokens",
+  "slug": "persistence_iam_api_calls_via_user_session_token",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS CloudTrail",
+    "Data Source: AWS IAM",
+    "Data Source: AWS STS",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/persistence_iam_api_calls_via_user_session_token.toml",
+  "raw_query": "data_stream.dataset: aws.cloudtrail\n    and event.provider: (\"iam.amazonaws.com\")\n    and event.outcome: \"success\"\n    and aws.cloudtrail.user_identity.type: \"IAMUser\"\n    and aws.cloudtrail.user_identity.access_key_id: ASIA*\n    and source.ip: *\n    and not user_agent.original : \"AWS Internal\"\n    and not aws.cloudtrail.session_credential_from_console: true\n",
+  "conditions": [
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": ":",
+      "values": [
+        "iamuser"
+      ],
+      "raw_values": [
+        "IAMUser"
+      ]
+    },
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": ":",
+      "values": [
+        "aws internal"
+      ],
+      "raw_values": [
+        "AWS Internal"
+      ]
+    }
+  ]
+}

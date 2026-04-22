@@ -1,0 +1,1 @@
+any where (process.executable:"*:\\ProgramData\\clip.exe" and file.path:"*:\\ProgramData\\Version.dll") or (process.executable:"*:\\ProgramData\\wsmprovhost.exe" and file.path:"*:\\ProgramData\\DSROLE.dll")

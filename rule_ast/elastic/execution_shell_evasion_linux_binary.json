@@ -1,0 +1,273 @@
+{
+  "source": "elastic",
+  "name": "Linux Restricted Shell Breakout via Linux Binary(s)",
+  "slug": "execution_shell_evasion_linux_binary",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_shell_evasion_linux_binary.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and process.executable != null and\n(\n  /* launching shell from capsh */\n  (process.name == \"capsh\" and process.args == \"--\" and not process.parent.executable == \"/usr/bin/log4j-cve-2021-44228-hotpatch\") or\n\n  /* launching shells from unusual parents or parent+arg combos */\n  (process.name in (\"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and (\n    (process.parent.name : \"*awk\" and process.parent.args : \"BEGIN {system(*)}\") or\n    (process.parent.name == \"git\" and process.parent.args : (\"!*sh\", \"exec *sh\") and not process.name == \"ssh\" ) or\n    (process.parent.name : (\"byebug\", \"ftp\", \"strace\", \"zip\", \"tar\") and\n    (\n      process.parent.args : \"BEGIN {system(*)}\" or\n      (\n        (process.parent.args : \"exec=*sh\" or (process.parent.args : \"-I\" and process.parent.args : \"*sh\")) or\n        (process.args : \"exec=*sh\" or (process.args : \"-I\" and process.args : \"*sh\"))\n        )\n      )\n    ) or\n\n    /* shells specified in parent args */\n    /* nice rule is broken in 8.2 */\n    (process.parent.args : \"*sh\" and\n      (\n        (process.parent.name == \"nice\") or\n        (process.parent.name == \"cpulimit\" and process.parent.args == \"-f\") or\n        (process.parent.name == \"find\" and process.parent.args == \".\" and process.parent.args == \"-exec\" and\n         process.parent.args == \";\" and process.parent.args : \"/bin/*sh\") or\n        (process.parent.name == \"flock\" and process.parent.args == \"-u\" and process.parent.args == \"/\")\n      )\n    )\n  )) or\n\n  /* shells specified in args */\n  (process.args : \"*sh\" and (\n    (process.parent.name == \"crash\" and process.parent.args == \"-h\") or\n    (process.name == \"sensible-pager\" and process.parent.name in (\"apt\", \"apt-get\") and process.parent.args == \"changelog\")\n    /* scope to include more sensible-pager invoked shells with different parent process to reduce noise and remove false positives */\n\n  )) or\n  (process.name == \"busybox\" and event.action == \"exec\" and process.args_count == 2 and process.args : \"*sh\" and not\n   process.executable : \"/var/lib/docker/overlay2/*/merged/bin/busybox\" and not (process.parent.args == \"init\" and\n   process.parent.args == \"runc\") and not process.parent.args in (\"ls-remote\", \"push\", \"fetch\") and not process.parent.name == \"mkinitramfs\" and\n   not process.parent.executable == \"/bin/busybox\") or\n  (process.name == \"env\" and process.args_count == 2 and process.args : \"*sh\") or\n  (process.parent.name in (\"vi\", \"vim\") and process.parent.args == \"-c\" and process.parent.args : \":!*sh\") or\n  (process.parent.name in (\"c89\", \"c99\", \"gcc\") and process.parent.args : \"*sh,-s\" and process.parent.args == \"-wrapper\") or\n  (process.parent.name == \"expect\" and process.parent.args == \"-c\" and process.parent.args : \"spawn *sh;interact\") or\n  (process.parent.name == \"mysql\" and process.parent.args == \"-e\" and process.parent.args : \"\\\\!*sh\") or\n  (process.parent.name == \"ssh\" and process.parent.args == \"-o\" and process.parent.args : \"ProxyCommand=;*sh 0<&2 1>&2\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "!*sh",
+        "exec *sh",
+        "begin {system(*)}",
+        "exec=*sh",
+        "/bin/*sh",
+        ":!*sh",
+        "sh,-s",
+        "spawn *sh;interact",
+        "\\\\!*sh",
+        "proxycommand=;*sh 0<&2 1>&2"
+      ],
+      "raw_values": [
+        "!*sh",
+        "exec *sh",
+        "BEGIN {system(*)}",
+        "exec=*sh",
+        "-I",
+        "*sh",
+        "/bin/*sh",
+        ":!*sh",
+        "*sh,-s",
+        "spawn *sh;interact",
+        "\\\\!*sh",
+        "ProxyCommand=;*sh 0<&2 1>&2"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "byebug",
+        "ftp",
+        "strace",
+        "zip",
+        "tar",
+        "awk"
+      ],
+      "raw_values": [
+        "byebug",
+        "ftp",
+        "strace",
+        "zip",
+        "tar",
+        "*awk"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "apt",
+        "apt-get",
+        "vim",
+        "c89",
+        "c99",
+        "gcc"
+      ],
+      "raw_values": [
+        "apt",
+        "apt-get",
+        "vi",
+        "vim",
+        "c89",
+        "c99",
+        "gcc"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "ls-remote",
+        "push",
+        "fetch"
+      ],
+      "raw_values": [
+        "ls-remote",
+        "push",
+        "fetch"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "capsh",
+        "ssh",
+        "sensible-pager",
+        "busybox",
+        "env"
+      ],
+      "raw_values": [
+        "capsh",
+        "ssh",
+        "sensible-pager",
+        "busybox",
+        "env"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "log4j-cve-2021-44228-hotpatch",
+        "git",
+        "nice",
+        "cpulimit",
+        "find",
+        "flock",
+        "crash",
+        "mkinitramfs",
+        "busybox",
+        "expect",
+        "mysql",
+        "ssh"
+      ],
+      "raw_values": [
+        "/usr/bin/log4j-cve-2021-44228-hotpatch",
+        "git",
+        "nice",
+        "cpulimit",
+        "find",
+        "flock",
+        "crash",
+        "mkinitramfs",
+        "/bin/busybox",
+        "expect",
+        "mysql",
+        "ssh"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "exec=*sh"
+      ],
+      "raw_values": [
+        "exec=*sh",
+        "-I",
+        "*sh"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "-exec",
+        "changelog",
+        "init",
+        "runc",
+        "-wrapper"
+      ],
+      "raw_values": [
+        "-f",
+        ".",
+        "-exec",
+        ";",
+        "-u",
+        "/",
+        "-h",
+        "changelog",
+        "init",
+        "runc",
+        "-c",
+        "-wrapper",
+        "-e",
+        "-o"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "busybox"
+      ],
+      "raw_values": [
+        "/var/lib/docker/overlay2/*/merged/bin/busybox"
+      ]
+    }
+  ]
+}

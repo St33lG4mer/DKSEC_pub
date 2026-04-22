@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_security_wmiprvse_wbemcomn_dll_hijack",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_wmiprvse_wbemcomn_dll_hijack.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"5145\" and winlog.event_data.RelativeTargetName:\"*\\\\wbem\\\\wbemcomn.dll\") and (not user.name:\"*$\"))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    },
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": ":",
+      "values": [
+        "\\\\wbem\\\\wbemcomn.dll"
+      ],
+      "raw_values": [
+        "*\\\\wbem\\\\wbemcomn.dll"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_reg_desktop_background_change",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_reg_desktop_background_change.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and process.command_line:\"*add*\") and (process.command_line like~ (\"*Control Panel\\\\Desktop*\", \"*CurrentVersion\\\\Policies\\\\ActiveDesktop*\", \"*CurrentVersion\\\\Policies\\\\System*\")) and ((process.command_line:\"*/v NoChangingWallpaper*\" and process.command_line:\"*/d 1*\") or (process.command_line:\"*/v Wallpaper*\" and process.command_line:\"*/t REG_SZ*\") or (process.command_line:\"*/v WallpaperStyle*\" and process.command_line:\"*/d 2*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "desktop",
+        "activedesktop",
+        "system"
+      ],
+      "raw_values": [
+        "*Control Panel\\\\Desktop*",
+        "*CurrentVersion\\\\Policies\\\\ActiveDesktop*",
+        "*CurrentVersion\\\\Policies\\\\System*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "v nochangingwallpaper",
+        "d 1",
+        "v wallpaper",
+        "t reg_sz",
+        "v wallpaperstyle",
+        "d 2"
+      ],
+      "raw_values": [
+        "*add*",
+        "*/v NoChangingWallpaper*",
+        "*/d 1*",
+        "*/v Wallpaper*",
+        "*/t REG_SZ*",
+        "*/v WallpaperStyle*",
+        "*/d 2*"
+      ]
+    }
+  ]
+}

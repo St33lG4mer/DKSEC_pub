@@ -1,0 +1,80 @@
+{
+  "source": "sigma",
+  "name": "win_system_susp_service_installation_folder",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/system/service_control_manager/win_system_susp_service_installation_folder.eql",
+  "raw_query": "any where winlog.channel:\"System\" and ((winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\" and (winlog.event_data.ImagePath like~ (\"*\\\\AppData\\\\*\", \"*\\\\\\\\127.0.0.1*\", \"*\\\\\\\\localhost*\"))) and (not (winlog.event_data.ServiceName:\"Zoom Sharing Service\" and winlog.event_data.ImagePath:\"*:\\\\Program Files\\\\Common Files\\\\Zoom\\\\Support\\\\CptService.exe*\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": "like~",
+      "values": [
+        "\\\\appdata\\\\",
+        "\\\\\\\\127.0.0.1",
+        "\\\\\\\\localhost"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\*",
+        "*\\\\\\\\127.0.0.1*",
+        "*\\\\\\\\localhost*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicename",
+      "raw_field": "winlog.event_data.ServiceName",
+      "operator": ":",
+      "values": [
+        "zoom sharing service"
+      ],
+      "raw_values": [
+        "Zoom Sharing Service"
+      ]
+    },
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": ":",
+      "values": [
+        ":\\\\program files\\\\common files\\\\zoom\\\\support\\\\cptservice.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Common Files\\\\Zoom\\\\Support\\\\CptService.exe*"
+      ]
+    }
+  ]
+}

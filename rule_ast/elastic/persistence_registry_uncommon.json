@@ -1,0 +1,216 @@
+{
+  "source": "elastic",
+  "name": "Uncommon Registry Persistence Change",
+  "slug": "persistence_registry_uncommon",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_registry_uncommon.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n length(registry.data.strings) > 0 and\n registry.path : (\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Terminal Server\\\\Install\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Terminal Server\\\\Install\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Runonce\\\\*\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\Load\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\Run\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\IconServiceLib\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\AppSetup\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Taskman\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\VmApplet\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\Shell\",\n      \"HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Logoff\\\\Script\",\n      \"HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Logon\\\\Script\",\n      \"HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Shutdown\\\\Script\",\n      \"HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Startup\\\\Script\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\Shell\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Logoff\\\\Script\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Logon\\\\Script\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Shutdown\\\\Script\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Startup\\\\Script\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\*\\\\ShellComponent\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows CE Services\\\\AutoStartOnConnect\\\\MicrosoftActiveSync\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows CE Services\\\\AutoStartOnDisconnect\\\\MicrosoftActiveSync\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Ctf\\\\LangBarAddin\\\\*\\\\FilePath\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Exec\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Script\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Command Processor\\\\Autorun\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Ctf\\\\LangBarAddin\\\\*\\\\FilePath\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Exec\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Script\",\n      \"HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Command Processor\\\\Autorun\",\n      \"HKEY_USERS\\\\*\\\\Control Panel\\\\Desktop\\\\scrnsave.exe\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*\\\\VerifierDlls\",\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\GpExtensions\\\\*\\\\DllName\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\SafeBoot\\\\AlternateShell\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Terminal Server\\\\Wds\\\\rdpwd\\\\StartupPrograms\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\InitialProgram\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\BootExecute\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\BootExecuteNoPnpSync\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\SetupExecute\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\SetupExecuteNoPnpSync\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\PlatformExecute\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\Execute\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\S0InitialCommand\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\ServiceControlManagerExtension\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\BootVerificationProgram\\\\ImagePath\",\n      \"HKLM\\\\SYSTEM\\\\Setup\\\\CmdLine\",\n      \"HKEY_USERS\\\\*\\\\Environment\\\\UserInitMprLogonScript\") and\n\n not registry.data.strings : (\"C:\\\\Windows\\\\system32\\\\userinit.exe\", \"cmd.exe\", \"C:\\\\Program Files (x86)\\\\*.exe\",\n                              \"C:\\\\Program Files\\\\*.exe\") and\n not (process.name : \"rundll32.exe\" and registry.path : \"*\\\\Software\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Script\") and\n not process.executable : (\"C:\\\\Windows\\\\System32\\\\msiexec.exe\",\n                           \"C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\",\n                           \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\\\\MsMpEng.exe\",\n                           \"C:\\\\Program Files\\\\*.exe\",\n                           \"C:\\\\Program Files (x86)\\\\*.exe\") and\n not (process.name : (\"TiWorker.exe\", \"poqexec.exe\") and registry.value : \"SetupExecute\" and\n      registry.data.strings : (\n        \"C:\\\\windows\\\\System32\\\\poqexec.exe /display_progress \\\\SystemRoot\\\\WinSxS\\\\pending.xml\",\n        \"C:\\\\Windows\\\\System32\\\\poqexec.exe /skip_critical_poq /display_progress \\\\SystemRoot\\\\WinSxS\\\\pending.xml\"\n      )\n     ) and\n not (process.name : \"svchost.exe\" and registry.value : \"SCRNSAVE.EXE\" and\n      registry.data.strings : (\n        \"%windir%\\\\system32\\\\rundll32.exe user32.dll,LockWorkStation\",\n        \"scrnsave.scr\",\n        \"%windir%\\\\system32\\\\Ribbons.scr\"\n      )\n     )\n",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\terminal server\\\\install\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\terminal server\\\\install\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\runonce\\\\",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\windows\\\\load",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\windows\\\\run",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\windows\\\\iconservicelib",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\shell",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\shell",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\appsetup",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\taskman",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\userinit",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\vmapplet",
+        "hklm\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run\\\\",
+        "hklm\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\shell",
+        "hklm\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts\\\\logoff\\\\script",
+        "hklm\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts\\\\logon\\\\script",
+        "hklm\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts\\\\shutdown\\\\script",
+        "hklm\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts\\\\startup\\\\script",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run\\\\",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\shell",
+        "hkey_users\\\\*\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts\\\\logoff\\\\script",
+        "hkey_users\\\\*\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts\\\\logon\\\\script",
+        "hkey_users\\\\*\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts\\\\shutdown\\\\script",
+        "hkey_users\\\\*\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts\\\\startup\\\\script",
+        "hklm\\\\software\\\\microsoft\\\\active setup\\\\installed components\\\\*\\\\shellcomponent",
+        "hklm\\\\software\\\\microsoft\\\\windows ce services\\\\autostartonconnect\\\\microsoftactivesync",
+        "hklm\\\\software\\\\microsoft\\\\windows ce services\\\\autostartondisconnect\\\\microsoftactivesync",
+        "hklm\\\\software\\\\microsoft\\\\ctf\\\\langbaraddin\\\\*\\\\filepath",
+        "hklm\\\\software\\\\microsoft\\\\internet explorer\\\\extensions\\\\*\\\\exec",
+        "hklm\\\\software\\\\microsoft\\\\internet explorer\\\\extensions\\\\*\\\\script",
+        "hklm\\\\software\\\\microsoft\\\\command processor\\\\autorun",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\ctf\\\\langbaraddin\\\\*\\\\filepath",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\internet explorer\\\\extensions\\\\*\\\\exec",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\internet explorer\\\\extensions\\\\*\\\\script",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\command processor\\\\autorun",
+        "hkey_users\\\\*\\\\control panel\\\\desktop\\\\scrnsave.exe",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\image file execution options\\\\*\\\\verifierdlls",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\gpextensions\\\\*\\\\dllname",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\safeboot\\\\alternateshell",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\terminal server\\\\wds\\\\rdpwd\\\\startupprograms",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\terminal server\\\\winstations\\\\rdp-tcp\\\\initialprogram",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\session manager\\\\bootexecute",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\session manager\\\\bootexecutenopnpsync",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\session manager\\\\setupexecute",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\session manager\\\\setupexecutenopnpsync",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\session manager\\\\platformexecute",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\session manager\\\\execute",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\session manager\\\\s0initialcommand",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\servicecontrolmanagerextension",
+        "hklm\\\\system\\\\controlset*\\\\control\\\\bootverificationprogram\\\\imagepath",
+        "hklm\\\\system\\\\setup\\\\cmdline",
+        "hkey_users\\\\*\\\\environment\\\\userinitmprlogonscript",
+        "\\\\software\\\\microsoft\\\\internet explorer\\\\extensions\\\\*\\\\script"
+      ],
+      "raw_values": [
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Terminal Server\\\\Install\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Terminal Server\\\\Install\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Runonce\\\\*",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\Load",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\Run",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows\\\\IconServiceLib",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\AppSetup",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Taskman",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\VmApplet",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\Shell",
+        "HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Logoff\\\\Script",
+        "HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Logon\\\\Script",
+        "HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Shutdown\\\\Script",
+        "HKLM\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Startup\\\\Script",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\Shell",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Logoff\\\\Script",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Logon\\\\Script",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Shutdown\\\\Script",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts\\\\Startup\\\\Script",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\*\\\\ShellComponent",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows CE Services\\\\AutoStartOnConnect\\\\MicrosoftActiveSync",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows CE Services\\\\AutoStartOnDisconnect\\\\MicrosoftActiveSync",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Ctf\\\\LangBarAddin\\\\*\\\\FilePath",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Exec",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Script",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Command Processor\\\\Autorun",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Ctf\\\\LangBarAddin\\\\*\\\\FilePath",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Exec",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Script",
+        "HKEY_USERS\\\\*\\\\SOFTWARE\\\\Microsoft\\\\Command Processor\\\\Autorun",
+        "HKEY_USERS\\\\*\\\\Control Panel\\\\Desktop\\\\scrnsave.exe",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\\\\*\\\\VerifierDlls",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\GpExtensions\\\\*\\\\DllName",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\SafeBoot\\\\AlternateShell",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Terminal Server\\\\Wds\\\\rdpwd\\\\StartupPrograms",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\InitialProgram",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\BootExecute",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\BootExecuteNoPnpSync",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\SetupExecute",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\SetupExecuteNoPnpSync",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\PlatformExecute",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\Execute",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\Session Manager\\\\S0InitialCommand",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\ServiceControlManagerExtension",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Control\\\\BootVerificationProgram\\\\ImagePath",
+        "HKLM\\\\SYSTEM\\\\Setup\\\\CmdLine",
+        "HKEY_USERS\\\\*\\\\Environment\\\\UserInitMprLogonScript",
+        "*\\\\Software\\\\Microsoft\\\\Internet Explorer\\\\Extensions\\\\*\\\\Script"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\userinit.exe",
+        "cmd.exe",
+        "c:\\\\windows\\\\system32\\\\poqexec.exe /display_progress \\\\systemroot\\\\winsxs\\\\pending.xml",
+        "c:\\\\windows\\\\system32\\\\poqexec.exe /skip_critical_poq /display_progress \\\\systemroot\\\\winsxs\\\\pending.xml",
+        "%windir%\\\\system32\\\\rundll32.exe user32.dll,lockworkstation",
+        "scrnsave.scr",
+        "%windir%\\\\system32\\\\ribbons.scr"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\userinit.exe",
+        "cmd.exe",
+        "C:\\\\windows\\\\System32\\\\poqexec.exe /display_progress \\\\SystemRoot\\\\WinSxS\\\\pending.xml",
+        "C:\\\\Windows\\\\System32\\\\poqexec.exe /skip_critical_poq /display_progress \\\\SystemRoot\\\\WinSxS\\\\pending.xml",
+        "%windir%\\\\system32\\\\rundll32.exe user32.dll,LockWorkStation",
+        "scrnsave.scr",
+        "%windir%\\\\system32\\\\Ribbons.scr"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe",
+        "msmpeng.exe",
+        ".exe",
+        "tiworker.exe",
+        "poqexec.exe",
+        "rundll32.exe",
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\\\\MsMpEng.exe",
+        "C:\\\\Program Files\\\\*.exe",
+        "TiWorker.exe",
+        "poqexec.exe",
+        "rundll32.exe",
+        "svchost.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "setupexecute",
+        "scrnsave.exe"
+      ],
+      "raw_values": [
+        "SetupExecute",
+        "SCRNSAVE.EXE"
+      ]
+    }
+  ]
+}

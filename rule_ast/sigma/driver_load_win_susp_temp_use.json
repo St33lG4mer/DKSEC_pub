@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "driver_load_win_susp_temp_use",
+  "subtree": "rules",
+  "category": "driver",
+  "sigma_path": "rules/windows/driver_load/driver_load_win_susp_temp_use.eql",
+  "raw_query": "any where file.path:\"*\\\\Temp\\\\*\"",
+  "conditions": []
+}

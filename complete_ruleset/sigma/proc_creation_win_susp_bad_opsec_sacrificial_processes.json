@@ -1,0 +1,71 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_bad_opsec_sacrificial_processes",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_bad_opsec_sacrificial_processes.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\WerFault.exe\" and process.command_line:\"*WerFault.exe\") or (process.executable:\"*\\\\rundll32.exe\" and process.command_line:\"*rundll32.exe\") or (process.executable:\"*\\\\regsvcs.exe\" and process.command_line:\"*regsvcs.exe\") or (process.executable:\"*\\\\regasm.exe\" and process.command_line:\"*regasm.exe\") or (process.executable:\"*\\\\regsvr32.exe\" and process.command_line:\"*regsvr32.exe\")) and (not ((process.parent.executable:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\EdgeUpdate\\\\Install\\\\{*\" and process.executable:\"*\\\\rundll32.exe\" and process.command_line:\"*rundll32.exe\") or ((process.parent.executable like~ (\"*\\\\AppData\\\\Local\\\\BraveSoftware\\\\Brave-Browser\\\\Application\\\\*\", \"*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\Application\\\\*\")) and process.parent.executable:\"*\\\\Installer\\\\setup.exe\" and process.parent.command_line:\"*--uninstall *\" and process.executable:\"*\\\\rundll32.exe\" and process.command_line:\"*rundll32.exe\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe",
+        "rundll32.exe",
+        "regsvcs.exe",
+        "regasm.exe",
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\WerFault.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\regsvcs.exe",
+        "*\\\\regasm.exe",
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "werfault.exe",
+        "rundll32.exe",
+        "regsvcs.exe",
+        "regasm.exe",
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*WerFault.exe",
+        "*rundll32.exe",
+        "*regsvcs.exe",
+        "*regasm.exe",
+        "*regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "setup.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\EdgeUpdate\\\\Install\\\\{*",
+        "*\\\\Installer\\\\setup.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "--uninstall"
+      ],
+      "raw_values": [
+        "*--uninstall *"
+      ]
+    }
+  ]
+}

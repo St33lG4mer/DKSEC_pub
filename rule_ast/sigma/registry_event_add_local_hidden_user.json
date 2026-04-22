@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_event_add_local_hidden_user",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_event_add_local_hidden_user.eql",
+  "raw_query": "any where registry.path:\"*\\\\SAM\\\\SAM\\\\Domains\\\\Account\\\\Users\\\\Names\\\\*\" and registry.path:\"*$\\\\(Default)\" and process.executable:\"*\\\\lsass.exe\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\sam\\\\sam\\\\domains\\\\account\\\\users\\\\names\\\\",
+        "$\\\\(default)"
+      ],
+      "raw_values": [
+        "*\\\\SAM\\\\SAM\\\\Domains\\\\Account\\\\Users\\\\Names\\\\*",
+        "*$\\\\(Default)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    }
+  ]
+}

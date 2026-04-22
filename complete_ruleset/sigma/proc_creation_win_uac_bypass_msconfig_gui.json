@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_msconfig_gui",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_msconfig_gui.eql",
+  "raw_query": "any where (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\")) and process.parent.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\pkgmgr.exe\" and process.command_line:\"\\\"C:\\\\Windows\\\\system32\\\\msconfig.exe\\\" -5\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "pkgmgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\pkgmgr.exe"
+      ]
+    }
+  ]
+}

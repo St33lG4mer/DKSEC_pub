@@ -1,0 +1,70 @@
+{
+  "source": "elastic",
+  "name": "M365 SharePoint/OneDrive File Access via PowerShell",
+  "slug": "collection_sharepoint_file_download_via_powershell",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: SaaS",
+    "Data Source: Microsoft 365",
+    "Data Source: Microsoft 365 Audit Logs",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Tactic: Exfiltration",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/collection_sharepoint_file_download_via_powershell.toml",
+  "raw_query": "data_stream.dataset: \"o365.audit\" and\n    event.provider: (\"SharePoint\" or \"OneDrive\") and\n    event.action: (\"FileDownloaded\" or \"FileAccessed\") and\n    event.outcome: \"success\" and\n    user_agent.original: (*PowerShell* or *PnPPS* or *PnPCoreSDK* or *SharePointPnP*)\n",
+  "conditions": [
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "sharepoint",
+        "onedrive"
+      ],
+      "raw_values": [
+        "SharePoint",
+        "OneDrive"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "filedownloaded",
+        "fileaccessed"
+      ],
+      "raw_values": [
+        "FileDownloaded",
+        "FileAccessed"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

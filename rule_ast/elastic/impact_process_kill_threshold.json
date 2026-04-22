@@ -1,0 +1,34 @@
+{
+  "source": "elastic",
+  "name": "High Number of Process Terminations",
+  "slug": "impact_process_kill_threshold",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/linux/impact_process_kill_threshold.toml",
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and (\n  (process.name:\"pkill\" and process.args:\"-f\") or\n  (process.name:kill and process.args:\"-9\") or\n  (process.name:killall)\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "pkill"
+      ],
+      "raw_values": [
+        "pkill"
+      ]
+    }
+  ]
+}

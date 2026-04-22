@@ -1,0 +1,35 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_ccleaner_du",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_ccleaner_du.eql",
+  "raw_query": "any where file.path:\"*\\\\CCleanerDU.dll\" and (not ((process.executable like~ (\"C:\\\\Program Files\\\\CCleaner\\\\*\", \"C:\\\\Program Files (x86)\\\\CCleaner\\\\*\")) and (process.executable like~ (\"*\\\\CCleaner.exe\", \"*\\\\CCleaner64.exe\"))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "ccleaner.exe",
+        "ccleaner64.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\CCleaner\\\\*",
+        "*\\\\CCleaner.exe",
+        "*\\\\CCleaner64.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "ccleanerdu.dll"
+      ],
+      "raw_values": [
+        "*\\\\CCleanerDU.dll"
+      ]
+    }
+  ]
+}

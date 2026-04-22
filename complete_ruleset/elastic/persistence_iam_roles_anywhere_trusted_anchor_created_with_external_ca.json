@@ -1,0 +1,65 @@
+{
+  "source": "elastic",
+  "name": "AWS IAM Roles Anywhere Trust Anchor Created with External CA",
+  "slug": "persistence_iam_roles_anywhere_trusted_anchor_created_with_external_ca",
+  "category": "info",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS IAM",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/persistence_iam_roles_anywhere_trusted_anchor_created_with_external_ca.toml",
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n  and event.provider == \"rolesanywhere.amazonaws.com\"\n  and event.action == \"CreateTrustAnchor\"\n  and event.outcome == \"success\"\n  and not stringContains(aws.cloudtrail.request_parameters, \"sourceType=AWS_ACM_PCA\")\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "rolesanywhere.amazonaws.com"
+      ],
+      "raw_values": [
+        "rolesanywhere.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "createtrustanchor"
+      ],
+      "raw_values": [
+        "CreateTrustAnchor"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

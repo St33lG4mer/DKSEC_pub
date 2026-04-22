@@ -1,0 +1,74 @@
+{
+  "source": "sigma",
+  "name": "registry_set_service_image_path_user_controlled_folder",
+  "subtree": "rules-threat-hunting",
+  "category": "registry",
+  "sigma_path": "rules-threat-hunting/windows/registry/registry_set/registry_set_service_image_path_user_controlled_folder.eql",
+  "raw_query": "any where ((registry.path:\"*ControlSet*\" and registry.path:\"*\\\\Services\\\\*\") and registry.path:\"*\\\\ImagePath\" and (winlog.event_data.Details like~ (\"*:\\\\ProgramData\\\\*\", \"*\\\\AppData\\\\Local\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\"))) and (not ((registry.path like~ (\"*\\\\Services\\\\WinDefend\\\\*\", \"*\\\\Services\\\\MpKs*\")) and winlog.event_data.Details:\"*C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\*\")) and (not ((registry.path:\"*\\\\Services\\\\ZoomCptService*\" and winlog.event_data.Details:\"*C:\\\\Program Files\\\\Common Files\\\\Zoom\\\\Support\\\\CptService.exe*\") or (registry.path:\"*\\\\Services\\\\MBAMInstallerService*\" and (winlog.event_data.Details:\"*C:\\\\Users\\\\*\" and winlog.event_data.Details:\"*AppData\\\\Local\\\\Temp\\\\MBAMInstallerService.exe*\"))))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        ":\\\\programdata\\\\",
+        "\\\\appdata\\\\local\\\\",
+        "\\\\appdata\\\\roaming\\\\"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\services\\\\windefend\\\\",
+        "\\\\services\\\\mpks"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\WinDefend\\\\*",
+        "*\\\\Services\\\\MpKs*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "controlset",
+        "\\\\services\\\\",
+        "\\\\imagepath",
+        "\\\\services\\\\zoomcptservice",
+        "\\\\services\\\\mbaminstallerservice"
+      ],
+      "raw_values": [
+        "*ControlSet*",
+        "*\\\\Services\\\\*",
+        "*\\\\ImagePath",
+        "*\\\\Services\\\\ZoomCptService*",
+        "*\\\\Services\\\\MBAMInstallerService*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "c:\\\\programdata\\\\microsoft\\\\windows defender\\\\",
+        "c:\\\\program files\\\\common files\\\\zoom\\\\support\\\\cptservice.exe",
+        "c:\\\\users\\\\",
+        "appdata\\\\local\\\\temp\\\\mbaminstallerservice.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\*",
+        "*C:\\\\Program Files\\\\Common Files\\\\Zoom\\\\Support\\\\CptService.exe*",
+        "*C:\\\\Users\\\\*",
+        "*AppData\\\\Local\\\\Temp\\\\MBAMInstallerService.exe*"
+      ]
+    }
+  ]
+}

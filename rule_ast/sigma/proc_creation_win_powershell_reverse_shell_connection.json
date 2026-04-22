@@ -1,0 +1,51 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_reverse_shell_connection",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_reverse_shell_connection.eql",
+  "raw_query": "any where ((process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\")) or (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\"))) and (process.command_line:\"* Net.Sockets.TCPClient*\" and process.command_line:\"*.GetStream(*\" and process.command_line:\"*.Write(*\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "net.sockets.tcpclient",
+        ".getstream(",
+        ".write("
+      ],
+      "raw_values": [
+        "* Net.Sockets.TCPClient*",
+        "*.GetStream(*",
+        "*.Write(*"
+      ]
+    }
+  ]
+}

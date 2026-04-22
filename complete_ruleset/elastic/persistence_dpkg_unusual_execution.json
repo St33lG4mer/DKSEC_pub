@@ -1,0 +1,93 @@
+{
+  "source": "elastic",
+  "name": "Unusual DPKG Execution",
+  "slug": "persistence_dpkg_unusual_execution",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_dpkg_unusual_execution.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.executable : \"/var/lib/dpkg/info/*\" and process.session_leader.name != null and\nprocess.group_leader.name != null and not (\n  process.parent.name in (\"dpkg\", \"dpkg-reconfigure\", \"frontend\") or\n  process.session_leader.name == \"dpkg\" or\n  process.group_leader.name == \"dpkg\" or\n  process.parent.executable in (\"/usr/share/debconf/frontend\", \"/usr/bin/unattended-upgrade\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "dpkg",
+        "dpkg-reconfigure",
+        "frontend",
+        "unattended-upgrade"
+      ],
+      "raw_values": [
+        "dpkg",
+        "dpkg-reconfigure",
+        "frontend",
+        "/usr/share/debconf/frontend",
+        "/usr/bin/unattended-upgrade"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.session_leader.name",
+      "raw_field": "process.session_leader.name",
+      "operator": "==",
+      "values": [
+        "dpkg"
+      ],
+      "raw_values": [
+        "dpkg"
+      ]
+    },
+    {
+      "field": "process.group_leader.name",
+      "raw_field": "process.group_leader.name",
+      "operator": "==",
+      "values": [
+        "dpkg"
+      ],
+      "raw_values": [
+        "dpkg"
+      ]
+    }
+  ]
+}

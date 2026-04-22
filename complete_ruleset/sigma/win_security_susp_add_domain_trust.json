@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_add_domain_trust",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_add_domain_trust.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and event.code:\"4706\"",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4706"
+      ],
+      "raw_values": [
+        "4706"
+      ]
+    }
+  ]
+}

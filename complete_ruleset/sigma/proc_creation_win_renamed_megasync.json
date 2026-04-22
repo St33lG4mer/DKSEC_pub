@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_megasync",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_megasync.eql",
+  "raw_query": "any where process.pe.original_file_name:\"megasync.exe\" and (not process.executable:\"*\\\\megasync.exe\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "megasync.exe"
+      ],
+      "raw_values": [
+        "megasync.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "megasync.exe"
+      ],
+      "raw_values": [
+        "*\\\\megasync.exe"
+      ]
+    }
+  ]
+}

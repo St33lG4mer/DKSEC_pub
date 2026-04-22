@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_import_cert_susp_locations",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_import_cert_susp_locations.eql",
+  "raw_query": "any where (process.command_line:\"*Import-Certificate*\" and process.command_line:\"* -FilePath *\" and process.command_line:\"*Cert:\\\\LocalMachine\\\\Root*\") and (process.command_line like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*:\\\\Windows\\\\TEMP\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "import-certificate",
+        "-filepath",
+        "root"
+      ],
+      "raw_values": [
+        "*Import-Certificate*",
+        "* -FilePath *",
+        "*Cert:\\\\LocalMachine\\\\Root*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "sysmon_wmi_event_subscription",
+  "subtree": "rules",
+  "category": "wmi",
+  "sigma_path": "rules/windows/wmi_event/sysmon_wmi_event_subscription.eql",
+  "raw_query": "any where event.code like~ (\"19\", \"20\", \"21\")",
+  "conditions": []
+}

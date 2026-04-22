@@ -1,0 +1,105 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_copy_lateral_movement",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_copy_lateral_movement.eql",
+  "raw_query": "any where (process.command_line like~ (\"*\\\\\\\\*\\\\*$*\", \"*\\\\Sysvol\\\\*\")) and (((process.executable like~ (\"*\\\\robocopy.exe\", \"*\\\\xcopy.exe\")) or (process.pe.original_file_name like~ (\"robocopy.exe\", \"XCOPY.EXE\"))) or ((process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and process.command_line:\"*copy*\") or (((process.executable like~ (\"*\\\\powershell_ise.exe*\", \"*\\\\powershell.exe*\", \"*\\\\pwsh.exe*\")) or (process.pe.original_file_name like~ (\"powershell_ise.exe\", \"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"*copy-item*\", \"*copy *\", \"*cpi *\", \"* cp *\", \"*move *\", \"* move-item*\", \"* mi *\", \"* mv *\"))))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "copy-item",
+        "copy",
+        "cpi",
+        "move",
+        "move-item"
+      ],
+      "raw_values": [
+        "*\\\\\\\\*\\\\*$*",
+        "*\\\\Sysvol\\\\*",
+        "*copy-item*",
+        "*copy *",
+        "*cpi *",
+        "* cp *",
+        "*move *",
+        "* move-item*",
+        "* mi *",
+        "* mv *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "robocopy.exe",
+        "xcopy.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\robocopy.exe",
+        "*\\\\xcopy.exe",
+        "*\\\\powershell_ise.exe*",
+        "*\\\\powershell.exe*",
+        "*\\\\pwsh.exe*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "robocopy.exe",
+        "xcopy.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "robocopy.exe",
+        "XCOPY.EXE",
+        "powershell_ise.exe",
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "copy"
+      ],
+      "raw_values": [
+        "*copy*"
+      ]
+    }
+  ]
+}

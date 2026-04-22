@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_googleupdate_susp_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_googleupdate_susp_child_process.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\GoogleUpdate.exe\" and (not ((process.executable:\"*\\\\Google*\" or (process.executable like~ (\"*\\\\setup.exe\", \"*chrome_updater.exe\", \"*chrome_installer.exe\"))) or (?process.executable == null)))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "setup.exe",
+        "chrome_updater.exe",
+        "chrome_installer.exe"
+      ],
+      "raw_values": [
+        "*\\\\setup.exe",
+        "*chrome_updater.exe",
+        "*chrome_installer.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "googleupdate.exe"
+      ],
+      "raw_values": [
+        "*\\\\GoogleUpdate.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "google"
+      ],
+      "raw_values": [
+        "*\\\\Google*"
+      ]
+    }
+  ]
+}

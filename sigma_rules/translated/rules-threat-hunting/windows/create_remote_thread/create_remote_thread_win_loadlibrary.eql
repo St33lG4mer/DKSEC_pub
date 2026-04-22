@@ -1,0 +1,1 @@
+any where winlog.event_data.StartModule:"*\\kernel32.dll" and winlog.event_data.StartFunction:"LoadLibraryA"

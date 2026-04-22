@@ -1,0 +1,139 @@
+{
+  "source": "elastic",
+  "name": "Kernel Module Removal",
+  "slug": "defense_evasion_kernel_module_removal",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_kernel_module_removal.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\n(\n  process.name == \"rmmod\" or\n  (process.name == \"modprobe\" and process.args in (\"--remove\", \"-r\"))\n) and\nprocess.parent.name in (\"sudo\", \"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and\nnot (\n  ?process.parent.args like \"/var/tmp/rpm-tmp*\" or\n  ?process.working_directory like~ (\"/tmp/makeself*NVIDIA-Linux*\", \"/tmp/self*NVIDIA-Linux*\")\n)\n",
+  "conditions": [
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "like~",
+      "values": [
+        "/tmp/makeself*nvidia-linux",
+        "/tmp/self*nvidia-linux"
+      ],
+      "raw_values": [
+        "/tmp/makeself*NVIDIA-Linux*",
+        "/tmp/self*NVIDIA-Linux*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--remove"
+      ],
+      "raw_values": [
+        "--remove",
+        "-r"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "sudo",
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "sudo",
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "rmmod",
+        "modprobe"
+      ],
+      "raw_values": [
+        "rmmod",
+        "modprobe"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "like",
+      "values": [
+        "/var/tmp/rpm-tmp"
+      ],
+      "raw_values": [
+        "/var/tmp/rpm-tmp*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Managed Code Hosting Process",
+  "slug": "defense_evasion_suspicious_managedcode_host_process",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Data Source: Elastic Endgame",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_suspicious_managedcode_host_process.toml",
+  "raw_query": "file where host.os.type == \"windows\" and event.type != \"deletion\" and\n  file.name : (\"wscript.exe.log\",\n               \"cscript.exe.log\",\n               \"mshta.exe.log\",\n               \"wmic.exe.log\",\n               \"svchost.exe.log\",\n               \"dllhost.exe.log\",\n               \"cmstp.exe.log\",\n               \"regsvr32.exe.log\")\n",
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "wscript.exe.log",
+        "cscript.exe.log",
+        "mshta.exe.log",
+        "wmic.exe.log",
+        "svchost.exe.log",
+        "dllhost.exe.log",
+        "cmstp.exe.log",
+        "regsvr32.exe.log"
+      ],
+      "raw_values": [
+        "wscript.exe.log",
+        "cscript.exe.log",
+        "mshta.exe.log",
+        "wmic.exe.log",
+        "svchost.exe.log",
+        "dllhost.exe.log",
+        "cmstp.exe.log",
+        "regsvr32.exe.log"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ]
+}

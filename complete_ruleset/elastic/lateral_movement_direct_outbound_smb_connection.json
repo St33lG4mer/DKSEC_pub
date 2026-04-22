@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "SMB Connections via LOLBin or Untrusted Process",
+  "slug": "lateral_movement_direct_outbound_smb_connection",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/windows/lateral_movement_direct_outbound_smb_connection.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=1m\n\n  /* first sequence to capture the start of Windows processes */\n  [process where host.os.type == \"windows\" and event.type == \"start\" and process.pid != 4 and\n\n    /* ignore NT Authority and Network Service accounts */\n    not user.id in (\"S-1-5-19\", \"S-1-5-20\") and\n\n    /* filter out anything trusted but not from Microsoft */\n    /* LOLBins will be inherently trusted and signed, so ignore everything else trusted */\n    not (process.code_signature.trusted == true and not startsWith(process.code_signature.subject_name, \"Microsoft\")) and\n\n    /* filter out PowerShell scripts from Windows Defender ATP */\n    not (\n      process.name : \"powershell.exe\" and\n      process.args :\"?:\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced Threat Protection\\\\Downloads\\\\PSScript_*.ps1\")]\n\n  /* second sequence to capture network connections over port 445 related to SMB */\n  [network where host.os.type == \"windows\" and destination.port == 445 and process.pid != 4]\n",
+  "conditions": [
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "in",
+      "values": [
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "powershell.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "psscript_*.ps1"
+      ],
+      "raw_values": [
+        "?:\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced Threat Protection\\\\Downloads\\\\PSScript_*.ps1"
+      ]
+    }
+  ]
+}

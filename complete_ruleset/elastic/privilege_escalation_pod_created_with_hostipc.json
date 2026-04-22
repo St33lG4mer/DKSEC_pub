@@ -1,0 +1,68 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Pod Created With HostIPC",
+  "slug": "privilege_escalation_pod_created_with_hostipc",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/privilege_escalation_pod_created_with_hostipc.toml",
+  "raw_query": "data_stream.dataset : \"kubernetes.audit_logs\" and kubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.objectRef.resource:\"pods\" and kubernetes.audit.verb:(\"create\" or \"update\" or \"patch\") and\nkubernetes.audit.requestObject.spec.hostIPC:true and\nnot kubernetes.audit.requestObject.spec.containers.image: (\n  docker.elastic.co/beats/elastic-agent* or rancher/system-agent* or registry.crowdstrike.com/falcon-sensor*\n)\n",
+  "conditions": [
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create",
+        "update",
+        "patch"
+      ],
+      "raw_values": [
+        "create",
+        "update",
+        "patch"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "pods"
+      ],
+      "raw_values": [
+        "pods"
+      ]
+    }
+  ]
+}

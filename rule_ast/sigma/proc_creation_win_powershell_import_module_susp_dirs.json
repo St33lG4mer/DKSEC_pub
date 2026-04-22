@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_import_module_susp_dirs",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_import_module_susp_dirs.eql",
+  "raw_query": "any where process.command_line like~ (\"*Import-Module \\\"$Env:Temp\\\\*\", \"*Import-Module '$Env:Temp\\\\*\", \"*Import-Module $Env:Temp\\\\*\", \"*Import-Module \\\"$Env:Appdata\\\\*\", \"*Import-Module '$Env:Appdata\\\\*\", \"*Import-Module $Env:Appdata\\\\*\", \"*Import-Module C:\\\\Users\\\\Public\\\\*\", \"*ipmo \\\"$Env:Temp\\\\*\", \"*ipmo '$Env:Temp\\\\*\", \"*ipmo $Env:Temp\\\\*\", \"*ipmo \\\"$Env:Appdata\\\\*\", \"*ipmo '$Env:Appdata\\\\*\", \"*ipmo $Env:Appdata\\\\*\", \"*ipmo C:\\\\Users\\\\Public\\\\*\")",
+  "conditions": []
+}

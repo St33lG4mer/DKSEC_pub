@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "registry_set_file_association_exefile",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_file_association_exefile.eql",
+  "raw_query": "any where registry.path:\"*Classes\\\\.*\" and winlog.event_data.Details:\"exefile\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "classes\\\\."
+      ],
+      "raw_values": [
+        "*Classes\\\\.*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "exefile"
+      ],
+      "raw_values": [
+        "exefile"
+      ]
+    }
+  ]
+}

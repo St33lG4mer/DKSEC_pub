@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "M365 Exchange Mail Flow Transport Rule Created",
+  "slug": "exfiltration_exchange_transport_rule_creation",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Use Case: Configuration Audit",
+    "Tactic: Exfiltration",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/exfiltration_exchange_transport_rule_creation.toml",
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:\"New-TransportRule\" and event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "new-transportrule"
+      ],
+      "raw_values": [
+        "New-TransportRule"
+      ]
+    }
+  ]
+}

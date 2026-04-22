@@ -1,0 +1,68 @@
+{
+  "source": "sigma",
+  "name": "win_security_susp_opened_encrypted_zip_filename",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_susp_opened_encrypted_zip_filename.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"5379\" and winlog.event_data.TargetName:\"*Microsoft_Windows_Shell_ZipFolder:filename*\") and (winlog.event_data.TargetName like~ (\"*invoice*\", \"*new order*\", \"*rechnung*\", \"*factura*\", \"*delivery*\", \"*purchase*\", \"*order*\", \"*payment*\")))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetname",
+      "raw_field": "winlog.event_data.TargetName",
+      "operator": "like~",
+      "values": [
+        "invoice",
+        "new order",
+        "rechnung",
+        "factura",
+        "delivery",
+        "purchase",
+        "order",
+        "payment"
+      ],
+      "raw_values": [
+        "*invoice*",
+        "*new order*",
+        "*rechnung*",
+        "*factura*",
+        "*delivery*",
+        "*purchase*",
+        "*order*",
+        "*payment*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5379"
+      ],
+      "raw_values": [
+        "5379"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetname",
+      "raw_field": "winlog.event_data.TargetName",
+      "operator": ":",
+      "values": [
+        "microsoft_windows_shell_zipfolder:filename"
+      ],
+      "raw_values": [
+        "*Microsoft_Windows_Shell_ZipFolder:filename*"
+      ]
+    }
+  ]
+}

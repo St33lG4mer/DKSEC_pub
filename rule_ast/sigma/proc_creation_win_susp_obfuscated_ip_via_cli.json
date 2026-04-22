@@ -1,0 +1,52 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_obfuscated_ip_via_cli",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_obfuscated_ip_via_cli.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\ping.exe\", \"*\\\\arp.exe\")) and ((process.command_line like~ (\"* 0x*\", \"*//0x*\", \"*.0x*\", \"*.00x*\")) or (process.command_line:\"*http://%*\" and process.command_line:\"*%2e*\") or (process.command_line like~ (\"SigmaRegularExpression(regexp=SigmaString(['https', <SpecialChars.WILDCARD_SINGLE: 2>, '://[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.0[0-9]{3,4}']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['https', <SpecialChars.WILDCARD_SINGLE: 2>, '://[0-9]{1,3}\\\\.0[0-9]{3,7}']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['https', <SpecialChars.WILDCARD_SINGLE: 2>, '://0[0-9]{3,11}']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['https', <SpecialChars.WILDCARD_SINGLE: 2>, '://(0[0-9]{1,11}\\\\.){3}0[0-9]{1,11}']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['https', <SpecialChars.WILDCARD_SINGLE: 2>, '://0[0-9]{1,11}']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString([' [0-7]{7,13}']), flags=set())\"))) and (not process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['https', <SpecialChars.WILDCARD_SINGLE: 2>, '://((25[0-5]|(2[0-4]|1\\\\d|[1-9])', <SpecialChars.WILDCARD_SINGLE: 2>, '\\\\d)(\\\\.|\\\\b)){4}']), flags=set())\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "ping.exe",
+        "arp.exe"
+      ],
+      "raw_values": [
+        "*\\\\ping.exe",
+        "*\\\\arp.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".0x",
+        ".00x"
+      ],
+      "raw_values": [
+        "* 0x*",
+        "*//0x*",
+        "*.0x*",
+        "*.00x*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "%2e",
+        "b)){4}']), flags=set())"
+      ],
+      "raw_values": [
+        "*http://%*",
+        "*%2e*",
+        "SigmaRegularExpression(regexp=SigmaString(['https', <SpecialChars.WILDCARD_SINGLE: 2>, '://((25[0-5]|(2[0-4]|1\\\\d|[1-9])', <SpecialChars.WILDCARD_SINGLE: 2>, '\\\\d)(\\\\.|\\\\b)){4}']), flags=set())"
+      ]
+    }
+  ]
+}

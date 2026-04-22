@@ -1,0 +1,48 @@
+{
+  "source": "sigma",
+  "name": "image_load_susp_script_dotnet_clr_dll_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_susp_script_dotnet_clr_dll_load.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\cmstp.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\msxsl.exe\", \"*\\\\regsvr32.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\")) and (file.path like~ (\"*\\\\clr.dll\", \"*\\\\mscoree.dll\", \"*\\\\mscorlib.dll\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmstp.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "msxsl.exe",
+        "regsvr32.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmstp.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\msxsl.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "clr.dll",
+        "mscoree.dll",
+        "mscorlib.dll"
+      ],
+      "raw_values": [
+        "*\\\\clr.dll",
+        "*\\\\mscoree.dll",
+        "*\\\\mscorlib.dll"
+      ]
+    }
+  ]
+}

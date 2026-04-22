@@ -1,0 +1,77 @@
+{
+  "source": "elastic",
+  "name": "Elastic Defend Alert from GenAI Utility or Descendant",
+  "slug": "initial_access_elastic_defend_alert_genai_utility_descendant",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 99,
+  "tags": [
+    "Domain: Endpoint",
+    "Domain: LLM",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/cross-platform/initial_access_elastic_defend_alert_genai_utility_descendant.toml",
+  "raw_query": "FROM logs-endpoint.alerts-*, logs-endpoint.events.process-* metadata _id, _version, _index \n| EVAL is_genai_spawn =  TO_LOWER(process.parent.name) IN (\n        \"claude\", \"claude.exe\", \"cursor\", \"cursor.exe\", \"cursor helper\", \"cursor helper (plugin)\",\n        \"codex\", \"codex.exe\", \"cody\", \"cody.exe\", \"copilot\", \"copilot.exe\", \"gemini-cli\", \"gemini-cli.exe\",\n        \"openai\", \"openai.exe\", \"ollama\", \"ollama.exe\", \"llm\", \"llm.exe\",\n        \"aider\", \"aider.exe\", \"cline\", \"cline.exe\", \"continue\", \"continue.exe\",\n        \"zed\", \"zed.exe\", \"windsurf\", \"windsurf.exe\",\n        \"tabnine\", \"tabnine.exe\", \"codeium\", \"codeium.exe\", \"bolt\", \"bolt.exe\",\n        \"devin\", \"devin.exe\", \"replit\", \"replit.exe\", \"ghostwriter\", \"ghostwriter.exe\", \"bito\", \"bito.exe\"\n    ),\n     is_openclaw_spawn = process.parent.name in (\"node\", \"node.exe\") and (process.parent.command_line like \"*openclaw*\" or process.parent.command_line like \"*moltbot*\" or process.parent.command_line like \"*clawdbot*\")\n| WHERE process.Ext.ancestry IS NOT NULL and \n   (data_stream.dataset == \"endpoint.alerts\" or is_genai_spawn or is_openclaw_spawn)\n// Identify GenAI tool spawn events and capture their entity_ids\n| EVAL genai_entity_id = CASE(is_genai_spawn or is_openclaw_spawn, process.parent.entity_id, NULL)\n\n// Collect ALL GenAI entity_ids globally across the dataset\n| INLINE STATS \n    all_genai_entity_ids = VALUES(genai_entity_id) WHERE genai_entity_id IS NOT NULL\n// Find which GenAI entity_ids appear in this process's ancestry\n| EVAL Esql.genai_ancestor_ids = MV_INTERSECTION(all_genai_entity_ids, process.Ext.ancestry)\n\n// Elastic Defend alerts from a GenAI grandparent \n| WHERE Esql.genai_ancestor_ids IS NOT NULL \n        AND data_stream.dataset == \"endpoint.alerts\" AND not rule.name in (\n            \"Persistence via GenAI Tool\",\n            \"Code Editor Untrusted or Unsigned Child Process Execution\",\n            \"Suspicious Credential Access via GenAI Tool\",\n            \"Credential Access via GenAI Tool Descendant\"\n        )\n\n| KEEP *\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "node",
+        "node.exe"
+      ],
+      "raw_values": [
+        "node",
+        "node.exe"
+      ]
+    },
+    {
+      "field": "rule.name",
+      "raw_field": "rule.name",
+      "operator": "in",
+      "values": [
+        "persistence via genai tool",
+        "code editor untrusted or unsigned child process execution",
+        "suspicious credential access via genai tool",
+        "credential access via genai tool descendant"
+      ],
+      "raw_values": [
+        "Persistence via GenAI Tool",
+        "Code Editor Untrusted or Unsigned Child Process Execution",
+        "Suspicious Credential Access via GenAI Tool",
+        "Credential Access via GenAI Tool Descendant"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "openclaw",
+        "moltbot",
+        "clawdbot"
+      ],
+      "raw_values": [
+        "*openclaw*",
+        "*moltbot*",
+        "*clawdbot*"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "endpoint.alerts"
+      ],
+      "raw_values": [
+        "endpoint.alerts"
+      ]
+    }
+  ]
+}

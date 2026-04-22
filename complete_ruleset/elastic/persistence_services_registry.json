@@ -1,0 +1,121 @@
+{
+  "source": "elastic",
+  "name": "Unusual Persistence via Services Registry",
+  "slug": "persistence_services_registry",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_services_registry.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.data.strings != null and registry.value : (\"ServiceDLL\", \"ImagePath\") and\n  registry.path : (\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ServiceDLL\",\n      \"HKLM\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ImagePath\",\n      \"\\\\REGISTRY\\\\MACHINE\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ServiceDLL\",\n      \"\\\\REGISTRY\\\\MACHINE\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ImagePath\",\n      \"MACHINE\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ServiceDLL\",\n      \"MACHINE\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ImagePath\"\n  ) and not registry.data.strings : (\n      \"?:\\\\windows\\\\system32\\\\Drivers\\\\*.sys\",\n      \"\\\\SystemRoot\\\\System32\\\\drivers\\\\*.sys\",\n      \"\\\\??\\\\?:\\\\Windows\\\\system32\\\\Drivers\\\\*.SYS\",\n      \"\\\\??\\\\?:\\\\Windows\\\\syswow64\\\\*.sys\",\n      \"system32\\\\DRIVERS\\\\USBSTOR\", \n      \"system32\\\\drivers\\\\*.sys\", \n      \"C:\\\\WindowsAzure\\\\GuestAgent*.exe\", \n      \"\\\"C:\\\\Program Files\\\\Common Files\\\\McAfee\\\\*\", \n      \"C:\\\\Program Files (x86)\\\\VERITAS\\\\VxPBX\\\\bin\\\\pbx_exchange.exe\", \n      \"\\\"C:\\\\Program Files (x86)\\\\VERITAS\\\\VxPBX\\\\bin\\\\pbx_exchange.exe\\\"\",\n      \"\\\"C:\\\\ProgramData\\\\McAfee\\\\Agent\\\\Current\\\\*\") and\n  not (process.name : \"procexp??.exe\" and registry.data.strings : \"?:\\\\*\\\\procexp*.sys\") and\n  not process.executable : (\n      \"?:\\\\Program Files\\\\*.exe\",\n      \"?:\\\\Program Files (x86)\\\\*.exe\",\n      \"?:\\\\Windows\\\\System32\\\\svchost.exe\",\n      \"?:\\\\Windows\\\\winsxs\\\\*\\\\TiWorker.exe\",\n      \"?:\\\\Windows\\\\System32\\\\drvinst.exe\",\n      \"?:\\\\Windows\\\\System32\\\\services.exe\",\n      \"?:\\\\Windows\\\\System32\\\\msiexec.exe\",\n      \"?:\\\\Windows\\\\System32\\\\regsvr32.exe\",\n      \"?:\\\\Windows\\\\System32\\\\WaaSMedicAgent.exe\", \n      \"?:\\\\Windows\\\\UUS\\\\amd64\\\\WaaSMedicAgent.exe\"\n  )\n",
+  "conditions": [
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "servicedll",
+        "imagepath"
+      ],
+      "raw_values": [
+        "ServiceDLL",
+        "ImagePath"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\system\\\\controlset*\\\\services\\\\*\\\\servicedll",
+        "hklm\\\\system\\\\controlset*\\\\services\\\\*\\\\imagepath",
+        "\\\\registry\\\\machine\\\\system\\\\controlset*\\\\services\\\\*\\\\servicedll",
+        "\\\\registry\\\\machine\\\\system\\\\controlset*\\\\services\\\\*\\\\imagepath",
+        "machine\\\\system\\\\controlset*\\\\services\\\\*\\\\servicedll",
+        "machine\\\\system\\\\controlset*\\\\services\\\\*\\\\imagepath"
+      ],
+      "raw_values": [
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ServiceDLL",
+        "HKLM\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ImagePath",
+        "\\\\REGISTRY\\\\MACHINE\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ServiceDLL",
+        "\\\\REGISTRY\\\\MACHINE\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ImagePath",
+        "MACHINE\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ServiceDLL",
+        "MACHINE\\\\SYSTEM\\\\ControlSet*\\\\Services\\\\*\\\\ImagePath"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\system32\\\\drivers\\\\*.sys",
+        "\\\\systemroot\\\\system32\\\\drivers\\\\*.sys",
+        "\\\\??\\\\?:\\\\windows\\\\system32\\\\drivers\\\\*.sys",
+        "\\\\??\\\\?:\\\\windows\\\\syswow64\\\\*.sys",
+        "system32\\\\drivers\\\\usbstor",
+        "system32\\\\drivers\\\\*.sys",
+        "c:\\\\windowsazure\\\\guestagent*.exe",
+        ":\\\\*\\\\procexp*.sys"
+      ],
+      "raw_values": [
+        "?:\\\\windows\\\\system32\\\\Drivers\\\\*.sys",
+        "\\\\SystemRoot\\\\System32\\\\drivers\\\\*.sys",
+        "\\\\??\\\\?:\\\\Windows\\\\system32\\\\Drivers\\\\*.SYS",
+        "\\\\??\\\\?:\\\\Windows\\\\syswow64\\\\*.sys",
+        "system32\\\\DRIVERS\\\\USBSTOR",
+        "system32\\\\drivers\\\\*.sys",
+        "C:\\\\WindowsAzure\\\\GuestAgent*.exe",
+        "\\",
+        ", \n      ",
+        "?:\\\\*\\\\procexp*.sys"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "procexp??.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\*.exe",
+        "procexp??.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    }
+  ]
+}

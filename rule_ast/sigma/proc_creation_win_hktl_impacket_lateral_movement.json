@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_impacket_lateral_movement",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_impacket_lateral_movement.eql",
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\wmiprvse.exe\", \"*\\\\mmc.exe\", \"*\\\\explorer.exe\", \"*\\\\services.exe\")) and (process.command_line:\"*cmd.exe*\" and process.command_line:\"*/Q*\" and process.command_line:\"*/c*\" and process.command_line:\"*\\\\\\\\127.0.0.1\\\\*\" and process.command_line:\"*&1*\")) or ((process.parent.command_line like~ (\"*svchost.exe -k netsvcs*\", \"*taskeng.exe*\")) and (process.command_line:\"*cmd.exe*\" and process.command_line:\"*/C*\" and process.command_line:\"*Windows\\\\Temp\\\\*\" and process.command_line:\"*&1*\"))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "wmiprvse.exe",
+        "mmc.exe",
+        "explorer.exe",
+        "services.exe"
+      ],
+      "raw_values": [
+        "*\\\\wmiprvse.exe",
+        "*\\\\mmc.exe",
+        "*\\\\explorer.exe",
+        "*\\\\services.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "svchost.exe -k netsvcs",
+        "taskeng.exe"
+      ],
+      "raw_values": [
+        "*svchost.exe -k netsvcs*",
+        "*taskeng.exe*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*cmd.exe*",
+        "*/Q*",
+        "*/c*",
+        "*\\\\\\\\127.0.0.1\\\\*",
+        "*&1*",
+        "*/C*",
+        "*Windows\\\\Temp\\\\*"
+      ]
+    }
+  ]
+}

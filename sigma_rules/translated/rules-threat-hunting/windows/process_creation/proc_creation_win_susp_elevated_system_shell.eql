@@ -1,0 +1,1 @@
+any where ((process.executable like~ ("*\\powershell.exe", "*\\powershell_ise.exe", "*\\pwsh.exe", "*\\cmd.exe")) or (process.pe.original_file_name like~ ("PowerShell.EXE", "powershell_ise.EXE", "pwsh.dll", "Cmd.Exe"))) and ((user.name like~ ("*AUTHORI*", "*AUTORI*")) and winlog.event_data.LogonId:"0x3e7")

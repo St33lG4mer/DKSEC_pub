@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "registry_set_wab_dllpath_reg_change",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_wab_dllpath_reg_change.eql",
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Microsoft\\\\WAB\\\\DLLPath\" and (not winlog.event_data.Details:\"%CommonProgramFiles%\\\\System\\\\wab32.dll\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\wab\\\\dllpath"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\WAB\\\\DLLPath"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "%commonprogramfiles%\\\\system\\\\wab32.dll"
+      ],
+      "raw_values": [
+        "%CommonProgramFiles%\\\\System\\\\wab32.dll"
+      ]
+    }
+  ]
+}

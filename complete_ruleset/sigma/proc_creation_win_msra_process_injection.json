@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_msra_process_injection",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_msra_process_injection.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\msra.exe\" and process.parent.command_line:\"*msra.exe\" and (process.executable like~ (\"*\\\\arp.exe\", \"*\\\\cmd.exe\", \"*\\\\net.exe\", \"*\\\\netstat.exe\", \"*\\\\nslookup.exe\", \"*\\\\route.exe\", \"*\\\\schtasks.exe\", \"*\\\\whoami.exe\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "arp.exe",
+        "cmd.exe",
+        "net.exe",
+        "netstat.exe",
+        "nslookup.exe",
+        "route.exe",
+        "schtasks.exe",
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\arp.exe",
+        "*\\\\cmd.exe",
+        "*\\\\net.exe",
+        "*\\\\netstat.exe",
+        "*\\\\nslookup.exe",
+        "*\\\\route.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\whoami.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "msra.exe"
+      ],
+      "raw_values": [
+        "*\\\\msra.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "msra.exe"
+      ],
+      "raw_values": [
+        "*msra.exe"
+      ]
+    }
+  ]
+}

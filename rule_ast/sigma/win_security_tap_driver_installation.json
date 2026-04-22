@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_security_tap_driver_installation",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_tap_driver_installation.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and winlog.event_data.ServiceFileName:\"*tap0901*\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "tap0901"
+      ],
+      "raw_values": [
+        "*tap0901*"
+      ]
+    }
+  ]
+}

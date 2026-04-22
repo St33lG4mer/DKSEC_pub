@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "registry_set_office_outlook_enable_load_macro_provider_on_boot",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_office_outlook_enable_load_macro_provider_on_boot.eql",
+  "raw_query": "any where registry.path:\"*\\\\Outlook\\\\LoadMacroProviderOnBoot\" and winlog.event_data.Details:\"*0x00000001*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\outlook\\\\loadmacroprovideronboot"
+      ],
+      "raw_values": [
+        "*\\\\Outlook\\\\LoadMacroProviderOnBoot"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "0x00000001"
+      ],
+      "raw_values": [
+        "*0x00000001*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_bitsadmin_download_file_sharing_domains",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_bitsadmin_download_file_sharing_domains.eql",
+  "raw_query": "any where (process.executable:\"*\\\\bitsadmin.exe\" or process.pe.original_file_name:\"bitsadmin.exe\") and (process.command_line like~ (\"* /transfer *\", \"* /create *\", \"* /addfile *\")) and (process.command_line like~ (\"*.githubusercontent.com*\", \"*anonfiles.com*\", \"*cdn.discordapp.com*\", \"*ddns.net*\", \"*dl.dropboxusercontent.com*\", \"*ghostbin.co*\", \"*github.com*\", \"*glitch.me*\", \"*gofile.io*\", \"*hastebin.com*\", \"*mediafire.com*\", \"*mega.nz*\", \"*onrender.com*\", \"*pages.dev*\", \"*paste.ee*\", \"*pastebin.com*\", \"*pastebin.pl*\", \"*pastetext.net*\", \"*privatlab.com*\", \"*privatlab.net*\", \"*send.exploit.in*\", \"*sendspace.com*\", \"*storage.googleapis.com*\", \"*storjshare.io*\", \"*supabase.co*\", \"*temp.sh*\", \"*transfer.sh*\", \"*trycloudflare.com*\", \"*ufile.io*\", \"*w3spaces.com*\", \"*workers.dev*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "transfer",
+        "create",
+        "addfile",
+        ".githubusercontent.com",
+        "anonfiles.com",
+        "cdn.discordapp.com",
+        "ddns.net",
+        "dl.dropboxusercontent.com",
+        "ghostbin.co",
+        "github.com",
+        "glitch.me",
+        "gofile.io",
+        "hastebin.com",
+        "mediafire.com",
+        "mega.nz",
+        "onrender.com",
+        "pages.dev",
+        "paste.ee",
+        "pastebin.com",
+        "pastebin.pl",
+        "pastetext.net",
+        "privatlab.com",
+        "privatlab.net",
+        "send.exploit.in",
+        "sendspace.com",
+        "storage.googleapis.com",
+        "storjshare.io",
+        "supabase.co",
+        "temp.sh",
+        "transfer.sh",
+        "trycloudflare.com",
+        "ufile.io",
+        "w3spaces.com",
+        "workers.dev"
+      ],
+      "raw_values": [
+        "* /transfer *",
+        "* /create *",
+        "* /addfile *",
+        "*.githubusercontent.com*",
+        "*anonfiles.com*",
+        "*cdn.discordapp.com*",
+        "*ddns.net*",
+        "*dl.dropboxusercontent.com*",
+        "*ghostbin.co*",
+        "*github.com*",
+        "*glitch.me*",
+        "*gofile.io*",
+        "*hastebin.com*",
+        "*mediafire.com*",
+        "*mega.nz*",
+        "*onrender.com*",
+        "*pages.dev*",
+        "*paste.ee*",
+        "*pastebin.com*",
+        "*pastebin.pl*",
+        "*pastetext.net*",
+        "*privatlab.com*",
+        "*privatlab.net*",
+        "*send.exploit.in*",
+        "*sendspace.com*",
+        "*storage.googleapis.com*",
+        "*storjshare.io*",
+        "*supabase.co*",
+        "*temp.sh*",
+        "*transfer.sh*",
+        "*trycloudflare.com*",
+        "*ufile.io*",
+        "*w3spaces.com*",
+        "*workers.dev*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\bitsadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "bitsadmin.exe"
+      ]
+    }
+  ]
+}

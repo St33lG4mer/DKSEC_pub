@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_get_clipboard",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_get_clipboard.eql",
+  "raw_query": "any where process.command_line:\"*Get-Clipboard*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "get-clipboard"
+      ],
+      "raw_values": [
+        "*Get-Clipboard*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "source": "sigma",
+  "name": "proc_access_win_svchost_susp_access_request",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_access/proc_access_win_svchost_susp_access_request.eql",
+  "raw_query": "any where (winlog.event_data.TargetImage:\"*:\\\\Windows\\\\System32\\\\svchost.exe\" and winlog.event_data.GrantedAccess:\"0x1F3FFF\" and winlog.event_data.CallTrace:\"*UNKNOWN*\") and (not (process.executable:\"*:\\\\Program Files\\\\Microsoft Visual Studio\\\\*\" and process.executable:\"*\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" and (winlog.event_data.CallTrace like~ (\"*Microsoft.Build.ni.dll*\", \"*System.ni.dll*\"))))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": "like~",
+      "values": [
+        "microsoft.build.ni.dll",
+        "system.ni.dll"
+      ],
+      "raw_values": [
+        "*Microsoft.Build.ni.dll*",
+        "*System.ni.dll*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\system32\\\\svchost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x1f3fff"
+      ],
+      "raw_values": [
+        "0x1F3FFF"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "unknown"
+      ],
+      "raw_values": [
+        "*UNKNOWN*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Microsoft Visual Studio\\\\*",
+        "*\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe"
+      ]
+    }
+  ]
+}

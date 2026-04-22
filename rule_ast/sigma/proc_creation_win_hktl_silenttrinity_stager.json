@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_silenttrinity_stager",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_silenttrinity_stager.eql",
+  "raw_query": "any where process.pe.description:\"*st2stager*\"",
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "st2stager"
+      ],
+      "raw_values": [
+        "*st2stager*"
+      ]
+    }
+  ]
+}

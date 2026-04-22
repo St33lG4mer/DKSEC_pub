@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_network_sniffing",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_network_sniffing.eql",
+  "raw_query": "any where (process.executable:\"*\\\\tshark.exe\" and process.command_line:\"*-i*\") or process.executable:\"*\\\\windump.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tshark.exe",
+        "windump.exe"
+      ],
+      "raw_values": [
+        "*\\\\tshark.exe",
+        "*\\\\windump.exe"
+      ]
+    }
+  ]
+}

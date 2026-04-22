@@ -1,0 +1,66 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_susp_legitimate_app_dropping_script",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_susp_legitimate_app_dropping_script.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\eqnedt32.exe\", \"*\\\\wordpad.exe\", \"*\\\\wordview.exe\", \"*\\\\certutil.exe\", \"*\\\\certoc.exe\", \"*\\\\CertReq.exe\", \"*\\\\Desktopimgdownldr.exe\", \"*\\\\esentutl.exe\", \"*\\\\mshta.exe\", \"*\\\\AcroRd32.exe\", \"*\\\\RdrCEF.exe\", \"*\\\\hh.exe\", \"*\\\\finger.exe\")) and (file.path like~ (\"*.ps1\", \"*.bat\", \"*.vbs\", \"*.scf\", \"*.wsf\", \"*.wsh\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "eqnedt32.exe",
+        "wordpad.exe",
+        "wordview.exe",
+        "certutil.exe",
+        "certoc.exe",
+        "certreq.exe",
+        "desktopimgdownldr.exe",
+        "esentutl.exe",
+        "mshta.exe",
+        "acrord32.exe",
+        "rdrcef.exe",
+        "hh.exe",
+        "finger.exe"
+      ],
+      "raw_values": [
+        "*\\\\eqnedt32.exe",
+        "*\\\\wordpad.exe",
+        "*\\\\wordview.exe",
+        "*\\\\certutil.exe",
+        "*\\\\certoc.exe",
+        "*\\\\CertReq.exe",
+        "*\\\\Desktopimgdownldr.exe",
+        "*\\\\esentutl.exe",
+        "*\\\\mshta.exe",
+        "*\\\\AcroRd32.exe",
+        "*\\\\RdrCEF.exe",
+        "*\\\\hh.exe",
+        "*\\\\finger.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".ps1",
+        ".bat",
+        ".vbs",
+        ".scf",
+        ".wsf",
+        ".wsh"
+      ],
+      "raw_values": [
+        "*.ps1",
+        "*.bat",
+        "*.vbs",
+        "*.scf",
+        "*.wsf",
+        "*.wsh"
+      ]
+    }
+  ]
+}

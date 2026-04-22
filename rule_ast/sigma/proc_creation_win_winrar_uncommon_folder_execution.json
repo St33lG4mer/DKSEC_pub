@@ -1,0 +1,48 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_winrar_uncommon_folder_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_winrar_uncommon_folder_execution.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\rar.exe\", \"*\\\\winrar.exe\")) or (process.pe.description like~ (\"Command line RAR\", \"WinRAR\"))) and (not (process.executable:\"*\\\\UnRAR.exe\" or (process.executable like~ (\"*:\\\\Program Files (x86)\\\\WinRAR\\\\*\", \"*:\\\\Program Files\\\\WinRAR\\\\*\")))) and (not process.executable:\"*:\\\\Windows\\\\Temp\\\\*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rar.exe",
+        "winrar.exe"
+      ],
+      "raw_values": [
+        "*\\\\rar.exe",
+        "*\\\\winrar.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": "like~",
+      "values": [
+        "command line rar",
+        "winrar"
+      ],
+      "raw_values": [
+        "Command line RAR",
+        "WinRAR"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "unrar.exe"
+      ],
+      "raw_values": [
+        "*\\\\UnRAR.exe",
+        "*:\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ]
+}

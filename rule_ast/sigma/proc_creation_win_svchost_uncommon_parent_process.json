@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_svchost_uncommon_parent_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_svchost_uncommon_parent_process.eql",
+  "raw_query": "any where process.executable:\"*\\\\svchost.exe\" and (not ((process.parent.executable like~ (\"*\\\\Mrt.exe\", \"*\\\\MsMpEng.exe\", \"*\\\\ngen.exe\", \"*\\\\rpcnet.exe\", \"*\\\\services.exe\", \"*\\\\TiWorker.exe\")) or (?process.parent.executable == null) or (process.parent.executable like~ (\"-\", \"\"))))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "mrt.exe",
+        "msmpeng.exe",
+        "ngen.exe",
+        "rpcnet.exe",
+        "services.exe",
+        "tiworker.exe"
+      ],
+      "raw_values": [
+        "*\\\\Mrt.exe",
+        "*\\\\MsMpEng.exe",
+        "*\\\\ngen.exe",
+        "*\\\\rpcnet.exe",
+        "*\\\\services.exe",
+        "*\\\\TiWorker.exe",
+        "-",
+        ""
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    }
+  ]
+}

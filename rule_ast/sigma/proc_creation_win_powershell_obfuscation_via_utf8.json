@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_obfuscation_via_utf8",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_obfuscation_via_utf8.eql",
+  "raw_query": "any where process.command_line like~ (\"*[char]0x*\", \"*(WCHAR)0x*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "[char]0x"
+      ],
+      "raw_values": [
+        "*[char]0x*"
+      ]
+    }
+  ]
+}

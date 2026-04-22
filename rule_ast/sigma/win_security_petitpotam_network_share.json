@@ -1,0 +1,67 @@
+{
+  "source": "sigma",
+  "name": "win_security_petitpotam_network_share",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_petitpotam_network_share.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"5145\" and winlog.event_data.ShareName:\"\\\\\\\\*\" and winlog.event_data.ShareName:\"*\\\\IPC$\" and winlog.event_data.RelativeTargetName:\"lsarpc\" and user.name:\"ANONYMOUS LOGON\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    },
+    {
+      "field": "winlog.event_data.sharename",
+      "raw_field": "winlog.event_data.ShareName",
+      "operator": ":",
+      "values": [
+        "\\\\\\\\",
+        "\\\\ipc$"
+      ],
+      "raw_values": [
+        "\\\\\\\\*",
+        "*\\\\IPC$"
+      ]
+    },
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": ":",
+      "values": [
+        "lsarpc"
+      ],
+      "raw_values": [
+        "lsarpc"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": ":",
+      "values": [
+        "anonymous logon"
+      ],
+      "raw_values": [
+        "ANONYMOUS LOGON"
+      ]
+    }
+  ]
+}

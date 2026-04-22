@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "registry_set_powershell_crypto_namespace",
+  "subtree": "rules-threat-hunting",
+  "category": "registry",
+  "sigma_path": "rules-threat-hunting/windows/registry/registry_set/registry_set_powershell_crypto_namespace.eql",
+  "raw_query": "any where registry.path:\"*\\\\Shell\\\\Open\\\\Command*\" and (winlog.event_data.Details like~ (\"*powershell*\", \"*pwsh*\")) and winlog.event_data.Details:\"*System.Security.Cryptography.*\" and (winlog.event_data.Details like~ (\"*.AesCryptoServiceProvider*\", \"*.DESCryptoServiceProvider*\", \"*.DSACryptoServiceProvider*\", \"*.RC2CryptoServiceProvider*\", \"*.Rijndael*\", \"*.RSACryptoServiceProvider*\", \"*.TripleDESCryptoServiceProvider*\"))",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "powershell",
+        "pwsh",
+        ".aescryptoserviceprovider",
+        ".descryptoserviceprovider",
+        ".dsacryptoserviceprovider",
+        ".rc2cryptoserviceprovider",
+        ".rijndael",
+        ".rsacryptoserviceprovider",
+        ".tripledescryptoserviceprovider"
+      ],
+      "raw_values": [
+        "*powershell*",
+        "*pwsh*",
+        "*.AesCryptoServiceProvider*",
+        "*.DESCryptoServiceProvider*",
+        "*.DSACryptoServiceProvider*",
+        "*.RC2CryptoServiceProvider*",
+        "*.Rijndael*",
+        "*.RSACryptoServiceProvider*",
+        "*.TripleDESCryptoServiceProvider*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\shell\\\\open\\\\command"
+      ],
+      "raw_values": [
+        "*\\\\Shell\\\\Open\\\\Command*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "system.security.cryptography."
+      ],
+      "raw_values": [
+        "*System.Security.Cryptography.*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "source": "elastic",
+  "name": "SoftwareUpdate Preferences Modification",
+  "slug": "defense_evasion_apple_softupdates_modification",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/defense_evasion_apple_softupdates_modification.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.name == \"defaults\" and\n process.args like \"write\" and process.args like \"-bool\" and process.args like~ (\"com.apple.SoftwareUpdate\", \"/Library/Preferences/com.apple.SoftwareUpdate.plist\") and not process.args like (\"TRUE\", \"true\")\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "com.apple.softwareupdate",
+        "com.apple.softwareupdate.plist"
+      ],
+      "raw_values": [
+        "com.apple.SoftwareUpdate",
+        "/Library/Preferences/com.apple.SoftwareUpdate.plist"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "defaults"
+      ],
+      "raw_values": [
+        "defaults"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "write",
+        "-bool"
+      ],
+      "raw_values": [
+        "write",
+        "-bool"
+      ]
+    }
+  ]
+}

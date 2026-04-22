@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "registry_set_office_outlook_enable_unsafe_client_mail_rules",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_office_outlook_enable_unsafe_client_mail_rules.eql",
+  "raw_query": "any where registry.path:\"*\\\\Outlook\\\\Security\\\\EnableUnsafeClientMailRules\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\outlook\\\\security\\\\enableunsafeclientmailrules"
+      ],
+      "raw_values": [
+        "*\\\\Outlook\\\\Security\\\\EnableUnsafeClientMailRules"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ]
+}

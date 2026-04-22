@@ -1,0 +1,84 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_unc2452_cmds",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2020/TA/SolarWinds-Supply-Chain/proc_creation_win_apt_unc2452_cmds.eql",
+  "raw_query": "any where ((process.command_line like~ (\"*7z.exe a -v500m -mx9 -r0 -p*\", \"*7z.exe a -mx9 -r0 -p*\")) and (process.command_line:\"*.zip*\" and process.command_line:\"*.txt*\")) or ((process.command_line like~ (\"*7z.exe a -v500m -mx9 -r0 -p*\", \"*7z.exe a -mx9 -r0 -p*\")) and (process.command_line:\"*.zip*\" and process.command_line:\"*.log*\")) or ((process.parent.command_line:\"*wscript.exe*\" and process.parent.command_line:\"*.vbs*\") and (process.command_line:\"*rundll32.exe*\" and process.command_line:\"*C:\\\\Windows*\" and process.command_line:\"*.dll,Tk_*\")) or (process.parent.executable:\"*\\\\rundll32.exe\" and (process.parent.command_line:\"*C:\\\\Windows*\" and process.parent.command_line:\"*.dll*\") and process.command_line:\"*cmd.exe /C *\") or (process.parent.executable:\"*\\\\rundll32.exe\" and process.executable:\"*\\\\dllhost.exe\" and process.command_line==\"\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "7z.exe a -v500m -mx9 -r0 -p",
+        "7z.exe a -mx9 -r0 -p"
+      ],
+      "raw_values": [
+        "*7z.exe a -v500m -mx9 -r0 -p*",
+        "*7z.exe a -mx9 -r0 -p*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".zip",
+        ".txt",
+        ".log",
+        "rundll32.exe",
+        "windows",
+        ".dll,tk_"
+      ],
+      "raw_values": [
+        "*.zip*",
+        "*.txt*",
+        "*.log*",
+        "*rundll32.exe*",
+        "*C:\\\\Windows*",
+        "*.dll,Tk_*",
+        "*cmd.exe /C *"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "wscript.exe",
+        ".vbs",
+        "windows",
+        ".dll"
+      ],
+      "raw_values": [
+        "*wscript.exe*",
+        "*.vbs*",
+        "*C:\\\\Windows*",
+        "*.dll*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\dllhost.exe"
+      ]
+    }
+  ]
+}

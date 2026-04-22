@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "win_security_audit_log_cleared",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_audit_log_cleared.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"517\" and winlog.provider_name:\"Security\") or (event.code:\"1102\" and winlog.provider_name:\"Microsoft-Windows-Eventlog\"))",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "517",
+        "1102"
+      ],
+      "raw_values": [
+        "517",
+        "1102"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "security",
+        "microsoft-windows-eventlog"
+      ],
+      "raw_values": [
+        "Security",
+        "Microsoft-Windows-Eventlog"
+      ]
+    }
+  ]
+}

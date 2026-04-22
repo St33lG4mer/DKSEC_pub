@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_appdata_local_system",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_appdata_local_system.eql",
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe\" and (process.command_line:\"*/Create*\" and process.command_line:\"*/RU*\" and process.command_line:\"*/TR*\" and process.command_line:\"*C:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\*\") and (process.command_line like~ (\"*NT AUT*\", \"* SYSTEM *\"))) and (not ((process.parent.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and process.parent.executable:\"*TeamViewer_.exe*\") and process.executable:\"*\\\\schtasks.exe\" and process.command_line:\"*/TN TVInstallRestore*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "nt aut",
+        "system"
+      ],
+      "raw_values": [
+        "*NT AUT*",
+        "* SYSTEM *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create",
+        "tn tvinstallrestore"
+      ],
+      "raw_values": [
+        "*/Create*",
+        "*/RU*",
+        "*/TR*",
+        "*C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*/TN TVInstallRestore*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "teamviewer_.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*TeamViewer_.exe*"
+      ]
+    }
+  ]
+}

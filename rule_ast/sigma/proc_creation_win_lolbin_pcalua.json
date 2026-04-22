@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_pcalua",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_pcalua.eql",
+  "raw_query": "any where process.executable:\"*\\\\pcalua.exe\" and process.command_line:\"* -a*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pcalua.exe"
+      ],
+      "raw_values": [
+        "*\\\\pcalua.exe"
+      ]
+    }
+  ]
+}

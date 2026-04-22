@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_shim_database_uncommon_location",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_shim_database_uncommon_location.eql",
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\InstalledSDB\\\\*\" and registry.path:\"*\\\\DatabasePath*\") and (not winlog.event_data.Details:\"*:\\\\Windows\\\\AppPatch\\\\Custom*\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\installedsdb\\\\",
+        "\\\\databasepath"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\InstalledSDB\\\\*",
+        "*\\\\DatabasePath*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\apppatch\\\\custom"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\AppPatch\\\\Custom*"
+      ]
+    }
+  ]
+}

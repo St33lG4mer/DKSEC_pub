@@ -1,0 +1,91 @@
+{
+  "source": "elastic",
+  "name": "Potential Privilege Escalation via Container Misconfiguration",
+  "slug": "privilege_escalation_container_util_misconfiguration",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Domain: Container",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_container_util_misconfiguration.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  (process.name == \"runc\" and process.args == \"run\") or\n  (process.name == \"ctr\" and process.args == \"run\" and process.args in (\"--privileged\", \"--mount\"))\n) and not user.Ext.real.id == \"0\" and not group.Ext.real.id == \"0\" and\nprocess.interactive == true and process.parent.interactive == true\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--privileged",
+        "--mount"
+      ],
+      "raw_values": [
+        "--privileged",
+        "--mount"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "runc",
+        "ctr"
+      ],
+      "raw_values": [
+        "runc",
+        "ctr"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "run"
+      ],
+      "raw_values": [
+        "run"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_certoc_download_direct_ip",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_certoc_download_direct_ip.eql",
+  "raw_query": "any where (process.executable:\"*\\\\certoc.exe\" or process.pe.original_file_name:\"CertOC.exe\") and process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['://[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}']), flags=set())\" and process.command_line:\"*-GetCACAPS*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certoc.exe"
+      ],
+      "raw_values": [
+        "*\\\\certoc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certoc.exe"
+      ],
+      "raw_values": [
+        "CertOC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".[0-9]{1,3}']), flags=set())",
+        "-getcacaps"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['://[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}']), flags=set())",
+        "*-GetCACAPS*"
+      ]
+    }
+  ]
+}

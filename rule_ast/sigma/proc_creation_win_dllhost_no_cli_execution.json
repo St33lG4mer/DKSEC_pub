@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_dllhost_no_cli_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_dllhost_no_cli_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\dllhost.exe\" and (process.command_line like~ (\"dllhost.exe\", \"dllhost\"))) and ?process.command_line != null",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "dllhost.exe",
+        "dllhost"
+      ],
+      "raw_values": [
+        "dllhost.exe",
+        "dllhost"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\dllhost.exe"
+      ]
+    }
+  ]
+}

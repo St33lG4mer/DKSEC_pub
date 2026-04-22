@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "win_susp_ntlm_brute_force",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/ntlm/win_susp_ntlm_brute_force.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-NTLM/Operational\" and (event.code:\"8004\" and (source.domain like~ (\"Rdesktop\", \"Remmina\", \"Freerdp\", \"Windows7\", \"Windows8\", \"Windows2012\", \"Windows2016\", \"Windows2019\")))",
+  "conditions": [
+    {
+      "field": "source.domain",
+      "raw_field": "source.domain",
+      "operator": "like~",
+      "values": [
+        "rdesktop",
+        "remmina",
+        "freerdp",
+        "windows7",
+        "windows8",
+        "windows2012",
+        "windows2016",
+        "windows2019"
+      ],
+      "raw_values": [
+        "Rdesktop",
+        "Remmina",
+        "Freerdp",
+        "Windows7",
+        "Windows8",
+        "Windows2012",
+        "Windows2016",
+        "Windows2019"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-ntlm/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-NTLM/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "8004"
+      ],
+      "raw_values": [
+        "8004"
+      ]
+    }
+  ]
+}

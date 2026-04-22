@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_c3_rundll32_pattern",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_c3_rundll32_pattern.eql",
+  "raw_query": "any where process.command_line:\"*rundll32.exe*\" and process.command_line:\"*.dll*\" and process.command_line:\"*StartNodeRelay*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rundll32.exe",
+        ".dll",
+        "startnoderelay"
+      ],
+      "raw_values": [
+        "*rundll32.exe*",
+        "*.dll*",
+        "*StartNodeRelay*"
+      ]
+    }
+  ]
+}

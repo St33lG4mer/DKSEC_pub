@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_whoami_as_param",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_whoami_as_param.eql",
+  "raw_query": "any where process.command_line:\"*.exe whoami*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".exe whoami"
+      ],
+      "raw_values": [
+        "*.exe whoami*"
+      ]
+    }
+  ]
+}

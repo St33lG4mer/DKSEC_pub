@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_trustedpath",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_trustedpath.eql",
+  "raw_query": "any where process.executable like~ (\"*C:\\\\Windows \\\\System32\\\\*\", \"*C:\\\\Windows \\\\SysWOW64\\\\*\")",
+  "conditions": []
+}

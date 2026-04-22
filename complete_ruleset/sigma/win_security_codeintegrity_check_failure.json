@@ -1,0 +1,62 @@
+{
+  "source": "sigma",
+  "name": "win_security_codeintegrity_check_failure",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_codeintegrity_check_failure.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"5038\", \"6281\")) and (not ((winlog.event_data.param1 like~ (\"*\\\\CSFalconServiceUninstallTool_*\", \"*\\\\Program Files\\\\CrowdStrike\\\\*\", \"*\\\\System32\\\\drivers\\\\CrowdStrike\\\\*\", \"*\\\\Windows\\\\System32\\\\ScriptControl64_*\")) or winlog.event_data.param1:\"*\\\\Program Files\\\\Sophos\\\\*\")))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "5038",
+        "6281"
+      ],
+      "raw_values": [
+        "5038",
+        "6281"
+      ]
+    },
+    {
+      "field": "winlog.event_data.param1",
+      "raw_field": "winlog.event_data.param1",
+      "operator": "like~",
+      "values": [
+        "\\\\csfalconserviceuninstalltool_",
+        "\\\\program files\\\\crowdstrike\\\\",
+        "\\\\system32\\\\drivers\\\\crowdstrike\\\\",
+        "\\\\windows\\\\system32\\\\scriptcontrol64_"
+      ],
+      "raw_values": [
+        "*\\\\CSFalconServiceUninstallTool_*",
+        "*\\\\Program Files\\\\CrowdStrike\\\\*",
+        "*\\\\System32\\\\drivers\\\\CrowdStrike\\\\*",
+        "*\\\\Windows\\\\System32\\\\ScriptControl64_*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.param1",
+      "raw_field": "winlog.event_data.param1",
+      "operator": ":",
+      "values": [
+        "\\\\program files\\\\sophos\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Program Files\\\\Sophos\\\\*"
+      ]
+    }
+  ]
+}

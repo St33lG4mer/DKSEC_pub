@@ -1,0 +1,284 @@
+{
+  "source": "elastic",
+  "name": "Suspicious DLL Loaded for Persistence or Privilege Escalation",
+  "slug": "privilege_escalation_persistence_phantom_dll",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon"
+  ],
+  "elastic_path": "rules/windows/privilege_escalation_persistence_phantom_dll.toml",
+  "raw_query": "any where host.os.type == \"windows\" and \n(\n  /*  Elastic Defend DLL load events */\n  (event.category == \"library\" and \n    (\n     ?dll.name : (\"wlbsctrl.dll\", \"wbemcomn.dll\", \"WptsExtensions.dll\", \"Tsmsisrv.dll\", \"TSVIPSrv.dll\", \"Msfte.dll\", \"wow64log.dll\", \"WindowsCoreDeviceInfo.dll\", \"Ualapi.dll\", \"wlanhlp.dll\", \"phoneinfo.dll\", \"EdgeGdi.dll\", \"cdpsgshims.dll\", \"windowsperformancerecordercontrol.dll\", \"diagtrack_win.dll\", \"TPPCOIPW32.dll\", \"tpgenlic.dll\", \"thinmon.dll\", \"fxsst.dll\", \"msTracer.dll\") or \n\n     (?dll.path : \"?:\\\\Windows\\\\*\\\\oci.dll\" and process.executable : \"?:\\\\Windows\\\\*.exe\")\n     )\n    and (?dll.code_signature.trusted == false or ?dll.code_signature.exists == false or (?dll.code_signature.trusted == true and not ?dll.code_signature.subject_name : (\"Microsoft Windows\", \"Microsoft Corporation\", \"Microsoft Windows Publisher\"))\n      ))\n   or\n\n  /*  Sysmon DLL load events */\n  ((event.category == \"process\" and event.action like \"Image loaded*\") and file.code_signature.status != \"Valid\" and \n  file.name : (\"wlbsctrl.dll\", \"wbemcomn.dll\", \"WptsExtensions.dll\", \"Tsmsisrv.dll\", \"TSVIPSrv.dll\", \"Msfte.dll\", \"wow64log.dll\", \"WindowsCoreDeviceInfo.dll\", \"Ualapi.dll\", \"wlanhlp.dll\", \"phoneinfo.dll\", \"EdgeGdi.dll\", \"cdpsgshims.dll\", \"windowsperformancerecordercontrol.dll\", \"diagtrack_win.dll\", \"TPPCOIPW32.dll\", \"tpgenlic.dll\", \"thinmon.dll\", \"fxsst.dll\", \"msTracer.dll\") and \n   not file.hash.sha256 in \n            (\"6e837794fc282446906c36d681958f2f6212043fc117c716936920be166a700f\", \n             \"b14e4954e8cca060ffeb57f2458b6a3a39c7d2f27e94391cbcea5387652f21a4\", \n             \"c258d90acd006fa109dc6b748008edbb196d6168bc75ace0de0de54a4db46662\", \n             \"254e5053ac04b7623e86234077876388e0b10c3ac5c3f4e4e86292b62571bfb0\")) \n\n) and not\n  (\n    ?dll.path : (\n      \"?:\\\\Windows\\\\System32\\\\wbemcomn.dll\",\n      \"?:\\\\Windows\\\\SysWOW64\\\\wbemcomn.dll\",\n      \"?:\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll\",\n      \"?:\\\\Windows\\\\System32\\\\wlanhlp.dll\", \n      \"\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\SysWOW64\\\\wbemcomn.dll\", \n      \"\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\System32\\\\wbemcomn.dll\", \n      \"\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\SysWOW64\\\\wlanhlp.dll\", \n      \"\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\System32\\\\wlanhlp.dll\", \n      \"\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\SysWOW64\\\\windowsperformancerecordercontrol.dll\", \n      \"\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll\", \n      \"C:\\\\ProgramData\\\\docker\\\\windowsfilter\\\\*\\\\Files\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll\", \n      \"\\\\Device\\\\vmsmb\\\\VSMB-{*}\\\\os\\\\windows\\\\system32\\\\*.dll\", \n      \"C:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll\", \n      \"C:\\\\Windows\\\\WinSxS\\\\wow64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll\", \n      \"C:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows-coresystem-wpr_*\\\\windowsperformancerecordercontrol.dll\"\n    ) or\n    \n    file.path : (\n      \"?:\\\\Windows\\\\System32\\\\wbemcomn.dll\",\n      \"?:\\\\Windows\\\\SysWOW64\\\\wbemcomn.dll\",\n      \"?:\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll\",\n      \"?:\\\\Windows\\\\System32\\\\wlanhlp.dll\", \n      \"C:\\\\ProgramData\\\\docker\\\\windowsfilter\\\\*\\\\Files\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll\", \n      \"C:\\\\ProgramData\\\\docker\\\\windowsfilter\\\\*\\\\Files\\\\Windows\\\\System32\\\\wbemcomn.dll\", \n      \"\\\\Device\\\\vmsmb\\\\VSMB-{*}\\\\os\\\\windows\\\\system32\\\\*.dll\", \n      \"C:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll\", \n      \"C:\\\\Windows\\\\WinSxS\\\\wow64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll\"\n    ) or \n\n ?dll.code_signature.status like \"errorCode_endpoint*\"\n  )\n",
+  "conditions": [
+    {
+      "field": "dll.name",
+      "raw_field": "dll.name",
+      "operator": ":",
+      "values": [
+        "wlbsctrl.dll",
+        "wbemcomn.dll",
+        "wptsextensions.dll",
+        "tsmsisrv.dll",
+        "tsvipsrv.dll",
+        "msfte.dll",
+        "wow64log.dll",
+        "windowscoredeviceinfo.dll",
+        "ualapi.dll",
+        "wlanhlp.dll",
+        "phoneinfo.dll",
+        "edgegdi.dll",
+        "cdpsgshims.dll",
+        "windowsperformancerecordercontrol.dll",
+        "diagtrack_win.dll",
+        "tppcoipw32.dll",
+        "tpgenlic.dll",
+        "thinmon.dll",
+        "fxsst.dll",
+        "mstracer.dll"
+      ],
+      "raw_values": [
+        "wlbsctrl.dll",
+        "wbemcomn.dll",
+        "WptsExtensions.dll",
+        "Tsmsisrv.dll",
+        "TSVIPSrv.dll",
+        "Msfte.dll",
+        "wow64log.dll",
+        "WindowsCoreDeviceInfo.dll",
+        "Ualapi.dll",
+        "wlanhlp.dll",
+        "phoneinfo.dll",
+        "EdgeGdi.dll",
+        "cdpsgshims.dll",
+        "windowsperformancerecordercontrol.dll",
+        "diagtrack_win.dll",
+        "TPPCOIPW32.dll",
+        "tpgenlic.dll",
+        "thinmon.dll",
+        "fxsst.dll",
+        "msTracer.dll"
+      ]
+    },
+    {
+      "field": "dll.code_signature.subject_name",
+      "raw_field": "dll.code_signature.subject_name",
+      "operator": ":",
+      "values": [
+        "microsoft windows",
+        "microsoft corporation",
+        "microsoft windows publisher"
+      ],
+      "raw_values": [
+        "Microsoft Windows",
+        "Microsoft Corporation",
+        "Microsoft Windows Publisher"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "wlbsctrl.dll",
+        "wbemcomn.dll",
+        "wptsextensions.dll",
+        "tsmsisrv.dll",
+        "tsvipsrv.dll",
+        "msfte.dll",
+        "wow64log.dll",
+        "windowscoredeviceinfo.dll",
+        "ualapi.dll",
+        "wlanhlp.dll",
+        "phoneinfo.dll",
+        "edgegdi.dll",
+        "cdpsgshims.dll",
+        "windowsperformancerecordercontrol.dll",
+        "diagtrack_win.dll",
+        "tppcoipw32.dll",
+        "tpgenlic.dll",
+        "thinmon.dll",
+        "fxsst.dll",
+        "mstracer.dll"
+      ],
+      "raw_values": [
+        "wlbsctrl.dll",
+        "wbemcomn.dll",
+        "WptsExtensions.dll",
+        "Tsmsisrv.dll",
+        "TSVIPSrv.dll",
+        "Msfte.dll",
+        "wow64log.dll",
+        "WindowsCoreDeviceInfo.dll",
+        "Ualapi.dll",
+        "wlanhlp.dll",
+        "phoneinfo.dll",
+        "EdgeGdi.dll",
+        "cdpsgshims.dll",
+        "windowsperformancerecordercontrol.dll",
+        "diagtrack_win.dll",
+        "TPPCOIPW32.dll",
+        "tpgenlic.dll",
+        "thinmon.dll",
+        "fxsst.dll",
+        "msTracer.dll"
+      ]
+    },
+    {
+      "field": "dll.path",
+      "raw_field": "dll.path",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\system32\\\\wbemcomn.dll",
+        ":\\\\windows\\\\syswow64\\\\wbemcomn.dll",
+        ":\\\\windows\\\\system32\\\\windowsperformancerecordercontrol.dll",
+        ":\\\\windows\\\\system32\\\\wlanhlp.dll",
+        "\\\\device\\\\harddiskvolume?\\\\windows\\\\syswow64\\\\wbemcomn.dll",
+        "\\\\device\\\\harddiskvolume?\\\\windows\\\\system32\\\\wbemcomn.dll",
+        "\\\\device\\\\harddiskvolume?\\\\windows\\\\syswow64\\\\wlanhlp.dll",
+        "\\\\device\\\\harddiskvolume?\\\\windows\\\\system32\\\\wlanhlp.dll",
+        "\\\\device\\\\harddiskvolume?\\\\windows\\\\syswow64\\\\windowsperformancerecordercontrol.dll",
+        "\\\\device\\\\harddiskvolume?\\\\windows\\\\system32\\\\windowsperformancerecordercontrol.dll",
+        "c:\\\\programdata\\\\docker\\\\windowsfilter\\\\*\\\\files\\\\windows\\\\system32\\\\windowsperformancerecordercontrol.dll",
+        "\\\\device\\\\vmsmb\\\\vsmb-{*}\\\\os\\\\windows\\\\system32\\\\*.dll",
+        "c:\\\\windows\\\\winsxs\\\\amd64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll",
+        "c:\\\\windows\\\\winsxs\\\\wow64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll",
+        "c:\\\\windows\\\\winsxs\\\\amd64_microsoft-windows-coresystem-wpr_*\\\\windowsperformancerecordercontrol.dll",
+        ":\\\\windows\\\\*\\\\oci.dll"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\wbemcomn.dll",
+        "?:\\\\Windows\\\\SysWOW64\\\\wbemcomn.dll",
+        "?:\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll",
+        "?:\\\\Windows\\\\System32\\\\wlanhlp.dll",
+        "\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\SysWOW64\\\\wbemcomn.dll",
+        "\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\System32\\\\wbemcomn.dll",
+        "\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\SysWOW64\\\\wlanhlp.dll",
+        "\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\System32\\\\wlanhlp.dll",
+        "\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\SysWOW64\\\\windowsperformancerecordercontrol.dll",
+        "\\\\Device\\\\HarddiskVolume?\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll",
+        "C:\\\\ProgramData\\\\docker\\\\windowsfilter\\\\*\\\\Files\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll",
+        "\\\\Device\\\\vmsmb\\\\VSMB-{*}\\\\os\\\\windows\\\\system32\\\\*.dll",
+        "C:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll",
+        "C:\\\\Windows\\\\WinSxS\\\\wow64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll",
+        "C:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows-coresystem-wpr_*\\\\windowsperformancerecordercontrol.dll",
+        "?:\\\\Windows\\\\*\\\\oci.dll"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "wbemcomn.dll",
+        "windowsperformancerecordercontrol.dll",
+        "wlanhlp.dll",
+        ".dll"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\wbemcomn.dll",
+        "?:\\\\Windows\\\\SysWOW64\\\\wbemcomn.dll",
+        "?:\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll",
+        "?:\\\\Windows\\\\System32\\\\wlanhlp.dll",
+        "C:\\\\ProgramData\\\\docker\\\\windowsfilter\\\\*\\\\Files\\\\Windows\\\\System32\\\\windowsperformancerecordercontrol.dll",
+        "C:\\\\ProgramData\\\\docker\\\\windowsfilter\\\\*\\\\Files\\\\Windows\\\\System32\\\\wbemcomn.dll",
+        "\\\\Device\\\\vmsmb\\\\VSMB-{*}\\\\os\\\\windows\\\\system32\\\\*.dll",
+        "C:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll",
+        "C:\\\\Windows\\\\WinSxS\\\\wow64_microsoft-windows-wmi-core-wbemcomn-dll_*\\\\wbemcomn.dll"
+      ]
+    },
+    {
+      "field": "file.hash.sha256",
+      "raw_field": "file.hash.sha256",
+      "operator": "in",
+      "values": [
+        "6e837794fc282446906c36d681958f2f6212043fc117c716936920be166a700f",
+        "b14e4954e8cca060ffeb57f2458b6a3a39c7d2f27e94391cbcea5387652f21a4",
+        "c258d90acd006fa109dc6b748008edbb196d6168bc75ace0de0de54a4db46662",
+        "254e5053ac04b7623e86234077876388e0b10c3ac5c3f4e4e86292b62571bfb0"
+      ],
+      "raw_values": [
+        "6e837794fc282446906c36d681958f2f6212043fc117c716936920be166a700f",
+        "b14e4954e8cca060ffeb57f2458b6a3a39c7d2f27e94391cbcea5387652f21a4",
+        "c258d90acd006fa109dc6b748008edbb196d6168bc75ace0de0de54a4db46662",
+        "254e5053ac04b7623e86234077876388e0b10c3ac5c3f4e4e86292b62571bfb0"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "library",
+        "process"
+      ],
+      "raw_values": [
+        "library",
+        "process"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\*.exe"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "like",
+      "values": [
+        "image loaded"
+      ],
+      "raw_values": [
+        "Image loaded*"
+      ]
+    },
+    {
+      "field": "file.code_signature.status",
+      "raw_field": "file.code_signature.status",
+      "operator": "!=",
+      "values": [
+        "valid"
+      ],
+      "raw_values": [
+        "Valid"
+      ]
+    },
+    {
+      "field": "dll.code_signature.status",
+      "raw_field": "dll.code_signature.status",
+      "operator": "like",
+      "values": [
+        "errorcode_endpoint"
+      ],
+      "raw_values": [
+        "errorCode_endpoint*"
+      ]
+    }
+  ]
+}

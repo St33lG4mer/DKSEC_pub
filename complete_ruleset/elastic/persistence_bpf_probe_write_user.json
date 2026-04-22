@@ -1,0 +1,42 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Usage of bpf_probe_write_user Helper",
+  "slug": "persistence_bpf_probe_write_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_bpf_probe_write_user.toml",
+  "raw_query": "host.os.type:linux and data_stream.dataset:\"system.syslog\" and process.name:kernel and message:\"bpf_probe_write_user\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "system.syslog"
+      ],
+      "raw_values": [
+        "system.syslog"
+      ]
+    },
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": ":",
+      "values": [
+        "bpf_probe_write_user"
+      ],
+      "raw_values": [
+        "bpf_probe_write_user"
+      ]
+    }
+  ]
+}

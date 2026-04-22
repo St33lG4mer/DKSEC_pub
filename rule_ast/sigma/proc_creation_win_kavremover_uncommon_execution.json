@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_kavremover_uncommon_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_kavremover_uncommon_execution.eql",
+  "raw_query": "any where process.command_line:\"* run run-cmd *\" and (not (process.parent.executable like~ (\"*\\\\cleanapi.exe\", \"*\\\\kavremover.exe\")))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cleanapi.exe",
+        "kavremover.exe"
+      ],
+      "raw_values": [
+        "*\\\\cleanapi.exe",
+        "*\\\\kavremover.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "run run-cmd"
+      ],
+      "raw_values": [
+        "* run run-cmd *"
+      ]
+    }
+  ]
+}

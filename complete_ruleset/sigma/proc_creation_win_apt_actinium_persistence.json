@@ -1,0 +1,27 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_actinium_persistence",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2022/TA/ACTINIUM/proc_creation_win_apt_actinium_persistence.eql",
+  "raw_query": "any where process.command_line:\"*schtasks*\" and process.command_line:\"*create*\" and process.command_line:\"*wscript*\" and process.command_line:\"* /e:vbscript*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "schtasks",
+        "create",
+        "wscript",
+        "e:vbscript"
+      ],
+      "raw_values": [
+        "*schtasks*",
+        "*create*",
+        "*wscript*",
+        "* /e:vbscript*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "source": "elastic",
+  "name": "File with Right-to-Left Override Character (RTLO) Created/Executed",
+  "slug": "defense_evasion_right_to_left_override",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_right_to_left_override.toml",
+  "raw_query": "any where host.os.type == \"windows\" and event.category in (\"file\", \"process\") and \n  (\n    (event.type == \"creation\" and file.path : \"*\\u{202E}*\") or \n    (event.type == \"start\" and process.name : \"*\\u{202E}*\")\n  )\n",
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "in",
+      "values": [
+        "file",
+        "process"
+      ],
+      "raw_values": [
+        "file",
+        "process"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation",
+        "start"
+      ],
+      "raw_values": [
+        "creation",
+        "start"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "u{202e}"
+      ],
+      "raw_values": [
+        "*\\u{202E}*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "u{202e}"
+      ],
+      "raw_values": [
+        "*\\u{202E}*"
+      ]
+    }
+  ]
+}

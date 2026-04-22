@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_fin7_powertrash_lateral_movement",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/FIN7/proc_creation_win_apt_fin7_powertrash_lateral_movement.eql",
+  "raw_query": "any where (process.command_line:\"*-noni -nop -exe bypass -f \\\\\\\\*\" and process.command_line:\"*ADMIN$*\") or (process.command_line:\"*-ex bypass -noprof -nolog -nonint -f*\" and process.command_line:\"*C:\\\\Windows\\\\Temp\\\\*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "admin$",
+        "-ex bypass -noprof -nolog -nonint -f"
+      ],
+      "raw_values": [
+        "*-noni -nop -exe bypass -f \\\\\\\\*",
+        "*ADMIN$*",
+        "*-ex bypass -noprof -nolog -nonint -f*",
+        "*C:\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ]
+}

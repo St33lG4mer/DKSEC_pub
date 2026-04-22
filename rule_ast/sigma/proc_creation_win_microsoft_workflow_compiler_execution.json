@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_microsoft_workflow_compiler_execution",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_microsoft_workflow_compiler_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\Microsoft.Workflow.Compiler.exe\" or process.pe.original_file_name:\"Microsoft.Workflow.Compiler.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microsoft.workflow.compiler.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft.Workflow.Compiler.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "microsoft.workflow.compiler.exe"
+      ],
+      "raw_values": [
+        "Microsoft.Workflow.Compiler.exe"
+      ]
+    }
+  ]
+}

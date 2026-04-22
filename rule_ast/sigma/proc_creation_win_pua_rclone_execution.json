@@ -1,0 +1,87 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_rclone_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_rclone_execution.eql",
+  "raw_query": "any where (process.command_line:\"*--config *\" and process.command_line:\"*--no-check-certificate *\" and process.command_line:\"* copy *\") or ((process.executable:\"*\\\\rclone.exe\" or process.pe.description:\"Rsync for cloud storage\") and (process.command_line like~ (\"*pass*\", \"*user*\", \"*copy*\", \"*sync*\", \"*config*\", \"*lsd*\", \"*remote*\", \"*ls*\", \"*mega*\", \"*pcloud*\", \"*ftp*\", \"*ignore-existing*\", \"*auto-confirm*\", \"*transfers*\", \"*multi-thread-streams*\", \"*no-check-certificate *\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "pass",
+        "user",
+        "copy",
+        "sync",
+        "config",
+        "lsd",
+        "remote",
+        "mega",
+        "pcloud",
+        "ftp",
+        "ignore-existing",
+        "auto-confirm",
+        "transfers",
+        "multi-thread-streams",
+        "no-check-certificate"
+      ],
+      "raw_values": [
+        "*pass*",
+        "*user*",
+        "*copy*",
+        "*sync*",
+        "*config*",
+        "*lsd*",
+        "*remote*",
+        "*ls*",
+        "*mega*",
+        "*pcloud*",
+        "*ftp*",
+        "*ignore-existing*",
+        "*auto-confirm*",
+        "*transfers*",
+        "*multi-thread-streams*",
+        "*no-check-certificate *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--config",
+        "--no-check-certificate",
+        "copy"
+      ],
+      "raw_values": [
+        "*--config *",
+        "*--no-check-certificate *",
+        "* copy *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rclone.exe"
+      ],
+      "raw_values": [
+        "*\\\\rclone.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "rsync for cloud storage"
+      ],
+      "raw_values": [
+        "Rsync for cloud storage"
+      ]
+    }
+  ]
+}

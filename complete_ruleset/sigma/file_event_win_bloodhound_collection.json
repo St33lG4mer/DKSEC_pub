@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_bloodhound_collection",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_bloodhound_collection.eql",
+  "raw_query": "any where (file.path like~ (\"*BloodHound.zip\", \"*_computers.json\", \"*_containers.json\", \"*_gpos.json\", \"*_groups.json\", \"*_ous.json\", \"*_users.json\")) and (not (process.executable:\"*\\\\svchost.exe\" and file.path:\"C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.*\" and file.path:\"*\\\\pocket_containers.json\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "bloodhound.zip",
+        "_computers.json",
+        "_containers.json",
+        "_gpos.json",
+        "_groups.json",
+        "_ous.json",
+        "_users.json"
+      ],
+      "raw_values": [
+        "*BloodHound.zip",
+        "*_computers.json",
+        "*_containers.json",
+        "*_gpos.json",
+        "*_groups.json",
+        "*_ous.json",
+        "*_users.json"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "microsoft.",
+        "pocket_containers.json"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.*",
+        "*\\\\pocket_containers.json"
+      ]
+    }
+  ]
+}

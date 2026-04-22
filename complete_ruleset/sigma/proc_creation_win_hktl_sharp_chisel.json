@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_sharp_chisel",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_sharp_chisel.eql",
+  "raw_query": "any where process.executable:\"*\\\\SharpChisel.exe\" or process.pe.product:\"SharpChisel\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sharpchisel.exe"
+      ],
+      "raw_values": [
+        "*\\\\SharpChisel.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sharpchisel"
+      ],
+      "raw_values": [
+        "SharpChisel"
+      ]
+    }
+  ]
+}

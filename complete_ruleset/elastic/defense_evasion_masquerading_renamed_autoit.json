@@ -1,0 +1,92 @@
+{
+  "source": "elastic",
+  "name": "Renamed Automation Script Interpreter",
+  "slug": "defense_evasion_masquerading_renamed_autoit",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_masquerading_renamed_autoit.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (\n   (process.pe.original_file_name : \"AutoIt*.exe\" and not process.name : \"AutoIt*.exe\") or\n   (process.pe.original_file_name == \"AutoHotkey.exe\" and not process.name : (\"AutoHotkey*.exe\", \"InternalAHK.exe\")) or\n   (process.pe.original_file_name == \"KIX32.EXE\" and not process.name : \"KIX*.exe\" and process.executable : (\"?:\\\\Users\\\\*.exe\", \"?:\\\\ProgramData\\\\*.exe\", \"\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*.exe\", \"\\\\Device\\\\HarddiskVolume*\\\\ProgramData\\\\*.exe\"))\n   )\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "autohotkey*.exe",
+        "internalahk.exe",
+        ".exe",
+        "autoit*.exe",
+        "kix*.exe"
+      ],
+      "raw_values": [
+        "AutoHotkey*.exe",
+        "InternalAHK.exe",
+        "?:\\\\Users\\\\*.exe",
+        "?:\\\\ProgramData\\\\*.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\ProgramData\\\\*.exe",
+        "AutoIt*.exe",
+        "KIX*.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "autoit*.exe"
+      ],
+      "raw_values": [
+        "AutoIt*.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "autohotkey.exe",
+        "kix32.exe"
+      ],
+      "raw_values": [
+        "AutoHotkey.exe",
+        "KIX32.EXE"
+      ]
+    }
+  ]
+}

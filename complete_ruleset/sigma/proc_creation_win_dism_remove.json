@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_dism_remove",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_dism_remove.eql",
+  "raw_query": "any where (process.executable:\"*\\\\DismHost.exe\" and (process.parent.command_line:\"*/Online*\" and process.parent.command_line:\"*/Disable-Feature*\")) or (process.executable:\"*\\\\Dism.exe\" and (process.command_line:\"*/Online*\" and process.command_line:\"*/Disable-Feature*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dismhost.exe",
+        "dism.exe"
+      ],
+      "raw_values": [
+        "*\\\\DismHost.exe",
+        "*\\\\Dism.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "online",
+        "disable-feature"
+      ],
+      "raw_values": [
+        "*/Online*",
+        "*/Disable-Feature*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "online",
+        "disable-feature"
+      ],
+      "raw_values": [
+        "*/Online*",
+        "*/Disable-Feature*"
+      ]
+    }
+  ]
+}

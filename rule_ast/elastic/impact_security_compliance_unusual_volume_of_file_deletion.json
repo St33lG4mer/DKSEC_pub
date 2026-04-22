@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Deprecated - M365 Security Compliance Unusual Volume of File Deletion",
+  "slug": "impact_security_compliance_unusual_volume_of_file_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Microsoft 365",
+    "Use Case: Configuration Audit",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/impact_security_compliance_unusual_volume_of_file_deletion.toml",
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:SecurityComplianceCenter and event.category:web and event.action:\"Unusual volume of file deletion\" and event.outcome:success\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "unusual volume of file deletion"
+      ],
+      "raw_values": [
+        "Unusual volume of file deletion"
+      ]
+    }
+  ]
+}

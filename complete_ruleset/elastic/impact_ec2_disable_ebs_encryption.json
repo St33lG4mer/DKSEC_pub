@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Encryption Disabled",
+  "slug": "impact_ec2_disable_ebs_encryption",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Tactic: Impact",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/impact_ec2_disable_ebs_encryption.toml",
+  "raw_query": "data_stream.dataset:aws.cloudtrail and event.provider:ec2.amazonaws.com and event.action:DisableEbsEncryptionByDefault and event.outcome:success\n",
+  "conditions": []
+}

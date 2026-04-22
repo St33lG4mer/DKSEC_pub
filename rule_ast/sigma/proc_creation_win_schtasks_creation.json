@@ -1,0 +1,70 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_creation",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_schtasks_creation.eql",
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe\" and process.command_line:\"* /create *\") and (not (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\"))) and (not ((process.parent.executable like~ (\"C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\")) and (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\schtasks.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\schtasks.exe\")) and process.command_line:\"*Microsoft\\\\Office\\\\Office Performance Monitor*\"))",
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "integrator.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\schtasks.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create",
+        "office performance monitor"
+      ],
+      "raw_values": [
+        "* /create *",
+        "*Microsoft\\\\Office\\\\Office Performance Monitor*"
+      ]
+    }
+  ]
+}

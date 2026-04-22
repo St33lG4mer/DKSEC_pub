@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\curl.exe" or process.pe.product:"The curl executable") and ((process.command_line like~ ("* --form*", "* --upload-file *", "* --data *", "* --data-*")) or process.command_line:"SigmaRegularExpression(regexp=SigmaString(['\\s-[FTd]\\s']), flags=set())")) and (not (process.command_line like~ ("*://localhost*", "*://127.0.0.1*")))

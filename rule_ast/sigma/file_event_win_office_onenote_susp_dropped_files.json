@@ -1,0 +1,62 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_office_onenote_susp_dropped_files",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_event/file_event_win_office_onenote_susp_dropped_files.eql",
+  "raw_query": "any where (process.executable like~ (\"*\\\\onenote.exe\", \"*\\\\onenotem.exe\", \"*\\\\onenoteim.exe\")) and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\OneNote\\\\*\" and (file.path like~ (\"*.bat\", \"*.chm\", \"*.cmd\", \"*.dll\", \"*.exe\", \"*.hta\", \"*.htm\", \"*.html\", \"*.js\", \"*.lnk\", \"*.ps1\", \"*.vbe\", \"*.vbs\", \"*.wsf\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "onenote.exe",
+        "onenotem.exe",
+        "onenoteim.exe"
+      ],
+      "raw_values": [
+        "*\\\\onenote.exe",
+        "*\\\\onenotem.exe",
+        "*\\\\onenoteim.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".chm",
+        ".cmd",
+        ".dll",
+        ".exe",
+        ".hta",
+        ".htm",
+        ".html",
+        ".js",
+        ".lnk",
+        ".ps1",
+        ".vbe",
+        ".vbs",
+        ".wsf"
+      ],
+      "raw_values": [
+        "*.bat",
+        "*.chm",
+        "*.cmd",
+        "*.dll",
+        "*.exe",
+        "*.hta",
+        "*.htm",
+        "*.html",
+        "*.js",
+        "*.lnk",
+        "*.ps1",
+        "*.vbe",
+        "*.vbs",
+        "*.wsf"
+      ]
+    }
+  ]
+}

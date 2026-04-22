@@ -1,0 +1,9 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_empire_powershell_uac_bypass",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_empire_powershell_uac_bypass.eql",
+  "raw_query": "any where process.command_line like~ (\"* -NoP -NonI -w Hidden -c $x=$((gp HKCU:Software\\\\Microsoft\\\\Windows Update).Update)*\", \"* -NoP -NonI -c $x=$((gp HKCU:Software\\\\Microsoft\\\\Windows Update).Update);*\")",
+  "conditions": []
+}

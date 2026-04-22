@@ -1,0 +1,135 @@
+{
+  "source": "elastic",
+  "name": "Potential Disabling of AppArmor",
+  "slug": "defense_evasion_disable_apparmor_attempt",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_disable_apparmor_attempt.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\n(\n  (process.name == \"systemctl\" and process.args in (\"disable\", \"stop\", \"kill\", \"mask\") and process.args in (\"apparmor\", \"apparmor.service\")) or\n  (process.name == \"service\" and process.args == \"apparmor\" and process.args == \"stop\") or\n  (process.name == \"chkconfig\" and process.args == \"apparmor\" and process.args == \"off\") or\n  (process.name == \"update-rc.d\" and process.args == \"apparmor\" and process.args in (\"remove\", \"disable\")) or\n  (process.name == \"ln\" and process.args : \"/etc/apparmor.d/*\" and process.args == \"/etc/apparmor.d/disable/\")\n) and\nnot ?process.parent.executable == \"/opt/puppetlabs/puppet/bin/ruby\"\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "disable",
+        "stop",
+        "kill",
+        "mask",
+        "apparmor",
+        "apparmor.service",
+        "remove"
+      ],
+      "raw_values": [
+        "disable",
+        "stop",
+        "kill",
+        "mask",
+        "apparmor",
+        "apparmor.service",
+        "remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "systemctl",
+        "service",
+        "chkconfig",
+        "update-rc.d"
+      ],
+      "raw_values": [
+        "systemctl",
+        "service",
+        "chkconfig",
+        "update-rc.d",
+        "ln"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "apparmor",
+        "stop",
+        "off"
+      ],
+      "raw_values": [
+        "apparmor",
+        "stop",
+        "off",
+        "/etc/apparmor.d/disable/"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "ruby"
+      ],
+      "raw_values": [
+        "/opt/puppetlabs/puppet/bin/ruby"
+      ]
+    }
+  ]
+}

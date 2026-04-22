@@ -1,0 +1,48 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_download_office_domain",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_download_office_domain.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\curl.exe\", \"*\\\\wget.exe\")) or (process.command_line like~ (\"*Invoke-WebRequest*\", \"*iwr *\", \"*curl *\", \"*wget *\", \"*Start-BitsTransfer*\", \"*.DownloadFile(*\", \"*.DownloadString(*\"))) and (process.command_line like~ (\"*https://attachment.outlook.live.net/owa/*\", \"*https://onenoteonlinesync.onenote.com/onenoteonlinesync/*\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "curl.exe",
+        "wget.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe",
+        "*\\\\wget.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-webrequest",
+        "iwr",
+        "curl",
+        "wget",
+        "start-bitstransfer",
+        ".downloadfile(",
+        ".downloadstring("
+      ],
+      "raw_values": [
+        "*Invoke-WebRequest*",
+        "*iwr *",
+        "*curl *",
+        "*wget *",
+        "*Start-BitsTransfer*",
+        "*.DownloadFile(*",
+        "*.DownloadString(*",
+        "*https://attachment.outlook.live.net/owa/*",
+        "*https://onenoteonlinesync.onenote.com/onenoteonlinesync/*"
+      ]
+    }
+  ]
+}

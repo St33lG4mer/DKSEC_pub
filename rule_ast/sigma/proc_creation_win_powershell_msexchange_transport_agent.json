@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_msexchange_transport_agent",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_msexchange_transport_agent.eql",
+  "raw_query": "any where process.command_line:\"*Install-TransportAgent*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "install-transportagent"
+      ],
+      "raw_values": [
+        "*Install-TransportAgent*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_virtualbox_vboxdrvinst_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_virtualbox_vboxdrvinst_execution.eql",
+  "raw_query": "any where process.executable:\"*\\\\VBoxDrvInst.exe\" and (process.command_line:\"*driver*\" and process.command_line:\"*executeinf*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vboxdrvinst.exe"
+      ],
+      "raw_values": [
+        "*\\\\VBoxDrvInst.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "driver",
+        "executeinf"
+      ],
+      "raw_values": [
+        "*driver*",
+        "*executeinf*"
+      ]
+    }
+  ]
+}

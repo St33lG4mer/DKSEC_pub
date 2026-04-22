@@ -1,0 +1,35 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_registry_install_reg_debugger_backdoor",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_registry_install_reg_debugger_backdoor.eql",
+  "raw_query": "any where process.command_line:\"*\\\\CurrentVersion\\\\Image File Execution Options\\\\*\" and (process.command_line like~ (\"*sethc.exe*\", \"*utilman.exe*\", \"*osk.exe*\", \"*magnify.exe*\", \"*narrator.exe*\", \"*displayswitch.exe*\", \"*atbroker.exe*\", \"*HelpPane.exe*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "sethc.exe",
+        "utilman.exe",
+        "osk.exe",
+        "magnify.exe",
+        "narrator.exe",
+        "displayswitch.exe",
+        "atbroker.exe",
+        "helppane.exe"
+      ],
+      "raw_values": [
+        "*sethc.exe*",
+        "*utilman.exe*",
+        "*osk.exe*",
+        "*magnify.exe*",
+        "*narrator.exe*",
+        "*displayswitch.exe*",
+        "*atbroker.exe*",
+        "*HelpPane.exe*"
+      ]
+    }
+  ]
+}

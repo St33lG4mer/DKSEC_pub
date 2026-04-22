@@ -1,0 +1,61 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_schtasks_creation_from_susp_parent",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_schtasks_creation_from_susp_parent.eql",
+  "raw_query": "any where ((process.parent.executable like~ (\"*:\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*\\\\Temporary Internet*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\")) and process.executable:\"*\\\\schtasks.exe\" and process.command_line:\"*/Create *\") and (not (process.command_line like~ (\"*update_task.xml*\", \"*unattended.ini*\")))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "temporary internet"
+      ],
+      "raw_values": [
+        "*:\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*\\\\Temporary Internet*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "update_task.xml",
+        "unattended.ini"
+      ],
+      "raw_values": [
+        "*update_task.xml*",
+        "*unattended.ini*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "*/Create *"
+      ]
+    }
+  ]
+}

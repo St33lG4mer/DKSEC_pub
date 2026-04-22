@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_gup_arbitrary_binary_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_gup_arbitrary_binary_execution.eql",
+  "raw_query": "any where (process.parent.executable:\"*\\\\gup.exe\" and process.executable:\"*\\\\explorer.exe\") and (not ((process.executable:\"*\\\\explorer.exe\" and process.command_line:\"*\\\\Notepad++\\\\notepad++.exe*\") or process.parent.executable:\"*\\\\Notepad++\\\\updater\\\\*\" or (?process.command_line == null)))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "gup.exe"
+      ],
+      "raw_values": [
+        "*\\\\gup.exe",
+        "*\\\\Notepad++\\\\updater\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "notepad++.exe"
+      ],
+      "raw_values": [
+        "*\\\\Notepad++\\\\notepad++.exe*"
+      ]
+    }
+  ]
+}

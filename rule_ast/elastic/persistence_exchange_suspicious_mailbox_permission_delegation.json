@@ -1,0 +1,83 @@
+{
+  "source": "elastic",
+  "name": "M365 Exchange Mailbox High-Risk Permission Delegated",
+  "slug": "persistence_exchange_suspicious_mailbox_permission_delegation",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: SaaS",
+    "Data Source: Microsoft 365",
+    "Data Source: Microsoft Exchange",
+    "Data Source: Microsoft 365 Audit Logs",
+    "Use Case: Configuration Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/o365/persistence_exchange_suspicious_mailbox_permission_delegation.toml",
+  "raw_query": "data_stream.dataset: \"o365.audit\" and\nevent.provider: \"Exchange\" and\nevent.outcome: \"success\" and\nnot o365.audit.UserType : (3 or 4) and\n(\n    (event.action: \"Add-MailboxPermission\" and o365.audit.Parameters.AccessRights: \"FullAccess\") or\n    (event.action: \"Add-RecipientPermission\" and o365.audit.Parameters.AccessRights: \"SendAs\") or\n    (event.action: \"Set-Mailbox\" and o365.audit.Parameters.GrantSendOnBehalfTo: *)\n) and\nnot user.id:(\n    \"NT AUTHORITY\\SYSTEM (Microsoft.Exchange.ServiceHost)\" or\n    \"NT AUTHORITY\\SYSTEM (Microsoft.Exchange.AdminApi.NetCore)\" or\n    \"NT AUTHORITY\\SYSTEM (w3wp)\"\n    )\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "exchange"
+      ],
+      "raw_values": [
+        "Exchange"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "add-mailboxpermission",
+        "add-recipientpermission",
+        "set-mailbox"
+      ],
+      "raw_values": [
+        "Add-MailboxPermission",
+        "Add-RecipientPermission",
+        "Set-Mailbox"
+      ]
+    },
+    {
+      "field": "o365.audit.parameters.accessrights",
+      "raw_field": "o365.audit.Parameters.AccessRights",
+      "operator": ":",
+      "values": [
+        "fullaccess",
+        "sendas"
+      ],
+      "raw_values": [
+        "FullAccess",
+        "SendAs"
+      ]
+    }
+  ]
+}

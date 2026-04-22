@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_dism_enable_powershell_web_access_feature",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_dism_enable_powershell_web_access_feature.eql",
+  "raw_query": "any where (process.executable:\"*\\\\dism.exe\" or process.pe.original_file_name:\"DISM.EXE\") and (process.command_line:\"*WindowsPowerShellWebAccess*\" and process.command_line:\"*/online*\" and process.command_line:\"*/enable-feature*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dism.exe"
+      ],
+      "raw_values": [
+        "*\\\\dism.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dism.exe"
+      ],
+      "raw_values": [
+        "DISM.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "windowspowershellwebaccess",
+        "online",
+        "enable-feature"
+      ],
+      "raw_values": [
+        "*WindowsPowerShellWebAccess*",
+        "*/online*",
+        "*/enable-feature*"
+      ]
+    }
+  ]
+}

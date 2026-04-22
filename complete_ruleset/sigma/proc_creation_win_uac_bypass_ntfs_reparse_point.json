@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_ntfs_reparse_point",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_ntfs_reparse_point.eql",
+  "raw_query": "any where (process.command_line:\"\\\"C:\\\\Windows\\\\system32\\\\wusa.exe\\\"  /quiet C:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\Temp\\\\update.msu\" and (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\"))) or (process.parent.command_line:\"\\\"C:\\\\Windows\\\\system32\\\\dism.exe\\\" /online /quiet /norestart /add-package /packagepath:\\\"C:\\\\Windows\\\\system32\\\\pe386\\\" /ignorecheck\" and (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\")) and (process.command_line:\"*C:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and process.command_line:\"*\\\\dismhost.exe {*\") and process.executable:\"*\\\\DismHost.exe\")",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "update.msu",
+        "dismhost.exe {"
+      ],
+      "raw_values": [
+        "\\",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\update.msu",
+        "*C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\dismhost.exe {*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dismhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\DismHost.exe"
+      ]
+    }
+  ]
+}

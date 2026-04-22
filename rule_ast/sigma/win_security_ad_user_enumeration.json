@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "win_security_ad_user_enumeration",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/win_security_ad_user_enumeration.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4662\" and winlog.event_data.ObjectType:\"*bf967aba-0de6-11d0-a285-00aa003049e2*\" and (winlog.event_data.AccessMask like~ (\"*1?\", \"*3?\", \"*4?\", \"*7?\", \"*9?\", \"*B?\", \"*D?\", \"*F?\"))) and (not (user.name like~ (\"*$\", \"MSOL_*\"))))",
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "msol_"
+      ],
+      "raw_values": [
+        "*$",
+        "MSOL_*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4662"
+      ],
+      "raw_values": [
+        "4662"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "bf967aba-0de6-11d0-a285-00aa003049e2"
+      ],
+      "raw_values": [
+        "*bf967aba-0de6-11d0-a285-00aa003049e2*"
+      ]
+    }
+  ]
+}

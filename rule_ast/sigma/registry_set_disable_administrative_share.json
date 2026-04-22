@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "registry_set_disable_administrative_share",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_disable_administrative_share.eql",
+  "raw_query": "any where registry.path:\"*\\\\Services\\\\LanmanServer\\\\Parameters\\\\*\" and (registry.path like~ (\"*\\\\AutoShareWks\", \"*\\\\AutoShareServer\")) and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\autosharewks",
+        "\\\\autoshareserver"
+      ],
+      "raw_values": [
+        "*\\\\AutoShareWks",
+        "*\\\\AutoShareServer"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\services\\\\lanmanserver\\\\parameters\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\LanmanServer\\\\Parameters\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ]
+}

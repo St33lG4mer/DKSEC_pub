@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_wmiexec_default_powershell",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_wmiexec_default_powershell.eql",
+  "raw_query": "any where process.command_line:\"*-NoP -NoL -sta -NonI -W Hidden -Exec Bypass -Enc*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-nop -nol -sta -noni -w hidden -exec bypass -enc"
+      ],
+      "raw_values": [
+        "*-NoP -NoL -sta -NonI -W Hidden -Exec Bypass -Enc*"
+      ]
+    }
+  ]
+}

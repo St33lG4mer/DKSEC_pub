@@ -1,0 +1,71 @@
+{
+  "source": "elastic",
+  "name": "Entra ID Protection - Risk Detection - Sign-in Risk",
+  "slug": "initial_access_entra_id_protection_sign_in_risk_detected",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Data Source: Azure",
+    "Data Source: Entra ID",
+    "Use Case: Identity and Access Audit",
+    "Use Case: Threat Detection",
+    "Use Case: Risk Detection",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/initial_access_entra_id_protection_sign_in_risk_detected.toml",
+  "raw_query": "data_stream.dataset: \"azure.identity_protection\" and\n    event.action: \"User Risk Detection\" and\n    azure.identityprotection.properties.activity: \"signin\" and\n    not azure.identityprotection.properties.risk_state: (\n        \"remediated\" or \"dismissed\" or \"confirmedSafe\"\n    )\n",
+  "conditions": [
+    {
+      "field": "azure.identityprotection.properties.risk_state",
+      "raw_field": "azure.identityprotection.properties.risk_state",
+      "operator": ":",
+      "values": [
+        "remediated",
+        "dismissed",
+        "confirmedsafe"
+      ],
+      "raw_values": [
+        "remediated",
+        "dismissed",
+        "confirmedSafe"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.identity_protection"
+      ],
+      "raw_values": [
+        "azure.identity_protection"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "user risk detection"
+      ],
+      "raw_values": [
+        "User Risk Detection"
+      ]
+    },
+    {
+      "field": "azure.identityprotection.properties.activity",
+      "raw_field": "azure.identityprotection.properties.activity",
+      "operator": ":",
+      "values": [
+        "signin"
+      ],
+      "raw_values": [
+        "signin"
+      ]
+    }
+  ]
+}

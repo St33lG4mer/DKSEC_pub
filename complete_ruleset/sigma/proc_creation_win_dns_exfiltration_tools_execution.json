@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_dns_exfiltration_tools_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_dns_exfiltration_tools_execution.eql",
+  "raw_query": "any where process.executable like~ (\"*\\\\iodine.exe\", \"*\\\\dnscat2*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "iodine.exe",
+        "dnscat2"
+      ],
+      "raw_values": [
+        "*\\\\iodine.exe",
+        "*\\\\dnscat2*"
+      ]
+    }
+  ]
+}

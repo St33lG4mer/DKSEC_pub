@@ -1,0 +1,197 @@
+{
+  "source": "elastic",
+  "name": "Potential Protocol Tunneling via Chisel Client",
+  "slug": "command_and_control_linux_chisel_client_activity",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/command_and_control_linux_chisel_client_activity.toml",
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=3s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and \n   process.args == \"client\" and process.args : (\"R*\", \"*:*\", \"*socks*\") and process.args_count >= 4 and \n   process.parent.name in (\"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and\n   not process.name in (\"velociraptor\", \"nbemmcmd\", \"redis-cli\", \"ipa\")]\n  [network where host.os.type == \"linux\" and event.action == \"connection_attempted\" and event.type == \"start\" and \n   destination.ip != null and destination.ip != \"127.0.0.1\" and destination.ip != \"::1\" and \n   not process.name : (\n     \"python*\", \"php*\", \"perl\", \"ruby\", \"lua*\", \"openssl\", \"nc\", \"netcat\", \"ncat\", \"telnet\", \"awk\", \"java\", \"telnet\",\n     \"ftp\", \"socat\", \"curl\", \"wget\", \"dpkg\", \"docker\", \"dockerd\", \"yum\", \"apt\", \"rpm\", \"dnf\", \"ssh\", \"sshd\", \"kubectl*\",\n     \"clickhouse\"\n   )]\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "socks"
+      ],
+      "raw_values": [
+        "R*",
+        "*:*",
+        "*socks*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "python",
+        "php",
+        "perl",
+        "ruby",
+        "lua",
+        "openssl",
+        "netcat",
+        "ncat",
+        "telnet",
+        "awk",
+        "java",
+        "ftp",
+        "socat",
+        "curl",
+        "wget",
+        "dpkg",
+        "docker",
+        "dockerd",
+        "yum",
+        "apt",
+        "rpm",
+        "dnf",
+        "ssh",
+        "sshd",
+        "kubectl",
+        "clickhouse"
+      ],
+      "raw_values": [
+        "python*",
+        "php*",
+        "perl",
+        "ruby",
+        "lua*",
+        "openssl",
+        "nc",
+        "netcat",
+        "ncat",
+        "telnet",
+        "awk",
+        "java",
+        "ftp",
+        "socat",
+        "curl",
+        "wget",
+        "dpkg",
+        "docker",
+        "dockerd",
+        "yum",
+        "apt",
+        "rpm",
+        "dnf",
+        "ssh",
+        "sshd",
+        "kubectl*",
+        "clickhouse"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "velociraptor",
+        "nbemmcmd",
+        "redis-cli",
+        "ipa"
+      ],
+      "raw_values": [
+        "velociraptor",
+        "nbemmcmd",
+        "redis-cli",
+        "ipa"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "exec",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "client"
+      ],
+      "raw_values": [
+        "client"
+      ]
+    },
+    {
+      "field": "destination.ip",
+      "raw_field": "destination.ip",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1",
+        "::1"
+      ],
+      "raw_values": [
+        "127.0.0.1",
+        "::1"
+      ]
+    }
+  ]
+}

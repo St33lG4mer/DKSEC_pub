@@ -1,0 +1,98 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_bloodhound_sharphound",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_bloodhound_sharphound.eql",
+  "raw_query": "any where (process.pe.product:\"*SharpHound*\" or process.pe.description:\"*SharpHound*\" or (process.pe.company like~ (\"*SpecterOps*\", \"*evil corp*\")) or (process.executable like~ (\"*\\\\Bloodhound.exe*\", \"*\\\\SharpHound.exe*\"))) or (process.command_line like~ (\"* -CollectionMethod All *\", \"* --CollectionMethods Session *\", \"* --Loop --Loopduration *\", \"* --PortScanTimeout *\", \"*.exe -c All -d *\", \"*Invoke-Bloodhound*\", \"*Get-BloodHoundData*\")) or (process.command_line:\"* -JsonFolder *\" and process.command_line:\"* -ZipFileName *\") or (process.command_line:\"* DCOnly *\" and process.command_line:\"* --NoSaveCache *\")",
+  "conditions": [
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": "like~",
+      "values": [
+        "specterops",
+        "evil corp"
+      ],
+      "raw_values": [
+        "*SpecterOps*",
+        "*evil corp*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bloodhound.exe",
+        "sharphound.exe"
+      ],
+      "raw_values": [
+        "*\\\\Bloodhound.exe*",
+        "*\\\\SharpHound.exe*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-collectionmethod all",
+        "--collectionmethods session",
+        "--loop --loopduration",
+        "--portscantimeout",
+        ".exe -c all -d",
+        "invoke-bloodhound",
+        "get-bloodhounddata"
+      ],
+      "raw_values": [
+        "* -CollectionMethod All *",
+        "* --CollectionMethods Session *",
+        "* --Loop --Loopduration *",
+        "* --PortScanTimeout *",
+        "*.exe -c All -d *",
+        "*Invoke-Bloodhound*",
+        "*Get-BloodHoundData*"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sharphound"
+      ],
+      "raw_values": [
+        "*SharpHound*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "sharphound"
+      ],
+      "raw_values": [
+        "*SharpHound*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-jsonfolder",
+        "-zipfilename",
+        "dconly",
+        "--nosavecache"
+      ],
+      "raw_values": [
+        "* -JsonFolder *",
+        "* -ZipFileName *",
+        "* DCOnly *",
+        "* --NoSaveCache *"
+      ]
+    }
+  ]
+}

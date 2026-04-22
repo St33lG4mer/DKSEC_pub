@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_plink_port_forwarding",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_plink_port_forwarding.eql",
+  "raw_query": "any where process.pe.description:\"Command-line SSH, Telnet, and Rlogin client\" and process.command_line:\"* -R *\"",
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "command-line ssh, telnet, and rlogin client"
+      ],
+      "raw_values": [
+        "Command-line SSH, Telnet, and Rlogin client"
+      ]
+    }
+  ]
+}

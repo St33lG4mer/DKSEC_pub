@@ -1,0 +1,112 @@
+{
+  "source": "elastic",
+  "name": "Discovery Command Output Written to Suspicious File",
+  "slug": "collection_discovery_output_written_to_suspicious_file",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Collection",
+    "Tactic: Discovery",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/collection_discovery_output_written_to_suspicious_file.toml",
+  "raw_query": "sequence by process.entity_id with maxspan=15s\n  [process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and\n    process.parent.name in (\"bash\", \"sh\", \"zsh\") and\n    process.name in (\"whoami\", \"ifconfig\", \"system_profiler\", \"dscl\", \"arch\", \"csrutil\") and\n    process.args_count == 1]\n  [file where host.os.type == \"macos\" and event.action == \"modification\" and\n    file.path like (\"/Users/Shared/*\", \"/tmp/*\", \"/private/tmp/*\", \"/Library/WebServer/*\",\n                    \"/Library/Graphics/*\", \"/Library/Fonts/*\", \"/private/var/root/Library/HTTPStorages/*\", \"/*/.*\") and\n    not file.path like (\"/private/tmp/*.fifo\", \"/private/tmp/tcl-tk*\")]\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".fifo",
+        "tcl-tk"
+      ],
+      "raw_values": [
+        "/Users/Shared/*",
+        "/tmp/*",
+        "/private/tmp/*",
+        "/Library/WebServer/*",
+        "/Library/Graphics/*",
+        "/Library/Fonts/*",
+        "/private/var/root/Library/HTTPStorages/*",
+        "/*/.*",
+        "/private/tmp/*.fifo",
+        "/private/tmp/tcl-tk*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "bash",
+        "sh",
+        "zsh"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "whoami",
+        "ifconfig",
+        "system_profiler",
+        "dscl",
+        "arch",
+        "csrutil"
+      ],
+      "raw_values": [
+        "whoami",
+        "ifconfig",
+        "system_profiler",
+        "dscl",
+        "arch",
+        "csrutil"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "modification"
+      ],
+      "raw_values": [
+        "exec",
+        "modification"
+      ]
+    }
+  ]
+}

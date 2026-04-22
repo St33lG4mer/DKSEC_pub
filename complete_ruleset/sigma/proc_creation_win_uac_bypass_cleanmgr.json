@@ -1,0 +1,38 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_uac_bypass_cleanmgr",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_cleanmgr.eql",
+  "raw_query": "any where process.command_line:\"*\\\"\\\\system32\\\\cleanmgr.exe /autoclean /d C:\" and process.parent.command_line:\"C:\\\\Windows\\\\system32\\\\svchost.exe -k netsvcs -p -s Schedule\" and (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\"))",
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "c",
+      "raw_field": "C",
+      "operator": ":",
+      "values": [
+        "and process.parent.command_line:"
+      ],
+      "raw_values": [
+        " and process.parent.command_line:"
+      ]
+    }
+  ]
+}

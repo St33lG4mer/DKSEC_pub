@@ -1,0 +1,36 @@
+{
+  "source": "elastic",
+  "name": "Entra ID Custom Domain Added or Verified",
+  "slug": "resource_development_entra_id_custom_domain_added_and_verified",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Data Source: Microsoft Entra ID Audit Logs",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Discovery",
+    "Tactic: Resource Development",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/resource_development_entra_id_custom_domain_added_and_verified.toml",
+  "raw_query": "data_stream.dataset: azure.auditlogs\n    and azure.auditlogs.properties.category: DirectoryManagement\n    and event.action: (\"Add unverified domain\" or \"Verify domain\")\n    and event.outcome: success\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "add unverified domain",
+        "verify domain"
+      ],
+      "raw_values": [
+        "Add unverified domain",
+        "Verify domain"
+      ]
+    }
+  ]
+}

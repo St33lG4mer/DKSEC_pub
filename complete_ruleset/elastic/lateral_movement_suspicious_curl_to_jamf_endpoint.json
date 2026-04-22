@@ -1,0 +1,106 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Curl to Jamf Endpoint",
+  "slug": "lateral_movement_suspicious_curl_to_jamf_endpoint",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/lateral_movement_suspicious_curl_to_jamf_endpoint.toml",
+  "raw_query": "process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and\n  process.name in (\"curl\", \"nscurl\") and process.command_line like \"*https://jamf.*\" and\n  ((process.parent.code_signature.exists == false or process.parent.code_signature.trusted == false) or\n   process.parent.name in (\"osascript\", \"node\", \"perl\", \"ruby\") or\n   process.parent.name like \"python*\")\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "nscurl"
+      ],
+      "raw_values": [
+        "curl",
+        "nscurl"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "osascript",
+        "node",
+        "perl",
+        "ruby"
+      ],
+      "raw_values": [
+        "osascript",
+        "node",
+        "perl",
+        "ruby"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like",
+      "values": [
+        "jamf."
+      ],
+      "raw_values": [
+        "*https://jamf.*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    }
+  ]
+}

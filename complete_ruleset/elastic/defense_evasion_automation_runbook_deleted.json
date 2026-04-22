@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Azure Automation Runbook Deleted",
+  "slug": "defense_evasion_automation_runbook_deleted",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Configuration Audit",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/defense_evasion_automation_runbook_deleted.toml",
+  "raw_query": "data_stream.dataset:azure.activitylogs and\n    azure.activitylogs.operation_name:\"MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/DELETE\" and\n    event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.automation/automationaccounts/runbooks/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/DELETE"
+      ]
+    }
+  ]
+}

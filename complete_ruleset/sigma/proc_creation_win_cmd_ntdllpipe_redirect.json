@@ -1,0 +1,24 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_ntdllpipe_redirect",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_ntdllpipe_redirect.eql",
+  "raw_query": "any where process.command_line like~ (\"*type %windir%\\\\system32\\\\ntdll.dll*\", \"*type %systemroot%\\\\system32\\\\ntdll.dll*\", \"*type c:\\\\windows\\\\system32\\\\ntdll.dll*\", \"*\\\\ntdll.dll > \\\\\\\\.\\\\pipe\\\\*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "ntdll.dll"
+      ],
+      "raw_values": [
+        "*type %windir%\\\\system32\\\\ntdll.dll*",
+        "*type %systemroot%\\\\system32\\\\ntdll.dll*",
+        "*type c:\\\\windows\\\\system32\\\\ntdll.dll*",
+        "*\\\\ntdll.dll > \\\\\\\\.\\\\pipe\\\\*"
+      ]
+    }
+  ]
+}

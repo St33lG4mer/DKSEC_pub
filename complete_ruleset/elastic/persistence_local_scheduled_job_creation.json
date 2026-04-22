@@ -1,0 +1,82 @@
+{
+  "source": "elastic",
+  "name": "Persistence via Scheduled Job Creation",
+  "slug": "persistence_local_scheduled_job_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_local_scheduled_job_creation.toml",
+  "raw_query": "file where host.os.type == \"windows\" and event.type != \"deletion\" and\n  file.path : \"?:\\\\Windows\\\\Tasks\\\\*\" and file.extension : \"job\" and\n  not (\n    (\n      process.executable : \"?:\\\\Program Files\\\\CCleaner\\\\CCleaner64.exe\" and\n      file.path : \"?:\\\\Windows\\\\Tasks\\\\CCleanerCrashReporting.job\"\n    ) or\n    (\n      process.executable : (\n        \"?:\\\\Program Files (x86)\\\\ManageEngine\\\\UEMS_Agent\\\\bin\\\\dcagentregister.exe\",\n        \"?:\\\\Program Files (x86)\\\\DesktopCentral_Agent\\\\bin\\\\dcagentregister.exe\"\n      ) and\n      file.path : \"?:\\\\Windows\\\\Tasks\\\\DCAgentUpdater.job\"\n    )\n  )\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "ccleanercrashreporting.job",
+        "dcagentupdater.job"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\Tasks\\\\*",
+        "?:\\\\Windows\\\\Tasks\\\\CCleanerCrashReporting.job",
+        "?:\\\\Windows\\\\Tasks\\\\DCAgentUpdater.job"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "job"
+      ],
+      "raw_values": [
+        "job"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ccleaner64.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\CCleaner\\\\CCleaner64.exe"
+      ]
+    }
+  ]
+}

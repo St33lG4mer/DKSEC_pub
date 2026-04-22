@@ -1,0 +1,54 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_bginfo_suspicious_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_bginfo_suspicious_child_process.eql",
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\bginfo.exe\", \"*\\\\bginfo64.exe\")) and ((process.executable like~ (\"*\\\\calc.exe\", \"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\notepad.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\")) or (process.executable like~ (\"*\\\\AppData\\\\Local\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*:\\\\PerfLogs\\\\*\")))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "bginfo.exe",
+        "bginfo64.exe"
+      ],
+      "raw_values": [
+        "*\\\\bginfo.exe",
+        "*\\\\bginfo64.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "calc.exe",
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "notepad.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe",
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\notepad.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*:\\\\PerfLogs\\\\*"
+      ]
+    }
+  ]
+}

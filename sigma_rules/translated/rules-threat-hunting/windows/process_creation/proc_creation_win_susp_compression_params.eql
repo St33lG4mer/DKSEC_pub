@@ -1,0 +1,1 @@
+any where ((process.pe.original_file_name like~ ("7z*.exe", "*rar.exe", "*Command*Line*RAR*")) and (process.command_line like~ ("* -p*", "* -ta*", "* -tb*", "* -sdel*", "* -dw*", "* -hp*"))) and (not (process.parent.executable like~ ("*:\\Program Files\\*", "*:\\Program Files (x86)\\*")))

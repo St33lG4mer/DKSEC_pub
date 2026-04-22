@@ -1,0 +1,68 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_binary",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_binary.eql",
+  "raw_query": "any where (process.pe.original_file_name like~ (\"Cmd.Exe\", \"CONHOST.EXE\", \"7z.exe\", \"7za.exe\", \"WinRAR.exe\", \"wevtutil.exe\", \"net.exe\", \"net1.exe\", \"netsh.exe\", \"InstallUtil.exe\")) and (not (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\conhost.exe\", \"*\\\\7z.exe\", \"*\\\\7za.exe\", \"*\\\\WinRAR.exe\", \"*\\\\wevtutil.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\netsh.exe\", \"*\\\\InstallUtil.exe\")))",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "conhost.exe",
+        "7z.exe",
+        "7za.exe",
+        "winrar.exe",
+        "wevtutil.exe",
+        "net.exe",
+        "net1.exe",
+        "netsh.exe",
+        "installutil.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe",
+        "CONHOST.EXE",
+        "7z.exe",
+        "7za.exe",
+        "WinRAR.exe",
+        "wevtutil.exe",
+        "net.exe",
+        "net1.exe",
+        "netsh.exe",
+        "InstallUtil.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "conhost.exe",
+        "7z.exe",
+        "7za.exe",
+        "winrar.exe",
+        "wevtutil.exe",
+        "net.exe",
+        "net1.exe",
+        "netsh.exe",
+        "installutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\conhost.exe",
+        "*\\\\7z.exe",
+        "*\\\\7za.exe",
+        "*\\\\WinRAR.exe",
+        "*\\\\wevtutil.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\netsh.exe",
+        "*\\\\InstallUtil.exe"
+      ]
+    }
+  ]
+}

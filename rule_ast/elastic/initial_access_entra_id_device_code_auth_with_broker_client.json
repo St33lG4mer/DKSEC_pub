@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "Entra ID OAuth Device Code Grant by Microsoft Authentication Broker",
+  "slug": "initial_access_entra_id_device_code_auth_with_broker_client",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/initial_access_entra_id_device_code_auth_with_broker_client.toml",
+  "raw_query": " data_stream.dataset:(azure.activitylogs or azure.signinlogs)\n    and azure.signinlogs.properties.authentication_protocol:deviceCode\n    and azure.signinlogs.properties.conditional_access_audiences.application_id:29d9ed98-a469-4536-ade2-f981bc1d605e\n    and event.outcome:success or (\n        azure.activitylogs.properties.appId:29d9ed98-a469-4536-ade2-f981bc1d605e\n        and azure.activitylogs.properties.authentication_protocol:deviceCode)\n",
+  "conditions": []
+}

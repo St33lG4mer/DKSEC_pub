@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "image_load_office_excel_xll_susp_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_office_excel_xll_susp_load.eql",
+  "raw_query": "any where process.executable:\"*\\\\excel.exe\" and (file.path like~ (\"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Perflogs\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Tasks\\\\*\")) and file.path:\"*.xll\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "excel.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".xll"
+      ],
+      "raw_values": [
+        "*.xll"
+      ]
+    }
+  ]
+}

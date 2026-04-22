@@ -1,0 +1,47 @@
+{
+  "source": "elastic",
+  "name": "Windows Event Logs Cleared",
+  "slug": "defense_evasion_clearing_windows_security_logs",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Windows System Event Logs"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_clearing_windows_security_logs.toml",
+  "raw_query": "host.os.type:windows and event.action:(\"audit-log-cleared\" or \"Log clear\") and\n  winlog.channel: (\"Security\" or \"System\")\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "audit-log-cleared",
+        "log clear"
+      ],
+      "raw_values": [
+        "audit-log-cleared",
+        "Log clear"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security",
+        "system"
+      ],
+      "raw_values": [
+        "Security",
+        "System"
+      ]
+    }
+  ]
+}

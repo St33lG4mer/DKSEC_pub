@@ -1,0 +1,63 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_goopdate",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_goopdate.eql",
+  "raw_query": "any where file.path:\"*\\\\goopdate.dll\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Program Files\\\\*\"))) and (not (((process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\GUM*\" and process.executable:\"*.tmp\\\\Dropbox*\") and (file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\GUM*\" and file.path:\"*.tmp\\\\goopdate.dll*\")) or ((process.executable like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\GUM*\", \"*:\\\\Windows\\\\SystemTemp\\\\GUM*\")) and process.executable:\"*.tmp\\\\GoogleUpdate.exe\" and (file.path like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\GUM*\", \"*:\\\\Windows\\\\SystemTemp\\\\GUM*\")))))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "gum"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\GUM*",
+        "*:\\\\Windows\\\\SystemTemp\\\\GUM*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "gum"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\GUM*",
+        "*:\\\\Windows\\\\SystemTemp\\\\GUM*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "goopdate.dll",
+        "gum"
+      ],
+      "raw_values": [
+        "*\\\\goopdate.dll",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\GUM*",
+        "*.tmp\\\\goopdate.dll*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gum",
+        "dropbox",
+        "googleupdate.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\GUM*",
+        "*.tmp\\\\Dropbox*",
+        "*.tmp\\\\GoogleUpdate.exe"
+      ]
+    }
+  ]
+}

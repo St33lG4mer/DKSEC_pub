@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "dns_query_win_ufile_io_query",
+  "subtree": "rules",
+  "category": "dns",
+  "sigma_path": "rules/windows/dns_query/dns_query_win_ufile_io_query.eql",
+  "raw_query": "any where dns.question.name:\"*ufile.io*\"",
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "ufile.io"
+      ],
+      "raw_values": [
+        "*ufile.io*"
+      ]
+    }
+  ]
+}

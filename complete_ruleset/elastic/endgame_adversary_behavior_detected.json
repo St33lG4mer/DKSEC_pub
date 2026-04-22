@@ -1,0 +1,15 @@
+{
+  "source": "elastic",
+  "name": "Adversary Behavior - Detected - Elastic Endgame",
+  "slug": "endgame_adversary_behavior_detected",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/promotions/endgame_adversary_behavior_detected.toml",
+  "raw_query": "event.kind:alert and event.module:endgame and (event.action:behavior_protection_event or endgame.event_subtype_full:behavior_protection_event)\n",
+  "conditions": []
+}

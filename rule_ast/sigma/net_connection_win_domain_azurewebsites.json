@@ -1,0 +1,104 @@
+{
+  "source": "sigma",
+  "name": "net_connection_win_domain_azurewebsites",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/windows/network_connection/net_connection_win_domain_azurewebsites.eql",
+  "raw_query": "any where (network.direction:\"true\" and destination.domain:\"*azurewebsites.net\") and (not ((process.executable like~ (\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\", \"C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\")) or (process.executable:\"C:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\") or (process.executable like~ (\"C:\\\\Program Files\\\\Mozilla Firefox\\\\firefox.exe\", \"C:\\\\Program Files (x86)\\\\Mozilla Firefox\\\\firefox.exe\")) or (process.executable:\"C:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Mozilla Firefox\\\\firefox.exe\") or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Internet Explorer\\\\iexplore.exe\", \"C:\\\\Program Files\\\\Internet Explorer\\\\iexplore.exe\")) or (process.executable:\"C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\*\" or process.executable:\"*\\\\WindowsApps\\\\MicrosoftEdge.exe\" or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\", \"C:\\\\Program Files\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\"))) or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeCore\\\\*\", \"C:\\\\Program Files\\\\Microsoft\\\\EdgeCore\\\\*\")) and (process.executable like~ (\"*\\\\msedge.exe\", \"*\\\\msedgewebview2.exe\"))) or ((process.executable like~ (\"*C:\\\\Program Files (x86)\\\\Safari\\\\*\", \"*C:\\\\Program Files\\\\Safari\\\\*\")) and process.executable:\"*\\\\safari.exe\") or ((process.executable like~ (\"*C:\\\\Program Files\\\\Windows Defender Advanced Threat Protection\\\\*\", \"*C:\\\\Program Files\\\\Windows Defender\\\\*\", \"*C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\")) and (process.executable like~ (\"*\\\\MsMpEng.exe\", \"*\\\\MsSense.exe\"))) or (process.executable like~ (\"*C:\\\\Program Files (x86)\\\\PRTG Network Monitor\\\\PRTG Probe.exe\", \"*C:\\\\Program Files\\\\PRTG Network Monitor\\\\PRTG Probe.exe\")) or (process.executable:\"C:\\\\Program Files\\\\BraveSoftware\\\\*\" and process.executable:\"*\\\\brave.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Maxthon\\\\*\" and process.executable:\"*\\\\maxthon.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Programs\\\\Opera\\\\*\" and process.executable:\"*\\\\opera.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\SeaMonkey\\\\*\", \"C:\\\\Program Files (x86)\\\\SeaMonkey\\\\*\")) and process.executable:\"*\\\\seamonkey.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Vivaldi\\\\*\" and process.executable:\"*\\\\vivaldi.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\Naver\\\\Naver Whale\\\\*\", \"C:\\\\Program Files (x86)\\\\Naver\\\\Naver Whale\\\\*\")) and process.executable:\"*\\\\whale.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\Waterfox\\\\*\", \"C:\\\\Program Files (x86)\\\\Waterfox\\\\*\")) and process.executable:\"*\\\\Waterfox.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\SlimBrowser\\\\*\", \"C:\\\\Program Files (x86)\\\\SlimBrowser\\\\*\")) and process.executable:\"*\\\\slimbrowser.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Flock\\\\*\" and process.executable:\"*\\\\Flock.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Phoebe\\\\*\" and process.executable:\"*\\\\Phoebe.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\Falkon\\\\*\", \"C:\\\\Program Files (x86)\\\\Falkon\\\\*\")) and process.executable:\"*\\\\falkon.exe\") or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\QtWeb\\\\*\", \"C:\\\\Program Files\\\\QtWeb\\\\*\")) and process.executable:\"*\\\\QtWeb.exe\") or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Avant Browser\\\\*\", \"C:\\\\Program Files\\\\Avant Browser\\\\*\")) and process.executable:\"*\\\\avant.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Discord\\\\*\" and process.executable:\"*\\\\Discord.exe\") or (?process.executable == null) or process.executable==\"\"))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "chrome.exe",
+        "firefox.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "msmpeng.exe",
+        "mssense.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+        "C:\\\\Program Files\\\\Mozilla Firefox\\\\firefox.exe",
+        "*\\\\msedge.exe",
+        "*\\\\msedgewebview2.exe",
+        "*C:\\\\Program Files\\\\Windows Defender Advanced Threat Protection\\\\*",
+        "*C:\\\\Program Files\\\\Windows Defender\\\\*",
+        "*C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*",
+        "*\\\\MsMpEng.exe",
+        "*\\\\MsSense.exe",
+        "C:\\\\Program Files\\\\SeaMonkey\\\\*",
+        "C:\\\\Program Files\\\\Naver\\\\Naver Whale\\\\*",
+        "C:\\\\Program Files\\\\Waterfox\\\\*",
+        "C:\\\\Program Files\\\\SlimBrowser\\\\*",
+        "C:\\\\Program Files\\\\Falkon\\\\*"
+      ]
+    },
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        "azurewebsites.net"
+      ],
+      "raw_values": [
+        "*azurewebsites.net"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "chrome.exe",
+        "firefox.exe",
+        "microsoftedge.exe",
+        "safari.exe",
+        "brave.exe",
+        "maxthon.exe",
+        "opera.exe",
+        "seamonkey.exe",
+        "vivaldi.exe",
+        "whale.exe",
+        "waterfox.exe",
+        "slimbrowser.exe",
+        "flock.exe",
+        "phoebe.exe",
+        "falkon.exe",
+        "qtweb.exe",
+        "avant.exe",
+        "discord.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+        "*\\\\AppData\\\\Local\\\\Mozilla Firefox\\\\firefox.exe",
+        "C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\*",
+        "*\\\\WindowsApps\\\\MicrosoftEdge.exe",
+        "*\\\\safari.exe",
+        "C:\\\\Program Files\\\\BraveSoftware\\\\*",
+        "*\\\\brave.exe",
+        "*\\\\AppData\\\\Local\\\\Maxthon\\\\*",
+        "*\\\\maxthon.exe",
+        "*\\\\AppData\\\\Local\\\\Programs\\\\Opera\\\\*",
+        "*\\\\opera.exe",
+        "*\\\\seamonkey.exe",
+        "*\\\\AppData\\\\Local\\\\Vivaldi\\\\*",
+        "*\\\\vivaldi.exe",
+        "*\\\\whale.exe",
+        "*\\\\Waterfox.exe",
+        "*\\\\slimbrowser.exe",
+        "*\\\\AppData\\\\Local\\\\Flock\\\\*",
+        "*\\\\Flock.exe",
+        "*\\\\AppData\\\\Local\\\\Phoebe\\\\*",
+        "*\\\\Phoebe.exe",
+        "*\\\\falkon.exe",
+        "*\\\\QtWeb.exe",
+        "*\\\\avant.exe",
+        "*\\\\AppData\\\\Local\\\\Discord\\\\*",
+        "*\\\\Discord.exe"
+      ]
+    }
+  ]
+}

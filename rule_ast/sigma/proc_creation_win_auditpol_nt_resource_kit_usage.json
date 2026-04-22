@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_auditpol_nt_resource_kit_usage",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_auditpol_nt_resource_kit_usage.eql",
+  "raw_query": "any where process.command_line like~ (\"*/logon:none*\", \"*/system:none*\", \"*/sam:none*\", \"*/privilege:none*\", \"*/object:none*\", \"*/process:none*\", \"*/policy:none*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "logon:none",
+        "system:none",
+        "sam:none",
+        "privilege:none",
+        "object:none",
+        "process:none",
+        "policy:none"
+      ],
+      "raw_values": [
+        "*/logon:none*",
+        "*/system:none*",
+        "*/sam:none*",
+        "*/privilege:none*",
+        "*/object:none*",
+        "*/process:none*",
+        "*/policy:none*"
+      ]
+    }
+  ]
+}

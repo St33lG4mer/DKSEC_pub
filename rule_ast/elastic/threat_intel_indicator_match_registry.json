@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Threat Intel Windows Registry Indicator Match",
+  "slug": "threat_intel_indicator_match_registry",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "OS: Windows",
+    "Data Source: Elastic Endgame",
+    "Rule Type: Threat Match",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/threat_intel/threat_intel_indicator_match_registry.toml",
+  "raw_query": "registry.path:*\n",
+  "conditions": []
+}

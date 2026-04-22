@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_dll_system_drawing_load",
+  "subtree": "rules-threat-hunting",
+  "category": "library",
+  "sigma_path": "rules-threat-hunting/windows/image_load/image_load_dll_system_drawing_load.eql",
+  "raw_query": "any where file.path:\"*\\\\System.Drawing.ni.dll\"",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "system.drawing.ni.dll"
+      ],
+      "raw_values": [
+        "*\\\\System.Drawing.ni.dll"
+      ]
+    }
+  ]
+}

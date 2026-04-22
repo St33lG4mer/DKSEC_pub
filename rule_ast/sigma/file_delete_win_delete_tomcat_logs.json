@@ -1,0 +1,37 @@
+{
+  "source": "sigma",
+  "name": "file_delete_win_delete_tomcat_logs",
+  "subtree": "rules",
+  "category": "file",
+  "sigma_path": "rules/windows/file/file_delete/file_delete_win_delete_tomcat_logs.eql",
+  "raw_query": "any where (file.path:\"*\\\\Tomcat*\" and file.path:\"*\\\\logs\\\\*\") and (file.path like~ (\"*catalina.*\", \"*_access_log.*\", \"*localhost.*\"))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "catalina.",
+        "_access_log.",
+        "localhost."
+      ],
+      "raw_values": [
+        "*catalina.*",
+        "*_access_log.*",
+        "*localhost.*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "tomcat"
+      ],
+      "raw_values": [
+        "*\\\\Tomcat*",
+        "*\\\\logs\\\\*"
+      ]
+    }
+  ]
+}

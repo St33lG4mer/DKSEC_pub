@@ -1,0 +1,92 @@
+{
+  "source": "elastic",
+  "name": "Suspicious File Creation via Kworker",
+  "slug": "persistence_kworker_file_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Data Source: Elastic Endgame",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_kworker_file_creation.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"creation\", \"file_create_event\") and\nprocess.name : \"kworker*\" and not (\n  process.name : \"kworker*kcryptd*\" or\n  file.path like (\n    \"/var/log/*\", \"/var/crash/*\", \"/var/run/*\", \"/var/lib/systemd/coredump/*\", \"/var/spool/*\",\n    \"/var/lib/nfs/nfsdcltrack/main.sqlite-journal\", \"/proc/*/cwd/core.*\", \"/var/run/apport.lock\",\n    \"/var/spool/abrt/ccpp-*\", \"/var/lib/dynatrace/oneagent/*\", \"/var/lib/nfs*\", \"/run/user/*/.bubblewrap/*\",\n    \"/etc/localtime/*\", \"/proc/*/cwd/core.*\", \"/tmp/sh-thd.*\", \"/var/lib/apport/coredump/*\", \"/var/tmp/abrt/ccpp*\"\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "main.sqlite-journal",
+        "core.",
+        "apport.lock",
+        "ccpp-",
+        "nfs",
+        "sh-thd.",
+        "ccpp"
+      ],
+      "raw_values": [
+        "/var/log/*",
+        "/var/crash/*",
+        "/var/run/*",
+        "/var/lib/systemd/coredump/*",
+        "/var/spool/*",
+        "/var/lib/nfs/nfsdcltrack/main.sqlite-journal",
+        "/proc/*/cwd/core.*",
+        "/var/run/apport.lock",
+        "/var/spool/abrt/ccpp-*",
+        "/var/lib/dynatrace/oneagent/*",
+        "/var/lib/nfs*",
+        "/run/user/*/.bubblewrap/*",
+        "/etc/localtime/*",
+        "/tmp/sh-thd.*",
+        "/var/lib/apport/coredump/*",
+        "/var/tmp/abrt/ccpp*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "creation",
+        "file_create_event"
+      ],
+      "raw_values": [
+        "creation",
+        "file_create_event"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "kworker",
+        "kworker*kcryptd"
+      ],
+      "raw_values": [
+        "kworker*",
+        "kworker*kcryptd*"
+      ]
+    }
+  ]
+}

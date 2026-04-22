@@ -1,0 +1,86 @@
+{
+  "source": "elastic",
+  "name": "Potential Persistence via Time Provider Modification",
+  "slug": "persistence_time_provider_mod",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_time_provider_mod.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.path: \"*\\\\SYSTEM\\\\*ControlSet*\\\\Services\\\\W32Time\\\\TimeProviders\\\\*\" and\n  registry.data.strings:\"*.dll\" and\n  not\n  (\n    process.executable : (\"?:\\\\Windows\\\\System32\\\\msiexec.exe\", \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\msiexec.exe\") and\n    registry.data.strings : \"?:\\\\Program Files\\\\VMware\\\\VMware Tools\\\\vmwTimeProvider\\\\vmwTimeProvider.dll\"\n  ) and\n  not registry.data.strings : \"C:\\\\Windows\\\\SYSTEM32\\\\w32time.DLL\"\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\*controlset*\\\\services\\\\w32time\\\\timeproviders\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\*ControlSet*\\\\Services\\\\W32Time\\\\TimeProviders\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        ".dll",
+        ":\\\\program files\\\\vmware\\\\vmware tools\\\\vmwtimeprovider\\\\vmwtimeprovider.dll",
+        "c:\\\\windows\\\\system32\\\\w32time.dll"
+      ],
+      "raw_values": [
+        "*.dll",
+        "?:\\\\Program Files\\\\VMware\\\\VMware Tools\\\\vmwTimeProvider\\\\vmwTimeProvider.dll",
+        "C:\\\\Windows\\\\SYSTEM32\\\\w32time.DLL"
+      ]
+    }
+  ]
+}

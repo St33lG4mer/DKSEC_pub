@@ -1,0 +1,1 @@
+any where ((process.executable:"*\\rundll32.exe" or process.pe.original_file_name:"RUNDLL32.EXE") and process.command_line:"*DllRegisterServer*") and (not (process.command_line like~ ("*:\\Program Files (x86)*", "*:\\Program Files\\*", "*:\\Windows\\System32\\*", "*:\\Windows\\SysWOW64\\*")))

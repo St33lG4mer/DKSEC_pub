@@ -1,0 +1,61 @@
+{
+  "source": "elastic",
+  "name": "Potential SAP NetWeaver WebShell Creation",
+  "slug": "execution_sap_netweaver_jsp_webshell",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Use Case: Vulnerability",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/execution_sap_netweaver_jsp_webshell.toml",
+  "raw_query": "file where host.os.type in (\"linux\", \"windows\") and event.action == \"creation\" and\n file.extension : (\"jsp\", \"java\", \"class\") and\n file.path : (\"/*/sap.com/*/servlet_jsp/irj/root/*\",\n              \"/*/sap.com/*/servlet_jsp/irj/work/*\",\n              \"?:\\\\*\\\\sap.com\\\\*\\\\servlet_jsp\\\\irj\\\\root\\\\*\",\n              \"?:\\\\*\\\\sap.com\\\\*\\\\servlet_jsp\\\\irj\\\\work\\\\*\")\n",
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "jsp",
+        "java",
+        "class"
+      ],
+      "raw_values": [
+        "jsp",
+        "java",
+        "class"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "linux",
+        "windows"
+      ],
+      "raw_values": [
+        "linux",
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    }
+  ]
+}

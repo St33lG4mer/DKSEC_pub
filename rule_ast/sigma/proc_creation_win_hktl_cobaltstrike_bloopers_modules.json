@@ -1,0 +1,55 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_cobaltstrike_bloopers_modules",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_cobaltstrike_bloopers_modules.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"Cmd.Exe\" or process.executable:\"*\\\\cmd.exe\") and (process.command_line like~ (\"*Invoke-UserHunter*\", \"*Invoke-ShareFinder*\", \"*Invoke-Kerberoast*\", \"*Invoke-SMBAutoBrute*\", \"*Invoke-Nightmare*\", \"*zerologon*\", \"*av_query*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-userhunter",
+        "invoke-sharefinder",
+        "invoke-kerberoast",
+        "invoke-smbautobrute",
+        "invoke-nightmare",
+        "zerologon",
+        "av_query"
+      ],
+      "raw_values": [
+        "*Invoke-UserHunter*",
+        "*Invoke-ShareFinder*",
+        "*Invoke-Kerberoast*",
+        "*Invoke-SMBAutoBrute*",
+        "*Invoke-Nightmare*",
+        "*zerologon*",
+        "*av_query*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    }
+  ]
+}

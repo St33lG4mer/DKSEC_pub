@@ -1,0 +1,39 @@
+{
+  "source": "elastic",
+  "name": "Rare SMB Connection to the Internet",
+  "slug": "exfiltration_smb_rare_destination",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Exfiltration",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/exfiltration_smb_rare_destination.toml",
+  "raw_query": "event.category:network and host.os.type:windows and process.pid:4 and\n  network.transport:tcp and destination.port:(139 or 445) and\n  source.ip:(\n    10.0.0.0/8 or\n    172.16.0.0/12 or\n    192.168.0.0/16\n  ) and\n  not destination.ip:(\n    10.0.0.0/8 or\n    127.0.0.0/8 or\n    169.254.0.0/16 or\n    172.16.0.0/12 or\n    192.0.0.0/24 or\n    192.0.0.0/29 or\n    192.0.0.8/32 or\n    192.0.0.9/32 or\n    192.0.0.10/32 or\n    192.0.0.170/32 or\n    192.0.0.171/32 or\n    192.0.2.0/24 or\n    192.31.196.0/24 or\n    192.52.193.0/24 or\n    192.168.0.0/16 or\n    192.88.99.0/24 or\n    224.0.0.0/4 or\n    100.64.0.0/10 or\n    192.175.48.0/24 or\n    198.18.0.0/15 or\n    198.51.100.0/24 or\n    203.0.113.0/24 or\n    240.0.0.0/4 or\n    \"::1\" or\n    \"FE80::/10\" or\n    \"FF00::/8\"\n  )\n",
+  "conditions": [
+    {
+      "field": "destination.ip",
+      "raw_field": "destination.ip",
+      "operator": ":",
+      "values": [
+        "::1",
+        "fe80::/10",
+        "ff00::/8"
+      ],
+      "raw_values": [
+        "::1",
+        "FE80::/10",
+        "FF00::/8"
+      ]
+    }
+  ]
+}

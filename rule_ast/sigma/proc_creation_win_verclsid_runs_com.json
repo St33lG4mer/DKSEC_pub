@@ -1,0 +1,57 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_verclsid_runs_com",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_verclsid_runs_com.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\verclsid.exe\" or process.pe.original_file_name:\"verclsid.exe\") and (process.command_line:\"*/S*\" and process.command_line:\"*/C*\")) and (not (process.parent.executable:\"*C:\\\\Windows\\\\System32\\\\RuntimeBroker.exe\" and (process.command_line:\"*verclsid.exe\\\" /S /C {*\" and process.command_line:\"*} /I {*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "verclsid.exe"
+      ],
+      "raw_values": [
+        "*\\\\verclsid.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "verclsid.exe"
+      ],
+      "raw_values": [
+        "verclsid.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "i {"
+      ],
+      "raw_values": [
+        "*/S*",
+        "*/C*",
+        "*verclsid.exe\\",
+        "*} /I {*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "runtimebroker.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\System32\\\\RuntimeBroker.exe"
+      ]
+    }
+  ]
+}

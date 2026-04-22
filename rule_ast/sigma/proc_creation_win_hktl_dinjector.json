@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_dinjector",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_dinjector.eql",
+  "raw_query": "any where process.command_line:\"* /am51*\" and process.command_line:\"* /password*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "am51",
+        "password"
+      ],
+      "raw_values": [
+        "* /am51*",
+        "* /password*"
+      ]
+    }
+  ]
+}

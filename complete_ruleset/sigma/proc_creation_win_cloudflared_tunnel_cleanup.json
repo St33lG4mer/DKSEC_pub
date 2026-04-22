@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cloudflared_tunnel_cleanup",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cloudflared_tunnel_cleanup.eql",
+  "raw_query": "any where (process.command_line:\"* tunnel *\" and process.command_line:\"*cleanup *\") and (process.command_line like~ (\"*-config *\", \"*-connector-id *\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-config",
+        "-connector-id"
+      ],
+      "raw_values": [
+        "*-config *",
+        "*-connector-id *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "tunnel",
+        "cleanup"
+      ],
+      "raw_values": [
+        "* tunnel *",
+        "*cleanup *"
+      ]
+    }
+  ]
+}

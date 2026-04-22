@@ -1,0 +1,112 @@
+{
+  "source": "sigma",
+  "name": "image_load_dll_dbghelp_dbgcore_susp_load",
+  "subtree": "rules-threat-hunting",
+  "category": "library",
+  "sigma_path": "rules-threat-hunting/windows/image_load/image_load_dll_dbghelp_dbgcore_susp_load.eql",
+  "raw_query": "any where ((file.path like~ (\"*\\\\dbghelp.dll\", \"*\\\\dbgcore.dll\")) and (process.executable like~ (\"*\\\\bash.exe\", \"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\dnx.exe\", \"*\\\\excel.exe\", \"*\\\\monitoringhost.exe\", \"*\\\\msbuild.exe\", \"*\\\\mshta.exe\", \"*\\\\outlook.exe\", \"*\\\\powerpnt.exe\", \"*\\\\regsvcs.exe\", \"*\\\\rundll32.exe\", \"*\\\\sc.exe\", \"*\\\\scriptrunner.exe\", \"*\\\\winword.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\"))) and (not ((winlog.event_data.CommandLine:\"C:\\\\WINDOWS\\\\WinSxS\\\\*\" and winlog.event_data.CommandLine:\"*\\\\TiWorker.exe -Embedding\") or (process.executable:\"*\\\\svchost.exe\" and (winlog.event_data.CommandLine like~ (\"*-k LocalServiceNetworkRestricted\", \"*-k WerSvcGroup\"))) or (process.executable:\"*\\\\rundll32.exe\" and (winlog.event_data.CommandLine like~ (\"*/d srrstr.dll,ExecuteScheduledSPPCreation*\", \"*aepdu.dll,AePduRunUpdate*\", \"*shell32.dll,OpenAs_RunDL*\", \"*Windows.Storage.ApplicationData.dll,CleanupTemporaryState*\")))))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "dbghelp.dll",
+        "dbgcore.dll"
+      ],
+      "raw_values": [
+        "*\\\\dbghelp.dll",
+        "*\\\\dbgcore.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bash.exe",
+        "cmd.exe",
+        "cscript.exe",
+        "dnx.exe",
+        "excel.exe",
+        "monitoringhost.exe",
+        "msbuild.exe",
+        "mshta.exe",
+        "outlook.exe",
+        "powerpnt.exe",
+        "regsvcs.exe",
+        "rundll32.exe",
+        "sc.exe",
+        "scriptrunner.exe",
+        "winword.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\bash.exe",
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\dnx.exe",
+        "*\\\\excel.exe",
+        "*\\\\monitoringhost.exe",
+        "*\\\\msbuild.exe",
+        "*\\\\mshta.exe",
+        "*\\\\outlook.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\regsvcs.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\sc.exe",
+        "*\\\\scriptrunner.exe",
+        "*\\\\winword.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "winlog.event_data.CommandLine",
+      "operator": "like~",
+      "values": [
+        "-k localservicenetworkrestricted",
+        "-k wersvcgroup",
+        "d srrstr.dll,executescheduledsppcreation",
+        "aepdu.dll,aepdurunupdate",
+        "shell32.dll,openas_rundl",
+        "windows.storage.applicationdata.dll,cleanuptemporarystate"
+      ],
+      "raw_values": [
+        "*-k LocalServiceNetworkRestricted",
+        "*-k WerSvcGroup",
+        "*/d srrstr.dll,ExecuteScheduledSPPCreation*",
+        "*aepdu.dll,AePduRunUpdate*",
+        "*shell32.dll,OpenAs_RunDL*",
+        "*Windows.Storage.ApplicationData.dll,CleanupTemporaryState*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "winlog.event_data.CommandLine",
+      "operator": ":",
+      "values": [
+        "tiworker.exe -embedding"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\WinSxS\\\\*",
+        "*\\\\TiWorker.exe -Embedding"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe",
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ]
+}

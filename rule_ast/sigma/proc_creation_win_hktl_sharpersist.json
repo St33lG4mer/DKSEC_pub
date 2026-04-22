@@ -1,0 +1,62 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_sharpersist",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_sharpersist.eql",
+  "raw_query": "any where (process.executable:\"*\\\\SharPersist.exe\" or process.pe.product:\"SharPersist\") or (process.command_line like~ (\"* -t schtask -c *\", \"* -t startupfolder -c *\")) or (process.command_line:\"* -t reg -c *\" and process.command_line:\"* -m add*\") or (process.command_line:\"* -t service -c *\" and process.command_line:\"* -m add*\") or (process.command_line:\"* -t schtask -c *\" and process.command_line:\"* -m add*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-t schtask -c",
+        "-t startupfolder -c"
+      ],
+      "raw_values": [
+        "* -t schtask -c *",
+        "* -t startupfolder -c *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sharpersist.exe"
+      ],
+      "raw_values": [
+        "*\\\\SharPersist.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sharpersist"
+      ],
+      "raw_values": [
+        "SharPersist"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-t reg -c",
+        "-m add",
+        "-t service -c",
+        "-t schtask -c"
+      ],
+      "raw_values": [
+        "* -t reg -c *",
+        "* -m add*",
+        "* -t service -c *",
+        "* -t schtask -c *"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "AWS SSM Session Started to EC2 Instance",
+  "slug": "lateral_movement_aws_ssm_start_session_to_ec2_instance",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS SSM",
+    "Data Source: AWS EC2",
+    "Use Case: Threat Detection",
+    "Tactic: Lateral Movement",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/lateral_movement_aws_ssm_start_session_to_ec2_instance.toml",
+  "raw_query": "data_stream.dataset:\"aws.cloudtrail\" and event.provider:\"ssm.amazonaws.com\"\n    and event.action:\"StartSession\" and event.outcome:\"success\"\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ssm.amazonaws.com"
+      ],
+      "raw_values": [
+        "ssm.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "startsession"
+      ],
+      "raw_values": [
+        "StartSession"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

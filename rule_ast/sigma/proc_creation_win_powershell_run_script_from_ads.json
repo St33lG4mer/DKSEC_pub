@@ -1,0 +1,49 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_run_script_from_ads",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_run_script_from_ads.eql",
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.command_line:\"*Get-Content*\" and process.command_line:\"*-Stream*\")",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "get-content",
+        "-stream"
+      ],
+      "raw_values": [
+        "*Get-Content*",
+        "*-Stream*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_binary_highly_relevant",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_binary_highly_relevant.eql",
+  "raw_query": "any where (process.pe.description:\"Execute processes remotely\" or process.pe.product:\"Sysinternals PsExec\" or (process.pe.description like~ (\"Windows PowerShell*\", \"pwsh*\")) or (process.pe.original_file_name like~ (\"certutil.exe\", \"cmstp.exe\", \"cscript.exe\", \"IE4UINIT.EXE\", \"finger.exe\", \"mshta.exe\", \"msiexec.exe\", \"msxsl.exe\", \"powershell_ise.exe\", \"powershell.exe\", \"psexec.c\", \"psexec.exe\", \"psexesvc.exe\", \"pwsh.dll\", \"reg.exe\", \"regsvr32.exe\", \"rundll32.exe\", \"WerMgr\", \"wmic.exe\", \"wscript.exe\"))) and (not (process.executable like~ (\"*\\\\certutil.exe\", \"*\\\\cmstp.exe\", \"*\\\\cscript.exe\", \"*\\\\ie4uinit.exe\", \"*\\\\finger.exe\", \"*\\\\mshta.exe\", \"*\\\\msiexec.exe\", \"*\\\\msxsl.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\psexec.exe\", \"*\\\\psexec64.exe\", \"*\\\\PSEXESVC.exe\", \"*\\\\pwsh.exe\", \"*\\\\reg.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wermgr.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\")))",
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": "like~",
+      "values": [
+        "windows powershell",
+        "pwsh"
+      ],
+      "raw_values": [
+        "Windows PowerShell*",
+        "pwsh*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "certutil.exe",
+        "cmstp.exe",
+        "cscript.exe",
+        "ie4uinit.exe",
+        "finger.exe",
+        "mshta.exe",
+        "msiexec.exe",
+        "msxsl.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "psexec.c",
+        "psexec.exe",
+        "psexesvc.exe",
+        "pwsh.dll",
+        "reg.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wermgr",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "certutil.exe",
+        "cmstp.exe",
+        "cscript.exe",
+        "IE4UINIT.EXE",
+        "finger.exe",
+        "mshta.exe",
+        "msiexec.exe",
+        "msxsl.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "psexec.c",
+        "psexec.exe",
+        "psexesvc.exe",
+        "pwsh.dll",
+        "reg.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "WerMgr",
+        "wmic.exe",
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "certutil.exe",
+        "cmstp.exe",
+        "cscript.exe",
+        "ie4uinit.exe",
+        "finger.exe",
+        "mshta.exe",
+        "msiexec.exe",
+        "msxsl.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "psexec.exe",
+        "psexec64.exe",
+        "psexesvc.exe",
+        "pwsh.exe",
+        "reg.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wermgr.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe",
+        "*\\\\cmstp.exe",
+        "*\\\\cscript.exe",
+        "*\\\\ie4uinit.exe",
+        "*\\\\finger.exe",
+        "*\\\\mshta.exe",
+        "*\\\\msiexec.exe",
+        "*\\\\msxsl.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\psexec.exe",
+        "*\\\\psexec64.exe",
+        "*\\\\PSEXESVC.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\reg.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wermgr.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "execute processes remotely"
+      ],
+      "raw_values": [
+        "Execute processes remotely"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sysinternals psexec"
+      ],
+      "raw_values": [
+        "Sysinternals PsExec"
+      ]
+    }
+  ]
+}

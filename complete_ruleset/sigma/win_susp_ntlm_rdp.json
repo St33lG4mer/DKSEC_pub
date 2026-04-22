@@ -1,0 +1,43 @@
+{
+  "source": "sigma",
+  "name": "win_susp_ntlm_rdp",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/ntlm/win_susp_ntlm_rdp.eql",
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-NTLM/Operational\" and (event.code:\"8001\" and winlog.event_data.TargetName:\"TERMSRV*\")",
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-ntlm/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-NTLM/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "8001"
+      ],
+      "raw_values": [
+        "8001"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetname",
+      "raw_field": "winlog.event_data.TargetName",
+      "operator": ":",
+      "values": [
+        "termsrv"
+      ],
+      "raw_values": [
+        "TERMSRV*"
+      ]
+    }
+  ]
+}

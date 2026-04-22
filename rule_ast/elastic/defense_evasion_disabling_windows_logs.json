@@ -1,0 +1,118 @@
+{
+  "source": "elastic",
+  "name": "Disable Windows Event and Security Logs Using Built-in Tools",
+  "slug": "defense_evasion_disabling_windows_logs",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_disabling_windows_logs.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n(\n  (\n    (process.name:\"logman.exe\" or ?process.pe.original_file_name == \"Logman.exe\") and\n    process.args : \"EventLog-*\" and process.args : (\"stop\", \"delete\")\n  ) or\n  (\n    (\n      process.name : (\"pwsh.exe\", \"powershell.exe\", \"powershell_ise.exe\") or\n      ?process.pe.original_file_name in (\"PowerShell.EXE\", \"pwsh.dll\", \"powershell_ise.EXE\")\n    ) and\n\t  process.args : \"Set-Service\" and process.args: \"EventLog\" and process.args : \"Disabled\"\n  )  or\n  (\n    (process.name:\"auditpol.exe\" or ?process.pe.original_file_name == \"AUDITPOL.EXE\") and process.args : \"/success:disable\"\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "stop",
+        "delete",
+        "eventlog-",
+        "set-service",
+        "eventlog",
+        "disabled",
+        "success:disable"
+      ],
+      "raw_values": [
+        "stop",
+        "delete",
+        "EventLog-*",
+        "Set-Service",
+        "EventLog",
+        "Disabled",
+        "/success:disable"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "pwsh.exe",
+        "powershell.exe",
+        "powershell_ise.exe",
+        "logman.exe",
+        "auditpol.exe"
+      ],
+      "raw_values": [
+        "pwsh.exe",
+        "powershell.exe",
+        "powershell_ise.exe",
+        "logman.exe",
+        "auditpol.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "in",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll",
+        "powershell_ise.EXE"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "logman.exe",
+        "auditpol.exe"
+      ],
+      "raw_values": [
+        "Logman.exe",
+        "AUDITPOL.EXE"
+      ]
+    }
+  ]
+}

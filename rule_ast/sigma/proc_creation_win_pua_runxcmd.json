@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_pua_runxcmd",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_pua_runxcmd.eql",
+  "raw_query": "any where (process.command_line like~ (\"* /account=system *\", \"* /account=ti *\")) and process.command_line:\"*/exec=*\"",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "account=system",
+        "account=ti"
+      ],
+      "raw_values": [
+        "* /account=system *",
+        "* /account=ti *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "exec="
+      ],
+      "raw_values": [
+        "*/exec=*"
+      ]
+    }
+  ]
+}

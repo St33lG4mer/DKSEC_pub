@@ -1,0 +1,104 @@
+{
+  "source": "elastic",
+  "name": "SUID/SGUID Enumeration Detected",
+  "slug": "discovery_suid_sguid_enumeration",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/discovery_suid_sguid_enumeration.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.name == \"find\" and process.args : \"-perm\" and process.args : (\n  \"/6000\", \"-6000\", \"/4000\", \"-4000\", \"/2000\", \"-2000\", \"/u=s\", \"-u=s\", \"/g=s\", \"-g=s\", \"/u=s,g=s\", \"/g=s,u=s\"\n) and not (\n  user.Ext.real.id == \"0\" or group.Ext.real.id == \"0\" or process.args_count >= 12 or\n  (process.args : \"/usr/bin/pkexec\" and process.args : \"-xdev\" and process.args_count == 7)\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "6000",
+        "-6000",
+        "4000",
+        "-4000",
+        "2000",
+        "-2000",
+        "u=s",
+        "-u=s",
+        "g=s",
+        "-g=s",
+        "u=s,g=s",
+        "g=s,u=s",
+        "-perm",
+        "pkexec",
+        "-xdev"
+      ],
+      "raw_values": [
+        "/6000",
+        "-6000",
+        "/4000",
+        "-4000",
+        "/2000",
+        "-2000",
+        "/u=s",
+        "-u=s",
+        "/g=s",
+        "-g=s",
+        "/u=s,g=s",
+        "/g=s,u=s",
+        "-perm",
+        "/usr/bin/pkexec",
+        "-xdev"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "find"
+      ],
+      "raw_values": [
+        "find"
+      ]
+    }
+  ]
+}

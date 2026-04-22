@@ -1,0 +1,70 @@
+{
+  "source": "elastic",
+  "name": "Modification of AmsiEnable Registry Key",
+  "slug": "defense_evasion_amsienable_key_mod",
+  "category": "registry",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_amsienable_key_mod.toml",
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.value : \"AmsiEnable\" and registry.data.strings: (\"0\", \"0x00000000\")\n\n  /*\n    Full registry key path omitted due to data source variations:\n    HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows Script\\\\Settings\\\\AmsiEnable\"\n  */\n",
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000000"
+      ],
+      "raw_values": [
+        "0",
+        "0x00000000"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "amsienable"
+      ],
+      "raw_values": [
+        "AmsiEnable"
+      ]
+    }
+  ]
+}

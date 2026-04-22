@@ -1,0 +1,45 @@
+{
+  "source": "elastic",
+  "name": "GitHub UEBA - Multiple Alerts from a GitHub Account",
+  "slug": "execution_github_ueba_multiple_behavior_alerts_from_account",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Use Case: UEBA",
+    "Tactic: Execution",
+    "Rule Type: Higher-Order Rule",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/execution_github_ueba_multiple_behavior_alerts_from_account.toml",
+  "raw_query": "signal.rule.tags:(\"Use Case: UEBA\" and \"Data Source: Github\") and kibana.alert.workflow_status:\"open\"\n",
+  "conditions": [
+    {
+      "field": "signal.rule.tags",
+      "raw_field": "signal.rule.tags",
+      "operator": ":",
+      "values": [
+        "use case: ueba",
+        "data source: github"
+      ],
+      "raw_values": [
+        "Use Case: UEBA",
+        "Data Source: Github"
+      ]
+    },
+    {
+      "field": "kibana.alert.workflow_status",
+      "raw_field": "kibana.alert.workflow_status",
+      "operator": ":",
+      "values": [
+        "open"
+      ],
+      "raw_values": [
+        "open"
+      ]
+    }
+  ]
+}

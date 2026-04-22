@@ -1,0 +1,71 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_sysinternals_procdump",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_sysinternals_procdump.eql",
+  "raw_query": "any where (process.pe.original_file_name:\"procdump\" or ((process.command_line like~ (\"* -ma *\", \"* /ma *\", \"* \u2013ma *\", \"* \u2014ma *\", \"* \u2015ma *\") or process.command_line like~ (\"* -mp *\", \"* /mp *\", \"* \u2013mp *\", \"* \u2014mp *\", \"* \u2015mp *\")) and process.command_line like~ (\"* -accepteula*\", \"* /accepteula*\", \"* \u2013accepteula*\", \"* \u2014accepteula*\", \"* \u2015accepteula*\"))) and (not (process.executable like~ (\"*\\\\procdump.exe\", \"*\\\\procdump64.exe\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-ma",
+        "\u2013ma",
+        "\u2014ma",
+        "\u2015ma",
+        "-mp",
+        "\u2013mp",
+        "\u2014mp",
+        "\u2015mp",
+        "-accepteula",
+        "accepteula",
+        "\u2013accepteula",
+        "\u2014accepteula",
+        "\u2015accepteula"
+      ],
+      "raw_values": [
+        "* -ma *",
+        "* /ma *",
+        "* \u2013ma *",
+        "* \u2014ma *",
+        "* \u2015ma *",
+        "* -mp *",
+        "* /mp *",
+        "* \u2013mp *",
+        "* \u2014mp *",
+        "* \u2015mp *",
+        "* -accepteula*",
+        "* /accepteula*",
+        "* \u2013accepteula*",
+        "* \u2014accepteula*",
+        "* \u2015accepteula*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "procdump.exe",
+        "procdump64.exe"
+      ],
+      "raw_values": [
+        "*\\\\procdump.exe",
+        "*\\\\procdump64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "procdump"
+      ],
+      "raw_values": [
+        "procdump"
+      ]
+    }
+  ]
+}

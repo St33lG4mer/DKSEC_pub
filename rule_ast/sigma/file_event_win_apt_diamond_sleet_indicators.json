@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "file_event_win_apt_diamond_sleet_indicators",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/Diamond-Sleet/file_event_win_apt_diamond_sleet_indicators.eql",
+  "raw_query": "any where file.path like~ (\"*:\\\\ProgramData\\\\4800-84DC-063A6A41C5C\", \"*:\\\\ProgramData\\\\clip.exe\", \"*:\\\\ProgramData\\\\DSROLE.dll\", \"*:\\\\ProgramData\\\\Forest64.exe\", \"*:\\\\ProgramData\\\\readme.md\", \"*:\\\\ProgramData\\\\Version.dll\", \"*:\\\\ProgramData\\\\wsmprovhost.exe\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "4800-84dc-063a6a41c5c",
+        "clip.exe",
+        "dsrole.dll",
+        "forest64.exe",
+        "readme.md",
+        "version.dll",
+        "wsmprovhost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\4800-84DC-063A6A41C5C",
+        "*:\\\\ProgramData\\\\clip.exe",
+        "*:\\\\ProgramData\\\\DSROLE.dll",
+        "*:\\\\ProgramData\\\\Forest64.exe",
+        "*:\\\\ProgramData\\\\readme.md",
+        "*:\\\\ProgramData\\\\Version.dll",
+        "*:\\\\ProgramData\\\\wsmprovhost.exe"
+      ]
+    }
+  ]
+}

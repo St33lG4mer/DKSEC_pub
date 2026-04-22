@@ -1,0 +1,20 @@
+{
+  "source": "elastic",
+  "name": "Systemd Service Started by Unusual Parent Process",
+  "slug": "persistence_systemd_service_started",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_systemd_service_started.toml",
+  "raw_query": "host.os.type:linux and event.category:process and event.type:start and event.action:exec and\nprocess.executable:/usr/bin/systemctl and process.args:(enable or reenable or start) and \nprocess.entry_leader.entry_meta.type:* and\nnot (\n  process.entry_leader.entry_meta.type:(container or init or unknown) or\n  process.parent.pid:1 or\n  process.parent.executable:(\n    /bin/adduser or /bin/dnf or /bin/dnf-automatic or /bin/dockerd or /bin/dpkg or /bin/microdnf or /bin/pacman or\n    /bin/podman or /bin/rpm or /bin/snapd or /bin/sudo or /bin/useradd or /bin/yum or /usr/bin/dnf or\n    /usr/bin/dnf-automatic or /usr/bin/dockerd or /usr/bin/dpkg or /usr/bin/microdnf or /usr/bin/pacman or\n    /usr/bin/podman or /usr/bin/rpm or /usr/bin/snapd or /usr/bin/sudo or /usr/bin/yum or /usr/sbin/adduser or\n    /usr/sbin/invoke-rc.d or /usr/sbin/useradd or /var/lib/dpkg/* or /opt/datadog-agent/embedded/bin/installer or\n    /opt/saltstack/salt/bin/python* or /opt/puppetlabs/puppet/bin/puppet or /opt/splunkforwarder/bin/splunk or\n    /opt/puppetlabs/puppet/bin/ruby or /opt/kaspersky/kesl/shared/kesl or /usr/local/bin/cloudflared or\n    /usr/bin/puppet or /opt/sentinelone/bin/sentinelctl\n  ) or\n  process.args_count >= 5 or\n  process.parent.command_line:*ansible*\n)\n",
+  "conditions": []
+}

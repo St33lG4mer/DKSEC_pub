@@ -1,0 +1,66 @@
+{
+  "source": "elastic",
+  "name": "AWS IAM User Created Access Keys For Another User",
+  "slug": "persistence_iam_user_created_access_keys_for_another_user",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS IAM",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Privilege Escalation",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/persistence_iam_user_created_access_keys_for_another_user.toml",
+  "raw_query": "from logs-aws.cloudtrail-* metadata _id, _version, _index\n| where data_stream.dataset == \"aws.cloudtrail\"\n    and event.provider == \"iam.amazonaws.com\"\n    and event.action == \"CreateAccessKey\"\n    and event.outcome == \"success\"\n    and user.name != user.target.name\n| keep\n    @timestamp,\n    cloud.account.id,\n    cloud.region,\n    event.provider,\n    event.action,\n    event.outcome,\n    data_stream.dataset,\n    user.name,\n    source.address,\n    source.ip,\n    user.target.name,\n    user_agent.original,\n    aws.cloudtrail.request_parameters,\n    aws.cloudtrail.response_elements,\n    aws.cloudtrail.user_identity.arn,\n    aws.cloudtrail.user_identity.type,\n    aws.cloudtrail.user_identity.access_key_id,\n    source.geo.*,\n    _id,\n    _version,\n    _index\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "createaccesskey"
+      ],
+      "raw_values": [
+        "CreateAccessKey"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

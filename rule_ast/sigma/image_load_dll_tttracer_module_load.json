@@ -1,0 +1,25 @@
+{
+  "source": "sigma",
+  "name": "image_load_dll_tttracer_module_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_dll_tttracer_module_load.eql",
+  "raw_query": "any where file.path like~ (\"*\\\\ttdrecord.dll\", \"*\\\\ttdwriter.dll\", \"*\\\\ttdloader.dll\")",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "ttdrecord.dll",
+        "ttdwriter.dll",
+        "ttdloader.dll"
+      ],
+      "raw_values": [
+        "*\\\\ttdrecord.dll",
+        "*\\\\ttdwriter.dll",
+        "*\\\\ttdloader.dll"
+      ]
+    }
+  ]
+}

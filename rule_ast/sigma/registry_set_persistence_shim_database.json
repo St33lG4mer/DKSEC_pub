@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_set_persistence_shim_database",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_persistence_shim_database.eql",
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\InstalledSDB\\\\*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom\\\\*\")) and (not (winlog.event_data.Details==\"\" or winlog.event_data.Details:\"(Empty)\" or (?winlog.event_data.Details == null)))",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\installedsdb\\\\",
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\custom\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\InstalledSDB\\\\*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    }
+  ]
+}

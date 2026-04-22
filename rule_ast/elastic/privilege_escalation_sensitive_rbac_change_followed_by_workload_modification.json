@@ -1,0 +1,76 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Sensitive RBAC Change Followed by Workload Modification",
+  "slug": "privilege_escalation_sensitive_rbac_change_followed_by_workload_modification",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/privilege_escalation_sensitive_rbac_change_followed_by_workload_modification.toml",
+  "raw_query": "sequence by user.name with maxspan=5m\n  [any where data_stream.dataset == \"kubernetes.audit_logs\" and\n   `kubernetes.audit.annotations.authorization_k8s_io/decision` == \"allow\" and\n    kubernetes.audit.objectRef.resource in (\"roles\", \"clusterroles\") and\n    kubernetes.audit.verb in (\"create\", \"update\", \"patch\")]\n  [any where data_stream.dataset == \"kubernetes.audit_logs\" and\n   `kubernetes.audit.annotations.authorization_k8s_io/decision` == \"allow\" and\n    kubernetes.audit.objectRef.resource in (\"daemonsets\", \"deployments\", \"cronjobs\") and\n    kubernetes.audit.verb in (\"create\", \"patch\") and\n    /* reduce control-plane / bootstrap noise */\n    not kubernetes.audit.user.groups == \"system:masters\"\n  ]\n",
+  "conditions": [
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": "in",
+      "values": [
+        "roles",
+        "clusterroles",
+        "daemonsets",
+        "deployments",
+        "cronjobs"
+      ],
+      "raw_values": [
+        "roles",
+        "clusterroles",
+        "daemonsets",
+        "deployments",
+        "cronjobs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": "in",
+      "values": [
+        "create",
+        "update",
+        "patch"
+      ],
+      "raw_values": [
+        "create",
+        "update",
+        "patch"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.user.groups",
+      "raw_field": "kubernetes.audit.user.groups",
+      "operator": "==",
+      "values": [
+        "system:masters"
+      ],
+      "raw_values": [
+        "system:masters"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "source": "elastic",
+  "name": "Potential snap-confine Privilege Escalation via CVE-2026-3888",
+  "slug": "privilege_escalation_snap_confine_lpe_via_cve_2026_3888",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Use Case: Vulnerability",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_snap_confine_lpe_via_cve_2026_3888.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.action == \"creation\" and\nfile.path like (\"/tmp/.snap*\", \"/tmp/snap-private-tmp/*/tmp/.snap*\") and\nuser.id != \"0\"\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".snap"
+      ],
+      "raw_values": [
+        "/tmp/.snap*",
+        "/tmp/snap-private-tmp/*/tmp/.snap*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    }
+  ]
+}

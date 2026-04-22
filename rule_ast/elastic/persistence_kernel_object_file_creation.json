@@ -1,0 +1,49 @@
+{
+  "source": "elastic",
+  "name": "Kernel Object File Creation",
+  "slug": "persistence_kernel_object_file_creation",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_kernel_object_file_creation.toml",
+  "raw_query": "event.category:file and host.os.type:linux and event.type:creation and file.extension:ko and\nnot (\n  file.path:(\n    /tmp/mkinitramfs* or /var/cache/uptrack/* or /var/tmp/dracut.* or /build/* or /var/lib/dkms/* or\n    /mnt/Samsung/* or /var/tmp/portage/* or /tmp/user/0/mkinitramfs* or /var/tmp/supermin* or\n    /mnt/img/storage/squashfs-root/* or /var/opt/eset/* or /var/tmp/mkinitramfs_* \n  ) or\n  process.executable:(\n    \"/usr/local/v3net/suarez/bin/suarez\" or \"/sbin/dracut\" or \"/opt/traps/bin/pmd\" or \"/usr/bin/pacman\" or\n    \"/usr/bin/containerd\" or \"/usr/sbin/dockerd\" or \"/usr/bin/dockerd\" or /snap/* or\n    \"/usr/lib/dracut/dracut-initramfs-restore\" or \"/sbin/unsquashfs\"\n  ) or\n  process.name:\"cpio\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "suarez",
+        "dracut",
+        "pmd",
+        "pacman",
+        "containerd",
+        "dockerd",
+        "dracut-initramfs-restore",
+        "unsquashfs",
+        "cpio"
+      ],
+      "raw_values": [
+        "/usr/local/v3net/suarez/bin/suarez",
+        "/sbin/dracut",
+        "/opt/traps/bin/pmd",
+        "/usr/bin/pacman",
+        "/usr/bin/containerd",
+        "/usr/sbin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/lib/dracut/dracut-initramfs-restore",
+        "/sbin/unsquashfs",
+        "cpio"
+      ]
+    }
+  ]
+}

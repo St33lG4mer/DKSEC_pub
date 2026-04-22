@@ -1,0 +1,35 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_pester",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_pester.eql",
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and process.parent.command_line:\"*\\\\WindowsPowerShell\\\\Modules\\\\Pester\\\\*\") and (process.parent.command_line like~ (\"*{ Invoke-Pester -EnableExit ;*\", \"*{ Get-Help \\\"*\"))",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "{ invoke-pester -enableexit ;"
+      ],
+      "raw_values": [
+        "*{ Invoke-Pester -EnableExit ;*",
+        "*{ Get-Help \\"
+      ]
+    }
+  ]
+}

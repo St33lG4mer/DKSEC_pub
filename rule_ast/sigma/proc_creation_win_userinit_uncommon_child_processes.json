@@ -1,0 +1,68 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_userinit_uncommon_child_processes",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_userinit_uncommon_child_processes.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\userinit.exe\" and (not process.executable:\"*:\\\\WINDOWS\\\\explorer.exe\") and (not ((process.command_line like~ (\"*netlogon.bat*\", \"*UsrLogon.cmd*\")) or process.command_line:\"PowerShell.exe\" or (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\proquota.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\proquota.exe\")) or (process.executable like~ (\"*:\\\\Program Files (x86)\\\\Citrix\\\\HDX\\\\bin\\\\cmstart.exe\", \"*:\\\\Program Files (x86)\\\\Citrix\\\\HDX\\\\bin\\\\icast.exe\", \"*:\\\\Program Files (x86)\\\\Citrix\\\\System32\\\\icast.exe\", \"*:\\\\Program Files\\\\Citrix\\\\HDX\\\\bin\\\\cmstart.exe\", \"*:\\\\Program Files\\\\Citrix\\\\HDX\\\\bin\\\\icast.exe\", \"*:\\\\Program Files\\\\Citrix\\\\System32\\\\icast.exe\")) or (?process.executable == null)))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "netlogon.bat",
+        "usrlogon.cmd"
+      ],
+      "raw_values": [
+        "*netlogon.bat*",
+        "*UsrLogon.cmd*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "proquota.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\proquota.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\proquota.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "userinit.exe"
+      ],
+      "raw_values": [
+        "*\\\\userinit.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*:\\\\WINDOWS\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "PowerShell.exe"
+      ]
+    }
+  ]
+}

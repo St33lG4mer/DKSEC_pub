@@ -1,0 +1,153 @@
+{
+  "source": "elastic",
+  "name": "Multi-Base64 Decoding Attempt from Suspicious Location",
+  "slug": "defense_evasion_multi_base64_decoding_attempt",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_multi_base64_decoding_attempt.toml",
+  "raw_query": "sequence by process.parent.entity_id with maxspan=3s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.parent.executable != null and\n   process.name in (\"base64\", \"base64plain\", \"base64url\", \"base64mime\", \"base64pem\", \"base32\", \"base16\") and\n   // Only including potentially suspicious locations\n   process.args like~ (\"-d*\", \"--d*\") and process.working_directory like (\n     \"/tmp/*\", \"/var/tmp*\", \"/dev/shm/*\", \"/var/www/*\", \"/home/*\", \"/root/*\"\n   ) and not (\n     process.parent.executable in (\n       \"/usr/share/ec2-instance-connect/eic_curl_authorized_keys\", \"/etc/cron.daily/vivaldi\",\n       \"/etc/cron.daily/opera-browser\"\n     ) or\n     process.working_directory like (\n       \"/opt/microsoft/omsagent/plugin\", \"/opt/rapid7/ir_agent/*\", \"/tmp/newroot/*\"\n      ) or\n      (process.parent.name == \"zsh\" and process.parent.command_line like \"*extendedglob*\")\n   )]\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.parent.executable != null and\n   process.name in (\"base64\", \"base64plain\", \"base64url\", \"base64mime\", \"base64pem\", \"base32\", \"base16\") and\n   process.args like~ (\"-d*\", \"--d*\")]\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "--d"
+      ],
+      "raw_values": [
+        "-d*",
+        "--d*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/tmp/",
+        "/var/tmp",
+        "/dev/shm/",
+        "/var/www/",
+        "/home/",
+        "/root/",
+        "/opt/microsoft/omsagent/plugin",
+        "/opt/rapid7/ir_agent/",
+        "/tmp/newroot/"
+      ],
+      "raw_values": [
+        "/tmp/*",
+        "/var/tmp*",
+        "/dev/shm/*",
+        "/var/www/*",
+        "/home/*",
+        "/root/*",
+        "/opt/microsoft/omsagent/plugin",
+        "/opt/rapid7/ir_agent/*",
+        "/tmp/newroot/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "base64",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "base32",
+        "base16"
+      ],
+      "raw_values": [
+        "base64",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "base32",
+        "base16"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "eic_curl_authorized_keys",
+        "vivaldi",
+        "opera-browser"
+      ],
+      "raw_values": [
+        "/usr/share/ec2-instance-connect/eic_curl_authorized_keys",
+        "/etc/cron.daily/vivaldi",
+        "/etc/cron.daily/opera-browser"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "zsh"
+      ],
+      "raw_values": [
+        "zsh"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "extendedglob"
+      ],
+      "raw_values": [
+        "*extendedglob*"
+      ]
+    }
+  ]
+}

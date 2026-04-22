@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "CyberArk Privileged Access Security Error",
+  "slug": "privilege_escalation_cyberarkpas_error_audit_event_promotion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 73,
+  "tags": [
+    "Data Source: CyberArk PAS",
+    "Use Case: Log Auditing",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/cyberarkpas/privilege_escalation_cyberarkpas_error_audit_event_promotion.toml",
+  "raw_query": "data_stream.dataset:cyberarkpas.audit and event.type:error\n",
+  "conditions": []
+}

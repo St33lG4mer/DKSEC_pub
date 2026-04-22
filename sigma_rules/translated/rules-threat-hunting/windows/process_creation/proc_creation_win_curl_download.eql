@@ -1,0 +1,1 @@
+any where (process.executable:"*\\curl.exe" or process.pe.product:"The curl executable") and (process.command_line like~ ("* -O*", "*--remote-name*", "*--output*"))

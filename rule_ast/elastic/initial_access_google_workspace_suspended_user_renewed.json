@@ -1,0 +1,18 @@
+{
+  "source": "elastic",
+  "name": "Google Workspace Suspended User Account Renewed",
+  "slug": "initial_access_google_workspace_suspended_user_renewed",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Google Workspace",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/google_workspace/initial_access_google_workspace_suspended_user_renewed.toml",
+  "raw_query": "data_stream.dataset:google_workspace.admin and event.category:iam and event.action:UNSUSPEND_USER\n",
+  "conditions": []
+}

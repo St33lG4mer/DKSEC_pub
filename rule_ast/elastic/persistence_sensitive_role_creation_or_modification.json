@@ -1,0 +1,103 @@
+{
+  "source": "elastic",
+  "name": "Kubernetes Creation or Modification of Sensitive Role",
+  "slug": "persistence_sensitive_role_creation_or_modification",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Kubernetes",
+    "Domain: Kubernetes",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Tactic: Privilege Escalation",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/kubernetes/persistence_sensitive_role_creation_or_modification.toml",
+  "raw_query": "FROM logs-kubernetes.audit_logs-* metadata _id, _index, _version\n| WHERE\n  kubernetes.audit.objectRef.resource in (\"roles\", \"clusterroles\") and\n  kubernetes.audit.verb in (\"create\", \"update\", \"patch\") and\n  `kubernetes.audit.annotations.authorization_k8s_io/decision` == \"allow\" and\n  kubernetes.audit.level == \"RequestResponse\" and kubernetes.audit.stage == \"ResponseComplete\" and\n  KQL(\"\"\"kubernetes.audit.requestObject.rules.verbs:(\"*\" or \"escalate\" or \"bind\" or \"impersonate\") or kubernetes.audit.requestObject.rules.resources:(\"clusterroles\" or \"clusterrolebindings\" or \"roles\" or \"rolebindings\")\"\"\")\n| KEEP\n  @timestamp,\n  data_stream.namespace,\n  `kubernetes.audit.annotations.authorization_k8s_io/decision`,\n  kubernetes.audit.level,\n  kubernetes.audit.objectRef.name,\n  kubernetes.audit.objectRef.resource,\n  kubernetes.audit.requestURI,\n  kubernetes.audit.responseStatus.code,\n  kubernetes.audit.sourceIPs,\n  kubernetes.audit.stage,\n  kubernetes.audit.user.groups,\n  kubernetes.audit.user.username,\n  user_agent.original,\n  kubernetes.audit.verb,\n  _id,\n  _index,\n  _version\n",
+  "conditions": [
+    {
+      "field": "kubernetes.audit.requestobject.rules.verbs",
+      "raw_field": "kubernetes.audit.requestObject.rules.verbs",
+      "operator": ":",
+      "values": [
+        "escalate",
+        "bind",
+        "impersonate"
+      ],
+      "raw_values": [
+        "*",
+        "escalate",
+        "bind",
+        "impersonate"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.requestobject.rules.resources",
+      "raw_field": "kubernetes.audit.requestObject.rules.resources",
+      "operator": ":",
+      "values": [
+        "clusterroles",
+        "clusterrolebindings",
+        "roles",
+        "rolebindings"
+      ],
+      "raw_values": [
+        "clusterroles",
+        "clusterrolebindings",
+        "roles",
+        "rolebindings"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": "in",
+      "values": [
+        "roles",
+        "clusterroles"
+      ],
+      "raw_values": [
+        "roles",
+        "clusterroles"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": "in",
+      "values": [
+        "create",
+        "update",
+        "patch"
+      ],
+      "raw_values": [
+        "create",
+        "update",
+        "patch"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.level",
+      "raw_field": "kubernetes.audit.level",
+      "operator": "==",
+      "values": [
+        "requestresponse"
+      ],
+      "raw_values": [
+        "RequestResponse"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": "==",
+      "values": [
+        "responsecomplete"
+      ],
+      "raw_values": [
+        "ResponseComplete"
+      ]
+    }
+  ]
+}

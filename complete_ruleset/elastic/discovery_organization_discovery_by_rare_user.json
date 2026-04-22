@@ -1,0 +1,105 @@
+{
+  "source": "elastic",
+  "name": "AWS Account Discovery By Rare User",
+  "slug": "discovery_organization_discovery_by_rare_user",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS CloudTrail",
+    "Data Source: AWS Organizations",
+    "Data Source: AWS IAM",
+    "Use Case: Threat Detection",
+    "Tactic: Discovery",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/discovery_organization_discovery_by_rare_user.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.outcome: \"success\"\n    and source.ip:*\n    and not aws.cloudtrail.session_credential_from_console: \"true\"\n    and not aws.cloudtrail.user_identity.type: \"AWSService\"\n    and (\n        (\n            event.provider: \"organizations.amazonaws.com\"\n            and event.action: (\n                \"DescribeOrganization\" or \"DescribeOrgnanizationalUnit\" or \"ListAccounts\" or \"ListRoots\"\n                or \"ListOrganizationalUnitsForParent\" or \"ListAccountsForParent\" or \"ListPolicies\"\n                or \"ListAWSServiceAccessForOrganization\" or \"ListDelegatedAdministrators\"\n                or \"ListDelegatedServicesForAccount\" or \"DescribeResourcePolicy\"\n            )\n        )\n        or (\n            event.provider: \"iam.amazonaws.com\"\n            and event.action: (\"ListAccountAliases\" or \"GetAccountSummary\")\n        )\n    )\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "describeorganization",
+        "describeorgnanizationalunit",
+        "listaccounts",
+        "listroots",
+        "listorganizationalunitsforparent",
+        "listaccountsforparent",
+        "listpolicies",
+        "listawsserviceaccessfororganization",
+        "listdelegatedadministrators",
+        "listdelegatedservicesforaccount",
+        "describeresourcepolicy",
+        "listaccountaliases",
+        "getaccountsummary"
+      ],
+      "raw_values": [
+        "DescribeOrganization",
+        "DescribeOrgnanizationalUnit",
+        "ListAccounts",
+        "ListRoots",
+        "ListOrganizationalUnitsForParent",
+        "ListAccountsForParent",
+        "ListPolicies",
+        "ListAWSServiceAccessForOrganization",
+        "ListDelegatedAdministrators",
+        "ListDelegatedServicesForAccount",
+        "DescribeResourcePolicy",
+        "ListAccountAliases",
+        "GetAccountSummary"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": ":",
+      "values": [
+        "awsservice"
+      ],
+      "raw_values": [
+        "AWSService"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "organizations.amazonaws.com",
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "organizations.amazonaws.com",
+        "iam.amazonaws.com"
+      ]
+    }
+  ]
+}

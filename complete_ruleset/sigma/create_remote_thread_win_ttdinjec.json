@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "create_remote_thread_win_ttdinjec",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/create_remote_thread/create_remote_thread_win_ttdinjec.eql",
+  "raw_query": "any where process.executable:\"*\\\\ttdinject.exe\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ttdinject.exe"
+      ],
+      "raw_values": [
+        "*\\\\ttdinject.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "registry_set_bypass_uac_using_eventviewer",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_bypass_uac_using_eventviewer.eql",
+  "raw_query": "any where registry.path:\"*_Classes\\\\mscfile\\\\shell\\\\open\\\\command\\\\(Default)\" and (not winlog.event_data.Details:\"%SystemRoot%\\\\system32\\\\mmc.exe \\\"%1\\\" %*\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "_classes\\\\mscfile\\\\shell\\\\open\\\\command\\\\(default)"
+      ],
+      "raw_values": [
+        "*_Classes\\\\mscfile\\\\shell\\\\open\\\\command\\\\(Default)"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "%systemroot%\\\\system32\\\\mmc.exe \\"
+      ],
+      "raw_values": [
+        "%SystemRoot%\\\\system32\\\\mmc.exe \\"
+      ]
+    }
+  ]
+}

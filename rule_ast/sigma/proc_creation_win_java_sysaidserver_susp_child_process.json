@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_java_sysaidserver_susp_child_process",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_java_sysaidserver_susp_child_process.eql",
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and process.parent.command_line:\"*SysAidServer*\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "java.exe",
+        "javaw.exe"
+      ],
+      "raw_values": [
+        "*\\\\java.exe",
+        "*\\\\javaw.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "sysaidserver"
+      ],
+      "raw_values": [
+        "*SysAidServer*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_renamed_whoami",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_renamed_whoami.eql",
+  "raw_query": "any where process.pe.original_file_name:\"whoami.exe\" and (not process.executable:\"*\\\\whoami.exe\")",
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "whoami.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\whoami.exe"
+      ]
+    }
+  ]
+}

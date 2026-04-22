@@ -1,0 +1,30 @@
+{
+  "source": "elastic",
+  "name": "Entra ID User Added as Service Principal Owner",
+  "slug": "persistence_entra_id_user_added_as_owner_for_azure_service_principal",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Configuration Audit",
+    "Tactic: Persistence",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/persistence_entra_id_user_added_as_owner_for_azure_service_principal.toml",
+  "raw_query": "data_stream.dataset:azure.auditlogs and azure.auditlogs.operation_name:\"Add owner to service principal\" and event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "add owner to service principal"
+      ],
+      "raw_values": [
+        "Add owner to service principal"
+      ]
+    }
+  ]
+}

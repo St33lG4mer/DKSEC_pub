@@ -1,0 +1,36 @@
+{
+  "source": "elastic",
+  "name": "Entra ID Protection Admin Confirmed Compromise",
+  "slug": "initial_access_entra_id_protection_confirmed_compromise",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 99,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Data Source: Azure",
+    "Data Source: Entra ID",
+    "Data Source: Entra ID Protection Logs",
+    "Use Case: Identity and Access Audit",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/initial_access_entra_id_protection_confirmed_compromise.toml",
+  "raw_query": "data_stream.dataset: azure.identity_protection and\n    azure.identityprotection.properties.risk_detail: (\n        \"adminConfirmedSigninCompromised\" or\n        \"adminConfirmedUserCompromised\"\n    )\n",
+  "conditions": [
+    {
+      "field": "azure.identityprotection.properties.risk_detail",
+      "raw_field": "azure.identityprotection.properties.risk_detail",
+      "operator": ":",
+      "values": [
+        "adminconfirmedsignincompromised",
+        "adminconfirmedusercompromised"
+      ],
+      "raw_values": [
+        "adminConfirmedSigninCompromised",
+        "adminConfirmedUserCompromised"
+      ]
+    }
+  ]
+}

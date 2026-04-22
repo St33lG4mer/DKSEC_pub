@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_crackmapexec_patterns",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_crackmapexec_patterns.eql",
+  "raw_query": "any where ((process.command_line:\"*tasklist /fi *\" and process.command_line:\"*Imagename eq lsass.exe*\") and (process.command_line like~ (\"*cmd.exe /c *\", \"*cmd.exe /r *\", \"*cmd.exe /k *\", \"*cmd /c *\", \"*cmd /r *\", \"*cmd /k *\")) and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\"))) or (process.command_line:\"*do rundll32.exe C:\\\\windows\\\\System32\\\\comsvcs.dll, MiniDump*\" and process.command_line:\"*\\\\Windows\\\\Temp\\\\*\" and process.command_line:\"* full*\" and process.command_line:\"*%%B*\") or (process.command_line:\"*tasklist /v /fo csv*\" and process.command_line:\"*findstr /i \\\"lsass\\\"*\")",
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "imagename eq lsass.exe",
+        "comsvcs.dll, minidump",
+        "full",
+        "%%b",
+        "fo csv"
+      ],
+      "raw_values": [
+        "*tasklist /fi *",
+        "*Imagename eq lsass.exe*",
+        "*do rundll32.exe C:\\\\windows\\\\System32\\\\comsvcs.dll, MiniDump*",
+        "*\\\\Windows\\\\Temp\\\\*",
+        "* full*",
+        "*%%B*",
+        "*tasklist /v /fo csv*",
+        "*findstr /i \\"
+      ]
+    }
+  ]
+}

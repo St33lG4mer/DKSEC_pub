@@ -1,0 +1,56 @@
+{
+  "source": "elastic",
+  "name": "New GitHub Self Hosted Action Runner",
+  "slug": "initial_access_github_register_self_hosted_runner",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/initial_access_github_register_self_hosted_runner.toml",
+  "raw_query": "data_stream.dataset:\"github.audit\" and\n    event.category:\"configuration\" and\n    event.action: (\n        \"repo.register_self_hosted_runner\" or\n        \"org.register_self_hosted_runner\" or\n        \"enterprise.register_self_hosted_runner\"\n    )\n",
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "repo.register_self_hosted_runner",
+        "org.register_self_hosted_runner",
+        "enterprise.register_self_hosted_runner"
+      ],
+      "raw_values": [
+        "repo.register_self_hosted_runner",
+        "org.register_self_hosted_runner",
+        "enterprise.register_self_hosted_runner"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "configuration"
+      ],
+      "raw_values": [
+        "configuration"
+      ]
+    }
+  ]
+}

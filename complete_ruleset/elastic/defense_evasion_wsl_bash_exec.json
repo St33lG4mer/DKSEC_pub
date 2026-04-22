@@ -1,0 +1,134 @@
+{
+  "source": "elastic",
+  "name": "Suspicious Execution via Windows Subsystem for Linux",
+  "slug": "defense_evasion_wsl_bash_exec",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_wsl_bash_exec.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type : \"start\" and\n  (\n    (\n      (process.executable : \"?:\\\\Windows\\\\System32\\\\bash.exe\" or ?process.pe.original_file_name == \"Bash.exe\") and\n      not process.command_line : (\"bash\", \"bash.exe\")\n    ) or\n    process.executable : \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Packages\\\\*\\\\rootfs\\\\usr\\\\bin\\\\bash\" or\n    (\n      process.parent.name : \"wsl.exe\" and process.parent.command_line : \"bash*\" and not process.name : \"wslhost.exe\"\n    ) or\n    (\n      process.name : \"wsl.exe\" and process.args : (\n        \"curl\", \"/etc/shadow\", \"/etc/passwd\", \"cat\", \"--system\", \"root\", \"-e\", \"--exec\", \"bash\", \"/mnt/c/*\"\n      ) and not process.args : (\"wsl-bootstrap\", \"docker-desktop-data\", \"*.vscode-server*\")\n    )\n  ) and\n    not process.parent.executable : (\"?:\\\\Program Files\\\\Docker\\\\*.exe\", \"?:\\\\Program Files (x86)\\\\Docker\\\\*.exe\")\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "bash",
+        "bash.exe",
+        "curl",
+        "shadow",
+        "passwd",
+        "cat",
+        "--system",
+        "root",
+        "--exec",
+        "wsl-bootstrap",
+        "docker-desktop-data",
+        ".vscode-server"
+      ],
+      "raw_values": [
+        "bash",
+        "bash.exe",
+        "curl",
+        "/etc/shadow",
+        "/etc/passwd",
+        "cat",
+        "--system",
+        "root",
+        "-e",
+        "--exec",
+        "/mnt/c/*",
+        "wsl-bootstrap",
+        "docker-desktop-data",
+        "*.vscode-server*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "wsl.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\Docker\\\\*.exe",
+        "wsl.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bash.exe",
+        "bash",
+        "wslhost.exe",
+        "wsl.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\bash.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Packages\\\\*\\\\rootfs\\\\usr\\\\bin\\\\bash",
+        "wslhost.exe",
+        "wsl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "bash.exe"
+      ],
+      "raw_values": [
+        "Bash.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "bash"
+      ],
+      "raw_values": [
+        "bash*"
+      ]
+    }
+  ]
+}

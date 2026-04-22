@@ -1,0 +1,64 @@
+{
+  "source": "elastic",
+  "name": "High Number of Protected Branch Force Pushes by User",
+  "slug": "impact_high_number_of_protected_branch_force_pushes_by_user",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Use Case: Threat Detection",
+    "Tactic: Impact",
+    "Tactic: Exfiltration",
+    "Data Source: Github",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/github/impact_high_number_of_protected_branch_force_pushes_by_user.toml",
+  "raw_query": "from logs-github.audit-* metadata _id, _index, _version\n| where\n  data_stream.dataset == \"github.audit\" and\n  event.type == \"change\" and\n  event.action == \"protected_branch.policy_override\" and\n  github.category == \"protected_branch\" and\n  mv_contains(github.reasons.code, \"force_push\")\n| stats\n  Esql.event_count = COUNT(*),\n  Esql.github_org_values = values(github.org),\n  Esql.github_repo_values = values(github.repo),\n  Esql.github_overridden_codes_values = values(github.overridden_codes),\n  Esql.github_reasons_code_values = values(github.reasons.code),\n  Esql.github_reasons_message_values = values(github.reasons.message),\n  Esql.user_name_values = values(user.name),\n  Esql.agent_id_values = values(agent.id),\n  Esql.data_stream_dataset_values = values(data_stream.dataset),\n  Esql.data_stream_namespace_values = values(data_stream.namespace)\n\n  by user.name\n\n| keep Esql.*\n\n| where\n  Esql.event_count >= 10\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "protected_branch.policy_override"
+      ],
+      "raw_values": [
+        "protected_branch.policy_override"
+      ]
+    },
+    {
+      "field": "github.category",
+      "raw_field": "github.category",
+      "operator": "==",
+      "values": [
+        "protected_branch"
+      ],
+      "raw_values": [
+        "protected_branch"
+      ]
+    }
+  ]
+}

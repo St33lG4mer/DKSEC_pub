@@ -1,0 +1,164 @@
+{
+  "source": "elastic",
+  "name": "Local Scheduled Task Creation",
+  "slug": "persistence_local_scheduled_task_creation",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/persistence_local_scheduled_task_creation.toml",
+  "raw_query": "sequence with maxspan=1m\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n    ((process.name : (\"cmd.exe\", \"wscript.exe\", \"rundll32.exe\", \"regsvr32.exe\", \"wmic.exe\", \"mshta.exe\",\n                      \"powershell.exe\", \"pwsh.exe\", \"powershell_ise.exe\", \"WmiPrvSe.exe\", \"wsmprovhost.exe\", \"winrshost.exe\") or\n    process.pe.original_file_name : (\"cmd.exe\", \"wscript.exe\", \"rundll32.exe\", \"regsvr32.exe\", \"wmic.exe\", \"mshta.exe\",\n                                     \"powershell.exe\", \"pwsh.dll\", \"powershell_ise.exe\", \"WmiPrvSe.exe\", \"wsmprovhost.exe\",\n                                     \"winrshost.exe\")) or\n    ?process.code_signature.trusted == false)] by process.entity_id\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n    (process.name : \"schtasks.exe\" or process.pe.original_file_name == \"schtasks.exe\") and\n    process.args : (\"/create\", \"-create\") and process.args : (\"/RU\", \"/SC\", \"/TN\", \"/TR\", \"/F\", \"/XML\") and\n    /* exclude SYSTEM Integrity Level - look for task creations by non-SYSTEM user */\n    not (?process.Ext.token.integrity_level_name : \"System\" or ?winlog.event_data.IntegrityLevel : \"System\")\n  ] by process.parent.entity_id\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "wscript.exe",
+        "rundll32.exe",
+        "regsvr32.exe",
+        "wmic.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "wmiprvse.exe",
+        "wsmprovhost.exe",
+        "winrshost.exe",
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "wscript.exe",
+        "rundll32.exe",
+        "regsvr32.exe",
+        "wmic.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "WmiPrvSe.exe",
+        "wsmprovhost.exe",
+        "winrshost.exe",
+        "schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "wscript.exe",
+        "rundll32.exe",
+        "regsvr32.exe",
+        "wmic.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.dll",
+        "powershell_ise.exe",
+        "wmiprvse.exe",
+        "wsmprovhost.exe",
+        "winrshost.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "wscript.exe",
+        "rundll32.exe",
+        "regsvr32.exe",
+        "wmic.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.dll",
+        "powershell_ise.exe",
+        "WmiPrvSe.exe",
+        "wsmprovhost.exe",
+        "winrshost.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "create",
+        "-create",
+        "xml"
+      ],
+      "raw_values": [
+        "/create",
+        "-create",
+        "/RU",
+        "/SC",
+        "/TN",
+        "/TR",
+        "/F",
+        "/XML"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.ext.token.integrity_level_name",
+      "raw_field": "process.Ext.token.integrity_level_name",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+any where (process.executable:"*\\attrib.exe" or process.pe.original_file_name:"ATTRIB.EXE") and process.command_line:"* +s *"

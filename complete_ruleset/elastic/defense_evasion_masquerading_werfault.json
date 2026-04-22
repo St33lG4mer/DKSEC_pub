@@ -1,0 +1,93 @@
+{
+  "source": "elastic",
+  "name": "Potential Windows Error Manager Masquerading",
+  "slug": "defense_evasion_masquerading_werfault",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend",
+    "Data Source: Sysmon"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_masquerading_werfault.toml",
+  "raw_query": "sequence by host.id, process.entity_id with maxspan = 5s\n  [process where host.os.type == \"windows\" and event.type:\"start\" and process.name : (\"wermgr.exe\", \"WerFault.exe\") and\n    (process.args_count == 1 and\n      /* Excludes bug where a missing closing quote sets args_count to 1 despite extra args */\n      not process.command_line regex~ \"\"\"\\\".*\\.exe[^\\\"].*\"\"\")]\n  [network where host.os.type == \"windows\" and process.name : (\"wermgr.exe\", \"WerFault.exe\") and network.protocol != \"dns\" and\n    network.direction : (\"outgoing\", \"egress\") and destination.ip !=\"::1\" and destination.ip !=\"127.0.0.1\"\n  ]\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "wermgr.exe",
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "wermgr.exe",
+        "WerFault.exe"
+      ]
+    },
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": ":",
+      "values": [
+        "outgoing",
+        "egress"
+      ],
+      "raw_values": [
+        "outgoing",
+        "egress"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "network.protocol",
+      "raw_field": "network.protocol",
+      "operator": "!=",
+      "values": [
+        "dns"
+      ],
+      "raw_values": [
+        "dns"
+      ]
+    },
+    {
+      "field": "destination.ip",
+      "raw_field": "destination.ip",
+      "operator": "!=",
+      "values": [
+        "::1",
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "::1",
+        "127.0.0.1"
+      ]
+    }
+  ]
+}

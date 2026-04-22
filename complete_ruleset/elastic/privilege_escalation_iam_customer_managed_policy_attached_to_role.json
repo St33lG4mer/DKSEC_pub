@@ -1,0 +1,65 @@
+{
+  "source": "elastic",
+  "name": "AWS IAM Customer-Managed Policy Attached to Role by Rare User",
+  "slug": "privilege_escalation_iam_customer_managed_policy_attached_to_role",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS IAM",
+    "Resources: Investigation Guide",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Privilege Escalation"
+  ],
+  "elastic_path": "rules/integrations/aws/privilege_escalation_iam_customer_managed_policy_attached_to_role.toml",
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"iam.amazonaws.com\"\n    and event.action: \"AttachRolePolicy\"\n    and event.outcome: \"success\"\n    and not related.entity: arn\\:aws\\:iam\\:\\:aws\\:policy*\n",
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "attachrolepolicy"
+      ],
+      "raw_values": [
+        "AttachRolePolicy"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

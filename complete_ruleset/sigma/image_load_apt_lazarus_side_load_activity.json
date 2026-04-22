@@ -1,0 +1,44 @@
+{
+  "source": "sigma",
+  "name": "image_load_apt_lazarus_side_load_activity",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2023/TA/Lazarus/image_load_apt_lazarus_side_load_activity.eql",
+  "raw_query": "any where (process.executable:\"C:\\\\ProgramShared\\\\PresentationHost.exe\" and file.path:\":\\\\ProgramShared\\\\mscoree.dll\") or (process.executable:\"C:\\\\ProgramData\\\\Adobe\\\\colorcpl.exe\" and file.path:\"C:\\\\ProgramData\\\\Adobe\\\\colorui.dll\") or (process.executable:\"C:\\\\ProgramData\\\\Oracle\\\\Java\\\\fixmapi.exe\" and file.path:\"C:\\\\ProgramData\\\\Oracle\\\\Java\\\\mapistub.dll\") or (process.executable:\"C:\\\\ProgramData\\\\Adobe\\\\ARM\\\\tabcal.exe\" and file.path:\"C:\\\\ProgramData\\\\Adobe\\\\ARM\\\\HID.dll\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "presentationhost.exe",
+        "colorcpl.exe",
+        "fixmapi.exe",
+        "tabcal.exe"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramShared\\\\PresentationHost.exe",
+        "C:\\\\ProgramData\\\\Adobe\\\\colorcpl.exe",
+        "C:\\\\ProgramData\\\\Oracle\\\\Java\\\\fixmapi.exe",
+        "C:\\\\ProgramData\\\\Adobe\\\\ARM\\\\tabcal.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mscoree.dll",
+        "colorui.dll",
+        "mapistub.dll",
+        "hid.dll"
+      ],
+      "raw_values": [
+        ":\\\\ProgramShared\\\\mscoree.dll",
+        "C:\\\\ProgramData\\\\Adobe\\\\colorui.dll",
+        "C:\\\\ProgramData\\\\Oracle\\\\Java\\\\mapistub.dll",
+        "C:\\\\ProgramData\\\\Adobe\\\\ARM\\\\HID.dll"
+      ]
+    }
+  ]
+}

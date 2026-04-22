@@ -1,0 +1,32 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wsl_windows_binaries_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_wsl_windows_binaries_execution.eql",
+  "raw_query": "any where process.executable:\"SigmaRegularExpression(regexp=SigmaString(['[a-zA-Z]:\\\\\\\\']), flags=set())\" and process.working_directory:\"*\\\\\\\\wsl.localhost*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['[a-zA-Z]:\\\\\\\\']), flags=set())"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "\\\\\\\\wsl.localhost"
+      ],
+      "raw_values": [
+        "*\\\\\\\\wsl.localhost*"
+      ]
+    }
+  ]
+}

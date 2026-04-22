@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "dns_query_win_devtunnels_communication",
+  "subtree": "rules",
+  "category": "dns",
+  "sigma_path": "rules/windows/dns_query/dns_query_win_devtunnels_communication.eql",
+  "raw_query": "any where dns.question.name:\"*.devtunnels.ms\"",
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        ".devtunnels.ms"
+      ],
+      "raw_values": [
+        "*.devtunnels.ms"
+      ]
+    }
+  ]
+}

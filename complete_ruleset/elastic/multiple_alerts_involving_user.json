@@ -1,0 +1,44 @@
+{
+  "source": "elastic",
+  "name": "Multiple Alerts Involving a User",
+  "slug": "multiple_alerts_involving_user",
+  "category": "any",
+  "language": "esql",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Rule Type: Higher-Order Rule",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/multiple_alerts_involving_user.toml",
+  "raw_query": "from .alerts-security.*\n| where kibana.alert.rule.name is not null and user.id is not null and\n  // Exclude low severity alerts\n  kibana.alert.risk_score > 21 and\n  not KQL(\"\"\"kibana.alert.rule.tags : \"Rule Type: Higher-Order Rule\" \"\"\")\n| stats\n    Esql.rule_name_distinct_count = COUNT_DISTINCT(kibana.alert.rule.name), \n    Esql.rule_id_distinct_count = COUNT_DISTINCT(kibana.alert.rule.rule_id),\n    Esql.host_id_distinct_count = COUNT_DISTINCT(host.id),\n    Esql.risk_score_distinct_count = COUNT_DISTINCT(kibana.alert.risk_score),\n    Esql.data_stream_dataset_distinct_count = COUNT_DISTINCT(data_stream.dataset),\n    Esql.rule_name_values = VALUES(kibana.alert.rule.name), \n    Esql.risk_score_values = VALUES(kibana.alert.risk_score), \n    Esql.data_stream_dataset_values = VALUES(data_stream.dataset), \n    Esql.event_module_values = VALUES(event.module), \n    Esql.process_command_line = VALUES(process.command_line), \n    Esql.host_id_values = VALUES(host.id), \n    Esql.source_ip_values = VALUES(source.ip), \n    Esql.destination_ip_values = VALUES(destination.ip) by user.id\n\n| where Esql.rule_name_distinct_count >= 4 AND Esql.rule_id_distinct_count >= 2 and\n  // Exclude known system accounts with matches in more than one host\n  not (\n    (length(TO_STRING(user.id)) <= 4 or user.id IN (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\", \"0\")) and\n    (Esql.host_id_distinct_count >= 2 or Esql.host_id_distinct_count == 0)\n  )\n\n| keep user.id, Esql.*\n",
+  "conditions": [
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "in",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20",
+        "0"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.tags",
+      "raw_field": "kibana.alert.rule.tags",
+      "operator": ":",
+      "values": [
+        "rule type: higher-order rule"
+      ],
+      "raw_values": [
+        "Rule Type: Higher-Order Rule"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "source": "elastic",
+  "name": "Forbidden Direct Interactive Kubernetes API Request",
+  "slug": "execution_d4c_k8s_mda_forbidden_direct_interactive_kubernetes_api_request",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Elastic Defend for Containers",
+    "Data Source: Kubernetes",
+    "Domain: Container",
+    "Domain: Kubernetes",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Tactic: Discovery",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/execution_d4c_k8s_mda_forbidden_direct_interactive_kubernetes_api_request.toml",
+  "raw_query": "sequence with maxspan=1s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n     process.name in (\"wget\", \"curl\", \"openssl\", \"socat\", \"ncat\", \"kubectl\") or\n     (\n       /* Account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n       process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n       process.args in (\n         \"wget\", \"/bin/wget\", \"/usr/bin/wget\", \"/usr/local/bin/wget\",\n         \"ssl_client\", \"/bin/ssl_client\", \"/usr/bin/ssl_client\", \"/usr/local/bin/ssl_client\",\n         \"curl\", \"/bin/curl\", \"/usr/bin/curl\", \"/usr/local/bin/curl\",\n         \"openssl\", \"/bin/openssl\", \"/usr/bin/openssl\", \"/usr/local/bin/openssl\",\n         \"socat\", \"/bin/socat\", \"/usr/bin/socat\", \"/usr/local/bin/socat\",\n         \"ncat\", \"/bin/ncat\", \"/usr/bin/ncat\", \"/usr/local/bin/ncat\",\n         \"kubectl\", \"/bin/kubectl\", \"/usr/bin/kubectl\", \"/usr/local/bin/kubectl\"\n       ) and\n       /* default exclusion list to not FP on default multi-process commands */\n       not process.args in (\n         \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n         \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n         \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n         \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n       )\n     )\n   ) and process.interactive == true and container.id like \"*\"\n  ] by orchestrator.resource.name\n  [any where data_stream.dataset == \"kubernetes.audit_logs\" and kubernetes.audit.stage in (\"ResponseComplete\", \"ResponseStarted\") and\n  `kubernetes.audit.annotations.authorization_k8s_io/decision` == \"forbid\"\n  ] by `kubernetes.audit.user.extra.authentication.kubernetes.io/pod-name` \n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "wget",
+        "curl",
+        "openssl",
+        "socat",
+        "ncat",
+        "kubectl",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "wget",
+        "curl",
+        "openssl",
+        "socat",
+        "ncat",
+        "kubectl",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "wget",
+        "ssl_client",
+        "curl",
+        "openssl",
+        "socat",
+        "ncat",
+        "kubectl",
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "wget",
+        "/bin/wget",
+        "/usr/bin/wget",
+        "/usr/local/bin/wget",
+        "ssl_client",
+        "/bin/ssl_client",
+        "/usr/bin/ssl_client",
+        "/usr/local/bin/ssl_client",
+        "curl",
+        "/bin/curl",
+        "/usr/bin/curl",
+        "/usr/local/bin/curl",
+        "openssl",
+        "/bin/openssl",
+        "/usr/bin/openssl",
+        "/usr/local/bin/openssl",
+        "socat",
+        "/bin/socat",
+        "/usr/bin/socat",
+        "/usr/local/bin/socat",
+        "ncat",
+        "/bin/ncat",
+        "/usr/bin/ncat",
+        "/usr/local/bin/ncat",
+        "kubectl",
+        "/bin/kubectl",
+        "/usr/bin/kubectl",
+        "/usr/local/bin/kubectl",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": "in",
+      "values": [
+        "responsecomplete",
+        "responsestarted"
+      ],
+      "raw_values": [
+        "ResponseComplete",
+        "ResponseStarted"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    }
+  ]
+}

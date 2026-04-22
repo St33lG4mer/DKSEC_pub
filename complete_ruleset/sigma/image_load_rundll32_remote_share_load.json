@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_rundll32_remote_share_load",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_rundll32_remote_share_load.eql",
+  "raw_query": "any where process.executable:\"*\\\\rundll32.exe\" and file.path:\"\\\\\\\\*\"",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ]
+}

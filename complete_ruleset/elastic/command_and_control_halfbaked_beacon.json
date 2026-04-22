@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Halfbaked Command and Control Beacon",
+  "slug": "command_and_control_halfbaked_beacon",
+  "category": "network",
+  "language": "lucene",
+  "risk_score": 73,
+  "tags": [
+    "Use Case: Threat Detection",
+    "Tactic: Command and Control",
+    "Domain: Endpoint",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/network/command_and_control_halfbaked_beacon.toml",
+  "raw_query": "(data_stream.dataset: (network_traffic.tls OR network_traffic.http) OR\n  (event.category: (network OR network_traffic) AND network.protocol: http)) AND\n  network.transport:tcp AND url.full:/http:\\/\\/[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}\\/cd/ AND\n  destination.port:(53 OR 80 OR 8080 OR 443)\n",
+  "conditions": []
+}

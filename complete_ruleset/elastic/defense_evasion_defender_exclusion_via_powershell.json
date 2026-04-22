@@ -1,0 +1,93 @@
+{
+  "source": "elastic",
+  "name": "Windows Defender Exclusions Added via PowerShell",
+  "slug": "defense_evasion_defender_exclusion_via_powershell",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Windows Security Event Logs",
+    "Data Source: Microsoft Defender for Endpoint",
+    "Data Source: Sysmon",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_defender_exclusion_via_powershell.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n (process.name : (\"powershell.exe\", \"pwsh.exe\", \"powershell_ise.exe\") or ?process.pe.original_file_name in (\"PowerShell.EXE\", \"pwsh.dll\", \"powershell_ise.EXE\")) and\n  process.args : (\"*Add-MpPreference*\", \"*Set-MpPreference*\") and\n  process.args : (\"*-Exclusion*\")\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "add-mppreference",
+        "set-mppreference",
+        "-exclusion"
+      ],
+      "raw_values": [
+        "*Add-MpPreference*",
+        "*Set-MpPreference*",
+        "*-Exclusion*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "in",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll",
+        "powershell_ise.EXE"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "win_security_security_enabled_global_group_deleted",
+  "subtree": "rules",
+  "category": "builtin",
+  "sigma_path": "rules/windows/builtin/security/account_management/win_security_security_enabled_global_group_deleted.eql",
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code like~ (\"4730\", \"634\"))",
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4730",
+        "634"
+      ],
+      "raw_values": [
+        "4730",
+        "634"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_abused_dlls_susp_paths",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_abused_dlls_susp_paths.eql",
+  "raw_query": "any where (file.path like~ (\"*\\\\coreclr.dll\", \"*\\\\facesdk.dll\", \"*\\\\HPCustPartUI.dll\", \"*\\\\libcef.dll\", \"*\\\\ZIPDLL.dll\")) and ((file.path like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*\\\\Temporary Internet*\", \"*\\\\Windows\\\\Temp\\\\*\")) or ((file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\Favorites\\\\*\") or (file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\Favourites\\\\*\") or (file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\Contacts\\\\*\") or (file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\Pictures\\\\*\")))",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "coreclr.dll",
+        "facesdk.dll",
+        "hpcustpartui.dll",
+        "libcef.dll",
+        "zipdll.dll",
+        "temporary internet"
+      ],
+      "raw_values": [
+        "*\\\\coreclr.dll",
+        "*\\\\facesdk.dll",
+        "*\\\\HPCustPartUI.dll",
+        "*\\\\libcef.dll",
+        "*\\\\ZIPDLL.dll",
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*\\\\Temporary Internet*",
+        "*\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ]
+}

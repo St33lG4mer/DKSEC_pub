@@ -1,0 +1,47 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_winrm_execution_via_scripting_api_winrm_vbs",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_winrm_execution_via_scripting_api_winrm_vbs.eql",
+  "raw_query": "any where (process.executable:\"*\\\\cscript.exe\" or process.pe.original_file_name:\"cscript.exe\") and (process.command_line:\"*winrm*\" and process.command_line:\"*invoke Create wmicimv2/Win32_*\" and process.command_line:\"*-r:http*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "cscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "winrm",
+        "win32_",
+        "-r:http"
+      ],
+      "raw_values": [
+        "*winrm*",
+        "*invoke Create wmicimv2/Win32_*",
+        "*-r:http*"
+      ]
+    }
+  ]
+}

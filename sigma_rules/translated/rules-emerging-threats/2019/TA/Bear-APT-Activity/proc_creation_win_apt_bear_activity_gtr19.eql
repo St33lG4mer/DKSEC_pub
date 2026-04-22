@@ -1,0 +1,1 @@
+any where (process.command_line:"*xcopy /S /E /C /Q /H \\\\*" and process.command_line:"*\\sysvol\\*") or (process.command_line:"*adexplorer -snapshot \"\" c:\\users\\*" and process.command_line:"*\\downloads\\*" and process.command_line:"*.snp*")

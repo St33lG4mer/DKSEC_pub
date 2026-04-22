@@ -1,0 +1,60 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_cmd_del_execution",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_cmd_del_execution.eql",
+  "raw_query": "any where (process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and (process.command_line like~ (\"*del *\", \"*erase *\")) and (process.command_line like~ (\"* -f*\", \"* /f*\", \"* \u2013f*\", \"* \u2014f*\", \"* \u2015f*\") or process.command_line like~ (\"* -s*\", \"* /s*\", \"* \u2013s*\", \"* \u2014s*\", \"* \u2015s*\") or process.command_line like~ (\"* -q*\", \"* /q*\", \"* \u2013q*\", \"* \u2014q*\", \"* \u2015q*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "del",
+        "erase"
+      ],
+      "raw_values": [
+        "*del *",
+        "*erase *",
+        "* -f*",
+        "* /f*",
+        "* \u2013f*",
+        "* \u2014f*",
+        "* \u2015f*",
+        "* -s*",
+        "* /s*",
+        "* \u2013s*",
+        "* \u2014s*",
+        "* \u2015s*",
+        "* -q*",
+        "* /q*",
+        "* \u2013q*",
+        "* \u2014q*",
+        "* \u2015q*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    }
+  ]
+}

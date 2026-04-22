@@ -1,0 +1,192 @@
+{
+  "source": "elastic",
+  "name": "System Binary Path File Permission Modification",
+  "slug": "execution_system_binary_file_permission_change",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/execution_system_binary_file_permission_change.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.name == \"chmod\" and\nprocess.args like (\n  \"/bin/*\", \"/usr/bin/*\", \"/sbin/*\", \"/usr/sbin/*\", \"/usr/local/sbin/*\", \"/lib/*\", \"/usr/lib/*\", \"/lib64/*\", \"/usr/lib64/*\"\n) and\nprocess.args in (\"4755\", \"755\", \"000\", \"777\", \"444\", \"+x\") and not (\n  process.args in (\n    \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\", \"/usr/bin/restic\", \"/usr/local/bin/ack-tool\", \"/usr/lib/policykit-1/polkit-agent-helper-1\",\n    \"/usr/local/bin/deploy-entrypoint.sh\", \"/usr/local/bin/mc\", \"/usr/local/bin/start.sh\", \"/usr/local/sbin/MySQLBackups/mysql_backup.sh\",\n    \"/usr/bin/coreutils\", \"/usr/bin/docker-compose\", \"/usr/bin/cri-dockerd\", \"/usr/sbin/mkfs.ext5\", \"/usr/bin/cyclonedx\", \"/usr/bin/distro\",\n    \"/usr/bin/telegraf\", \"/usr/bin/jq\", \"/usr/bin/google-chrome\", \"/usr/sbin/login_duo\"\n  ) or\n  process.args like \"/usr/lib/omnissa/*\" or\n  process.parent.executable like (\n    \"/tmp/newroot/*\", \"/var/lib/dpkg/*\", \"/usr/libexec/postfix/post-install\", \"/kaniko/executor\", \"./install_viewagent.sh\", \"/bin/make\" \n  ) or\n  process.parent.args like (\n    \"/var/lib/dpkg/*\", \"/usr/lib/postfix/bin/post-install\", \"/usr/lib/postfix/sbin/post-install\", \"/usr/libexec/postfix/post-install\",\n    \"./install_viewagent.sh\", \"/usr/lib/omnissa/*\", \"/var/tmp/rpm-tmp.*\"\n  ) or\n  process.parent.name in (\"udevadm\", \"systemd\", \"entrypoint\", \"sudo\", \"dart\") or\n  process.parent.command_line == \"runc init\"\n)\n",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "post-install",
+        "executor",
+        "install_viewagent.sh",
+        "make"
+      ],
+      "raw_values": [
+        "/tmp/newroot/*",
+        "/var/lib/dpkg/*",
+        "/usr/libexec/postfix/post-install",
+        "/kaniko/executor",
+        "./install_viewagent.sh",
+        "/bin/make"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/var/lib/dpkg/",
+        "/usr/lib/postfix/bin/post-install",
+        "/usr/lib/postfix/sbin/post-install",
+        "/usr/libexec/postfix/post-install",
+        "./install_viewagent.sh",
+        "/usr/lib/omnissa/",
+        "/var/tmp/rpm-tmp."
+      ],
+      "raw_values": [
+        "/var/lib/dpkg/*",
+        "/usr/lib/postfix/bin/post-install",
+        "/usr/lib/postfix/sbin/post-install",
+        "/usr/libexec/postfix/post-install",
+        "./install_viewagent.sh",
+        "/usr/lib/omnissa/*",
+        "/var/tmp/rpm-tmp.*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "4755",
+        "755",
+        "000",
+        "777",
+        "444",
+        "chmod",
+        "restic",
+        "ack-tool",
+        "polkit-agent-helper-1",
+        "deploy-entrypoint.sh",
+        "start.sh",
+        "mysql_backup.sh",
+        "coreutils",
+        "docker-compose",
+        "cri-dockerd",
+        "mkfs.ext5",
+        "cyclonedx",
+        "distro",
+        "telegraf",
+        "google-chrome",
+        "login_duo"
+      ],
+      "raw_values": [
+        "4755",
+        "755",
+        "000",
+        "777",
+        "444",
+        "+x",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "/usr/bin/restic",
+        "/usr/local/bin/ack-tool",
+        "/usr/lib/policykit-1/polkit-agent-helper-1",
+        "/usr/local/bin/deploy-entrypoint.sh",
+        "/usr/local/bin/mc",
+        "/usr/local/bin/start.sh",
+        "/usr/local/sbin/MySQLBackups/mysql_backup.sh",
+        "/usr/bin/coreutils",
+        "/usr/bin/docker-compose",
+        "/usr/bin/cri-dockerd",
+        "/usr/sbin/mkfs.ext5",
+        "/usr/bin/cyclonedx",
+        "/usr/bin/distro",
+        "/usr/bin/telegraf",
+        "/usr/bin/jq",
+        "/usr/bin/google-chrome",
+        "/usr/sbin/login_duo"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "udevadm",
+        "systemd",
+        "entrypoint",
+        "sudo",
+        "dart"
+      ],
+      "raw_values": [
+        "udevadm",
+        "systemd",
+        "entrypoint",
+        "sudo",
+        "dart"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "chmod"
+      ],
+      "raw_values": [
+        "chmod"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "==",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    }
+  ]
+}

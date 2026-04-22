@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Microsoft Sentinel External Alerts",
+  "slug": "microsoft_sentinel_external_alerts",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Microsoft Sentinel",
+    "Use Case: Threat Detection",
+    "Resources: Investigation Guide",
+    "Promotion: External Alerts"
+  ],
+  "elastic_path": "rules/promotions/microsoft_sentinel_external_alerts.toml",
+  "raw_query": "event.kind: alert and data_stream.dataset: microsoft_sentinel.alert\n",
+  "conditions": []
+}

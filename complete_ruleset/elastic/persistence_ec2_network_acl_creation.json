@@ -1,0 +1,21 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Network Access Control List Creation",
+  "slug": "persistence_ec2_network_acl_creation",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Network Security Monitoring",
+    "Tactic: Persistence",
+    "Tactic: Defense Evasion",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/persistence_ec2_network_acl_creation.toml",
+  "raw_query": "data_stream.dataset:aws.cloudtrail and event.provider:ec2.amazonaws.com and event.action:(CreateNetworkAcl or CreateNetworkAclEntry) and event.outcome:success\n",
+  "conditions": []
+}

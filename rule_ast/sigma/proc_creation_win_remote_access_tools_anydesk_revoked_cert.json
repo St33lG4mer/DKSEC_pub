@@ -1,0 +1,94 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_remote_access_tools_anydesk_revoked_cert",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_anydesk_revoked_cert.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\AnyDesk.exe\" or process.pe.description:\"AnyDesk\" or process.pe.product:\"AnyDesk\" or process.pe.company:\"AnyDesk Software GmbH\") and (process.pe.file_version like~ (\"7.0.*\", \"7.1.*\", \"8.0.1*\", \"8.0.2*\", \"8.0.3*\", \"8.0.4*\", \"8.0.5*\", \"8.0.6*\", \"8.0.7*\"))) and (not (process.command_line like~ (\"* --remove*\", \"* --uninstall*\")))",
+  "conditions": [
+    {
+      "field": "process.pe.file_version",
+      "raw_field": "process.pe.file_version",
+      "operator": "like~",
+      "values": [
+        "7.0.",
+        "7.1.",
+        "8.0.1",
+        "8.0.2",
+        "8.0.3",
+        "8.0.4",
+        "8.0.5",
+        "8.0.6",
+        "8.0.7"
+      ],
+      "raw_values": [
+        "7.0.*",
+        "7.1.*",
+        "8.0.1*",
+        "8.0.2*",
+        "8.0.3*",
+        "8.0.4*",
+        "8.0.5*",
+        "8.0.6*",
+        "8.0.7*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--remove",
+        "--uninstall"
+      ],
+      "raw_values": [
+        "* --remove*",
+        "* --uninstall*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "anydesk.exe"
+      ],
+      "raw_values": [
+        "*\\\\AnyDesk.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "anydesk"
+      ],
+      "raw_values": [
+        "AnyDesk"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "anydesk"
+      ],
+      "raw_values": [
+        "AnyDesk"
+      ]
+    },
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "anydesk software gmbh"
+      ],
+      "raw_values": [
+        "AnyDesk Software GmbH"
+      ]
+    }
+  ]
+}

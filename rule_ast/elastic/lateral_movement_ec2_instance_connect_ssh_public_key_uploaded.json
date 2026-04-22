@@ -1,0 +1,21 @@
+{
+  "source": "elastic",
+  "name": "AWS EC2 Instance Connect SSH Public Key Uploaded",
+  "slug": "lateral_movement_ec2_instance_connect_ssh_public_key_uploaded",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS EC2",
+    "Use Case: Identity and Access Audit",
+    "Tactic: Privilege Escalation",
+    "Tactic: Lateral Movement",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/aws/lateral_movement_ec2_instance_connect_ssh_public_key_uploaded.toml",
+  "raw_query": "data_stream.dataset: aws.cloudtrail\n    and event.provider: ec2-instance-connect.amazonaws.com\n    and event.action: (SendSSHPublicKey or SendSerialConsoleSSHPublicKey)\n    and event.outcome: success\n",
+  "conditions": []
+}

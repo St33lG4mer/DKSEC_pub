@@ -1,0 +1,138 @@
+{
+  "source": "elastic",
+  "name": "Initial Access via File Upload Followed by GET Request",
+  "slug": "initial_access_file_upload_followed_by_get_request",
+  "category": "any",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "Domain: Web",
+    "Domain: Network",
+    "OS: Linux",
+    "OS: Windows",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Initial Access",
+    "Tactic: Persistence",
+    "Data Source: Elastic Defend",
+    "Data Source: Network Traffic",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/initial_access_file_upload_followed_by_get_request.toml",
+  "raw_query": "sequence by agent.id with maxspan=5m\n  [network where\n   data_stream.dataset == \"network_traffic.http\" and\n   http.request.method in (\"POST\", \"PUT\") and\n   /* We can restrict to 200 in the future, but I prefer to broaden the scope and decrease it later if necessary */\n   http.response.status_code in (200, 201, 204, 301, 302, 303, 409) and\n   /* These should detect most common file upload activities, adhering to browser standards */\n   http.request.body.content like \"*Content-Disposition: form-data*\" and\n   http.request.body.content like \"*filename=*\"\n   /* May add a lower/upper boundary limit to reduce FPs in the future, e.g.\n   and http.request.body.bytes >= 500\n   */\n  ]\n  [file where\n   data_stream.dataset == \"endpoint.events.file\" and\n   event.action in (\"creation\", \"rename\") and\n   file.extension in (\"php\", \"phtml\", \"pht\", \"php5\", \"asp\", \"aspx\", \"jsp\", \"jspx\", \"war\", \"cgi\")\n   /* We can add file.path values here in the future, if telemetry is noisy */\n  ]\n  [network where\n   data_stream.dataset == \"network_traffic.http\" and\n   http.request.method in (\"GET\", \"POST\") and\n   /* we may restrict to 200, but keeping it broader right now */\n   http.response.status_code >= 200 and http.response.status_code < 600 and\n   url.extension in (\"php\", \"phtml\", \"pht\", \"php5\", \"asp\", \"aspx\", \"jsp\", \"jspx\", \"war\", \"cgi\")\n  ]\n",
+  "conditions": [
+    {
+      "field": "http.request.method",
+      "raw_field": "http.request.method",
+      "operator": "in",
+      "values": [
+        "post",
+        "put",
+        "get"
+      ],
+      "raw_values": [
+        "POST",
+        "PUT",
+        "GET"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "creation",
+        "rename"
+      ],
+      "raw_values": [
+        "creation",
+        "rename"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "php",
+        "phtml",
+        "pht",
+        "php5",
+        "asp",
+        "aspx",
+        "jsp",
+        "jspx",
+        "war",
+        "cgi"
+      ],
+      "raw_values": [
+        "php",
+        "phtml",
+        "pht",
+        "php5",
+        "asp",
+        "aspx",
+        "jsp",
+        "jspx",
+        "war",
+        "cgi"
+      ]
+    },
+    {
+      "field": "url.extension",
+      "raw_field": "url.extension",
+      "operator": "in",
+      "values": [
+        "php",
+        "phtml",
+        "pht",
+        "php5",
+        "asp",
+        "aspx",
+        "jsp",
+        "jspx",
+        "war",
+        "cgi"
+      ],
+      "raw_values": [
+        "php",
+        "phtml",
+        "pht",
+        "php5",
+        "asp",
+        "aspx",
+        "jsp",
+        "jspx",
+        "war",
+        "cgi"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "network_traffic.http",
+        "endpoint.events.file"
+      ],
+      "raw_values": [
+        "network_traffic.http",
+        "endpoint.events.file"
+      ]
+    },
+    {
+      "field": "http.request.body.content",
+      "raw_field": "http.request.body.content",
+      "operator": "like",
+      "values": [
+        "content-disposition: form-data",
+        "filename="
+      ],
+      "raw_values": [
+        "*Content-Disposition: form-data*",
+        "*filename=*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_remote_time_discovery",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_remote_time_discovery.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) and process.command_line:\"*time*\") or (process.executable:\"*\\\\w32tm.exe\" and process.command_line:\"*tz*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "*\\\\net.exe",
+        "*\\\\net1.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "time"
+      ],
+      "raw_values": [
+        "*time*",
+        "*tz*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "w32tm.exe"
+      ],
+      "raw_values": [
+        "*\\\\w32tm.exe"
+      ]
+    }
+  ]
+}

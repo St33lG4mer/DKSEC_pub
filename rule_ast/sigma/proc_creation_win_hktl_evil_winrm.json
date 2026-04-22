@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_hktl_evil_winrm",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_hktl_evil_winrm.eql",
+  "raw_query": "any where process.executable:\"*\\\\ruby.exe\" and (process.command_line:\"*-i *\" and process.command_line:\"*-u *\" and process.command_line:\"*-p *\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ruby.exe"
+      ],
+      "raw_values": [
+        "*\\\\ruby.exe"
+      ]
+    }
+  ]
+}

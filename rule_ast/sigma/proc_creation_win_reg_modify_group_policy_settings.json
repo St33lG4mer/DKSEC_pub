@@ -1,0 +1,64 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_reg_modify_group_policy_settings",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_reg_modify_group_policy_settings.eql",
+  "raw_query": "any where (process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and process.command_line:\"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System*\" and (process.command_line like~ (\"*GroupPolicyRefreshTimeDC*\", \"*GroupPolicyRefreshTimeOffsetDC*\", \"*GroupPolicyRefreshTime*\", \"*GroupPolicyRefreshTimeOffset*\", \"*EnableSmartScreen*\", \"*ShellSmartScreenLevel*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "grouppolicyrefreshtimedc",
+        "grouppolicyrefreshtimeoffsetdc",
+        "grouppolicyrefreshtime",
+        "grouppolicyrefreshtimeoffset",
+        "enablesmartscreen",
+        "shellsmartscreenlevel"
+      ],
+      "raw_values": [
+        "*GroupPolicyRefreshTimeDC*",
+        "*GroupPolicyRefreshTimeOffsetDC*",
+        "*GroupPolicyRefreshTime*",
+        "*GroupPolicyRefreshTimeOffset*",
+        "*EnableSmartScreen*",
+        "*ShellSmartScreenLevel*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System*"
+      ]
+    }
+  ]
+}

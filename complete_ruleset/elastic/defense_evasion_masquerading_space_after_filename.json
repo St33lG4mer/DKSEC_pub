@@ -1,0 +1,89 @@
+{
+  "source": "elastic",
+  "name": "Masquerading Space After Filename",
+  "slug": "defense_evasion_masquerading_space_after_filename",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/cross-platform/defense_evasion_masquerading_space_after_filename.toml",
+  "raw_query": "process where host.os.type:(\"linux\",\"macos\") and event.type == \"start\" and\nprocess.executable regex~ \"\"\"/[a-z0-9\\s_\\-\\\\./]+\\s\"\"\" and not (\n  process.name in (\"ls\", \"find\", \"grep\", \"xkbcomp\") or\n  process.executable like (\"/opt/nessus_agent/*\", \"/opt/gitlab/sv/gitlab-exporter/*\", \"/tmp/ansible-admin/*\") or\n  process.parent.args in (\n    \"./check_rubrik\", \"/usr/bin/check_mk_agent\", \"/etc/rubrik/start_stop_bootstrap.sh\", \"/etc/rubrik/start_stop_agent.sh\"\n  ) or\n  process.args == \"runc\"\n)\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux",
+        "macos"
+      ],
+      "raw_values": [
+        "linux",
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "find",
+        "grep",
+        "xkbcomp"
+      ],
+      "raw_values": [
+        "ls",
+        "find",
+        "grep",
+        "xkbcomp"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "./check_rubrik",
+        "/usr/bin/check_mk_agent",
+        "/etc/rubrik/start_stop_bootstrap.sh",
+        "/etc/rubrik/start_stop_agent.sh"
+      ],
+      "raw_values": [
+        "./check_rubrik",
+        "/usr/bin/check_mk_agent",
+        "/etc/rubrik/start_stop_bootstrap.sh",
+        "/etc/rubrik/start_stop_agent.sh"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "runc"
+      ],
+      "raw_values": [
+        "runc"
+      ]
+    }
+  ]
+}

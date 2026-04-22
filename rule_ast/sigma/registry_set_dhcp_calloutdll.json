@@ -1,0 +1,23 @@
+{
+  "source": "sigma",
+  "name": "registry_set_dhcp_calloutdll",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_dhcp_calloutdll.eql",
+  "raw_query": "any where registry.path like~ (\"*\\\\Services\\\\DHCPServer\\\\Parameters\\\\CalloutDlls\", \"*\\\\Services\\\\DHCPServer\\\\Parameters\\\\CalloutEnabled\")",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\services\\\\dhcpserver\\\\parameters\\\\calloutdlls",
+        "\\\\services\\\\dhcpserver\\\\parameters\\\\calloutenabled"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\DHCPServer\\\\Parameters\\\\CalloutDlls",
+        "*\\\\Services\\\\DHCPServer\\\\Parameters\\\\CalloutEnabled"
+      ]
+    }
+  ]
+}

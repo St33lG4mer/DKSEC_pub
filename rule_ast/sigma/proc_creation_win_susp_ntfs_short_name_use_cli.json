@@ -1,0 +1,79 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_susp_ntfs_short_name_use_cli",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_susp_ntfs_short_name_use_cli.eql",
+  "raw_query": "any where (process.command_line like~ (\"*~1.exe*\", \"*~1.bat*\", \"*~1.msi*\", \"*~1.vbe*\", \"*~1.vbs*\", \"*~1.dll*\", \"*~1.ps1*\", \"*~1.js*\", \"*~1.hta*\", \"*~2.exe*\", \"*~2.bat*\", \"*~2.msi*\", \"*~2.vbe*\", \"*~2.vbs*\", \"*~2.dll*\", \"*~2.ps1*\", \"*~2.js*\", \"*~2.hta*\")) and (not ((process.parent.executable like~ (\"*\\\\WebEx\\\\WebexHost.exe\", \"*\\\\thor\\\\thor64.exe\")) or process.command_line:\"*C:\\\\xampp\\\\vcredist\\\\VCREDI~1.EXE*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "~1.exe",
+        "~1.bat",
+        "~1.msi",
+        "~1.vbe",
+        "~1.vbs",
+        "~1.dll",
+        "~1.ps1",
+        "~1.js",
+        "~1.hta",
+        "~2.exe",
+        "~2.bat",
+        "~2.msi",
+        "~2.vbe",
+        "~2.vbs",
+        "~2.dll",
+        "~2.ps1",
+        "~2.js",
+        "~2.hta"
+      ],
+      "raw_values": [
+        "*~1.exe*",
+        "*~1.bat*",
+        "*~1.msi*",
+        "*~1.vbe*",
+        "*~1.vbs*",
+        "*~1.dll*",
+        "*~1.ps1*",
+        "*~1.js*",
+        "*~1.hta*",
+        "*~2.exe*",
+        "*~2.bat*",
+        "*~2.msi*",
+        "*~2.vbe*",
+        "*~2.vbs*",
+        "*~2.dll*",
+        "*~2.ps1*",
+        "*~2.js*",
+        "*~2.hta*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "webexhost.exe",
+        "thor64.exe"
+      ],
+      "raw_values": [
+        "*\\\\WebEx\\\\WebexHost.exe",
+        "*\\\\thor\\\\thor64.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "vcredi~1.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\xampp\\\\vcredist\\\\VCREDI~1.EXE*"
+      ]
+    }
+  ]
+}

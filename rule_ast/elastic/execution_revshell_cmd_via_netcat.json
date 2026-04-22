@@ -1,0 +1,73 @@
+{
+  "source": "elastic",
+  "name": "Potential Command Shell via NetCat",
+  "slug": "execution_revshell_cmd_via_netcat",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Resources: Investigation Guide",
+    "Data Source: Elastic Defend"
+  ],
+  "elastic_path": "rules/windows/execution_revshell_cmd_via_netcat.toml",
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\nprocess.name : (\"cmd.exe\", \"powershell.exe\") and process.parent.args : \"-e\" and\n (\n  (process.parent.args_count == 5 and process.parent.command_line regex~ \"\"\".*[0-9]{1,3}(\\.[0-9]{1,3}){3}.*\"\"\") or\n  (process.parent.args : \"-*l*\" and process.parent.args : \"-*p*\" and process.parent.args : (\"cmd.exe\", \"powershell.exe\"))\n  )\n",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "powershell.exe"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "-*l",
+        "-*p"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "powershell.exe",
+        "-e",
+        "-*l*",
+        "-*p*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ]
+}

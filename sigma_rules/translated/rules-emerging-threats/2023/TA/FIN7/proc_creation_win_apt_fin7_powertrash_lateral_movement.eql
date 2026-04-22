@@ -1,0 +1,1 @@
+any where (process.command_line:"*-noni -nop -exe bypass -f \\\\*" and process.command_line:"*ADMIN$*") or (process.command_line:"*-ex bypass -noprof -nolog -nonint -f*" and process.command_line:"*C:\\Windows\\Temp\\*")

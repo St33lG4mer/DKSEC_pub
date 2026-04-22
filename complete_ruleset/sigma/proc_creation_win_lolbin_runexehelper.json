@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_lolbin_runexehelper",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_lolbin_runexehelper.eql",
+  "raw_query": "any where process.parent.executable:\"*\\\\runexehelper.exe\"",
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "runexehelper.exe"
+      ],
+      "raw_values": [
+        "*\\\\runexehelper.exe"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "source": "elastic",
+  "name": "Entra ID OAuth user_impersonation Scope for Unusual User and Client",
+  "slug": "initial_access_entra_id_oauth_user_impersonation_scope",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Domain: Identity",
+    "Use Case: Threat Detection",
+    "Data Source: Azure",
+    "Data Source: Microsoft Entra ID",
+    "Data Source: Microsoft Entra ID Sign-In Logs",
+    "Tactic: Initial Access",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/initial_access_entra_id_oauth_user_impersonation_scope.toml",
+  "raw_query": "data_stream.dataset: azure.signinlogs and\n    azure.signinlogs.properties.authentication_processing_details: *user_impersonation* and\n    azure.signinlogs.properties.authentication_requirement: \"singleFactorAuthentication\" and\n    azure.signinlogs.properties.token_issuer_type: \"AzureAD\" and\n    azure.signinlogs.properties.token_protection_status_details.sign_in_session_status: \"unbound\" and\n    azure.signinlogs.properties.user_type: \"Member\" and\n    azure.signinlogs.properties.conditional_access_status: \"notApplied\" and\n    not user_agent.original: (Mozilla*PKeyAuth/1.0 or Microsoft*Authentication*iPhone*) and\n    not azure.signinlogs.properties.device_detail.operating_system: (Ios* or Android*) and\n    event.outcome: \"success\"\n    and not azure.signinlogs.properties.app_id: (\n        \"a5f63c0-b750-4f38-a71c-4fc0d58b89e2\" or\n        \"6bc3b958-689b-49f5-9006-36d165f30e00\" or\n        \"66a88757-258c-4c72-893c-3e8bed4d6899\" or\n        \"cc15fd57-2c6c-4117-a88c-83b1d56b4bbe\" or\n        \"0000000c-0000-0000-c000-000000000000\" or\n        \"0a5f63c0-b750-4f38-a71c-4fc0d58b89e2\" or\n        \"48af08dc-f6d2-435f-b2a7-069abd99c086\" or\n        \"ab9b8c07-8f02-4f72-87fa-80105867a763\" or\n        \"fc0f3af4-6835-4174-b806-f7db311fd2f3\" or\n        \"5e3ce6c0-2b1f-4285-8d4b-75ee78787346\" or\n        \"e8be65d6-d430-4289-a665-51bf2a194bda\" or\n        \"95de633a-083e-42f5-b444-a4295d8e9314\" or\n        \"d52792f4-ba38-424d-8140-ada5b883f293\" or\n        \"65d91a3d-ab74-42e6-8a2f-0add61688c74\" or\n        \"8c59ead7-d703-4a27-9e55-c96a0054c8d2\"\n    )\n",
+  "conditions": [
+    {
+      "field": "azure.signinlogs.properties.app_id",
+      "raw_field": "azure.signinlogs.properties.app_id",
+      "operator": ":",
+      "values": [
+        "a5f63c0-b750-4f38-a71c-4fc0d58b89e2",
+        "6bc3b958-689b-49f5-9006-36d165f30e00",
+        "66a88757-258c-4c72-893c-3e8bed4d6899",
+        "cc15fd57-2c6c-4117-a88c-83b1d56b4bbe",
+        "0000000c-0000-0000-c000-000000000000",
+        "0a5f63c0-b750-4f38-a71c-4fc0d58b89e2",
+        "48af08dc-f6d2-435f-b2a7-069abd99c086",
+        "ab9b8c07-8f02-4f72-87fa-80105867a763",
+        "fc0f3af4-6835-4174-b806-f7db311fd2f3",
+        "5e3ce6c0-2b1f-4285-8d4b-75ee78787346",
+        "e8be65d6-d430-4289-a665-51bf2a194bda",
+        "95de633a-083e-42f5-b444-a4295d8e9314",
+        "d52792f4-ba38-424d-8140-ada5b883f293",
+        "65d91a3d-ab74-42e6-8a2f-0add61688c74",
+        "8c59ead7-d703-4a27-9e55-c96a0054c8d2"
+      ],
+      "raw_values": [
+        "a5f63c0-b750-4f38-a71c-4fc0d58b89e2",
+        "6bc3b958-689b-49f5-9006-36d165f30e00",
+        "66a88757-258c-4c72-893c-3e8bed4d6899",
+        "cc15fd57-2c6c-4117-a88c-83b1d56b4bbe",
+        "0000000c-0000-0000-c000-000000000000",
+        "0a5f63c0-b750-4f38-a71c-4fc0d58b89e2",
+        "48af08dc-f6d2-435f-b2a7-069abd99c086",
+        "ab9b8c07-8f02-4f72-87fa-80105867a763",
+        "fc0f3af4-6835-4174-b806-f7db311fd2f3",
+        "5e3ce6c0-2b1f-4285-8d4b-75ee78787346",
+        "e8be65d6-d430-4289-a665-51bf2a194bda",
+        "95de633a-083e-42f5-b444-a4295d8e9314",
+        "d52792f4-ba38-424d-8140-ada5b883f293",
+        "65d91a3d-ab74-42e6-8a2f-0add61688c74",
+        "8c59ead7-d703-4a27-9e55-c96a0054c8d2"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.authentication_requirement",
+      "raw_field": "azure.signinlogs.properties.authentication_requirement",
+      "operator": ":",
+      "values": [
+        "singlefactorauthentication"
+      ],
+      "raw_values": [
+        "singleFactorAuthentication"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.token_issuer_type",
+      "raw_field": "azure.signinlogs.properties.token_issuer_type",
+      "operator": ":",
+      "values": [
+        "azuread"
+      ],
+      "raw_values": [
+        "AzureAD"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.token_protection_status_details.sign_in_session_status",
+      "raw_field": "azure.signinlogs.properties.token_protection_status_details.sign_in_session_status",
+      "operator": ":",
+      "values": [
+        "unbound"
+      ],
+      "raw_values": [
+        "unbound"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.user_type",
+      "raw_field": "azure.signinlogs.properties.user_type",
+      "operator": ":",
+      "values": [
+        "member"
+      ],
+      "raw_values": [
+        "Member"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.conditional_access_status",
+      "raw_field": "azure.signinlogs.properties.conditional_access_status",
+      "operator": ":",
+      "values": [
+        "notapplied"
+      ],
+      "raw_values": [
+        "notApplied"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "source": "elastic",
+  "name": "Potential Defense Evasion via Doas",
+  "slug": "defense_evasion_doas_configuration_creation_or_rename",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: Elastic Defend",
+    "Data Source: Elastic Endgame",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/defense_evasion_doas_configuration_creation_or_rename.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.type != \"deletion\" and file.path == \"/etc/doas.conf\"\n",
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "==",
+      "values": [
+        "doas.conf"
+      ],
+      "raw_values": [
+        "/etc/doas.conf"
+      ]
+    }
+  ]
+}

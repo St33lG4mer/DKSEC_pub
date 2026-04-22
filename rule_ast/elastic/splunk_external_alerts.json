@@ -1,0 +1,17 @@
+{
+  "source": "elastic",
+  "name": "Splunk External Alerts",
+  "slug": "splunk_external_alerts",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: Splunk",
+    "Use Case: Threat Detection",
+    "Resources: Investigation Guide",
+    "Promotion: External Alerts"
+  ],
+  "elastic_path": "rules/promotions/splunk_external_alerts.toml",
+  "raw_query": "event.kind: alert and data_stream.dataset: splunk.alert\n",
+  "conditions": []
+}

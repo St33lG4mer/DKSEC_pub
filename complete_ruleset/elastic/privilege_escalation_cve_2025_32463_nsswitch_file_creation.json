@@ -1,0 +1,98 @@
+{
+  "source": "elastic",
+  "name": "Potential CVE-2025-32463 Nsswitch File Creation",
+  "slug": "privilege_escalation_cve_2025_32463_nsswitch_file_creation",
+  "category": "file",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Privilege Escalation",
+    "Data Source: Elastic Defend",
+    "Data Source: SentinelOne",
+    "Data Source: Crowdstrike",
+    "Data Source: Elastic Endgame",
+    "Data Source: Auditd Manager",
+    "Use Case: Vulnerability",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/privilege_escalation_cve_2025_32463_nsswitch_file_creation.toml",
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"creation\" and file.path like \"/*/etc/nsswitch.conf\" and\nprocess.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and\nnot file.path like (\n  \"/var/tmp/mkinitramfs_*\", \"/tmp/tmp.*/mkinitramfs_*\", \"/var/tmp/dracut.*\", \"/tmp/user/0/mkinitramfs_*\",\n  \"/var/lib/aws-replication-agent/.tmp/mkinitramfs_*\"\n)\n",
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mkinitramfs_",
+        "dracut."
+      ],
+      "raw_values": [
+        "/var/tmp/mkinitramfs_*",
+        "/tmp/tmp.*/mkinitramfs_*",
+        "/var/tmp/dracut.*",
+        "/tmp/user/0/mkinitramfs_*",
+        "/var/lib/aws-replication-agent/.tmp/mkinitramfs_*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like",
+      "values": [
+        "nsswitch.conf"
+      ],
+      "raw_values": [
+        "/*/etc/nsswitch.conf"
+      ]
+    }
+  ]
+}

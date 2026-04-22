@@ -1,0 +1,68 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_powershell_download_patterns",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_powershell_download_patterns.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell_ISE.EXE\", \"PowerShell.EXE\", \"pwsh.dll\"))) and ((process.command_line:\"*new-object*\" and process.command_line:\"*net.webclient).*\" and process.command_line:\"*download*\") and (process.command_line like~ (\"*string(*\", \"*file(*\")))",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell_ISE.EXE",
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "string(",
+        "file("
+      ],
+      "raw_values": [
+        "*string(*",
+        "*file(*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "new-object",
+        "net.webclient).",
+        "download"
+      ],
+      "raw_values": [
+        "*new-object*",
+        "*net.webclient).*",
+        "*download*"
+      ]
+    }
+  ]
+}

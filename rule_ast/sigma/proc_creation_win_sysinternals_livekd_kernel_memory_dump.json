@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_sysinternals_livekd_kernel_memory_dump",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_sysinternals_livekd_kernel_memory_dump.eql",
+  "raw_query": "any where ((process.executable like~ (\"*\\\\livekd.exe\", \"*\\\\livekd64.exe\")) or process.pe.original_file_name:\"livekd.exe\") and process.command_line like~ (\"* -m*\", \"* /m*\", \"* \u2013m*\", \"* \u2014m*\", \"* \u2015m*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "livekd.exe",
+        "livekd64.exe"
+      ],
+      "raw_values": [
+        "*\\\\livekd.exe",
+        "*\\\\livekd64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "livekd.exe"
+      ],
+      "raw_values": [
+        "livekd.exe"
+      ]
+    }
+  ]
+}

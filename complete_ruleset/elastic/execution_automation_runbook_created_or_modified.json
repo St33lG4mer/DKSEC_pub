@@ -1,0 +1,34 @@
+{
+  "source": "elastic",
+  "name": "Azure Automation Runbook Created or Modified",
+  "slug": "execution_automation_runbook_created_or_modified",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: Azure",
+    "Use Case: Configuration Audit",
+    "Tactic: Execution",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/integrations/azure/execution_automation_runbook_created_or_modified.toml",
+  "raw_query": "data_stream.dataset:azure.activitylogs and\n  azure.activitylogs.operation_name:\n  (\n    \"MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/DRAFT/WRITE\" or\n    \"MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/WRITE\" or\n    \"MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/PUBLISH/ACTION\"\n  ) and\n  event.outcome:(Success or success)\n",
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.automation/automationaccounts/runbooks/draft/write",
+        "microsoft.automation/automationaccounts/runbooks/write",
+        "microsoft.automation/automationaccounts/runbooks/publish/action"
+      ],
+      "raw_values": [
+        "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/DRAFT/WRITE",
+        "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/WRITE",
+        "MICROSOFT.AUTOMATION/AUTOMATIONACCOUNTS/RUNBOOKS/PUBLISH/ACTION"
+      ]
+    }
+  ]
+}

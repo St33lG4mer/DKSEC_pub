@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "net_dns_susp_telegram_api",
+  "subtree": "rules",
+  "category": "network",
+  "sigma_path": "rules/network/dns/net_dns_susp_telegram_api.eql",
+  "raw_query": "any where query:\"api.telegram.org\"",
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        "api.telegram.org"
+      ],
+      "raw_values": [
+        "api.telegram.org"
+      ]
+    }
+  ]
+}

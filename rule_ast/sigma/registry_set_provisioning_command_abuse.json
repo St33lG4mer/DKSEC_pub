@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "registry_set_provisioning_command_abuse",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_set/registry_set_provisioning_command_abuse.eql",
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Provisioning\\\\Commands\\\\*\"",
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\provisioning\\\\commands\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Provisioning\\\\Commands\\\\*"
+      ]
+    }
+  ]
+}

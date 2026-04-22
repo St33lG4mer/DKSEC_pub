@@ -1,0 +1,164 @@
+{
+  "source": "elastic",
+  "name": "Initramfs Extraction via CPIO",
+  "slug": "persistence_extract_initramfs_via_cpio",
+  "category": "process",
+  "language": "eql",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Linux",
+    "Use Case: Threat Detection",
+    "Tactic: Persistence",
+    "Data Source: Elastic Endgame",
+    "Data Source: Elastic Defend",
+    "Data Source: Auditd Manager",
+    "Data Source: Crowdstrike",
+    "Data Source: SentinelOne",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/linux/persistence_extract_initramfs_via_cpio.toml",
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\") and\nprocess.name == \"cpio\" and process.args in (\"-H\", \"--format\") and process.args == \"newc\" and\nnot (\n  process.parent.name in (\"mkinitramfs\", \"dracut\") or\n  ?process.parent.executable like~ (\"/usr/share/initramfs-tools/*\", \"/nix/store/*\") or\n  ?process.parent.args in (\n    \"/bin/dracut\", \"/usr/share/initramfs-tools/hooks/amd64_microcode\", \"/usr/bin/dracut\", \"/usr/sbin/mkinitramfs\",\n    \"/usr/sbin/dracut\", \"/usr/bin/update-microcode-initrd\"\n  ) or\n  process.args like (\"/var/tmp/mkinitramfs_*\", \"/tmp/tmp.*/mkinitramfs_*\") or\n  ?process.working_directory like (\n    \"/var/tmp/mkinitramfs-*\", \"/tmp/microcode-initrd_*\", \"/var/tmp/mkinitramfs-*\", \"/var/tmp/dracut.*\",\n    \"/var/tmp/mkinitramfs_*\", \"/var/tmp/supermin*/init.d\"\n  )\n)\n",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "mkinitramfs_"
+      ],
+      "raw_values": [
+        "/var/tmp/mkinitramfs_*",
+        "/tmp/tmp.*/mkinitramfs_*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/var/tmp/mkinitramfs-",
+        "/tmp/microcode-initrd_",
+        "/var/tmp/dracut.",
+        "/var/tmp/mkinitramfs_",
+        "/var/tmp/supermin*/init.d"
+      ],
+      "raw_values": [
+        "/var/tmp/mkinitramfs-*",
+        "/tmp/microcode-initrd_*",
+        "/var/tmp/dracut.*",
+        "/var/tmp/mkinitramfs_*",
+        "/var/tmp/supermin*/init.d"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--format"
+      ],
+      "raw_values": [
+        "-H",
+        "--format"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "mkinitramfs",
+        "dracut"
+      ],
+      "raw_values": [
+        "mkinitramfs",
+        "dracut"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/bin/dracut",
+        "/usr/share/initramfs-tools/hooks/amd64_microcode",
+        "/usr/bin/dracut",
+        "/usr/sbin/mkinitramfs",
+        "/usr/sbin/dracut",
+        "/usr/bin/update-microcode-initrd"
+      ],
+      "raw_values": [
+        "/bin/dracut",
+        "/usr/share/initramfs-tools/hooks/amd64_microcode",
+        "/usr/bin/dracut",
+        "/usr/sbin/mkinitramfs",
+        "/usr/sbin/dracut",
+        "/usr/bin/update-microcode-initrd"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "cpio"
+      ],
+      "raw_values": [
+        "cpio"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "newc"
+      ],
+      "raw_values": [
+        "newc"
+      ]
+    }
+  ]
+}

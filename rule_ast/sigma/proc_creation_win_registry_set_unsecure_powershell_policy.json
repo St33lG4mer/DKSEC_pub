@@ -1,0 +1,28 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_registry_set_unsecure_powershell_policy",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_registry_set_unsecure_powershell_policy.eql",
+  "raw_query": "any where (process.command_line like~ (\"*\\\\ShellIds\\\\Microsoft.PowerShell\\\\ExecutionPolicy*\", \"*\\\\Policies\\\\Microsoft\\\\Windows\\\\PowerShell\\\\ExecutionPolicy*\")) and (process.command_line like~ (\"*Bypass*\", \"*RemoteSigned*\", \"*Unrestricted*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "executionpolicy",
+        "bypass",
+        "remotesigned",
+        "unrestricted"
+      ],
+      "raw_values": [
+        "*\\\\ShellIds\\\\Microsoft.PowerShell\\\\ExecutionPolicy*",
+        "*\\\\Policies\\\\Microsoft\\\\Windows\\\\PowerShell\\\\ExecutionPolicy*",
+        "*Bypass*",
+        "*RemoteSigned*",
+        "*Unrestricted*"
+      ]
+    }
+  ]
+}

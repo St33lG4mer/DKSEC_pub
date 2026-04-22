@@ -1,0 +1,36 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_apt_taidoor",
+  "subtree": "rules-emerging-threats",
+  "category": "any",
+  "sigma_path": "rules-emerging-threats/2020/TA/TAIDOOR-RAT/proc_creation_win_apt_taidoor.eql",
+  "raw_query": "any where (process.command_line like~ (\"*dll,MyStart*\", \"*dll MyStart*\")) or (process.command_line:\"* MyStart\" and process.command_line:\"*rundll32.exe*\")",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "dll,mystart",
+        "dll mystart"
+      ],
+      "raw_values": [
+        "*dll,MyStart*",
+        "*dll MyStart*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "mystart",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "* MyStart",
+        "*rundll32.exe*"
+      ]
+    }
+  ]
+}

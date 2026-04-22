@@ -1,0 +1,45 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_mpcmdrun_remove_windows_defender_definition",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_mpcmdrun_remove_windows_defender_definition.eql",
+  "raw_query": "any where (process.executable:\"*\\\\MpCmdRun.exe\" or process.pe.original_file_name:\"MpCmdRun.exe\") and (process.command_line:\"* -RemoveDefinitions*\" and process.command_line:\"* -All*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mpcmdrun.exe"
+      ],
+      "raw_values": [
+        "*\\\\MpCmdRun.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mpcmdrun.exe"
+      ],
+      "raw_values": [
+        "MpCmdRun.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-removedefinitions",
+        "-all"
+      ],
+      "raw_values": [
+        "* -RemoveDefinitions*",
+        "* -All*"
+      ]
+    }
+  ]
+}

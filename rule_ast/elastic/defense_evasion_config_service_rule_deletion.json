@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "AWS Config Resource Deletion",
+  "slug": "defense_evasion_config_service_rule_deletion",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Domain: Cloud",
+    "Data Source: AWS",
+    "Data Source: Amazon Web Services",
+    "Data Source: AWS Config",
+    "Resources: Investigation Guide",
+    "Tactic: Defense Evasion"
+  ],
+  "elastic_path": "rules/integrations/aws/defense_evasion_config_service_rule_deletion.toml",
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: config.amazonaws.com \n    and event.outcome: success\n    and event.action: (DeleteConfigRule or DeleteOrganizationConfigRule or DeleteConfigurationAggregator or\n    DeleteConfigurationRecorder or DeleteConformancePack or DeleteOrganizationConformancePack or\n    DeleteDeliveryChannel or DeleteRemediationConfiguration or DeleteRetentionConfiguration)\n    and not aws.cloudtrail.user_identity.invoked_by: (securityhub.amazonaws.com or fms.amazonaws.com or controltower.amazonaws.com or config-conforms.amazonaws.com)\n",
+  "conditions": []
+}

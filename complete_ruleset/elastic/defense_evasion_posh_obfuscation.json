@@ -1,0 +1,45 @@
+{
+  "source": "elastic",
+  "name": "Deprecated - Potential PowerShell Obfuscated Script",
+  "slug": "defense_evasion_posh_obfuscation",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: Windows",
+    "Use Case: Threat Detection",
+    "Tactic: Defense Evasion",
+    "Data Source: PowerShell Logs",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/windows/defense_evasion_posh_obfuscation.toml",
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n    \"[string]::join\" or\n    \"-Join\" or\n    \"[convert]::toint16\" or\n    \"[char][int]$_\" or\n    (\"ConvertTo-SecureString\" and \"PtrToStringAuto\") or\n    \"-BXor\" or\n    (\"replace\" and \"char\") or\n    \"[array]::reverse\" or\n    \"-replace\"\n  ) and\n  powershell.file.script_block_text : (\n    (\"$pSHoMe[\" and \"+$pSHoMe[\") or\n    (\"$ShellId[\" and \"+$ShellId[\") or\n    (\"$env:ComSpec[4\" and \"25]-Join\") or\n    ((\"Set-Variable\" or \"SV\" or \"Set-Item\") and \"OFS\") or\n    (\"*MDR*\" and \"Name[3,11,2]\") or\n    (\"$VerbosePreference\" and \"[1,3]+'X'-Join''\") or\n    (\"rahc\" or \"ekovin\" or \"gnirts\" or \"ecnereferpesobrev\" or \"ecalper\" or \"cepsmoc\" or \"dillehs\") or\n    (\"System.Management.Automation.$([cHAr]\" or \"System.$([cHAr]\" or \")+[cHAR]([byte]\")\n  ) and\n  not powershell.file.script_block_text : (\n        (\"Copyright (c) 2018 Ansible Project\" or \"Export-ModuleMember -Function Add-CSharpType\") and\n        (\"[Object]$AnsibleModule\" or \"$AnsibleModule.Tmpdir\")\n  )\n",
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "[string]::join",
+        "-join",
+        "[convert]::toint16",
+        "[char][int]$_",
+        "convertto-securestring",
+        "ptrtostringauto",
+        "$pshome[",
+        "+$pshome["
+      ],
+      "raw_values": [
+        "[string]::join",
+        "-Join",
+        "[convert]::toint16",
+        "[char][int]$_",
+        "ConvertTo-SecureString",
+        "PtrToStringAuto",
+        "$pSHoMe[",
+        "+$pSHoMe["
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_wsl_arbitrary_command_execution",
+  "subtree": "rules-threat-hunting",
+  "category": "process",
+  "sigma_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_wsl_arbitrary_command_execution.eql",
+  "raw_query": "any where ((process.executable:\"*\\\\wsl.exe\" or process.pe.original_file_name:\"wsl.exe\") and (process.command_line like~ (\"* -e *\", \"* --exec*\", \"* --system*\", \"* --shell-type *\", \"* /mnt/c*\", \"* --user root*\", \"* -u root*\", \"*--debug-shell*\"))) and (not (process.parent.executable:\"*\\\\cmd.exe\" and (process.command_line:\"* -d *\" and process.command_line:\"* -e kill *\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--exec",
+        "--system",
+        "--shell-type",
+        "--user root",
+        "-u root",
+        "--debug-shell"
+      ],
+      "raw_values": [
+        "* -e *",
+        "* --exec*",
+        "* --system*",
+        "* --shell-type *",
+        "* /mnt/c*",
+        "* --user root*",
+        "* -u root*",
+        "*--debug-shell*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wsl.exe"
+      ],
+      "raw_values": [
+        "*\\\\wsl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wsl.exe"
+      ],
+      "raw_values": [
+        "wsl.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-e kill"
+      ],
+      "raw_values": [
+        "* -d *",
+        "* -e kill *"
+      ]
+    }
+  ]
+}

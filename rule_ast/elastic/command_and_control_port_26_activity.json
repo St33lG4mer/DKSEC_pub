@@ -1,0 +1,19 @@
+{
+  "source": "elastic",
+  "name": "SMTP on Port 26/TCP",
+  "slug": "command_and_control_port_26_activity",
+  "category": "network",
+  "language": "kuery",
+  "risk_score": 21,
+  "tags": [
+    "Tactic: Command and Control",
+    "Tactic: Exfiltration",
+    "Domain: Endpoint",
+    "Use Case: Threat Detection",
+    "Data Source: PAN-OS",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/network/command_and_control_port_26_activity.toml",
+  "raw_query": "(data_stream.dataset: (network_traffic.flow or zeek.smtp) or event.category:(network or network_traffic)) and network.transport:tcp and destination.port:26\n",
+  "conditions": []
+}

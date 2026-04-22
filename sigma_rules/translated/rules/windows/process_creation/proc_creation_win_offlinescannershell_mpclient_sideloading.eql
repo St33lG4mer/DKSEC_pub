@@ -1,0 +1,1 @@
+any where (process.executable:"*\\OfflineScannerShell.exe" or process.pe.original_file_name:"OfflineScannerShell.exe") and (not (process.working_directory:"C:\\Program Files\\Windows Defender\\Offline\\" or process.working_directory=="" or (?process.working_directory == null)))

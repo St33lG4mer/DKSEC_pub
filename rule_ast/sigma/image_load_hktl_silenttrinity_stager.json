@@ -1,0 +1,21 @@
+{
+  "source": "sigma",
+  "name": "image_load_hktl_silenttrinity_stager",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_hktl_silenttrinity_stager.eql",
+  "raw_query": "any where file.pe.description:\"*st2stager*\"",
+  "conditions": [
+    {
+      "field": "file.pe.description",
+      "raw_field": "file.pe.description",
+      "operator": ":",
+      "values": [
+        "st2stager"
+      ],
+      "raw_values": [
+        "*st2stager*"
+      ]
+    }
+  ]
+}

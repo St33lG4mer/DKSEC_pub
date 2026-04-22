@@ -1,0 +1,96 @@
+{
+  "source": "elastic",
+  "name": "Unusual Library Load via Python",
+  "slug": "execution_unusual_library_load_via_python",
+  "category": "library",
+  "language": "eql",
+  "risk_score": 73,
+  "tags": [
+    "Domain: Endpoint",
+    "OS: macOS",
+    "Use Case: Threat Detection",
+    "Tactic: Execution",
+    "Data Source: Elastic Defend",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/macos/execution_unusual_library_load_via_python.toml",
+  "raw_query": "library where host.os.type == \"macos\" and event.action == \"load\" and\n  dll.path like \"/Users/*\" and\n  process.name like \"python*\" and\n  not dll.name like (\"*.so\", \"*.dylib\", \"Python\", \"*.*_extension\", \"*.dylib.*\") and\n  not dll.path like (\"*/site-packages/*/Qt*/lib/Qt*.framework/Versions/*/Qt*\",\n                     \"/Users/*/.pyenv/versions/*/lib/python*/site-packages/*\")\n",
+  "conditions": [
+    {
+      "field": "dll.name",
+      "raw_field": "dll.name",
+      "operator": ":",
+      "values": [
+        ".so",
+        ".dylib",
+        "python",
+        ".*_extension",
+        ".dylib."
+      ],
+      "raw_values": [
+        "*.so",
+        "*.dylib",
+        "Python",
+        "*.*_extension",
+        "*.dylib.*"
+      ]
+    },
+    {
+      "field": "dll.path",
+      "raw_field": "dll.path",
+      "operator": ":",
+      "values": [
+        "/site-packages/*/qt*/lib/qt*.framework/versions/*/qt",
+        "/users/*/.pyenv/versions/*/lib/python*/site-packages/"
+      ],
+      "raw_values": [
+        "*/site-packages/*/Qt*/lib/Qt*.framework/Versions/*/Qt*",
+        "/Users/*/.pyenv/versions/*/lib/python*/site-packages/*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "load"
+      ],
+      "raw_values": [
+        "load"
+      ]
+    },
+    {
+      "field": "dll.path",
+      "raw_field": "dll.path",
+      "operator": "like",
+      "values": [
+        "/users/"
+      ],
+      "raw_values": [
+        "/Users/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    }
+  ]
+}

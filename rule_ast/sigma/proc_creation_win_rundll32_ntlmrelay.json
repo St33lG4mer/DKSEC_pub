@@ -1,0 +1,59 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_rundll32_ntlmrelay",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_rundll32_ntlmrelay.eql",
+  "raw_query": "any where (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and ((process.command_line:\"*C:\\\\windows\\\\system32\\\\davclnt.dll,DavSetCookie*\" and process.command_line:\"*http*\") and (process.command_line like~ (\"*spoolss*\", \"*srvsvc*\", \"*/print/pipe/*\")))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "spoolss",
+        "srvsvc"
+      ],
+      "raw_values": [
+        "*spoolss*",
+        "*srvsvc*",
+        "*/print/pipe/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "davclnt.dll,davsetcookie",
+        "http"
+      ],
+      "raw_values": [
+        "*C:\\\\windows\\\\system32\\\\davclnt.dll,DavSetCookie*",
+        "*http*"
+      ]
+    }
+  ]
+}

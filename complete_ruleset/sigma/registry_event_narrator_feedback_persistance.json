@@ -1,0 +1,34 @@
+{
+  "source": "sigma",
+  "name": "registry_event_narrator_feedback_persistance",
+  "subtree": "rules",
+  "category": "registry",
+  "sigma_path": "rules/windows/registry/registry_event/registry_event_narrator_feedback_persistance.eql",
+  "raw_query": "any where (winlog.event_data.EventType:\"DeleteValue\" and registry.path:\"*\\\\AppXypsaf9f1qserqevf0sws76dx4k9a5206\\\\Shell\\\\open\\\\command\\\\DelegateExecute\") or registry.path:\"*\\\\AppXypsaf9f1qserqevf0sws76dx4k9a5206\\\\Shell\\\\open\\\\command\\\\(Default)\"",
+  "conditions": [
+    {
+      "field": "winlog.event_data.eventtype",
+      "raw_field": "winlog.event_data.EventType",
+      "operator": ":",
+      "values": [
+        "deletevalue"
+      ],
+      "raw_values": [
+        "DeleteValue"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\appxypsaf9f1qserqevf0sws76dx4k9a5206\\\\shell\\\\open\\\\command\\\\delegateexecute",
+        "\\\\appxypsaf9f1qserqevf0sws76dx4k9a5206\\\\shell\\\\open\\\\command\\\\(default)"
+      ],
+      "raw_values": [
+        "*\\\\AppXypsaf9f1qserqevf0sws76dx4k9a5206\\\\Shell\\\\open\\\\command\\\\DelegateExecute",
+        "*\\\\AppXypsaf9f1qserqevf0sws76dx4k9a5206\\\\Shell\\\\open\\\\command\\\\(Default)"
+      ]
+    }
+  ]
+}

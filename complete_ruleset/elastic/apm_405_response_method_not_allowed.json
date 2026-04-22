@@ -1,0 +1,15 @@
+{
+  "source": "elastic",
+  "name": "Web Application Suspicious Activity: Unauthorized Method",
+  "slug": "apm_405_response_method_not_allowed",
+  "category": "any",
+  "language": "kuery",
+  "risk_score": 47,
+  "tags": [
+    "Data Source: APM",
+    "Resources: Investigation Guide"
+  ],
+  "elastic_path": "rules/apm/apm_405_response_method_not_allowed.toml",
+  "raw_query": "http.response.status_code:405\n",
+  "conditions": []
+}

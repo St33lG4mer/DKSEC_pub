@@ -1,0 +1,33 @@
+{
+  "source": "sigma",
+  "name": "image_load_side_load_ualapi",
+  "subtree": "rules",
+  "category": "library",
+  "sigma_path": "rules/windows/image_load/image_load_side_load_ualapi.eql",
+  "raw_query": "any where (process.executable:\"*\\\\fxssvc.exe\" and file.path:\"*ualapi.dll\") and (not file.path:\"C:\\\\Windows\\\\WinSxS\\\\*\")",
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "fxssvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\fxssvc.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "ualapi.dll"
+      ],
+      "raw_values": [
+        "*ualapi.dll",
+        "C:\\\\Windows\\\\WinSxS\\\\*"
+      ]
+    }
+  ]
+}

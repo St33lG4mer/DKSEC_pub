@@ -1,0 +1,1 @@
+any where (process.command_line like~ ("*dll,MyStart*", "*dll MyStart*")) or (process.command_line:"* MyStart" and process.command_line:"*rundll32.exe*")

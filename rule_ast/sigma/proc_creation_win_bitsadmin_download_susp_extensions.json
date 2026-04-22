@@ -1,0 +1,111 @@
+{
+  "source": "sigma",
+  "name": "proc_creation_win_bitsadmin_download_susp_extensions",
+  "subtree": "rules",
+  "category": "process",
+  "sigma_path": "rules/windows/process_creation/proc_creation_win_bitsadmin_download_susp_extensions.eql",
+  "raw_query": "any where (process.executable:\"*\\\\bitsadmin.exe\" or process.pe.original_file_name:\"bitsadmin.exe\") and (process.command_line like~ (\"* /transfer *\", \"* /create *\", \"* /addfile *\")) and (process.command_line like~ (\"*.7z*\", \"*.asax*\", \"*.ashx*\", \"*.asmx*\", \"*.asp*\", \"*.aspx*\", \"*.bat*\", \"*.cfm*\", \"*.cgi*\", \"*.chm*\", \"*.cmd*\", \"*.dll*\", \"*.gif*\", \"*.jpeg*\", \"*.jpg*\", \"*.jsp*\", \"*.jspx*\", \"*.log*\", \"*.png*\", \"*.ps1*\", \"*.psm1*\", \"*.rar*\", \"*.scf*\", \"*.sct*\", \"*.txt*\", \"*.vbe*\", \"*.vbs*\", \"*.war*\", \"*.wsf*\", \"*.wsh*\", \"*.xll*\", \"*.zip*\"))",
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "transfer",
+        "create",
+        "addfile",
+        ".7z",
+        ".asax",
+        ".ashx",
+        ".asmx",
+        ".asp",
+        ".aspx",
+        ".bat",
+        ".cfm",
+        ".cgi",
+        ".chm",
+        ".cmd",
+        ".dll",
+        ".gif",
+        ".jpeg",
+        ".jpg",
+        ".jsp",
+        ".jspx",
+        ".log",
+        ".png",
+        ".ps1",
+        ".psm1",
+        ".rar",
+        ".scf",
+        ".sct",
+        ".txt",
+        ".vbe",
+        ".vbs",
+        ".war",
+        ".wsf",
+        ".wsh",
+        ".xll",
+        ".zip"
+      ],
+      "raw_values": [
+        "* /transfer *",
+        "* /create *",
+        "* /addfile *",
+        "*.7z*",
+        "*.asax*",
+        "*.ashx*",
+        "*.asmx*",
+        "*.asp*",
+        "*.aspx*",
+        "*.bat*",
+        "*.cfm*",
+        "*.cgi*",
+        "*.chm*",
+        "*.cmd*",
+        "*.dll*",
+        "*.gif*",
+        "*.jpeg*",
+        "*.jpg*",
+        "*.jsp*",
+        "*.jspx*",
+        "*.log*",
+        "*.png*",
+        "*.ps1*",
+        "*.psm1*",
+        "*.rar*",
+        "*.scf*",
+        "*.sct*",
+        "*.txt*",
+        "*.vbe*",
+        "*.vbs*",
+        "*.war*",
+        "*.wsf*",
+        "*.wsh*",
+        "*.xll*",
+        "*.zip*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\bitsadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "bitsadmin.exe"
+      ]
+    }
+  ]
+}
