@@ -53,8 +53,9 @@ if btn_col.button("🔃 Refresh", help="Clear alert cache and reload"):
 with st.spinner("Fetching live alerts…"):
     alerts = fetch_alerts_24h(es_host, es_user, es_pass)
 
-if alerts["error"]:
-    st.info("ℹ️ Elasticsearch not connected — alert counts show zero.")
+connected = bool(es_host) and not alerts.get("error")
+if not connected:
+    st.info("ℹ️ Elasticsearch not connected — showing rule inventory.")
 
 # ── Pre-compute all derived values ────────────────────────────────────────
 sigma_stems   = complete_sigma_stems()
@@ -91,24 +92,27 @@ def _sev_df(sev_dict: dict) -> pd.DataFrame:
 # ═══════════════════════════════════════════════════════════════
 st.markdown('<div class="section-header">Executive Snapshot</div>', unsafe_allow_html=True)
 
-signal_color = "#f85149" if signal_ratio > 50 else ("#d29922" if signal_ratio > 20 else "#3fb950")
-gap_color    = "#f85149" if critical_gaps else "#3fb950"
+gap_color = "#f85149" if critical_gaps else "#3fb950"
+
+if connected:
+    signal_color = "#f85149" if signal_ratio > 50 else ("#d29922" if signal_ratio > 20 else "#3fb950")
+    card2 = metric_card_html("Signal Ratio", f"{signal_ratio:.1f}%", "high + critical / total alerts (24h)", signal_color)
+    card4 = alert_donut_html(alerts["total"], alerts["by_severity"])
+else:
+    eql_pct = round(n_valid / total_sigma * 100) if total_sigma else 0
+    elastic_rule_count = len([r for r in kibana_rules if "SIGMA" not in (r.get("tags") or [])])
+    card2 = metric_card_html("EQL Validity", f"{eql_pct}%", f"{n_valid} of {total_sigma} rules pass validation", "#58a6ff")
+    card4 = metric_card_html(
+        "Detection Rules", f"{len(sigma_rules) + elastic_rule_count:,}",
+        f"Sigma: {len(sigma_rules):,}  ·  Elastic: {elastic_rule_count:,}", "#e6edf3",
+    )
 
 st.markdown(
     '<div class="metric-row">'
-    + metric_card_html(
-        "Coverage Score", f"{coverage_pct}%",
-        f"{sigma_in_set} of {total_sigma} SIGMA rules deploy-ready", "#3fb950",
-    )
-    + metric_card_html(
-        "Signal Ratio", f"{signal_ratio:.1f}%",
-        "high + critical / total alerts (24h)", signal_color,
-    )
-    + metric_card_html(
-        "Critical Gaps", str(len(critical_gaps)),
-        "high/critical SIGMA rules not deployed", gap_color,
-    )
-    + alert_donut_html(alerts["total"], alerts["by_severity"])
+    + metric_card_html("Coverage Score", f"{coverage_pct}%", f"{sigma_in_set} of {total_sigma} SIGMA rules deploy-ready", "#3fb950")
+    + card2
+    + metric_card_html("Critical Gaps", str(len(critical_gaps)), "high/critical SIGMA rules not deployed", gap_color)
+    + card4
     + '</div>',
     unsafe_allow_html=True,
 )
@@ -130,72 +134,116 @@ with col_gaps:
         st.caption(f"{len(critical_gaps)} high/critical rules pending deployment")
 
 with col_noisy:
-    st.caption("TOP NOISY RULES (24h)")
-    noisy_rows = [
-        {"Rule": r["rule"][:40], "Count": r["count"], "Source": "SIGMA"}
-        for r in alerts["sigma"]["top_rules"] if r["count"] >= 20
-    ] + [
-        {"Rule": r["rule"][:40], "Count": r["count"], "Source": "Elastic"}
-        for r in alerts["elastic"]["top_rules"] if r["count"] >= 20
-    ]
-    if noisy_rows:
-        df_noisy = (
-            pd.DataFrame(noisy_rows)
-            .sort_values("Count", ascending=False)
-            .head(5)
-            .reset_index(drop=True)
-        )
-        st.dataframe(df_noisy, height=280, use_container_width=True)
+    if connected:
+        st.caption("TOP NOISY RULES (24h)")
+        noisy_rows = [
+            {"Rule": r["rule"][:40], "Count": r["count"], "Source": "SIGMA"}
+            for r in alerts["sigma"]["top_rules"] if r["count"] >= 20
+        ] + [
+            {"Rule": r["rule"][:40], "Count": r["count"], "Source": "Elastic"}
+            for r in alerts["elastic"]["top_rules"] if r["count"] >= 20
+        ]
+        if noisy_rows:
+            df_noisy = (
+                pd.DataFrame(noisy_rows)
+                .sort_values("Count", ascending=False)
+                .head(5)
+                .reset_index(drop=True)
+            )
+            st.dataframe(df_noisy, height=280, use_container_width=True)
+        else:
+            st.info("No high-volume rules detected.")
     else:
-        st.info("No high-volume rules detected.")
+        st.caption("TOP HIGH / CRITICAL SIGMA RULES")
+        top_hc = sorted(
+            [r for r in sigma_rules if r["severity"] in ("high", "critical")],
+            key=lambda r: -r["risk_score"],
+        )[:8]
+        if top_hc:
+            st.dataframe(
+                pd.DataFrame([
+                    {"Rule": r["title"][:38], "Severity": r["severity"], "Risk": r["risk_score"]}
+                    for r in top_hc
+                ]),
+                height=280,
+                use_container_width=True,
+                hide_index=True,
+            )
 
 st.divider()
 
 # ═══════════════════════════════════════════════════════════════
-# TIER 3 — Detection Activity
+# TIER 3 — Detection Activity / Rule Inventory
 # ═══════════════════════════════════════════════════════════════
-st.markdown('<div class="section-header">Detection Activity — Last 24 Hours</div>', unsafe_allow_html=True)
+if connected:
+    st.markdown('<div class="section-header">Detection Activity — Last 24 Hours</div>', unsafe_allow_html=True)
+    if alerts["timeline"]:
+        df_tl = pd.DataFrame(alerts["timeline"])
+        if not df_tl.empty and "count" in df_tl.columns:
+            st.bar_chart(df_tl.set_index("hour").rename(columns={"count": "Alerts"}), color="#58a6ff")
 
-if alerts["timeline"]:
-    df_tl = pd.DataFrame(alerts["timeline"])
-    if not df_tl.empty and "count" in df_tl.columns:
-        st.bar_chart(df_tl.set_index("hour").rename(columns={"count": "Alerts"}), color="#58a6ff")
-
-col_sig, col_ela = st.columns(2)
-with col_sig:
-    st.caption("🔵 SIGMA — severity breakdown")
-    df_sig = _sev_df(alerts["sigma"]["by_severity"])
-    if not df_sig.empty:
-        st.bar_chart(df_sig, color="#58a6ff")
-    else:
-        st.info("No SIGMA alerts in last 24 h")
-
-with col_ela:
-    st.caption("🟡 Elastic — severity breakdown")
-    df_ela = _sev_df(alerts["elastic"]["by_severity"])
-    if not df_ela.empty:
-        st.bar_chart(df_ela, color="#d29922")
-    else:
-        st.info("No Elastic alerts in last 24 h")
-
-st.markdown('<div class="section-header">Top Triggered Rules</div>', unsafe_allow_html=True)
-all_top = [
-    {"Rule": r["rule"], "Alerts": r["count"], "Source": "SIGMA"}
-    for r in alerts["sigma"]["top_rules"]
-] + [
-    {"Rule": r["rule"], "Alerts": r["count"], "Source": "Elastic"}
-    for r in alerts["elastic"]["top_rules"]
-]
-if all_top:
-    df_top = (
-        pd.DataFrame(all_top)
-        .sort_values("Alerts", ascending=False)
-        .head(15)
-        .reset_index(drop=True)
-    )
-    st.dataframe(df_top, use_container_width=True, height=360)
+    col_sig, col_ela = st.columns(2)
+    with col_sig:
+        st.caption("🔵 SIGMA — severity breakdown")
+        df_sig = _sev_df(alerts["sigma"]["by_severity"])
+        if not df_sig.empty:
+            st.bar_chart(df_sig, color="#58a6ff")
+        else:
+            st.info("No SIGMA alerts in last 24 h")
+    with col_ela:
+        st.caption("🟡 Elastic — severity breakdown")
+        df_ela = _sev_df(alerts["elastic"]["by_severity"])
+        if not df_ela.empty:
+            st.bar_chart(df_ela, color="#d29922")
+        else:
+            st.info("No Elastic alerts in last 24 h")
 else:
-    st.info("No alert data available — connect to Elasticsearch to see live triggered rules.")
+    st.markdown('<div class="section-header">Rule Inventory</div>', unsafe_allow_html=True)
+    elastic_inv = [r for r in kibana_rules if "SIGMA" not in (r.get("tags") or [])]
+    col_sig, col_ela = st.columns(2)
+    with col_sig:
+        st.caption("🔵 SIGMA — rules by severity")
+        st.bar_chart(
+            _sev_df({sev: sum(1 for r in sigma_rules if r["severity"] == sev) for sev in SEV_ORDER}),
+            color="#58a6ff",
+        )
+    with col_ela:
+        st.caption("🟡 Elastic — rules by severity")
+        st.bar_chart(
+            _sev_df({sev: sum(1 for r in elastic_inv if r["severity"] == sev) for sev in SEV_ORDER}),
+            color="#d29922",
+        )
+
+if connected:
+    st.markdown('<div class="section-header">Top Triggered Rules</div>', unsafe_allow_html=True)
+    all_top = [
+        {"Rule": r["rule"], "Alerts": r["count"], "Source": "SIGMA"}
+        for r in alerts["sigma"]["top_rules"]
+    ] + [
+        {"Rule": r["rule"], "Alerts": r["count"], "Source": "Elastic"}
+        for r in alerts["elastic"]["top_rules"]
+    ]
+    if all_top:
+        df_top = (
+            pd.DataFrame(all_top)
+            .sort_values("Alerts", ascending=False)
+            .head(15)
+            .reset_index(drop=True)
+        )
+        st.dataframe(df_top, use_container_width=True, height=360)
+else:
+    st.markdown('<div class="section-header">Top Sigma Rules by Risk Score</div>', unsafe_allow_html=True)
+    top_scored = sorted(sigma_rules, key=lambda r: -r["risk_score"])[:15]
+    st.dataframe(
+        pd.DataFrame([
+            {"Rule": r["title"], "Severity": r["severity"], "Risk Score": r["risk_score"],
+             "MITRE Techniques": len(r["techniques"])}
+            for r in top_scored
+        ]),
+        use_container_width=True,
+        height=360,
+        hide_index=True,
+    )
 
 st.divider()
 

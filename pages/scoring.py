@@ -87,28 +87,25 @@ df["Decision"] = df["Name"].map(decision_map).fillna("—")
 # ── Classification badges ────────────────────────────────────────────────────
 st.markdown('<div class="section-header">Rule Classifications</div>', unsafe_allow_html=True)
 
-n_dead     = int((df["Classification"] == "dead").sum())
-n_noisy    = int((df["Classification"] == "noisy").sum())
-n_valuable = int((df["Classification"] == "valuable").sum())
-n_active   = int((df["Classification"] == "active").sum())
-
 cb1, cb2, cb3, cb4 = st.columns(4)
-cb1.markdown(
-    metric_card_html("Dead Rules", str(n_dead), "No alerts fired in 24 h", "#8b949e"),
-    unsafe_allow_html=True,
-)
-cb2.markdown(
-    metric_card_html("Noisy Rules", str(n_noisy), "≥50 fires, low/medium severity", "#d29922"),
-    unsafe_allow_html=True,
-)
-cb3.markdown(
-    metric_card_html("Valuable Rules", str(n_valuable), "Fires on high/critical severity", "#3fb950"),
-    unsafe_allow_html=True,
-)
-cb4.markdown(
-    metric_card_html("Active Rules", str(n_active), "Firing, not noisy or valuable", "#58a6ff"),
-    unsafe_allow_html=True,
-)
+if es_host and not alerts.get("error"):
+    n_dead     = int((df["Classification"] == "dead").sum())
+    n_noisy    = int((df["Classification"] == "noisy").sum())
+    n_valuable = int((df["Classification"] == "valuable").sum())
+    n_active   = int((df["Classification"] == "active").sum())
+    cb1.markdown(metric_card_html("Dead Rules",    str(n_dead),     "No alerts fired in 24 h",          "#8b949e"), unsafe_allow_html=True)
+    cb2.markdown(metric_card_html("Noisy Rules",   str(n_noisy),    "≥50 fires, low/medium severity",    "#d29922"), unsafe_allow_html=True)
+    cb3.markdown(metric_card_html("Valuable Rules", str(n_valuable), "Fires on high/critical severity",  "#3fb950"), unsafe_allow_html=True)
+    cb4.markdown(metric_card_html("Active Rules",  str(n_active),   "Firing, not noisy or valuable",     "#58a6ff"), unsafe_allow_html=True)
+else:
+    n_crit = int((df["Severity"] == "critical").sum())
+    n_high = int((df["Severity"] == "high").sum())
+    n_med  = int((df["Severity"] == "medium").sum())
+    n_low  = int((df["Severity"] == "low").sum())
+    cb1.markdown(metric_card_html("Critical", str(n_crit), "rules", "#f85149"), unsafe_allow_html=True)
+    cb2.markdown(metric_card_html("High",     str(n_high), "rules", "#d29922"), unsafe_allow_html=True)
+    cb3.markdown(metric_card_html("Medium",   str(n_med),  "rules", "#58a6ff"), unsafe_allow_html=True)
+    cb4.markdown(metric_card_html("Low",      str(n_low),  "rules", "#3fb950"), unsafe_allow_html=True)
 
 st.write("")
 
