@@ -182,3 +182,42 @@ def test_parse_metadata_contains_author(tmp_path):
     adapter = SigmaAdapter(folder_path=tmp_path)
     rule = adapter.parse(_make_raw(tmp_path))
     assert rule.metadata.get("author") == "Test Author"
+
+
+# ---------------------------------------------------------------------------
+# translate() tests
+# ---------------------------------------------------------------------------
+
+def test_translate_sets_translated_query_via_mock(tmp_path):
+    adapter = SigmaAdapter(folder_path=tmp_path)
+    rule = adapter.parse(_make_raw(tmp_path))
+    with patch("adapters.sigma.translator.sigma_to_eql", return_value='process where process.name == "cmd.exe"'):
+        result = adapter.translate(rule)
+    assert result.translated_query == 'process where process.name == "cmd.exe"'
+
+
+def test_translate_sets_none_when_translation_fails(tmp_path):
+    adapter = SigmaAdapter(folder_path=tmp_path)
+    rule = adapter.parse(_make_raw(tmp_path))
+    with patch("adapters.sigma.translator.sigma_to_eql", return_value=None):
+        result = adapter.translate(rule)
+    assert result.translated_query is None
+
+
+def test_translate_returns_same_ast_object(tmp_path):
+    adapter = SigmaAdapter(folder_path=tmp_path)
+    rule = adapter.parse(_make_raw(tmp_path))
+    with patch("adapters.sigma.translator.sigma_to_eql", return_value="process where true"):
+        result = adapter.translate(rule)
+    assert result is rule  # mutates in-place, returns same object
+
+
+def test_translate_integration_does_not_raise(tmp_path):
+    """End-to-end: real pySigma. Only asserts no exception; output may be None."""
+    (tmp_path / "rule.yml").write_text(SAMPLE_SIGMA_YAML, encoding="utf-8")
+    adapter = SigmaAdapter(folder_path=tmp_path)
+    raw_list = adapter.load()
+    assert len(raw_list) == 1
+    rule = adapter.parse(raw_list[0])
+    result = adapter.translate(rule)  # must not raise
+    assert result.translated_query is None or isinstance(result.translated_query, str)
