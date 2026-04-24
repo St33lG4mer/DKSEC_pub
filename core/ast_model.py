@@ -27,12 +27,20 @@ class Condition:
 
     @classmethod
     def from_dict(cls, d: dict) -> "Condition":
+        values = d["values"]
+        if not isinstance(values, list):
+            raise TypeError(f"'values' must be a list, got {type(values).__name__}")
+        
+        raw_values = d.get("raw_values", values)
+        if not isinstance(raw_values, list):
+            raise TypeError(f"'raw_values' must be a list, got {type(raw_values).__name__}")
+        
         return cls(
             field=d["field"],
             raw_field=d.get("raw_field", d["field"]),
             operator=d["operator"],
-            values=d["values"],
-            raw_values=d.get("raw_values", d["values"]),
+            values=values,
+            raw_values=raw_values,
         )
 
 
@@ -54,7 +62,7 @@ class RuleAST:
     language: str                  # "eql" | "kuery" | "esql" | "sigma" | ...
     translated_query: str | None   # ECS-normalized query set by translate step
     source_path: str               # Original file path or API endpoint
-    metadata: dict = field(default_factory=dict)  # Catalog-specific extras
+    metadata: dict = field(default_factory=dict)  # Catalog-specific extras (must be JSON-serializable)
 
     @classmethod
     def new_id(cls) -> str:
@@ -79,15 +87,27 @@ class RuleAST:
 
     @classmethod
     def from_dict(cls, d: dict) -> "RuleAST":
+        mitre_techniques = d.get("mitre_techniques", [])
+        if not isinstance(mitre_techniques, list):
+            raise TypeError(f"'mitre_techniques' must be a list, got {type(mitre_techniques).__name__}")
+        
+        event_categories = d.get("event_categories", [])
+        if not isinstance(event_categories, list):
+            raise TypeError(f"'event_categories' must be a list, got {type(event_categories).__name__}")
+        
+        conditions = d.get("conditions", [])
+        if not isinstance(conditions, list):
+            raise TypeError(f"'conditions' must be a list, got {type(conditions).__name__}")
+        
         return cls(
             id=d["id"],
             catalog=d["catalog"],
             name=d["name"],
             description=d.get("description", ""),
             severity=d["severity"],
-            mitre_techniques=d.get("mitre_techniques", []),
-            event_categories=d.get("event_categories", []),
-            conditions=[Condition.from_dict(c) for c in d.get("conditions", [])],
+            mitre_techniques=mitre_techniques,
+            event_categories=event_categories,
+            conditions=[Condition.from_dict(c) for c in conditions],
             raw_query=d.get("raw_query", ""),
             language=d.get("language", "eql"),
             translated_query=d.get("translated_query"),
@@ -96,7 +116,10 @@ class RuleAST:
         )
 
     def to_json(self) -> str:
-        return json.dumps(self.to_dict(), ensure_ascii=False, indent=2)
+        try:
+            return json.dumps(self.to_dict(), ensure_ascii=False, indent=2)
+        except TypeError as exc:
+            raise TypeError(f"RuleAST '{self.id}' contains non-JSON-serializable metadata: {exc}") from exc
 
     @classmethod
     def from_json(cls, s: str) -> "RuleAST":

@@ -1,5 +1,7 @@
 # tests/core/test_ast_model.py
 import json
+import datetime
+import pytest
 from core.ast_model import Condition, RuleAST, ValidationResult
 
 
@@ -82,3 +84,26 @@ def test_condition_fields():
     )
     assert c.field == "process.name"
     assert c.operator == "like~"
+
+
+def test_from_dict_rejects_string_where_list_expected():
+    data = {
+        "id": "x", "catalog": "sigma", "name": "X", "description": "",
+        "severity": "high", "mitre_techniques": "T1059",  # string, not list
+        "event_categories": ["process"], "conditions": [],
+        "raw_query": "", "language": "eql", "translated_query": None,
+        "source_path": "", "metadata": {},
+    }
+    with pytest.raises(TypeError, match="mitre_techniques"):
+        RuleAST.from_dict(data)
+
+
+def test_to_json_raises_helpful_error_for_bad_metadata():
+    rule = RuleAST(
+        id="x", catalog="sigma", name="X", description="", severity="high",
+        mitre_techniques=[], event_categories=[], conditions=[],
+        raw_query="", language="eql", translated_query=None, source_path="",
+        metadata={"ts": datetime.datetime.now()},
+    )
+    with pytest.raises(TypeError, match="non-JSON-serializable"):
+        rule.to_json()
