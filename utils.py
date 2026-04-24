@@ -819,19 +819,29 @@ def find_query_overlaps(
     elastic_only = [r for r in kibana_rules if "SIGMA" not in (r.get("tags") or [])]
 
     # Pre-compute tokens for sigma rules
+    # Augment EQL-extracted categories with the stored 'category' field.
+    # Sigma rules translate to 'any where ...' EQL, so the regex finds no category;
+    # the JSON 'category' field is the authoritative source.
+    _SKIP_CATS = frozenset({"any", ""})
     sigma_prep = []
     for sr in sigma_rules:
         toks = extract_eql_tokens(sr["query"])
         cats = get_event_categories(toks)
-        mitre = frozenset(t.lower() for t in sr["techniques"])
+        stored = (sr.get("category") or "").lower()
+        if stored and stored not in _SKIP_CATS:
+            cats = cats | frozenset({f"@cat:{stored}"})
+        mitre = frozenset(t.lower() for t in sr.get("techniques", []))
         sigma_prep.append((sr, toks, cats, mitre))
 
-    # Pre-compute tokens for elastic rules
+    # Pre-compute tokens for elastic rules (same augmentation)
     elastic_prep = []
     for er in elastic_only:
         q = er.get("query") or er.get("name") or ""
         toks = extract_eql_tokens(q)
         cats = get_event_categories(toks)
+        stored = (er.get("category") or "").lower()
+        if stored and stored not in _SKIP_CATS | frozenset({"info"}):
+            cats = cats | frozenset({f"@cat:{stored}"})
         er_mitre = frozenset(
             t.lower() for t in (er.get("tags") or [])
             if re.match(r"attack\.t\d+", t, re.I)

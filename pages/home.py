@@ -89,7 +89,7 @@ if sigma_unique:
             "Severity":         r["severity"].capitalize(),
             "Risk Score":       r["risk_score"],
             "MITRE Techniques": ", ".join(r.get("techniques", [])) or "—",
-            "Event Categories": ", ".join(r.get("event_categories", [])) or "—",
+            "Category":         r.get("category", "any"),
         })
     st.dataframe(pd.DataFrame(rows), width='stretch', height=360, hide_index=True)
 else:

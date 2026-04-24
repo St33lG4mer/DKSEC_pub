@@ -65,7 +65,7 @@ m2.metric("Sigma rules to add",        len(sigma_unique), help="Sigma rules with
 m3.metric("Elastic-only gaps",         len(elastic_uniq), help="Elastic rules with no Sigma coverage")
 m4.metric("Shared MITRE techniques",   len(shared_tech),  help="Techniques covered by both rule sets")
 
-overlap_pct = round(len(overlaps) / len(sigma_rules) * 100) if sigma_rules else 0
+overlap_pct = round(len({o["sigma_id"] for o in overlaps}) / len(sigma_rules) * 100) if sigma_rules else 0
 st.progress(min(1.0, overlap_pct / 100), text=f"{overlap_pct}% of Sigma rules have an Elastic equivalent")
 
 st.divider()
@@ -94,7 +94,7 @@ if sigma_unique:
                 "Severity":         r["severity"].capitalize(),
                 "Risk Score":       r["risk_score"],
                 "MITRE Techniques": ", ".join(r.get("techniques", [])) or "—",
-                "Categories":       ", ".join(r.get("event_categories", [])) or "—",
+                "Category":         r.get("category", "any"),
                 "Rule ID":          r["rule_id"],
             })
         df_add = pd.DataFrame(rows)
