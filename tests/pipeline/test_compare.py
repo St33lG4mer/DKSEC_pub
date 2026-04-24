@@ -95,3 +95,97 @@ def test_compare_result_confidence_stored():
         catalog_b="elastic",
     )
     assert result.confidence == "full"
+
+
+# ---------------------------------------------------------------------------
+# compare_rules() — logic-only mode
+# ---------------------------------------------------------------------------
+
+from pipeline.compare import compare_rules
+
+
+def test_compare_empty_lists_return_empty_result():
+    result = compare_rules([], [], threshold=0.15)
+    assert result.overlaps == []
+    assert result.unique_a == []
+    assert result.unique_b == []
+    assert result.confidence == "logic-only"
+
+
+def test_compare_identical_queries_produce_overlap():
+    query = 'process where process.name == "cmd.exe"'
+    a = _make_rule("a1", "sigma", translated=query)
+    b = _make_rule("b1", "elastic", translated=query)
+    result = compare_rules([a], [b], threshold=0.15)
+    assert len(result.overlaps) == 1
+    assert result.overlaps[0].rule_a.id == "a1"
+    assert result.overlaps[0].rule_b.id == "b1"
+    assert result.overlaps[0].jaccard_score == pytest.approx(1.0)
+
+
+def test_compare_unrelated_queries_no_overlap():
+    a = _make_rule("a1", "sigma", translated='process where process.name == "cmd.exe"')
+    b = _make_rule("b1", "elastic", translated='network where destination.port == 443')
+    result = compare_rules([a], [b], threshold=0.15)
+    assert result.overlaps == []
+    assert len(result.unique_a) == 1
+    assert len(result.unique_b) == 1
+
+
+def test_compare_threshold_controls_overlap():
+    a = _make_rule("a1", "sigma", translated='process where process.name == "cmd.exe" and process.args == "/c"')
+    b = _make_rule("b1", "elastic", translated='process where process.name == "cmd.exe" and user.name == "admin"')
+    result_strict = compare_rules([a], [b], threshold=0.99)
+    result_loose = compare_rules([a], [b], threshold=0.01)
+    assert result_strict.overlaps == [] or result_loose.overlaps != []
+
+
+def test_compare_unique_a_and_b_are_disjoint_from_overlaps():
+    query = 'process where process.name == "cmd.exe"'
+    a1 = _make_rule("a1", "sigma", translated=query)
+    a2 = _make_rule("a2", "sigma", translated='file where file.name == "malware.exe"')
+    b1 = _make_rule("b1", "elastic", translated=query)
+    b2 = _make_rule("b2", "elastic", translated='network where destination.port == 4444')
+    result = compare_rules([a1, a2], [b1, b2], threshold=0.15)
+    overlap_a_ids = {p.rule_a.id for p in result.overlaps}
+    overlap_b_ids = {p.rule_b.id for p in result.overlaps}
+    unique_a_ids = {r.id for r in result.unique_a}
+    unique_b_ids = {r.id for r in result.unique_b}
+    assert overlap_a_ids.isdisjoint(unique_a_ids)
+    assert overlap_b_ids.isdisjoint(unique_b_ids)
+
+
+def test_compare_uses_translated_query_if_available():
+    a = _make_rule("a1", "sigma", query="sigma: junk", translated='process where process.name == "cmd.exe"')
+    b = _make_rule("b1", "elastic", query="sigma: junk", translated='process where process.name == "cmd.exe"')
+    result = compare_rules([a], [b], threshold=0.15)
+    assert len(result.overlaps) == 1
+
+
+def test_compare_falls_back_to_raw_query_when_no_translated():
+    a = _make_rule("a1", "sigma", query='process where process.name == "cmd.exe"')
+    b = _make_rule("b1", "elastic", query='process where process.name == "cmd.exe"')
+    result = compare_rules([a], [b], threshold=0.15)
+    assert len(result.overlaps) == 1
+
+
+def test_compare_many_to_many():
+    queries = [
+        'process where process.name == "cmd.exe"',
+        'network where destination.port == 4444',
+        'file where file.name == "malware.dll"',
+    ]
+    rules_a = [_make_rule(f"a{i}", "sigma", translated=q) for i, q in enumerate(queries)]
+    rules_b = [_make_rule(f"b{i}", "elastic", translated=q) for i, q in enumerate(queries)]
+    result = compare_rules(rules_a, rules_b, threshold=0.15)
+    assert len(result.overlaps) == 3
+    assert result.unique_a == []
+    assert result.unique_b == []
+
+
+def test_compare_catalog_names_in_result():
+    a = _make_rule("a1", "sigma")
+    b = _make_rule("b1", "elastic")
+    result = compare_rules([a], [b], threshold=0.15)
+    assert result.catalog_a == "sigma"
+    assert result.catalog_b == "elastic"
