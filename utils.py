@@ -377,7 +377,7 @@ def load_complete_sigma_rules() -> list[dict]:
         severity, risk_score = _SEVERITY_MAP.get(level, ("medium", 47))
         raw_tags = meta.get("tags") or []
         mitre_techniques = [t for t in raw_tags if isinstance(t, str) and re.match(r"attack\.t\d+", t, re.I)]
-        mitre_tactics    = [t for t in raw_tags if isinstance(t, str) and t.startswith("attack.") and not re.match(r"attack\.t\d+", t, re.I)]
+        mitre_tactics    = [t for t in raw_tags if isinstance(t, str) and t.startswith("attack.") and not re.match(r"attack\.[tgs]\d+", t, re.I)]
         rules.append({
             "name":       f"(SIGMA) {meta.get('title') or name}",
             "title":      meta.get("title") or name,
@@ -1100,22 +1100,35 @@ def compute_coverage_report(
         key=lambda r: -r.get("risk_score", 0),
     )
 
-    sigma_techniques: set[str] = set()
+    # Sigma stores both technique IDs (attack.t1059) and tactic names (attack.execution).
+    # Elastic curated rules only have tactic-level tags — no technique IDs.
+    # Compare at tactic level so the intersection is non-empty and meaningful.
+    sigma_tactics: set[str] = set()
+    sigma_all_techniques: set[str] = set()
     for r in sigma_rules:
-        sigma_techniques.update(t.lower() for t in r.get("techniques", []))
+        sigma_tactics.update(t.lower() for t in r.get("tactics", []))
+        sigma_all_techniques.update(t.lower() for t in r.get("techniques", []))
 
-    elastic_techniques: set[str] = set()
+    # Elastic normalized tags look like "attack.execution", "attack.command-and-control"
+    # (converted from "Tactic: Execution" by _normalize_elastic_mitre_tag).
+    # Exclude group tags (attack.g0032), technique IDs, and software tags (attack.s0002).
+    elastic_tactics: set[str] = set()
     for r in elastic_only_rules:
         for t in (r.get("tags") or []):
-            if isinstance(t, str) and re.match(r"attack\.t\d+", t, re.I):
-                elastic_techniques.add(t.lower())
+            if (
+                isinstance(t, str)
+                and t.startswith("attack.")
+                and not re.match(r"^attack\.[tgs]\d+", t, re.I)
+            ):
+                elastic_tactics.add(t.lower())
 
     return {
-        "overlaps":                 overlaps,
-        "coverage":                 coverage,
-        "sigma_unique":             sigma_unique,
-        "elastic_unique":           elastic_unique,
-        "sigma_only_techniques":    sorted(sigma_techniques - elastic_techniques),
-        "elastic_only_techniques":  sorted(elastic_techniques - sigma_techniques),
-        "shared_techniques":        sorted(sigma_techniques & elastic_techniques),
+        "overlaps":                overlaps,
+        "coverage":                coverage,
+        "sigma_unique":            sigma_unique,
+        "elastic_unique":          elastic_unique,
+        "sigma_all_techniques":    sorted(sigma_all_techniques),
+        "sigma_only_tactics":      sorted(sigma_tactics - elastic_tactics),
+        "elastic_only_tactics":    sorted(elastic_tactics - sigma_tactics),
+        "shared_tactics":          sorted(sigma_tactics & elastic_tactics),
     }
