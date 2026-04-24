@@ -126,7 +126,7 @@ if dec_filter != "All":
 
 cols = ["Name", "Score", "Risk Score", "Severity", "EQL Valid",
         "Decision", "MITRE Techniques", "24h Alerts"]
-st.dataframe(view[cols].head(top_n), use_container_width=True, height=500)
+st.dataframe(view[cols].head(top_n), width='stretch', height=500)
 
 # ── Charts ────────────────────────────────────────────────────────────────
 st.markdown('<div class="section-header">Distribution</div>', unsafe_allow_html=True)

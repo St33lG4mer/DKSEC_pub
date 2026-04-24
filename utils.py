@@ -1047,3 +1047,65 @@ def score_rules(
         for row in rows:
             row["Score"] = round((row["Score"] - min_s) / rng * 100)
     return pd.DataFrame(rows).sort_values("Score", ascending=False).reset_index(drop=True)
+
+
+# ---------------------------------------------------------------------------
+# Full coverage report (offline — no Elastic API required)
+# ---------------------------------------------------------------------------
+
+@st.cache_data(show_spinner="Computing coverage report…")
+def compute_coverage_report(
+    sigma_rules: list[dict],
+    elastic_rules: list[dict],
+    threshold: float = 0.15,
+) -> dict:
+    """
+    Full offline coverage analysis — compares sigma vs elastic rule inventories.
+
+    Returns:
+        overlaps                — rule pairs (sigma ↔ elastic) sharing query logic
+        coverage                — {sigma_only, elastic_only, shared} event categories
+        sigma_unique            — sigma rules with NO elastic equivalent (→ add to SIEM)
+        elastic_unique          — elastic rules with NO sigma equivalent (gap without sigma)
+        sigma_only_techniques   — MITRE techniques in sigma but not elastic
+        elastic_only_techniques — MITRE techniques in elastic but not sigma
+        shared_techniques       — MITRE techniques covered by both
+    """
+    overlaps, coverage = find_query_overlaps(sigma_rules, elastic_rules, threshold)
+
+    sigma_ids_in_overlap   = {o["sigma_id"]   for o in overlaps}
+    elastic_ids_in_overlap = {o["elastic_id"] for o in overlaps}
+
+    elastic_only_rules = [r for r in elastic_rules if "SIGMA" not in (r.get("tags") or [])]
+
+    sigma_unique = sorted(
+        [r for r in sigma_rules if r["rule_id"] not in sigma_ids_in_overlap],
+        key=lambda r: -r["risk_score"],
+    )
+    elastic_unique = sorted(
+        [
+            r for r in elastic_only_rules
+            if r.get("rule_id", r.get("id", "")) not in elastic_ids_in_overlap
+        ],
+        key=lambda r: -r.get("risk_score", 0),
+    )
+
+    sigma_techniques: set[str] = set()
+    for r in sigma_rules:
+        sigma_techniques.update(t.lower() for t in r.get("techniques", []))
+
+    elastic_techniques: set[str] = set()
+    for r in elastic_only_rules:
+        for t in (r.get("tags") or []):
+            if isinstance(t, str) and re.match(r"attack\.t\d+", t, re.I):
+                elastic_techniques.add(t.lower())
+
+    return {
+        "overlaps":                 overlaps,
+        "coverage":                 coverage,
+        "sigma_unique":             sigma_unique,
+        "elastic_unique":           elastic_unique,
+        "sigma_only_techniques":    sorted(sigma_techniques - elastic_techniques),
+        "elastic_only_techniques":  sorted(elastic_techniques - sigma_techniques),
+        "shared_techniques":        sorted(sigma_techniques & elastic_techniques),
+    }

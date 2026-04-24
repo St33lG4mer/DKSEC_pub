@@ -146,7 +146,7 @@ for sid in SCENARIO_ORDER:
     )
 
 sc_df = pd.DataFrame(scenario_rows)
-st.dataframe(sc_df, use_container_width=True, height=380, hide_index=True)
+st.dataframe(sc_df, width='stretch', height=380, hide_index=True)
 
 st.divider()
 
@@ -162,7 +162,7 @@ if not coverage_df.empty:
         st.markdown("##### Platform Distribution")
         plat_counts = coverage_df["platform"].value_counts().reset_index()
         plat_counts.columns = ["Platform", "Rules"]
-        st.dataframe(plat_counts, use_container_width=True, hide_index=True)
+        st.dataframe(plat_counts, width='stretch', hide_index=True)
 
     with col_right:
         st.markdown("##### Windows Rules by Scenario")
@@ -176,7 +176,7 @@ if not coverage_df.empty:
                 .reset_index()
             )
             sc_counts.rename(columns={"scenario_id": "Scenario"}, inplace=True)
-            st.dataframe(sc_counts, use_container_width=True, hide_index=True, height=380)
+            st.dataframe(sc_counts, width='stretch', hide_index=True, height=380)
 else:
     st.info("Run `python sliver_test_harness/build_coverage_map.py` to generate the coverage map.")
 
@@ -201,7 +201,7 @@ for sid in SCENARIO_ORDER:
                 "ATT&CK": s.get("atck", ""),
                 "Command": f"{s['command']} {' '.join(s.get('args', [])[:3])}",
             })
-        st.dataframe(pd.DataFrame(step_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(step_rows), width='stretch', hide_index=True)
 
 st.divider()
 
