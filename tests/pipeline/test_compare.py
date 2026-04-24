@@ -189,3 +189,86 @@ def test_compare_catalog_names_in_result():
     result = compare_rules([a], [b], threshold=0.15)
     assert result.catalog_a == "sigma"
     assert result.catalog_b == "elastic"
+
+
+# ---------------------------------------------------------------------------
+# compare_rules() — alert overlay mode
+# ---------------------------------------------------------------------------
+
+def test_compare_alert_confirmed_sets_confidence_full():
+    a = _make_rule("a1", "sigma", translated='process where process.name == "cmd.exe"')
+    b = _make_rule("b1", "elastic", translated='network where destination.port == 443')
+    alerts = [
+        {"rule_id": "a1", "catalog": "sigma", "scenario_id": "t1059"},
+        {"rule_id": "b1", "catalog": "elastic", "scenario_id": "t1059"},
+    ]
+    result = compare_rules([a], [b], alerts=alerts, threshold=0.15)
+    assert result.confidence == "full"
+
+
+def test_compare_alert_co_firing_produces_overlap_even_below_threshold():
+    a = _make_rule("a1", "sigma", translated='process where process.name == "cmd.exe"')
+    b = _make_rule("b1", "elastic", translated='network where destination.port == 443')
+    alerts = [
+        {"rule_id": "a1", "catalog": "sigma", "scenario_id": "t1059"},
+        {"rule_id": "b1", "catalog": "elastic", "scenario_id": "t1059"},
+    ]
+    result = compare_rules([a], [b], alerts=alerts, threshold=0.15)
+    assert len(result.overlaps) == 1
+    assert result.overlaps[0].alert_confirmed is True
+    assert result.overlaps[0].jaccard_score == pytest.approx(0.0)
+
+
+def test_compare_different_scenarios_no_alert_overlap():
+    a = _make_rule("a1", "sigma", translated='process where process.name == "cmd.exe"')
+    b = _make_rule("b1", "elastic", translated='network where destination.port == 443')
+    alerts = [
+        {"rule_id": "a1", "catalog": "sigma", "scenario_id": "t1059"},
+        {"rule_id": "b1", "catalog": "elastic", "scenario_id": "t1021"},
+    ]
+    result = compare_rules([a], [b], alerts=alerts, threshold=0.15)
+    assert result.overlaps == []
+    assert len(result.unique_a) == 1
+    assert len(result.unique_b) == 1
+
+
+def test_compare_logic_overlap_also_marked_not_alert_confirmed():
+    query = 'process where process.name == "cmd.exe"'
+    a = _make_rule("a1", "sigma", translated=query)
+    b = _make_rule("b1", "elastic", translated=query)
+    alerts = [
+        {"rule_id": "a1", "catalog": "sigma", "scenario_id": "t1059"},
+        {"rule_id": "b1", "catalog": "elastic", "scenario_id": "t1021"},
+    ]
+    result = compare_rules([a], [b], alerts=alerts, threshold=0.15)
+    assert len(result.overlaps) == 1
+    assert result.overlaps[0].alert_confirmed is False
+    assert result.overlaps[0].jaccard_score == pytest.approx(1.0)
+
+
+def test_compare_both_signals_sets_alert_confirmed_true():
+    query = 'process where process.name == "cmd.exe"'
+    a = _make_rule("a1", "sigma", translated=query)
+    b = _make_rule("b1", "elastic", translated=query)
+    alerts = [
+        {"rule_id": "a1", "catalog": "sigma", "scenario_id": "t1059"},
+        {"rule_id": "b1", "catalog": "elastic", "scenario_id": "t1059"},
+    ]
+    result = compare_rules([a], [b], alerts=alerts, threshold=0.15)
+    assert len(result.overlaps) == 1
+    assert result.overlaps[0].alert_confirmed is True
+    assert result.overlaps[0].jaccard_score == pytest.approx(1.0)
+
+
+def test_compare_no_alerts_gives_logic_only_confidence():
+    a = _make_rule("a1", "sigma", translated='process where process.name == "cmd.exe"')
+    b = _make_rule("b1", "elastic", translated='process where process.name == "cmd.exe"')
+    result = compare_rules([a], [b])  # no alerts kwarg
+    assert result.confidence == "logic-only"
+
+
+def test_compare_empty_alerts_list_gives_full_confidence():
+    a = _make_rule("a1", "sigma", translated='process where process.name == "cmd.exe"')
+    b = _make_rule("b1", "elastic", translated='process where process.name == "cmd.exe"')
+    result = compare_rules([a], [b], alerts=[])  # explicit empty list = "full" mode
+    assert result.confidence == "full"
