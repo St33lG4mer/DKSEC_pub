@@ -52,9 +52,9 @@ overlaps     = report["overlaps"]
 coverage     = report["coverage"]
 sigma_unique = report["sigma_unique"]
 elastic_uniq = report["elastic_unique"]
-shared_tech  = report["shared_techniques"]
-sigma_tech   = report["sigma_only_techniques"]
-elastic_tech = report["elastic_only_techniques"]
+shared_tech  = report["shared_tactics"]
+sigma_tech   = report["sigma_only_tactics"]
+elastic_tech = report["elastic_only_tactics"]
 
 # ── SECTION 1: Summary metrics ───────────────────────────────────────────────
 st.markdown('<div class="section-header">Coverage Summary</div>', unsafe_allow_html=True)
@@ -63,9 +63,9 @@ m1, m2, m3, m4 = st.columns(4)
 m1.metric("Overlapping rule pairs",    len(overlaps),     help="Rules matched across both rule sets")
 m2.metric("Sigma rules to add",        len(sigma_unique), help="Sigma rules with no Elastic equivalent — recommended to deploy")
 m3.metric("Elastic-only gaps",         len(elastic_uniq), help="Elastic rules with no Sigma coverage")
-m4.metric("Shared MITRE techniques",   len(shared_tech),  help="Techniques covered by both rule sets")
+m4.metric("Shared MITRE tactics",    len(shared_tech),  help="ATT&CK tactics covered by both rule sets")
 
-overlap_pct = round(len(overlaps) / len(sigma_rules) * 100) if sigma_rules else 0
+overlap_pct = round(len({o["sigma_id"] for o in overlaps}) / len(sigma_rules) * 100) if sigma_rules else 0
 st.progress(min(1.0, overlap_pct / 100), text=f"{overlap_pct}% of Sigma rules have an Elastic equivalent")
 
 st.divider()
@@ -94,7 +94,7 @@ if sigma_unique:
                 "Severity":         r["severity"].capitalize(),
                 "Risk Score":       r["risk_score"],
                 "MITRE Techniques": ", ".join(r.get("techniques", [])) or "—",
-                "Categories":       ", ".join(r.get("event_categories", [])) or "—",
+                "Category":         r.get("category", "any"),
                 "Rule ID":          r["rule_id"],
             })
         df_add = pd.DataFrame(rows)
@@ -160,30 +160,40 @@ with st.expander(f"🟢 View {len(overlaps)} overlapping rule pair(s)", expanded
 st.divider()
 
 # ── SECTION 5: MITRE technique breakdown ─────────────────────────────────────
-st.markdown('<div class="section-header">MITRE ATT&CK Coverage Breakdown</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-header">MITRE ATT&CK Tactic Coverage</div>', unsafe_allow_html=True)
 
 
 def _tech_pills(techs: list[str], css_class: str) -> str:
     if not techs:
         return '<span style="color:#8b949e;font-size:0.82rem">none</span>'
     return " ".join(
-        f'<span class="coverage-pill {css_class}">{t.upper()}</span>' for t in techs[:30]
+        f'<span class="coverage-pill {css_class}">{t.replace("attack.", "").upper()}</span>'
+        for t in techs[:30]
     )
 
 
 col_s, col_b, col_e = st.columns(3)
 with col_s:
-    st.markdown(f"**🔵 Sigma-only techniques** ({len(sigma_tech)})")
-    st.caption("Covered only by Sigma — unique detection value")
+    st.markdown(f"**🔵 Sigma-only tactics** ({len(sigma_tech)})")
+    st.caption("Tactics covered only by Sigma")
     st.markdown(_tech_pills(sigma_tech, "pill-sigma"), unsafe_allow_html=True)
 with col_b:
-    st.markdown(f"**🟢 Shared techniques** ({len(shared_tech)})")
-    st.caption("Covered by both rule sets")
+    st.markdown(f"**🟢 Shared tactics** ({len(shared_tech)})")
+    st.caption("Tactics covered by both rule sets")
     st.markdown(_tech_pills(list(shared_tech), "pill-both"), unsafe_allow_html=True)
 with col_e:
-    st.markdown(f"**🟡 Elastic-only techniques** ({len(elastic_tech)})")
-    st.caption("Covered only by Elastic — consider adding Sigma coverage")
+    st.markdown(f"**🟡 Elastic-only tactics** ({len(elastic_tech)})")
+    st.caption("Tactics covered only by Elastic")
     st.markdown(_tech_pills(elastic_tech, "pill-elastic"), unsafe_allow_html=True)
+
+sigma_all_tech = report.get("sigma_all_techniques", [])
+if sigma_all_tech:
+    with st.expander(f"🔍 All {len(sigma_all_tech)} Sigma technique IDs (T-numbers)", expanded=False):
+        st.caption(
+            "These are the specific MITRE ATT&CK technique IDs covered by your Sigma rules. "
+            "Elastic rules only tag at tactic level, so technique-level comparison isn't possible."
+        )
+        st.markdown(_tech_pills(sigma_all_tech, "pill-sigma"), unsafe_allow_html=True)
 
 st.divider()
 
