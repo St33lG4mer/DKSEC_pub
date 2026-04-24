@@ -82,7 +82,7 @@ class ElasticAdapter(BaseAdapter):
             data = resp.json()
             batch = data.get("data", [])
             rules.extend(batch)
-            if len(rules) >= data.get("total", 0) or not batch:
+            if len(rules) >= data.get("total", float("inf")) or not batch:
                 break
             page += 1
 

@@ -83,6 +83,15 @@ def test_load_raises_on_403():
             adapter.load()
 
 
+def test_load_raises_after_all_retries_exhausted():
+    retry_resp = MagicMock(status_code=429, text="Too Many Requests")
+    adapter = ElasticAdapter(kibana_url="http://kibana:5601", user="u", password="p")
+    with patch("requests.get", return_value=retry_resp):
+        with patch("time.sleep"):
+            with pytest.raises(RuntimeError, match="Kibana API error 429"):
+                adapter.load()
+
+
 # ---------------------------------------------------------------------------
 # parse() tests
 # ---------------------------------------------------------------------------
