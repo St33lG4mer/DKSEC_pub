@@ -159,15 +159,15 @@ class ElasticAdapter(BaseAdapter):
             )
         url = f"{self.es_host}/logs-*/_eql/search"
         try:
-            session = requests.Session()
-            session.auth = (self.user, self.password)
-            session.headers.update({"Content-Type": "application/json"})
-            r = session.post(
-                url,
-                json={"query": query, "size": 0},
-                params={"ignore_unavailable": "true"},
-                timeout=10,
-            )
+            with requests.Session() as session:
+                session.auth = (self.user, self.password)
+                session.headers.update({"Content-Type": "application/json"})
+                r = session.post(
+                    url,
+                    json={"query": query, "size": 0},
+                    params={"ignore_unavailable": "true"},
+                    timeout=10,
+                )
             if r.status_code == 200:
                 return ValidationResult(valid=True)
             body = r.json()
