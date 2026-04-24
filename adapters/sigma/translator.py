@@ -26,6 +26,9 @@ def sigma_to_eql(yaml_text: str) -> str | None:
         queries = backend.convert(collection)
         if not queries:
             return None
-        return "\n\n".join(queries)
+        result = "\n\n".join(queries)
+        if not result or not result.strip():
+            return None
+        return result
     except Exception:
         return None
