@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import copy
 import os
 from pathlib import Path
 
@@ -33,11 +34,7 @@ def load_config(path: Path | None = None) -> dict:
     """
     cfg_path = path if path is not None else BASE_DIR / "config.yaml"
 
-    config: dict = {
-        "kibana": dict(_DEFAULTS["kibana"]),
-        "elasticsearch": dict(_DEFAULTS["elasticsearch"]),
-        "sigma": dict(_DEFAULTS["sigma"]),
-    }
+    config: dict = copy.deepcopy(_DEFAULTS)
 
     if cfg_path.exists():
         try:

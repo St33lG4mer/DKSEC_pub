@@ -51,3 +51,13 @@ def test_kibana_headers():
     assert "Authorization" in headers
     assert headers["Authorization"].startswith("Basic ")
     assert headers["kbn-xsrf"] == "true"
+
+
+def test_load_config_does_not_mutate_defaults(tmp_path):
+    from core.config import load_config, _DEFAULTS
+
+    config = load_config(tmp_path / "nonexistent.yaml")
+    config["sigma"]["input_dirs"].append("mutated")
+    
+    config2 = load_config(tmp_path / "nonexistent.yaml")
+    assert config2["sigma"]["input_dirs"] == []
