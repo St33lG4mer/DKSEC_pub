@@ -58,6 +58,7 @@ class ApiSource:
             page += 1
 
     def _get_with_retry(self, params: dict) -> requests.Response:
+        last_exc = None
         for attempt in range(self.max_retries):
             resp = requests.get(
                 self.base_url,
@@ -66,9 +67,12 @@ class ApiSource:
                 timeout=self.timeout,
             )
             if resp.status_code in (429, 500, 502, 503):
+                last_exc = RuntimeError(f"Transient error {resp.status_code} on attempt {attempt + 1}")
                 time.sleep(2 ** attempt)
                 continue
             if resp.status_code != 200:
                 raise RuntimeError(f"API error {resp.status_code}: {resp.text[:200]}")
             return resp
-        raise RuntimeError(f"API request failed after {self.max_retries} retries")
+        raise RuntimeError(
+            f"API request failed after {self.max_retries} attempts: {last_exc}"
+        )
