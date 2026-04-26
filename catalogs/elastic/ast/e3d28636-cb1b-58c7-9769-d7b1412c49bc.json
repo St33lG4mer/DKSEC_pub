@@ -1,0 +1,35 @@
+{
+  "id": "e3d28636-cb1b-58c7-9769-d7b1412c49bc",
+  "catalog": "elastic",
+  "name": "Credential Dumping - LSASS Access",
+  "description": "Detects access to LSASS process for credential dumping",
+  "severity": "critical",
+  "mitre_techniques": [
+    "attack.t1003.001"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "mimikatz.exe",
+        "procdump.exe",
+        "procdump64.exe"
+      ],
+      "raw_values": [
+        "mimikatz.exe",
+        "procdump.exe",
+        "procdump64.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where process.name in (\"mimikatz.exe\",\"procdump.exe\",\"procdump64.exe\")",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

@@ -1,0 +1,213 @@
+[
+  {
+    "id": "4ac30fcc-8c0e-59b0-86f0-d2c3a0d9e954",
+    "catalog": "sigma",
+    "name": "Suspicious PowerShell Download Cradle",
+    "description": "Detects PowerShell download cradles using Net.WebClient or IEX",
+    "severity": "high",
+    "mitre_techniques": [
+      "attack.t1059.001",
+      "attack.t1105"
+    ],
+    "event_categories": [
+      "process"
+    ],
+    "conditions": [
+      {
+        "field": "process.command_line",
+        "raw_field": "CommandLine",
+        "operator": "like~",
+        "values": [
+          "*Net.WebClient*",
+          "*DownloadString*"
+        ],
+        "raw_values": [
+          "*Net.WebClient*",
+          "*DownloadString*"
+        ]
+      }
+    ],
+    "raw_query": "process where process.command_line like~ \"*Net.WebClient*\" and process.command_line like~ \"*DownloadString*\"",
+    "language": "sigma",
+    "translated_query": "process where process.command_line like~ \"*Net.WebClient*\" and process.command_line like~ \"*DownloadString*\"",
+    "source_path": "demo",
+    "metadata": {}
+  },
+  {
+    "id": "3657382f-67d2-5fcd-99c8-6292a3de9420",
+    "catalog": "sigma",
+    "name": "UAC Bypass via EventViewer",
+    "description": "Detects UAC bypass technique using Windows Event Viewer",
+    "severity": "high",
+    "mitre_techniques": [
+      "attack.t1548.002"
+    ],
+    "event_categories": [
+      "process",
+      "registry"
+    ],
+    "conditions": [
+      {
+        "field": "registry.path",
+        "raw_field": "TargetObject",
+        "operator": "like~",
+        "values": [
+          "*mscfile\\\\shell\\\\open\\\\command*"
+        ],
+        "raw_values": [
+          "*mscfile\\\\shell\\\\open\\\\command*"
+        ]
+      }
+    ],
+    "raw_query": "registry where registry.path like~ \"*mscfile\\\\shell\\\\open\\\\command*\"",
+    "language": "sigma",
+    "translated_query": null,
+    "source_path": "demo",
+    "metadata": {}
+  },
+  {
+    "id": "f358410d-1f63-5c14-a576-edf039d42848",
+    "catalog": "sigma",
+    "name": "Cobalt Strike Named Pipe",
+    "description": "Detects named pipes used by Cobalt Strike beacon",
+    "severity": "critical",
+    "mitre_techniques": [
+      "attack.t1071"
+    ],
+    "event_categories": [
+      "file"
+    ],
+    "conditions": [
+      {
+        "field": "file.name",
+        "raw_field": "PipeName",
+        "operator": "like~",
+        "values": [
+          "\\\\msagent_*",
+          "\\\\status_*"
+        ],
+        "raw_values": [
+          "\\\\msagent_*",
+          "\\\\status_*"
+        ]
+      }
+    ],
+    "raw_query": "file where file.name like~ \"\\\\msagent_*\"",
+    "language": "sigma",
+    "translated_query": null,
+    "source_path": "demo",
+    "metadata": {}
+  },
+  {
+    "id": "72687de6-7531-5333-b3c7-93b9214f1f98",
+    "catalog": "sigma",
+    "name": "Kerberoasting via Rubeus",
+    "description": "Detects Rubeus tool used for Kerberoasting attacks",
+    "severity": "critical",
+    "mitre_techniques": [
+      "attack.t1558.003"
+    ],
+    "event_categories": [
+      "process"
+    ],
+    "conditions": [
+      {
+        "field": "process.command_line",
+        "raw_field": "CommandLine",
+        "operator": "like~",
+        "values": [
+          "*rubeus*",
+          "*kerberoast*"
+        ],
+        "raw_values": [
+          "*rubeus*",
+          "*kerberoast*"
+        ]
+      }
+    ],
+    "raw_query": "process where process.command_line like~ \"*rubeus*\"",
+    "language": "sigma",
+    "translated_query": null,
+    "source_path": "demo",
+    "metadata": {}
+  },
+  {
+    "id": "e7471c85-8fd9-55b6-9530-0fbd57e86ab3",
+    "catalog": "sigma",
+    "name": "Suspicious Mshta Execution",
+    "description": "Detects mshta.exe executing remote scripts",
+    "severity": "high",
+    "mitre_techniques": [
+      "attack.t1218.005"
+    ],
+    "event_categories": [
+      "process"
+    ],
+    "conditions": [
+      {
+        "field": "process.name",
+        "raw_field": "Image",
+        "operator": "==",
+        "values": [
+          "mshta.exe"
+        ],
+        "raw_values": [
+          "mshta.exe"
+        ]
+      },
+      {
+        "field": "process.command_line",
+        "raw_field": "CommandLine",
+        "operator": "like~",
+        "values": [
+          "*http*",
+          "*vbscript*"
+        ],
+        "raw_values": [
+          "*http*",
+          "*vbscript*"
+        ]
+      }
+    ],
+    "raw_query": "process where process.name == \"mshta.exe\" and process.command_line like~ \"*http*\"",
+    "language": "sigma",
+    "translated_query": null,
+    "source_path": "demo",
+    "metadata": {}
+  },
+  {
+    "id": "e229d7c5-9982-50b6-9625-cf636f609b3a",
+    "catalog": "sigma",
+    "name": "DLL Side-Loading via Legitimate App",
+    "description": "Detects DLL side-loading by placing malicious DLL next to legit binary",
+    "severity": "medium",
+    "mitre_techniques": [
+      "attack.t1574.002"
+    ],
+    "event_categories": [
+      "process"
+    ],
+    "conditions": [
+      {
+        "field": "process.parent.name",
+        "raw_field": "ParentImage",
+        "operator": "in",
+        "values": [
+          "OneDrive.exe",
+          "Teams.exe",
+          "Outlook.exe"
+        ],
+        "raw_values": [
+          "OneDrive.exe",
+          "Teams.exe",
+          "Outlook.exe"
+        ]
+      }
+    ],
+    "raw_query": "process where process.parent.name in (\"OneDrive.exe\",\"Teams.exe\")",
+    "language": "sigma",
+    "translated_query": null,
+    "source_path": "demo",
+    "metadata": {}
+  }
+]

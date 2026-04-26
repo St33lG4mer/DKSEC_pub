@@ -1,0 +1,42 @@
+{
+  "id": "abf542cf-2ed7-5cfa-84b5-5a55f5152ecb",
+  "catalog": "sigma",
+  "name": "Certutil Download",
+  "description": "Detects certutil used to download files (LOLBin abuse)",
+  "severity": "high",
+  "mitre_techniques": [
+    "attack.t1105"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "Image",
+      "operator": "==",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "certutil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "CommandLine",
+      "operator": "like~",
+      "values": [
+        "*-urlcache*"
+      ],
+      "raw_values": [
+        "*-urlcache*"
+      ]
+    }
+  ],
+  "raw_query": "process where process.name == \"certutil.exe\" and process.command_line like~ \"*-urlcache*\"",
+  "language": "sigma",
+  "translated_query": "process where process.name == \"certutil.exe\" and process.command_line like~ \"*-urlcache*\"",
+  "source_path": "demo",
+  "metadata": {}
+}

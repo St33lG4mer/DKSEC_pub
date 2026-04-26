@@ -1,0 +1,33 @@
+{
+  "id": "72687de6-7531-5333-b3c7-93b9214f1f98",
+  "catalog": "sigma",
+  "name": "Kerberoasting via Rubeus",
+  "description": "Detects Rubeus tool used for Kerberoasting attacks",
+  "severity": "critical",
+  "mitre_techniques": [
+    "attack.t1558.003"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "CommandLine",
+      "operator": "like~",
+      "values": [
+        "*rubeus*",
+        "*kerberoast*"
+      ],
+      "raw_values": [
+        "*rubeus*",
+        "*kerberoast*"
+      ]
+    }
+  ],
+  "raw_query": "process where process.command_line like~ \"*rubeus*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

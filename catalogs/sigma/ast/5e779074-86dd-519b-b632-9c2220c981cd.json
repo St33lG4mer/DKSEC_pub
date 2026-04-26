@@ -1,0 +1,45 @@
+{
+  "id": "5e779074-86dd-519b-b632-9c2220c981cd",
+  "catalog": "sigma",
+  "name": "Net User Discovery",
+  "description": "Detects enumeration of local and domain users",
+  "severity": "low",
+  "mitre_techniques": [
+    "attack.t1087.001",
+    "attack.t1087.002"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "Image",
+      "operator": "in",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "net.exe",
+        "net1.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "CommandLine",
+      "operator": "like~",
+      "values": [
+        "*user*"
+      ],
+      "raw_values": [
+        "*user*"
+      ]
+    }
+  ],
+  "raw_query": "process where process.name in (\"net.exe\",\"net1.exe\") and process.command_line like~ \"*user*\"",
+  "language": "sigma",
+  "translated_query": "process where process.name in (\"net.exe\",\"net1.exe\") and process.command_line like~ \"*user*\"",
+  "source_path": "demo",
+  "metadata": {}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "07963077-b072-5049-b14c-b0117fb44d5a",
+  "catalog": "elastic",
+  "name": "PowerShell Obfuscated Command Execution",
+  "description": "Detects PowerShell running encoded/obfuscated commands",
+  "severity": "high",
+  "mitre_techniques": [
+    "attack.t1059.001"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "powershell.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "*-EncodedCommand*"
+      ],
+      "raw_values": [
+        "*-EncodedCommand*"
+      ]
+    }
+  ],
+  "raw_query": "process where process.name == \"powershell.exe\" and process.command_line like~ \"*-EncodedCommand*\"",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

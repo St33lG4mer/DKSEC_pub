@@ -1,0 +1,35 @@
+{
+  "id": "e229d7c5-9982-50b6-9625-cf636f609b3a",
+  "catalog": "sigma",
+  "name": "DLL Side-Loading via Legitimate App",
+  "description": "Detects DLL side-loading by placing malicious DLL next to legit binary",
+  "severity": "medium",
+  "mitre_techniques": [
+    "attack.t1574.002"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "ParentImage",
+      "operator": "in",
+      "values": [
+        "OneDrive.exe",
+        "Teams.exe",
+        "Outlook.exe"
+      ],
+      "raw_values": [
+        "OneDrive.exe",
+        "Teams.exe",
+        "Outlook.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where process.parent.name in (\"OneDrive.exe\",\"Teams.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

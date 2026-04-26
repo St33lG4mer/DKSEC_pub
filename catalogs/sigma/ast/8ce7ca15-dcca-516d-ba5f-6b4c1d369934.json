@@ -1,0 +1,33 @@
+{
+  "id": "8ce7ca15-dcca-516d-ba5f-6b4c1d369934",
+  "catalog": "sigma",
+  "name": "DNS Query for C2 Domains",
+  "description": "Detects DNS lookups to common C2 infrastructure patterns",
+  "severity": "medium",
+  "mitre_techniques": [
+    "attack.t1071.004"
+  ],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "QueryName",
+      "operator": "like~",
+      "values": [
+        "*.duckdns.org",
+        "*.ngrok.io"
+      ],
+      "raw_values": [
+        "*.duckdns.org",
+        "*.ngrok.io"
+      ]
+    }
+  ],
+  "raw_query": "dns where dns.question.name like~ \"*.duckdns.org\"",
+  "language": "sigma",
+  "translated_query": "dns where dns.question.name like~ \"*.duckdns.org\"",
+  "source_path": "demo",
+  "metadata": {}
+}

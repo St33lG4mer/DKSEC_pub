@@ -1,0 +1,32 @@
+{
+  "id": "3657382f-67d2-5fcd-99c8-6292a3de9420",
+  "catalog": "sigma",
+  "name": "UAC Bypass via EventViewer",
+  "description": "Detects UAC bypass technique using Windows Event Viewer",
+  "severity": "high",
+  "mitre_techniques": [
+    "attack.t1548.002"
+  ],
+  "event_categories": [
+    "process",
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "TargetObject",
+      "operator": "like~",
+      "values": [
+        "*mscfile\\\\shell\\\\open\\\\command*"
+      ],
+      "raw_values": [
+        "*mscfile\\\\shell\\\\open\\\\command*"
+      ]
+    }
+  ],
+  "raw_query": "registry where registry.path like~ \"*mscfile\\\\shell\\\\open\\\\command*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

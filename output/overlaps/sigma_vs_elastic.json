@@ -1,0 +1,1139 @@
+[
+  {
+    "rule_a_id": "de7f88da-72c1-5f15-9904-421221d81ce2",
+    "rule_b_id": "e3d28636-cb1b-58c7-9769-d7b1412c49bc",
+    "rule_a_name": "Mimikatz Credential Dumping",
+    "rule_b_name": "Credential Dumping - LSASS Access",
+    "jaccard_score": 0.857,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "de7f88da-72c1-5f15-9904-421221d81ce2",
+      "catalog": "sigma",
+      "name": "Mimikatz Credential Dumping",
+      "description": "Detects execution of Mimikatz for credential dumping",
+      "severity": "critical",
+      "mitre_techniques": [
+        "attack.t1003.001"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "==",
+          "values": [
+            "mimikatz.exe"
+          ],
+          "raw_values": [
+            "mimikatz.exe"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"mimikatz.exe\"",
+      "language": "sigma",
+      "translated_query": "process where process.name == \"mimikatz.exe\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "e3d28636-cb1b-58c7-9769-d7b1412c49bc",
+      "catalog": "elastic",
+      "name": "Credential Dumping - LSASS Access",
+      "description": "Detects access to LSASS process for credential dumping",
+      "severity": "critical",
+      "mitre_techniques": [
+        "attack.t1003.001"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "in",
+          "values": [
+            "mimikatz.exe",
+            "procdump.exe",
+            "procdump64.exe"
+          ],
+          "raw_values": [
+            "mimikatz.exe",
+            "procdump.exe",
+            "procdump64.exe"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name in (\"mimikatz.exe\",\"procdump.exe\",\"procdump64.exe\")",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "4cdc2377-7ae0-593d-9b4c-b1510abe91cf",
+    "rule_b_id": "07963077-b072-5049-b14c-b0117fb44d5a",
+    "rule_a_name": "PowerShell Encoded Command",
+    "rule_b_name": "PowerShell Obfuscated Command Execution",
+    "jaccard_score": 0.8,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "4cdc2377-7ae0-593d-9b4c-b1510abe91cf",
+      "catalog": "sigma",
+      "name": "PowerShell Encoded Command",
+      "description": "Detects PowerShell executing encoded commands",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1059.001"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "==",
+          "values": [
+            "powershell.exe"
+          ],
+          "raw_values": [
+            "powershell.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*-EncodedCommand*"
+          ],
+          "raw_values": [
+            "*-EncodedCommand*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"powershell.exe\" and process.command_line like~ \"*-EncodedCommand*\"",
+      "language": "sigma",
+      "translated_query": "process where process.name == \"powershell.exe\" and process.command_line like~ \"*-EncodedCommand*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "07963077-b072-5049-b14c-b0117fb44d5a",
+      "catalog": "elastic",
+      "name": "PowerShell Obfuscated Command Execution",
+      "description": "Detects PowerShell running encoded/obfuscated commands",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1059.001"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "==",
+          "values": [
+            "powershell.exe"
+          ],
+          "raw_values": [
+            "powershell.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "process.command_line",
+          "operator": "like~",
+          "values": [
+            "*-EncodedCommand*"
+          ],
+          "raw_values": [
+            "*-EncodedCommand*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"powershell.exe\" and process.command_line like~ \"*-EncodedCommand*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "5ce6fdd3-ec2f-53c3-b3a7-b44ac241d8b0",
+    "rule_b_id": "5ba3d72b-63c0-5cc5-aa10-7ee62f31b183",
+    "rule_a_name": "Scheduled Task Creation via Schtasks",
+    "rule_b_name": "Scheduled Task via Schtasks",
+    "jaccard_score": 0.923,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "5ce6fdd3-ec2f-53c3-b3a7-b44ac241d8b0",
+      "catalog": "sigma",
+      "name": "Scheduled Task Creation via Schtasks",
+      "description": "Detects creation of scheduled tasks via schtasks.exe",
+      "severity": "medium",
+      "mitre_techniques": [
+        "attack.t1053.005"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "==",
+          "values": [
+            "schtasks.exe"
+          ],
+          "raw_values": [
+            "schtasks.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*/create*"
+          ],
+          "raw_values": [
+            "*/create*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"schtasks.exe\" and process.command_line like~ \"*/create*\"",
+      "language": "sigma",
+      "translated_query": "process where process.name == \"schtasks.exe\" and process.command_line like~ \"*/create*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "5ba3d72b-63c0-5cc5-aa10-7ee62f31b183",
+      "catalog": "elastic",
+      "name": "Scheduled Task via Schtasks",
+      "description": "Detects task scheduling via schtasks.exe",
+      "severity": "medium",
+      "mitre_techniques": [
+        "attack.t1053.005"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "==",
+          "values": [
+            "schtasks.exe"
+          ],
+          "raw_values": [
+            "schtasks.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "process.command_line",
+          "operator": "like~",
+          "values": [
+            "*/create*"
+          ],
+          "raw_values": [
+            "*/create*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"schtasks.exe\" and process.command_line like~ \"*/create*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "d320b5f6-5a6c-58e1-b6bd-732cd9840c6b",
+    "rule_b_id": "e3d28636-cb1b-58c7-9769-d7b1412c49bc",
+    "rule_a_name": "LSASS Memory Dump via ProcDump",
+    "rule_b_name": "Credential Dumping - LSASS Access",
+    "jaccard_score": 0.75,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "d320b5f6-5a6c-58e1-b6bd-732cd9840c6b",
+      "catalog": "sigma",
+      "name": "LSASS Memory Dump via ProcDump",
+      "description": "Detects ProcDump targeting LSASS process memory",
+      "severity": "critical",
+      "mitre_techniques": [
+        "attack.t1003.001"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "in",
+          "values": [
+            "procdump.exe",
+            "procdump64.exe"
+          ],
+          "raw_values": [
+            "procdump.exe",
+            "procdump64.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*lsass*"
+          ],
+          "raw_values": [
+            "*lsass*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name in (\"procdump.exe\",\"procdump64.exe\") and process.command_line like~ \"*lsass*\"",
+      "language": "sigma",
+      "translated_query": "process where process.name in (\"procdump.exe\",\"procdump64.exe\") and process.command_line like~ \"*lsass*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "e3d28636-cb1b-58c7-9769-d7b1412c49bc",
+      "catalog": "elastic",
+      "name": "Credential Dumping - LSASS Access",
+      "description": "Detects access to LSASS process for credential dumping",
+      "severity": "critical",
+      "mitre_techniques": [
+        "attack.t1003.001"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "in",
+          "values": [
+            "mimikatz.exe",
+            "procdump.exe",
+            "procdump64.exe"
+          ],
+          "raw_values": [
+            "mimikatz.exe",
+            "procdump.exe",
+            "procdump64.exe"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name in (\"mimikatz.exe\",\"procdump.exe\",\"procdump64.exe\")",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "04425edf-3ad7-5620-b8c7-6f64680896c0",
+    "rule_b_id": "fb8c88ba-03d0-5c0e-911f-3cbbbe106e15",
+    "rule_a_name": "WMI Remote Execution",
+    "rule_b_name": "Remote Code Execution via WMI",
+    "jaccard_score": 0.889,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "04425edf-3ad7-5620-b8c7-6f64680896c0",
+      "catalog": "sigma",
+      "name": "WMI Remote Execution",
+      "description": "Detects remote code execution via WMI",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1047"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "==",
+          "values": [
+            "wmic.exe"
+          ],
+          "raw_values": [
+            "wmic.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*process call create*"
+          ],
+          "raw_values": [
+            "*process call create*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"wmic.exe\" and process.command_line like~ \"*process call create*\"",
+      "language": "sigma",
+      "translated_query": "process where process.name == \"wmic.exe\" and process.command_line like~ \"*process call create*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "fb8c88ba-03d0-5c0e-911f-3cbbbe106e15",
+      "catalog": "elastic",
+      "name": "Remote Code Execution via WMI",
+      "description": "Detects WMI used for remote command execution",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1047"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "==",
+          "values": [
+            "wmic.exe"
+          ],
+          "raw_values": [
+            "wmic.exe"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"wmic.exe\" and process.command_line like~ \"*process call create*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "abf542cf-2ed7-5cfa-84b5-5a55f5152ecb",
+    "rule_b_id": "4da27942-e3df-5a9d-8eb6-e792dc1bd0bf",
+    "rule_a_name": "Certutil Download",
+    "rule_b_name": "Certutil File Download",
+    "jaccard_score": 0.9,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "abf542cf-2ed7-5cfa-84b5-5a55f5152ecb",
+      "catalog": "sigma",
+      "name": "Certutil Download",
+      "description": "Detects certutil used to download files (LOLBin abuse)",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1105"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "==",
+          "values": [
+            "certutil.exe"
+          ],
+          "raw_values": [
+            "certutil.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*-urlcache*"
+          ],
+          "raw_values": [
+            "*-urlcache*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"certutil.exe\" and process.command_line like~ \"*-urlcache*\"",
+      "language": "sigma",
+      "translated_query": "process where process.name == \"certutil.exe\" and process.command_line like~ \"*-urlcache*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "4da27942-e3df-5a9d-8eb6-e792dc1bd0bf",
+      "catalog": "elastic",
+      "name": "Certutil File Download",
+      "description": "Detects certutil.exe downloading remote files",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1105"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "==",
+          "values": [
+            "certutil.exe"
+          ],
+          "raw_values": [
+            "certutil.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "process.command_line",
+          "operator": "like~",
+          "values": [
+            "*-urlcache*"
+          ],
+          "raw_values": [
+            "*-urlcache*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"certutil.exe\" and process.command_line like~ \"*-urlcache*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "c5c5f538-8d00-5a54-84ab-cda515fc55c1",
+    "rule_b_id": "3bb014f3-8063-5dfa-81b3-8a2c6ff7acde",
+    "rule_a_name": "Suspicious Registry Run Key Modification",
+    "rule_b_name": "Windows Registry Run Key Persistence",
+    "jaccard_score": 0.857,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "c5c5f538-8d00-5a54-84ab-cda515fc55c1",
+      "catalog": "sigma",
+      "name": "Suspicious Registry Run Key Modification",
+      "description": "Detects modification of Run/RunOnce registry keys for persistence",
+      "severity": "medium",
+      "mitre_techniques": [
+        "attack.t1547.001"
+      ],
+      "event_categories": [
+        "registry"
+      ],
+      "conditions": [
+        {
+          "field": "registry.path",
+          "raw_field": "TargetObject",
+          "operator": "like~",
+          "values": [
+            "*\\CurrentVersion\\Run*"
+          ],
+          "raw_values": [
+            "*\\CurrentVersion\\Run*"
+          ]
+        }
+      ],
+      "raw_query": "registry where registry.path like~ \"*\\\\CurrentVersion\\\\Run*\"",
+      "language": "sigma",
+      "translated_query": "registry where registry.path like~ \"*\\\\CurrentVersion\\\\Run*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "3bb014f3-8063-5dfa-81b3-8a2c6ff7acde",
+      "catalog": "elastic",
+      "name": "Windows Registry Run Key Persistence",
+      "description": "Detects addition of entries to registry Run keys",
+      "severity": "medium",
+      "mitre_techniques": [
+        "attack.t1547.001"
+      ],
+      "event_categories": [
+        "registry"
+      ],
+      "conditions": [
+        {
+          "field": "registry.path",
+          "raw_field": "registry.path",
+          "operator": "like~",
+          "values": [
+            "*\\\\CurrentVersion\\\\Run*"
+          ],
+          "raw_values": [
+            "*\\\\CurrentVersion\\\\Run*"
+          ]
+        }
+      ],
+      "raw_query": "registry where registry.path like~ \"*\\\\CurrentVersion\\\\Run*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "150ba99d-5a24-5ab7-99bf-5f67e20dd676",
+    "rule_b_id": "84c166c3-a3e4-5a09-933e-9b95bafeeac9",
+    "rule_a_name": "Pass-the-Hash via Mimikatz",
+    "rule_b_name": "Pass-the-Hash Attack Detection",
+    "jaccard_score": 0.714,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "150ba99d-5a24-5ab7-99bf-5f67e20dd676",
+      "catalog": "sigma",
+      "name": "Pass-the-Hash via Mimikatz",
+      "description": "Detects pass-the-hash attacks using Mimikatz sekurlsa module",
+      "severity": "critical",
+      "mitre_techniques": [
+        "attack.t1550.002"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*sekurlsa::pth*"
+          ],
+          "raw_values": [
+            "*sekurlsa::pth*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.command_line like~ \"*sekurlsa::pth*\"",
+      "language": "sigma",
+      "translated_query": "process where process.command_line like~ \"*sekurlsa::pth*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "84c166c3-a3e4-5a09-933e-9b95bafeeac9",
+      "catalog": "elastic",
+      "name": "Pass-the-Hash Attack Detection",
+      "description": "Detects pass-the-hash via NTLM authentication anomalies",
+      "severity": "critical",
+      "mitre_techniques": [
+        "attack.t1550.002"
+      ],
+      "event_categories": [
+        "authentication"
+      ],
+      "conditions": [
+        {
+          "field": "event.action",
+          "raw_field": "event.action",
+          "operator": "==",
+          "values": [
+            "logged-in"
+          ],
+          "raw_values": [
+            "logged-in"
+          ]
+        }
+      ],
+      "raw_query": "authentication where event.action == \"logged-in\" and source.ip != \"127.0.0.1\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "6e9b60b8-3fa2-5f9c-bc78-43c183ecbf3f",
+    "rule_b_id": "32ea5d2f-52a9-55cc-9ef3-4fe11fe17791",
+    "rule_a_name": "Remote Service Creation",
+    "rule_b_name": "Lateral Movement - Remote Service",
+    "jaccard_score": 0.833,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "6e9b60b8-3fa2-5f9c-bc78-43c183ecbf3f",
+      "catalog": "sigma",
+      "name": "Remote Service Creation",
+      "description": "Detects creation of remote services for lateral movement",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1021.002"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "==",
+          "values": [
+            "sc.exe"
+          ],
+          "raw_values": [
+            "sc.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*create*"
+          ],
+          "raw_values": [
+            "*create*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"sc.exe\" and process.command_line like~ \"*create*\"",
+      "language": "sigma",
+      "translated_query": "process where process.name == \"sc.exe\" and process.command_line like~ \"*create*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "32ea5d2f-52a9-55cc-9ef3-4fe11fe17791",
+      "catalog": "elastic",
+      "name": "Lateral Movement - Remote Service",
+      "description": "Detects service creation for lateral movement",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1021.002"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "==",
+          "values": [
+            "sc.exe"
+          ],
+          "raw_values": [
+            "sc.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "process.command_line",
+          "operator": "like~",
+          "values": [
+            "*create*"
+          ],
+          "raw_values": [
+            "*create*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"sc.exe\" and process.command_line like~ \"*create*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "1784b30b-af0e-5ec1-b741-fad15a9f072c",
+    "rule_b_id": "e6f7f031-8bdf-5347-ba86-7fc00a6555b1",
+    "rule_a_name": "Credential Dumping - SAM Registry Hive",
+    "rule_b_name": "SAM Database Access",
+    "jaccard_score": 0.875,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "1784b30b-af0e-5ec1-b741-fad15a9f072c",
+      "catalog": "sigma",
+      "name": "Credential Dumping - SAM Registry Hive",
+      "description": "Detects attempts to dump the SAM registry hive",
+      "severity": "critical",
+      "mitre_techniques": [
+        "attack.t1003.002"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*reg save*"
+          ],
+          "raw_values": [
+            "*reg save*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.command_line like~ \"*reg save*\" and process.command_line like~ \"*\\\\sam*\"",
+      "language": "sigma",
+      "translated_query": "process where process.command_line like~ \"*reg save*\" and process.command_line like~ \"*\\\\sam*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "e6f7f031-8bdf-5347-ba86-7fc00a6555b1",
+      "catalog": "elastic",
+      "name": "SAM Database Access",
+      "description": "Detects attempts to access the SAM database for credential theft",
+      "severity": "critical",
+      "mitre_techniques": [
+        "attack.t1003.002"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.command_line",
+          "raw_field": "process.command_line",
+          "operator": "like~",
+          "values": [
+            "*reg save*"
+          ],
+          "raw_values": [
+            "*reg save*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.command_line like~ \"*reg save*\" and process.command_line like~ \"*\\\\sam*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "bfb29e68-33dc-5214-b189-b06a3aec6114",
+    "rule_b_id": "ed3b396c-d5f7-5dfc-8f25-5d293ff87c5d",
+    "rule_a_name": "RunDLL32 Suspicious Execution",
+    "rule_b_name": "Suspicious RunDLL32 Usage",
+    "jaccard_score": 0.8,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "bfb29e68-33dc-5214-b189-b06a3aec6114",
+      "catalog": "sigma",
+      "name": "RunDLL32 Suspicious Execution",
+      "description": "Detects rundll32 executing DLLs from uncommon paths",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1218.011"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "==",
+          "values": [
+            "rundll32.exe"
+          ],
+          "raw_values": [
+            "rundll32.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*\\\\Temp\\\\*"
+          ],
+          "raw_values": [
+            "*\\\\Temp\\\\*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"rundll32.exe\" and process.command_line like~ \"*\\\\Temp\\\\*\"",
+      "language": "sigma",
+      "translated_query": "process where process.name == \"rundll32.exe\" and process.command_line like~ \"*\\\\Temp\\\\*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "ed3b396c-d5f7-5dfc-8f25-5d293ff87c5d",
+      "catalog": "elastic",
+      "name": "Suspicious RunDLL32 Usage",
+      "description": "Detects rundll32 executing from suspicious paths",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1218.011"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "==",
+          "values": [
+            "rundll32.exe"
+          ],
+          "raw_values": [
+            "rundll32.exe"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name == \"rundll32.exe\" and process.command_line like~ \"*\\\\Temp\\\\*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "8ce7ca15-dcca-516d-ba5f-6b4c1d369934",
+    "rule_b_id": "6d8678f9-ab0d-5b65-a02c-9f482858a4ec",
+    "rule_a_name": "DNS Query for C2 Domains",
+    "rule_b_name": "DNS Beaconing Detection",
+    "jaccard_score": 0.769,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "8ce7ca15-dcca-516d-ba5f-6b4c1d369934",
+      "catalog": "sigma",
+      "name": "DNS Query for C2 Domains",
+      "description": "Detects DNS lookups to common C2 infrastructure patterns",
+      "severity": "medium",
+      "mitre_techniques": [
+        "attack.t1071.004"
+      ],
+      "event_categories": [
+        "dns"
+      ],
+      "conditions": [
+        {
+          "field": "dns.question.name",
+          "raw_field": "QueryName",
+          "operator": "like~",
+          "values": [
+            "*.duckdns.org",
+            "*.ngrok.io"
+          ],
+          "raw_values": [
+            "*.duckdns.org",
+            "*.ngrok.io"
+          ]
+        }
+      ],
+      "raw_query": "dns where dns.question.name like~ \"*.duckdns.org\"",
+      "language": "sigma",
+      "translated_query": "dns where dns.question.name like~ \"*.duckdns.org\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "6d8678f9-ab0d-5b65-a02c-9f482858a4ec",
+      "catalog": "elastic",
+      "name": "DNS Beaconing Detection",
+      "description": "Detects high-frequency DNS queries suggesting C2 beaconing",
+      "severity": "medium",
+      "mitre_techniques": [
+        "attack.t1071.004"
+      ],
+      "event_categories": [
+        "dns"
+      ],
+      "conditions": [
+        {
+          "field": "dns.question.name",
+          "raw_field": "dns.question.name",
+          "operator": "like~",
+          "values": [
+            "*.duckdns.org",
+            "*.ngrok.io"
+          ],
+          "raw_values": [
+            "*.duckdns.org",
+            "*.ngrok.io"
+          ]
+        }
+      ],
+      "raw_query": "dns where dns.question.name like~ \"*.duckdns.org\" or dns.question.name like~ \"*.ngrok.io\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "1103650c-372f-507c-ab52-cb5f72e0c7fb",
+    "rule_b_id": "f25c873e-edfd-5991-8251-a3d9e0939c99",
+    "rule_a_name": "Lateral Movement via PsExec",
+    "rule_b_name": "PsExec Lateral Movement",
+    "jaccard_score": 0.923,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "1103650c-372f-507c-ab52-cb5f72e0c7fb",
+      "catalog": "sigma",
+      "name": "Lateral Movement via PsExec",
+      "description": "Detects lateral movement using PsExec remote execution",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1570",
+        "attack.t1021.002"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "in",
+          "values": [
+            "psexec.exe",
+            "psexesvc.exe"
+          ],
+          "raw_values": [
+            "psexec.exe",
+            "psexesvc.exe"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name in (\"psexec.exe\",\"psexesvc.exe\")",
+      "language": "sigma",
+      "translated_query": "process where process.name in (\"psexec.exe\",\"psexesvc.exe\")",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "f25c873e-edfd-5991-8251-a3d9e0939c99",
+      "catalog": "elastic",
+      "name": "PsExec Lateral Movement",
+      "description": "Detects PsExec used for lateral movement between hosts",
+      "severity": "high",
+      "mitre_techniques": [
+        "attack.t1021.002"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "in",
+          "values": [
+            "psexec.exe",
+            "psexesvc.exe"
+          ],
+          "raw_values": [
+            "psexec.exe",
+            "psexesvc.exe"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name in (\"psexec.exe\",\"psexesvc.exe\")",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  },
+  {
+    "rule_a_id": "5e779074-86dd-519b-b632-9c2220c981cd",
+    "rule_b_id": "2ae5fafe-e48f-574b-b590-3dbf7541e0ce",
+    "rule_a_name": "Net User Discovery",
+    "rule_b_name": "Net User/View Enumeration",
+    "jaccard_score": 0.667,
+    "alert_confirmed": false,
+    "rule_a": {
+      "id": "5e779074-86dd-519b-b632-9c2220c981cd",
+      "catalog": "sigma",
+      "name": "Net User Discovery",
+      "description": "Detects enumeration of local and domain users",
+      "severity": "low",
+      "mitre_techniques": [
+        "attack.t1087.001",
+        "attack.t1087.002"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "Image",
+          "operator": "in",
+          "values": [
+            "net.exe",
+            "net1.exe"
+          ],
+          "raw_values": [
+            "net.exe",
+            "net1.exe"
+          ]
+        },
+        {
+          "field": "process.command_line",
+          "raw_field": "CommandLine",
+          "operator": "like~",
+          "values": [
+            "*user*"
+          ],
+          "raw_values": [
+            "*user*"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name in (\"net.exe\",\"net1.exe\") and process.command_line like~ \"*user*\"",
+      "language": "sigma",
+      "translated_query": "process where process.name in (\"net.exe\",\"net1.exe\") and process.command_line like~ \"*user*\"",
+      "source_path": "demo",
+      "metadata": {}
+    },
+    "rule_b": {
+      "id": "2ae5fafe-e48f-574b-b590-3dbf7541e0ce",
+      "catalog": "elastic",
+      "name": "Net User/View Enumeration",
+      "description": "Detects Windows network and user enumeration",
+      "severity": "low",
+      "mitre_techniques": [
+        "attack.t1087.001",
+        "attack.t1018"
+      ],
+      "event_categories": [
+        "process"
+      ],
+      "conditions": [
+        {
+          "field": "process.name",
+          "raw_field": "process.name",
+          "operator": "in",
+          "values": [
+            "net.exe",
+            "net1.exe"
+          ],
+          "raw_values": [
+            "net.exe",
+            "net1.exe"
+          ]
+        }
+      ],
+      "raw_query": "process where process.name in (\"net.exe\",\"net1.exe\") and process.command_line like~ \"*user*\"",
+      "language": "eql",
+      "translated_query": null,
+      "source_path": "demo",
+      "metadata": {}
+    }
+  }
+]

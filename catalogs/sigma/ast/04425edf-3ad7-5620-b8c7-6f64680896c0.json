@@ -1,0 +1,42 @@
+{
+  "id": "04425edf-3ad7-5620-b8c7-6f64680896c0",
+  "catalog": "sigma",
+  "name": "WMI Remote Execution",
+  "description": "Detects remote code execution via WMI",
+  "severity": "high",
+  "mitre_techniques": [
+    "attack.t1047"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "Image",
+      "operator": "==",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "CommandLine",
+      "operator": "like~",
+      "values": [
+        "*process call create*"
+      ],
+      "raw_values": [
+        "*process call create*"
+      ]
+    }
+  ],
+  "raw_query": "process where process.name == \"wmic.exe\" and process.command_line like~ \"*process call create*\"",
+  "language": "sigma",
+  "translated_query": "process where process.name == \"wmic.exe\" and process.command_line like~ \"*process call create*\"",
+  "source_path": "demo",
+  "metadata": {}
+}

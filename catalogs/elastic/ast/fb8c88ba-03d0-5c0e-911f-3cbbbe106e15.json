@@ -1,0 +1,31 @@
+{
+  "id": "fb8c88ba-03d0-5c0e-911f-3cbbbe106e15",
+  "catalog": "elastic",
+  "name": "Remote Code Execution via WMI",
+  "description": "Detects WMI used for remote command execution",
+  "severity": "high",
+  "mitre_techniques": [
+    "attack.t1047"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where process.name == \"wmic.exe\" and process.command_line like~ \"*process call create*\"",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

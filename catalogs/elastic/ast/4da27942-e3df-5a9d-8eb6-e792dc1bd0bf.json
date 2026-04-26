@@ -1,0 +1,42 @@
+{
+  "id": "4da27942-e3df-5a9d-8eb6-e792dc1bd0bf",
+  "catalog": "elastic",
+  "name": "Certutil File Download",
+  "description": "Detects certutil.exe downloading remote files",
+  "severity": "high",
+  "mitre_techniques": [
+    "attack.t1105"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "certutil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "*-urlcache*"
+      ],
+      "raw_values": [
+        "*-urlcache*"
+      ]
+    }
+  ],
+  "raw_query": "process where process.name == \"certutil.exe\" and process.command_line like~ \"*-urlcache*\"",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

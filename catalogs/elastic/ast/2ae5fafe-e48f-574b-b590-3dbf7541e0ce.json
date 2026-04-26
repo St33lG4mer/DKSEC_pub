@@ -1,0 +1,34 @@
+{
+  "id": "2ae5fafe-e48f-574b-b590-3dbf7541e0ce",
+  "catalog": "elastic",
+  "name": "Net User/View Enumeration",
+  "description": "Detects Windows network and user enumeration",
+  "severity": "low",
+  "mitre_techniques": [
+    "attack.t1087.001",
+    "attack.t1018"
+  ],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "net.exe",
+        "net1.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where process.name in (\"net.exe\",\"net1.exe\") and process.command_line like~ \"*user*\"",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

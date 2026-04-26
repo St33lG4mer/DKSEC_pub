@@ -1,0 +1,31 @@
+{
+  "id": "eaf719bf-3ab1-5186-9175-8996b6829918",
+  "catalog": "elastic",
+  "name": "Elastic Endpoint Malware Detection",
+  "description": "Elastic Endpoint Security malware prevention alert",
+  "severity": "high",
+  "mitre_techniques": [
+    "attack.t1204"
+  ],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    }
+  ],
+  "raw_query": "file where event.type == \"creation\" and file.Ext.malware_classification.identifier != \"\"",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

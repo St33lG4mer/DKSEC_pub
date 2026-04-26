@@ -1,0 +1,33 @@
+{
+  "id": "6d8678f9-ab0d-5b65-a02c-9f482858a4ec",
+  "catalog": "elastic",
+  "name": "DNS Beaconing Detection",
+  "description": "Detects high-frequency DNS queries suggesting C2 beaconing",
+  "severity": "medium",
+  "mitre_techniques": [
+    "attack.t1071.004"
+  ],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        "*.duckdns.org",
+        "*.ngrok.io"
+      ],
+      "raw_values": [
+        "*.duckdns.org",
+        "*.ngrok.io"
+      ]
+    }
+  ],
+  "raw_query": "dns where dns.question.name like~ \"*.duckdns.org\" or dns.question.name like~ \"*.ngrok.io\"",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "894f8235-4e99-5c24-b4a1-3745095a291e",
+  "catalog": "elastic",
+  "name": "Suspicious PowerShell Network Activity",
+  "description": "Detects PowerShell making outbound network connections",
+  "severity": "high",
+  "mitre_techniques": [
+    "attack.t1059.001"
+  ],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "powershell.exe"
+      ]
+    },
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": "==",
+      "values": [
+        "egress"
+      ],
+      "raw_values": [
+        "egress"
+      ]
+    }
+  ],
+  "raw_query": "network where process.name == \"powershell.exe\" and network.direction == \"egress\"",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "demo",
+  "metadata": {}
+}
