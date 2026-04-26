@@ -40,6 +40,7 @@ def test_deploy_result_fields():
     assert r.mode == "test"
     assert r.deployed_count == 3
     assert r.failed_count == 1
+    assert r.errors == ["err"]
 
 
 def test_deploy_rules_calls_adapter_deploy_for_each():
@@ -65,6 +66,7 @@ def test_deploy_rules_records_failure_and_continues():
     assert result.deployed_count == 1
     assert result.failed_count == 1
     assert len(result.errors) == 1
+    assert "r1:" in result.errors[0]
     assert "SIEM rejected rule" in result.errors[0]
 
 
