@@ -110,3 +110,21 @@ def test_translate_catalog_no_raw_returns_zero(tmp_path):
     assert result.translated_count == 0
     assert result.failed_count == 0
     assert result.errors == []
+
+
+def test_translate_catalog_skips_failed_translate(tmp_path):
+    store = RuleStore(tmp_path)
+    raws = [_make_raw("r1"), _make_raw("r2")]
+    store.save_raw("sigma", raws)
+
+    ast1 = _make_ast("r1")
+    ast2 = _make_ast("r2")
+    adapter = _mock_adapter(raws)
+    adapter.parse.side_effect = [ast1, ast2]
+    adapter.translate.side_effect = [RuntimeError("ECS mapping failed"), ast2]
+
+    result = translate_catalog(adapter, store)
+
+    assert result.translated_count == 1
+    assert result.failed_count == 1
+    assert "ECS mapping failed" in result.errors[0]
