@@ -1,0 +1,42 @@
+{
+  "id": "dfdc3b7d-2ff3-5f4f-be96-ba6276b220ff",
+  "catalog": "sigma",
+  "name": "registry_event_modify_screensaver_binary_path",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rundll32.exe",
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe",
+        "*\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\control panel\\\\desktop\\\\scrnsave.exe"
+      ],
+      "raw_values": [
+        "*\\\\Control Panel\\\\Desktop\\\\SCRNSAVE.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Control Panel\\\\Desktop\\\\SCRNSAVE.EXE\" and (not (process.executable like~ (\"*\\\\rundll32.exe\", \"*\\\\explorer.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_modify_screensaver_binary_path.eql",
+  "metadata": {}
+}

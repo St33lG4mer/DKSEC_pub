@@ -1,0 +1,52 @@
+{
+  "id": "f9e3cca9-e01a-574b-aae2-74379c67d79b",
+  "catalog": "sigma",
+  "name": "win_applocker_application_was_prevented_from_running",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": "like~",
+      "values": [
+        "microsoft-windows-applocker/msi and script",
+        "microsoft-windows-applocker/exe and dll",
+        "microsoft-windows-applocker/packaged app-deployment",
+        "microsoft-windows-applocker/packaged app-execution"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-AppLocker/MSI and Script",
+        "Microsoft-Windows-AppLocker/EXE and DLL",
+        "Microsoft-Windows-AppLocker/Packaged app-Deployment",
+        "Microsoft-Windows-AppLocker/Packaged app-Execution"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "8004",
+        "8007",
+        "8022",
+        "8025"
+      ],
+      "raw_values": [
+        "8004",
+        "8007",
+        "8022",
+        "8025"
+      ]
+    }
+  ],
+  "raw_query": "any where (winlog.channel like~ (\"Microsoft-Windows-AppLocker/MSI and Script\", \"Microsoft-Windows-AppLocker/EXE and DLL\", \"Microsoft-Windows-AppLocker/Packaged app-Deployment\", \"Microsoft-Windows-AppLocker/Packaged app-Execution\")) and (event.code like~ (\"8004\", \"8007\", \"8022\", \"8025\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/applocker/win_applocker_application_was_prevented_from_running.eql",
+  "metadata": {}
+}

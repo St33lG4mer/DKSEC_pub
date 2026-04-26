@@ -1,0 +1,41 @@
+{
+  "id": "a65b8b0e-65c6-5465-aebe-7dc95f188417",
+  "catalog": "sigma",
+  "name": "image_load_side_load_mfdetours_unsigned",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mfdetours.dll"
+      ],
+      "raw_values": [
+        "*\\\\mfdetours.dll",
+        "*:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\bin\\\\*"
+      ]
+    },
+    {
+      "field": "file.code_signature.status",
+      "raw_field": "file.code_signature.status",
+      "operator": ":",
+      "values": [
+        "valid"
+      ],
+      "raw_values": [
+        "Valid"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\mfdetours.dll\" and (not (file.path:\"*:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\bin\\\\*\" and file.code_signature.status:\"Valid\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_mfdetours_unsigned.eql",
+  "metadata": {}
+}

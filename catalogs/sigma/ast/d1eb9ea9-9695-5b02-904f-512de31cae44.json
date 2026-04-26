@@ -1,0 +1,57 @@
+{
+  "id": "d1eb9ea9-9695-5b02-904f-512de31cae44",
+  "catalog": "sigma",
+  "name": "win_security_camera_microphone_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4657",
+        "4656",
+        "4663"
+      ],
+      "raw_values": [
+        "4657",
+        "4656",
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\capabilityaccessmanager\\\\consentstore\\\\microphone\\\\nonpackaged",
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\capabilityaccessmanager\\\\consentstore\\\\webcam\\\\nonpackaged"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\CapabilityAccessManager\\\\ConsentStore\\\\microphone\\\\NonPackaged*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\CapabilityAccessManager\\\\ConsentStore\\\\webcam\\\\NonPackaged*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"4657\", \"4656\", \"4663\")) and (winlog.event_data.ObjectName like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\CapabilityAccessManager\\\\ConsentStore\\\\microphone\\\\NonPackaged*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\CapabilityAccessManager\\\\ConsentStore\\\\webcam\\\\NonPackaged*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_camera_microphone_access.eql",
+  "metadata": {}
+}

@@ -1,0 +1,94 @@
+{
+  "id": "885f28bc-80b2-5b1e-ae6c-909054e6b6a6",
+  "catalog": "elastic",
+  "name": "SSH Authorized Keys File Deletion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "backup",
+        "ansible",
+        "puppet"
+      ],
+      "raw_values": [
+        "*backup*",
+        "*ansible*",
+        "*puppet*"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "in",
+      "values": [
+        "authorized_keys",
+        "authorized_keys2"
+      ],
+      "raw_values": [
+        "authorized_keys",
+        "authorized_keys2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "google_guest_agent",
+        "dockerd",
+        "containerd"
+      ],
+      "raw_values": [
+        "/usr/bin/google_guest_agent",
+        "/usr/bin/dockerd",
+        "/bin/dockerd",
+        "/usr/bin/containerd"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"deletion\" and file.name in (\"authorized_keys\", \"authorized_keys2\") and\nnot (\n  process.executable in (\n    \"/usr/bin/google_guest_agent\", \"/usr/bin/dockerd\", \"/bin/dockerd\", \"/usr/bin/containerd\"\n  ) or\n  process.executable like~ \"/nix/store/*\" or\n  file.path like~ (\"*backup*\", \"*ansible*\", \"*puppet*\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_authorized_keys_file_deletion.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

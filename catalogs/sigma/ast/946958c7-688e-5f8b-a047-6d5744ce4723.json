@@ -1,0 +1,29 @@
+{
+  "id": "946958c7-688e-5f8b-a047-6d5744ce4723",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wermgr_susp_exec_location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wermgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\wermgr.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\wermgr.exe\" and (not (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wermgr_susp_exec_location.eql",
+  "metadata": {}
+}

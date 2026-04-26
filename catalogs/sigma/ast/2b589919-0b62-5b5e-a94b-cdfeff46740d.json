@@ -1,0 +1,47 @@
+{
+  "id": "2b589919-0b62-5b5e-a94b-cdfeff46740d",
+  "catalog": "sigma",
+  "name": "image_load_cmstp_load_dll_from_susp_location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".dll",
+        ".ocx"
+      ],
+      "raw_values": [
+        "*\\\\PerfLogs\\\\*",
+        "*\\\\ProgramData\\\\*",
+        "*\\\\Users\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*",
+        "*C:\\\\Temp\\\\*",
+        "*.dll",
+        "*.ocx"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmstp.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmstp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\cmstp.exe\" and (file.path like~ (\"*\\\\PerfLogs\\\\*\", \"*\\\\ProgramData\\\\*\", \"*\\\\Users\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\", \"*C:\\\\Temp\\\\*\")) and (file.path like~ (\"*.dll\", \"*.ocx\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_cmstp_load_dll_from_susp_location.eql",
+  "metadata": {}
+}

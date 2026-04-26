@@ -1,0 +1,31 @@
+{
+  "id": "acfff66b-6e9a-5b02-a2e4-93835a2076d8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_cli_obfuscation_escape_char",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "h^t^t^p"
+      ],
+      "raw_values": [
+        "*h^t^t^p*",
+        "*h\\",
+        "t\\"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*h^t^t^p*\", \"*h\\\"t\\\"t\\\"p*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_cli_obfuscation_escape_char.eql",
+  "metadata": {}
+}

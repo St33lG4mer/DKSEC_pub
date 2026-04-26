@@ -1,0 +1,29 @@
+{
+  "id": "92dea44f-9540-5c61-9170-51bd770ee666",
+  "catalog": "sigma",
+  "name": "image_load_side_load_mpsvc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mpsvc.dll"
+      ],
+      "raw_values": [
+        "*\\\\MpSvc.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\MpSvc.dll\" and (not (file.path like~ (\"C:\\\\Program Files\\\\Windows Defender\\\\*\", \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_mpsvc.eql",
+  "metadata": {}
+}

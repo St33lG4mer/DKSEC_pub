@@ -1,0 +1,89 @@
+{
+  "id": "76139cdc-b106-55d7-841c-34f026177f53",
+  "catalog": "elastic",
+  "name": "Multiple External EDR Alerts by Host",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "in",
+      "values": [
+        "crowdstrike.alert",
+        "crowdstrike.falcon",
+        "sentinel_one.alert",
+        "sentinel_one.threat",
+        "m365_defender.alert"
+      ],
+      "raw_values": [
+        "crowdstrike.alert",
+        "crowdstrike.falcon",
+        "sentinel_one.alert",
+        "sentinel_one.threat",
+        "m365_defender.alert"
+      ]
+    },
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "crowdstrike"
+      ],
+      "raw_values": [
+        "crowdstrike"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.name",
+      "raw_field": "kibana.alert.rule.name",
+      "operator": "==",
+      "values": [
+        "eicartestfilewrittenwin"
+      ],
+      "raw_values": [
+        "EICARTestFileWrittenWin"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.tags",
+      "raw_field": "kibana.alert.rule.tags",
+      "operator": ":",
+      "values": [
+        "rule type: higher-order rule"
+      ],
+      "raw_values": [
+        "Rule Type: Higher-Order Rule"
+      ]
+    },
+    {
+      "field": "esql.rule_name_values",
+      "raw_field": "Esql.rule_name_values",
+      "operator": "==",
+      "values": [
+        "external alerts"
+      ],
+      "raw_values": [
+        "External Alerts"
+      ]
+    }
+  ],
+  "raw_query": "from .alerts-security.*\n| WHERE data_stream.dataset in (\"crowdstrike.alert\", \"crowdstrike.falcon\", \"sentinel_one.alert\", \"sentinel_one.threat\", \"m365_defender.alert\") and\n        host.id is not null and kibana.alert.risk_score > 21 and\n        not (event.module == \"crowdstrike\" and (kibana.alert.rule.name like \"* at *\" or kibana.alert.rule.name like \"* on *\" or kibana.alert.rule.name == \"EICARTestFileWrittenWin\")) and\n        not KQL(\"\"\"kibana.alert.rule.tags : \"Rule Type: Higher-Order Rule\" \"\"\")\n| stats Esql.alerts_count = COUNT(*),\n        Esql.rule_risk_score_distinct_count = COUNT_DISTINCT(kibana.alert.risk_score),\n        Esql.unique_rules_count = COUNT_DISTINCT(kibana.alert.rule.name),\n        Esql.processes_count = COUNT_DISTINCT(process.executable),\n        Esql.files_count = COUNT_DISTINCT(file.path),\n        Esql.process_cmdline_count = COUNT_DISTINCT(process.command_line),\n        Esql.rule_risk_score_values = VALUES(kibana.alert.risk_score),\n        Esql.process_path_values = VALUES(process.executable),\n        Esql.file_path_values = VALUES(file.path),\n        Esql.user_name_values = VALUES(user.name),\n        Esql.process_command_line_values = VALUES(process.command_line),\n        Esql.process_parent_command_line_values = VALUES(process.parent.command_line),\n        Esql.rule_name_values = VALUES(kibana.alert.rule.name) by host.id, host.name, event.module\n| where (\n\t// 3+ unique rules or processes\n  (\n    Esql.unique_rules_count >= 3 or\n    (Esql.processes_count >= 3 and Esql.rule_name_values == \"External Alerts\")\n  ) and\n  \t// and 2+ rules of different severity, or 1 high/critical severity rule\n  (\n    Esql.rule_risk_score_distinct_count >= 2 or\n    Esql.rule_risk_score_values == 73 or\n    Esql.rule_risk_score_values == 99\n  )\n) or\n  // or 5+ unique rules from the same host for 1+ path/command_line/process\n  (Esql.unique_rules_count >= 5 and Esql.alerts_count <= 50 and\n  (Esql.files_count >= 1 or Esql.process_cmdline_count >= 1 or Esql.processes_count >= 1)\n)\n| KEEP event.module, host.id, host.name, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/multiple_external_edr_alerts_by_host.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide",
+      "Domain: Endpoint"
+    ]
+  }
+}

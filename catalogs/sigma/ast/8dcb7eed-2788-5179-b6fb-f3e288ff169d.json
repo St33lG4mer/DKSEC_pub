@@ -1,0 +1,69 @@
+{
+  "id": "8dcb7eed-2788-5179-b6fb-f3e288ff169d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_certutil_decode",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-decode",
+        "decode",
+        "–decode",
+        "—decode",
+        "―decode",
+        "-decodehex",
+        "decodehex",
+        "–decodehex",
+        "—decodehex",
+        "―decodehex"
+      ],
+      "raw_values": [
+        "*-decode *",
+        "*/decode *",
+        "*–decode *",
+        "*—decode *",
+        "*―decode *",
+        "*-decodehex *",
+        "*/decodehex *",
+        "*–decodehex *",
+        "*—decodehex *",
+        "*―decodehex *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\certutil.exe\" or process.pe.original_file_name:\"CertUtil.exe\") and (process.command_line like~ (\"*-decode *\", \"*/decode *\", \"*–decode *\", \"*—decode *\", \"*―decode *\") or process.command_line like~ (\"*-decodehex *\", \"*/decodehex *\", \"*–decodehex *\", \"*—decodehex *\", \"*―decodehex *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_certutil_decode.eql",
+  "metadata": {}
+}

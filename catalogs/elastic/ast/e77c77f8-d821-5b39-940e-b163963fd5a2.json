@@ -1,0 +1,133 @@
+{
+  "id": "e77c77f8-d821-5b39-940e-b163963fd5a2",
+  "catalog": "elastic",
+  "name": "Pluggable Authentication Module (PAM) Creation in Unusual Directory",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "containerd",
+        "checkpoint",
+        "driver-jail",
+        "iot",
+        "steamlinuxruntime"
+      ],
+      "raw_values": [
+        "/lib/security/*",
+        "/lib64/security/*",
+        "/lib/x86_64-linux-gnu/security/*",
+        "/usr/lib/security/*",
+        "/usr/lib64/security/*",
+        "/usr/lib/x86_64-linux-gnu/security/*",
+        "/build/rootImage/nix/store/*",
+        "/home/*/.local/share/containers/*",
+        "/nix/store/*",
+        "/var/lib/containerd/*",
+        "/var/snap/*",
+        "/usr/share/nix/nix/store/*",
+        "/tmp/cura/squashfs-root/*",
+        "/home/*/docker/*",
+        "/tmp/containerd*",
+        "/var/lib/rancher/*/agent/containerd/*",
+        "/var/lib/lxc/*",
+        "/var/lib/containers/storage/*",
+        "/var/lib/checkpoint*",
+        "/var/lib/docker/overlay2/*",
+        "/srv/docker/*",
+        "/podman/storage/*",
+        "/opt/jail/driver-jail*",
+        "/build/tmp/work/iot*",
+        "/tmp/containers-root/*",
+        "/cce-14/*",
+        "/cce-usr/*",
+        "/var/tmp/portage/*",
+        "/media/*",
+        "/data/var/lib/docker/overlay2/*",
+        "/home/*/.cache/bazel/*",
+        "/home/*/.cache/umu/*/SteamLinuxRuntime*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dockerd",
+        "containerd",
+        "steam",
+        "buildkitd",
+        "unsquashfs",
+        "pacman",
+        "executor"
+      ],
+      "raw_values": [
+        "dockerd",
+        "containerd",
+        "steam",
+        "buildkitd",
+        "unsquashfs",
+        "pacman",
+        "executor"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like",
+      "values": [
+        "pam_*.so"
+      ],
+      "raw_values": [
+        "pam_*.so"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"creation\" and file.name like \"pam_*.so\" and not file.path like (\n  \"/lib/security/*\",\n  \"/lib64/security/*\",\n  \"/lib/x86_64-linux-gnu/security/*\",\n  \"/usr/lib/security/*\",\n  \"/usr/lib64/security/*\",\n  \"/usr/lib/x86_64-linux-gnu/security/*\"\n) and not (\n  process.name in (\"dockerd\", \"containerd\", \"steam\", \"buildkitd\", \"unsquashfs\", \"pacman\", \"executor\") or\n  file.path like (\n    \"/build/rootImage/nix/store/*\", \"/home/*/.local/share/containers/*\", \"/nix/store/*\", \"/var/lib/containerd/*\",\n    \"/var/snap/*\", \"/usr/share/nix/nix/store/*\", \"/tmp/cura/squashfs-root/*\", \"/home/*/docker/*\", \"/tmp/containerd*\",\n    \"/var/lib/rancher/*/agent/containerd/*\", \"/var/lib/lxc/*\", \"/var/lib/containers/storage/*\", \"/var/lib/checkpoint*\",\n    \"/var/lib/docker/overlay2/*\", \"/srv/docker/*\", \"/podman/storage/*\", \"/opt/jail/driver-jail*\", \"/build/tmp/work/iot*\",\n    \"/tmp/containers-root/*\", \"/cce-14/*\", \"/cce-usr/*\", \"/var/tmp/portage/*\", \"/media/*\", \"/data/var/lib/docker/overlay2/*\",\n    \"/home/*/.cache/bazel/*\", \"/home/*/.cache/umu/*/SteamLinuxRuntime*\"\n  )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_pluggable_authentication_module_creation_in_unusual_dir.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

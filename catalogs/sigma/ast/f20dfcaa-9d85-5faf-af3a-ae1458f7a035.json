@@ -1,0 +1,46 @@
+{
+  "id": "f20dfcaa-9d85-5faf-af3a-ae1458f7a035",
+  "catalog": "sigma",
+  "name": "registry_set_disable_system_restore",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\policies\\\\microsoft\\\\windows nt\\\\systemrestore",
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\systemrestore",
+        "disableconfig",
+        "disablesr"
+      ],
+      "raw_values": [
+        "*\\\\Policies\\\\Microsoft\\\\Windows NT\\\\SystemRestore*",
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SystemRestore*",
+        "*DisableConfig",
+        "*DisableSR"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Policies\\\\Microsoft\\\\Windows NT\\\\SystemRestore*\", \"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\SystemRestore*\")) and (registry.path like~ (\"*DisableConfig\", \"*DisableSR\")) and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disable_system_restore.eql",
+  "metadata": {}
+}

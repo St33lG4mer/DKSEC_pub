@@ -1,0 +1,39 @@
+{
+  "id": "babd9d0b-0bdb-5465-8e3d-03eb8bc575f2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_adwind",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "oracle",
+        "java",
+        ".exe",
+        "cscript.exe",
+        "retrive",
+        ".vbs"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Roaming\\\\Oracle*",
+        "*\\\\java*",
+        "*.exe *",
+        "*cscript.exe*",
+        "*Retrive*",
+        "*.vbs *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*\\\\AppData\\\\Roaming\\\\Oracle*\" and process.command_line:\"*\\\\java*\" and process.command_line:\"*.exe *\") or (process.command_line:\"*cscript.exe*\" and process.command_line:\"*Retrive*\" and process.command_line:\"*.vbs *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/Malware/Adwind-RAT/proc_creation_win_malware_adwind.eql",
+  "metadata": {}
+}

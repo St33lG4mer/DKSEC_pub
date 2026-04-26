@@ -1,0 +1,40 @@
+{
+  "id": "37f28448-c412-5b71-896f-83313606ff39",
+  "catalog": "sigma",
+  "name": "win_codeintegrity_unsigned_image_loaded",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-codeintegrity/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CodeIntegrity/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "3037"
+      ],
+      "raw_values": [
+        "3037"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CodeIntegrity/Operational\" and event.code:\"3037\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/code_integrity/win_codeintegrity_unsigned_image_loaded.eql",
+  "metadata": {}
+}

@@ -1,0 +1,215 @@
+{
+  "id": "f442520f-bae0-5a92-a51a-53959544ef75",
+  "catalog": "elastic",
+  "name": "Privilege Escalation via CAP_SETUID/SETGID Capabilities",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "carbonblack"
+      ],
+      "raw_values": [
+        "/tmp/newroot/*",
+        "/opt/carbonblack*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sudo*become-success",
+        "sh*sapsysinfo.sh",
+        "sudo su",
+        "sudo su -",
+        "sudo -e -h bash -l",
+        "lsb_release",
+        "fgrep"
+      ],
+      "raw_values": [
+        "sudo*BECOME-SUCCESS*",
+        "/bin/sh*sapsysinfo.sh*",
+        "sudo su",
+        "sudo su -",
+        "sudo -E -H bash -l",
+        "/usr/bin/lsb_release*",
+        "/bin/fgrep*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/opt/elastic/agent/data/",
+        "/usr/sap/tmp"
+      ],
+      "raw_values": [
+        "/opt/Elastic/Agent/data/*",
+        "/usr/sap/tmp"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "solarwinds.agent.jobengine.plugin",
+        "vmware-toolbox-cmd",
+        "dbus-daemon",
+        "update-notifier",
+        "language-options",
+        "lynis.sh",
+        "sssd_be",
+        "osqueryd.5",
+        "oneagentos",
+        "osqueryi",
+        "osqueryd",
+        "saposcol",
+        "sdbrun"
+      ],
+      "raw_values": [
+        "/opt/SolarWinds/Agent/bin/Plugins/JobEngine/SolarWinds.Agent.JobEngine.Plugin",
+        "/usr/bin/vmware-toolbox-cmd",
+        "/usr/bin/dbus-daemon",
+        "/usr/bin/update-notifier",
+        "/usr/share/language-tools/language-options",
+        "/opt/SolarWinds/Agent/*",
+        "/usr/local/sbin/lynis.sh",
+        "/usr/libexec/sssd/sssd_be",
+        "/opt/sophos-spl/plugins/edr/bin/osqueryd.5",
+        "/apps/dynatrace/oneagent/install/agent/lib64/oneagentos",
+        "/opt/carbonblack/*/osqueryi",
+        "update-notifier",
+        "language-options",
+        "osqueryd",
+        "saposcol",
+        "dbus-daemon",
+        "osqueryi",
+        "sdbrun"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "fgrep",
+        "sudo",
+        "pkexec",
+        "cockpit-session",
+        "suexec",
+        "lsb_release",
+        "apt-update",
+        "dbus-daemon-launch-helper",
+        "man"
+      ],
+      "raw_values": [
+        "/bin/fgrep",
+        "/usr/bin/sudo",
+        "/usr/bin/pkexec",
+        "/usr/lib/cockpit/cockpit-session",
+        "/usr/sbin/suexec",
+        "sudo",
+        "fgrep",
+        "lsb_release",
+        "apt-update",
+        "dbus-daemon-launch-helper",
+        "man"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "uid_change"
+      ],
+      "raw_values": [
+        "exec",
+        "uid_change"
+      ]
+    },
+    {
+      "field": "process.thread.capabilities.effective",
+      "raw_field": "process.thread.capabilities.effective",
+      "operator": ":",
+      "values": [
+        "cap_set?id"
+      ],
+      "raw_values": [
+        "CAP_SET?ID"
+      ]
+    },
+    {
+      "field": "process.thread.capabilities.permitted",
+      "raw_field": "process.thread.capabilities.permitted",
+      "operator": ":",
+      "values": [
+        "cap_set?id"
+      ],
+      "raw_values": [
+        "CAP_SET?ID"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "python*ansible"
+      ],
+      "raw_values": [
+        "/usr/bin/python*ansible*"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=1s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.name != null and\n   (process.thread.capabilities.effective : \"CAP_SET?ID\" or process.thread.capabilities.permitted : \"CAP_SET?ID\") and\n   user.id != \"0\" and not (\n     process.parent.executable : (\"/tmp/newroot/*\", \"/opt/carbonblack*\") or\n     process.parent.executable in (\n       \"/opt/SolarWinds/Agent/bin/Plugins/JobEngine/SolarWinds.Agent.JobEngine.Plugin\", \"/usr/bin/vmware-toolbox-cmd\",\n       \"/usr/bin/dbus-daemon\", \"/usr/bin/update-notifier\", \"/usr/share/language-tools/language-options\",\n       \"/opt/SolarWinds/Agent/*\", \"/usr/local/sbin/lynis.sh\", \"/usr/libexec/sssd/sssd_be\",\n       \"/opt/sophos-spl/plugins/edr/bin/osqueryd.5\", \"/apps/dynatrace/oneagent/install/agent/lib64/oneagentos\",\n       \"/opt/carbonblack/*/osqueryi\"\n     ) or\n     process.executable : (\"/opt/dynatrace/*\", \"/tmp/newroot/*\", \"/opt/SolarWinds/Agent/*\") or\n     process.executable in (\n       \"/bin/fgrep\", \"/usr/bin/sudo\", \"/usr/bin/pkexec\", \"/usr/lib/cockpit/cockpit-session\", \"/usr/sbin/suexec\"\n     ) or\n     process.parent.name in (\"update-notifier\", \"language-options\", \"osqueryd\", \"saposcol\", \"dbus-daemon\", \"osqueryi\", \"sdbrun\") or\n     process.command_line like (\"sudo*BECOME-SUCCESS*\", \"/bin/sh*sapsysinfo.sh*\", \"sudo su\", \"sudo su -\", \"sudo -E -H bash -l\") or\n     process.name in (\"sudo\", \"fgrep\", \"lsb_release\", \"apt-update\", \"dbus-daemon-launch-helper\", \"man\") or\n     process.parent.command_line like \"/usr/bin/python*ansible*\" or\n     process.working_directory like (\"/opt/Elastic/Agent/data/*\", \"/usr/sap/tmp\") or\n     process.args like (\"/usr/bin/lsb_release*\", \"/bin/fgrep*\")\n   )]\n  [process where host.os.type == \"linux\" and event.action == \"uid_change\" and event.type == \"change\" and\n   (process.thread.capabilities.effective : \"CAP_SET?ID\" or process.thread.capabilities.permitted : \"CAP_SET?ID\")\n   and user.id == \"0\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_suspicious_uid_guid_elevation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

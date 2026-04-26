@@ -1,0 +1,40 @@
+{
+  "id": "8bf643c7-84f6-5d34-b032-308e9981b26c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_diskshadow_script_mode",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "*\\\\diskshadow.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"diskshadow.exe\" or process.executable:\"*\\\\diskshadow.exe\") and process.command_line like~ (\"*-s *\", \"*/s *\", \"*–s *\", \"*—s *\", \"*―s *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_diskshadow_script_mode.eql",
+  "metadata": {}
+}

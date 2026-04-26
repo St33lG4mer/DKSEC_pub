@@ -1,0 +1,63 @@
+{
+  "id": "543779dc-e3dc-51c2-9fe5-81a2eac8aee4",
+  "catalog": "elastic",
+  "name": "Renaming of OpenSSH Binaries",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microdnf",
+        "dnf5",
+        "gdm",
+        "packagekitd",
+        "zypp-rpm",
+        "sa-ansible"
+      ],
+      "raw_values": [
+        "/usr/bin/microdnf",
+        "/usr/bin/dnf5",
+        "/usr/sbin/gdm",
+        "/usr/libexec/packagekitd",
+        "/usr/libexec/zypp/zypp-rpm",
+        "/home/sa-ansible"
+      ]
+    },
+    {
+      "field": "file.ext.original.name",
+      "raw_field": "file.Ext.original.name",
+      "operator": ":",
+      "values": [
+        "sshd.session-split"
+      ],
+      "raw_values": [
+        "sshd.session-split"
+      ]
+    }
+  ],
+  "raw_query": "event.category:file and host.os.type:linux and event.type:change and \nprocess.name:(* and not (\n  dnf or dnf-automatic or dpkg or yum or rpm or yum-cron or anacron or platform-python* or\n  apk or ansible-admin or systemd or python* or yum or nix-daemon or nix\n  )\n) and \n(file.path:(/usr/bin/scp or \n              /usr/bin/sftp or \n              /usr/bin/ssh or \n              /usr/sbin/sshd) or \nfile.name:libkeyutils.so) and\nnot (\n  process.executable:(\n    /usr/share/elasticsearch/* or \"/usr/bin/microdnf\" or \"/usr/bin/dnf5\" or \"/usr/sbin/gdm\" or\n    \"/usr/libexec/packagekitd\" or \"/usr/libexec/zypp/zypp-rpm\" or \"/home/sa-ansible\"\n  ) or\n  file.Ext.original.name:\"sshd.session-split\"\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_credential_access_modify_ssh_binaries.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Persistence",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

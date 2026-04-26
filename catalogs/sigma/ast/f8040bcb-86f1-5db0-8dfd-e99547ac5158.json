@@ -1,0 +1,44 @@
+{
+  "id": "f8040bcb-86f1-5db0-8dfd-e99547ac5158",
+  "catalog": "sigma",
+  "name": "registry_set_sophos_av_tamper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\sophos endpoint defense\\\\tamperprotection\\\\config\\\\savenabled",
+        "\\\\sophos endpoint defense\\\\tamperprotection\\\\config\\\\sedenabled",
+        "\\\\sophos\\\\savservice\\\\tamperprotection\\\\enabled"
+      ],
+      "raw_values": [
+        "*\\\\Sophos Endpoint Defense\\\\TamperProtection\\\\Config\\\\SAVEnabled*",
+        "*\\\\Sophos Endpoint Defense\\\\TamperProtection\\\\Config\\\\SEDEnabled*",
+        "*\\\\Sophos\\\\SAVService\\\\TamperProtection\\\\Enabled*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Sophos Endpoint Defense\\\\TamperProtection\\\\Config\\\\SAVEnabled*\", \"*\\\\Sophos Endpoint Defense\\\\TamperProtection\\\\Config\\\\SEDEnabled*\", \"*\\\\Sophos\\\\SAVService\\\\TamperProtection\\\\Enabled*\")) and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_sophos_av_tamper.eql",
+  "metadata": {}
+}

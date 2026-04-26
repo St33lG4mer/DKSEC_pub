@@ -1,0 +1,52 @@
+{
+  "id": "027d2bf0-5281-52c4-a427-b15f79c13bf1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_downgrade_attack",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-version 2",
+        "-versio 2",
+        "-versi 2",
+        "-vers 2",
+        "-ver 2",
+        "-ve 2",
+        "-v 2"
+      ],
+      "raw_values": [
+        "* -version 2 *",
+        "* -versio 2 *",
+        "* -versi 2 *",
+        "* -vers 2 *",
+        "* -ver 2 *",
+        "* -ve 2 *",
+        "* -v 2 *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\powershell.exe\" and (process.command_line like~ (\"* -version 2 *\", \"* -versio 2 *\", \"* -versi 2 *\", \"* -vers 2 *\", \"* -ver 2 *\", \"* -ve 2 *\", \"* -v 2 *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_downgrade_attack.eql",
+  "metadata": {}
+}

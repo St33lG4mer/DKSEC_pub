@@ -1,0 +1,51 @@
+{
+  "id": "1f5d9dca-e883-53fd-94d2-e5c97932c352",
+  "catalog": "sigma",
+  "name": "win_cve_2023_21554_msmq_corrupted_packet",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "application"
+      ],
+      "raw_values": [
+        "Application"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "msmq"
+      ],
+      "raw_values": [
+        "MSMQ"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "2027"
+      ],
+      "raw_values": [
+        "2027"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Application\" and (winlog.provider_name:\"MSMQ\" and event.code:\"2027\" and winlog.event_data.Level:\"2\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-21554/win_cve_2023_21554_msmq_corrupted_packet.eql",
+  "metadata": {}
+}

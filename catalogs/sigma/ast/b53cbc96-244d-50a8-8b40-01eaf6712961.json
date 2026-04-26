@@ -1,0 +1,43 @@
+{
+  "id": "b53cbc96-244d-50a8-8b40-01eaf6712961",
+  "catalog": "sigma",
+  "name": "registry_event_ssp_added_lsa_config",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\control\\\\lsa\\\\security packages",
+        "\\\\control\\\\lsa\\\\osconfig\\\\security packages"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\Lsa\\\\Security Packages",
+        "*\\\\Control\\\\Lsa\\\\OSConfig\\\\Security Packages"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\syswow64\\\\MsiExec.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Control\\\\Lsa\\\\Security Packages\", \"*\\\\Control\\\\Lsa\\\\OSConfig\\\\Security Packages\")) and (not ((process.executable like~ (\"C:\\\\Windows\\\\system32\\\\msiexec.exe\", \"C:\\\\Windows\\\\syswow64\\\\MsiExec.exe\")) or (?process.executable == null)))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_ssp_added_lsa_config.eql",
+  "metadata": {}
+}

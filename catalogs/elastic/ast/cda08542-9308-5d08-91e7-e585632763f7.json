@@ -1,0 +1,26 @@
+{
+  "id": "cda08542-9308-5d08-91e7-e585632763f7",
+  "catalog": "elastic",
+  "name": "IPSEC NAT Traversal Port Activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [],
+  "raw_query": "(data_stream.dataset: network_traffic.flow or (event.category: (network or network_traffic))) and network.transport:udp and destination.port:4500\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/network/command_and_control_nat_traversal_port_activity.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Tactic: Command and Control",
+      "Domain: Endpoint",
+      "Use Case: Threat Detection",
+      "Data Source: PAN-OS",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "id": "d9e02b9e-8ccf-5c32-a6ee-707296cf09fc",
+  "catalog": "elastic",
+  "name": "New GitHub Personal Access Token (PAT) Added",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "configuration"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "github.operation_type",
+      "raw_field": "github.operation_type",
+      "operator": "==",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "create"
+      ]
+    },
+    {
+      "field": "github.category",
+      "raw_field": "github.category",
+      "operator": "==",
+      "values": [
+        "personal_access_token"
+      ],
+      "raw_values": [
+        "personal_access_token"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "personal_access_token.access_granted"
+      ],
+      "raw_values": [
+        "personal_access_token.access_granted"
+      ]
+    }
+  ],
+  "raw_query": "configuration where data_stream.dataset == \"github.audit\" and github.operation_type == \"create\" and\ngithub.category == \"personal_access_token\" and event.action == \"personal_access_token.access_granted\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/github/persistence_new_pat_created.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Credential Access",
+      "Data Source: Github",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

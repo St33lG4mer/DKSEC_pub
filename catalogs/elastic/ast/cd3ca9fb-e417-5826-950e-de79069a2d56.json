@@ -1,0 +1,27 @@
+{
+  "id": "cd3ca9fb-e417-5826-950e-de79069a2d56",
+  "catalog": "elastic",
+  "name": "GCP IAM Role Deletion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.iam.admin.v*.DeleteRole and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/impact_gcp_iam_role_deletion.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

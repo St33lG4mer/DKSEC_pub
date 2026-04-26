@@ -1,0 +1,101 @@
+{
+  "id": "a63170cc-174f-5645-9e2a-cee0fd42c613",
+  "catalog": "elastic",
+  "name": "LSASS Memory Dump Handle Access",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x1fffff",
+        "0x1010",
+        "0x120089",
+        "0x1f3fff"
+      ],
+      "raw_values": [
+        "0x1fffff",
+        "0x1010",
+        "0x120089",
+        "0x1F3FFF"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmaskdescription",
+      "raw_field": "winlog.event_data.AccessMaskDescription",
+      "operator": ":",
+      "values": [
+        "read_control",
+        "read from process memory"
+      ],
+      "raw_values": [
+        "READ_CONTROL",
+        "Read from process memory"
+      ]
+    },
+    {
+      "field": "winlog.event_data.processname",
+      "raw_field": "winlog.event_data.ProcessName",
+      "operator": ":",
+      "values": [
+        "c:\\windows\\system32\\wbem\\wmiprvse.exe",
+        "c:\\windows\\syswow64\\wbem\\wmiprvse.exe",
+        "c:\\windows\\system32\\dllhost.exe",
+        "c:\\windows\\system32\\svchost.exe",
+        "c:\\windows\\system32\\msiexec.exe",
+        "c:\\windows\\explorer.exe"
+      ],
+      "raw_values": [
+        "C:\\Windows\\System32\\wbem\\WmiPrvSE.exe",
+        "C:\\Windows\\SysWOW64\\wbem\\WmiPrvSE.exe",
+        "C:\\Windows\\System32\\dllhost.exe",
+        "C:\\Windows\\System32\\svchost.exe",
+        "C:\\Windows\\System32\\msiexec.exe",
+        "C:\\Windows\\explorer.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4656"
+      ],
+      "raw_values": [
+        "4656"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:\"windows\" and event.code:\"4656\" and\n  (\n    winlog.event_data.AccessMask : (\"0x1fffff\" or \"0x1010\" or \"0x120089\" or \"0x1F3FFF\") or\n    winlog.event_data.AccessMaskDescription : (\"READ_CONTROL\" or \"Read from process memory\")\n  ) and\n  winlog.event_data.ObjectName : *\\\\Windows\\\\System32\\\\lsass.exe and\n  not winlog.event_data.ProcessName : (\n      \"C:\\Windows\\System32\\wbem\\WmiPrvSE.exe\" or\n      \"C:\\Windows\\SysWOW64\\wbem\\WmiPrvSE.exe\" or\n      \"C:\\Windows\\System32\\dllhost.exe\" or\n      \"C:\\Windows\\System32\\svchost.exe\" or\n      \"C:\\Windows\\System32\\msiexec.exe\" or\n      \"C:\\Windows\\explorer.exe\"\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_lsass_memdump_handle_access.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

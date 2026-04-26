@@ -1,0 +1,84 @@
+{
+  "id": "a4ee0a74-35ae-5eb5-8a56-6ed40b6f6c85",
+  "catalog": "elastic",
+  "name": "AWS STS GetCallerIdentity API Called for the First Time",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "sts.amazonaws.com"
+      ],
+      "raw_values": [
+        "sts.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "getcalleridentity"
+      ],
+      "raw_values": [
+        "GetCallerIdentity"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": ":",
+      "values": [
+        "assumedrole"
+      ],
+      "raw_values": [
+        "AssumedRole"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"sts.amazonaws.com\"\n    and event.action: \"GetCallerIdentity\"\n    and event.outcome: \"success\"\n    and not aws.cloudtrail.user_identity.type: \"AssumedRole\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/discovery_new_terms_sts_getcalleridentity.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS STS",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "4751ea8f-5a9a-5be0-b5ae-b6e9fe84365f",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_coldsteel_service_dll_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "newdev.dll"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\newdev.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Roaming\\\\newdev.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/COLDSTEEL/file_event_win_malware_coldsteel_service_dll_creation.eql",
+  "metadata": {}
+}

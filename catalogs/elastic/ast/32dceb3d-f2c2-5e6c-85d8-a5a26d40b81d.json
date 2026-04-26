@@ -1,0 +1,53 @@
+{
+  "id": "32dceb3d-f2c2-5e6c-85d8-a5a26d40b81d",
+  "catalog": "elastic",
+  "name": "Insecure AWS EC2 VPC Security Group Ingress Rule Added",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "aws.cloudtrail.flattened.request_parameters.ippermissions.items.ipranges.items.cidrip",
+      "raw_field": "aws.cloudtrail.flattened.request_parameters.ipPermissions.items.ipRanges.items.cidrIp",
+      "operator": ":",
+      "values": [
+        "0.0.0.0/0",
+        "::/0"
+      ],
+      "raw_values": [
+        "0.0.0.0/0",
+        "::/0"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: ec2.amazonaws.com\n    and event.action: AuthorizeSecurityGroupIngress\n    and event.outcome: success\n    and aws.cloudtrail.flattened.request_parameters.ipPermissions.items.ipRanges.items.cidrIp: (\"0.0.0.0/0\" or \"::/0\")\n    and aws.cloudtrail.flattened.request_parameters.ipPermissions.items.fromPort: (\n        21 or 22 or 23 or 445 or 3389 or 5985 or 5986)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_vpc_security_group_ingress_rule_added_for_remote_connections.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS EC2",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

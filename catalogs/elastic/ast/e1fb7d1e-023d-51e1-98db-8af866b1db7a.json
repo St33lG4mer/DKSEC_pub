@@ -1,0 +1,78 @@
+{
+  "id": "e1fb7d1e-023d-51e1-98db-8af866b1db7a",
+  "catalog": "elastic",
+  "name": "Potential Sudo Token Manipulation via Process Injection",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "uid_change"
+      ],
+      "raw_values": [
+        "exec",
+        "uid_change"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "gdb",
+        "sudo"
+      ],
+      "raw_values": [
+        "gdb",
+        "sudo"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.session_leader.entity_id with maxspan=15s\n[ process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n  process.name == \"gdb\" and process.user.id != \"0\" and process.group.id != \"0\" ]\n[ process where host.os.type == \"linux\" and event.action == \"uid_change\" and event.type == \"change\" and\n  process.name == \"sudo\" and process.user.id == \"0\" and process.group.id == \"0\" ]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_sudo_token_via_process_injection.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

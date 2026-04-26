@@ -1,0 +1,70 @@
+{
+  "id": "7730226b-7707-5253-b93f-d2f566f70c91",
+  "catalog": "sigma",
+  "name": "proc_creation_win_vscode_tunnel_remote_shell_",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "wsl.exe",
+        "bash.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wsl.exe",
+        "*\\\\bash.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "stable-",
+        "node.exe"
+      ],
+      "raw_values": [
+        "*\\\\servers\\\\Stable-*",
+        "*\\\\server\\\\node.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        ".vscode-server"
+      ],
+      "raw_values": [
+        "*.vscode-server*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shellintegration.ps1"
+      ],
+      "raw_values": [
+        "*\\\\terminal\\\\browser\\\\media\\\\shellIntegration.ps1*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\servers\\\\Stable-*\" and process.parent.executable:\"*\\\\server\\\\node.exe\" and process.parent.command_line:\"*.vscode-server*\") and (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and process.command_line:\"*\\\\terminal\\\\browser\\\\media\\\\shellIntegration.ps1*\") or (process.executable like~ (\"*\\\\wsl.exe\", \"*\\\\bash.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_vscode_tunnel_remote_shell_.eql",
+  "metadata": {}
+}

@@ -1,0 +1,67 @@
+{
+  "id": "7fd9b973-5740-5af9-944f-62a414c00782",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_wannacry",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "tasksche.exe",
+        "mssecsvc.exe",
+        "taskdl.exe",
+        "taskhsvc.exe",
+        "taskse.exe",
+        "111.exe",
+        "lhdfrgui.exe",
+        "linuxnew.exe",
+        "wannacry.exe"
+      ],
+      "raw_values": [
+        "*\\\\tasksche.exe",
+        "*\\\\mssecsvc.exe",
+        "*\\\\taskdl.exe",
+        "*\\\\taskhsvc.exe",
+        "*\\\\taskse.exe",
+        "*\\\\111.exe",
+        "*\\\\lhdfrgui.exe",
+        "*\\\\linuxnew.exe",
+        "*\\\\wannacry.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wanadecryptor"
+      ],
+      "raw_values": [
+        "*WanaDecryptor*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "@please_read_me@.txt"
+      ],
+      "raw_values": [
+        "*@Please_Read_Me@.txt*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\tasksche.exe\", \"*\\\\mssecsvc.exe\", \"*\\\\taskdl.exe\", \"*\\\\taskhsvc.exe\", \"*\\\\taskse.exe\", \"*\\\\111.exe\", \"*\\\\lhdfrgui.exe\", \"*\\\\linuxnew.exe\", \"*\\\\wannacry.exe\")) or process.executable:\"*WanaDecryptor*\") or process.command_line:\"*@Please_Read_Me@.txt*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/Malware/WannaCry/proc_creation_win_malware_wannacry.eql",
+  "metadata": {}
+}

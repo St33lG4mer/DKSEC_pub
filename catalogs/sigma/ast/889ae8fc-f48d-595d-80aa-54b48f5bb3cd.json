@@ -1,0 +1,29 @@
+{
+  "id": "889ae8fc-f48d-595d-80aa-54b48f5bb3cd",
+  "catalog": "sigma",
+  "name": "file_event_win_csexec_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "csexecsvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\csexecsvc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\csexecsvc.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_csexec_service.eql",
+  "metadata": {}
+}

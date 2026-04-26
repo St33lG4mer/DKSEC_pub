@@ -1,0 +1,52 @@
+{
+  "id": "5ed1bb8a-d6a2-54a2-9bce-f3edafd63015",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_image_missing",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "system",
+        "registry",
+        "memcompression",
+        "vmmem"
+      ],
+      "raw_values": [
+        "-",
+        "",
+        "System",
+        "Registry",
+        "MemCompression",
+        "vmmem"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "registry",
+        "memcompression",
+        "vmmem"
+      ],
+      "raw_values": [
+        "Registry",
+        "MemCompression",
+        "vmmem"
+      ]
+    }
+  ],
+  "raw_query": "any where (not process.executable:\"*\\\\*\") and (not ((?process.executable == null) or (process.executable like~ (\"-\", \"\")) or ((process.executable like~ (\"System\", \"Registry\", \"MemCompression\", \"vmmem\")) or (process.command_line like~ (\"Registry\", \"MemCompression\", \"vmmem\")))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_image_missing.eql",
+  "metadata": {}
+}

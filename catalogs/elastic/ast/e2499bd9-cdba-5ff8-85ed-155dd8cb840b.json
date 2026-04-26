@@ -1,0 +1,41 @@
+{
+  "id": "e2499bd9-cdba-5ff8-85ed-155dd8cb840b",
+  "catalog": "elastic",
+  "name": "Potential LSASS Memory Dump via PssCaptureSnapShot",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\lsass.exe",
+        "c:\\\\Windows\\\\system32\\\\lsass.exe",
+        "c:\\\\Windows\\\\System32\\\\lsass.exe"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and event.code:10 and\n winlog.event_data.TargetImage:(\"C:\\\\Windows\\\\system32\\\\lsass.exe\" or\n                                 \"c:\\\\Windows\\\\system32\\\\lsass.exe\" or\n                                 \"c:\\\\Windows\\\\System32\\\\lsass.exe\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_suspicious_lsass_access_via_snapshot.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

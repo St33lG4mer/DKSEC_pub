@@ -1,0 +1,33 @@
+{
+  "id": "1728c9c5-7f2a-55e5-a6ac-84ee8f10b876",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ultravnc_susp_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-autoreconnect",
+        "-connect",
+        "-id:"
+      ],
+      "raw_values": [
+        "*-autoreconnect *",
+        "*-connect *",
+        "*-id:*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*-autoreconnect *\" and process.command_line:\"*-connect *\" and process.command_line:\"*-id:*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ultravnc_susp_execution.eql",
+  "metadata": {}
+}

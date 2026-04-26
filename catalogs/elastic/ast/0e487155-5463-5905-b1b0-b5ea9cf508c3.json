@@ -1,0 +1,38 @@
+{
+  "id": "0e487155-5463-5905-b1b0-b5ea9cf508c3",
+  "catalog": "elastic",
+  "name": "M365 Exchange Management Group Role Assigned",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "new-managementroleassignment"
+      ],
+      "raw_values": [
+        "New-ManagementRoleAssignment"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:\"New-ManagementRoleAssignment\" and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/persistence_exchange_management_role_assignment.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

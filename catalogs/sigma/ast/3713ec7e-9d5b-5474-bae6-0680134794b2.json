@@ -1,0 +1,29 @@
+{
+  "id": "3713ec7e-9d5b-5474-bae6-0680134794b2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mftrace_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "mftrace.exe"
+      ],
+      "raw_values": [
+        "*\\\\mftrace.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\mftrace.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mftrace_child_process.eql",
+  "metadata": {}
+}

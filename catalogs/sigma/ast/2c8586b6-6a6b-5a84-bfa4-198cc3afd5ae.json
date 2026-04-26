@@ -1,0 +1,79 @@
+{
+  "id": "2c8586b6-6a6b-5a84-bfa4-198cc3afd5ae",
+  "catalog": "sigma",
+  "name": "win_security_malware_bluesky_ransomware_files_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4663",
+        "4656"
+      ],
+      "raw_values": [
+        "4663",
+        "4656"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        ".bluesky",
+        "decrypt files bluesky"
+      ],
+      "raw_values": [
+        "*.bluesky",
+        "*DECRYPT FILES BLUESKY*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": "like~",
+      "values": [
+        ".bluesky",
+        "decrypt files bluesky"
+      ],
+      "raw_values": [
+        "*.bluesky",
+        "*DECRYPT FILES BLUESKY*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (((event.code like~ (\"4663\", \"4656\")) and (winlog.event_data.ObjectName like~ (\"*.bluesky\", \"*DECRYPT FILES BLUESKY*\"))) or (event.code:\"5145\" and (winlog.event_data.RelativeTargetName like~ (\"*.bluesky\", \"*DECRYPT FILES BLUESKY*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Malware/BlueSky-Ransomware/win_security_malware_bluesky_ransomware_files_indicators.eql",
+  "metadata": {}
+}

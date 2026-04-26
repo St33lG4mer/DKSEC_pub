@@ -1,0 +1,87 @@
+{
+  "id": "1cf74cb8-a036-577b-9fa2-1f9f4add3971",
+  "catalog": "elastic",
+  "name": "Remote Desktop File Opened from Suspicious Path",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ".rdp",
+        "temp?_*.rdp",
+        "7z*.rdp",
+        "bnz.*.rdp"
+      ],
+      "raw_values": [
+        "?:\\\\Users\\\\*\\\\Downloads\\\\*.rdp",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Temp?_*.rdp",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\7z*.rdp",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*\\\\*.rdp",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\BNZ.*.rdp",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\INetCache\\\\Content.Outlook\\\\*.rdp"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "mstsc.exe"
+      ],
+      "raw_values": [
+        "mstsc.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n process.name : \"mstsc.exe\" and\n process.args : (\"?:\\\\Users\\\\*\\\\Downloads\\\\*.rdp\",\n                 \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Temp?_*.rdp\",\n                 \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\7z*.rdp\",\n                 \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*\\\\*.rdp\",\n                 \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\BNZ.*.rdp\",\n                 \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\INetCache\\\\Content.Outlook\\\\*.rdp\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/initial_access_rdp_file_mail_attachment.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

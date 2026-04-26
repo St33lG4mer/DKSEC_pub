@@ -1,0 +1,40 @@
+{
+  "id": "17c9b76c-32b9-522c-85e7-90fe63c90875",
+  "catalog": "sigma",
+  "name": "dns_query_win_onelaunch_update_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "update.onelaunch.com"
+      ],
+      "raw_values": [
+        "update.onelaunch.com"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "onelaunch.exe"
+      ],
+      "raw_values": [
+        "*\\\\OneLaunch.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name:\"update.onelaunch.com\" and process.executable:\"*\\\\OneLaunch.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_onelaunch_update_service.eql",
+  "metadata": {}
+}

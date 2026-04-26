@@ -1,0 +1,102 @@
+{
+  "id": "75c17a7a-2610-522a-b85a-da4ecea7a483",
+  "catalog": "elastic",
+  "name": "BPF filter applied using TC",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "filter",
+        "add",
+        "bpf"
+      ],
+      "raw_values": [
+        "filter",
+        "add",
+        "bpf"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "libvirtd"
+      ],
+      "raw_values": [
+        "/usr/sbin/libvirtd"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.executable == \"/usr/sbin/tc\" and process.args == \"filter\" and process.args == \"add\" and process.args == \"bpf\" and\nnot ?process.parent.executable == \"/usr/sbin/libvirtd\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_tc_bpf_filter.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Threat: TripleCross",
+      "Data Source: Auditd Manager",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

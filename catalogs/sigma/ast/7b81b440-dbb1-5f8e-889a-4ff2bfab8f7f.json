@@ -1,0 +1,42 @@
+{
+  "id": "7b81b440-dbb1-5f8e-889a-4ff2bfab8f7f",
+  "catalog": "sigma",
+  "name": "win_security_user_logoff",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4634",
+        "4647"
+      ],
+      "raw_values": [
+        "4634",
+        "4647"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code like~ (\"4634\", \"4647\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_user_logoff.eql",
+  "metadata": {}
+}

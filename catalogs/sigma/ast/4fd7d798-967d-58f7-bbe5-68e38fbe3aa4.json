@@ -1,0 +1,53 @@
+{
+  "id": "4fd7d798-967d-58f7-bbe5-68e38fbe3aa4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_netsh_fw_add_rule",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "firewall",
+        "add"
+      ],
+      "raw_values": [
+        "* firewall *",
+        "* add *"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\netsh.exe\" or process.pe.original_file_name:\"netsh.exe\") and (process.command_line:\"* firewall *\" and process.command_line:\"* add *\")) and (not (process.command_line like~ (\"*advfirewall firewall add rule name=Dropbox dir=in action=allow \\\"program=?:\\\\Program Files (x86)\\\\Dropbox\\\\Client\\\\Dropbox.exe\\\" enable=yes profile=Any*\", \"*advfirewall firewall add rule name=Dropbox dir=in action=allow \\\"program=?:\\\\Program Files\\\\Dropbox\\\\Client\\\\Dropbox.exe\\\" enable=yes profile=Any*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_netsh_fw_add_rule.eql",
+  "metadata": {}
+}

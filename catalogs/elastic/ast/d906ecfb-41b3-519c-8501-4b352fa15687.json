@@ -1,0 +1,90 @@
+{
+  "id": "d906ecfb-41b3-519c-8501-4b352fa15687",
+  "catalog": "elastic",
+  "name": "FortiGate SOCKS Traffic from an Unusual Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "network.application",
+      "raw_field": "network.application",
+      "operator": "in",
+      "values": [
+        "socks4",
+        "socks5"
+      ],
+      "raw_values": [
+        "SOCKS4",
+        "SOCKS5"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "disconnect_received",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "disconnect_received",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "fortinet_fortigate.log"
+      ],
+      "raw_values": [
+        "fortinet_fortigate.log"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "signature"
+      ],
+      "raw_values": [
+        "signature"
+      ]
+    },
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "endpoint"
+      ],
+      "raw_values": [
+        "endpoint"
+      ]
+    }
+  ],
+  "raw_query": "sequence by source.port, source.ip, destination.ip with maxspan=1m\n [network where data_stream.dataset == \"fortinet_fortigate.log\" and event.action == \"signature\" and network.application in (\"SOCKS4\", \"SOCKS5\")]\n [network where event.module == \"endpoint\" and event.action in (\"disconnect_received\", \"connection_attempted\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/command_and_control_socks_fortigate_endpoint.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: Windows",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Data Source: Fortinet",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

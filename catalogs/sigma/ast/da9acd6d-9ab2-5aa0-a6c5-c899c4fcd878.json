@@ -1,0 +1,44 @@
+{
+  "id": "da9acd6d-9ab2-5aa0-a6c5-c899c4fcd878",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dtrace_kernel_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dtrace.exe"
+      ],
+      "raw_values": [
+        "*\\\\dtrace.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "lkd(0)",
+        "syscall:::return",
+        "lkd("
+      ],
+      "raw_values": [
+        "*lkd(0)*",
+        "*syscall:::return*",
+        "*lkd(*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\dtrace.exe\" and process.command_line:\"*lkd(0)*\") or (process.command_line:\"*syscall:::return*\" and process.command_line:\"*lkd(*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dtrace_kernel_dump.eql",
+  "metadata": {}
+}

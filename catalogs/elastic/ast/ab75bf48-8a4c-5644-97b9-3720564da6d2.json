@@ -1,0 +1,144 @@
+{
+  "id": "ab75bf48-8a4c-5644-97b9-3720564da6d2",
+  "catalog": "elastic",
+  "name": "Attempt to Disable Syslog Service",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "remove",
+        "disable",
+        "stop",
+        "kill",
+        "mask",
+        "syslog",
+        "rsyslog",
+        "syslog-ng",
+        "syslog.service",
+        "rsyslog.service",
+        "syslog-ng.service"
+      ],
+      "raw_values": [
+        "remove",
+        "disable",
+        "stop",
+        "kill",
+        "mask",
+        "syslog",
+        "rsyslog",
+        "syslog-ng",
+        "syslog.service",
+        "rsyslog.service",
+        "syslog-ng.service"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "service",
+        "chkconfig",
+        "update-rc.d",
+        "systemctl"
+      ],
+      "raw_values": [
+        "service",
+        "chkconfig",
+        "update-rc.d",
+        "systemctl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "stop",
+        "off",
+        "hup"
+      ],
+      "raw_values": [
+        "stop",
+        "off",
+        "HUP"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "rsyslog-rotate"
+      ],
+      "raw_values": [
+        "rsyslog-rotate"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and (\n  (process.name == \"service\" and process.args == \"stop\") or\n  (process.name == \"chkconfig\" and process.args == \"off\") or\n  (process.name == \"update-rc.d\" and process.args in (\"remove\", \"disable\")) or\n  (process.name == \"systemctl\" and process.args in (\"disable\", \"stop\", \"kill\", \"mask\"))\n) and\nprocess.args in (\"syslog\", \"rsyslog\", \"syslog-ng\", \"syslog.service\", \"rsyslog.service\", \"syslog-ng.service\") and\nnot (\n  process.parent.name == \"rsyslog-rotate\" or\n  process.args == \"HUP\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_attempt_to_disable_syslog_service.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "id": "1595a2b7-7ca2-5f6b-9d3e-b38ddf8227e6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2024_37085_esxi_admins_group_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\PowerShell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe",
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "net.exe",
+        "net1.exe",
+        "PowerShell.exe",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "domain",
+        "esx admins",
+        "group",
+        "new-adgroup"
+      ],
+      "raw_values": [
+        "*/add*",
+        "*/domain*",
+        "*ESX Admins*",
+        "*group*",
+        "*New-ADGroup*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) or (process.pe.original_file_name like~ (\"net.exe\", \"net1.exe\"))) and (process.command_line:\"*/add*\" and process.command_line:\"*/domain*\" and process.command_line:\"*ESX Admins*\" and process.command_line:\"*group*\")) or (((process.executable like~ (\"*\\\\PowerShell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.exe\", \"pwsh.dll\"))) and (process.command_line:\"*New-ADGroup*\" and process.command_line:\"*ESX Admins*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Exploits/CVE-2024-37085/proc_creation_win_exploit_cve_2024_37085_esxi_admins_group_creation.eql",
+  "metadata": {}
+}

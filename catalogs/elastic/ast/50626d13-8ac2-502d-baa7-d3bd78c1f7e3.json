@@ -1,0 +1,73 @@
+{
+  "id": "50626d13-8ac2-502d-baa7-d3bd78c1f7e3",
+  "catalog": "elastic",
+  "name": "AWS IAM OIDC Provider Created by Rare User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "createopenidconnectprovider"
+      ],
+      "raw_values": [
+        "CreateOpenIDConnectProvider"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"iam.amazonaws.com\"\n    and event.action: \"CreateOpenIDConnectProvider\"\n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_iam_oidc_provider_created.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS IAM",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

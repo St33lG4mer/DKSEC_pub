@@ -1,0 +1,42 @@
+{
+  "id": "9ad561cf-e02f-5536-a598-ea9d7cc5d7aa",
+  "catalog": "sigma",
+  "name": "registry_set_disable_defender_firewall",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\services\\\\sharedaccess\\\\parameters\\\\firewallpolicy\\\\",
+        "\\\\enablefirewall"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\*",
+        "*\\\\EnableFirewall"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Services\\\\SharedAccess\\\\Parameters\\\\FirewallPolicy\\\\*\" and registry.path:\"*\\\\EnableFirewall\" and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disable_defender_firewall.eql",
+  "metadata": {}
+}

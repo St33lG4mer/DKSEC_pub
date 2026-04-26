@@ -1,0 +1,84 @@
+{
+  "id": "fc5c7660-5ed0-53ab-87eb-3e1880a0c4e3",
+  "catalog": "elastic",
+  "name": "Suspicious StartupItem Plist Creation",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "startupparameters.plist"
+      ],
+      "raw_values": [
+        "/System/Library/StartupItems/*/StartupParameters.plist",
+        "/Library/StartupItems/*/StartupParameters.plist"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "==",
+      "values": [
+        "startupparameters.plist"
+      ],
+      "raw_values": [
+        "StartupParameters.plist"
+      ]
+    },
+    {
+      "field": "process.code_signature.signing_id",
+      "raw_field": "process.code_signature.signing_id",
+      "operator": "==",
+      "values": [
+        "com.apple.shove"
+      ],
+      "raw_values": [
+        "com.apple.shove"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.type != \"deletion\" and \n  file.name == \"StartupParameters.plist\" and \n  file.path like (\"/System/Library/StartupItems/*/StartupParameters.plist\", \n  \"/Library/StartupItems/*/StartupParameters.plist\") and\n  not (process.code_signature.signing_id == \"com.apple.shove\" and process.code_signature.trusted == true)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_startup_item_plist_creation.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

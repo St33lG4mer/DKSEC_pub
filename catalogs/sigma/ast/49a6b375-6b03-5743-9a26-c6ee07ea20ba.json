@@ -1,0 +1,33 @@
+{
+  "id": "49a6b375-6b03-5743-9a26-c6ee07ea20ba",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_ke3chang_tidepool",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-property dword -name disablefirstruncustomize -value 2 -force",
+        "-property string -name check_associations -value",
+        "-property dword -name ieharden -value 0 -force"
+      ],
+      "raw_values": [
+        "*-Property DWORD -name DisableFirstRunCustomize -value 2 -Force*",
+        "*-Property String -name Check_Associations -value*",
+        "*-Property DWORD -name IEHarden -value 0 -Force*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*-Property DWORD -name DisableFirstRunCustomize -value 2 -Force*\", \"*-Property String -name Check_Associations -value*\", \"*-Property DWORD -name IEHarden -value 0 -Force*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Malware/Ke3chang-TidePool/proc_creation_win_malware_ke3chang_tidepool.eql",
+  "metadata": {}
+}

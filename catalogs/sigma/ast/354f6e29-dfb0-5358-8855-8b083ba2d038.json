@@ -1,0 +1,56 @@
+{
+  "id": "354f6e29-dfb0-5358-8855-8b083ba2d038",
+  "catalog": "sigma",
+  "name": "proc_creation_win_netsh_wifi_credential_harvesting",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "wlan",
+        "=clear"
+      ],
+      "raw_values": [
+        "*wlan*",
+        "* s*",
+        "* p*",
+        "* k*",
+        "*=clear*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\netsh.exe\" or process.pe.original_file_name:\"netsh.exe\") and (process.command_line:\"*wlan*\" and process.command_line:\"* s*\" and process.command_line:\"* p*\" and process.command_line:\"* k*\" and process.command_line:\"*=clear*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_netsh_wifi_credential_harvesting.eql",
+  "metadata": {}
+}

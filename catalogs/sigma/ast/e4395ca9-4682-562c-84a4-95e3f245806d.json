@@ -1,0 +1,57 @@
+{
+  "id": "e4395ca9-4682-562c-84a4-95e3f245806d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_7zip_password_extraction",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "7z.exe",
+        "7zr.exe",
+        "7za.exe"
+      ],
+      "raw_values": [
+        "*\\\\7z.exe",
+        "*\\\\7zr.exe",
+        "*\\\\7za.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "7z.exe",
+        "7za.exe"
+      ],
+      "raw_values": [
+        "7z.exe",
+        "7za.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "7-zip"
+      ],
+      "raw_values": [
+        "*7-Zip*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.description:\"*7-Zip*\" or (process.executable like~ (\"*\\\\7z.exe\", \"*\\\\7zr.exe\", \"*\\\\7za.exe\")) or (process.pe.original_file_name like~ (\"7z.exe\", \"7za.exe\"))) and (process.command_line:\"* -p*\" and process.command_line:\"* x *\" and process.command_line:\"* -o*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_7zip_password_extraction.eql",
+  "metadata": {}
+}

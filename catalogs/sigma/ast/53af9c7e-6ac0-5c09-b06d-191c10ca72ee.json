@@ -1,0 +1,29 @@
+{
+  "id": "53af9c7e-6ac0-5c09-b06d-191c10ca72ee",
+  "catalog": "sigma",
+  "name": "file_event_win_exploit_cve_2023_36874_wermgr_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "wermgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\wermgr.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\wermgr.exe\" and (not (file.path like~ (\"*:\\\\$WINDOWS.~BT\\\\NewOS\\\\*\", \"*:\\\\$WinREAgent\\\\*\", \"*:\\\\Windows\\\\servicing\\\\LCU\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\", \"*:\\\\Windows\\\\WinSxS\\\\*\", \"*:\\\\WUDownloadCache\\\\*\", \"*:\\\\Windows\\\\SoftwareDistribution\\\\Download\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-36874/file_event_win_exploit_cve_2023_36874_wermgr_creation.eql",
+  "metadata": {}
+}

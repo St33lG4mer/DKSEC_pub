@@ -1,0 +1,133 @@
+{
+  "id": "7e1c71fe-be1e-5a06-bc35-5e1f3ba44ddb",
+  "catalog": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_office",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\office",
+        "\\\\software\\\\microsoft\\\\office",
+        "\\\\word\\\\addins",
+        "\\\\powerpoint\\\\addins",
+        "\\\\outlook\\\\addins",
+        "\\\\onenote\\\\addins",
+        "\\\\excel\\\\addins",
+        "\\\\access\\\\addins",
+        "test\\\\special\\\\perf",
+        "\\\\excel\\\\addins\\\\adhocreportingexcelclientlib.adhocreportingexcelclientaddin.1\\\\",
+        "\\\\excel\\\\addins\\\\excelpluginshell.powermapconnect\\\\",
+        "\\\\excel\\\\addins\\\\nativeshim\\\\",
+        "\\\\excel\\\\addins\\\\nativeshim.inquireconnector.1\\\\",
+        "\\\\excel\\\\addins\\\\powerpivotexcelclientaddin.nativeentry.1\\\\",
+        "\\\\outlook\\\\addins\\\\accessaddin.dc\\\\",
+        "\\\\outlook\\\\addins\\\\colleagueimport.colleagueimportaddin\\\\",
+        "\\\\outlook\\\\addins\\\\evernotecc.evernotecontactconnector\\\\",
+        "\\\\outlook\\\\addins\\\\evernoteolrd.connect\\\\",
+        "\\\\outlook\\\\addins\\\\microsoft.vbaaddinforoutlook.1\\\\",
+        "\\\\outlook\\\\addins\\\\ocoffice.ocforms\\\\",
+        "\\\\outlook\\\\addins\\\\onenote.outlookaddin",
+        "\\\\outlook\\\\addins\\\\oscaddin.connect\\\\",
+        "\\\\outlook\\\\addins\\\\outlookchangenotifier.connect\\\\",
+        "\\\\outlook\\\\addins\\\\ucaddin.lyncaddin.1",
+        "\\\\outlook\\\\addins\\\\ucaddin.ucaddin.1",
+        "\\\\outlook\\\\addins\\\\umoutlookaddin.formregionaddin\\\\",
+        "addintakenotesservice\\\\friendlyname"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Office*",
+        "*\\\\Software\\\\Microsoft\\\\Office*",
+        "*\\\\Word\\\\Addins*",
+        "*\\\\PowerPoint\\\\Addins*",
+        "*\\\\Outlook\\\\Addins*",
+        "*\\\\Onenote\\\\Addins*",
+        "*\\\\Excel\\\\Addins*",
+        "*\\\\Access\\\\Addins*",
+        "*test\\\\Special\\\\Perf*",
+        "*\\\\Excel\\\\Addins\\\\AdHocReportingExcelClientLib.AdHocReportingExcelClientAddIn.1\\\\*",
+        "*\\\\Excel\\\\Addins\\\\ExcelPlugInShell.PowerMapConnect\\\\*",
+        "*\\\\Excel\\\\Addins\\\\NativeShim\\\\*",
+        "*\\\\Excel\\\\Addins\\\\NativeShim.InquireConnector.1\\\\*",
+        "*\\\\Excel\\\\Addins\\\\PowerPivotExcelClientAddIn.NativeEntry.1\\\\*",
+        "*\\\\Outlook\\\\AddIns\\\\AccessAddin.DC\\\\*",
+        "*\\\\Outlook\\\\AddIns\\\\ColleagueImport.ColleagueImportAddin\\\\*",
+        "*\\\\Outlook\\\\AddIns\\\\EvernoteCC.EvernoteContactConnector\\\\*",
+        "*\\\\Outlook\\\\AddIns\\\\EvernoteOLRD.Connect\\\\*",
+        "*\\\\Outlook\\\\Addins\\\\Microsoft.VbaAddinForOutlook.1\\\\*",
+        "*\\\\Outlook\\\\Addins\\\\OcOffice.OcForms\\\\*",
+        "*\\\\Outlook\\\\Addins\\\\OneNote.OutlookAddin*",
+        "*\\\\Outlook\\\\Addins\\\\OscAddin.Connect\\\\*",
+        "*\\\\Outlook\\\\Addins\\\\OutlookChangeNotifier.Connect\\\\*",
+        "*\\\\Outlook\\\\Addins\\\\UCAddin.LyncAddin.1*",
+        "*\\\\Outlook\\\\Addins\\\\UCAddin.UCAddin.1*",
+        "*\\\\Outlook\\\\Addins\\\\UmOutlookAddin.FormRegionAddin\\\\*",
+        "*AddinTakeNotesService\\\\FriendlyName*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "regsvr.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft Office\\\\*",
+        "C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*",
+        "C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\Updates\\\\*",
+        "C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\RegSvr.exe",
+        "C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\x86\\\\RegSvr.exe",
+        "C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\RegSvr.exe",
+        "C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\x86\\\\RegSvr.exe"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "officeclicktorun.exe"
+      ],
+      "raw_values": [
+        "*\\\\OfficeClickToRun.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\office\\\\outlook\\\\addins\\\\antivirus.asoutext\\\\",
+        "\\\\microsoft\\\\office\\\\outlook\\\\addins\\\\avast.asoutext\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Antivirus.AsOutExt\\\\*",
+        "*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Avast.AsOutExt\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((registry.path like~ (\"*\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Office*\", \"*\\\\Software\\\\Microsoft\\\\Office*\")) and (registry.path like~ (\"*\\\\Word\\\\Addins*\", \"*\\\\PowerPoint\\\\Addins*\", \"*\\\\Outlook\\\\Addins*\", \"*\\\\Onenote\\\\Addins*\", \"*\\\\Excel\\\\Addins*\", \"*\\\\Access\\\\Addins*\", \"*test\\\\Special\\\\Perf*\"))) and (not (winlog.event_data.Details:\"(Empty)\" or ((process.executable like~ (\"C:\\\\Program Files\\\\Microsoft Office\\\\*\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\*\", \"C:\\\\Windows\\\\System32\\\\msiexec.exe*\", \"C:\\\\Windows\\\\System32\\\\regsvr32.exe*\")) and (registry.path like~ (\"*\\\\Excel\\\\Addins\\\\AdHocReportingExcelClientLib.AdHocReportingExcelClientAddIn.1\\\\*\", \"*\\\\Excel\\\\Addins\\\\ExcelPlugInShell.PowerMapConnect\\\\*\", \"*\\\\Excel\\\\Addins\\\\NativeShim\\\\*\", \"*\\\\Excel\\\\Addins\\\\NativeShim.InquireConnector.1\\\\*\", \"*\\\\Excel\\\\Addins\\\\PowerPivotExcelClientAddIn.NativeEntry.1\\\\*\", \"*\\\\Outlook\\\\AddIns\\\\AccessAddin.DC\\\\*\", \"*\\\\Outlook\\\\AddIns\\\\ColleagueImport.ColleagueImportAddin\\\\*\", \"*\\\\Outlook\\\\AddIns\\\\EvernoteCC.EvernoteContactConnector\\\\*\", \"*\\\\Outlook\\\\AddIns\\\\EvernoteOLRD.Connect\\\\*\", \"*\\\\Outlook\\\\Addins\\\\Microsoft.VbaAddinForOutlook.1\\\\*\", \"*\\\\Outlook\\\\Addins\\\\OcOffice.OcForms\\\\*\", \"*\\\\Outlook\\\\Addins\\\\OneNote.OutlookAddin*\", \"*\\\\Outlook\\\\Addins\\\\OscAddin.Connect\\\\*\", \"*\\\\Outlook\\\\Addins\\\\OutlookChangeNotifier.Connect\\\\*\", \"*\\\\Outlook\\\\Addins\\\\UCAddin.LyncAddin.1*\", \"*\\\\Outlook\\\\Addins\\\\UCAddin.UCAddin.1*\", \"*\\\\Outlook\\\\Addins\\\\UmOutlookAddin.FormRegionAddin\\\\*\", \"*AddinTakeNotesService\\\\FriendlyName*\"))) or ((process.executable like~ (\"C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*\", \"C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\Updates\\\\*\")) and process.executable:\"*\\\\OfficeClickToRun.exe\"))) and (not (((process.executable like~ (\"C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\RegSvr.exe\", \"C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\x86\\\\RegSvr.exe\")) and registry.path:\"*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Antivirus.AsOutExt\\\\*\") or ((process.executable like~ (\"C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\RegSvr.exe\", \"C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\x86\\\\RegSvr.exe\")) and registry.path:\"*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Avast.AsOutExt\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_office.eql",
+  "metadata": {}
+}

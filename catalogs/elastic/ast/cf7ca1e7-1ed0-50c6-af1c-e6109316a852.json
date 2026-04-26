@@ -1,0 +1,107 @@
+{
+  "id": "cf7ca1e7-1ed0-50c6-af1c-e6109316a852",
+  "catalog": "elastic",
+  "name": "Code Signing Policy Modification Through Registry",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000000",
+        "0x00000001"
+      ],
+      "raw_values": [
+        "0",
+        "0x00000000",
+        "1",
+        "0x00000001"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe",
+        "ccmexec.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\svchost.exe",
+        "?:\\\\Windows\\\\CCM\\\\CcmExec.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\system32\\\\svchost.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\CCM\\\\CcmExec.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "behavioronfailedverify"
+      ],
+      "raw_values": [
+        "BehaviorOnFailedVerify"
+      ]
+    },
+    {
+      "field": "variations",
+      "raw_field": "variations",
+      "operator": ":",
+      "values": [
+        "hkey_users\\\\*\\\\software\\\\policies\\\\microsoft\\\\windows nt\\\\driver signing\\\\behavioronfailedverify"
+      ],
+      "raw_values": [
+        "HKEY_USERS\\\\*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows NT\\\\Driver Signing\\\\BehaviorOnFailedVerify"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.value: \"BehaviorOnFailedVerify\" and registry.data.strings : (\"0\", \"0x00000000\", \"1\", \"0x00000001\") and \n  not process.executable : \n                      (\"?:\\\\Windows\\\\System32\\\\svchost.exe\", \n                       \"?:\\\\Windows\\\\CCM\\\\CcmExec.exe\",\n                       \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\system32\\\\svchost.exe\", \n                       \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\CCM\\\\CcmExec.exe\")\n  /*\n    Full registry key path omitted due to data source variations:\n    \"HKEY_USERS\\\\*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows NT\\\\Driver Signing\\\\BehaviorOnFailedVerify\"\n  */\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_code_signing_policy_modification_registry.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

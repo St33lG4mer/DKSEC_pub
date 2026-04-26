@@ -1,0 +1,40 @@
+{
+  "id": "89b4c997-2575-5b80-b0e3-9dc94330c99c",
+  "catalog": "sigma",
+  "name": "registry_set_apt_forest_blizzard_custom_protocol_handler",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\protocols\\\\handler\\\\rogue\\\\clsid"
+      ],
+      "raw_values": [
+        "*\\\\PROTOCOLS\\\\Handler\\\\rogue\\\\CLSID*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "{026cc6d7-34b2-33d5-b551-ca31eb6ce345}"
+      ],
+      "raw_values": [
+        "{026CC6D7-34B2-33D5-B551-CA31EB6CE345}"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\PROTOCOLS\\\\Handler\\\\rogue\\\\CLSID*\" and winlog.event_data.Details:\"{026CC6D7-34B2-33D5-B551-CA31EB6CE345}\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/TA/Forest-Blizzard/registry_set_apt_forest_blizzard_custom_protocol_handler.eql",
+  "metadata": {}
+}

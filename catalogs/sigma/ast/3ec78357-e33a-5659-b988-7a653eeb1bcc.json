@@ -1,0 +1,70 @@
+{
+  "id": "3ec78357-e33a-5659-b988-7a653eeb1bcc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_disable_sec_services",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "appidsvc",
+        "msmpsvc",
+        "nissrv",
+        "securityhealthservice",
+        "sense",
+        "usosvc",
+        "wdboot",
+        "wdfilter",
+        "wdnisdrv",
+        "wdnissvc",
+        "windefend",
+        "wscsvc",
+        "wuauserv"
+      ],
+      "raw_values": [
+        "*\\\\AppIDSvc*",
+        "*\\\\MsMpSvc*",
+        "*\\\\NisSrv*",
+        "*\\\\SecurityHealthService*",
+        "*\\\\Sense*",
+        "*\\\\UsoSvc*",
+        "*\\\\WdBoot*",
+        "*\\\\WdFilter*",
+        "*\\\\WdNisDrv*",
+        "*\\\\WdNisSvc*",
+        "*\\\\WinDefend*",
+        "*\\\\wscsvc*",
+        "*\\\\wuauserv*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "reg",
+        "add",
+        "d 4",
+        "v start"
+      ],
+      "raw_values": [
+        "*reg*",
+        "*add*",
+        "*d 4*",
+        "*v Start*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*reg*\" and process.command_line:\"*add*\") and ((process.command_line:\"*d 4*\" and process.command_line:\"*v Start*\") and (process.command_line like~ (\"*\\\\AppIDSvc*\", \"*\\\\MsMpSvc*\", \"*\\\\NisSrv*\", \"*\\\\SecurityHealthService*\", \"*\\\\Sense*\", \"*\\\\UsoSvc*\", \"*\\\\WdBoot*\", \"*\\\\WdFilter*\", \"*\\\\WdNisDrv*\", \"*\\\\WdNisSvc*\", \"*\\\\WinDefend*\", \"*\\\\wscsvc*\", \"*\\\\wuauserv*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_disable_sec_services.eql",
+  "metadata": {}
+}

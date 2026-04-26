@@ -1,0 +1,29 @@
+{
+  "id": "7b3a5831-20df-5a07-9773-b2a65ffc090b",
+  "catalog": "sigma",
+  "name": "file_event_win_advanced_ip_scanner",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "advanced ip scanner 2"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\Advanced IP Scanner 2*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\Advanced IP Scanner 2*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_advanced_ip_scanner.eql",
+  "metadata": {}
+}

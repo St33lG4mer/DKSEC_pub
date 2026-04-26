@@ -1,0 +1,70 @@
+{
+  "id": "68ed1fd8-3f06-532e-a6f4-399b406cabab",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_coldsteel_cleanup",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "-k msupdate",
+        "-k msupdate2",
+        "-k alg"
+      ],
+      "raw_values": [
+        "* -k msupdate*",
+        "* -k msupdate2*",
+        "* -k alg*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "updatedriverforplugandplaydevicesw",
+        "servicemain",
+        "diuninstalldevice"
+      ],
+      "raw_values": [
+        "*UpdateDriverForPlugAndPlayDevicesW*",
+        "*ServiceMain*",
+        "*DiUninstallDevice*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\svchost.exe\" and (process.parent.command_line like~ (\"* -k msupdate*\", \"* -k msupdate2*\", \"* -k alg*\")) and process.executable:\"*\\\\rundll32.exe\" and (process.command_line like~ (\"*UpdateDriverForPlugAndPlayDevicesW*\", \"*ServiceMain*\", \"*DiUninstallDevice*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/COLDSTEEL/proc_creation_win_malware_coldsteel_cleanup.eql",
+  "metadata": {}
+}

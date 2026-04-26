@@ -1,0 +1,42 @@
+{
+  "id": "b5e81b01-c681-5d95-b1a4-e49c6fce3893",
+  "catalog": "sigma",
+  "name": "proc_access_win_lsass_powershell_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and winlog.event_data.TargetImage:\"*\\\\lsass.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_access/proc_access_win_lsass_powershell_access.eql",
+  "metadata": {}
+}

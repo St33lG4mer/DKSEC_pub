@@ -1,0 +1,91 @@
+{
+  "id": "5e1f9d79-16a8-511c-bdf8-732d3fa0c7a8",
+  "catalog": "elastic",
+  "name": "System and Network Configuration Check",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "python",
+        "osascript",
+        "perl",
+        "ruby",
+        "node"
+      ],
+      "raw_values": [
+        "python*",
+        "osascript",
+        "perl",
+        "ruby",
+        "node"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "open"
+      ],
+      "raw_values": [
+        "open"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like",
+      "values": [
+        "preferences.plist"
+      ],
+      "raw_values": [
+        "/Library/Preferences/SystemConfiguration/preferences.plist"
+      ]
+    },
+    {
+      "field": "effective_process.executable",
+      "raw_field": "Effective_process.executable",
+      "operator": "like",
+      "values": [
+        "/applications/docker.app/contents/macos/docker"
+      ],
+      "raw_values": [
+        "/Applications/Docker.app/Contents/MacOS/Docker"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.action == \"open\" and \n  file.path like \"/Library/Preferences/SystemConfiguration/preferences.plist\" and\n  (process.name like~ (\"python*\", \"osascript\", \"perl\", \"ruby\", \"node\") or \n   process.executable like (\"/Users/Shared/*\", \"/tmp/*\", \"/private/tmp/*\", \"/var/tmp/*\", \"/private/var/tmp/*\")) and\n  not Effective_process.executable like \"/Applications/Docker.app/Contents/MacOS/Docker\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/discovery_system_and_network_configuration_check.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

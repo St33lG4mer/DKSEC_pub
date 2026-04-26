@@ -1,0 +1,40 @@
+{
+  "id": "97ec608b-97dd-5df7-ae3a-591c041b7413",
+  "catalog": "sigma",
+  "name": "image_load_wmi_persistence_commandline_event_consumer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "wbemcons.dll"
+      ],
+      "raw_values": [
+        "*\\\\wbemcons.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"C:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe\" and file.path:\"*\\\\wbemcons.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_wmi_persistence_commandline_event_consumer.eql",
+  "metadata": {}
+}

@@ -1,0 +1,27 @@
+{
+  "id": "072beebe-4d51-5cd9-844b-85ef9c05d798",
+  "catalog": "elastic",
+  "name": "GCP IAM Custom Role Creation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.iam.admin.v*.CreateRole and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/initial_access_gcp_iam_custom_role_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

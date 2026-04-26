@@ -1,0 +1,67 @@
+{
+  "id": "c0b12a15-273f-551a-914a-36d7e562279e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_obfuscated_ordinal_call",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "#655",
+        "#656"
+      ],
+      "raw_values": [
+        "*#+*",
+        "*#-*",
+        "*#0*",
+        "*#655*",
+        "*#656*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rundll32"
+      ],
+      "raw_values": [
+        "*rundll32*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\" or process.command_line:\"*rundll32*\") and (process.command_line like~ (\"*#+*\", \"*#-*\", \"*#0*\", \"*#655*\", \"*#656*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_obfuscated_ordinal_call.eql",
+  "metadata": {}
+}

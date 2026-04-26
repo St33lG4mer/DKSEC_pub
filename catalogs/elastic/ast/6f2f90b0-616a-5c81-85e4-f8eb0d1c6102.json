@@ -1,0 +1,94 @@
+{
+  "id": "6f2f90b0-616a-5c81-85e4-f8eb0d1c6102",
+  "catalog": "elastic",
+  "name": "Attempt to Install Root Certificate",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like~",
+      "values": [
+        "osascript",
+        "bash",
+        "zsh",
+        "terminal",
+        "python"
+      ],
+      "raw_values": [
+        "osascript",
+        "bash",
+        "sh",
+        "zsh",
+        "Terminal",
+        "Python*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "security"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "add-trusted-cert"
+      ],
+      "raw_values": [
+        "add-trusted-cert"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n  process.name == \"security\" and process.args like \"add-trusted-cert\" and\n  (process.parent.name like~ (\"osascript\", \"bash\", \"sh\", \"zsh\", \"Terminal\", \"Python*\") or (process.parent.code_signature.exists == false or process.parent.code_signature.trusted == false))\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/defense_evasion_install_root_certificate.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

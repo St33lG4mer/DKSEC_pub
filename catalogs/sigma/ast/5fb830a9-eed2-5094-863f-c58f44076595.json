@@ -1,0 +1,58 @@
+{
+  "id": "5fb830a9-eed2-5094-863f-c58f44076595",
+  "catalog": "sigma",
+  "name": "proc_creation_win_bash_file_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bash.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\bash.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\bash.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "bash.exe -",
+        "bash -",
+        "bash.exe",
+        "bash"
+      ],
+      "raw_values": [
+        "*bash.exe -*",
+        "*bash -*",
+        "bash.exe",
+        "bash"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bash.exe"
+      ],
+      "raw_values": [
+        "Bash.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*:\\\\Windows\\\\System32\\\\bash.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\bash.exe\")) or process.pe.original_file_name:\"Bash.exe\") and (not ((process.command_line like~ (\"*bash.exe -*\", \"*bash -*\")) or (?process.command_line == null) or process.command_line==\"\" or (process.command_line like~ (\"bash.exe\", \"bash\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_bash_file_execution.eql",
+  "metadata": {}
+}

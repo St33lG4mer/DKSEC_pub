@@ -1,0 +1,55 @@
+{
+  "id": "0a848fc6-a738-560f-bf9a-a278dce56124",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_recon_product_class",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "antivirusproduct",
+        "antispywareproduct",
+        "firewallproduct"
+      ],
+      "raw_values": [
+        "*AntiVirusProduct*",
+        "*AntiSpywareProduct*",
+        "*FirewallProduct*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\wmic.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\wmic.exe\" or process.pe.original_file_name:\"wmic.exe\") and (process.command_line like~ (\"*AntiVirusProduct*\", \"*AntiSpywareProduct*\", \"*FirewallProduct*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_recon_product_class.eql",
+  "metadata": {}
+}

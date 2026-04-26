@@ -1,0 +1,93 @@
+{
+  "id": "e27a5592-965f-51a9-b634-24064a75260a",
+  "catalog": "elastic",
+  "name": "Potential Kerberos Attack via Bifrost",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "-kerberoast",
+        "askhash",
+        "asktgs",
+        "asktgt",
+        "s4u",
+        "-action",
+        "-ticket",
+        "ptt",
+        "dump"
+      ],
+      "raw_values": [
+        "-kerberoast",
+        "askhash",
+        "asktgs",
+        "asktgt",
+        "s4u",
+        "-action",
+        "-ticket",
+        "ptt",
+        "dump"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "tickets",
+        "keytab"
+      ],
+      "raw_values": [
+        "tickets",
+        "keytab"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.args like~ \"-action\" and\n (\n  process.args like~ (\"-kerberoast\", \"askhash\", \"asktgs\", \"asktgt\", \"s4u\") or\n  (process.args like~ \"-ticket\" and process.args like~ \"ptt\") or\n  (process.args like~ \"dump\" and process.args in~ (\"tickets\", \"keytab\"))\n )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/lateral_movement_credential_access_kerberos_bifrostconsole.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

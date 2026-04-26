@@ -1,0 +1,31 @@
+{
+  "id": "1e7f7465-96a1-586f-9ed0-d6907ced2c70",
+  "catalog": "sigma",
+  "name": "registry_event_apt_diamond_sleet_scheduled_task",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tree\\\\",
+        "windows teamcity settings user interface"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*",
+        "*Windows TeamCity Settings User Interface*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*\" and registry.path:\"*Windows TeamCity Settings User Interface*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Diamond-Sleet/registry_event_apt_diamond_sleet_scheduled_task.eql",
+  "metadata": {}
+}

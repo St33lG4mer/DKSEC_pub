@@ -1,0 +1,40 @@
+{
+  "id": "419b4b99-024c-56b6-b3e1-1ed7976b6bb3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_attrib_system",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "attrib.exe"
+      ],
+      "raw_values": [
+        "*\\\\attrib.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "attrib.exe"
+      ],
+      "raw_values": [
+        "ATTRIB.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\attrib.exe\" or process.pe.original_file_name:\"ATTRIB.EXE\") and process.command_line:\"* +s *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_attrib_system.eql",
+  "metadata": {}
+}

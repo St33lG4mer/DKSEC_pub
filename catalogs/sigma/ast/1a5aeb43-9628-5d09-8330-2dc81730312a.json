@@ -1,0 +1,66 @@
+{
+  "id": "1a5aeb43-9628-5d09-8330-2dc81730312a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_certutil_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "urlcache",
+        "verifyctl",
+        "url"
+      ],
+      "raw_values": [
+        "*urlcache *",
+        "*verifyctl *",
+        "*URL *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "*http*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\certutil.exe\" or process.pe.original_file_name:\"CertUtil.exe\") and (process.command_line like~ (\"*urlcache *\", \"*verifyctl *\", \"*URL *\")) and process.command_line:\"*http*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_certutil_download.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e069e9d1-09d8-5d66-8aeb-2dc844560aac",
+  "catalog": "sigma",
+  "name": "dns_query_win_mega_nz",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "userstorage.mega.co.nz"
+      ],
+      "raw_values": [
+        "*userstorage.mega.co.nz*"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name:\"*userstorage.mega.co.nz*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_mega_nz.eql",
+  "metadata": {}
+}

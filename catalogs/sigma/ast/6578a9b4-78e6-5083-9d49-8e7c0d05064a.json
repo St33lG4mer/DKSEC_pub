@@ -1,0 +1,57 @@
+{
+  "id": "6578a9b4-78e6-5083-9d49-8e7c0d05064a",
+  "catalog": "sigma",
+  "name": "file_event_win_sam_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "sam",
+        "sam.sav",
+        "sam.hive",
+        "_shadowsteal.zip",
+        "sam.export",
+        "hive_sam_",
+        "sam.save",
+        "~reg_sam.save",
+        "sam_backup",
+        "sam.bck",
+        "sam.backup"
+      ],
+      "raw_values": [
+        "*\\\\Temp\\\\sam",
+        "*\\\\sam.sav",
+        "*\\\\Intel\\\\sam",
+        "*\\\\sam.hive",
+        "*\\\\Perflogs\\\\sam",
+        "*\\\\ProgramData\\\\sam",
+        "*\\\\Users\\\\Public\\\\sam",
+        "*\\\\AppData\\\\Local\\\\sam",
+        "*\\\\AppData\\\\Roaming\\\\sam",
+        "*_ShadowSteal.zip",
+        "*\\\\Documents\\\\SAM.export",
+        "*:\\\\sam",
+        "*\\\\hive_sam_*",
+        "*\\\\sam.save*",
+        "*\\\\sam.export*",
+        "*\\\\~reg_sam.save*",
+        "*\\\\sam_backup*",
+        "*\\\\sam.bck*",
+        "*\\\\sam.backup*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\Temp\\\\sam\", \"*\\\\sam.sav\", \"*\\\\Intel\\\\sam\", \"*\\\\sam.hive\", \"*\\\\Perflogs\\\\sam\", \"*\\\\ProgramData\\\\sam\", \"*\\\\Users\\\\Public\\\\sam\", \"*\\\\AppData\\\\Local\\\\sam\", \"*\\\\AppData\\\\Roaming\\\\sam\", \"*_ShadowSteal.zip\", \"*\\\\Documents\\\\SAM.export\", \"*:\\\\sam\")) or (file.path like~ (\"*\\\\hive_sam_*\", \"*\\\\sam.save*\", \"*\\\\sam.export*\", \"*\\\\~reg_sam.save*\", \"*\\\\sam_backup*\", \"*\\\\sam.bck*\", \"*\\\\sam.backup*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_sam_dump.eql",
+  "metadata": {}
+}

@@ -1,0 +1,69 @@
+{
+  "id": "3f3310fb-4dc8-503b-bc6c-a2092b7ae7d2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regsvr32_susp_exec_path_2",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "crmlog"
+      ],
+      "raw_values": [
+        "*:\\\\PerfLogs\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*\\\\Windows\\\\Registration\\\\CRMLog*",
+        "*\\\\Windows\\\\System32\\\\com\\\\dmp\\\\*",
+        "*\\\\Windows\\\\System32\\\\FxsTmp\\\\*",
+        "*\\\\Windows\\\\System32\\\\Microsoft\\\\Crypto\\\\RSA\\\\MachineKeys\\\\*",
+        "*\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\*",
+        "*\\\\Windows\\\\System32\\\\spool\\\\PRINTERS\\\\*",
+        "*\\\\Windows\\\\System32\\\\spool\\\\SERVERS\\\\*",
+        "*\\\\Windows\\\\System32\\\\Tasks_Migrated\\\\*",
+        "*\\\\Windows\\\\System32\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\*",
+        "*\\\\Windows\\\\SysWOW64\\\\com\\\\dmp\\\\*",
+        "*\\\\Windows\\\\SysWOW64\\\\FxsTmp\\\\*",
+        "*\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\PLA\\\\System\\\\*",
+        "*\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\*",
+        "*\\\\Windows\\\\Tasks\\\\*",
+        "*\\\\Windows\\\\Tracing\\\\*",
+        "* \\",
+        ", "
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "REGSVR32.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\regsvr32.exe\" or process.pe.original_file_name:\"REGSVR32.EXE\") and ((process.command_line like~ (\"*:\\\\PerfLogs\\\\*\", \"*:\\\\Temp\\\\*\", \"*\\\\Windows\\\\Registration\\\\CRMLog*\", \"*\\\\Windows\\\\System32\\\\com\\\\dmp\\\\*\", \"*\\\\Windows\\\\System32\\\\FxsTmp\\\\*\", \"*\\\\Windows\\\\System32\\\\Microsoft\\\\Crypto\\\\RSA\\\\MachineKeys\\\\*\", \"*\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\*\", \"*\\\\Windows\\\\System32\\\\spool\\\\PRINTERS\\\\*\", \"*\\\\Windows\\\\System32\\\\spool\\\\SERVERS\\\\*\", \"*\\\\Windows\\\\System32\\\\Tasks_Migrated\\\\*\", \"*\\\\Windows\\\\System32\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\*\", \"*\\\\Windows\\\\SysWOW64\\\\com\\\\dmp\\\\*\", \"*\\\\Windows\\\\SysWOW64\\\\FxsTmp\\\\*\", \"*\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\PLA\\\\System\\\\*\", \"*\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\*\", \"*\\\\Windows\\\\Tasks\\\\*\", \"*\\\\Windows\\\\Tracing\\\\*\")) or ((process.command_line like~ (\"* \\\"C:\\\\*\", \"* C:\\\\*\", \"* 'C:\\\\*\", \"*D:\\\\*\")) and (not (process.command_line like~ (\"*C:\\\\Program Files (x86)\\\\*\", \"*C:\\\\Program Files\\\\*\", \"*C:\\\\ProgramData\\\\*\", \"*C:\\\\Users\\\\*\", \"* C:\\\\Windows\\\\*\", \"* \\\"C:\\\\Windows\\\\*\", \"* 'C:\\\\Windows\\\\*\"))))) and (not (process.command_line==\"\" or (?process.command_line == null)))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regsvr32_susp_exec_path_2.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e90ae9b0-ebba-5820-bffd-d63ac704e579",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_runexehelper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "runexehelper.exe"
+      ],
+      "raw_values": [
+        "*\\\\runexehelper.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\runexehelper.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_runexehelper.eql",
+  "metadata": {}
+}

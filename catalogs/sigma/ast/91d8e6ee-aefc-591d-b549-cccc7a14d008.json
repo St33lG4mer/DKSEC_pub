@@ -1,0 +1,87 @@
+{
+  "id": "91d8e6ee-aefc-591d-b549-cccc7a14d008",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_raspberry_robin_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rundll32.exe",
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe",
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "installdriver",
+        "setfiledsndir",
+        "vkipdse"
+      ],
+      "raw_values": [
+        "*installdriver*",
+        "*setfiledsndir*",
+        "*vkipdse*",
+        "*-a",
+        "*/a",
+        "*–a",
+        "*—a",
+        "*―a",
+        "*-f",
+        "*/f",
+        "*–f",
+        "*—f",
+        "*―f",
+        "*-s",
+        "*/s",
+        "*–s",
+        "*—s",
+        "*―s"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "fodhelper.exe"
+      ],
+      "raw_values": [
+        "*\\\\fodhelper.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "odbcconf.exe",
+        "regsvr",
+        "shellexec_rundll"
+      ],
+      "raw_values": [
+        "*odbcconf.exe*",
+        "*regsvr*",
+        "*shellexec_rundll*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\fodhelper.exe\" and (process.executable like~ (\"*\\\\rundll32.exe\", \"*\\\\regsvr32.exe\")) and (process.command_line:\"*odbcconf.exe*\" and process.command_line:\"*regsvr*\" and process.command_line:\"*shellexec_rundll*\") and (process.command_line like~ (\"*installdriver*\", \"*setfiledsndir*\", \"*vkipdse*\")) and (process.command_line like~ (\"*-a\", \"*/a\", \"*–a\", \"*—a\", \"*―a\") or process.command_line like~ (\"*-f\", \"*/f\", \"*–f\", \"*—f\", \"*―f\") or process.command_line like~ (\"*-s\", \"*/s\", \"*–s\", \"*—s\", \"*―s\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Malware/Raspberry-Robin/proc_creation_win_malware_raspberry_robin_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,27 @@
+{
+  "id": "5e45160f-be24-5573-a3d6-978d18c11b25",
+  "catalog": "elastic",
+  "name": "Spike in Failed Logon Events",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/credential_access_ml_auth_spike_in_failed_logon_events.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "f620d5df-6c47-549d-984a-64cd0162fb39",
+  "catalog": "sigma",
+  "name": "registry_set_office_disable_python_security_warnings",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\office\\\\",
+        "\\\\excel\\\\security\\\\pythonfunctionwarnings"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Excel\\\\Security\\\\PythonFunctionWarnings"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Office\\\\*\" and registry.path:\"*\\\\Excel\\\\Security\\\\PythonFunctionWarnings\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_office_disable_python_security_warnings.eql",
+  "metadata": {}
+}

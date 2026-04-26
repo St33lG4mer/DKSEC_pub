@@ -1,0 +1,160 @@
+{
+  "id": "5f1b5961-f52e-5c0b-921e-8a8fd8a8cb33",
+  "catalog": "sigma",
+  "name": "proc_creation_win_webshell_susp_process_spawned_from_webserver",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "caddy.exe",
+        "httpd.exe",
+        "nginx.exe",
+        "php-cgi.exe",
+        "php.exe",
+        "tomcat.exe",
+        "umworkerprocess.exe",
+        "w3wp.exe",
+        "ws_tomcatservice.exe",
+        "java.exe",
+        "javaw.exe",
+        "-tomcat-",
+        "tomcat"
+      ],
+      "raw_values": [
+        "*\\\\caddy.exe",
+        "*\\\\httpd.exe",
+        "*\\\\nginx.exe",
+        "*\\\\php-cgi.exe",
+        "*\\\\php.exe",
+        "*\\\\tomcat.exe",
+        "*\\\\UMWorkerProcess.exe",
+        "*\\\\w3wp.exe",
+        "*\\\\ws_TomcatService.exe",
+        "*\\\\java.exe",
+        "*\\\\javaw.exe",
+        "*-tomcat-*",
+        "*\\\\tomcat*"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "catalina_home",
+        "catalina.home",
+        "catalina.jar"
+      ],
+      "raw_values": [
+        "*CATALINA_HOME*",
+        "*catalina.home*",
+        "*catalina.jar*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "arp.exe",
+        "at.exe",
+        "bash.exe",
+        "bitsadmin.exe",
+        "certutil.exe",
+        "cmd.exe",
+        "cscript.exe",
+        "dsget.exe",
+        "hostname.exe",
+        "nbtstat.exe",
+        "net.exe",
+        "net1.exe",
+        "netdom.exe",
+        "netsh.exe",
+        "nltest.exe",
+        "ntdsutil.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "qprocess.exe",
+        "query.exe",
+        "qwinsta.exe",
+        "reg.exe",
+        "rundll32.exe",
+        "sc.exe",
+        "sh.exe",
+        "wmic.exe",
+        "wscript.exe",
+        "wusa.exe"
+      ],
+      "raw_values": [
+        "*\\\\arp.exe",
+        "*\\\\at.exe",
+        "*\\\\bash.exe",
+        "*\\\\bitsadmin.exe",
+        "*\\\\certutil.exe",
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\dsget.exe",
+        "*\\\\hostname.exe",
+        "*\\\\nbtstat.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\netdom.exe",
+        "*\\\\netsh.exe",
+        "*\\\\nltest.exe",
+        "*\\\\ntdsutil.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\qprocess.exe",
+        "*\\\\query.exe",
+        "*\\\\qwinsta.exe",
+        "*\\\\reg.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\sc.exe",
+        "*\\\\sh.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe",
+        "*\\\\wusa.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "java.exe"
+      ],
+      "raw_values": [
+        "*\\\\java.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sc query",
+        "admanager plus"
+      ],
+      "raw_values": [
+        "*Windows\\\\system32\\\\cmd.exe /c C:\\\\ManageEngine\\\\ADManager \\",
+        "*sc query*",
+        "*ADManager Plus*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\caddy.exe\", \"*\\\\httpd.exe\", \"*\\\\nginx.exe\", \"*\\\\php-cgi.exe\", \"*\\\\php.exe\", \"*\\\\tomcat.exe\", \"*\\\\UMWorkerProcess.exe\", \"*\\\\w3wp.exe\", \"*\\\\ws_TomcatService.exe\")) or ((process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and (process.parent.executable like~ (\"*-tomcat-*\", \"*\\\\tomcat*\"))) or ((process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and (process.parent.command_line like~ (\"*CATALINA_HOME*\", \"*catalina.home*\", \"*catalina.jar*\")))) and (process.executable like~ (\"*\\\\arp.exe\", \"*\\\\at.exe\", \"*\\\\bash.exe\", \"*\\\\bitsadmin.exe\", \"*\\\\certutil.exe\", \"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\dsget.exe\", \"*\\\\hostname.exe\", \"*\\\\nbtstat.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\netdom.exe\", \"*\\\\netsh.exe\", \"*\\\\nltest.exe\", \"*\\\\ntdsutil.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\qprocess.exe\", \"*\\\\query.exe\", \"*\\\\qwinsta.exe\", \"*\\\\reg.exe\", \"*\\\\rundll32.exe\", \"*\\\\sc.exe\", \"*\\\\sh.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\", \"*\\\\wusa.exe\")) and (not ((process.parent.executable:\"*\\\\java.exe\" and process.command_line:\"*Windows\\\\system32\\\\cmd.exe /c C:\\\\ManageEngine\\\\ADManager \\\"Plus\\\\ES\\\\bin\\\\elasticsearch.bat -Enode.name=RMP-NODE1 -pelasticsearch-pid.txt\") or (process.parent.executable:\"*\\\\java.exe\" and (process.command_line:\"*sc query*\" and process.command_line:\"*ADManager Plus*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_webshell_susp_process_spawned_from_webserver.eql",
+  "metadata": {}
+}

@@ -1,0 +1,85 @@
+{
+  "id": "6e4f5ae2-1a92-571e-a313-d8f3ed1b823a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_certutil_encode_susp_extensions",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-encode",
+        "encode",
+        "–encode",
+        "—encode",
+        "―encode",
+        ".acl",
+        ".bat",
+        ".doc",
+        ".gif",
+        ".jpeg",
+        ".jpg",
+        ".mp3",
+        ".pdf",
+        ".png",
+        ".ppt",
+        ".tmp",
+        ".xls",
+        ".xml"
+      ],
+      "raw_values": [
+        "*-encode*",
+        "*/encode*",
+        "*–encode*",
+        "*—encode*",
+        "*―encode*",
+        "*.acl*",
+        "*.bat*",
+        "*.doc*",
+        "*.gif*",
+        "*.jpeg*",
+        "*.jpg*",
+        "*.mp3*",
+        "*.pdf*",
+        "*.png*",
+        "*.ppt*",
+        "*.tmp*",
+        "*.xls*",
+        "*.xml*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\certutil.exe\" or process.pe.original_file_name:\"CertUtil.exe\") and process.command_line like~ (\"*-encode*\", \"*/encode*\", \"*–encode*\", \"*—encode*\", \"*―encode*\") and (process.command_line like~ (\"*.acl*\", \"*.bat*\", \"*.doc*\", \"*.gif*\", \"*.jpeg*\", \"*.jpg*\", \"*.mp3*\", \"*.pdf*\", \"*.png*\", \"*.ppt*\", \"*.tmp*\", \"*.xls*\", \"*.xml*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_certutil_encode_susp_extensions.eql",
+  "metadata": {}
+}

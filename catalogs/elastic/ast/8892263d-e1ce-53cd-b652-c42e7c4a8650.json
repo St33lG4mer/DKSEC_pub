@@ -1,0 +1,112 @@
+{
+  "id": "8892263d-e1ce-53cd-b652-c42e7c4a8650",
+  "catalog": "elastic",
+  "name": "Suspicious Emond Child Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "python",
+        "perl",
+        "php",
+        "osascript",
+        "pwsh",
+        "curl",
+        "wget",
+        "touch",
+        "echo",
+        "base64",
+        "launchctl"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "Python",
+        "python*",
+        "perl*",
+        "php*",
+        "osascript",
+        "pwsh",
+        "curl",
+        "wget",
+        "cp",
+        "mv",
+        "touch",
+        "echo",
+        "base64",
+        "launchctl"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "emond"
+      ],
+      "raw_values": [
+        "emond"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.parent.name == \"emond\" and\n process.name like~ (\n   \"bash\",\n   \"dash\",\n   \"sh\",\n   \"tcsh\",\n   \"csh\",\n   \"zsh\",\n   \"ksh\",\n   \"fish\",\n   \"Python\",\n   \"python*\",\n   \"perl*\",\n   \"php*\",\n   \"osascript\",\n   \"pwsh\",\n   \"curl\",\n   \"wget\",\n   \"cp\",\n   \"mv\",\n   \"touch\",\n   \"echo\",\n   \"base64\",\n   \"launchctl\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_emond_rules_process_execution.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

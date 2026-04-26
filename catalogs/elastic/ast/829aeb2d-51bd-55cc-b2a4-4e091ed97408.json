@@ -1,0 +1,72 @@
+{
+  "id": "829aeb2d-51bd-55cc-b2a4-4e091ed97408",
+  "catalog": "elastic",
+  "name": "AppArmor Policy Interface Access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "opened-file",
+        "wrote-to-file",
+        "deleted"
+      ],
+      "raw_values": [
+        "opened-file",
+        "wrote-to-file",
+        "deleted"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "in",
+      "values": [
+        ".load",
+        ".replace",
+        ".remove"
+      ],
+      "raw_values": [
+        "/sys/kernel/security/apparmor/.load",
+        ".load",
+        "/sys/kernel/security/apparmor/.replace",
+        ".replace",
+        "/sys/kernel/security/apparmor/.remove",
+        ".remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"opened-file\", \"wrote-to-file\", \"deleted\") and\nfile.path in (\n  \"/sys/kernel/security/apparmor/.load\", \".load\",\n  \"/sys/kernel/security/apparmor/.replace\", \".replace\",\n  \"/sys/kernel/security/apparmor/.remove\", \".remove\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_apparmor_policy_access.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

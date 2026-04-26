@@ -1,0 +1,131 @@
+{
+  "id": "131d0671-c664-56d8-b900-07f4b1a62006",
+  "catalog": "elastic",
+  "name": "Elastic Defend Alert from Package Manager Install Ancestry",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "node",
+        "node.exe",
+        "uv.exe",
+        "cargo",
+        "cargo.exe",
+        "rustc",
+        "rustc.exe"
+      ],
+      "raw_values": [
+        "node",
+        "node.exe",
+        "uv",
+        "uv.exe",
+        "cargo",
+        "cargo.exe",
+        "rustc",
+        "rustc.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "==",
+      "values": [
+        "npm install",
+        "npm i",
+        "npx",
+        "yarn install",
+        "yarn add",
+        "pnpm install",
+        "pnpm add",
+        "npm-cli.js*install",
+        "setup.js",
+        "pip install",
+        "pip3 install",
+        "-m pip install",
+        "setup.py install",
+        "setup.py develop",
+        "pipx install",
+        "poetry install",
+        "poetry add",
+        "uv pip install",
+        "uv add",
+        "cargo install",
+        "cargo build",
+        "cargo run",
+        "cargo fetch"
+      ],
+      "raw_values": [
+        "*npm install*",
+        "*npm i *",
+        "*npx *",
+        "*yarn install*",
+        "*yarn add*",
+        "*pnpm install*",
+        "*pnpm add*",
+        "*npm-cli.js*install*",
+        "*setup.js*",
+        "*pip install*",
+        "*pip3 install*",
+        "*-m pip install*",
+        "*setup.py install*",
+        "*setup.py develop*",
+        "*pipx install*",
+        "*poetry install*",
+        "*poetry add*",
+        "*uv pip install*",
+        "*uv add*",
+        "*cargo install*",
+        "*cargo build*",
+        "*cargo run*",
+        "*cargo fetch*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like",
+      "values": [
+        "python",
+        "pip"
+      ],
+      "raw_values": [
+        "python*",
+        "pip*"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "endpoint.alerts"
+      ],
+      "raw_values": [
+        "endpoint.alerts"
+      ]
+    }
+  ],
+  "raw_query": "FROM logs-endpoint.alerts-*, logs-endpoint.events.process-* METADATA _id, _version, _index\n\n| EVAL is_pkg_install = CASE(\n    // npm  npx  yarn  pnpm (Node.js ecosystem)\n    process.parent.name IN (\"node\", \"node.exe\") AND (\n      process.parent.command_line LIKE \"*npm install*\" OR\n      process.parent.command_line LIKE \"*npm i *\" OR\n      ends_with(process.parent.command_line, \"npm i\") OR\n      process.parent.command_line LIKE \"*npx *\" OR\n      process.parent.command_line LIKE \"*yarn install*\" OR\n      process.parent.command_line LIKE \"*yarn add*\" OR\n      process.parent.command_line LIKE \"*pnpm install*\" OR\n      process.parent.command_line LIKE \"*pnpm add*\" OR\n      process.parent.command_line LIKE \"*npm-cli.js*install*\" OR\n      process.parent.command_line LIKE \"*setup.js*\"\n    ), true,\n\n    // pip  pip3 pipx poetry  uv (Python ecosystem)\n    ((process.parent.name like \"python*\" or process.parent.name like \"pip*\" or process.parent.name IN (\"uv\", \"uv.exe\") ) AND (\n      process.parent.command_line LIKE \"*pip install*\" OR\n      process.parent.command_line LIKE \"*pip3 install*\" OR\n      process.parent.command_line LIKE \"*-m pip install*\" OR\n      process.parent.command_line LIKE \"*setup.py install*\" OR\n      process.parent.command_line LIKE \"*setup.py develop*\" OR\n      process.parent.command_line LIKE \"*pipx install*\" OR\n      process.parent.command_line LIKE \"*poetry install*\" OR\n      process.parent.command_line LIKE \"*poetry add*\" OR\n      process.parent.command_line LIKE \"*uv pip install*\" OR\n      process.parent.command_line LIKE \"*uv add*\")), true,\n\n    // cargo (Rust / crates.io ecosystem)\n    process.parent.name IN (\"cargo\", \"cargo.exe\", \"rustc\", \"rustc.exe\") AND (\n      process.parent.command_line LIKE \"*cargo install*\" OR\n      process.parent.command_line LIKE \"*cargo build*\" OR\n      process.parent.command_line LIKE \"*cargo run*\" OR\n      process.parent.command_line LIKE \"*cargo fetch*\"), true,\n\n    false\n  )\n\n| WHERE process.Ext.ancestry IS NOT NULL AND (data_stream.dataset == \"endpoint.alerts\" OR is_pkg_install)\n\n// Capture entity_ids for package install parent processes\n| EVAL all_entity_id = CASE(is_pkg_install, process.parent.entity_id, \"null\")\n\n// Collect all package install entity_ids globally\n| INLINE STATS all_pkg_entity_ids = VALUES(all_entity_id) WHERE all_entity_id != \"null\"\n\n// Find which package install entity_ids appear in this process's ancestry\n| EVAL Esql.pkg_ancestor_ids = MV_INTERSECTION(all_pkg_entity_ids, process.Ext.ancestry)\n\n// Elastic Defend alerts descended from a package install process\n| WHERE Esql.pkg_ancestor_ids IS NOT NULL AND data_stream.dataset == \"endpoint.alerts\"\n\n| KEEP *\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/initial_access_elastic_defend_alert_package_manager_ancestor.toml",
+  "metadata": {
+    "risk_score": 99,
+    "tags": [
+      "Domain: Endpoint",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

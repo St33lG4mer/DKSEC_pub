@@ -1,0 +1,108 @@
+{
+  "id": "171ee2b0-f63b-57aa-836b-efb182b93543",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_electron_app_children",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "chrome.exe",
+        "discord.exe",
+        "githubdesktop.exe",
+        "keybase.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "msteams.exe",
+        "slack.exe",
+        "teams.exe"
+      ],
+      "raw_values": [
+        "*\\\\chrome.exe",
+        "*\\\\discord.exe",
+        "*\\\\GitHubDesktop.exe",
+        "*\\\\keybase.exe",
+        "*\\\\msedge.exe",
+        "*\\\\msedgewebview2.exe",
+        "*\\\\msteams.exe",
+        "*\\\\slack.exe",
+        "*\\\\teams.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "whoami.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\whoami.exe",
+        "*\\\\wscript.exe",
+        "*:\\\\ProgramData\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "discord.exe"
+      ],
+      "raw_values": [
+        "*\\\\Discord.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "nvidia-smi.exe"
+      ],
+      "raw_values": [
+        "*\\\\NVSMI\\\\nvidia-smi.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\chrome.exe\", \"*\\\\discord.exe\", \"*\\\\GitHubDesktop.exe\", \"*\\\\keybase.exe\", \"*\\\\msedge.exe\", \"*\\\\msedgewebview2.exe\", \"*\\\\msteams.exe\", \"*\\\\slack.exe\", \"*\\\\teams.exe\")) and ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\whoami.exe\", \"*\\\\wscript.exe\")) or (process.executable like~ (\"*:\\\\ProgramData\\\\*\", \"*:\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\"))) and (not (process.parent.executable:\"*\\\\Discord.exe\" and process.executable:\"*\\\\cmd.exe\" and process.command_line:\"*\\\\NVSMI\\\\nvidia-smi.exe*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_electron_app_children.eql",
+  "metadata": {}
+}

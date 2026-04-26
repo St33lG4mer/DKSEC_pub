@@ -1,0 +1,40 @@
+{
+  "id": "10ff83b1-406a-51a8-8bc7-9abcaf79a93a",
+  "catalog": "sigma",
+  "name": "registry_set_disabled_pua_protection_on_microsoft_defender",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\policies\\\\microsoft\\\\windows defender\\\\puaprotection"
+      ],
+      "raw_values": [
+        "*\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\PUAProtection*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\PUAProtection*\" and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disabled_pua_protection_on_microsoft_defender.eql",
+  "metadata": {}
+}

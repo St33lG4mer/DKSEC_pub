@@ -1,0 +1,79 @@
+{
+  "id": "ad81115a-1aef-52b0-8cba-6fc985b7f3f8",
+  "catalog": "elastic",
+  "name": "Correlated Alerts on Similar User Identities",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.type",
+      "raw_field": "kibana.alert.rule.type",
+      "operator": "in",
+      "values": [
+        "threat_match",
+        "machine_learning"
+      ],
+      "raw_values": [
+        "threat_match",
+        "machine_learning"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "in",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20",
+        "0"
+      ]
+    },
+    {
+      "field": "kibana.alert.workflow_status",
+      "raw_field": "kibana.alert.workflow_status",
+      "operator": "==",
+      "values": [
+        "open"
+      ],
+      "raw_values": [
+        "open"
+      ]
+    },
+    {
+      "field": "alerts",
+      "raw_field": "alerts",
+      "operator": ":",
+      "values": [
+        ", users_list, instructions)\n| completion triage_result = prompt with {"
+      ],
+      "raw_values": [
+        ", users_list, instructions)\n| COMPLETION triage_result = prompt WITH { "
+      ]
+    }
+  ],
+  "raw_query": "from .alerts-security.*\n\n// truncate timestamp to 5-minute window\n| eval Esql.time_window_date_trunc = date_trunc(5 minutes, @timestamp)\n\n// high severity alerts excluding system standard user.ids\n| where kibana.alert.rule.name is not null and user.name is not null and kibana.alert.risk_score >= 73 and kibana.alert.workflow_status == \"open\" and \n        not kibana.alert.rule.type in (\"threat_match\", \"machine_learning\") and\n        not user.id in (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\", \"0\")\n\n// group alerts by short time window and extract values of interest for alert triage\n| stats Esql.event_module_distinct_count = COUNT_DISTINCT(event.module),\n        Esql.user_name_distinct_count = COUNT_DISTINCT(user.name),\n        Esql.rule_name_distinct_count = COUNT_DISTINCT(kibana.alert.rule.name),\n        Esql.event_category_distinct_count = COUNT_DISTINCT(event.category),\n        Esql.rule_risk_score_distinct_count = COUNT_DISTINCT(kibana.alert.risk_score),\n        Esql.event_module_values = VALUES(event.module),\n        Esql.rule_name_values = VALUES(kibana.alert.rule.name),\n        Esql.message_values = VALUES(message),\n        Esql.event_category_values = VALUES(event.category),\n        Esql.event_action_values = VALUES(event.action),\n        Esql.source_ip_values = VALUES(source.ip),\n        Esql.destination_ip_values = VALUES(destination.ip),\n        Esql.host_id_values = VALUES(host.id),\n        Esql.agent_id_values = VALUES(agent.id),\n        Esql.rule_severity_values = VALUES(kibana.alert.risk_score),\n        Esql.user_name_values = VALUES(user.name) by Esql.time_window_date_trunc\n\n// filter for alerts from different integrations with unique categories\n| where Esql.event_module_distinct_count >= 2 and Esql.user_name_distinct_count >= 2 and Esql.event_category_distinct_count >= 2\n\n// build context for LLM analysis\n| eval users_list = MV_CONCAT(Esql.user_name_values, \",\")\n\n// LLM analysis\n| eval instructions = \"Analyze the provided user names and return a boolean value true if at least 2 of them are similar and they may belong to the same human identify or false if not, do not compare user names that may look like service accounts. If the list of users has more than 2 users and only 2 of them are similar consider this as true. Structure the output as follows: verdict=<verdict> confidence=<score between 0.0 and 1.0> summary=<short reason max 500 words> without any other response statements on a single line.\"\n| eval prompt = CONCAT(\"User identities extracted from different alerts: \", users_list, instructions)\n| COMPLETION triage_result = prompt WITH { \"inference_id\": \".gp-llm-v2-completion\"}\n\n// parse LLM response\n| DISSECT triage_result \"\"\"verdict=%{Esql.verdict} confidence=%{Esql.confidence} summary=%{Esql.summary}\"\"\"\n\n// filter for similar user values\n| where TO_LOWER(Esql.verdict) == \"true\"\n| keep Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/multiple_alerts_llm_by_user_entity.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Identity",
+      "Domain: LLM",
+      "Use Case: Threat Detection",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Rule Type: Higher-Order Rule"
+    ]
+  }
+}

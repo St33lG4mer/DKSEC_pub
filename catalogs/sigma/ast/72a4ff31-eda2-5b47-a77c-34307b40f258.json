@@ -1,0 +1,40 @@
+{
+  "id": "72a4ff31-eda2-5b47-a77c-34307b40f258",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_sharpevtmute",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sharpevtmute.exe"
+      ],
+      "raw_values": [
+        "*\\\\SharpEvtMute.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "sharpevtmute"
+      ],
+      "raw_values": [
+        "SharpEvtMute"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\SharpEvtMute.exe\" or process.pe.description:\"SharpEvtMute\" or (process.command_line like~ (\"*--Filter \\\"rule *\", \"*--Encoded --Filter \\\\\\\"*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_sharpevtmute.eql",
+  "metadata": {}
+}

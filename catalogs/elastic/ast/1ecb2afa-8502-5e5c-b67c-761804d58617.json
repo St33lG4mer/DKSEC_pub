@@ -1,0 +1,175 @@
+{
+  "id": "1ecb2afa-8502-5e5c-b67c-761804d58617",
+  "catalog": "elastic",
+  "name": "Potential Linux Ransomware Note Creation Detected",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dpkg",
+        "yum",
+        "dnf",
+        "rpm",
+        "dockerd",
+        "java",
+        "pip",
+        "python",
+        "node",
+        "containerd",
+        "php",
+        "p4d",
+        "conda",
+        "chrome",
+        "imap",
+        "cmake",
+        "firefox",
+        "semanage",
+        "semodule",
+        "ansible-galaxy",
+        "fc-cache",
+        "jammy",
+        "git",
+        "systemsettings",
+        "vmis-launcher",
+        "bundle",
+        "kudu-tserver",
+        "suldownloader",
+        "rustup-init",
+        "bun"
+      ],
+      "raw_values": [
+        "./*",
+        "/tmp/*",
+        "/var/tmp/*",
+        "/dev/shm/*",
+        "/var/run/*",
+        "/boot/*",
+        "dpkg",
+        "yum",
+        "dnf",
+        "rpm",
+        "dockerd",
+        "go",
+        "java",
+        "pip*",
+        "python*",
+        "node",
+        "containerd",
+        "php",
+        "p4d",
+        "conda",
+        "chrome",
+        "imap",
+        "cmake",
+        "firefox",
+        "semanage",
+        "semodule",
+        "ansible-galaxy",
+        "fc-cache",
+        "jammy",
+        "git",
+        "systemsettings",
+        "vmis-launcher",
+        "bundle",
+        "kudu-tserver",
+        "suldownloader",
+        "rustup-init",
+        "bun"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "restore",
+        "lock",
+        "recovery",
+        "read",
+        "instruction",
+        "how_to",
+        "ransom"
+      ],
+      "raw_values": [
+        "*restore*",
+        "*lock*",
+        "*recovery*",
+        "*read*",
+        "*instruction*",
+        "*how_to*",
+        "*ransom*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "runc",
+        "qemu-aarch64"
+      ],
+      "raw_values": [
+        "./runc",
+        "./usr/bin/qemu-aarch64"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "rename",
+        "creation"
+      ],
+      "raw_values": [
+        "rename",
+        "creation"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id, host.id with maxspan=1s\n  [file where host.os.type == \"linux\" and event.type == \"change\" and event.action == \"rename\" and file.extension : \"?*\"\n   and process.executable : (\"./*\", \"/tmp/*\", \"/var/tmp/*\", \"/dev/shm/*\", \"/var/run/*\", \"/boot/*\") and\n   file.path : (\n     \"/home/*/Downloads/*\", \"/home/*/Documents/*\", \"/root/*\", \"/bin/*\", \"/usr/bin/*\", \"/var/log/*\", \"/var/lib/log/*\",\n     \"/var/backup/*\", \"/var/www/*\") and\n   not (\n     process.name : (\n       \"dpkg\", \"yum\", \"dnf\", \"rpm\", \"dockerd\", \"go\", \"java\", \"pip*\", \"python*\", \"node\", \"containerd\", \"php\", \"p4d\",\n       \"conda\", \"chrome\", \"imap\", \"cmake\", \"firefox\", \"semanage\", \"semodule\", \"ansible-galaxy\", \"fc-cache\", \"jammy\", \"git\",\n       \"systemsettings\", \"vmis-launcher\", \"bundle\", \"kudu-tserver\", \"suldownloader\", \"rustup-init\", \"bun\"\n     ) or\n     process.executable in (\"./runc\", \"./usr/bin/qemu-aarch64\")\n   )\n  ] with runs=25\n  [file where host.os.type == \"linux\" and event.action == \"creation\" and\n   file.name : (\"*restore*\", \"*lock*\", \"*recovery*\", \"*read*\", \"*instruction*\", \"*how_to*\", \"*ransom*\")\n  ]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/impact_potential_linux_ransomware_note_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

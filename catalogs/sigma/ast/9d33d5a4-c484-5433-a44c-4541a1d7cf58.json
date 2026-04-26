@@ -1,0 +1,37 @@
+{
+  "id": "9d33d5a4-c484-5433-a44c-4541a1d7cf58",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_susp_ps_appdata",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell",
+        "pwsh",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*powershell.exe*",
+        "*\\\\powershell*",
+        "*\\\\pwsh*",
+        "*pwsh.exe*",
+        "*Local\\\\*",
+        "*Roaming\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*powershell.exe*\", \"*\\\\powershell*\", \"*\\\\pwsh*\", \"*pwsh.exe*\")) and ((process.command_line:\"*/c *\" and process.command_line:\"*\\\\AppData\\\\*\") and (process.command_line like~ (\"*Local\\\\*\", \"*Roaming\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_susp_ps_appdata.eql",
+  "metadata": {}
+}

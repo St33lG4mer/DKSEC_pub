@@ -1,0 +1,37 @@
+{
+  "id": "428b2e4e-453a-5b9a-9d9f-ae9a63e4efee",
+  "catalog": "sigma",
+  "name": "net_dns_wannacry_killswitch_domain",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": "like~",
+      "values": [
+        "ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.testing",
+        "ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.test",
+        "ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.com",
+        "ayylmaotjhsstasdfasdfasdfasdfasdfasdfasdf.com",
+        "iuqssfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+      ],
+      "raw_values": [
+        "ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.testing",
+        "ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.test",
+        "ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.com",
+        "ayylmaotjhsstasdfasdfasdfasdfasdfasdfasdf.com",
+        "iuqssfsodp9ifjaposdfjhgosurijfaewrwergwea.com"
+      ]
+    }
+  ],
+  "raw_query": "any where query like~ (\"ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.testing\", \"ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.test\", \"ifferfsodp9ifjaposdfjhgosurijfaewrwergwea.com\", \"ayylmaotjhsstasdfasdfasdfasdfasdfasdfasdf.com\", \"iuqssfsodp9ifjaposdfjhgosurijfaewrwergwea.com\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/network/dns/net_dns_wannacry_killswitch_domain.eql",
+  "metadata": {}
+}

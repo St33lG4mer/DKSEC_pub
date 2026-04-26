@@ -1,0 +1,40 @@
+{
+  "id": "8c2a3be7-9dab-5b74-bc6e-332e2c6271d4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ssh_rdp_tunneling",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ssh.exe"
+      ],
+      "raw_values": [
+        "*\\\\ssh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ":3389"
+      ],
+      "raw_values": [
+        "*:3389*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\ssh.exe\" and process.command_line:\"*:3389*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ssh_rdp_tunneling.eql",
+  "metadata": {}
+}

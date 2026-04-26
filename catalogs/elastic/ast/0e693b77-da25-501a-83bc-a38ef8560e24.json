@@ -1,0 +1,103 @@
+{
+  "id": "0e693b77-da25-501a-83bc-a38ef8560e24",
+  "catalog": "elastic",
+  "name": "Creation or Modification of a new GPO Scheduled Task or Service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "scheduledtasks.xml",
+        "services.xml"
+      ],
+      "raw_values": [
+        "ScheduledTasks.xml",
+        "Services.xml"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "scheduledtasks.xml",
+        "services.xml"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\SYSVOL\\\\domain\\\\Policies\\\\*\\\\MACHINE\\\\Preferences\\\\ScheduledTasks\\\\ScheduledTasks.xml",
+        "?:\\\\Windows\\\\SYSVOL\\\\domain\\\\Policies\\\\*\\\\MACHINE\\\\Preferences\\\\Services\\\\Services.xml"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "open"
+      ],
+      "raw_values": [
+        "open"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dfsrs.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\dfsrs.exe"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and event.type != \"deletion\" and event.action != \"open\" and\n file.name : (\"ScheduledTasks.xml\", \"Services.xml\") and\n  file.path : (\n    \"?:\\\\Windows\\\\SYSVOL\\\\domain\\\\Policies\\\\*\\\\MACHINE\\\\Preferences\\\\ScheduledTasks\\\\ScheduledTasks.xml\",\n    \"?:\\\\Windows\\\\SYSVOL\\\\domain\\\\Policies\\\\*\\\\MACHINE\\\\Preferences\\\\Services\\\\Services.xml\"\n  ) and\n  not process.executable : \"C:\\\\Windows\\\\System32\\\\dfsrs.exe\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_gpo_schtask_service_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Tactic: Persistence",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

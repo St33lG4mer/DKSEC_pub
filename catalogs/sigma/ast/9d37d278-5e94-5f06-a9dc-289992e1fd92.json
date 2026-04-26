@@ -1,0 +1,29 @@
+{
+  "id": "9d37d278-5e94-5f06-a9dc-289992e1fd92",
+  "catalog": "sigma",
+  "name": "image_load_dll_system_drawing_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "system.drawing.ni.dll"
+      ],
+      "raw_values": [
+        "*\\\\System.Drawing.ni.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\System.Drawing.ni.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/image_load/image_load_dll_system_drawing_load.eql",
+  "metadata": {}
+}

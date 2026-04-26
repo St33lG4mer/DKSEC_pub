@@ -1,0 +1,96 @@
+{
+  "id": "ab989273-e5c1-5ede-a44a-3ebc4b7afae0",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation via Enlightenment",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "noexec",
+        "nosuid",
+        "nodev",
+        "uid="
+      ],
+      "raw_values": [
+        "/bin/mount/",
+        "-o",
+        "noexec",
+        "nosuid",
+        "nodev",
+        "uid=*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "uid_change"
+      ],
+      "raw_values": [
+        "exec",
+        "uid_change"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "enlightenment_sys"
+      ],
+      "raw_values": [
+        "enlightenment_sys"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.parent.entity_id with maxspan=5s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n    process.name == \"enlightenment_sys\" and process.args in (\"/bin/mount/\", \"-o\",\"noexec\",\"nosuid\",\"nodev\",\"uid=*\") ]\n  [process where host.os.type == \"linux\" and event.action == \"uid_change\" and event.type == \"change\" and user.id == \"0\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_enlightenment_window_manager.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

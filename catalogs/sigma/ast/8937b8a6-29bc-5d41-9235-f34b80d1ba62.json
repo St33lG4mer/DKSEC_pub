@@ -1,0 +1,75 @@
+{
+  "id": "8937b8a6-29bc-5d41-9235-f34b80d1ba62",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_enumeration_for_credentials_cli",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "v3.1",
+        "foxmailpreview",
+        "passwords",
+        "sites",
+        "identities",
+        "sessions",
+        "keys",
+        "configs",
+        "password",
+        "commandline",
+        "winvnc4",
+        "settings",
+        "ffftp",
+        "server",
+        "radmin",
+        "export",
+        "save"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Aerofox\\\\Foxmail\\\\V3.1*",
+        "*\\\\Software\\\\Aerofox\\\\FoxmailPreview*",
+        "*\\\\Software\\\\DownloadManager\\\\Passwords*",
+        "*\\\\Software\\\\FTPWare\\\\COREFTP\\\\Sites*",
+        "*\\\\Software\\\\IncrediMail\\\\Identities*",
+        "*\\\\Software\\\\Martin Prikryl\\\\WinSCP 2\\\\Sessions*",
+        "*\\\\Software\\\\Mobatek\\\\MobaXterm\\\\*",
+        "*\\\\Software\\\\OpenSSH\\\\Agent\\\\Keys*",
+        "*\\\\Software\\\\OpenVPN-GUI\\\\configs*",
+        "*\\\\Software\\\\ORL\\\\WinVNC3\\\\Password*",
+        "*\\\\Software\\\\Qualcomm\\\\Eudora\\\\CommandLine*",
+        "*\\\\Software\\\\RealVNC\\\\WinVNC4*",
+        "*\\\\Software\\\\RimArts\\\\B2\\\\Settings*",
+        "*\\\\Software\\\\SimonTatham\\\\PuTTY\\\\Sessions*",
+        "*\\\\Software\\\\SimonTatham\\\\PuTTY\\\\SshHostKeys\\\\*",
+        "*\\\\Software\\\\Sota\\\\FFFTP*",
+        "*\\\\Software\\\\TightVNC\\\\Server*",
+        "*\\\\Software\\\\WOW6432Node\\\\Radmin\\\\v3.0\\\\Server\\\\Parameters\\\\Radmin*",
+        "*export*",
+        "*save*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*reg.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*\\\\Software\\\\Aerofox\\\\Foxmail\\\\V3.1*\", \"*\\\\Software\\\\Aerofox\\\\FoxmailPreview*\", \"*\\\\Software\\\\DownloadManager\\\\Passwords*\", \"*\\\\Software\\\\FTPWare\\\\COREFTP\\\\Sites*\", \"*\\\\Software\\\\IncrediMail\\\\Identities*\", \"*\\\\Software\\\\Martin Prikryl\\\\WinSCP 2\\\\Sessions*\", \"*\\\\Software\\\\Mobatek\\\\MobaXterm\\\\*\", \"*\\\\Software\\\\OpenSSH\\\\Agent\\\\Keys*\", \"*\\\\Software\\\\OpenVPN-GUI\\\\configs*\", \"*\\\\Software\\\\ORL\\\\WinVNC3\\\\Password*\", \"*\\\\Software\\\\Qualcomm\\\\Eudora\\\\CommandLine*\", \"*\\\\Software\\\\RealVNC\\\\WinVNC4*\", \"*\\\\Software\\\\RimArts\\\\B2\\\\Settings*\", \"*\\\\Software\\\\SimonTatham\\\\PuTTY\\\\Sessions*\", \"*\\\\Software\\\\SimonTatham\\\\PuTTY\\\\SshHostKeys\\\\*\", \"*\\\\Software\\\\Sota\\\\FFFTP*\", \"*\\\\Software\\\\TightVNC\\\\Server*\", \"*\\\\Software\\\\WOW6432Node\\\\Radmin\\\\v3.0\\\\Server\\\\Parameters\\\\Radmin*\")) and (not (process.executable:\"*reg.exe\" and (process.command_line like~ (\"*export*\", \"*save*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_enumeration_for_credentials_cli.eql",
+  "metadata": {}
+}

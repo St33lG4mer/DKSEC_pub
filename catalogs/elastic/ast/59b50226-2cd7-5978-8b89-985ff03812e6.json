@@ -1,0 +1,23 @@
+{
+  "id": "59b50226-2cd7-5978-8b89-985ff03812e6",
+  "catalog": "elastic",
+  "name": "Web Application Suspicious Activity: Unauthorized Method",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "http.response.status_code:405\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/apm/apm_405_response_method_not_allowed.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: APM",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

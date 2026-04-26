@@ -1,0 +1,51 @@
+{
+  "id": "3aa98eb2-efbb-5c07-9897-246959b35d96",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_3proxy_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "3proxy.exe"
+      ],
+      "raw_values": [
+        "*\\\\3proxy.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "3proxy - tiny proxy server"
+      ],
+      "raw_values": [
+        "3proxy - tiny proxy server"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".exe -i127.0.0.1 -p"
+      ],
+      "raw_values": [
+        "*.exe -i127.0.0.1 -p*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\3proxy.exe\" or process.pe.description:\"3proxy - tiny proxy server\" or process.command_line:\"*.exe -i127.0.0.1 -p*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_3proxy_execution.eql",
+  "metadata": {}
+}

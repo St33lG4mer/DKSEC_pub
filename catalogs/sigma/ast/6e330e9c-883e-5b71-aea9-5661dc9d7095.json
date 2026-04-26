@@ -1,0 +1,53 @@
+{
+  "id": "6e330e9c-883e-5b71-aea9-5661dc9d7095",
+  "catalog": "sigma",
+  "name": "win_security_mal_wceaux_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4656",
+        "4663"
+      ],
+      "raw_values": [
+        "4656",
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\wceaux.dll"
+      ],
+      "raw_values": [
+        "*\\\\wceaux.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"4656\", \"4663\")) and winlog.event_data.ObjectName:\"*\\\\wceaux.dll\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_mal_wceaux_dll.eql",
+  "metadata": {}
+}

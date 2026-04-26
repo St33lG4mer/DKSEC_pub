@@ -1,0 +1,136 @@
+{
+  "id": "943f909d-62fc-5e1a-bc5c-1db5b550e75b",
+  "catalog": "elastic",
+  "name": "Chkconfig Service Add",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/var/tmp/rpm",
+        "/var/lib/waagent/",
+        "/usr/bin/puppet"
+      ],
+      "raw_values": [
+        "/var/tmp/rpm*",
+        "/var/lib/waagent/*",
+        "/usr/bin/puppet*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "rpm",
+        "qualys-scan-util",
+        "qualys-cloud-agent",
+        "update-alternatives",
+        "install",
+        "alternatives"
+      ],
+      "raw_values": [
+        "rpm",
+        "qualys-scan-util",
+        "qualys-cloud-agent",
+        "update-alternatives",
+        "/opt/commvault/.gxsetup/silent_install/install",
+        "/usr/sbin/alternatives"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "jexec",
+        "sapinit",
+        "httpd",
+        "dbora",
+        "selfprotection"
+      ],
+      "raw_values": [
+        "jexec",
+        "sapinit",
+        "httpd",
+        "dbora",
+        "selfprotection"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "chkconfig"
+      ],
+      "raw_values": [
+        "/usr/sbin/chkconfig"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--add",
+        "chkconfig"
+      ],
+      "raw_values": [
+        "--add",
+        "*chkconfig"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.action in (\"exec\", \"exec_event\", \"start\") and\nprocess.executable != null and\n( \n  (process.executable : \"/usr/sbin/chkconfig\" and process.args : \"--add\") or\n  (process.args : \"*chkconfig\" and process.args : \"--add\")\n) and not (\n  process.parent.name in (\"rpm\", \"qualys-scan-util\", \"qualys-cloud-agent\", \"update-alternatives\") or\n  process.parent.executable in (\"/opt/commvault/.gxsetup/silent_install/install\", \"/usr/sbin/alternatives\") or\n  process.parent.args : (\"/var/tmp/rpm*\", \"/var/lib/waagent/*\", \"/usr/bin/puppet*\") or\n  process.args in (\"jexec\", \"sapinit\", \"httpd\", \"dbora\" , \"selfprotection\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_chkconfig_service_add.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Threat: Lightning Framework",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

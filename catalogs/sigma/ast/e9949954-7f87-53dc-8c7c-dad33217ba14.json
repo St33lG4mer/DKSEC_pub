@@ -1,0 +1,31 @@
+{
+  "id": "e9949954-7f87-53dc-8c7c-dad33217ba14",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_empiremonkey",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "e:jscript",
+        "errors.bat"
+      ],
+      "raw_values": [
+        "*/e:jscript*",
+        "*\\\\Local\\\\Temp\\\\Errors.bat*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*/e:jscript*\" and process.command_line:\"*\\\\Local\\\\Temp\\\\Errors.bat*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/TA/EmpireMonkey/proc_creation_win_apt_empiremonkey.eql",
+  "metadata": {}
+}

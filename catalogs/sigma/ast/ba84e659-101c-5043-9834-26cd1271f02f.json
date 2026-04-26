@@ -1,0 +1,41 @@
+{
+  "id": "ba84e659-101c-5043-9834-26cd1271f02f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_workfolders",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "control.exe"
+      ],
+      "raw_values": [
+        "*\\\\control.exe",
+        "C:\\\\Windows\\\\System32\\\\control.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "workfolders.exe"
+      ],
+      "raw_values": [
+        "*\\\\WorkFolders.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\control.exe\" and process.parent.executable:\"*\\\\WorkFolders.exe\") and (not process.executable:\"C:\\\\Windows\\\\System32\\\\control.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_workfolders.eql",
+  "metadata": {}
+}

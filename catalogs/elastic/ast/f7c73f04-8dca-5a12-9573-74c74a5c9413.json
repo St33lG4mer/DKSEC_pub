@@ -1,0 +1,62 @@
+{
+  "id": "f7c73f04-8dca-5a12-9573-74c74a5c9413",
+  "catalog": "elastic",
+  "name": "AWS S3 Bucket Replicated to Another Account",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "putbucketreplication"
+      ],
+      "raw_values": [
+        "PutBucketReplication"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n   and event.action == \"PutBucketReplication\"\n   and event.outcome == \"success\"\n   and stringContains(aws.cloudtrail.request_parameters, \"Account=\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/exfiltration_s3_bucket_replicated_to_external_account.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS S3",
+      "Resources: Investigation Guide",
+      "Use Case: Threat Detection",
+      "Tactic: Exfiltration"
+    ]
+  }
+}

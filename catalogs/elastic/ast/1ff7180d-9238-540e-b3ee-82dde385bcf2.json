@@ -1,0 +1,54 @@
+{
+  "id": "1ff7180d-9238-540e-b3ee-82dde385bcf2",
+  "catalog": "elastic",
+  "name": "Unusual Web Config File Access",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe",
+        "mssense.exe",
+        "mrt.exe"
+      ],
+      "raw_values": [
+        "C:\\Program Files\\Microsoft Security Client\\MsMpEng.exe",
+        "C:\\Program Files\\Windows Defender Advanced Threat Protection\\MsSense.exe",
+        "C:\\Windows\\System32\\MRT.exe"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "web.config"
+      ],
+      "raw_values": [
+        "web.config"
+      ]
+    }
+  ],
+  "raw_query": "event.category:file and host.os.type:windows and event.action:open and\n  file.name:\"web.config\" and file.path : *VirtualDirectories* and\n  not process.executable: (\n        \"C:\\Program Files\\Microsoft Security Client\\MsMpEng.exe\" or\n        \"C:\\Program Files\\Windows Defender Advanced Threat Protection\\MsSense.exe\" or\n        \"C:\\Windows\\System32\\MRT.exe\"\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_web_config_file_access.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

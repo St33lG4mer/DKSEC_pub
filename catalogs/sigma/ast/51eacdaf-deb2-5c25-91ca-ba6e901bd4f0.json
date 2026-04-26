@@ -1,0 +1,49 @@
+{
+  "id": "51eacdaf-deb2-5c25-91ca-ba6e901bd4f0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_formbook",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "*.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "del",
+        "type nul >",
+        ".exe"
+      ],
+      "raw_values": [
+        "*/c*",
+        "*del*",
+        "*C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*/C*",
+        "*type nul >*",
+        "*.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.command_line like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")) and process.parent.command_line:\"*.exe\") and ((process.command_line:\"*/c*\" and process.command_line:\"*del*\" and process.command_line:\"*C:\\\\Users\\\\*\" and process.command_line:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\") or (process.command_line:\"*/c*\" and process.command_line:\"*del*\" and process.command_line:\"*C:\\\\Users\\\\*\" and process.command_line:\"*\\\\Desktop\\\\*\") or (process.command_line:\"*/C*\" and process.command_line:\"*type nul >*\" and process.command_line:\"*C:\\\\Users\\\\*\" and process.command_line:\"*\\\\Desktop\\\\*\")) and process.command_line:\"*.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/Malware/Formbook/proc_creation_win_malware_formbook.eql",
+  "metadata": {}
+}

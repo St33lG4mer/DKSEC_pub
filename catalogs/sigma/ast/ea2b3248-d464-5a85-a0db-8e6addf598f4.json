@@ -1,0 +1,29 @@
+{
+  "id": "ea2b3248-d464-5a85-a0db-8e6addf598f4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_tropictrooper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "abccccccccccccccccccccccccccccccccccccccccccccccc"
+      ],
+      "raw_values": [
+        "*abCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCc*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*abCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCc*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2018/TA/TropicTrooper/proc_creation_win_apt_tropictrooper.eql",
+  "metadata": {}
+}

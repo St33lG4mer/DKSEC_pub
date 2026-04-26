@@ -1,0 +1,48 @@
+{
+  "id": "39668a6b-7f02-5bc4-bc99-2e42d03a3f97",
+  "catalog": "sigma",
+  "name": "file_event_win_system32_local_folder_privilege_escalation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "logonui.exe.local",
+        "werfault.exe.local",
+        "consent.exe.local",
+        "narrator.exe.local",
+        "wermgr.exe.local"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\logonUI.exe.local*",
+        "C:\\\\Windows\\\\System32\\\\werFault.exe.local*",
+        "C:\\\\Windows\\\\System32\\\\consent.exe.local*",
+        "C:\\\\Windows\\\\System32\\\\narrator.exe.local*",
+        "C:\\\\Windows\\\\System32\\\\wermgr.exe.local*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "comctl32.dll"
+      ],
+      "raw_values": [
+        "*\\\\comctl32.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"C:\\\\Windows\\\\System32\\\\logonUI.exe.local*\", \"C:\\\\Windows\\\\System32\\\\werFault.exe.local*\", \"C:\\\\Windows\\\\System32\\\\consent.exe.local*\", \"C:\\\\Windows\\\\System32\\\\narrator.exe.local*\", \"C:\\\\Windows\\\\System32\\\\wermgr.exe.local*\")) and file.path:\"*\\\\comctl32.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_system32_local_folder_privilege_escalation.eql",
+  "metadata": {}
+}

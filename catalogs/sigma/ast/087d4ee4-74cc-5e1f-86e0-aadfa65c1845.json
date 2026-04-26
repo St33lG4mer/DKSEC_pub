@@ -1,0 +1,44 @@
+{
+  "id": "087d4ee4-74cc-5e1f-86e0-aadfa65c1845",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regasm_regsvcs_uncommon_location_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "regsvcs.exe",
+        "regasm.exe"
+      ],
+      "raw_values": [
+        "*\\\\Regsvcs.exe",
+        "*\\\\Regasm.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "regsvcs.exe",
+        "regasm.exe"
+      ],
+      "raw_values": [
+        "RegSvcs.exe",
+        "RegAsm.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\Regsvcs.exe\", \"*\\\\Regasm.exe\")) or (process.pe.original_file_name like~ (\"RegSvcs.exe\", \"RegAsm.exe\"))) and (process.command_line like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*\", \"*\\\\PerfLogs\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regasm_regsvcs_uncommon_location_execution.eql",
+  "metadata": {}
+}

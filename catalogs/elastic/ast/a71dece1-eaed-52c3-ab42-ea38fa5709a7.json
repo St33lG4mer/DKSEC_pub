@@ -1,0 +1,60 @@
+{
+  "id": "a71dece1-eaed-52c3-ab42-ea38fa5709a7",
+  "catalog": "elastic",
+  "name": "Google Workspace User Organizational Unit Changed",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "google_workspace.admin"
+      ],
+      "raw_values": [
+        "google_workspace.admin"
+      ]
+    },
+    {
+      "field": "google_workspace.event.type",
+      "raw_field": "google_workspace.event.type",
+      "operator": ":",
+      "values": [
+        "user_settings"
+      ],
+      "raw_values": [
+        "USER_SETTINGS"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "move_user_to_org_unit"
+      ],
+      "raw_values": [
+        "MOVE_USER_TO_ORG_UNIT"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"google_workspace.admin\" and event.type:change and event.category:iam\n    and google_workspace.event.type:\"USER_SETTINGS\" and event.action:\"MOVE_USER_TO_ORG_UNIT\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/persistence_google_workspace_user_organizational_unit_changed.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Configuration Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "id": "660c553c-cf83-5f35-b57c-9ced1cc3b4a8",
+  "catalog": "elastic",
+  "name": "Interactive Shell Spawn Detected via Defend for Containers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "dash",
+        "bash",
+        "zsh",
+        "fish",
+        "busybox",
+        "-it"
+      ],
+      "raw_values": [
+        "sh",
+        "dash",
+        "bash",
+        "zsh",
+        "fish",
+        "busybox",
+        "/bin/sh",
+        "/bin/dash",
+        "/bin/bash",
+        "/bin/zsh",
+        "/bin/fish",
+        "/bin/busybox",
+        "/usr/bin/sh",
+        "/usr/bin/dash",
+        "/usr/bin/bash",
+        "/usr/bin/zsh",
+        "/usr/bin/fish",
+        "/usr/bin/busybox",
+        "/usr/local/bin/sh",
+        "/usr/local/bin/dash",
+        "/usr/local/bin/bash",
+        "/usr/local/bin/zsh",
+        "/usr/local/bin/fish",
+        "/usr/local/bin/busybox",
+        "-i",
+        "-it"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\nprocess.entry_leader.same_as_process == false and process.interactive == true and container.id like \"*\" and\nprocess.args in (\n  \"sh\", \"dash\", \"bash\", \"zsh\", \"fish\", \"busybox\",\n  \"/bin/sh\", \"/bin/dash\", \"/bin/bash\", \"/bin/zsh\", \"/bin/fish\", \"/bin/busybox\",\n  \"/usr/bin/sh\", \"/usr/bin/dash\", \"/usr/bin/bash\", \"/usr/bin/zsh\", \"/usr/bin/fish\", \"/usr/bin/busybox\",\n  \"/usr/local/bin/sh\", \"/usr/local/bin/dash\", \"/usr/local/bin/bash\", \"/usr/local/bin/zsh\", \"/usr/local/bin/fish\", \"/usr/local/bin/busybox\"\n) and process.args in (\"-i\", \"-it\") \n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/execution_interactive_shell_spawned_from_inside_a_container.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "id": "1d3a30bd-8806-59ae-b26d-83e43c7224ae",
+  "catalog": "elastic",
+  "name": "AWS CloudWatch Log Group Deletion",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "logs.amazonaws.com"
+      ],
+      "raw_values": [
+        "logs.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "deleteloggroup"
+      ],
+      "raw_values": [
+        "DeleteLogGroup"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": ":",
+      "values": [
+        "aws internal"
+      ],
+      "raw_values": [
+        "AWS Internal"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" \n  and event.provider: \"logs.amazonaws.com\" \n  and event.action: \"DeleteLogGroup\" \n  and event.outcome: \"success\"\n  and source.ip: * \n  and not user_agent.original : \"AWS Internal\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_cloudwatch_log_group_deletion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: Amazon CloudWatch",
+      "Use Case: Log Auditing",
+      "Resources: Investigation Guide",
+      "Tactic: Defense Evasion",
+      "Tactic: Impact"
+    ]
+  }
+}

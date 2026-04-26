@@ -1,0 +1,40 @@
+{
+  "id": "a90a034b-59a5-501d-83fd-2448c9a09746",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wusa_cab_files_extraction",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wusa.exe"
+      ],
+      "raw_values": [
+        "*\\\\wusa.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "extract:"
+      ],
+      "raw_values": [
+        "*/extract:*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\wusa.exe\" and process.command_line:\"*/extract:*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_wusa_cab_files_extraction.eql",
+  "metadata": {}
+}

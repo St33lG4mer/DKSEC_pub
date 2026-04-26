@@ -1,0 +1,40 @@
+{
+  "id": "496e632a-8969-53a6-9a4c-75c3ec99f213",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_dumpstack_log_evasion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dumpstack.log"
+      ],
+      "raw_values": [
+        "*\\\\DumpStack.log"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-o dumpstack.log"
+      ],
+      "raw_values": [
+        "* -o DumpStack.log*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\DumpStack.log\" or process.command_line:\"* -o DumpStack.log*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_dumpstack_log_evasion.eql",
+  "metadata": {}
+}

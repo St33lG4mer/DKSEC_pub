@@ -1,0 +1,40 @@
+{
+  "id": "9e584786-6cf4-57b4-baeb-cf7994bbad16",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_devtoolslauncher",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "devtoolslauncher.exe"
+      ],
+      "raw_values": [
+        "*\\\\devtoolslauncher.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "launchfordeploy"
+      ],
+      "raw_values": [
+        "*LaunchForDeploy*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\devtoolslauncher.exe\" and process.command_line:\"*LaunchForDeploy*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_devtoolslauncher.eql",
+  "metadata": {}
+}

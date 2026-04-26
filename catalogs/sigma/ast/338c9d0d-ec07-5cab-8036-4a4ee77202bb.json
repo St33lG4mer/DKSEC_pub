@@ -1,0 +1,51 @@
+{
+  "id": "338c9d0d-ec07-5cab-8036-4a4ee77202bb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_use_of_te_bin",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "te.exe"
+      ],
+      "raw_values": [
+        "*\\\\te.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "te.exe"
+      ],
+      "raw_values": [
+        "*\\\\te.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\te.exe"
+      ],
+      "raw_values": [
+        "\\\\te.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\te.exe\" or process.parent.executable:\"*\\\\te.exe\" or process.pe.original_file_name:\"\\\\te.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_use_of_te_bin.eql",
+  "metadata": {}
+}

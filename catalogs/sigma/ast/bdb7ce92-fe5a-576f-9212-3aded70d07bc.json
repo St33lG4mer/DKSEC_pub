@@ -1,0 +1,29 @@
+{
+  "id": "bdb7ce92-fe5a-576f-9212-3aded70d07bc",
+  "catalog": "sigma",
+  "name": "file_event_win_ntds_dit_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "ntds.dit"
+      ],
+      "raw_values": [
+        "*ntds.dit"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*ntds.dit\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_ntds_dit_creation.eql",
+  "metadata": {}
+}

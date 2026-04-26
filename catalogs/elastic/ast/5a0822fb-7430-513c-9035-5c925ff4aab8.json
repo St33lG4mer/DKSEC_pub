@@ -1,0 +1,97 @@
+{
+  "id": "5a0822fb-7430-513c-9035-5c925ff4aab8",
+  "catalog": "elastic",
+  "name": "ImageLoad via Windows Update Auto Update Client",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ".dll",
+        "runhandlercomserver",
+        "updatedeploymentprovider"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*.dll",
+        "C:\\\\ProgramData\\\\*.dll",
+        "C:\\\\Windows\\\\Temp\\\\*.dll",
+        "C:\\\\Windows\\\\Tasks\\\\*.dll",
+        "/RunHandlerComServer",
+        "/UpdateDeploymentProvider"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "wuauclt.exe"
+      ],
+      "raw_values": [
+        "wuauclt.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "wuauclt.exe"
+      ],
+      "raw_values": [
+        "wuauclt.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (?process.pe.original_file_name == \"wuauclt.exe\" or process.name : \"wuauclt.exe\") and\n   /* necessary windows update client args to load a dll */\n   process.args : \"/RunHandlerComServer\" and process.args : \"/UpdateDeploymentProvider\" and\n   /* common paths writeable by a standard user where the target DLL can be placed */\n   process.args : (\"C:\\\\Users\\\\*.dll\", \"C:\\\\ProgramData\\\\*.dll\", \"C:\\\\Windows\\\\Temp\\\\*.dll\", \"C:\\\\Windows\\\\Tasks\\\\*.dll\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_execution_lolbas_wuauclt.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

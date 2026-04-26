@@ -1,0 +1,31 @@
+{
+  "id": "18711254-f69c-528b-bd4a-63eebe629f2d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_fireball",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rundll32.exe",
+        "installarchersvc"
+      ],
+      "raw_values": [
+        "*rundll32.exe*",
+        "*InstallArcherSvc*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*rundll32.exe*\" and process.command_line:\"*InstallArcherSvc*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/Malware/Fireball/proc_creation_win_malware_fireball.eql",
+  "metadata": {}
+}

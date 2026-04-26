@@ -1,0 +1,92 @@
+{
+  "id": "79383fe1-8d35-5dd5-a922-0e1c3606c941",
+  "catalog": "elastic",
+  "name": "Attempt to Mount SMB Share via Command Line",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "mount_smbfs",
+        "open",
+        "mount",
+        "osascript"
+      ],
+      "raw_values": [
+        "mount_smbfs",
+        "open",
+        "mount",
+        "osascript"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "smbfs"
+      ],
+      "raw_values": [
+        "smb://*",
+        "smbfs"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like",
+      "values": [
+        "google drive"
+      ],
+      "raw_values": [
+        "/Applications/Google Drive.app/Contents/MacOS/Google Drive"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n  (\n    process.name == \"mount_smbfs\" or\n    (process.name == \"open\" and process.args like~ \"smb://*\") or\n    (process.name == \"mount\" and process.args like~ \"smbfs\") or\n    (process.name == \"osascript\" and process.command_line : \"osascript*mount volume*smb://*\")\n  ) and\n  not process.parent.executable like \"/Applications/Google Drive.app/Contents/MacOS/Google Drive\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/lateral_movement_mounting_smb_share.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

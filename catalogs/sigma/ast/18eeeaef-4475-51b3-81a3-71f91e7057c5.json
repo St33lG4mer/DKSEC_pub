@@ -1,0 +1,69 @@
+{
+  "id": "18eeeaef-4475-51b3-81a3-71f91e7057c5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_netsh_fw_delete_rule",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "firewall",
+        "delete",
+        "name=dropbox"
+      ],
+      "raw_values": [
+        "*firewall*",
+        "*delete *",
+        "*name=Dropbox*",
+        "*advfirewall firewall delete rule name=\\"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dropbox.exe",
+        "instup.exe"
+      ],
+      "raw_values": [
+        "*\\\\Dropbox.exe",
+        "*\\\\instup.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\netsh.exe\" or process.pe.original_file_name:\"netsh.exe\") and (process.command_line:\"*firewall*\" and process.command_line:\"*delete *\")) and (not ((process.parent.executable:\"*\\\\Dropbox.exe\" and process.command_line:\"*name=Dropbox*\") or (process.parent.executable:\"*\\\\instup.exe\" and process.command_line:\"*advfirewall firewall delete rule name=\\\"Avast Antivirus Admin Client\\\"*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_netsh_fw_delete_rule.eql",
+  "metadata": {}
+}

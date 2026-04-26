@@ -1,0 +1,68 @@
+{
+  "id": "e3582296-b9a5-588d-9600-001cbd9e3a9c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_active_directory_module_dll_import",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "import-module",
+        "ipmo"
+      ],
+      "raw_values": [
+        "*Import-Module *",
+        "*ipmo *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "microsoft.activedirectory.management.dll"
+      ],
+      "raw_values": [
+        "*Microsoft.ActiveDirectory.Management.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"*Import-Module *\", \"*ipmo *\")) and process.command_line:\"*Microsoft.ActiveDirectory.Management.dll*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_active_directory_module_dll_import.eql",
+  "metadata": {}
+}

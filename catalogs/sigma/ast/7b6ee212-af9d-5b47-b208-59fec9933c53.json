@@ -1,0 +1,31 @@
+{
+  "id": "7b6ee212-af9d-5b47-b208-59fec9933c53",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_utilityfunctions",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "utilityfunctions.ps1",
+        "regsnapin"
+      ],
+      "raw_values": [
+        "*UtilityFunctions.ps1*",
+        "*RegSnapin *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*UtilityFunctions.ps1*\", \"*RegSnapin *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_utilityfunctions.eql",
+  "metadata": {}
+}

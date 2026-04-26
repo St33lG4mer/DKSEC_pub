@@ -1,0 +1,41 @@
+{
+  "id": "a7eb1cb2-ec24-5ef5-8d8a-c2565c0e9776",
+  "catalog": "sigma",
+  "name": "image_load_side_load_gup_libcurl",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gup.exe"
+      ],
+      "raw_values": [
+        "*\\\\gup.exe",
+        "*\\\\Notepad++\\\\updater\\\\GUP.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "libcurl.dll"
+      ],
+      "raw_values": [
+        "*\\\\libcurl.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\gup.exe\" and file.path:\"*\\\\libcurl.dll\") and (not process.executable:\"*\\\\Notepad++\\\\updater\\\\GUP.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_gup_libcurl.eql",
+  "metadata": {}
+}

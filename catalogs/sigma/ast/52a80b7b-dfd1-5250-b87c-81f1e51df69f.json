@@ -1,0 +1,39 @@
+{
+  "id": "52a80b7b-dfd1-5250-b87c-81f1e51df69f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_zipexec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "generic:microsoft_windows_shell_zipfolder:filename=",
+        ".zip",
+        "pass:",
+        "user:",
+        "delete",
+        "microsoft_windows_shell_zipfolder:filename="
+      ],
+      "raw_values": [
+        "*/generic:Microsoft_Windows_Shell_ZipFolder:filename=*",
+        "*.zip*",
+        "*/pass:*",
+        "*/user:*",
+        "*/delete*",
+        "*Microsoft_Windows_Shell_ZipFolder:filename=*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*/generic:Microsoft_Windows_Shell_ZipFolder:filename=*\" and process.command_line:\"*.zip*\" and process.command_line:\"*/pass:*\" and process.command_line:\"*/user:*\") or (process.command_line:\"*/delete*\" and process.command_line:\"*Microsoft_Windows_Shell_ZipFolder:filename=*\" and process.command_line:\"*.zip*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_zipexec.eql",
+  "metadata": {}
+}

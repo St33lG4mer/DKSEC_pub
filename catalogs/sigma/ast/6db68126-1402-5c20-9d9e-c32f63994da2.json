@@ -1,0 +1,42 @@
+{
+  "id": "6db68126-1402-5c20-9d9e-c32f63994da2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regedit_trustedinstaller",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "trustedinstaller.exe",
+        "processhacker.exe"
+      ],
+      "raw_values": [
+        "*\\\\TrustedInstaller.exe",
+        "*\\\\ProcessHacker.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\regedit.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\regedit.exe\" and (process.parent.executable like~ (\"*\\\\TrustedInstaller.exe\", \"*\\\\ProcessHacker.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regedit_trustedinstaller.eql",
+  "metadata": {}
+}

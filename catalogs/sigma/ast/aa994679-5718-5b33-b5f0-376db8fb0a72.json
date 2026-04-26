@@ -1,0 +1,84 @@
+{
+  "id": "aa994679-5718-5b33-b5f0-376db8fb0a72",
+  "catalog": "sigma",
+  "name": "proc_creation_win_vscode_child_processes_anomalies",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "calc.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\cmd.exe",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*:\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-expressions",
+        "iex",
+        "invoke-command",
+        "icm",
+        "downloadstring",
+        "rundll32",
+        "regsvr32",
+        "wscript",
+        "cscript"
+      ],
+      "raw_values": [
+        "*Invoke-Expressions*",
+        "*IEX*",
+        "*Invoke-Command*",
+        "*ICM*",
+        "*DownloadString*",
+        "*rundll32*",
+        "*regsvr32*",
+        "*wscript*",
+        "*cscript*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "code.exe"
+      ],
+      "raw_values": [
+        "*\\\\code.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\code.exe\" and ((process.executable like~ (\"*\\\\calc.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\cscript.exe\", \"*\\\\wscript.exe\")) or ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\cmd.exe\")) and (process.command_line like~ (\"*Invoke-Expressions*\", \"*IEX*\", \"*Invoke-Command*\", \"*ICM*\", \"*DownloadString*\", \"*rundll32*\", \"*regsvr32*\", \"*wscript*\", \"*cscript*\"))) or (process.executable like~ (\"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*:\\\\Temp\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_vscode_child_processes_anomalies.eql",
+  "metadata": {}
+}

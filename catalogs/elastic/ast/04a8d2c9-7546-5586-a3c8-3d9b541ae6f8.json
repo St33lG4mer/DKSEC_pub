@@ -1,0 +1,24 @@
+{
+  "id": "04a8d2c9-7546-5586-a3c8-3d9b541ae6f8",
+  "catalog": "elastic",
+  "name": "Container Workload Protection",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind:alert and event.module:cloud_defend\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/container_workload_protection.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

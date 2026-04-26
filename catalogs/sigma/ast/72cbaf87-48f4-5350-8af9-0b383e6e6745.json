@@ -1,0 +1,102 @@
+{
+  "id": "72cbaf87-48f4-5350-8af9-0b383e6e6745",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mssql_veaam_susp_child_processes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wsl.exe",
+        "wt.exe",
+        "net.exe",
+        "net1.exe",
+        "netstat.exe",
+        "nltest.exe",
+        "ping.exe",
+        "tasklist.exe",
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wsl.exe",
+        "*\\\\wt.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\netstat.exe",
+        "*\\\\nltest.exe",
+        "*\\\\ping.exe",
+        "*\\\\tasklist.exe",
+        "*\\\\whoami.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-ex",
+        "bypass",
+        "cscript",
+        "downloadstring",
+        "mshta",
+        "regsvr32",
+        "rundll32",
+        "wscript",
+        "copy"
+      ],
+      "raw_values": [
+        "*-ex *",
+        "*bypass*",
+        "*cscript*",
+        "*DownloadString*",
+        "*http://*",
+        "*https://*",
+        "*mshta*",
+        "*regsvr32*",
+        "*rundll32*",
+        "*wscript*",
+        "*copy *"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sqlservr.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlservr.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "veeamsql"
+      ],
+      "raw_values": [
+        "*VEEAMSQL*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\sqlservr.exe\" and process.parent.command_line:\"*VEEAMSQL*\") and (((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wsl.exe\", \"*\\\\wt.exe\")) and (process.command_line like~ (\"*-ex *\", \"*bypass*\", \"*cscript*\", \"*DownloadString*\", \"*http://*\", \"*https://*\", \"*mshta*\", \"*regsvr32*\", \"*rundll32*\", \"*wscript*\", \"*copy *\"))) or (process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\netstat.exe\", \"*\\\\nltest.exe\", \"*\\\\ping.exe\", \"*\\\\tasklist.exe\", \"*\\\\whoami.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mssql_veaam_susp_child_processes.eql",
+  "metadata": {}
+}

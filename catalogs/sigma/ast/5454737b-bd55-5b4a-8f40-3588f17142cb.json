@@ -1,0 +1,86 @@
+{
+  "id": "5454737b-bd55-5b4a-8f40-3588f17142cb",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_legitimate_app_dropping_archive",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "msaccess.exe",
+        "mspub.exe",
+        "eqnedt32.exe",
+        "visio.exe",
+        "wordpad.exe",
+        "wordview.exe",
+        "certutil.exe",
+        "certoc.exe",
+        "certreq.exe",
+        "desktopimgdownldr.exe",
+        "esentutl.exe",
+        "finger.exe",
+        "notepad.exe",
+        "acrord32.exe",
+        "rdrcef.exe",
+        "mshta.exe",
+        "hh.exe"
+      ],
+      "raw_values": [
+        "*\\\\winword.exe",
+        "*\\\\excel.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\msaccess.exe",
+        "*\\\\mspub.exe",
+        "*\\\\eqnedt32.exe",
+        "*\\\\visio.exe",
+        "*\\\\wordpad.exe",
+        "*\\\\wordview.exe",
+        "*\\\\certutil.exe",
+        "*\\\\certoc.exe",
+        "*\\\\CertReq.exe",
+        "*\\\\Desktopimgdownldr.exe",
+        "*\\\\esentutl.exe",
+        "*\\\\finger.exe",
+        "*\\\\notepad.exe",
+        "*\\\\AcroRd32.exe",
+        "*\\\\RdrCEF.exe",
+        "*\\\\mshta.exe",
+        "*\\\\hh.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".zip",
+        ".rar",
+        ".7z",
+        ".diagcab",
+        ".appx"
+      ],
+      "raw_values": [
+        "*.zip",
+        "*.rar",
+        "*.7z",
+        "*.diagcab",
+        "*.appx"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\winword.exe\", \"*\\\\excel.exe\", \"*\\\\powerpnt.exe\", \"*\\\\msaccess.exe\", \"*\\\\mspub.exe\", \"*\\\\eqnedt32.exe\", \"*\\\\visio.exe\", \"*\\\\wordpad.exe\", \"*\\\\wordview.exe\", \"*\\\\certutil.exe\", \"*\\\\certoc.exe\", \"*\\\\CertReq.exe\", \"*\\\\Desktopimgdownldr.exe\", \"*\\\\esentutl.exe\", \"*\\\\finger.exe\", \"*\\\\notepad.exe\", \"*\\\\AcroRd32.exe\", \"*\\\\RdrCEF.exe\", \"*\\\\mshta.exe\", \"*\\\\hh.exe\")) and (file.path like~ (\"*.zip\", \"*.rar\", \"*.7z\", \"*.diagcab\", \"*.appx\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_legitimate_app_dropping_archive.eql",
+  "metadata": {}
+}

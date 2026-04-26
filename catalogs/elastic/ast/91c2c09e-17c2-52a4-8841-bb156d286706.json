@@ -1,0 +1,28 @@
+{
+  "id": "91c2c09e-17c2-52a4-8841-bb156d286706",
+  "catalog": "elastic",
+  "name": "Unusual Windows Remote User",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/initial_access_ml_windows_rare_user_type10_remote_login.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

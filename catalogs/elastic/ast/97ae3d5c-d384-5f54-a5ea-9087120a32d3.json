@@ -1,0 +1,103 @@
+{
+  "id": "97ae3d5c-d384-5f54-a5ea-9087120a32d3",
+  "catalog": "elastic",
+  "name": "Persistence via Folder Action Script",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "osascript",
+        "python",
+        "tcl",
+        "node",
+        "perl",
+        "ruby",
+        "php"
+      ],
+      "raw_values": [
+        "osascript",
+        "python*",
+        "tcl*",
+        "node",
+        "perl",
+        "ruby",
+        "php"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "csh",
+        "zsh"
+      ],
+      "raw_values": [
+        "bash",
+        "csh",
+        "zsh",
+        "sh"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "com.apple.foundation.userscriptservice"
+      ],
+      "raw_values": [
+        "com.apple.foundation.UserScriptService"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and process.parent.name == \"com.apple.foundation.UserScriptService\" and \n ((process.name like~ (\"osascript\", \"python*\", \"tcl*\", \"node\", \"perl\", \"ruby\", \"php\")) or \n  (process.name in (\"bash\", \"csh\", \"zsh\", \"sh\") and process.args == \"-c\")) and \n not process.args like (\"/Users/*/Library/Scripts/*\", \"/Users/*/Library/Application Scripts/*\", \"/Library/Scripts/*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_folder_action_scripts_runtime.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

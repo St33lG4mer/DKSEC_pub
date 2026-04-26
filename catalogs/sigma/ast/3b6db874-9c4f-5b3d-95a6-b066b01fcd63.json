@@ -1,0 +1,63 @@
+{
+  "id": "3b6db874-9c4f-5b3d-95a6-b066b01fcd63",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_userinit_child",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "userinit.exe"
+      ],
+      "raw_values": [
+        "*\\\\userinit.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*\\\\netlogon\\\\*",
+        "C:\\\\Windows\\\\Explorer.EXE"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "explorer.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\userinit.exe\" and (not (process.command_line:\"*\\\\netlogon\\\\*\" or (process.executable:\"*\\\\explorer.exe\" or process.pe.original_file_name:\"explorer.exe\" or process.command_line:\"C:\\\\Windows\\\\Explorer.EXE\") or (?process.executable == null)))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_userinit_child.eql",
+  "metadata": {}
+}

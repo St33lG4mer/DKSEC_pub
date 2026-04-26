@@ -1,0 +1,115 @@
+{
+  "id": "d0c72172-fb19-5f84-b645-ac3ce8ded109",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation via Linux DAC permissions",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "tar",
+        "getent",
+        "stat",
+        "dirname",
+        "chown",
+        "sudo",
+        "dpkg-split",
+        "dpkg-deb",
+        "dpkg",
+        "podman",
+        "awk",
+        "passwd",
+        "dpkg-maintscript-helper",
+        "mutt_dotlock",
+        "nscd",
+        "logger",
+        "gpasswd"
+      ],
+      "raw_values": [
+        "tar",
+        "getent",
+        "su",
+        "stat",
+        "dirname",
+        "chown",
+        "sudo",
+        "dpkg-split",
+        "dpkg-deb",
+        "dpkg",
+        "podman",
+        "awk",
+        "passwd",
+        "dpkg-maintscript-helper",
+        "mutt_dotlock",
+        "nscd",
+        "logger",
+        "gpasswd"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "dpkg",
+        "java",
+        "dpkg-preconfigure",
+        "gnome-shell",
+        "wdavdaemon",
+        "podman",
+        "wazuh-modulesd",
+        "google_guest_agent",
+        "gcc",
+        "make",
+        "ninja"
+      ],
+      "raw_values": [
+        "dpkg",
+        "java",
+        "dpkg-preconfigure",
+        "gnome-shell",
+        "/opt/microsoft/mdatp/sbin/wdavdaemon",
+        "/usr/bin/podman",
+        "/bin/podman",
+        "/var/ossec/bin/wazuh-modulesd",
+        "/usr/bin/google_guest_agent",
+        "/usr/bin/gcc",
+        "/usr/bin/make",
+        "/usr/bin/ninja"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:exec and\n(process.thread.capabilities.permitted:CAP_DAC_* or process.thread.capabilities.effective: CAP_DAC_*) and\nprocess.command_line:(*/etc/sudoers* or */etc/passwd* or */etc/shadow* or */root/.ssh/* or /home/*/.ssh/*) and not (\n  user.id : \"0\" or\n  process.name : (\n    \"tar\" or \"getent\" or \"su\" or \"stat\" or \"dirname\" or \"chown\" or \"sudo\" or \"dpkg-split\" or \"dpkg-deb\" or \"dpkg\" or\n    \"podman\" or \"awk\" or \"passwd\" or \"dpkg-maintscript-helper\" or \"mutt_dotlock\" or \"nscd\" or \"logger\" or \"gpasswd\"\n  ) or\n  process.executable : /usr/lib/*/lxc/rootfs/* or\n  process.parent.name : (\n    \"dpkg\" or \"java\" or *postinst or \"dpkg-preconfigure\" or \"gnome-shell\"\n  ) or\n  process.parent.executable:(\n    \"/opt/microsoft/mdatp/sbin/wdavdaemon\" or \"/usr/bin/podman\" or \"/bin/podman\" or\n    /var/lib/awx/.local/share/containers/storage/overlay/* or ./merged/var/lib/awx/.local/share/containers/storage/overlay/* or\n    \"/var/ossec/bin/wazuh-modulesd\" or /home/*/.local/share/containers/storage/overlay/* or /snap/* or /dev/fd/* or /tmp/newroot/* or\n    \"/usr/bin/google_guest_agent\" or /var/lib/docker/overlay2/* or /var/lib/containers/* or \"/usr/bin/gcc\" or \"/usr/bin/make\" or \"/usr/bin/ninja\"\n  ) or\n  process.parent.command_line:(*ansible* or \"runc init\")\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_dac_permissions.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

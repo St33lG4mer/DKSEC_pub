@@ -1,0 +1,55 @@
+{
+  "id": "2ea6a4f8-83b3-54b5-94b9-3d64ea95bfe7",
+  "catalog": "elastic",
+  "name": "Unusual Process Modifying GenAI Configuration File",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "modification",
+        "overwrite"
+      ],
+      "raw_values": [
+        "modification",
+        "overwrite"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "file"
+      ],
+      "raw_values": [
+        "file"
+      ]
+    }
+  ],
+  "raw_query": "event.category : \"file\" and event.action : (\"modification\" or \"overwrite\") and\nfile.path : (\n    */.cursor/mcp.json or */.cursor/settings.json or */AppData/Roaming/Cursor/*mcp* or\n    */.claude/* or */claude_desktop_config.json or */AppData/Roaming/Claude/* or\n    */.config/github-copilot/* or */AppData/Local/GitHub?Copilot/* or\n    */.ollama/config* or */AppData/Local/Ollama/* or\n    */.codex/* or */AppData/Roaming/Codex/* or\n    */.gemini/* or */AppData/Roaming/gemini-cli/* or\n    */.grok/* or */AppData/Roaming/Grok/* or\n    */.windsurf/* or */AppData/Roaming/Windsurf/* or\n    */.vscode/extensions/*mcp* or\n    */.openclaw/* or */AppData/Roaming/OpenClaw/* or\n    */.moltbot/* or */AppData/Roaming/Moltbot/* or\n    */.config/openclaw/*\n) and not (\n  file.extension : (lck or lock or log or png or marker or shm or wal or sqlite-shm or sqlite-wal or jsonl or journal or xcuserstate) or\n  file.name : .DS_Store or\n  file.path : (\n    */.claude/cache/* or\n    */.claude/statsig/* or\n    */.claude/sessions/* or\n    */.claude/shell-snapshots/* or\n    */.gemini/antigravity-browser-profile/* or\n    */.gemini/tmp/* or\n    */.codex/log/* or\n    */.codex/sessions/*\n  ) or\n  (\n    file.path : */.config/github-copilot/* and \n    file.name : (apps.json or versions.json or copilot*nitrite.db)\n  )\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/defense_evasion_genai_config_modification.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Domain: LLM"
+    ]
+  }
+}

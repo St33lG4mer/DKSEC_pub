@@ -1,0 +1,40 @@
+{
+  "id": "fb6aeaf0-3711-5e83-8a44-6b1f4c4b950f",
+  "catalog": "sigma",
+  "name": "image_load_office_outlook_outlvba_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\outlook.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "outlvba.dll"
+      ],
+      "raw_values": [
+        "*\\\\outlvba.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\outlook.exe\" and file.path:\"*\\\\outlvba.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_office_outlook_outlvba_load.eql",
+  "metadata": {}
+}

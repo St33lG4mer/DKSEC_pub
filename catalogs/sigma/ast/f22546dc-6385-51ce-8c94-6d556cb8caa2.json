@@ -1,0 +1,40 @@
+{
+  "id": "f22546dc-6385-51ce-8c94-6d556cb8caa2",
+  "catalog": "sigma",
+  "name": "registry_set_disable_windows_defender_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\services\\\\windefend\\\\start"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\WinDefend\\\\Start"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000004)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000004)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Services\\\\WinDefend\\\\Start\" and winlog.event_data.Details:\"DWORD (0x00000004)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disable_windows_defender_service.eql",
+  "metadata": {}
+}

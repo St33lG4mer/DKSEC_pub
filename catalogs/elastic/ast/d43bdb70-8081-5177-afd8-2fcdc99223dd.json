@@ -1,0 +1,27 @@
+{
+  "id": "d43bdb70-8081-5177-afd8-2fcdc99223dd",
+  "catalog": "elastic",
+  "name": "Unusual Windows Network Activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/ml_windows_anomalous_network_activity.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

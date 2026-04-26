@@ -1,0 +1,130 @@
+{
+  "id": "6746bb62-1737-5a7f-9459-cb91022ca416",
+  "catalog": "elastic",
+  "name": "Potential RemoteMonologue Attack",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe",
+        "teamviewer.exe",
+        "svchost.exe",
+        "securityhealthservice.exe",
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\4.*\\\\MsMpEng.exe",
+        "C:\\\\Program Files\\\\Windows Defender\\\\MsMpEng.exe",
+        "C:\\\\Program Files\\\\TeamViewer\\\\TeamViewer.exe",
+        "C:\\\\Windows\\\\System32\\\\svchost.exe",
+        "C:\\\\Windows\\\\System32\\\\SecurityHealthService.exe",
+        "C:\\\\windows\\\\System32\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\classes\\\\appid\\\\{1d278eef-5c38-4f2a-8c7d-d5c13b662567}\\\\runas",
+        "\\\\software\\\\classes\\\\appid\\\\{7e55a26d-ef95-4a45-9f55-21e52adf9878}\\\\runas",
+        "hklm\\\\software\\\\microsoft\\\\office\\\\clicktorun\\\\vregistry_",
+        "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\office\\\\clicktorun\\\\vregistry_",
+        "\\\\software\\\\classes\\\\appid\\\\{1111a26d-ef95-4a45-9f55-21e52adf9887}\\\\runas",
+        "\\\\software\\\\classes\\\\appid\\\\{850a928d-5456-4865-bbe5-42635f1ebca1}\\\\runas",
+        "\\\\s-1-*classes\\\\appid\\\\{d3e34b21-9d75-101a-8c3d-00aa001a1652}\\\\runas"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{1D278EEF-5C38-4F2A-8C7D-D5C13B662567}\\\\RunAs",
+        "*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{7E55A26D-EF95-4A45-9F55-21E52ADF9878}\\\\RunAs",
+        "HKLM\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\ClickToRun\\\\VREGISTRY_*",
+        "\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\ClickToRun\\\\VREGISTRY_*",
+        "*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{1111A26D-EF95-4A45-9F55-21E52ADF9887}\\\\RunAs",
+        "*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{850A928D-5456-4865-BBE5-42635F1EBCA1}\\\\RunAs",
+        "*\\\\S-1-*Classes\\\\AppID\\\\{D3E34B21-9D75-101A-8C3D-00AA001A1652}\\\\RunAs"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": "==",
+      "values": [
+        "runas"
+      ],
+      "raw_values": [
+        "RunAs"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "interactive user"
+      ],
+      "raw_values": [
+        "Interactive User"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.action != \"deletion\" and\n  registry.value == \"RunAs\" and registry.data.strings : \"Interactive User\" and\n\n  not \n  (\n    (\n      process.executable : (\n        \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\4.*\\\\MsMpEng.exe\",\n        \"C:\\\\Program Files\\\\Windows Defender\\\\MsMpEng.exe\"\n      ) and\n      registry.path : \"*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{1111A26D-EF95-4A45-9F55-21E52ADF9887}\\\\RunAs\"\n    ) or\n    (\n      process.executable : (\n        \"C:\\\\Program Files\\\\TeamViewer\\\\TeamViewer.exe\",\n        \"C:\\\\Program Files (x86)\\\\TeamViewer\\\\TeamViewer.exe\"\n      ) and\n      registry.path : \"*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{850A928D-5456-4865-BBE5-42635F1EBCA1}\\\\RunAs\"\n    ) or\n    (\n      process.executable : \"C:\\\\Windows\\\\System32\\\\svchost.exe\" and\n      registry.path : \"*\\\\S-1-*Classes\\\\AppID\\\\{D3E34B21-9D75-101A-8C3D-00AA001A1652}\\\\RunAs\"\n    ) or\n    (\n      process.executable : \"C:\\\\Windows\\\\System32\\\\SecurityHealthService.exe\" and\n      registry.path : (\n        \"*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{1D278EEF-5C38-4F2A-8C7D-D5C13B662567}\\\\RunAs\",\n        \"*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{7E55A26D-EF95-4A45-9F55-21E52ADF9878}\\\\RunAs\"\n      )\n    ) or\n    (\n      process.executable : \"C:\\\\Windows\\\\System32\\\\SecurityHealthService.exe\" and\n      registry.path : (\n        \"*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{1D278EEF-5C38-4F2A-8C7D-D5C13B662567}\\\\RunAs\",\n        \"*\\\\SOFTWARE\\\\Classes\\\\AppID\\\\{7E55A26D-EF95-4A45-9F55-21E52ADF9878}\\\\RunAs\"\n      )\n    ) or\n    registry.path : (\n      \"HKLM\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\ClickToRun\\\\VREGISTRY_*\",\n      \"\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\ClickToRun\\\\VREGISTRY_*\"\n    ) or\n    (process.executable : \"C:\\\\windows\\\\System32\\\\msiexec.exe\" and ?user.id : \"S-1-5-18\")\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_regmod_remotemonologue.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

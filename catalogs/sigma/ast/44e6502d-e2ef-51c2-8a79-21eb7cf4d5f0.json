@@ -1,0 +1,70 @@
+{
+  "id": "44e6502d-e2ef-51c2-8a79-21eb7cf4d5f0",
+  "catalog": "sigma",
+  "name": "registry_set_malware_raspberry_robin_internet_settings_zonemap_tamper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\intranetname",
+        "\\\\proxybypass",
+        "\\\\uncasintranet"
+      ],
+      "raw_values": [
+        "*\\\\IntranetName",
+        "*\\\\ProxyByPass",
+        "*\\\\UNCAsIntranet"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "control.exe"
+      ],
+      "raw_values": [
+        "*\\\\control.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\internet settings\\\\zonemap\\\\",
+        "\\\\autodetect"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\ZoneMap\\\\*",
+        "*\\\\AutoDetect"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)",
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "*DWORD (0x00000001)*",
+        "*DWORD (0x00000000)*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\")) or process.executable:\"*\\\\control.exe\") and registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\ZoneMap\\\\*\") and (((registry.path like~ (\"*\\\\IntranetName\", \"*\\\\ProxyByPass\", \"*\\\\UNCAsIntranet\")) and winlog.event_data.Details:\"*DWORD (0x00000001)*\") or (registry.path:\"*\\\\AutoDetect\" and winlog.event_data.Details:\"*DWORD (0x00000000)*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/Raspberry-Robin/registry_set_malware_raspberry_robin_internet_settings_zonemap_tamper.eql",
+  "metadata": {}
+}

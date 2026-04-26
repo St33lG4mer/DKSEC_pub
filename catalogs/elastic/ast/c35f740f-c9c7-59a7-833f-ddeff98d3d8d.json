@@ -1,0 +1,27 @@
+{
+  "id": "c35f740f-c9c7-59a7-833f-ddeff98d3d8d",
+  "catalog": "elastic",
+  "name": "Spike in AWS Error Messages",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/ml_cloudtrail_error_message_spike.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

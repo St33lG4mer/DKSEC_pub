@@ -1,0 +1,40 @@
+{
+  "id": "6fc981bc-03d7-5f70-8a62-a51b27acabc9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2017_8759",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\WINWORD.EXE"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csc.exe"
+      ],
+      "raw_values": [
+        "*\\\\csc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\WINWORD.EXE\" and process.executable:\"*\\\\csc.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/Exploits/CVE-2017-8759/proc_creation_win_exploit_cve_2017_8759.eql",
+  "metadata": {}
+}

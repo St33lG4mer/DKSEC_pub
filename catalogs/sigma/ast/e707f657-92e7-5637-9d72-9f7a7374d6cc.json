@@ -1,0 +1,40 @@
+{
+  "id": "e707f657-92e7-5637-9d72-9f7a7374d6cc",
+  "catalog": "sigma",
+  "name": "registry_set_disabled_exploit_guard_net_protection_on_ms_defender",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\policies\\\\microsoft\\\\windows defender security center\\\\app and browser protection\\\\disallowexploitprotectionoverride"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender Security Center\\\\App and Browser protection\\\\DisallowExploitProtectionOverride*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (00000001)"
+      ],
+      "raw_values": [
+        "DWORD (00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender Security Center\\\\App and Browser protection\\\\DisallowExploitProtectionOverride*\" and winlog.event_data.Details:\"DWORD (00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disabled_exploit_guard_net_protection_on_ms_defender.eql",
+  "metadata": {}
+}

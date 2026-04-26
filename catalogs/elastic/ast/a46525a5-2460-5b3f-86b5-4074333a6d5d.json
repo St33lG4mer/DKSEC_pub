@@ -1,0 +1,169 @@
+{
+  "id": "a46525a5-2460-5b3f-86b5-4074333a6d5d",
+  "catalog": "elastic",
+  "name": "Suspicious Service was Installed in the System",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "comspec",
+        "\\\\127.0.0.1",
+        "admin$",
+        "powershell",
+        "rundll32",
+        "cmd.exe",
+        "echo",
+        "remcomsvc",
+        ".bat",
+        ".cmd",
+        "certutil",
+        "vssadmin",
+        "certmgr",
+        "bitsadmin",
+        "\\\\users\\\\",
+        "\\\\windows\\\\tasks\\\\",
+        "\\\\perflogs\\\\",
+        "\\\\windows\\\\debug\\\\",
+        "regsvr32",
+        "msbuild",
+        "%systemroot%\\\\psexesvc.exe",
+        "%systemroot%\\\\\\\\remcomsvc.exe",
+        "%systemroot%\\\\pbpsdeploy.exe",
+        "%systemroot%\\\\system32\\\\remcomsvc.exe"
+      ],
+      "raw_values": [
+        "*COMSPEC*",
+        "*\\\\127.0.0.1*",
+        "*Admin$*",
+        "*powershell*",
+        "*rundll32*",
+        "*cmd.exe*",
+        "*echo*",
+        "*RemComSvc*",
+        "*.bat*",
+        "*.cmd*",
+        "*certutil*",
+        "*vssadmin*",
+        "*certmgr*",
+        "*bitsadmin*",
+        "*\\\\Users\\\\*",
+        "*\\\\Windows\\\\Tasks\\\\*",
+        "*\\\\PerfLogs\\\\*",
+        "*\\\\Windows\\\\Debug\\\\*",
+        "*regsvr32*",
+        "*msbuild*",
+        "%SystemRoot%\\\\PSEXESVC.exe",
+        "%SystemRoot%\\\\\\\\RemComSvc.exe",
+        "%SystemRoot%\\\\pbpsdeploy.exe",
+        "%SystemRoot%\\\\system32\\\\RemComSvc.exe",
+        "\\",
+        ",\n                                      "
+      ]
+    },
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": ":",
+      "values": [
+        "comspec",
+        "\\\\127.0.0.1",
+        "admin$",
+        "powershell",
+        "rundll32",
+        "cmd.exe",
+        "echo",
+        ".bat",
+        ".cmd",
+        "certutil",
+        "vssadmin",
+        "certmgr",
+        "bitsadmin",
+        "\\\\users\\\\",
+        "\\\\windows\\\\tasks\\\\",
+        "\\\\perflogs\\\\",
+        "\\\\windows\\\\debug\\\\",
+        "regsvr32",
+        "msbuild",
+        "%systemroot%\\\\psexesvc.exe",
+        "%systemroot%\\\\\\\\remcomsvc.exe",
+        "%systemroot%\\\\pbpsdeploy.exe",
+        "%systemroot%\\\\system32\\\\remcomsvc.exe"
+      ],
+      "raw_values": [
+        "*COMSPEC*",
+        "*\\\\127.0.0.1*",
+        "*Admin$*",
+        "*powershell*",
+        "*rundll32*",
+        "*cmd.exe*",
+        "*echo*",
+        "*.bat*",
+        "*.cmd*",
+        "*certutil*",
+        "*vssadmin*",
+        "*certmgr*",
+        "*bitsadmin*",
+        "*\\\\Users\\\\*",
+        "*\\\\Windows\\\\Tasks\\\\*",
+        "*\\\\PerfLogs\\\\*",
+        "*\\\\Windows\\\\Debug\\\\*",
+        "*regsvr32*",
+        "*msbuild*",
+        "%SystemRoot%\\\\PSEXESVC.exe",
+        "%SystemRoot%\\\\\\\\RemComSvc.exe",
+        "%SystemRoot%\\\\pbpsdeploy.exe",
+        "%SystemRoot%\\\\system32\\\\RemComSvc.exe",
+        "\\",
+        ",\n                                      "
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697",
+        "7045"
+      ],
+      "raw_values": [
+        "4697",
+        "7045"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and\n  (event.code : \"4697\" and\n   (winlog.event_data.ServiceFileName : \n           (\"*COMSPEC*\", \"*\\\\127.0.0.1*\", \"*Admin$*\", \"*powershell*\", \"*rundll32*\", \"*cmd.exe*\",\n            \"*echo*\", \"*RemComSvc*\", \"*.bat*\", \"*.cmd*\", \"*certutil*\", \"*vssadmin*\", \"*certmgr*\", \"*bitsadmin*\", \n            \"*\\\\Users\\\\*\", \"*\\\\Windows\\\\Tasks\\\\*\", \"*\\\\PerfLogs\\\\*\", \"*\\\\Windows\\\\Debug\\\\*\",\n            \"*regsvr32*\", \"*msbuild*\") or\n   winlog.event_data.ServiceFileName regex~ \"\"\"%systemroot%\\\\[a-z0-9]+\\.exe\"\"\") and\n   not winlog.event_data.ServiceFileName:\n                                     (\"%SystemRoot%\\\\PSEXESVC.exe\", \"%SystemRoot%\\\\\\\\RemComSvc.exe\",\n                                      \"%SystemRoot%\\\\pbpsdeploy.exe\", \"%SystemRoot%\\\\system32\\\\RemComSvc.exe\",\n                                      \"\\\"C:\\\\Program Files\\\\Common Files\\\\Zoom\\\\Support\\\\CptService.exe*\",\n                                      \"\\\"C:\\\\Program Files (x86)\\\\CheckPoint\\\\Endpoint Security\\\\EFR\\\\host\\\\cpsechost.exe\\\" service\")) or\n\n  (event.code : \"7045\" and\n   winlog.event_data.ImagePath : (\n       \"*COMSPEC*\", \"*\\\\127.0.0.1*\", \"*Admin$*\", \"*powershell*\", \"*rundll32*\", \"*cmd.exe*\",\n       \"*echo*\", \"*.bat*\", \"*.cmd*\", \"*certutil*\", \"*vssadmin*\", \"*certmgr*\", \"*bitsadmin*\",\n       \"*\\\\Users\\\\*\", \"*\\\\Windows\\\\Tasks\\\\*\", \"*\\\\PerfLogs\\\\*\", \"*\\\\Windows\\\\Debug\\\\*\",\n       \"*regsvr32*\", \"*msbuild*\") and\n   not winlog.event_data.ImagePath : (\"%SystemRoot%\\\\PSEXESVC.exe\", \"%SystemRoot%\\\\\\\\RemComSvc.exe\",\n                                      \"%SystemRoot%\\\\pbpsdeploy.exe\", \"%SystemRoot%\\\\system32\\\\RemComSvc.exe\",\n                                      \"\\\"C:\\\\Program Files\\\\Common Files\\\\Zoom\\\\Support\\\\CptService.exe*\",\n                                      \"\\\"C:\\\\Program Files (x86)\\\\CheckPoint\\\\Endpoint Security\\\\EFR\\\\host\\\\cpsechost.exe\\\" service\"))\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_service_windows_service_winlog.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Windows System Event Logs"
+    ]
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "id": "d1c67fa5-cb03-55a6-bf01-c40be42eb7fb",
+  "catalog": "elastic",
+  "name": "Potential Persistence via File Modification",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "crontab",
+        "cron.allow",
+        "cron.deny",
+        "ld.so.preload",
+        "ld.so.conf",
+        "ld-linux*.so",
+        "tmp.",
+        "rules.",
+        "known_hosts."
+      ],
+      "raw_values": [
+        "/etc/cron.d/*",
+        "/etc/cron.daily/*",
+        "/etc/cron.hourly/*",
+        "/etc/cron.monthly/*",
+        "/etc/cron.weekly/*",
+        "/etc/crontab",
+        "/var/spool/cron/crontabs/*",
+        "/etc/cron.allow",
+        "/etc/cron.deny",
+        "/var/spool/anacron/*",
+        "/var/spool/cron/atjobs/*",
+        "/etc/systemd/system/*",
+        "/usr/local/lib/systemd/system/*",
+        "/lib/systemd/system/*",
+        "/usr/lib/systemd/system/*",
+        "/home/*/.config/systemd/user/*",
+        "/home/*/.local/share/systemd/user/*",
+        "/root/.config/systemd/user/*",
+        "/root/.local/share/systemd/user/*",
+        "/etc/ld.so.preload",
+        "/etc/ld.so.conf.d/*",
+        "/etc/ld.so.conf",
+        "/lib/ld-linux*.so*",
+        "/lib64/ld-linux*.so*",
+        "/usr/lib/ld-linux*.so*",
+        "/usr/lib64/ld-linux*.so*",
+        "/var/spool/cron/crontabs/tmp.*",
+        "/run/udev/rules.d/*rules.*",
+        "/home/*/.ssh/known_hosts.*",
+        "/root/.ssh/known_hosts.*"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "dpkg-new",
+        "dpkg-remove",
+        "seq"
+      ],
+      "raw_values": [
+        "dpkg-new",
+        "dpkg-remove",
+        "SEQ"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "fim.event"
+      ],
+      "raw_values": [
+        "fim.event"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "updated"
+      ],
+      "raw_values": [
+        "updated"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and data_stream.dataset == \"fim.event\" and event.action == \"updated\" and\nfile.path : (\n  // cron, anacron & at\n  \"/etc/cron.d/*\", \"/etc/cron.daily/*\", \"/etc/cron.hourly/*\", \"/etc/cron.monthly/*\",\n  \"/etc/cron.weekly/*\", \"/etc/crontab\", \"/var/spool/cron/crontabs/*\", \"/etc/cron.allow\",\n  \"/etc/cron.deny\",  \"/var/spool/anacron/*\", \"/var/spool/cron/atjobs/*\",\n\n  // systemd services & timers\n  \"/etc/systemd/system/*\", \"/usr/local/lib/systemd/system/*\", \"/lib/systemd/system/*\",\n  \"/usr/lib/systemd/system/*\", \"/home/*/.config/systemd/user/*\", \"/home/*/.local/share/systemd/user/*\",\n  \"/root/.config/systemd/user/*\", \"/root/.local/share/systemd/user/*\",\n\n  // LD_PRELOAD\n  \"/etc/ld.so.preload\", \"/etc/ld.so.conf.d/*\", \"/etc/ld.so.conf\",\n\n  // Dynamic linker\n  \"/lib/ld-linux*.so*\", \"/lib64/ld-linux*.so*\", \"/usr/lib/ld-linux*.so*\", \"/usr/lib64/ld-linux*.so*\",\n\n  // message-of-the-day (MOTD)\n  \"/etc/update-motd.d/*\",\n\n  // SSH\n  \"/home/*/.ssh/*\", \"/root/.ssh/*\", \"/etc/ssh/*\",\n\n  // system-wide shell configurations\n  \"/etc/profile\", \"/etc/profile.d/*\", \"/etc/bash.bashrc\", \"/etc/zsh/*\", \"/etc/csh.cshrc\",\n  \"/etc/csh.login\", \"/etc/fish/config.fish\", \"/etc/ksh.kshrc\",\n\n  // root and user shell configurations\n  \"/home/*/.profile\", \"/home/*/.bashrc\", \"/home/*/.bash_login\", \"/home/*/.bash_logout\",\n  \"/root/.profile\", \"/root/.bashrc\", \"/root/.bash_login\", \"/root/.bash_logout\",\n  \"/home/*/.zprofile\", \"/home/*/.zshrc\", \"/root/.zprofile\", \"/root/.zshrc\",\n  \"/home/*/.cshrc\", \"/home/*/.login\", \"/home/*/.logout\", \"/root/.cshrc\", \"/root/.login\", \"/root/.logout\",\n  \"/home/*/.config/fish/config.fish\", \"/root/.config/fish/config.fish\",\n  \"/home/*/.kshrc\", \"/root/.kshrc\",\n\n  // Alias files\n  \"/home/*/.bash_aliases\", \"/root/.bash_aliases\", \"/home/*/.zsh_aliases\", \"/root/.zsh_aliases\",\n  \"/home/*/.aws/cli/alias\", \"/root/.aws/cli/alias\", \n\n  // runtime control\n  \"/etc/rc.common\", \"/etc/rc.local\",\n\n  // System V init/Upstart\n  \"/etc/init.d/*\", \"/etc/init/*\",\n\n  // passwd/sudoers/shadow\n  \"/etc/passwd\", \"/etc/shadow\", \"/etc/sudoers\", \"/etc/sudoers.d/*\",\n\n  // Systemd udevd\n  \"/lib/udev/*\", \"/etc/udev/rules.d/*\", \"/usr/lib/udev/rules.d/*\", \"/run/udev/rules.d/*\", \"/usr/local/lib/udev/rules.d/*\",\n\n  // XDG/KDE autostart entries\n  \"/home/*/.config/autostart/*\", \"/root/.config/autostart/*\", \"/etc/xdg/autostart/*\", \"/usr/share/autostart/*\",\n  \"/home/*/.kde/Autostart/*\", \"/root/.kde/Autostart/*\",\n  \"/home/*/.kde4/Autostart/*\", \"/root/.kde4/Autostart/*\",\n  \"/home/*/.kde/share/autostart/*\", \"/root/.kde/share/autostart/*\",\n  \"/home/*/.kde4/share/autostart/*\", \"/root/.kde4/share/autostart/*\",\n  \"/home/*/.local/share/autostart/*\", \"/root/.local/share/autostart/*\",\n  \"/home/*/.config/autostart-scripts/*\", \"/root/.config/autostart-scripts/*\",\n\n  // LKM configuration files\n  \"/etc/modules\", \"/etc/modprobe.d/*\", \"/usr/lib/modprobe.d/*\", \"/etc/modules-load.d/*\",\n  \"/run/modules-load.d/*\", \"/usr/local/lib/modules-load.d/*\", \"/usr/lib/modules-load.d/*\",\n\n  // PAM modules & configuration files\n  \"/lib/security/*\", \"/lib64/security/*\", \"/usr/lib/security/*\", \"/usr/lib64/security/*\",\n  \"/lib/x86_64-linux-gnu/security/*\", \"/usr/lib/x86_64-linux-gnu/security/*\",\n  \"/etc/pam.d/*\", \"/etc/security/pam_*\", \"/etc/pam.conf\",\n\n  // Polkit Rule files\n  \"/etc/polkit-1/rules.d/*\", \"/usr/share/polkit-1/rules.d/*\",\n\n  // Polkit pkla files\n  \"/etc/polkit-1/localauthority/*\", \"/var/lib/polkit-1/localauthority/*\",\n\n  // Polkit Action files\n  \"/usr/share/polkit-1/actions/*\",\n\n  // Polkit Legacy paths\n  \"/lib/polkit-1/rules.d/*\", \"/lib64/polkit-1/rules.d/*\", \"/var/lib/polkit-1/rules.d/*\",\n\n  // NetworkManager\n  \"/etc/NetworkManager/dispatcher.d/*\",\n\n  // D-bus Service files\n  \"/usr/share/dbus-1/system-services/*\", \"/etc/dbus-1/system.d/*\",\n  \"/lib/dbus-1/system-services/*\", \"/run/dbus/system.d/*\",\n  \"/home/*/.local/share/dbus-1/services/*\", \"/home/*/.dbus/session-bus/*\",\n  \"/usr/share/dbus-1/services/*\", \"/etc/dbus-1/session.d/*\",\n\n  // GRUB\n  \"/etc/default/grub.d/*\", \"/etc/default/grub\", \"/etc/grub.d/*\", \"/boot/grub2/grub.cfg\",\n  \"/boot/grub/grub.cfg\", \"/boot/efi/EFI/*/grub.cfg\", \"/etc/sysconfig/grub\",\n\n  // Dracut\n  \"/lib/dracut/modules.d/*\", \"/usr/lib/dracut/modules.d/*\",\n\n  // Misc.\n  \"/etc/shells\"\n\n) and not (\n  file.path : (\n    \"/var/spool/cron/crontabs/tmp.*\", \"/run/udev/rules.d/*rules.*\", \"/home/*/.ssh/known_hosts.*\", \"/root/.ssh/known_hosts.*\"\n  ) or\n  file.extension in (\"dpkg-new\", \"dpkg-remove\", \"SEQ\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/fim/persistence_suspicious_file_modifications.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Credential Access",
+      "Tactic: Privilege Escalation",
+      "Tactic: Defense Evasion",
+      "Data Source: File Integrity Monitoring",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

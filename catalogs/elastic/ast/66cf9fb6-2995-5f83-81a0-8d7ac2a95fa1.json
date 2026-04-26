@@ -1,0 +1,103 @@
+{
+  "id": "66cf9fb6-2995-5f83-81a0-8d7ac2a95fa1",
+  "catalog": "elastic",
+  "name": "Interactive Logon by an Unusual Process",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "authentication"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.subjectusersid",
+      "raw_field": "winlog.event_data.SubjectUserSid",
+      "operator": ":",
+      "values": [
+        "s-1-5-21",
+        "s-1-12-"
+      ],
+      "raw_values": [
+        "S-1-5-21*",
+        "S-1-12-*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetusersid",
+      "raw_field": "winlog.event_data.TargetUserSid",
+      "operator": ":",
+      "values": [
+        "s-1-5-21",
+        "s-1-12-"
+      ],
+      "raw_values": [
+        "S-1-5-21*",
+        "S-1-12-*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winlogon.exe",
+        "wininit.exe",
+        ".exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\winlogon.exe",
+        "?:\\\\Windows\\\\System32\\\\wininit.exe",
+        "?:\\\\Program Files\\\\*.exe",
+        "C:\\\\*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "winlog.event_data.logonprocessname",
+      "raw_field": "winlog.event_data.LogonProcessName",
+      "operator": ":",
+      "values": [
+        "advapi"
+      ],
+      "raw_values": [
+        "Advapi*"
+      ]
+    },
+    {
+      "field": "winlog.logon.type",
+      "raw_field": "winlog.logon.type",
+      "operator": "==",
+      "values": [
+        "interactive"
+      ],
+      "raw_values": [
+        "Interactive"
+      ]
+    }
+  ],
+  "raw_query": "authentication where\n host.os.type : \"windows\" and winlog.event_data.LogonProcessName : \"Advapi*\" and\n winlog.logon.type == \"Interactive\" and winlog.event_data.SubjectUserSid : (\"S-1-5-21*\", \"S-1-12-*\") and\n winlog.event_data.TargetUserSid : (\"S-1-5-21*\", \"S-1-12-*\")  and process.executable : \"C:\\\\*\" and\n not startswith~(winlog.event_data.SubjectUserSid, winlog.event_data.TargetUserSid) and\n not process.executable :\n            (\"?:\\\\Windows\\\\System32\\\\winlogon.exe\",\n             \"?:\\\\Windows\\\\System32\\\\wininit.exe\",\n             \"?:\\\\Program Files\\\\*.exe\",\n             \"?:\\\\Program Files (x86)\\\\*.exe\",\n             \"?:\\\\Windows\\\\SysWOW64\\\\inetsrv\\\\w3wp.exe\",\n             \"?:\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe\",\n             \"?:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_make_token_local.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

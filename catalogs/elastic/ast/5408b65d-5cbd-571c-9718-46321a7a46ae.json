@@ -1,0 +1,116 @@
+{
+  "id": "5408b65d-5cbd-571c-9718-46321a7a46ae",
+  "catalog": "elastic",
+  "name": "AWS STS Role Assumption by Service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "aws.cloudtrail.user_identity.invoked_by",
+      "raw_field": "aws.cloudtrail.user_identity.invoked_by",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com",
+        "lambda.amazonaws.com",
+        "rds.amazonaws.com",
+        "ssm.amazonaws.com",
+        "ecs-tasks.amazonaws.com",
+        "ecs.amazonaws.com",
+        "eks.amazonaws.com",
+        "eks-fargate.amazonaws.com",
+        "codepipeline.amazonaws.com",
+        "codebuild.amazonaws.com",
+        "autoscaling.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com",
+        "lambda.amazonaws.com",
+        "rds.amazonaws.com",
+        "ssm.amazonaws.com",
+        "ecs-tasks.amazonaws.com",
+        "ecs.amazonaws.com",
+        "eks.amazonaws.com",
+        "eks-fargate.amazonaws.com",
+        "codepipeline.amazonaws.com",
+        "codebuild.amazonaws.com",
+        "autoscaling.amazonaws.com"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "sts.amazonaws.com"
+      ],
+      "raw_values": [
+        "sts.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "assumerole"
+      ],
+      "raw_values": [
+        "AssumeRole"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": ":",
+      "values": [
+        "awsservice"
+      ],
+      "raw_values": [
+        "AWSService"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"sts.amazonaws.com\"\n    and event.action: \"AssumeRole\"\n    and event.outcome: \"success\"\n    and aws.cloudtrail.user_identity.type: \"AWSService\"\n    and aws.cloudtrail.user_identity.invoked_by: (\n          \"ec2.amazonaws.com\" or\n          \"lambda.amazonaws.com\" or\n          \"rds.amazonaws.com\" or\n          \"ssm.amazonaws.com\" or\n          \"ecs-tasks.amazonaws.com\" or\n          \"ecs.amazonaws.com\" or\n          \"eks.amazonaws.com\" or\n          \"eks-fargate.amazonaws.com\" or\n          \"codepipeline.amazonaws.com\" or\n          \"codebuild.amazonaws.com\" or\n          \"autoscaling.amazonaws.com\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/privilege_escalation_role_assumption_by_service.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS STS",
+      "Resources: Investigation Guide",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Privilege Escalation",
+      "Tactic: Lateral Movement"
+    ]
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "id": "86d90b64-f931-52a4-855a-1f1d06327067",
+  "catalog": "elastic",
+  "name": "File Permission Modification in Writable Directory",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "chattr",
+        "chgrp",
+        "chmod"
+      ],
+      "raw_values": [
+        "chattr",
+        "chgrp",
+        "chmod"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/dev/shm",
+        "/tmp",
+        "/var/tmp"
+      ],
+      "raw_values": [
+        "/dev/shm",
+        "/tmp",
+        "/var/tmp"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "640",
+        "coreutils",
+        "uninstall.sh"
+      ],
+      "raw_values": [
+        "+r",
+        "640",
+        "/usr/bin/coreutils",
+        "/opt/eset/eei/uninstall.sh"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "afb-ssh-setup-keys.sh",
+        "ruby",
+        "update-exim4.conf",
+        "dracut"
+      ],
+      "raw_values": [
+        "/usr/local/bin/afb-ssh-setup-keys.sh",
+        "/opt/puppetlabs/puppet/bin/ruby",
+        "/usr/sbin/update-exim4.conf",
+        "/bin/dracut"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/var/illumio_pce/illumio/scripts/consul"
+      ],
+      "raw_values": [
+        "/var/illumio_pce/illumio/scripts/consul"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:\"linux\" and event.category:process and event.type:\"start\" and event.action:\"exec\" and\nprocess.name:(\"chattr\" or \"chgrp\" or \"chmod\") and process.working_directory:(\"/dev/shm\" or \"/tmp\" or \"/var/tmp\") and\nnot (\n  process.args:(\n    \"+r\" or \"640\" or /tmp/apt-key-gpghome* or \"/usr/bin/coreutils\" or \"/opt/eset/eei/uninstall.sh\" or /tmp/era.repository.*.bin\n  ) or\n  process.parent.args:\"/var/illumio_pce/illumio/scripts/consul\" or\n  process.parent.name:(\n    apt-key or update-motd-updates-available or apt-get or java or pilot or PassengerAgent or nginx\n  ) or\n  process.parent.executable:(\n    \"/usr/local/bin/afb-ssh-setup-keys.sh\" or \"/usr/local/bin/afb-ssh-setup-keys.sh\" or \"/opt/puppetlabs/puppet/bin/ruby\" or\n    \"/usr/sbin/update-exim4.conf\" or \"/bin/dracut\"\n  )\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_file_mod_writable_dir.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

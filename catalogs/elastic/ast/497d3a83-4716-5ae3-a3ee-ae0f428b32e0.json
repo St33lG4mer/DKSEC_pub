@@ -1,0 +1,137 @@
+{
+  "id": "497d3a83-4716-5ae3-a3ee-ae0f428b32e0",
+  "catalog": "elastic",
+  "name": "Kubeconfig File Creation or Modification",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "config",
+        "admin.conf",
+        "super-admin.conf",
+        "kubelet.conf",
+        "controller-manager.conf",
+        "scheduler.conf",
+        "kubeconfig"
+      ],
+      "raw_values": [
+        "/root/.kube/config",
+        "/home/*/.kube/config",
+        "/etc/kubernetes/admin.conf",
+        "/etc/kubernetes/super-admin.conf",
+        "/etc/kubernetes/kubelet.conf",
+        "/etc/kubernetes/controller-manager.conf",
+        "/etc/kubernetes/scheduler.conf",
+        "/var/lib/*/kubeconfig"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "k3d",
+        "aws",
+        "kubectl"
+      ],
+      "raw_values": [
+        "/usr/local/bin/k3d",
+        "/usr/local/aws-cli/*/dist/aws",
+        "/usr/local/bin/ks",
+        "/usr/local/bin/aws",
+        "/usr/local/bin/kubectl"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "kubeadm",
+        "kubelet",
+        "vcluster",
+        "minikube",
+        "kind"
+      ],
+      "raw_values": [
+        "kubeadm",
+        "kubelet",
+        "vcluster",
+        "minikube",
+        "kind"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sed"
+      ],
+      "raw_values": [
+        "sed"
+      ]
+    },
+    {
+      "field": "file.ext.original.name",
+      "raw_field": "file.Ext.original.name",
+      "operator": "like",
+      "values": [
+        "sed"
+      ],
+      "raw_values": [
+        "sed*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type != \"deletion\" and file.path like (\n  \"/root/.kube/config\",\n  \"/home/*/.kube/config\",\n  \"/etc/kubernetes/admin.conf\",\n  \"/etc/kubernetes/super-admin.conf\",\n  \"/etc/kubernetes/kubelet.conf\",\n  \"/etc/kubernetes/controller-manager.conf\",\n  \"/etc/kubernetes/scheduler.conf\",\n  \"/var/lib/*/kubeconfig\"\n) and not (\n  process.name in (\"kubeadm\", \"kubelet\", \"vcluster\", \"minikube\", \"kind\") or\n  (process.name == \"sed\" and ?file.Ext.original.name like \"sed*\") or\n  process.executable like (\n    \"/usr/local/bin/k3d\", \"/usr/local/aws-cli/*/dist/aws\", \"/usr/local/bin/ks\", \"/usr/local/bin/aws\",\n    \"/usr/local/bin/kubectl\"\n  )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/lateral_movement_kubeconfig_file_activity.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Container",
+      "Domain: Kubernetes",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Lateral Movement",
+      "Tactic: Defense Evasion",
+      "Tactic: Initial Access",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Defend for Containers",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

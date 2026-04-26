@@ -1,0 +1,52 @@
+{
+  "id": "8a5f04b1-ade1-5be2-8a34-df44f366eb5e",
+  "catalog": "sigma",
+  "name": "file_event_win_office_addin_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".xlam",
+        ".xla",
+        ".ppam"
+      ],
+      "raw_values": [
+        "*.xlam",
+        "*.xla",
+        "*.ppam"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".wll",
+        ".xll",
+        ".xlam"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Word\\\\Startup\\\\*",
+        "*.wll",
+        "*\\\\Microsoft\\\\Excel\\\\Startup\\\\*",
+        "*.xll",
+        "*Microsoft\\\\Excel\\\\XLSTART\\\\*",
+        "*.xlam",
+        "*\\\\Microsoft\\\\Addins\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\Microsoft\\\\Word\\\\Startup\\\\*\" and file.path:\"*.wll\") or (file.path:\"*\\\\Microsoft\\\\Excel\\\\Startup\\\\*\" and file.path:\"*.xll\") or (file.path:\"*Microsoft\\\\Excel\\\\XLSTART\\\\*\" and file.path:\"*.xlam\") or (file.path:\"*\\\\Microsoft\\\\Addins\\\\*\" and (file.path like~ (\"*.xlam\", \"*.xla\", \"*.ppam\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_addin_persistence.eql",
+  "metadata": {}
+}

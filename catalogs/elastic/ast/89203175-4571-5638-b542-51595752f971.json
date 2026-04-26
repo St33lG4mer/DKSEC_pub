@@ -1,0 +1,94 @@
+{
+  "id": "89203175-4571-5638-b542-51595752f971",
+  "catalog": "elastic",
+  "name": "AWS S3 Rapid Bucket Posture API Calls from a Single Principal",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "getbucketacl",
+        "getbucketpublicaccessblock",
+        "getbucketpolicy",
+        "getbucketpolicystatus",
+        "getbucketversioning"
+      ],
+      "raw_values": [
+        "GetBucketAcl",
+        "GetBucketPublicAccessBlock",
+        "GetBucketPolicy",
+        "GetBucketPolicyStatus",
+        "GetBucketVersioning"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": "!=",
+      "values": [
+        "awsservice"
+      ],
+      "raw_values": [
+        "AWSService"
+      ]
+    }
+  ],
+  "raw_query": "from logs-aws.cloudtrail-* metadata _id, _version, _index\n| eval Esql.time_window_date_trunc = date_trunc(10 seconds, @timestamp)\n\n| where\n    data_stream.dataset == \"aws.cloudtrail\"\n    and event.provider == \"s3.amazonaws.com\"\n    and event.outcome == \"success\"\n    and event.action in (\n      \"GetBucketAcl\",\n      \"GetBucketPublicAccessBlock\",\n      \"GetBucketPolicy\",\n      \"GetBucketPolicyStatus\",\n      \"GetBucketVersioning\"\n    )\n    and aws.cloudtrail.user_identity.type != \"AWSService\"\n    and source.ip IS NOT NULL\n    and aws.cloudtrail.resources.arn IS NOT NULL\n    and aws.cloudtrail.user_identity.arn IS NOT NULL\n    and aws.cloudtrail.session_credential_from_console IS NULL\n\n| keep\n    @timestamp,\n    Esql.time_window_date_trunc,\n    event.action,\n    aws.cloudtrail.user_identity.arn,\n    aws.cloudtrail.user_identity.type,\n    aws.cloudtrail.user_identity.access_key_id,\n    source.ip,\n    aws.cloudtrail.resources.arn,\n    cloud.account.id,\n    cloud.region,\n    user_agent.original,\n    source.as.organization.name,\n    data_stream.namespace\n\n| stats\n    Esql.bucket_arn_count_distinct = count_distinct(aws.cloudtrail.resources.arn),\n    Esql.aws_cloudtrail_resources_arn_values = VALUES(aws.cloudtrail.resources.arn),\n    Esql.event_action_values = VALUES(event.action),\n    Esql.timestamp_values = VALUES(@timestamp),\n    Esql.aws_cloudtrail_user_identity_type_values = VALUES(aws.cloudtrail.user_identity.type),\n    Esql.aws_cloudtrail_user_identity_access_key_id_values = VALUES(aws.cloudtrail.user_identity.access_key_id),\n    Esql.cloud_account_id_values = VALUES(cloud.account.id),\n    Esql.cloud_region_values = VALUES(cloud.region),\n    Esql.user_agent_original_values = VALUES(user_agent.original),\n    Esql.source_as_organization_name_values = VALUES(source.as.organization.name),\n    Esql.data_stream_namespace_values = VALUES(data_stream.namespace)\n  by Esql.time_window_date_trunc, aws.cloudtrail.user_identity.arn, source.ip\n\n| where Esql.bucket_arn_count_distinct > 15\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/discovery_s3_rapid_bucket_posture_api_calls.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS S3",
+      "Data Source: AWS CloudTrail",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

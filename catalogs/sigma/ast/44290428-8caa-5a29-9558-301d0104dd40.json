@@ -1,0 +1,53 @@
+{
+  "id": "44290428-8caa-5a29-9558-301d0104dd40",
+  "catalog": "sigma",
+  "name": "win_system_application_sysmon_crash",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.caption",
+      "raw_field": "winlog.event_data.Caption",
+      "operator": "like~",
+      "values": [
+        "sysmon64.exe - application error",
+        "sysmon.exe - application error"
+      ],
+      "raw_values": [
+        "sysmon64.exe - Application Error",
+        "sysmon.exe - Application Error"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "application popup"
+      ],
+      "raw_values": [
+        "Application Popup"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Application Popup\" and event.code:\"26\" and (winlog.event_data.Caption like~ (\"sysmon64.exe - Application Error\", \"sysmon.exe - Application Error\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/application_popup/win_system_application_sysmon_crash.eql",
+  "metadata": {}
+}

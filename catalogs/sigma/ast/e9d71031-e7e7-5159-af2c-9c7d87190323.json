@@ -1,0 +1,42 @@
+{
+  "id": "e9d71031-e7e7-5159-af2c-9c7d87190323",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2021_44228_vmware_horizon_log4j",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "ws_tomcatservice.exe"
+      ],
+      "raw_values": [
+        "*\\\\ws_TomcatService.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\ws_TomcatService.exe\" and (not (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-44228/proc_creation_win_exploit_cve_2021_44228_vmware_horizon_log4j.eql",
+  "metadata": {}
+}

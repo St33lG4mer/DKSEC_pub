@@ -1,0 +1,97 @@
+{
+  "id": "00476e1b-24be-5959-b02c-007f12d37c22",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation through Writable Docker Socket",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "docker.sock",
+        "dockershim.sock",
+        "run",
+        "-it"
+      ],
+      "raw_values": [
+        "unix://*/docker.sock",
+        "unix://*/dockershim.sock",
+        "UNIX-CONNECT:*/docker.sock",
+        "UNIX-CONNECT:*/dockershim.sock",
+        "run",
+        "-it"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "docker",
+        "socat"
+      ],
+      "raw_values": [
+        "docker",
+        "socat"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"ProcessRollup2\") and\n(\n  (process.name == \"docker\" and process.args : \"run\" and process.args : \"-it\"  and\n   process.args : (\"unix://*/docker.sock\", \"unix://*/dockershim.sock\")) or\n  (process.name == \"socat\" and process.args : (\"UNIX-CONNECT:*/docker.sock\", \"UNIX-CONNECT:*/dockershim.sock\"))\n) and not user.Ext.real.id : \"0\" and not group.Ext.real.id : \"0\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_writable_docker_socket.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Domain: Container",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

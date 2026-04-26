@@ -1,0 +1,29 @@
+{
+  "id": "84868146-5646-5b08-9fe8-fd42801634d5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_sliver_c2_execution_pattern",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-noexit -command [console]::outputencoding=[text.utf8encoding]::utf8"
+      ],
+      "raw_values": [
+        "*-NoExit -Command [Console]::OutputEncoding=[Text.UTF8Encoding]::UTF8*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*-NoExit -Command [Console]::OutputEncoding=[Text.UTF8Encoding]::UTF8*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_sliver_c2_execution_pattern.eql",
+  "metadata": {}
+}

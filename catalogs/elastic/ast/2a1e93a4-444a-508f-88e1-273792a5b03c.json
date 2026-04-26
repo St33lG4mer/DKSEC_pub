@@ -1,0 +1,41 @@
+{
+  "id": "2a1e93a4-444a-508f-88e1-273792a5b03c",
+  "catalog": "elastic",
+  "name": "Entra ID Global Administrator Role Assigned",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "add member to role"
+      ],
+      "raw_values": [
+        "Add member to role"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.auditlogs and\n    azure.auditlogs.properties.category:RoleManagement and\n    azure.auditlogs.operation_name:\"Add member to role\" and\n    azure.auditlogs.properties.target_resources.*.modified_properties.*.new_value: \"\\\"Global Administrator\\\"\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/persistence_entra_id_global_administrator_role_assigned.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

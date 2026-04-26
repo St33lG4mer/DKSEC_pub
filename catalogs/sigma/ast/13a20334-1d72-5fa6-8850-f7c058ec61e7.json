@@ -1,0 +1,42 @@
+{
+  "id": "13a20334-1d72-5fa6-8850-f7c058ec61e7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_psr_capture_screenshots",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "start",
+        "-start"
+      ],
+      "raw_values": [
+        "*/start*",
+        "*-start*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "psr.exe"
+      ],
+      "raw_values": [
+        "*\\\\Psr.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\Psr.exe\" and (process.command_line like~ (\"*/start*\", \"*-start*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_psr_capture_screenshots.eql",
+  "metadata": {}
+}

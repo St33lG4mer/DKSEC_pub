@@ -1,0 +1,60 @@
+{
+  "id": "9d66130e-4312-5b45-ab5b-e261eb179837",
+  "catalog": "elastic",
+  "name": "GitHub Protected Branch Settings Changed",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "configuration"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "github.category",
+      "raw_field": "github.category",
+      "operator": "==",
+      "values": [
+        "protected_branch"
+      ],
+      "raw_values": [
+        "protected_branch"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    }
+  ],
+  "raw_query": "configuration where data_stream.dataset == \"github.audit\"\n  and github.category == \"protected_branch\" and event.type == \"change\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/github/defense_evasion_github_protected_branch_settings_changed.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Github",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

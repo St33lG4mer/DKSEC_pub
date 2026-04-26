@@ -1,0 +1,44 @@
+{
+  "id": "390f8624-8d73-546b-9ddc-9206ed1a7ebf",
+  "catalog": "sigma",
+  "name": "win_dns_server_susp_server_level_plugin_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "150",
+        "770",
+        "771"
+      ],
+      "raw_values": [
+        "150",
+        "770",
+        "771"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "dns server"
+      ],
+      "raw_values": [
+        "DNS Server"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"DNS Server\" and (event.code like~ (\"150\", \"770\", \"771\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/dns_server/win_dns_server_susp_server_level_plugin_dll.eql",
+  "metadata": {}
+}

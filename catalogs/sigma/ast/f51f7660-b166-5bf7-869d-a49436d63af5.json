@@ -1,0 +1,41 @@
+{
+  "id": "f51f7660-b166-5bf7-869d-a49436d63af5",
+  "catalog": "sigma",
+  "name": "image_load_side_load_vivaldi_elf",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "vivaldi_elf.dll"
+      ],
+      "raw_values": [
+        "*\\\\vivaldi_elf.dll",
+        "*\\\\Vivaldi\\\\Application\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vivaldi.exe"
+      ],
+      "raw_values": [
+        "*\\\\Vivaldi\\\\Application\\\\vivaldi.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\vivaldi_elf.dll\" and (not (process.executable:\"*\\\\Vivaldi\\\\Application\\\\vivaldi.exe\" and file.path:\"*\\\\Vivaldi\\\\Application\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_vivaldi_elf.eql",
+  "metadata": {}
+}

@@ -1,0 +1,189 @@
+{
+  "id": "ea66bca9-f033-5977-ab40-c554efcfb25c",
+  "catalog": "elastic",
+  "name": "Kernel Unpacking Activity",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "vmlinuz-get-version",
+        "platform-python",
+        "kdumpctl",
+        "stap-report",
+        "nv-update-initrd"
+      ],
+      "raw_values": [
+        "/usr/lib/needrestart/vmlinuz-get-version",
+        "/usr/libexec/platform-python*",
+        "/tmp/newroot/usr/libexec/platform-python*",
+        "/usr/bin/kdumpctl",
+        "/usr/bin/stap-report",
+        "/usr/sbin/nv-update-initrd"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "file",
+        "unlzma",
+        "gunzip",
+        "unxz",
+        "bunzip2",
+        "unzstd",
+        "unzip",
+        "tar",
+        "lzop",
+        "lz4"
+      ],
+      "raw_values": [
+        "file",
+        "unlzma",
+        "gunzip",
+        "unxz",
+        "bunzip2",
+        "unzstd",
+        "unzip",
+        "tar",
+        "lzop",
+        "lz4"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--decode"
+      ],
+      "raw_values": [
+        "-d",
+        "--decode"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "like",
+      "values": [
+        "/boot/"
+      ],
+      "raw_values": [
+        "/boot/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "grep"
+      ],
+      "raw_values": [
+        "grep"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "elf"
+      ],
+      "raw_values": [
+        "ELF"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "mkinitramfs"
+      ],
+      "raw_values": [
+        "mkinitramfs"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "ansible"
+      ],
+      "raw_values": [
+        "*ansible*"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "/usr/bin/kdumpctl"
+      ],
+      "raw_values": [
+        "/usr/bin/kdumpctl"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n(process.parent.args like \"/boot/*\" or process.args like \"/boot/*\") and (\n  (process.name in (\"file\", \"unlzma\", \"gunzip\", \"unxz\", \"bunzip2\", \"unzstd\", \"unzip\", \"tar\")) or\n  (process.name == \"grep\" and process.args == \"ELF\") or\n  (process.name in (\"lzop\", \"lz4\") and process.args in (\"-d\", \"--decode\"))\n) and\nnot (\n  process.parent.name == \"mkinitramfs\" or\n  process.parent.executable like (\n    \"/usr/lib/needrestart/vmlinuz-get-version\", \"/usr/libexec/platform-python*\", \"/tmp/newroot/usr/libexec/platform-python*\",\n    \"/usr/bin/kdumpctl\", \"/usr/bin/stap-report\", \"/usr/sbin/nv-update-initrd\"\n  ) or\n  process.parent.command_line like \"*ansible*\" or\n  process.parent.args == \"/usr/bin/kdumpctl\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_kernel_unpacking.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

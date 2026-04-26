@@ -1,0 +1,46 @@
+{
+  "id": "9b107ba3-b30a-59be-ba9e-5a42ff799d9f",
+  "catalog": "sigma",
+  "name": "image_load_side_load_dbghelp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "dbghelp.dll"
+      ],
+      "raw_values": [
+        "*\\\\Anaconda3\\\\Lib\\\\site-packages\\\\vtrace\\\\platforms\\\\windll\\\\amd64\\\\dbghelp.dll",
+        "*\\\\Anaconda3\\\\Lib\\\\site-packages\\\\vtrace\\\\platforms\\\\windll\\\\i386\\\\dbghelp.dll",
+        "*\\\\Epic Games\\\\Launcher\\\\Engine\\\\Binaries\\\\ThirdParty\\\\DbgHelp\\\\dbghelp.dll",
+        "*\\\\Epic Games\\\\MagicLegends\\\\x86\\\\dbghelp.dll"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "dbghelp.dll",
+        "opera_package"
+      ],
+      "raw_values": [
+        "*\\\\dbghelp.dll",
+        "*opera\\\\Opera Installer Temp\\\\opera_package*",
+        "*\\\\assistant\\\\dbghelp.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\dbghelp.dll\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Program Files\\\\*\", \"C:\\\\Windows\\\\SoftwareDistribution\\\\*\", \"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SystemTemp\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\"))) and (not ((file.path like~ (\"*\\\\Anaconda3\\\\Lib\\\\site-packages\\\\vtrace\\\\platforms\\\\windll\\\\amd64\\\\dbghelp.dll\", \"*\\\\Anaconda3\\\\Lib\\\\site-packages\\\\vtrace\\\\platforms\\\\windll\\\\i386\\\\dbghelp.dll\")) or (file.path like~ (\"*\\\\Epic Games\\\\Launcher\\\\Engine\\\\Binaries\\\\ThirdParty\\\\DbgHelp\\\\dbghelp.dll\", \"*\\\\Epic Games\\\\MagicLegends\\\\x86\\\\dbghelp.dll\")) or (file.path:\"*opera\\\\Opera Installer Temp\\\\opera_package*\" and file.path:\"*\\\\assistant\\\\dbghelp.dll\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_dbghelp.eql",
+  "metadata": {}
+}

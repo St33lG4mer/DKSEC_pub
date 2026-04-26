@@ -1,0 +1,64 @@
+{
+  "id": "c574a050-d8c7-52b5-ba7c-3189664deb41",
+  "catalog": "sigma",
+  "name": "proc_creation_win_bitsadmin_download_direct_ip",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "transfer",
+        "create",
+        "addfile"
+      ],
+      "raw_values": [
+        "* /transfer *",
+        "* /create *",
+        "* /addfile *",
+        "*://1*",
+        "*://2*",
+        "*://3*",
+        "*://4*",
+        "*://5*",
+        "*://6*",
+        "*://7*",
+        "*://8*",
+        "*://9*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\bitsadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "bitsadmin.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\bitsadmin.exe\" or process.pe.original_file_name:\"bitsadmin.exe\") and (process.command_line like~ (\"* /transfer *\", \"* /create *\", \"* /addfile *\")) and (process.command_line like~ (\"*://1*\", \"*://2*\", \"*://3*\", \"*://4*\", \"*://5*\", \"*://6*\", \"*://7*\", \"*://8*\", \"*://9*\"))) and (not process.command_line:\"*://7-*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_bitsadmin_download_direct_ip.eql",
+  "metadata": {}
+}

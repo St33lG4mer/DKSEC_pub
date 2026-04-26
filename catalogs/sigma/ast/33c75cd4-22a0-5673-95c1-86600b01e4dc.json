@@ -1,0 +1,46 @@
+{
+  "id": "33c75cd4-22a0-5673-95c1-86600b01e4dc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_remove_mppreference",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-controlledfolderaccessprotectedfolders",
+        "-attacksurfacereductionrules_ids",
+        "-attacksurfacereductionrules_actions",
+        "-checkforsignaturesbeforerunningscan"
+      ],
+      "raw_values": [
+        "*-ControlledFolderAccessProtectedFolders *",
+        "*-AttackSurfaceReductionRules_Ids *",
+        "*-AttackSurfaceReductionRules_Actions *",
+        "*-CheckForSignaturesBeforeRunningScan *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "remove-mppreference"
+      ],
+      "raw_values": [
+        "*Remove-MpPreference*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*Remove-MpPreference*\" and (process.command_line like~ (\"*-ControlledFolderAccessProtectedFolders *\", \"*-AttackSurfaceReductionRules_Ids *\", \"*-AttackSurfaceReductionRules_Actions *\", \"*-CheckForSignaturesBeforeRunningScan *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_remove_mppreference.eql",
+  "metadata": {}
+}

@@ -1,0 +1,89 @@
+{
+  "id": "51683917-66b8-592e-8d1e-34b912abeaf2",
+  "catalog": "elastic",
+  "name": "Potential Cookies Theft via Browser Debugging",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--remote-debugging-port=",
+        "--remote-debugging-targets=",
+        "--remote-debugging-pipe=",
+        "--user-data-dir=",
+        "--remote-debugging-port=0"
+      ],
+      "raw_values": [
+        "--remote-debugging-port=*",
+        "--remote-debugging-targets=*",
+        "--remote-debugging-pipe=*",
+        "--user-data-dir=*",
+        "--remote-debugging-port=0"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started",
+        "info"
+      ],
+      "raw_values": [
+        "start",
+        "process_started",
+        "info"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "microsoft edge",
+        "chrome.exe",
+        "google chrome",
+        "google-chrome-stable",
+        "google-chrome-beta",
+        "google-chrome",
+        "msedge.exe"
+      ],
+      "raw_values": [
+        "Microsoft Edge",
+        "chrome.exe",
+        "Google Chrome",
+        "google-chrome-stable",
+        "google-chrome-beta",
+        "google-chrome",
+        "msedge.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type in (\"start\", \"process_started\", \"info\") and\n  process.name in (\n             \"Microsoft Edge\",\n             \"chrome.exe\",\n             \"Google Chrome\",\n             \"google-chrome-stable\",\n             \"google-chrome-beta\",\n             \"google-chrome\",\n             \"msedge.exe\") and\n   process.args : (\"--remote-debugging-port=*\",\n                   \"--remote-debugging-targets=*\",\n                   \"--remote-debugging-pipe=*\") and\n   process.args : \"--user-data-dir=*\" and not process.args:\"--remote-debugging-port=0\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/credential_access_cookies_chromium_browsers_debugging.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: Windows",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Sysmon"
+    ]
+  }
+}

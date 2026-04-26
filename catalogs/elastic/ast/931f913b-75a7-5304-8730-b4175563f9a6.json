@@ -1,0 +1,23 @@
+{
+  "id": "931f913b-75a7-5304-8730-b4175563f9a6",
+  "catalog": "elastic",
+  "name": "Adversary Behavior - Detected - Elastic Endgame",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind:alert and event.module:endgame and (event.action:behavior_protection_event or endgame.event_subtype_full:behavior_protection_event)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/endgame_adversary_behavior_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

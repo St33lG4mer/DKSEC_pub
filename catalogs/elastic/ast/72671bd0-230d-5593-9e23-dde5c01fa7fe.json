@@ -1,0 +1,95 @@
+{
+  "id": "72671bd0-230d-5593-9e23-dde5c01fa7fe",
+  "catalog": "elastic",
+  "name": "AWS IAM SAML Provider Updated",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "updatesamlprovider"
+      ],
+      "raw_values": [
+        "UpdateSAMLProvider"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "source.address",
+      "raw_field": "source.address",
+      "operator": ":",
+      "values": [
+        "sso.amazonaws.com"
+      ],
+      "raw_values": [
+        "sso.amazonaws.com"
+      ]
+    },
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": ":",
+      "values": [
+        "sso.amazonaws.com"
+      ],
+      "raw_values": [
+        "sso.amazonaws.com"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"iam.amazonaws.com\"\n    and event.action: \"UpdateSAMLProvider\"\n    and event.outcome: \"success\"\n    and not (source.address: \"sso.amazonaws.com\" and user_agent.original: \"sso.amazonaws.com\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/privilege_escalation_iam_saml_provider_updated.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS IAM",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

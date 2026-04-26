@@ -1,0 +1,17 @@
+{
+  "id": "dff08a1e-4509-52fe-a41a-cc476400d0fd",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_raspberry_robin_single_dot_ending_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\[a-zA-Z0-9]{1,32}\\\\.[a-zA-Z0-9]{1,6}\\\\.[ \\\"\\\\']{1}']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Malware/Raspberry-Robin/proc_creation_win_malware_raspberry_robin_single_dot_ending_file.eql",
+  "metadata": {}
+}

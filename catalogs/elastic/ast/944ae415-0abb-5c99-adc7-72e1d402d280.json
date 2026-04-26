@@ -1,0 +1,135 @@
+{
+  "id": "944ae415-0abb-5c99-adc7-72e1d402d280",
+  "catalog": "elastic",
+  "name": "AWS EC2 LOLBin Execution via SSM SendCommand",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "base64",
+        "curl",
+        "wget",
+        "openssl",
+        "ncat",
+        "netcat",
+        "socat",
+        "python",
+        "python3",
+        "perl",
+        "php",
+        "ruby",
+        "ssh",
+        "scp",
+        "sftp",
+        "rsync"
+      ],
+      "raw_values": [
+        "base64",
+        "curl",
+        "wget",
+        "openssl",
+        "nc",
+        "ncat",
+        "netcat",
+        "socat",
+        "python",
+        "python3",
+        "perl",
+        "php",
+        "ruby",
+        "ssh",
+        "scp",
+        "sftp",
+        "rsync"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail",
+        "endpoint.events.process"
+      ],
+      "raw_values": [
+        "aws.cloudtrail",
+        "endpoint.events.process"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "sendcommand"
+      ],
+      "raw_values": [
+        "SendCommand"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.request_parameters",
+      "raw_field": "aws.cloudtrail.request_parameters",
+      "operator": "==",
+      "values": [
+        "documentname=aws-runshellscript"
+      ],
+      "raw_values": [
+        "*documentName=AWS-RunShellScript*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "==",
+      "values": [
+        "_script.sh"
+      ],
+      "raw_values": [
+        "%/document/orchestration/%/awsrunShellScript/%/_script.sh"
+      ]
+    }
+  ],
+  "raw_query": "FROM logs-aws.cloudtrail*, logs-endpoint.events.process-* METADATA _id, _version, _index\n| WHERE\n  // CloudTrail SSM SendCommand with AWS-RunShellScript\n  (\n    data_stream.dataset == \"aws.cloudtrail\"\n    AND event.action == \"SendCommand\"\n    AND aws.cloudtrail.request_parameters LIKE \"*documentName=AWS-RunShellScript*\"\n  )\n  // Linux endpoint process events, prefiltered to SSM shell runner OR LOLBins/GTFOBins\n  OR\n  (\n    data_stream.dataset == \"endpoint.events.process\"\n    AND host.os.type == \"linux\"\n    AND (\n      // SSM shell (_script.sh) runner\n      process.command_line LIKE \"%/document/orchestration/%/awsrunShellScript/%/_script.sh\"\n      // LOLBins / GTFOBins\n      OR process.name IN (\n        \"base64\",\n        \"curl\",\n        \"wget\",\n        \"openssl\",\n        \"nc\", \"ncat\", \"netcat\",\n        \"socat\",\n        \"python\", \"python3\",\n        \"perl\",\n        \"php\",\n        \"ruby\",\n        \"ssh\",\n        \"scp\",\n        \"sftp\",\n        \"rsync\"\n      )\n    )\n  )\n\n// Endpoint leg: extract SSM command ID from parent command line\n| DISSECT process.parent.command_line\n    \"%{}/document/orchestration/%{Esql.process_parent_command_line_ssm_command_id}/%{}\"\n\n// CloudTrail leg: extract SSM command ID from response_elements\n| DISSECT aws.cloudtrail.response_elements\n    \"%{}commandId=%{Esql.aws_cloudtrail_response_elements_ssm_command_id},%{}\"\n\n// Coalesce SSM command ID from both data sources\n| EVAL Esql.aws_ssm_command_id = COALESCE(\n    Esql.aws_cloudtrail_response_elements_ssm_command_id,\n    Esql.process_parent_command_line_ssm_command_id\n)\n| WHERE Esql.aws_ssm_command_id IS NOT NULL\n\n// Role flags\n| EVAL Esql.is_cloud_event    = data_stream.dataset == \"aws.cloudtrail\"\n| EVAL Esql.is_endpoint_event = data_stream.dataset == \"endpoint.events.process\"\n\n// Identify the SSM shell processes (the _script.sh runners)\n| EVAL Esql.is_ssm_shell_process =\n    Esql.is_endpoint_event\n    AND process.command_line LIKE \"%/document/orchestration/%/awsrunShellScript/%/_script.sh\"\n\n// LOLBins / GTFOBins on Linux\n| EVAL Esql.is_lolbin_process =\n    Esql.is_endpoint_event AND NOT Esql.is_ssm_shell_process\n\n// Aggregate per SSM command ID\n| STATS\n    // Core correlation counts & timing\n    Esql.aws_cloudtrail_event_count                 = SUM(CASE(Esql.is_cloud_event, 1, 0)),\n    Esql.endpoint_events_process_lolbin_count       = SUM(CASE(Esql.is_lolbin_process, 1, 0)),\n    Esql.endpoint_events_process_ssm_shell_count    = SUM(CASE(Esql.is_ssm_shell_process, 1, 0)),\n    Esql.aws_cloudtrail_first_event_ts              = MIN(CASE(Esql.is_cloud_event, @timestamp, null)),\n    Esql.endpoint_events_process_first_lolbin_ts    = MIN(CASE(Esql.is_lolbin_process, @timestamp, null)),\n\n    // AWS / CloudTrail identity & request context\n    Esql_priv.aws_cloudtrail_user_identity_arn_values          =\n      VALUES(CASE(Esql.is_cloud_event, aws.cloudtrail.user_identity.arn, null)),\n    Esql_priv.aws_cloudtrail_user_identity_access_key_id_values =\n      VALUES(CASE(Esql.is_cloud_event, aws.cloudtrail.user_identity.access_key_id, null)),\n    Esql_priv.user_name_values                                 =\n      VALUES(CASE(Esql.is_cloud_event, user.name, null)),\n\n    // AWS environment / request metadata\n    Esql.cloud_region_values     = VALUES(CASE(Esql.is_cloud_event, cloud.region, null)),\n    Esql.source_ip_values        = VALUES(CASE(Esql.is_cloud_event, source.ip, null)),\n    Esql.user_agent_original_values =\n      VALUES(CASE(Esql.is_cloud_event, user_agent.original, null)),\n\n    // Endpoint host & user context\n    Esql.host_name_values        = VALUES(CASE(Esql.is_endpoint_event, host.name, null)),\n    Esql_priv.endpoint_user_name_values =\n      VALUES(CASE(Esql.is_endpoint_event, user.name, null)),\n\n    // SSM shell processes on endpoint\n    Esql.process_command_line_ssm_shell_values =\n      VALUES(CASE(Esql.is_ssm_shell_process, process.command_line, null)),\n    Esql.process_pid_ssm_shell_values =\n      VALUES(CASE(Esql.is_ssm_shell_process, process.pid, null)),\n\n    // LOLBin processes on endpoint\n    Esql.process_name_lolbin_values =\n      VALUES(CASE(Esql.is_lolbin_process, process.name, null)),\n    Esql.process_executable_lolbin_values =\n      VALUES(CASE(Esql.is_lolbin_process, process.executable, null)),\n    Esql.process_command_line_lolbin_values =\n      VALUES(CASE(Esql.is_lolbin_process, process.command_line, null)),\n    Esql.process_pid_lolbin_values =\n      VALUES(CASE(Esql.is_lolbin_process, process.pid, null)),\n    Esql.process_parent_command_line_lolbin_values =\n      VALUES(CASE(Esql.is_lolbin_process, process.parent.command_line, null)),\n\n    Esql.data_stream_namespace_values = VALUES(data_stream.namespace)\n  BY Esql.aws_ssm_command_id\n\n// Detection condition: SSM SendCommand + AWS-RunShellScript + LOLBin on endpoint\n| WHERE Esql.aws_cloudtrail_event_count > 0\n  AND Esql.endpoint_events_process_lolbin_count > 0\n  AND DATE_DIFF(\n        \"minutes\",\n        Esql.endpoint_events_process_first_lolbin_ts,\n        Esql.aws_cloudtrail_first_event_ts\n      ) <= 5\n| SORT Esql.aws_cloudtrail_first_event_ts ASC\n| KEEP Esql.*, Esql_priv.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_aws_ec2_lolbin_via_ssm.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Command and Control",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS CloudTrail",
+      "Data Source: AWS EC2",
+      "Data Source: AWS SSM",
+      "Data Source: AWS Systems Manager",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

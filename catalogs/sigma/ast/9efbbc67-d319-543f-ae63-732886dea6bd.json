@@ -1,0 +1,40 @@
+{
+  "id": "9efbbc67-d319-543f-ae63-732886dea6bd",
+  "catalog": "sigma",
+  "name": "file_access_win_susp_credhist",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "credhist"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Protect\\\\CREDHIST"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\explorer.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Microsoft\\\\Protect\\\\CREDHIST\" and (not ((process.executable like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Windows\\\\system32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")) or process.executable:\"C:\\\\Windows\\\\explorer.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_access/file_access_win_susp_credhist.eql",
+  "metadata": {}
+}

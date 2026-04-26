@@ -1,0 +1,50 @@
+{
+  "id": "e4689dae-2b36-5c67-a810-a3b6f87a5f8c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_rorschach_ransomware_activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bcdedit.exe",
+        "net.exe",
+        "net1.exe",
+        "netsh.exe",
+        "wevtutil.exe",
+        "vssadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\bcdedit.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\netsh.exe",
+        "*\\\\wevtutil.exe",
+        "*\\\\vssadmin.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "11111111"
+      ],
+      "raw_values": [
+        "*11111111*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\bcdedit.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\netsh.exe\", \"*\\\\wevtutil.exe\", \"*\\\\vssadmin.exe\")) and process.command_line:\"*11111111*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/Rorschach/proc_creation_win_malware_rorschach_ransomware_activity.eql",
+  "metadata": {}
+}

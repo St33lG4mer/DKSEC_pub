@@ -1,0 +1,91 @@
+{
+  "id": "1de5cb37-00aa-5bc4-8453-347f3a0cf4a2",
+  "catalog": "elastic",
+  "name": "Persistence via Login or Logout Hook",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "loginhook",
+        "logouthook",
+        "logouthook.sh",
+        "loginhook.sh"
+      ],
+      "raw_values": [
+        "LoginHook",
+        "LogoutHook",
+        "Support/JAMF/ManagementFrameworkScripts/logouthook.sh",
+        "Support/JAMF/ManagementFrameworkScripts/loginhook.sh",
+        "/Library/Application Support/JAMF/ManagementFrameworkScripts/logouthook.sh",
+        "/Library/Application Support/JAMF/ManagementFrameworkScripts/loginhook.sh"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "defaults"
+      ],
+      "raw_values": [
+        "defaults"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "write"
+      ],
+      "raw_values": [
+        "write"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type == \"start\" and\n process.name == \"defaults\" and process.args == \"write\" and process.args : (\"LoginHook\", \"LogoutHook\") and\n not process.args :\n       (\n         \"Support/JAMF/ManagementFrameworkScripts/logouthook.sh\",\n         \"Support/JAMF/ManagementFrameworkScripts/loginhook.sh\",\n         \"/Library/Application Support/JAMF/ManagementFrameworkScripts/logouthook.sh\",\n         \"/Library/Application Support/JAMF/ManagementFrameworkScripts/loginhook.sh\"\n       )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_login_logout_hooks_defaults.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

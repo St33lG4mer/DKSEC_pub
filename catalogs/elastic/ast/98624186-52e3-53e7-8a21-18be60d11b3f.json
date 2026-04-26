@@ -1,0 +1,136 @@
+{
+  "id": "98624186-52e3-53e7-8a21-18be60d11b3f",
+  "catalog": "elastic",
+  "name": "Potential Credential Discovery via Recursive Grep",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "linux",
+        "macos"
+      ],
+      "raw_values": [
+        "linux",
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "grep",
+        "egrep"
+      ],
+      "raw_values": [
+        "grep",
+        "egrep"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "bash",
+        "sh",
+        "zsh"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like",
+      "values": [
+        "password",
+        "passwd",
+        "pwd",
+        "secret",
+        "token",
+        "apikey",
+        "api_key",
+        "api.key",
+        "access_key",
+        "private_key",
+        "client_secret",
+        "credential",
+        "auth",
+        "bearer",
+        "begin*private*key",
+        "ssh-rsa",
+        "ghp_",
+        "github_pat",
+        "xoxb-",
+        "hooks.slack.com",
+        "webhooks",
+        ".env"
+      ],
+      "raw_values": [
+        "*password*",
+        "*passwd*",
+        "*pwd*",
+        "*secret*",
+        "*token*",
+        "*apikey*",
+        "*api_key*",
+        "*api.key*",
+        "*access_key*",
+        "*private_key*",
+        "*client_secret*",
+        "*credential*",
+        "*auth*",
+        "*bearer*",
+        "*BEGIN*PRIVATE*KEY*",
+        "*ssh-rsa*",
+        "*ghp_*",
+        "*github_pat*",
+        "*xoxb-*",
+        "*hooks.slack.com*",
+        "*discord.com/api/webhooks*",
+        "*/.aws/*",
+        "*/.git/*",
+        "*/.env*"
+      ]
+    }
+  ],
+  "raw_query": "from logs-endpoint.events.process-* metadata _id, _version, _index\n| where host.os.type in (\"linux\", \"macos\")\n  and event.category == \"process\"\n  and process.name in (\"grep\", \"egrep\")\n  and (to_lower(process.command_line) like \"* -r*\" or to_lower(process.command_line) like \"*--recursive*\")\n  and (\n    process.command_line like \"*password*\"\n    or process.command_line like \"*passwd*\"\n    or process.command_line like \"*pwd*\"\n    or process.command_line like \"*secret*\"\n    or process.command_line like \"*token*\"\n    or process.command_line like \"*apikey*\"\n    or process.command_line like \"*api_key*\"\n    or process.command_line like \"*api.key*\"\n    or process.command_line like \"*access_key*\"\n    or process.command_line like \"*private_key*\"\n    or process.command_line like \"*client_secret*\"\n    or process.command_line like \"*credential*\"\n    or process.command_line like \"*auth*\"\n    or process.command_line like \"*bearer*\"\n    or process.command_line like \"*BEGIN*PRIVATE*KEY*\"\n    or process.command_line like \"*ssh-rsa*\"\n    or process.command_line like \"*ghp_*\"\n    or process.command_line like \"*github_pat*\"\n    or process.command_line like \"*xoxb-*\"\n    or process.command_line like \"*hooks.slack.com*\"\n    or process.command_line like \"*discord.com/api/webhooks*\"\n    or process.command_line like \"*/.aws/*\"\n    or process.command_line like \"*/.git/*\"\n    or process.command_line like \"*/.env*\"\n  )\n  and (process.parent.command_line is null or not (to_lower(process.parent.command_line) like \"*shell-snapshots*\" and process.parent.name in (\"bash\", \"sh\", \"zsh\")))\n| eval Esql.time_bucket = date_trunc(1 minute, @timestamp)\n| stats Esql.unique_cmd = count_distinct(process.command_line),\n        Esql.cmd_values = values(process.command_line),\n        Esql.pcmd_values = values(process.parent.command_line)\n  by process.name, host.id, host.name, agent.id, process.parent.name, user.name, Esql.time_bucket\n| where Esql.unique_cmd >= 3\n| keep host.id, host.name, agent.id, user.name, process.parent.name, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/credential_access_grep_recursive_credential_discovery.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

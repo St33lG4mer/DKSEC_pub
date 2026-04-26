@@ -1,0 +1,40 @@
+{
+  "id": "295b5819-9ac1-5a7a-b08f-87eea1cc65f7",
+  "catalog": "sigma",
+  "name": "registry_set_amsi_com_hijack",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\clsid\\\\{fdb00e52-a214-4aa1-8fba-4357bb0072ec}\\\\inprocserver32\\\\(default)"
+      ],
+      "raw_values": [
+        "*\\\\CLSID\\\\{fdb00e52-a214-4aa1-8fba-4357bb0072ec}\\\\InProcServer32\\\\(Default)"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "%windir%\\\\system32\\\\amsi.dll"
+      ],
+      "raw_values": [
+        "%windir%\\\\system32\\\\amsi.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\CLSID\\\\{fdb00e52-a214-4aa1-8fba-4357bb0072ec}\\\\InProcServer32\\\\(Default)\" and (not winlog.event_data.Details:\"%windir%\\\\system32\\\\amsi.dll\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_amsi_com_hijack.eql",
+  "metadata": {}
+}

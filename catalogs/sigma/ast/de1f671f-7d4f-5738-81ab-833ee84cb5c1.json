@@ -1,0 +1,51 @@
+{
+  "id": "de1f671f-7d4f-5738-81ab-833ee84cb5c1",
+  "catalog": "sigma",
+  "name": "win_security_susp_wmi_login",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4624"
+      ],
+      "raw_values": [
+        "4624"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe"
+      ],
+      "raw_values": [
+        "*\\\\WmiPrvSE.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4624\" and process.executable:\"*\\\\WmiPrvSE.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/account_management/win_security_susp_wmi_login.eql",
+  "metadata": {}
+}

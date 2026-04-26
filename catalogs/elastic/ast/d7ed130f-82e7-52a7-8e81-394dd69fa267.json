@@ -1,0 +1,39 @@
+{
+  "id": "d7ed130f-82e7-52a7-8e81-394dd69fa267",
+  "catalog": "elastic",
+  "name": "Interactive Shell Launched via Unusual Parent Process in a Container",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:exec and\nprocess.entry_leader.entry_meta.type:container and process.interactive:true and\nprocess.name:(sh or bash or dash or tcsh or csh or zsh or ksh or fish) and\nnot (\n  process.parent.name:(dpkg or runc or tini or frontend or elastic-agent or agentbeat or dpkg-query or ansible-playbook or gpgv or apt or apt-get) or\n  process.parent.command_line:\"runc init\"\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_unusual_interactive_process_inside_container.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

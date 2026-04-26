@@ -1,0 +1,43 @@
+{
+  "id": "bf1f59dc-06ad-5a94-8518-d440563aeb0f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_schtasks_creation_temp_folder",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create",
+        "sc once"
+      ],
+      "raw_values": [
+        "* /create *",
+        "* /sc once *",
+        "*\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\schtasks.exe\" and (process.command_line:\"* /create *\" and process.command_line:\"* /sc once *\" and process.command_line:\"*\\\\Temp\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_schtasks_creation_temp_folder.eql",
+  "metadata": {}
+}

@@ -1,0 +1,62 @@
+{
+  "id": "f62f9af9-0107-5446-9b07-0a03ab72e3e9",
+  "catalog": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_internet_explorer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\internet explorer",
+        "\\\\software\\\\microsoft\\\\internet explorer",
+        "\\\\toolbar",
+        "\\\\extensions",
+        "\\\\explorer bars",
+        "\\\\extensions\\\\{2670000a-7350-4f3c-8081-5663ee0c6c49}",
+        "\\\\extensions\\\\{31d09ba0-12f5-4cce-be8a-2923e76605da}",
+        "\\\\extensions\\\\{789fe86f-6fc4-46a1-9849-ede0db0c95ca}",
+        "\\\\extensions\\\\{a95fe080-8f5d-11d2-a20b-00aa003c157a}",
+        "\\\\toolbar\\\\shellbrowser\\\\itbar7layout",
+        "\\\\toolbar\\\\showdiscussionbutton",
+        "\\\\toolbar\\\\locked"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Internet Explorer*",
+        "*\\\\Software\\\\Microsoft\\\\Internet Explorer*",
+        "*\\\\Toolbar*",
+        "*\\\\Extensions*",
+        "*\\\\Explorer Bars*",
+        "*\\\\Extensions\\\\{2670000A-7350-4f3c-8081-5663EE0C6C49}*",
+        "*\\\\Extensions\\\\{31D09BA0-12F5-4CCE-BE8A-2923E76605DA}*",
+        "*\\\\Extensions\\\\{789FE86F-6FC4-46A1-9849-EDE0DB0C95CA}*",
+        "*\\\\Extensions\\\\{A95fe080-8f5d-11d2-a20b-00aa003c157a}*",
+        "*\\\\Toolbar\\\\ShellBrowser\\\\ITBar7Layout",
+        "*\\\\Toolbar\\\\ShowDiscussionButton",
+        "*\\\\Toolbar\\\\Locked"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Internet Explorer*\", \"*\\\\Software\\\\Microsoft\\\\Internet Explorer*\")) and (registry.path like~ (\"*\\\\Toolbar*\", \"*\\\\Extensions*\", \"*\\\\Explorer Bars*\")) and (not (winlog.event_data.Details:\"(Empty)\" or (registry.path like~ (\"*\\\\Extensions\\\\{2670000A-7350-4f3c-8081-5663EE0C6C49}*\", \"*\\\\Extensions\\\\{31D09BA0-12F5-4CCE-BE8A-2923E76605DA}*\", \"*\\\\Extensions\\\\{789FE86F-6FC4-46A1-9849-EDE0DB0C95CA}*\", \"*\\\\Extensions\\\\{A95fe080-8f5d-11d2-a20b-00aa003c157a}*\")) or (registry.path like~ (\"*\\\\Toolbar\\\\ShellBrowser\\\\ITBar7Layout\", \"*\\\\Toolbar\\\\ShowDiscussionButton\", \"*\\\\Toolbar\\\\Locked\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_internet_explorer.eql",
+  "metadata": {}
+}

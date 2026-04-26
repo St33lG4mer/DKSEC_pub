@@ -1,0 +1,51 @@
+{
+  "id": "7ff2ece2-d47e-5a41-b68e-00c4b6cebe8c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_recon_csproduct",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\wmic.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "csproduct"
+      ],
+      "raw_values": [
+        "*csproduct*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\wmic.exe\" or process.pe.original_file_name:\"wmic.exe\") and process.command_line:\"*csproduct*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_recon_csproduct.eql",
+  "metadata": {}
+}

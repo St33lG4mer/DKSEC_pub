@@ -1,0 +1,109 @@
+{
+  "id": "92a8d7d9-8544-5b0b-940b-12e1155e4d92",
+  "catalog": "elastic",
+  "name": "Potential DLL Side-Loading via Trusted Microsoft Programs",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "winword.exe",
+        "explorer.exe",
+        "w3wp.exe",
+        "dism.exe"
+      ],
+      "raw_values": [
+        "WinWord.exe",
+        "EXPLORER.EXE",
+        "w3wp.exe",
+        "DISM.EXE",
+        "\\\\\\\\?\\\\Volume{????????-????-????-????-????????????}\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe",
+        "?:\\\\PROGRA~?\\\\MICROS~?\\\\Office??\\\\winword.exe",
+        "?:\\\\Program Files\\\\Microsoft Office\\\\*\\\\winword.exe",
+        "?:\\\\Program Files\\\\Microsoft Office ??\\\\*\\\\winword.exe",
+        "?:\\\\Program Files\\\\WindowsApps\\\\Microsoft.Office.Desktop.*\\\\Office??\\\\winword.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Microsoft Office\\\\*\\\\winword.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Microsoft Office ??\\\\*\\\\winword.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\WindowsApps\\\\Microsoft.Office.Desktop.*\\\\Office??\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "winword.exe",
+        "explorer.exe",
+        "w3wp.exe",
+        "dism.exe"
+      ],
+      "raw_values": [
+        "WinWord.exe",
+        "EXPLORER.EXE",
+        "w3wp.exe",
+        "DISM.EXE"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "crowdstrike.fdr"
+      ],
+      "raw_values": [
+        "crowdstrike.fdr"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (\n    process.name : (\"WinWord.exe\", \"EXPLORER.EXE\", \"w3wp.exe\", \"DISM.EXE\") or\n    ?process.pe.original_file_name : (\"WinWord.exe\", \"EXPLORER.EXE\", \"w3wp.exe\", \"DISM.EXE\")\n  ) and\n  not process.executable : (\n          \"\\\\\\\\?\\\\Volume{????????-????-????-????-????????????}\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe\",\n          \"?:\\\\PROGRA~?\\\\MICROS~?\\\\Office??\\\\winword.exe\",\n          \"?:\\\\Program Files\\\\Microsoft Office\\\\*\\\\winword.exe\",\n          \"?:\\\\Program Files\\\\Microsoft Office ??\\\\*\\\\winword.exe\",\n          \"?:\\\\Program Files\\\\WindowsApps\\\\Microsoft.Office.Desktop.*\\\\Office??\\\\winword.exe\",\n          \"?:\\\\Program Files (x86)\\\\Microsoft Office\\\\*\\\\winword.exe\",\n          \"?:\\\\Program Files (x86)\\\\Windows Kits\\\\*Assessment and Deployment Kit\\\\Deployment Tools\\\\amd64\\\\DISM\\\\dism.exe\",\n          \"?:\\\\Windows\\\\explorer.exe\",\n          \"?:\\\\Windows\\\\System32\\\\Dism.exe\",\n          \"?:\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe\",\n          \"?:\\\\Windows\\\\SysWOW64\\\\Dism.exe\",\n          \"?:\\\\Windows\\\\SysWOW64\\\\explorer.exe\",\n          \"?:\\\\Windows\\\\SysWOW64\\\\inetsrv\\\\w3wp.exe\"\n  ) and\n  /* Crowdstrike specific exclusion as it uses NT Object paths */\n  not\n  (\n    data_stream.dataset == \"crowdstrike.fdr\" and\n    process.executable : (\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Microsoft Office\\\\*\\\\winword.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Microsoft Office ??\\\\*\\\\winword.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\WindowsApps\\\\Microsoft.Office.Desktop.*\\\\Office??\\\\winword.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\Microsoft Office\\\\*\\\\winword.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\Assessment and Deployment Kit\\\\Deployment Tools\\\\amd64\\\\DISM\\\\dism.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\explorer.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\Dism.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\SysWOW64\\\\Dism.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\SysWOW64\\\\explorer.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\SysWOW64\\\\inetsrv\\\\w3wp.exe\"\n    )\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_execution_suspicious_explorer_winword.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Resources: Investigation Guide",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

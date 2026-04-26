@@ -1,0 +1,95 @@
+{
+  "id": "87e4565b-eb65-5a24-9b47-9c01148b7873",
+  "catalog": "sigma",
+  "name": "win_security_scm_database_privileged_operation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4674"
+      ],
+      "raw_values": [
+        "4674"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "sc_manager object"
+      ],
+      "raw_values": [
+        "SC_MANAGER OBJECT"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "servicesactive"
+      ],
+      "raw_values": [
+        "servicesactive"
+      ]
+    },
+    {
+      "field": "winlog.event_data.privilegelist",
+      "raw_field": "winlog.event_data.PrivilegeList",
+      "operator": ":",
+      "values": [
+        "setakeownershipprivilege"
+      ],
+      "raw_values": [
+        "SeTakeOwnershipPrivilege"
+      ]
+    },
+    {
+      "field": "winlog.logon.id",
+      "raw_field": "winlog.logon.id",
+      "operator": ":",
+      "values": [
+        "0x3e4"
+      ],
+      "raw_values": [
+        "0x3e4"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "services.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\services.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4674\" and winlog.event_data.ObjectType:\"SC_MANAGER OBJECT\" and winlog.event_data.ObjectName:\"servicesactive\" and winlog.event_data.PrivilegeList:\"SeTakeOwnershipPrivilege\") and (not (winlog.logon.id:\"0x3e4\" and process.executable:\"*:\\\\Windows\\\\System32\\\\services.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_scm_database_privileged_operation.eql",
+  "metadata": {}
+}

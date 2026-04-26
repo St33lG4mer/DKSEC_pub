@@ -1,0 +1,69 @@
+{
+  "id": "d0d5e906-7e00-5088-bf2f-29b57e661b3e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_raspberry_robin_rundll32_shell32_cpl_exection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "rundll32.exe",
+        "control.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe",
+        "*\\\\control.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shell32.dll",
+        "control_rundll",
+        ".cpl"
+      ],
+      "raw_values": [
+        "*shell32.dll*",
+        "*Control_RunDLL*",
+        "*.CPL*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\rundll32.exe\", \"*\\\\control.exe\")) and (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and (process.command_line:\"*shell32.dll*\" and process.command_line:\"*Control_RunDLL*\" and process.command_line:\"*.CPL*\") and process.command_line:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/Raspberry-Robin/proc_creation_win_malware_raspberry_robin_rundll32_shell32_cpl_exection.eql",
+  "metadata": {}
+}

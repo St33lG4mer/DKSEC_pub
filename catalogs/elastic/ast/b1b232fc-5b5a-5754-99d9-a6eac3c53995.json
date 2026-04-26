@@ -1,0 +1,76 @@
+{
+  "id": "b1b232fc-5b5a-5754-99d9-a6eac3c53995",
+  "catalog": "elastic",
+  "name": "AWS IAM Virtual MFA Device Registration Attempt with Session Token",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "iam"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "createvirtualmfadevice",
+        "enablemfadevice"
+      ],
+      "raw_values": [
+        "CreateVirtualMFADevice",
+        "EnableMFADevice"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "iam where data_stream.dataset == \"aws.cloudtrail\"\n  and event.provider == \"iam.amazonaws.com\"\n  and event.outcome == \"success\"\n  and event.action in (\"CreateVirtualMFADevice\", \"EnableMFADevice\")\n  and startsWith (aws.cloudtrail.user_identity.access_key_id, \"ASIA\")\n  and not aws.cloudtrail.session_credential_from_console == \"true\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_aws_attempt_to_register_virtual_mfa_device.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS CloudTrail",
+      "Data Source: AWS IAM",
+      "Tactic: Persistence",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

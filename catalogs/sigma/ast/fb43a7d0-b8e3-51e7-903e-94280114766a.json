@@ -1,0 +1,29 @@
+{
+  "id": "fb43a7d0-b8e3-51e7-903e-94280114766a",
+  "catalog": "sigma",
+  "name": "registry_set_provisioning_command_abuse",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\provisioning\\\\commands\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Provisioning\\\\Commands\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Provisioning\\\\Commands\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_provisioning_command_abuse.eql",
+  "metadata": {}
+}

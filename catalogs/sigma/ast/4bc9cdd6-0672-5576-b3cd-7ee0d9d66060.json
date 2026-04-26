@@ -1,0 +1,59 @@
+{
+  "id": "4bc9cdd6-0672-5576-b3cd-7ee0d9d66060",
+  "catalog": "sigma",
+  "name": "proc_creation_win_certoc_load_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-loaddll",
+        "loaddll",
+        "–loaddll",
+        "—loaddll",
+        "―loaddll"
+      ],
+      "raw_values": [
+        "* -LoadDLL *",
+        "* /LoadDLL *",
+        "* –LoadDLL *",
+        "* —LoadDLL *",
+        "* ―LoadDLL *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certoc.exe"
+      ],
+      "raw_values": [
+        "*\\\\certoc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certoc.exe"
+      ],
+      "raw_values": [
+        "CertOC.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\certoc.exe\" or process.pe.original_file_name:\"CertOC.exe\") and process.command_line like~ (\"* -LoadDLL *\", \"* /LoadDLL *\", \"* –LoadDLL *\", \"* —LoadDLL *\", \"* ―LoadDLL *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_certoc_load_dll.eql",
+  "metadata": {}
+}

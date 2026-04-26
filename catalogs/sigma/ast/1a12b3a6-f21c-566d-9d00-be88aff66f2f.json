@@ -1,0 +1,83 @@
+{
+  "id": "1a12b3a6-f21c-566d-9d00-be88aff66f2f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_iis_appcmd_susp_module_install",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-name:",
+        "name:",
+        "–name:",
+        "—name:",
+        "―name:"
+      ],
+      "raw_values": [
+        "*-name:*",
+        "*/name:*",
+        "*–name:*",
+        "*—name:*",
+        "*―name:*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "appcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\appcmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "appcmd.exe"
+      ],
+      "raw_values": [
+        "appcmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "install",
+        "module"
+      ],
+      "raw_values": [
+        "*install*",
+        "*module*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "iissetup.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\inetsrv\\\\iissetup.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\appcmd.exe\" or process.pe.original_file_name:\"appcmd.exe\") and ((process.command_line:\"*install*\" and process.command_line:\"*module*\") and process.command_line like~ (\"*-name:*\", \"*/name:*\", \"*–name:*\", \"*—name:*\", \"*―name:*\"))) and (not process.parent.executable:\"C:\\\\Windows\\\\System32\\\\inetsrv\\\\iissetup.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_iis_appcmd_susp_module_install.eql",
+  "metadata": {}
+}

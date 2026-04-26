@@ -1,0 +1,84 @@
+{
+  "id": "3614dc04-a675-5be8-870f-8fa92fc6d1ff",
+  "catalog": "elastic",
+  "name": "MFA Deactivation with no Re-Activation for Okta User Account",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "okta.event_type",
+      "raw_field": "okta.event_type",
+      "operator": "in",
+      "values": [
+        "user.mfa.factor.deactivate",
+        "user.mfa.factor.reset_all"
+      ],
+      "raw_values": [
+        "user.mfa.factor.deactivate",
+        "user.mfa.factor.reset_all"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "okta.outcome.reason",
+      "raw_field": "okta.outcome.reason",
+      "operator": "!=",
+      "values": [
+        "user reset security_question factor"
+      ],
+      "raw_values": [
+        "User reset SECURITY_QUESTION factor"
+      ]
+    },
+    {
+      "field": "okta.outcome.result",
+      "raw_field": "okta.outcome.result",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "field": "okta.event_type",
+      "raw_field": "okta.event_type",
+      "operator": "==",
+      "values": [
+        "user.mfa.factor.activate"
+      ],
+      "raw_values": [
+        "user.mfa.factor.activate"
+      ]
+    }
+  ],
+  "raw_query": "sequence by okta.target.id with maxspan=12h\n    [any where data_stream.dataset == \"okta.system\" and okta.event_type in (\"user.mfa.factor.deactivate\", \"user.mfa.factor.reset_all\")\n        and okta.outcome.reason != \"User reset SECURITY_QUESTION factor\" and okta.outcome.result == \"SUCCESS\"]\n    ![any where data_stream.dataset == \"okta.system\" and okta.event_type == \"user.mfa.factor.activate\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/persistence_mfa_deactivation_with_no_reactivation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Tactic: Persistence",
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Domain: Cloud",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

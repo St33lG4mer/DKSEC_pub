@@ -1,0 +1,39 @@
+{
+  "id": "76ab2fd6-f79a-5ace-a60f-d8a5cd2d18c3",
+  "catalog": "elastic",
+  "name": "GCP Storage Bucket Configuration Modification",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "storage.buckets.update"
+      ],
+      "raw_values": [
+        "storage.buckets.update"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:\"storage.buckets.update\" and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/defense_evasion_gcp_storage_bucket_configuration_modified.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

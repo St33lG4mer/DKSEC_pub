@@ -1,0 +1,74 @@
+{
+  "id": "de043e48-30f2-5b3b-9c5e-deda9053fe61",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regsvr32_susp_parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rpcproxy.dll"
+      ],
+      "raw_values": [
+        "* /s C:\\\\Windows\\\\System32\\\\RpcProxy\\\\RpcProxy.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\")) and process.executable:\"*\\\\regsvr32.exe\") and (not (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\cmd.exe\" and process.command_line:\"* /s C:\\\\Windows\\\\System32\\\\RpcProxy\\\\RpcProxy.dll\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regsvr32_susp_parent.eql",
+  "metadata": {}
+}

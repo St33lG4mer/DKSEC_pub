@@ -1,0 +1,108 @@
+{
+  "id": "4b6ccc02-1184-54c0-90b8-451b5e581329",
+  "catalog": "elastic",
+  "name": "Potential System Tampering via File Modification",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "winload.exe",
+        "winlod.efi",
+        "ntoskrnl.exe",
+        "bootmgr"
+      ],
+      "raw_values": [
+        "winload.exe",
+        "winlod.efi",
+        "ntoskrnl.exe",
+        "bootmgr"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "download",
+        "amd64_microsoft-windows",
+        "amd64_microsoft-windows-"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\*",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\*",
+        "?:\\\\Windows\\\\WinSxS\\\\Temp\\\\InFlight\\\\*",
+        "?:\\\\Windows\\\\SoftwareDistribution\\\\Download*",
+        "?:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows*",
+        "?:\\\\Windows\\\\SystemTemp\\\\*",
+        "?:\\\\Windows\\\\Temp\\\\????????.???\\\\*",
+        "?:\\\\Windows\\\\Temp\\\\*\\\\amd64_microsoft-windows-*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "poqexec.exe",
+        "tiworker.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\poqexec.exe",
+        "?:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows-servicingstack_*\\\\tiworker.exe"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "change",
+        "deletion"
+      ],
+      "raw_values": [
+        "change",
+        "deletion"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and event.type in (\"change\", \"deletion\") and\n  file.name : (\"winload.exe\", \"winlod.efi\", \"ntoskrnl.exe\", \"bootmgr\") and\n  file.path : (\"?:\\\\Windows\\\\*\", \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\*\") and\n  not process.executable : (\n    \"?:\\\\Windows\\\\System32\\\\poqexec.exe\",\n    \"?:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows-servicingstack_*\\\\tiworker.exe\"\n  ) and\n  not file.path : (\n    \"?:\\\\Windows\\\\WinSxS\\\\Temp\\\\InFlight\\\\*\",\n    \"?:\\\\Windows\\\\SoftwareDistribution\\\\Download*\",\n    \"?:\\\\Windows\\\\WinSxS\\\\amd64_microsoft-windows*\",\n    \"?:\\\\Windows\\\\SystemTemp\\\\*\",\n    \"?:\\\\Windows\\\\Temp\\\\????????.???\\\\*\",\n    \"?:\\\\Windows\\\\Temp\\\\*\\\\amd64_microsoft-windows-*\"\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/impact_mod_critical_os_files.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Impact",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

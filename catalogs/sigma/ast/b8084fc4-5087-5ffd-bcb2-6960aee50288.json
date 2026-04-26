@@ -1,0 +1,31 @@
+{
+  "id": "b8084fc4-5087-5ffd-bcb2-6960aee50288",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_lace_tempest_cobalt_strike_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-nop -w hidden -c iex ((new-object net.webclient).downloadstring(",
+        "a')"
+      ],
+      "raw_values": [
+        "*-nop -w hidden -c IEX ((new-object net.webclient).downloadstring(*",
+        "*/a')*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*-nop -w hidden -c IEX ((new-object net.webclient).downloadstring(*\" and process.command_line:\"*/a')*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Lace-Tempest/proc_creation_win_apt_lace_tempest_cobalt_strike_download.eql",
+  "metadata": {}
+}

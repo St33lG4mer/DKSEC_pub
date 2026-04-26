@@ -1,0 +1,40 @@
+{
+  "id": "9bbb52b8-bdcb-55f8-9937-47d310db39db",
+  "catalog": "sigma",
+  "name": "proc_creation_win_soundrecorder_audio_capture",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "soundrecorder.exe"
+      ],
+      "raw_values": [
+        "*\\\\SoundRecorder.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "file"
+      ],
+      "raw_values": [
+        "*/FILE*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\SoundRecorder.exe\" and process.command_line:\"*/FILE*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_soundrecorder_audio_capture.eql",
+  "metadata": {}
+}

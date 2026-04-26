@@ -1,0 +1,27 @@
+{
+  "id": "e9bf6b01-3a0b-5b13-aede-f4bf86b371ec",
+  "catalog": "elastic",
+  "name": "GCP Pub/Sub Topic Deletion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.pubsub.v*.Publisher.DeleteTopic and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/defense_evasion_gcp_pub_sub_topic_deletion.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Use Case: Log Auditing",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

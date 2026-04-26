@@ -1,0 +1,52 @@
+{
+  "id": "72f0da58-d9e3-5acc-81e9-18d7ffe778e0",
+  "catalog": "elastic",
+  "name": "AWS API Activity from Uncommon S3 Client by Rare User",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and user_agent.original: (*S3 Browser* or *Cyberduck*)\n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/exfiltration_s3_uncommon_client_user_agent.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS CloudTrail",
+      "Data Source: AWS S3",
+      "Tactic: Exfiltration",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

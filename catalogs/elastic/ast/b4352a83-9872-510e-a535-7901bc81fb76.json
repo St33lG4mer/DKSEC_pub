@@ -1,0 +1,29 @@
+{
+  "id": "b4352a83-9872-510e-a535-7901bc81fb76",
+  "catalog": "elastic",
+  "name": "AWS Management Console Root Login",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:aws.cloudtrail and \nevent.provider:signin.amazonaws.com and \nevent.action:ConsoleLogin and \naws.cloudtrail.user_identity.type:Root and \nevent.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/initial_access_console_login_root.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Sign-In",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Initial Access",
+      "Tactic: Privilege Escalation"
+    ]
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "id": "c7f8f45c-ff35-5641-9eb7-b6c4b36c049e",
+  "catalog": "elastic",
+  "name": "Tool Enumeration Detected via Defend for Containers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "which",
+        "man",
+        "chmod",
+        "chown",
+        "curl",
+        "wget",
+        "socat",
+        "netcat",
+        "ncat",
+        "busybox",
+        "python3",
+        "python",
+        "perl",
+        "node",
+        "openssl",
+        "ruby",
+        "lua",
+        "getent",
+        "dig",
+        "nslookup",
+        "host",
+        "tcpdump",
+        "tshark",
+        "kubectl",
+        "docker",
+        "kubelet",
+        "kube-proxy",
+        "containerd",
+        "systemd",
+        "crictl",
+        "gcc",
+        "g++",
+        "clang",
+        "clang++",
+        "c++",
+        "c99",
+        "c89",
+        "cc1",
+        "musl-gcc",
+        "musl-clang",
+        "tcc",
+        "zig",
+        "ccache",
+        "distcc",
+        "make",
+        "nmap",
+        "zenmap",
+        "nuclei",
+        "netdiscover",
+        "legion",
+        "masscan",
+        "zmap",
+        "zgrab",
+        "ngrep",
+        "telnet",
+        "mitmproxy"
+      ],
+      "raw_values": [
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown",
+        "curl",
+        "wget",
+        "socat",
+        "nc",
+        "netcat",
+        "ncat",
+        "busybox",
+        "python3",
+        "python",
+        "perl",
+        "node",
+        "openssl",
+        "ruby",
+        "lua",
+        "getent",
+        "dig",
+        "nslookup",
+        "host",
+        "ip",
+        "tcpdump",
+        "tshark",
+        "kubectl",
+        "docker",
+        "kubelet",
+        "kube-proxy",
+        "containerd",
+        "systemd",
+        "crictl",
+        "gcc",
+        "g++",
+        "clang",
+        "clang++",
+        "cc",
+        "c++",
+        "c99",
+        "c89",
+        "cc1*",
+        "musl-gcc",
+        "musl-clang",
+        "tcc",
+        "zig",
+        "ccache",
+        "distcc",
+        "make",
+        "nmap",
+        "zenmap",
+        "nuclei",
+        "netdiscover",
+        "legion",
+        "masscan",
+        "zmap",
+        "zgrab",
+        "ngrep",
+        "telnet",
+        "mitmproxy"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "which"
+      ],
+      "raw_values": [
+        "which"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  process.name == \"which\" or\n  (\n    /* Account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\") and\n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )\n) and\nprocess.args in (\n\n  /* TCP IP */\n  \"curl\", \"wget\", \"socat\", \"nc\", \"netcat\", \"ncat\", \"busybox\", \"python3\", \"python\", \"perl\", \"node\", \"openssl\", \"ruby\", \"lua\",\n\n  /* networking */\n  \"getent\", \"dig\", \"nslookup\", \"host\", \"ip\", \"tcpdump\", \"tshark\",\n\n  /* container management */\n  \"kubectl\", \"docker\", \"kubelet\", \"kube-proxy\", \"containerd\", \"systemd\", \"crictl\",\n\n  /* compilation */\n  \"gcc\", \"g++\", \"clang\", \"clang++\", \"cc\", \"c++\", \"c99\", \"c89\", \"cc1*\", \"musl-gcc\", \"musl-clang\", \"tcc\", \"zig\", \"ccache\", \"distcc\", \"make\",\n\n  /* scanning */\n  \"nmap\", \"zenmap\", \"nuclei\", \"netdiscover\", \"legion\", \"masscan\", \"zmap\", \"zgrab\", \"ngrep\", \"telnet\", \"mitmproxy\", \"zmap\",\n  \"masscan\", \"zgrab\"\n) and\nprocess.interactive == true and container.id like \"*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/discovery_tool_enumeration.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "id": "15269f64-5ada-5638-ab6f-648db978de39",
+  "catalog": "elastic",
+  "name": "AWS EC2 EBS Snapshot Shared or Made Public",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modifysnapshotattribute"
+      ],
+      "raw_values": [
+        "ModifySnapshotAttribute"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"  \n  and event.action == \"ModifySnapshotAttribute\"\n  and event.outcome == \"success\"\n  and stringContains (aws.cloudtrail.request_parameters, \"attributeType=CREATE_VOLUME_PERMISSION\")\n  and stringContains (aws.cloudtrail.request_parameters, \"add=\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/exfiltration_ec2_ebs_snapshot_shared_with_another_account.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS EC2",
+      "Use Case: Threat Detection",
+      "Tactic: Exfiltration",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

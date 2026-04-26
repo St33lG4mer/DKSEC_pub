@@ -1,0 +1,31 @@
+{
+  "id": "1aa81c32-9a7a-5ced-ae13-05897a642e3a",
+  "catalog": "sigma",
+  "name": "file_event_win_powershell_module_susp_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".ps",
+        ".dll"
+      ],
+      "raw_values": [
+        "*\\\\WindowsPowerShell\\\\Modules\\\\*\\\\.ps",
+        "*\\\\WindowsPowerShell\\\\Modules\\\\*\\\\.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*\\\\WindowsPowerShell\\\\Modules\\\\*\\\\.ps\", \"*\\\\WindowsPowerShell\\\\Modules\\\\*\\\\.dll\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_powershell_module_susp_creation.eql",
+  "metadata": {}
+}

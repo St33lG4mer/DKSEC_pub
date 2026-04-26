@@ -1,0 +1,28 @@
+{
+  "id": "8c48f538-48d0-50b8-b570-9fe67b2fb25e",
+  "catalog": "elastic",
+  "name": "Unusual Windows Process Calling the Metadata Service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/credential_access_ml_windows_anomalous_metadata_process.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

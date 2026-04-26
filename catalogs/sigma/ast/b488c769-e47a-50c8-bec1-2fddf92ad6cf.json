@@ -1,0 +1,42 @@
+{
+  "id": "b488c769-e47a-50c8-bec1-2fddf92ad6cf",
+  "catalog": "sigma",
+  "name": "file_event_win_exploit_cve_2023_38331_winrar_susp_double_ext",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winrar.exe"
+      ],
+      "raw_values": [
+        "*\\\\WinRAR.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "rar$",
+        ".']), flags=set())"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*",
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\.[a-zA-Z0-9]{1,4} \\\\.']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\WinRAR.exe\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*\" and file.path:\"SigmaRegularExpression(regexp=SigmaString(['\\\\.[a-zA-Z0-9]{1,4} \\\\.']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-38831/file_event_win_exploit_cve_2023_38331_winrar_susp_double_ext.eql",
+  "metadata": {}
+}

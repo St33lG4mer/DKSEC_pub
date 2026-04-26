@@ -1,0 +1,29 @@
+{
+  "id": "cafab480-6156-5970-a2f8-199b278501cd",
+  "catalog": "sigma",
+  "name": "registry_set_bginfo_custom_wmi_query",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\winternals\\\\bginfo\\\\userfields\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Winternals\\\\BGInfo\\\\UserFields\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Winternals\\\\BGInfo\\\\UserFields\\\\*\" and winlog.event_data.Details:\"6*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_bginfo_custom_wmi_query.eql",
+  "metadata": {}
+}

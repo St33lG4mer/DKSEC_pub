@@ -1,0 +1,31 @@
+{
+  "id": "314c9421-7cb1-54d9-bcfd-d696f4431852",
+  "catalog": "sigma",
+  "name": "file_event_win_anydesk_artefact",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "user.conf",
+        "system.conf"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Roaming\\\\AnyDesk\\\\user.conf*",
+        "*\\\\AppData\\\\Roaming\\\\AnyDesk\\\\system.conf*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*\\\\AppData\\\\Roaming\\\\AnyDesk\\\\user.conf*\", \"*\\\\AppData\\\\Roaming\\\\AnyDesk\\\\system.conf*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_anydesk_artefact.eql",
+  "metadata": {}
+}

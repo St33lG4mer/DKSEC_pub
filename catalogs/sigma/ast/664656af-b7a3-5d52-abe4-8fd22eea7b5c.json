@@ -1,0 +1,51 @@
+{
+  "id": "664656af-b7a3-5d52-abe4-8fd22eea7b5c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_tpmvscmgr_add_virtual_smartcard",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tpmvscmgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\tpmvscmgr.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "tpmvscmgr.exe"
+      ],
+      "raw_values": [
+        "TpmVscMgr.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "*create*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\tpmvscmgr.exe\" and process.pe.original_file_name:\"TpmVscMgr.exe\") and process.command_line:\"*create*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_tpmvscmgr_add_virtual_smartcard.eql",
+  "metadata": {}
+}

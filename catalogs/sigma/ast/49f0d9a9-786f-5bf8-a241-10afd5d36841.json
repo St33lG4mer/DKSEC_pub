@@ -1,0 +1,87 @@
+{
+  "id": "49f0d9a9-786f-5bf8-a241-10afd5d36841",
+  "catalog": "sigma",
+  "name": "win_security_susp_scheduled_task_delete_or_disable",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4699",
+        "4701"
+      ],
+      "raw_values": [
+        "4699",
+        "4701"
+      ]
+    },
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": "like~",
+      "values": [
+        "\\\\windows\\\\systemrestore\\\\sr",
+        "\\\\windows\\\\windows defender\\\\",
+        "\\\\windows\\\\bitlocker",
+        "\\\\windows\\\\windowsbackup\\\\",
+        "\\\\windows\\\\windowsupdate\\\\",
+        "\\\\windows\\\\updateorchestrator\\\\schedule",
+        "\\\\windows\\\\exploitguard"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\SystemRestore\\\\SR*",
+        "*\\\\Windows\\\\Windows Defender\\\\*",
+        "*\\\\Windows\\\\BitLocker*",
+        "*\\\\Windows\\\\WindowsBackup\\\\*",
+        "*\\\\Windows\\\\WindowsUpdate\\\\*",
+        "*\\\\Windows\\\\UpdateOrchestrator\\\\Schedule*",
+        "*\\\\Windows\\\\ExploitGuard*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4699"
+      ],
+      "raw_values": [
+        "4699"
+      ]
+    },
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": ":",
+      "values": [
+        "\\\\windows\\\\windows defender\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\Windows Defender\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (((event.code like~ (\"4699\", \"4701\")) and (winlog.event_data.TaskName like~ (\"*\\\\Windows\\\\SystemRestore\\\\SR*\", \"*\\\\Windows\\\\Windows Defender\\\\*\", \"*\\\\Windows\\\\BitLocker*\", \"*\\\\Windows\\\\WindowsBackup\\\\*\", \"*\\\\Windows\\\\WindowsUpdate\\\\*\", \"*\\\\Windows\\\\UpdateOrchestrator\\\\Schedule*\", \"*\\\\Windows\\\\ExploitGuard*\"))) and (not (event.code:\"4699\" and user.name:\"*$\" and winlog.event_data.TaskName:\"*\\\\Windows\\\\Windows Defender\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_scheduled_task_delete_or_disable.eql",
+  "metadata": {}
+}

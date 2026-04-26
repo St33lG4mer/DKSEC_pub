@@ -1,0 +1,84 @@
+{
+  "id": "126a49ae-db44-56c0-a4bb-14e00de5d48e",
+  "catalog": "elastic",
+  "name": "Potential Linux Credential Dumping via Proc Filesystem",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "start",
+        "exec_event"
+      ],
+      "raw_values": [
+        "exec",
+        "start",
+        "exec_event"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "-eo",
+        "pid",
+        "command"
+      ],
+      "raw_values": [
+        "-eo",
+        "pid",
+        "command"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "strings"
+      ],
+      "raw_values": [
+        "ps",
+        "strings"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.parent.name with maxspan=1m\n  [process where host.os.type == \"linux\" and process.name == \"ps\" and event.action in (\"exec\", \"start\", \"exec_event\")\n   and process.args in (\"-eo\", \"pid\", \"command\")]\n  [process where host.os.type == \"linux\" and process.name == \"strings\" and event.action in (\"exec\", \"start\", \"exec_event\")\n   and process.args : \"/tmp/*\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_proc_credential_dumping.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

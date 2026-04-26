@@ -1,0 +1,33 @@
+{
+  "id": "a06fea47-a868-5e78-9314-fdd7572d1eab",
+  "catalog": "sigma",
+  "name": "image_load_dll_tttracer_module_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "ttdrecord.dll",
+        "ttdwriter.dll",
+        "ttdloader.dll"
+      ],
+      "raw_values": [
+        "*\\\\ttdrecord.dll",
+        "*\\\\ttdwriter.dll",
+        "*\\\\ttdloader.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*\\\\ttdrecord.dll\", \"*\\\\ttdwriter.dll\", \"*\\\\ttdloader.dll\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_dll_tttracer_module_load.eql",
+  "metadata": {}
+}

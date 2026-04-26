@@ -1,0 +1,56 @@
+{
+  "id": "3fd8a681-505e-5bd0-a6ee-2de157b3b497",
+  "catalog": "sigma",
+  "name": "win_system_susp_system_update_error",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "213",
+        "217"
+      ],
+      "raw_values": [
+        "16",
+        "20",
+        "24",
+        "213",
+        "217"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windowsupdateclient"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-WindowsUpdateClient"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Microsoft-Windows-WindowsUpdateClient\" and (event.code like~ (\"16\", \"20\", \"24\", \"213\", \"217\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/microsoft_windows_windows_update_client/win_system_susp_system_update_error.eql",
+  "metadata": {}
+}

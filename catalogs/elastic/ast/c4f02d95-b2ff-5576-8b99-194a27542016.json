@@ -1,0 +1,51 @@
+{
+  "id": "c4f02d95-b2ff-5576-8b99-194a27542016",
+  "catalog": "elastic",
+  "name": "Suspicious Process Execution Detected via Defend for Containers",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type == \"start\" and event.action == \"exec\" and process.interactive == true and (\n  process.executable like (\n    \"/tmp/*\", \"/dev/shm/*\", \"/var/tmp/*\", \"/run/*\", \"/var/run/*\", \"/mnt/*\", \"/media/*\", \"/boot/*\"\n  ) or\n  // Hidden process execution\n  process.name like \".*\"\n) and container.id like \"?*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/defense_evasion_interactive_process_execution_from_suspicious_directory.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

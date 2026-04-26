@@ -1,0 +1,40 @@
+{
+  "id": "e702aab0-3b34-5783-b34f-c4b3c2bc2a54",
+  "catalog": "sigma",
+  "name": "registry_set_disabled_microsoft_defender_eventlog",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\microsoft-windows-windows defender/operational\\\\enabled"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-Windows Defender/Operational\\\\Enabled*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-Windows Defender/Operational\\\\Enabled*\" and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disabled_microsoft_defender_eventlog.eql",
+  "metadata": {}
+}

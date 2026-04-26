@@ -1,0 +1,49 @@
+{
+  "id": "5ce64282-c491-5870-904e-1aaecfd812a2",
+  "catalog": "sigma",
+  "name": "file_event_win_webdav_tmpfile_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".7z",
+        ".bat",
+        ".dat",
+        ".ico",
+        ".js",
+        ".lnk",
+        ".ps1",
+        ".rar",
+        ".vbe",
+        ".vbs",
+        ".zip"
+      ],
+      "raw_values": [
+        "*.7z",
+        "*.bat",
+        "*.dat",
+        "*.ico",
+        "*.js",
+        "*.lnk",
+        "*.ps1",
+        "*.rar",
+        "*.vbe",
+        "*.vbs",
+        "*.zip"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\TfsStore\\\\Tfs_DAV\\\\*\" and (file.path like~ (\"*.7z\", \"*.bat\", \"*.dat\", \"*.ico\", \"*.js\", \"*.lnk\", \"*.ps1\", \"*.rar\", \"*.vbe\", \"*.vbs\", \"*.zip\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_event/file_event_win_webdav_tmpfile_creation.eql",
+  "metadata": {}
+}

@@ -1,0 +1,79 @@
+{
+  "id": "1ac322cc-7a04-5b9c-8f56-d318eca36aec",
+  "catalog": "sigma",
+  "name": "win_system_invoke_obfuscation_via_compress_services",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": "like~",
+      "values": [
+        ":system.io.compression.deflatestream",
+        "system.io.streamreader"
+      ],
+      "raw_values": [
+        "*:system.io.compression.deflatestream*",
+        "*system.io.streamreader*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    },
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": ":",
+      "values": [
+        "new-object",
+        "text.encoding]::ascii",
+        "readtoend"
+      ],
+      "raw_values": [
+        "*new-object*",
+        "*text.encoding]::ascii*",
+        "*readtoend*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\" and (winlog.event_data.ImagePath:\"*new-object*\" and winlog.event_data.ImagePath:\"*text.encoding]::ascii*\" and winlog.event_data.ImagePath:\"*readtoend*\") and (winlog.event_data.ImagePath like~ (\"*:system.io.compression.deflatestream*\", \"*system.io.streamreader*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_invoke_obfuscation_via_compress_services.eql",
+  "metadata": {}
+}

@@ -1,0 +1,54 @@
+{
+  "id": "ad3f66ed-898b-5e31-8940-ca50722462a3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_get_localgroup_member_recon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "domain admins",
+        "administrator",
+        "administrateur",
+        "enterprise admins",
+        "exchange trusted subsystem",
+        "remote desktop users",
+        "utilisateurs du bureau à distance",
+        "usuarios de escritorio remoto"
+      ],
+      "raw_values": [
+        "*domain admins*",
+        "* administrator*",
+        "* administrateur*",
+        "*enterprise admins*",
+        "*Exchange Trusted Subsystem*",
+        "*Remote Desktop Users*",
+        "*Utilisateurs du Bureau à distance*",
+        "*Usuarios de escritorio remoto*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "get-localgroupmember"
+      ],
+      "raw_values": [
+        "*Get-LocalGroupMember *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*Get-LocalGroupMember *\" and (process.command_line like~ (\"*domain admins*\", \"* administrator*\", \"* administrateur*\", \"*enterprise admins*\", \"*Exchange Trusted Subsystem*\", \"*Remote Desktop Users*\", \"*Utilisateurs du Bureau à distance*\", \"*Usuarios de escritorio remoto*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_get_localgroup_member_recon.eql",
+  "metadata": {}
+}

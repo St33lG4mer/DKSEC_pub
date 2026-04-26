@@ -1,0 +1,150 @@
+{
+  "id": "ee17c725-7385-50b6-8e30-4ca5cdf93b13",
+  "catalog": "elastic",
+  "name": "Unusual Web Server Command Execution",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "apache",
+        "nginx",
+        "apache2",
+        "httpd",
+        "lighttpd",
+        "caddy",
+        "mongrel_rails",
+        "haproxy",
+        "gunicorn",
+        "uwsgi",
+        "openresty",
+        "cherokee",
+        "h2o",
+        "resin",
+        "puma",
+        "unicorn",
+        "traefik",
+        "uvicorn",
+        "tornado",
+        "hypercorn",
+        "daphne",
+        "twistd",
+        "yaws",
+        "webfsd",
+        "httpd.worker",
+        "flask",
+        "rails",
+        "mongrel",
+        "php-cgi",
+        "php-fcgi",
+        "php-cgi.cagefs",
+        "java",
+        "node",
+        "catalina.sh",
+        "hiawatha",
+        "lswsctrl"
+      ],
+      "raw_values": [
+        "apache",
+        "nginx",
+        "apache2",
+        "httpd",
+        "lighttpd",
+        "caddy",
+        "mongrel_rails",
+        "haproxy",
+        "gunicorn",
+        "uwsgi",
+        "openresty",
+        "cherokee",
+        "h2o",
+        "resin",
+        "puma",
+        "unicorn",
+        "traefik",
+        "uvicorn",
+        "tornado",
+        "hypercorn",
+        "daphne",
+        "twistd",
+        "yaws",
+        "webfsd",
+        "httpd.worker",
+        "flask",
+        "rails",
+        "mongrel",
+        "php-cgi",
+        "php-fcgi",
+        "php-cgi.cagefs",
+        "java",
+        "node",
+        "catalina.sh",
+        "hiawatha",
+        "lswsctrl"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": ":",
+      "values": [
+        "apache",
+        "www-data",
+        "httpd",
+        "nginx",
+        "lighttpd",
+        "tomcat",
+        "tomcat8",
+        "tomcat9"
+      ],
+      "raw_values": [
+        "apache",
+        "www-data",
+        "httpd",
+        "nginx",
+        "lighttpd",
+        "tomcat",
+        "tomcat8",
+        "tomcat9"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "498",
+        "54321"
+      ],
+      "raw_values": [
+        "33",
+        "498",
+        "48",
+        "54321"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:exec and (\n  process.parent.name:(\n    \"apache\" or \"nginx\" or \"apache2\" or \"httpd\" or \"lighttpd\" or \"caddy\" or \"mongrel_rails\" or \"haproxy\" or\n    \"gunicorn\" or \"uwsgi\" or \"openresty\" or \"cherokee\" or \"h2o\" or \"resin\" or \"puma\" or \"unicorn\" or \"traefik\" or \"uvicorn\" or\n    \"tornado\" or \"hypercorn\" or \"daphne\" or \"twistd\" or \"yaws\" or \"webfsd\" or \"httpd.worker\" or \"flask\" or \"rails\" or \"mongrel\" or\n    php-fpm* or \"php-cgi\" or \"php-fcgi\" or \"php-cgi.cagefs\" or \"java\" or \"node\" or \"catalina.sh\" or \"hiawatha\" or \"lswsctrl\"\n  ) or\n  user.name:(\"apache\" or \"www-data\" or \"httpd\" or \"nginx\" or \"lighttpd\" or \"tomcat\" or \"tomcat8\" or \"tomcat9\") or\n  user.id:(\"33\" or \"498\" or \"48\" or \"54321\")\n) and process.working_directory:(\n  /var/www/* or\n  /usr/share/nginx/* or\n  /srv/www/* or\n  /srv/http/* or\n  */webapps/* or\n  /home/*/public_html/* or\n  /home/*/www/* or\n  /opt/* or\n  /u0*/*\n) and\nprocess.command_line:* and process.name:(bash or dash or sh or tcsh or csh or zsh or ksh or fish) and process.args:\"-c\" and\nnot (\n  (process.parent.name:java and not process.parent.executable:/u0*/*) or\n  (process.parent.name:node and process.parent.executable:(/home/*/.vscode-server/* or /users/*/.vscode-server/* or /bin/node or /usr/bin/node or /usr/local/bin/node or /opt/plesk/node/*/bin/node)) or\n  process.working_directory:(/u0*/*/sysman/emd or /u0*/app/oracle/product/*/dbhome_* or /u0*/app/oracle/product/*/db_* or /var/www/*edoc*) or\n  process.parent.executable:/tmp/* or\n  process.args:(/usr/local/bin/wkhtmltopdf* or /usr/bin/rsvg-convert*) or\n  process.command_line:*/opt/sc/bin/showvulns*\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_web_server_unusual_command_execution.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Web",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

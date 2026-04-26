@@ -1,0 +1,75 @@
+{
+  "id": "676e65bd-3fe9-5cbb-b157-959a512a20ce",
+  "catalog": "elastic",
+  "name": "Kerberos Traffic from Unusual Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": "==",
+      "values": [
+        "egress"
+      ],
+      "raw_values": [
+        "egress"
+      ]
+    },
+    {
+      "field": "destination.address",
+      "raw_field": "destination.address",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1",
+        "::1"
+      ],
+      "raw_values": [
+        "127.0.0.1",
+        "::1"
+      ]
+    }
+  ],
+  "raw_query": "network where host.os.type == \"windows\" and event.type == \"start\" and network.direction == \"egress\" and\n  destination.port == 88 and source.port >= 49152 and process.pid != 4 and destination.address : \"*\" and\n  not \n  (\n    process.executable : (\n        \"\\\\device\\\\harddiskvolume?\\\\program files (x86)\\\\nmap\\\\nmap.exe\",\n        \"\\\\device\\\\harddiskvolume?\\\\program files (x86)\\\\nmap oem\\\\nmap.exe\",\n        \"\\\\device\\\\harddiskvolume?\\\\windows\\\\system32\\\\lsass.exe\",\n        \"?:\\\\Program Files\\\\Amazon Corretto\\\\jdk1*\\\\bin\\\\java.exe\",\n        \"?:\\\\Program Files\\\\BlackBerry\\\\UEM\\\\Proxy Server\\\\bin\\\\prunsrv.exe\",\n        \"?:\\\\Program Files\\\\BlackBerry\\\\UEM\\\\Core\\\\tomcat-core\\\\bin\\\\tomcat9.exe\",\n        \"?:\\\\Program Files\\\\DBeaver\\\\dbeaver.exe\",\n        \"?:\\\\Program Files\\\\Docker\\\\Docker\\\\resources\\\\com.docker.backend.exe\",\n        \"?:\\\\Program Files\\\\Docker\\\\Docker\\\\resources\\\\com.docker.vpnkit.exe\",\n        \"?:\\\\Program Files\\\\Docker\\\\Docker\\\\resources\\\\vpnkit.exe\",\n        \"?:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\",\n        \"?:\\\\Program Files\\\\Internet Explorer\\\\iexplore.exe\",\n        \"?:\\\\Program Files\\\\JetBrains\\\\PyCharm Community Edition*\\\\bin\\\\pycharm64.exe\",\n        \"?:\\\\Program Files\\\\Mozilla Firefox\\\\firefox.exe\",\n        \"?:\\\\Program Files\\\\Oracle\\\\VirtualBox\\\\VirtualBoxVM.exe\",\n        \"?:\\\\Program Files\\\\Puppet Labs\\\\Puppet\\\\puppet\\\\bin\\\\ruby.exe\",\n        \"?:\\\\Program Files\\\\rapid7\\\\nexpose\\\\nse\\\\.DLLCACHE\\\\nseserv.exe\",\n        \"?:\\\\Program Files\\\\Silverfort\\\\Silverfort AD Adapter\\\\SilverfortServer.exe\",\n        \"?:\\\\Program Files\\\\Tenable\\\\Nessus\\\\nessusd.exe\",\n        \"?:\\\\Program Files\\\\VMware\\\\VMware View\\\\Server\\\\bin\\\\ws_TomcatService.exe\",\n        \"?:\\\\Program Files (x86)\\\\Advanced Port Scanner\\\\advanced_port_scanner.exe\",\n        \"?:\\\\Program Files (x86)\\\\DesktopCentral_Agent\\\\bin\\\\dcpatchscan.exe\",\n        \"?:\\\\Program Files (x86)\\\\GFI\\\\LanGuard 12 Agent\\\\lnsscomm.exe\",\n        \"?:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\",\n        \"?:\\\\Program Files (x86)\\\\Internet Explorer\\\\iexplore.exe\",\n        \"?:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\",\n        \"?:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeUpdate\\\\MicrosoftEdgeUpdate.exe\",\n        \"?:\\\\Program Files (x86)\\\\Microsoft Silverlight\\\\sllauncher.exe\",\n        \"?:\\\\Program Files (x86)\\\\Nmap\\\\nmap.exe\",\n        \"?:\\\\Program Files (x86)\\\\Nmap OEM\\\\nmap.exe\",\n        \"?:\\\\Program Files (x86)\\\\nwps\\\\NetScanTools Pro\\\\NSTPRO.exe\",\n        \"?:\\\\Program Files (x86)\\\\SAP BusinessObjects\\\\tomcat\\\\bin\\\\tomcat9.exe\",\n        \"?:\\\\Program Files (x86)\\\\SuperScan\\\\scanner.exe\",\n        \"?:\\\\Program Files (x86)\\\\Zscaler\\\\ZSATunnel\\\\ZSATunnel.exe\",\n        \"?:\\\\Windows\\\\System32\\\\lsass.exe\",\n        \"?:\\\\Windows\\\\System32\\\\MicrosoftEdgeCP.exe\",\n        \"?:\\\\Windows\\\\System32\\\\svchost.exe\",\n        \"?:\\\\Windows\\\\SysWOW64\\\\vmnat.exe\",\n        \"?:\\\\Windows\\\\SystemApps\\\\Microsoft.MicrosoftEdge_*\\\\MicrosoftEdge.exe\",\n        \"System\"\n    ) and process.code_signature.trusted == true\n  ) and\n destination.address != \"127.0.0.1\" and destination.address != \"::1\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_kerberoasting_unusual_process.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

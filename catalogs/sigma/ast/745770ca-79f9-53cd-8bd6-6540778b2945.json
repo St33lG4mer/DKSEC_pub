@@ -1,0 +1,73 @@
+{
+  "id": "745770ca-79f9-53cd-8bd6-6540778b2945",
+  "catalog": "sigma",
+  "name": "proc_creation_win_findstr_recon_everyone",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "find.exe",
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "*\\\\find.exe",
+        "*\\\\findstr.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "find.exe",
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "FIND.EXE",
+        "FINDSTR.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "'everyone'"
+      ],
+      "raw_values": [
+        "*\\",
+        "*",
+        "*'Everyone'*",
+        "*'BUILTIN\\\\'*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "icacls",
+        "findstr",
+        "everyone"
+      ],
+      "raw_values": [
+        "*icacls *",
+        "*findstr *",
+        "*Everyone*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable like~ (\"*\\\\find.exe\", \"*\\\\findstr.exe\")) or (process.pe.original_file_name like~ (\"FIND.EXE\", \"FINDSTR.EXE\"))) and (process.command_line like~ (\"*\\\"Everyone\\\"*\", \"*'Everyone'*\", \"*\\\"BUILTIN\\\\\\\"*\", \"*'BUILTIN\\\\'*\"))) or (process.command_line:\"*icacls *\" and process.command_line:\"*findstr *\" and process.command_line:\"*Everyone*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_findstr_recon_everyone.eql",
+  "metadata": {}
+}

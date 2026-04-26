@@ -1,0 +1,29 @@
+{
+  "id": "aa3043c3-dae4-59b4-8e9f-e7e4e5e00846",
+  "catalog": "sigma",
+  "name": "pipe_created_scrcons_wmi_consumer_namedpipe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "scrcons.exe"
+      ],
+      "raw_values": [
+        "*\\\\scrcons.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\scrcons.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_scrcons_wmi_consumer_namedpipe.eql",
+  "metadata": {}
+}

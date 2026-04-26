@@ -1,0 +1,17 @@
+{
+  "id": "f8da5308-c432-531e-befc-4ea9e9800dd1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_cli_obfuscation_unicode",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.command_line like~ (\"*ˣ*\", \"*˪*\", \"*ˢ*\", \"*∕*\", \"*⁄*\", \"*―*\", \"*—*\", \"* *\", \"*¯*\", \"*®*\", \"*¶*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_cli_obfuscation_unicode.eql",
+  "metadata": {}
+}

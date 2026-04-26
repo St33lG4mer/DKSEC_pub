@@ -1,0 +1,53 @@
+{
+  "id": "e32f12c9-598b-5c0f-973c-a5e841142399",
+  "catalog": "sigma",
+  "name": "proc_creation_win_tscon_rdp_session_hijacking",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tscon.exe"
+      ],
+      "raw_values": [
+        "*\\\\tscon.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "tscon.exe"
+      ],
+      "raw_values": [
+        "tscon.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\tscon.exe\" or process.pe.original_file_name:\"tscon.exe\") and (winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_tscon_rdp_session_hijacking.eql",
+  "metadata": {}
+}

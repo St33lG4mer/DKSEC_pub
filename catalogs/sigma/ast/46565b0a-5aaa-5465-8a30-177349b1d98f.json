@@ -1,0 +1,81 @@
+{
+  "id": "46565b0a-5aaa-5465-8a30-177349b1d98f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sc_service_tamper_for_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".sh",
+        ".exe",
+        ".dll",
+        ".bin$",
+        ".bat",
+        ".cmd",
+        ".js",
+        ".msh$",
+        ".reg$",
+        ".scr",
+        ".ps",
+        ".vb",
+        ".jar",
+        ".pl"
+      ],
+      "raw_values": [
+        "*.sh*",
+        "*.exe*",
+        "*.dll*",
+        "*.bin$*",
+        "*.bat*",
+        "*.cmd*",
+        "*.js*",
+        "*.msh$*",
+        "*.reg$*",
+        "*.scr*",
+        "*.ps*",
+        "*.vb*",
+        "*.jar*",
+        "*.pl*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "config",
+        "binpath=",
+        "failure",
+        "command=",
+        "reg",
+        "add",
+        "failurecommand",
+        "imagepath"
+      ],
+      "raw_values": [
+        "*sc *",
+        "*config *",
+        "*binpath=*",
+        "*failure*",
+        "*command=*",
+        "*reg *",
+        "*add *",
+        "*FailureCommand*",
+        "*ImagePath*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.command_line:\"*sc *\" and process.command_line:\"*config *\" and process.command_line:\"*binpath=*\") or (process.command_line:\"*sc *\" and process.command_line:\"*failure*\" and process.command_line:\"*command=*\")) or (((process.command_line:\"*reg *\" and process.command_line:\"*add *\" and process.command_line:\"*FailureCommand*\") or (process.command_line:\"*reg *\" and process.command_line:\"*add *\" and process.command_line:\"*ImagePath*\")) and (process.command_line like~ (\"*.sh*\", \"*.exe*\", \"*.dll*\", \"*.bin$*\", \"*.bat*\", \"*.cmd*\", \"*.js*\", \"*.msh$*\", \"*.reg$*\", \"*.scr*\", \"*.ps*\", \"*.vb*\", \"*.jar*\", \"*.pl*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sc_service_tamper_for_persistence.eql",
+  "metadata": {}
+}

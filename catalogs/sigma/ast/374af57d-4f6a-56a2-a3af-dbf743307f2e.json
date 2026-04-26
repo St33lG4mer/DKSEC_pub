@@ -1,0 +1,46 @@
+{
+  "id": "374af57d-4f6a-56a2-a3af-dbf743307f2e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_blue_mockingbird",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sc config",
+        "wercplsupporte.dll",
+        "cor_profiler"
+      ],
+      "raw_values": [
+        "*sc config*",
+        "*wercplsupporte.dll*",
+        "*COR_PROFILER"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cmd.exe\" and (process.command_line:\"*sc config*\" and process.command_line:\"*wercplsupporte.dll*\")) or (process.executable:\"*\\\\wmic.exe\" and process.command_line:\"*COR_PROFILER\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Malware/Blue-Mockingbird/proc_creation_win_malware_blue_mockingbird.eql",
+  "metadata": {}
+}

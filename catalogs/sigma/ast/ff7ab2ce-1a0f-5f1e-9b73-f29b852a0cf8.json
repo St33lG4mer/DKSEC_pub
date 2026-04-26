@@ -1,0 +1,32 @@
+{
+  "id": "ff7ab2ce-1a0f-5f1e-9b73-f29b852a0cf8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_turla_commands_critical",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "net use \\\\\\\\%DomainController%\\\\C$ \\",
+        " *",
+        "dir c:\\\\*.doc* /s",
+        "dir %TEMP%\\\\*.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"net use \\\\\\\\%DomainController%\\\\C$ \\\"P@ssw0rd\\\" *\", \"dir c:\\\\*.doc* /s\", \"dir %TEMP%\\\\*.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2014/TA/Turla/proc_creation_win_apt_turla_commands_critical.eql",
+  "metadata": {}
+}

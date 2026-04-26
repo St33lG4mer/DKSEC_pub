@@ -1,0 +1,52 @@
+{
+  "id": "50df072e-22b3-5f0d-8e74-0bbdda110077",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cdb_arbitrary_command_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-cf"
+      ],
+      "raw_values": [
+        "* -c *",
+        "* -cf *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cdb.exe"
+      ],
+      "raw_values": [
+        "*\\\\cdb.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cdb.exe"
+      ],
+      "raw_values": [
+        "CDB.Exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cdb.exe\" or process.pe.original_file_name:\"CDB.Exe\") and (process.command_line like~ (\"* -c *\", \"* -cf *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cdb_arbitrary_command_execution.eql",
+  "metadata": {}
+}

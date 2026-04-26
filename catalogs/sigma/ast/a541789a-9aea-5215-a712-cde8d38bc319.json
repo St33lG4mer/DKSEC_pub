@@ -1,0 +1,52 @@
+{
+  "id": "a541789a-9aea-5215-a712-cde8d38bc319",
+  "catalog": "sigma",
+  "name": "image_load_office_dotnet_gac_dll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "excel.exe",
+        "mspub.exe",
+        "onenote.exe",
+        "onenoteim.exe",
+        "outlook.exe",
+        "powerpnt.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe",
+        "*\\\\mspub.exe",
+        "*\\\\onenote.exe",
+        "*\\\\onenoteim.exe",
+        "*\\\\outlook.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "gac_msil"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\Microsoft.NET\\\\assembly\\\\GAC_MSIL*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\excel.exe\", \"*\\\\mspub.exe\", \"*\\\\onenote.exe\", \"*\\\\onenoteim.exe\", \"*\\\\outlook.exe\", \"*\\\\powerpnt.exe\", \"*\\\\winword.exe\")) and file.path:\"C:\\\\Windows\\\\Microsoft.NET\\\\assembly\\\\GAC_MSIL*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_office_dotnet_gac_dll_load.eql",
+  "metadata": {}
+}

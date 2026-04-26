@@ -1,0 +1,64 @@
+{
+  "id": "182cc409-752a-5690-9bbe-8f0677af61df",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_user32_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "user32.dll,",
+        "lockworkstation"
+      ],
+      "raw_values": [
+        "*user32.dll,*",
+        "*LockWorkStation*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and process.parent.executable:\"*\\\\cmd.exe\" and process.command_line:\"*user32.dll,*\" and process.command_line:\"*LockWorkStation*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_user32_dll.eql",
+  "metadata": {}
+}

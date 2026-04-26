@@ -1,0 +1,65 @@
+{
+  "id": "617e3c4d-e1fe-5ff4-a6bd-d296f9dfc956",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_nircmd",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "execmd",
+        ".exe script",
+        ".exe shexec",
+        "runinteractive",
+        "exec",
+        "exec2",
+        "show",
+        "hide"
+      ],
+      "raw_values": [
+        "* execmd *",
+        "*.exe script *",
+        "*.exe shexec *",
+        "* runinteractive *",
+        "* exec *",
+        "* exec2 *",
+        "* show *",
+        "* hide *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "nircmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\NirCmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "nircmd.exe"
+      ],
+      "raw_values": [
+        "NirCmd.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\NirCmd.exe\" or process.pe.original_file_name:\"NirCmd.exe\") or (process.command_line like~ (\"* execmd *\", \"*.exe script *\", \"*.exe shexec *\", \"* runinteractive *\"))) or ((process.command_line like~ (\"* exec *\", \"* exec2 *\")) and (process.command_line like~ (\"* show *\", \"* hide *\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_nircmd.eql",
+  "metadata": {}
+}

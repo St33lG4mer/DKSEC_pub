@@ -1,0 +1,35 @@
+{
+  "id": "ed8e8659-8d7d-5556-99f6-bf39562591b4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_winpwn",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "offline_winpwn",
+        "winpwn",
+        "winpwn.exe",
+        "winpwn.ps1"
+      ],
+      "raw_values": [
+        "*Offline_Winpwn*",
+        "*WinPwn *",
+        "*WinPwn.exe*",
+        "*WinPwn.ps1*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*Offline_Winpwn*\", \"*WinPwn *\", \"*WinPwn.exe*\", \"*WinPwn.ps1*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_winpwn.eql",
+  "metadata": {}
+}

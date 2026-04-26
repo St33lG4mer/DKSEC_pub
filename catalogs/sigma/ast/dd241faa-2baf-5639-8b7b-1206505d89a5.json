@@ -1,0 +1,40 @@
+{
+  "id": "dd241faa-2baf-5639-8b7b-1206505d89a5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_webbrowserpassview",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "web browser password viewer"
+      ],
+      "raw_values": [
+        "Web Browser Password Viewer"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "webbrowserpassview.exe"
+      ],
+      "raw_values": [
+        "*\\\\WebBrowserPassView.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.description:\"Web Browser Password Viewer\" or process.executable:\"*\\\\WebBrowserPassView.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_webbrowserpassview.eql",
+  "metadata": {}
+}

@@ -1,0 +1,51 @@
+{
+  "id": "1edc3298-5042-58e1-a9e7-21881990466a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_chrome_loader_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "-executionpolicy bypass -windowstyle hidden -e jab"
+      ],
+      "raw_values": [
+        "*-ExecutionPolicy Bypass -WindowStyle Hidden -E JAB*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "chrome.exe"
+      ],
+      "raw_values": [
+        "*\\\\chrome.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\powershell.exe\" and process.parent.command_line:\"*-ExecutionPolicy Bypass -WindowStyle Hidden -E JAB*\" and process.command_line:\"*--load-extension=\\\"*\\\\Appdata\\\\local\\\\chrome\\\"*\" and process.executable:\"*\\\\chrome.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Malware/ChromeLoader/proc_creation_win_malware_chrome_loader_execution.eql",
+  "metadata": {}
+}

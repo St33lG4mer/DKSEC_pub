@@ -1,0 +1,26 @@
+{
+  "id": "5c25c362-30ad-5ddf-aa95-d89a1424223a",
+  "catalog": "elastic",
+  "name": "Potential Data Exfiltration Activity to an Unusual IP Address",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/ded/exfiltration_ml_high_bytes_destination_ip.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Data Exfiltration Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Exfiltration",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

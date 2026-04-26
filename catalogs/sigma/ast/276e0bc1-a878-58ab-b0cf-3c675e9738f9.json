@@ -1,0 +1,56 @@
+{
+  "id": "276e0bc1-a878-58ab-b0cf-3c675e9738f9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_findstr_recon_pipe_output",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "ipconfig*|*find",
+        "net*|*find",
+        "netstat*|*find",
+        "ping*|*find",
+        "systeminfo*|*find",
+        "tasklist*|*find",
+        "whoami*|*find"
+      ],
+      "raw_values": [
+        "*ipconfig*|*find*",
+        "*net*|*find*",
+        "*netstat*|*find*",
+        "*ping*|*find*",
+        "*systeminfo*|*find*",
+        "*tasklist*|*find*",
+        "*whoami*|*find*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "v |",
+        "catalina_start.bat"
+      ],
+      "raw_values": [
+        "*cmd.exe /c TASKLIST /V |*",
+        "*FIND /I*",
+        "*\\\\xampp\\\\*",
+        "*\\\\catalina_start.bat*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*ipconfig*|*find*\", \"*net*|*find*\", \"*netstat*|*find*\", \"*ping*|*find*\", \"*systeminfo*|*find*\", \"*tasklist*|*find*\", \"*whoami*|*find*\")) and (not (process.command_line:\"*cmd.exe /c TASKLIST /V |*\" and process.command_line:\"*FIND /I*\" and process.command_line:\"*\\\\xampp\\\\*\" and process.command_line:\"*\\\\catalina_start.bat*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_findstr_recon_pipe_output.eql",
+  "metadata": {}
+}

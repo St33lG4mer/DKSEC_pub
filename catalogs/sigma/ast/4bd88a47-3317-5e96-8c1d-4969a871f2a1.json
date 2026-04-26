@@ -1,0 +1,95 @@
+{
+  "id": "4bd88a47-3317-5e96-8c1d-4969a871f2a1",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_office_vsto",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\office\\\\outlook\\\\addins\\\\",
+        "\\\\software\\\\microsoft\\\\office\\\\word\\\\addins\\\\",
+        "\\\\software\\\\microsoft\\\\office\\\\excel\\\\addins\\\\",
+        "\\\\software\\\\microsoft\\\\office\\\\powerpoint\\\\addins\\\\",
+        "\\\\software\\\\microsoft\\\\vsto\\\\security\\\\inclusion\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\*",
+        "*\\\\Software\\\\Microsoft\\\\Office\\\\Word\\\\Addins\\\\*",
+        "*\\\\Software\\\\Microsoft\\\\Office\\\\Excel\\\\Addins\\\\*",
+        "*\\\\Software\\\\Microsoft\\\\Office\\\\Powerpoint\\\\Addins\\\\*",
+        "*\\\\Software\\\\Microsoft\\\\VSTO\\\\Security\\\\Inclusion\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "msiexec.exe",
+        "regsvr32.exe",
+        "office",
+        "excel.exe",
+        "integrator.exe",
+        "outlook.exe",
+        "powerpnt.exe",
+        "teams.exe",
+        "visio.exe",
+        "winword.exe",
+        "regsvr.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "C:\\\\Windows\\\\System32\\\\regsvr32.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\regsvr32.exe",
+        "C:\\\\Program Files\\\\Microsoft Office\\\\OFFICE*",
+        "*\\\\excel.exe",
+        "*\\\\Integrator.exe",
+        "*\\\\outlook.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\Teams.exe",
+        "*\\\\visio.exe",
+        "*\\\\winword.exe",
+        "C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\RegSvr.exe",
+        "C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\RegSvr.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "officeclicktorun.exe"
+      ],
+      "raw_values": [
+        "*\\\\OfficeClickToRun.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\office\\\\outlook\\\\addins\\\\antivirus.asoutext\\\\",
+        "\\\\microsoft\\\\office\\\\outlook\\\\addins\\\\avast.asoutext\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Antivirus.AsOutExt\\\\*",
+        "*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Avast.AsOutExt\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Software\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\*\", \"*\\\\Software\\\\Microsoft\\\\Office\\\\Word\\\\Addins\\\\*\", \"*\\\\Software\\\\Microsoft\\\\Office\\\\Excel\\\\Addins\\\\*\", \"*\\\\Software\\\\Microsoft\\\\Office\\\\Powerpoint\\\\Addins\\\\*\", \"*\\\\Software\\\\Microsoft\\\\VSTO\\\\Security\\\\Inclusion\\\\*\")) and (not ((process.executable like~ (\"C:\\\\Windows\\\\System32\\\\msiexec.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\", \"C:\\\\Windows\\\\System32\\\\regsvr32.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\regsvr32.exe\")) or ((process.executable like~ (\"C:\\\\Program Files\\\\Common Files (x86)\\\\Microsoft Shared\\\\ClickToRun\\\\*\", \"C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*\")) and process.executable:\"*\\\\OfficeClickToRun.exe\") or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\", \"C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\")) or ((process.executable like~ (\"C:\\\\Program Files\\\\Microsoft Office\\\\OFFICE*\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\OFFICE*\", \"C:\\\\Program Files\\\\Microsoft Office\\\\Root\\\\OFFICE*\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\Root\\\\OFFICE*\")) and (process.executable like~ (\"*\\\\excel.exe\", \"*\\\\Integrator.exe\", \"*\\\\outlook.exe\", \"*\\\\powerpnt.exe\", \"*\\\\Teams.exe\", \"*\\\\visio.exe\", \"*\\\\winword.exe\"))))) and (not (((process.executable like~ (\"C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\RegSvr.exe\", \"C:\\\\Program Files (x86)\\\\AVG\\\\Antivirus\\\\RegSvr.exe\")) and registry.path:\"*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Antivirus.AsOutExt\\\\*\") or ((process.executable like~ (\"C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\RegSvr.exe\", \"C:\\\\Program Files (x86)\\\\Avast Software\\\\Avast\\\\RegSvr.exe\")) and registry.path:\"*\\\\Microsoft\\\\Office\\\\Outlook\\\\Addins\\\\Avast.AsOutExt\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_office_vsto.eql",
+  "metadata": {}
+}

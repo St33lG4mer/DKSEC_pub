@@ -1,0 +1,42 @@
+{
+  "id": "28dc9b33-fbd8-5a00-9092-0a5644b4641c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_remote_access_tools_screenconnect_webshell",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "csc.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\csc.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "screenconnect.service.exe"
+      ],
+      "raw_values": [
+        "*\\\\ScreenConnect.Service.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\ScreenConnect.Service.exe\" and (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\csc.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_screenconnect_webshell.eql",
+  "metadata": {}
+}

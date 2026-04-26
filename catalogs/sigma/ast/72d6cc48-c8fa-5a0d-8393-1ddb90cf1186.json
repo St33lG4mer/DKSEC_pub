@@ -1,0 +1,109 @@
+{
+  "id": "72d6cc48-c8fa-5a0d-8393-1ddb90cf1186",
+  "catalog": "sigma",
+  "name": "win_security_user_driver_loaded",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "helppane.exe",
+        "systemsettings.exe",
+        "dism.exe",
+        "fltmc.exe",
+        "mmc.exe",
+        "rundll32.exe",
+        "runtimebroker.exe",
+        "shellhost.exe",
+        "svchost.exe",
+        "systemsettingsbroker.exe",
+        "wimserv.exe",
+        "teams.exe",
+        "chrome.exe",
+        "procexp.exe",
+        "procexp64.exe",
+        "procmon.exe",
+        "procmon64.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\explorer.exe",
+        "C:\\\\Windows\\\\HelpPane.exe",
+        "C:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe",
+        "C:\\\\Windows\\\\System32\\\\Dism.exe",
+        "C:\\\\Windows\\\\System32\\\\fltMC.exe",
+        "C:\\\\Windows\\\\System32\\\\mmc.exe",
+        "C:\\\\Windows\\\\System32\\\\rundll32.exe",
+        "C:\\\\Windows\\\\System32\\\\RuntimeBroker.exe",
+        "C:\\\\Windows\\\\System32\\\\ShellHost.exe",
+        "C:\\\\Windows\\\\System32\\\\svchost.exe",
+        "C:\\\\Windows\\\\System32\\\\SystemSettingsBroker.exe",
+        "C:\\\\Windows\\\\System32\\\\wimserv.exe",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe",
+        "*\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+        "*\\\\procexp.exe",
+        "*\\\\procexp64.exe",
+        "*\\\\procmon.exe",
+        "*\\\\procmon64.exe"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4673"
+      ],
+      "raw_values": [
+        "4673"
+      ]
+    },
+    {
+      "field": "winlog.event_data.privilegelist",
+      "raw_field": "winlog.event_data.PrivilegeList",
+      "operator": ":",
+      "values": [
+        "seloaddriverprivilege"
+      ],
+      "raw_values": [
+        "SeLoadDriverPrivilege"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microsoft",
+        "dropbox.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\WindowsApps\\\\Microsoft*",
+        "*\\\\Dropbox.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4673\" and winlog.event_data.PrivilegeList:\"SeLoadDriverPrivilege\" and winlog.event_data.Service:\"-\") and (not ((process.executable like~ (\"C:\\\\Windows\\\\explorer.exe\", \"C:\\\\Windows\\\\HelpPane.exe\", \"C:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe\", \"C:\\\\Windows\\\\System32\\\\Dism.exe\", \"C:\\\\Windows\\\\System32\\\\fltMC.exe\", \"C:\\\\Windows\\\\System32\\\\mmc.exe\", \"C:\\\\Windows\\\\System32\\\\rundll32.exe\", \"C:\\\\Windows\\\\System32\\\\RuntimeBroker.exe\", \"C:\\\\Windows\\\\System32\\\\ShellHost.exe\", \"C:\\\\Windows\\\\System32\\\\svchost.exe\", \"C:\\\\Windows\\\\System32\\\\SystemSettingsBroker.exe\", \"C:\\\\Windows\\\\System32\\\\wimserv.exe\")) or process.executable:\"C:\\\\Program Files\\\\WindowsApps\\\\Microsoft*\")) and (not ((process.executable like~ (\"*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe\", \"*\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\", \"*\\\\procexp.exe\", \"*\\\\procexp64.exe\", \"*\\\\procmon.exe\", \"*\\\\procmon64.exe\")) or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Dropbox\\\\*\", \"C:\\\\Program Files\\\\Dropbox\\\\*\")) and process.executable:\"*\\\\Dropbox.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_user_driver_loaded.eql",
+  "metadata": {}
+}

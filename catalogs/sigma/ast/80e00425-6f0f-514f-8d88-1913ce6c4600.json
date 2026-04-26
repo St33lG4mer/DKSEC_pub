@@ -1,0 +1,30 @@
+{
+  "id": "80e00425-6f0f-514f-8d88-1913ce6c4600",
+  "catalog": "sigma",
+  "name": "file_delete_win_delete_exchange_powershell_logs",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "_cmdlet_"
+      ],
+      "raw_values": [
+        "\\\\Logging\\\\CmdletInfra\\\\LocalPowerShell\\\\Cmdlet\\\\*",
+        "*_Cmdlet_*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"\\\\Logging\\\\CmdletInfra\\\\LocalPowerShell\\\\Cmdlet\\\\*\" and file.path:\"*_Cmdlet_*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_delete/file_delete_win_delete_exchange_powershell_logs.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "02b9e229-17a2-5ae0-9895-2df766f808c3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sysprep_appdata",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sysprep.exe"
+      ],
+      "raw_values": [
+        "*\\\\sysprep.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\sysprep.exe\" and process.command_line:\"*\\\\AppData\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sysprep_appdata.eql",
+  "metadata": {}
+}

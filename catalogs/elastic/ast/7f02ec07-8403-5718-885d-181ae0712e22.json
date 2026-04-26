@@ -1,0 +1,64 @@
+{
+  "id": "7f02ec07-8403-5718-885d-181ae0712e22",
+  "catalog": "elastic",
+  "name": "Kernel Driver Load by non-root User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "driver"
+  ],
+  "conditions": [
+    {
+      "field": "auditd.data.syscall",
+      "raw_field": "auditd.data.syscall",
+      "operator": "in",
+      "values": [
+        "init_module",
+        "finit_module"
+      ],
+      "raw_values": [
+        "init_module",
+        "finit_module"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "loaded-kernel-module"
+      ],
+      "raw_values": [
+        "loaded-kernel-module"
+      ]
+    }
+  ],
+  "raw_query": "driver where host.os.type == \"linux\" and event.action == \"loaded-kernel-module\" and\nauditd.data.syscall in (\"init_module\", \"finit_module\") and user.id != \"0\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_kernel_driver_load_by_non_root.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Auditd Manager",
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

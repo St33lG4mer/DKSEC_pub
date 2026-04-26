@@ -1,0 +1,25 @@
+{
+  "id": "18f4f236-049a-5424-b9ce-38d41cfbda88",
+  "catalog": "elastic",
+  "name": "Attempt to Create Okta API Token",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:system.api_token.create\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/persistence_attempt_to_create_okta_api_token.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

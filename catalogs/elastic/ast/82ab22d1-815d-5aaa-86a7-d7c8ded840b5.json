@@ -1,0 +1,117 @@
+{
+  "id": "82ab22d1-815d-5aaa-86a7-d7c8ded840b5",
+  "catalog": "elastic",
+  "name": "Suspicious Passwd File Event Action",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "openssl"
+      ],
+      "raw_values": [
+        "openssl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "passwd"
+      ],
+      "raw_values": [
+        "passwd"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "==",
+      "values": [
+        "passwd"
+      ],
+      "raw_values": [
+        "/etc/passwd"
+      ]
+    },
+    {
+      "field": "auditd.data.a2",
+      "raw_field": "auditd.data.a2",
+      "operator": "==",
+      "values": [
+        "80000"
+      ],
+      "raw_values": [
+        "80000"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.parent.pid with maxspan=1m\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.name == \"openssl\" and process.args == \"passwd\" and user.id != \"0\"]\n  [file where host.os.type == \"linux\" and file.path == \"/etc/passwd\" and process.parent.pid != 1 and\n   not auditd.data.a2 == \"80000\" and event.outcome == \"success\" and user.id != \"0\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_suspicious_passwd_file_write.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Auditd Manager",
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

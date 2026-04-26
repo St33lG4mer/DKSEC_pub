@@ -1,0 +1,29 @@
+{
+  "id": "8526912e-59a1-5f92-8ab9-3c9f866e27c6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_boinc_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "university of california, berkeley"
+      ],
+      "raw_values": [
+        "University of California, Berkeley"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.description:\"University of California, Berkeley\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_boinc_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,81 @@
+{
+  "id": "38049501-5a53-5686-a3e8-1e6f7e8c61e6",
+  "catalog": "sigma",
+  "name": "win_security_account_backdoor_dcsync_rights",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.attributevalue",
+      "raw_field": "winlog.event_data.AttributeValue",
+      "operator": "like~",
+      "values": [
+        "1131f6ad-9c07-11d1-f79f-00c04fc2dcd2",
+        "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2",
+        "89e95b76-444d-4c62-991a-0facbeda640c"
+      ],
+      "raw_values": [
+        "*1131f6ad-9c07-11d1-f79f-00c04fc2dcd2*",
+        "*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*",
+        "*89e95b76-444d-4c62-991a-0facbeda640c*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectclass",
+      "raw_field": "winlog.event_data.ObjectClass",
+      "operator": "like~",
+      "values": [
+        "dnsnode",
+        "dnszonescope",
+        "dnszone"
+      ],
+      "raw_values": [
+        "dnsNode",
+        "dnsZoneScope",
+        "dnsZone"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5136"
+      ],
+      "raw_values": [
+        "5136"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": ":",
+      "values": [
+        "ntsecuritydescriptor"
+      ],
+      "raw_values": [
+        "ntSecurityDescriptor"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"5136\" and winlog.event_data.AttributeLDAPDisplayName:\"ntSecurityDescriptor\" and (winlog.event_data.AttributeValue like~ (\"*1131f6ad-9c07-11d1-f79f-00c04fc2dcd2*\", \"*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*\", \"*89e95b76-444d-4c62-991a-0facbeda640c*\"))) and (not (winlog.event_data.ObjectClass like~ (\"dnsNode\", \"dnsZoneScope\", \"dnsZone\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_account_backdoor_dcsync_rights.eql",
+  "metadata": {}
+}

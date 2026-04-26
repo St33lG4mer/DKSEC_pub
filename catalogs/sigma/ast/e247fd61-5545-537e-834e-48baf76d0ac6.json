@@ -1,0 +1,130 @@
+{
+  "id": "e247fd61-5545-537e-834e-48baf76d0ac6",
+  "catalog": "sigma",
+  "name": "win_security_lsass_access_non_system_account",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4663",
+        "4656"
+      ],
+      "raw_values": [
+        "4663",
+        "4656"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": "like~",
+      "values": [
+        "0x100000",
+        "0x1010",
+        "0x1400",
+        "0x1410",
+        "0x1418",
+        "0x1438",
+        "0x143a",
+        "0x1f0fff",
+        "0x1f1fff",
+        "0x1f2fff",
+        "0x1f3fff",
+        "0x40",
+        "143a",
+        "1f0fff",
+        "1f1fff",
+        "1f2fff",
+        "1f3fff"
+      ],
+      "raw_values": [
+        "0x100000",
+        "0x1010",
+        "0x1400",
+        "0x1410",
+        "0x1418",
+        "0x1438",
+        "0x143a",
+        "0x1f0fff",
+        "0x1f1fff",
+        "0x1f2fff",
+        "0x1f3fff",
+        "0x40",
+        "143a",
+        "1f0fff",
+        "1f1fff",
+        "1f2fff",
+        "1f3fff"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "Process"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmiprvse.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe",
+        "*\\\\SteamLibrary\\\\steamapps\\\\*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x1410"
+      ],
+      "raw_values": [
+        "0x1410"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (((event.code like~ (\"4663\", \"4656\")) and (winlog.event_data.AccessMask like~ (\"0x100000\", \"0x1010\", \"0x1400\", \"0x1410\", \"0x1418\", \"0x1438\", \"0x143a\", \"0x1f0fff\", \"0x1f1fff\", \"0x1f2fff\", \"0x1f3fff\", \"0x40\", \"143a\", \"1f0fff\", \"1f1fff\", \"1f2fff\", \"1f3fff\")) and winlog.event_data.ObjectType:\"Process\" and winlog.event_data.ObjectName:\"*\\\\lsass.exe\") and (not (user.name:\"*$\" or (process.executable like~ (\"*:\\\\Program Files\\\\*\", \"*:\\\\Program Files (x86)\\\\*\")) or (process.executable:\"C:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe\" and winlog.event_data.AccessMask:\"0x1410\"))) and (not process.executable:\"*\\\\SteamLibrary\\\\steamapps\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_lsass_access_non_system_account.eql",
+  "metadata": {}
+}

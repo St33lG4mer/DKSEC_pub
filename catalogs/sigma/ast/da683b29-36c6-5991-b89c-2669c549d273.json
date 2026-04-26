@@ -1,0 +1,76 @@
+{
+  "id": "da683b29-36c6-5991-b89c-2669c549d273",
+  "catalog": "sigma",
+  "name": "registry_set_disable_function_user",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\disablecmd",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\nocontrolpanel",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\norun",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\startmenulogoff",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\disablechangepassword",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\disablelockworkstation",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\disableregistrytools",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\disabletaskmgr",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\nodispbackgroundpage",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\nodispcpl",
+        "software\\\\policies\\\\microsoft\\\\windows\\\\explorer\\\\disablenotificationcenter",
+        "software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\disablecmd",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\consentpromptbehavioradmin",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\inactivitytimeoutsecs",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\shutdownwithoutlogon",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\pushnotifications\\\\toastenabled",
+        "system\\\\currentcontrolset\\\\control\\\\storage\\\\write protection",
+        "system\\\\currentcontrolset\\\\control\\\\storagedevicepolicies\\\\writeprotect"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\DisableCMD",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoControlPanel",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoRun",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\StartMenuLogOff",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableChangePassword",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableLockWorkstation",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableRegistryTools",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableTaskmgr",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\NoDispBackgroundPage",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\NoDispCPL",
+        "*SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\Explorer\\\\DisableNotificationCenter",
+        "*SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\DisableCMD",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\ConsentPromptBehaviorAdmin",
+        "*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\InactivityTimeoutSecs",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\shutdownwithoutlogon",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\PushNotifications\\\\ToastEnabled",
+        "*SYSTEM\\\\CurrentControlSet\\\\Control\\\\Storage\\\\Write Protection",
+        "*SYSTEM\\\\CurrentControlSet\\\\Control\\\\StorageDevicePolicies\\\\WriteProtect"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)",
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)",
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where ((registry.path like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\DisableCMD\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoControlPanel\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\NoRun\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\StartMenuLogOff\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableChangePassword\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableLockWorkstation\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableRegistryTools\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\DisableTaskmgr\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\NoDispBackgroundPage\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\NoDispCPL\", \"*SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\Explorer\\\\DisableNotificationCenter\", \"*SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\DisableCMD\")) and winlog.event_data.Details:\"DWORD (0x00000001)\") or ((registry.path like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\ConsentPromptBehaviorAdmin\", \"*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\InactivityTimeoutSecs\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\shutdownwithoutlogon\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\PushNotifications\\\\ToastEnabled\", \"*SYSTEM\\\\CurrentControlSet\\\\Control\\\\Storage\\\\Write Protection\", \"*SYSTEM\\\\CurrentControlSet\\\\Control\\\\StorageDevicePolicies\\\\WriteProtect\")) and winlog.event_data.Details:\"DWORD (0x00000000)\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disable_function_user.eql",
+  "metadata": {}
+}

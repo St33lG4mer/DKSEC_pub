@@ -1,0 +1,40 @@
+{
+  "id": "c26901ce-a904-5c20-8ad5-4efa89257131",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regsvr32_remote_share",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\regsvr32.exe"
+      ],
+      "raw_values": [
+        "\\\\REGSVR32.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\regsvr32.exe\" or process.pe.original_file_name:\"\\\\REGSVR32.EXE\") and process.command_line:\"* \\\\\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regsvr32_remote_share.eql",
+  "metadata": {}
+}

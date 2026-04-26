@@ -1,0 +1,27 @@
+{
+  "id": "e1e58028-10f6-578b-87b8-e12eb536eb70",
+  "catalog": "elastic",
+  "name": "GCP Logging Bucket Deletion",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.logging.v*.ConfigServiceV*.DeleteBucket and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/defense_evasion_gcp_logging_bucket_deletion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Use Case: Log Auditing",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "id": "75a63519-883d-5f20-86c6-7c4435f76a7f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_rubeus",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "asreproast",
+        "service:krbtgt",
+        "luid:0x",
+        "kerberoast",
+        "program:",
+        "ticket:",
+        "impersonateuser:",
+        "user:",
+        "interval:",
+        "password:",
+        "aes256:"
+      ],
+      "raw_values": [
+        "*asreproast *",
+        "*dump /service:krbtgt *",
+        "*dump /luid:0x*",
+        "*kerberoast *",
+        "*createnetonly /program:*",
+        "*ptt /ticket:*",
+        "*/impersonateuser:*",
+        "*renew /ticket:*",
+        "*asktgt /user:*",
+        "*harvest /interval:*",
+        "*s4u /user:*",
+        "*s4u /ticket:*",
+        "*hash /password:*",
+        "*golden /aes256:*",
+        "*silver /user:*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rubeus.exe"
+      ],
+      "raw_values": [
+        "*\\\\Rubeus.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rubeus.exe"
+      ],
+      "raw_values": [
+        "Rubeus.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "rubeus"
+      ],
+      "raw_values": [
+        "Rubeus"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\Rubeus.exe\" or process.pe.original_file_name:\"Rubeus.exe\" or process.pe.description:\"Rubeus\" or (process.command_line like~ (\"*asreproast *\", \"*dump /service:krbtgt *\", \"*dump /luid:0x*\", \"*kerberoast *\", \"*createnetonly /program:*\", \"*ptt /ticket:*\", \"*/impersonateuser:*\", \"*renew /ticket:*\", \"*asktgt /user:*\", \"*harvest /interval:*\", \"*s4u /user:*\", \"*s4u /ticket:*\", \"*hash /password:*\", \"*golden /aes256:*\", \"*silver /user:*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_rubeus.eql",
+  "metadata": {}
+}

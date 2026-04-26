@@ -1,0 +1,48 @@
+{
+  "id": "5b479d35-11f7-5dea-b6d8-030d79c974e4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_desktopimgdownldr_susp_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".jpg",
+        ".jpeg",
+        ".png"
+      ],
+      "raw_values": [
+        "*.jpg*",
+        "*.jpeg*",
+        "*.png*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "lockscreenurl:",
+        "reg delete",
+        "personalizationcsp"
+      ],
+      "raw_values": [
+        "* /lockscreenurl:*",
+        "*reg delete*",
+        "*\\\\PersonalizationCSP*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"* /lockscreenurl:*\" and (not (process.command_line like~ (\"*.jpg*\", \"*.jpeg*\", \"*.png*\")))) or (process.command_line:\"*reg delete*\" and process.command_line:\"*\\\\PersonalizationCSP*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_desktopimgdownldr_susp_execution.eql",
+  "metadata": {}
+}

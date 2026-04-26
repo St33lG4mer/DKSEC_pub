@@ -1,0 +1,106 @@
+{
+  "id": "2d605350-7c99-5e7b-9a5d-edc6bdafac7c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msiexec_install_quiet",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-package",
+        "package",
+        "–package",
+        "—package",
+        "―package"
+      ],
+      "raw_values": [
+        "*-i*",
+        "*/i*",
+        "*–i*",
+        "*—i*",
+        "*―i*",
+        "*-package*",
+        "*/package*",
+        "*–package*",
+        "*—package*",
+        "*―package*",
+        "*-a*",
+        "*/a*",
+        "*–a*",
+        "*—a*",
+        "*―a*",
+        "*-j*",
+        "*/j*",
+        "*–j*",
+        "*—j*",
+        "*―j*",
+        "*-q*",
+        "*/q*",
+        "*–q*",
+        "*—q*",
+        "*―q*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "ccm32bitlauncher.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "C:\\\\Windows\\\\Temp\\\\*",
+        "C:\\\\Windows\\\\CCM\\\\Ccm32BitLauncher.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\msiexec.exe\" or process.pe.original_file_name:\"msiexec.exe\") and (process.command_line like~ (\"*-i*\", \"*/i*\", \"*–i*\", \"*—i*\", \"*―i*\") or process.command_line like~ (\"*-package*\", \"*/package*\", \"*–package*\", \"*—package*\", \"*―package*\") or process.command_line like~ (\"*-a*\", \"*/a*\", \"*–a*\", \"*—a*\", \"*―a*\") or process.command_line like~ (\"*-j*\", \"*/j*\", \"*–j*\", \"*—j*\", \"*―j*\")) and process.command_line like~ (\"*-q*\", \"*/q*\", \"*–q*\", \"*—q*\", \"*―q*\")) and (not ((process.parent.executable:\"C:\\\\Users\\\\*\" and process.parent.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\") or process.parent.executable:\"C:\\\\Windows\\\\Temp\\\\*\" or (process.parent.executable:\"C:\\\\Windows\\\\CCM\\\\Ccm32BitLauncher.exe\" and (winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\")))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msiexec_install_quiet.eql",
+  "metadata": {}
+}

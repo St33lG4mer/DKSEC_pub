@@ -1,0 +1,30 @@
+{
+  "id": "16235d30-fea7-53ef-9877-e5ab43a56a28",
+  "catalog": "sigma",
+  "name": "image_load_side_load_chrome_frame_helper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "chrome_frame_helper.dll"
+      ],
+      "raw_values": [
+        "*\\\\chrome_frame_helper.dll",
+        "*\\\\AppData\\\\local\\\\Google\\\\Chrome\\\\Application\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\chrome_frame_helper.dll\" and (not (file.path like~ (\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\*\", \"C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\*\"))) and (not file.path:\"*\\\\AppData\\\\local\\\\Google\\\\Chrome\\\\Application\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_chrome_frame_helper.eql",
+  "metadata": {}
+}

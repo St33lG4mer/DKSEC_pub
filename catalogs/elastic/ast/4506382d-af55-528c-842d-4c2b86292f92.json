@@ -1,0 +1,26 @@
+{
+  "id": "4506382d-af55-528c-842d-4c2b86292f92",
+  "catalog": "elastic",
+  "name": "Google Workspace Custom Admin Role Created",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:google_workspace.admin and event.provider:admin and event.category:iam and event.action:CREATE_ROLE\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/persistence_google_workspace_custom_admin_role_created.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Persistence"
+    ]
+  }
+}

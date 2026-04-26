@@ -1,0 +1,51 @@
+{
+  "id": "dd5eef6f-c0dd-5f16-9720-bdf1fe390387",
+  "catalog": "elastic",
+  "name": "Unusual High Denied Sensitive Information Policy Blocks Detected",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "gen_ai.policy.action",
+      "raw_field": "gen_ai.policy.action",
+      "operator": "==",
+      "values": [
+        "blocked"
+      ],
+      "raw_values": [
+        "BLOCKED"
+      ]
+    },
+    {
+      "field": "gen_ai.policy.name",
+      "raw_field": "gen_ai.policy.name",
+      "operator": "==",
+      "values": [
+        "sensitive_information_policy"
+      ],
+      "raw_values": [
+        "sensitive_information_policy"
+      ]
+    }
+  ],
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Expand multi-valued policy name field\n| mv_expand gen_ai.policy.name\n| mv_expand gen_ai.policy.action\n\n// Filter for blocked actions related to sensitive info policy\n| where\n  gen_ai.policy.action == \"BLOCKED\"\n  and gen_ai.compliance.violation_detected == \"true\"\n  and gen_ai.policy.name == \"sensitive_information_policy\"\n\n// keep only relevant fields\n| keep user.id\n\n// count how many times each user triggered a sensitive info block\n| stats\n    Esql.ml_policy_blocked_sensitive_info_count = count()\n  by user.id\n\n// Filter for users with more than 5 violations\n| where Esql.ml_policy_blocked_sensitive_info_count > 5\n\n// sort highest to lowest\n| sort Esql.ml_policy_blocked_sensitive_info_count desc\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws_bedrock/aws_bedrock_multiple_sensitive_information_policy_blocks_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: LLM",
+      "Data Source: AWS Bedrock",
+      "Data Source: AWS S3",
+      "Use Case: Policy Violation",
+      "Mitre Atlas: T0051",
+      "Mitre Atlas: T0054",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

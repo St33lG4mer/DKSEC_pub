@@ -1,0 +1,109 @@
+{
+  "id": "ca15dded-bb32-55e2-b0d2-ce0bea95ce93",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_aadinternals_cmdlets_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.Exe",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "add-aadint",
+        "convertto-aadint",
+        "disable-aadint",
+        "enable-aadint",
+        "export-aadint",
+        "find-aadint",
+        "get-aadint",
+        "grant-aadint",
+        "initialize-aadint",
+        "install-aadint",
+        "invoke-aadint",
+        "join-aadint",
+        "new-aadint",
+        "open-aadint",
+        "read-aadint",
+        "register-aadint",
+        "remove-aadint",
+        "reset-aadint",
+        "resolve-aadint",
+        "restore-aadint",
+        "save-aadint",
+        "search-aadint",
+        "send-aadint",
+        "set-aadint",
+        "start-aadint",
+        "unprotect-aadint",
+        "update-aadint"
+      ],
+      "raw_values": [
+        "*Add-AADInt*",
+        "*ConvertTo-AADInt*",
+        "*Disable-AADInt*",
+        "*Enable-AADInt*",
+        "*Export-AADInt*",
+        "*Find-AADInt*",
+        "*Get-AADInt*",
+        "*Grant-AADInt*",
+        "*Initialize-AADInt*",
+        "*Install-AADInt*",
+        "*Invoke-AADInt*",
+        "*Join-AADInt*",
+        "*New-AADInt*",
+        "*Open-AADInt*",
+        "*Read-AADInt*",
+        "*Register-AADInt*",
+        "*Remove-AADInt*",
+        "*Reset-AADInt*",
+        "*Resolve-AADInt*",
+        "*Restore-AADInt*",
+        "*Save-AADInt*",
+        "*Search-AADInt*",
+        "*Send-AADInt*",
+        "*Set-AADInt*",
+        "*Start-AADInt*",
+        "*Unprotect-AADInt*",
+        "*Update-AADInt*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.Exe\", \"pwsh.dll\"))) and (process.command_line like~ (\"*Add-AADInt*\", \"*ConvertTo-AADInt*\", \"*Disable-AADInt*\", \"*Enable-AADInt*\", \"*Export-AADInt*\", \"*Find-AADInt*\", \"*Get-AADInt*\", \"*Grant-AADInt*\", \"*Initialize-AADInt*\", \"*Install-AADInt*\", \"*Invoke-AADInt*\", \"*Join-AADInt*\", \"*New-AADInt*\", \"*Open-AADInt*\", \"*Read-AADInt*\", \"*Register-AADInt*\", \"*Remove-AADInt*\", \"*Reset-AADInt*\", \"*Resolve-AADInt*\", \"*Restore-AADInt*\", \"*Save-AADInt*\", \"*Search-AADInt*\", \"*Send-AADInt*\", \"*Set-AADInt*\", \"*Start-AADInt*\", \"*Unprotect-AADInt*\", \"*Update-AADInt*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_aadinternals_cmdlets_execution.eql",
+  "metadata": {}
+}

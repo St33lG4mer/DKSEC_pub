@@ -1,0 +1,28 @@
+{
+  "id": "a3c7ae47-ac2e-54dc-a44e-a98df3afcb43",
+  "catalog": "elastic",
+  "name": "First Time Python Spawned a Shell on Host",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.category:process and host.os.type:macos and event.type:start and event.action:exec and\nprocess.parent.name:python* and\nprocess.name:(bash or dash or sh or tcsh or csh or zsh or ksh or fish) and process.args:\"-c\" and\nnot process.command_line:(*pip* or *conda* or *brew* or *jupyter*)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/macos/execution_python_shell_spawn_first_occurrence.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Domain: LLM"
+    ]
+  }
+}

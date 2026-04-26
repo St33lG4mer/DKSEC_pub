@@ -1,0 +1,27 @@
+{
+  "id": "2242107c-e789-5de1-9029-41a450e64ebb",
+  "catalog": "elastic",
+  "name": "GCP Pub/Sub Topic Creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.pubsub.v*.Publisher.CreateTopic and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/collection_gcp_pub_sub_topic_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Use Case: Log Auditing",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

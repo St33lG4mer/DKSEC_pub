@@ -1,0 +1,40 @@
+{
+  "id": "f40c4ca9-fecc-507e-a136-810e307c897b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_mint_sandstorm_log4j_wstomcat_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "ws_tomcatservice.exe"
+      ],
+      "raw_values": [
+        "*\\\\ws_tomcatservice.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "repadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\repadmin.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\ws_tomcatservice.exe\" and (not process.executable:\"*\\\\repadmin.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Mint-Sandstorm/proc_creation_win_apt_mint_sandstorm_log4j_wstomcat_execution.eql",
+  "metadata": {}
+}

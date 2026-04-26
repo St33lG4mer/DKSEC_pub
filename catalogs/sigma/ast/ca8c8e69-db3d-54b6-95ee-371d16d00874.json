@@ -1,0 +1,51 @@
+{
+  "id": "ca8c8e69-db3d-54b6-95ee-371d16d00874",
+  "catalog": "sigma",
+  "name": "win_security_dcom_iertutil_dll_hijack",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    },
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": ":",
+      "values": [
+        "\\\\internet explorer\\\\iertutil.dll"
+      ],
+      "raw_values": [
+        "*\\\\Internet Explorer\\\\iertutil.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"5145\" and winlog.event_data.RelativeTargetName:\"*\\\\Internet Explorer\\\\iertutil.dll\") and (not user.name:\"*$\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_dcom_iertutil_dll_hijack.eql",
+  "metadata": {}
+}

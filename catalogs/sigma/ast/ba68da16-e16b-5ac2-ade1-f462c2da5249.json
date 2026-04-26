@@ -1,0 +1,29 @@
+{
+  "id": "ba68da16-e16b-5ac2-ade1-f462c2da5249",
+  "catalog": "sigma",
+  "name": "file_event_win_errorhandler_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "errorhandler.cmd"
+      ],
+      "raw_values": [
+        "*\\\\WINDOWS\\\\Setup\\\\Scripts\\\\ErrorHandler.cmd"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\WINDOWS\\\\Setup\\\\Scripts\\\\ErrorHandler.cmd\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_errorhandler_persistence.eql",
+  "metadata": {}
+}

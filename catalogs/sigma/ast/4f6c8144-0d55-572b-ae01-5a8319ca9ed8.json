@@ -1,0 +1,42 @@
+{
+  "id": "4f6c8144-0d55-572b-ae01-5a8319ca9ed8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_launch_vsdevshell",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "vswherepath",
+        "vsinstallationpath"
+      ],
+      "raw_values": [
+        "*VsWherePath *",
+        "*VsInstallationPath *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "launch-vsdevshell.ps1"
+      ],
+      "raw_values": [
+        "*Launch-VsDevShell.ps1*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*Launch-VsDevShell.ps1*\" and (process.command_line like~ (\"*VsWherePath *\", \"*VsInstallationPath *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_launch_vsdevshell.eql",
+  "metadata": {}
+}

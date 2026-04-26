@@ -1,0 +1,42 @@
+{
+  "id": "128ccb36-dfa9-50f0-92ba-5079f26b8675",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_shim_database",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\installedsdb\\\\",
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\custom\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\InstalledSDB\\\\*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\InstalledSDB\\\\*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom\\\\*\")) and (not (winlog.event_data.Details==\"\" or winlog.event_data.Details:\"(Empty)\" or (?winlog.event_data.Details == null)))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_shim_database.eql",
+  "metadata": {}
+}

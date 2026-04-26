@@ -1,0 +1,40 @@
+{
+  "id": "d0cb5df6-f90b-555e-9661-7df6b37aaf63",
+  "catalog": "sigma",
+  "name": "win_codeintegrity_enforced_policy_block",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-codeintegrity/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CodeIntegrity/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "3077"
+      ],
+      "raw_values": [
+        "3077"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CodeIntegrity/Operational\" and event.code:\"3077\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/code_integrity/win_codeintegrity_enforced_policy_block.eql",
+  "metadata": {}
+}

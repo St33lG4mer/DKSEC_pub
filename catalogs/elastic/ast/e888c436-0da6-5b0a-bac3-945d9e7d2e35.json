@@ -1,0 +1,113 @@
+{
+  "id": "e888c436-0da6-5b0a-bac3-945d9e7d2e35",
+  "catalog": "elastic",
+  "name": "Private Key Searching Activity",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "id_dsa",
+        "id_rsa",
+        "id_ed",
+        "id_ecdsa",
+        "id_xmss",
+        "id_dh",
+        "ssh"
+      ],
+      "raw_values": [
+        "*id_dsa*",
+        "*id_rsa*",
+        "*id_ed*",
+        "*id_ecdsa*",
+        "*id_xmss*",
+        "*id_dh*",
+        "*/home/*",
+        "*/etc/ssh*",
+        "*/root/*",
+        "/"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "process_started",
+        "executed"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "process_started",
+        "executed"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "find"
+      ],
+      "raw_values": [
+        "find"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"process_started\", \"executed\") and\nprocess.name == \"find\" and\nprocess.command_line like (\"*id_dsa*\", \"*id_rsa*\", \"*id_ed*\", \"*id_ecdsa*\", \"*id_xmss*\", \"*id_dh*\") and\nprocess.command_line like (\"*/home/*\", \"*/etc/ssh*\", \"*/root/*\", \"/\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_private_key_password_searching_activity.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Credential Access",
+      "Data Source: Auditd Manager",
+      "Data Source: Elastic Defend",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

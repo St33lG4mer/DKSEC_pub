@@ -1,0 +1,140 @@
+{
+  "id": "1f28bf41-7c8f-5474-abd0-7de231dc8d03",
+  "catalog": "elastic",
+  "name": "Kubelet Pod Discovery Detected via Defend for Containers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "in",
+      "values": [
+        "file",
+        "process"
+      ],
+      "raw_values": [
+        "file",
+        "process"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "nice",
+        "find",
+        "locate"
+      ],
+      "raw_values": [
+        "du",
+        "nice",
+        "find",
+        "locate",
+        "ls"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "nice",
+        "find",
+        "locate"
+      ],
+      "raw_values": [
+        "du",
+        "/bin/du",
+        "/usr/bin/du",
+        "/usr/local/bin/du",
+        "nice",
+        "/bin/nice",
+        "/usr/bin/nice",
+        "/usr/local/bin/nice",
+        "find",
+        "/bin/find",
+        "/usr/bin/find",
+        "/usr/local/bin/find",
+        "locate",
+        "/bin/locate",
+        "/usr/bin/locate",
+        "/usr/local/bin/locate",
+        "ls",
+        "/bin/ls",
+        "/usr/bin/ls",
+        "/usr/local/bin/ls"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "file",
+        "process"
+      ],
+      "raw_values": [
+        "file",
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change",
+        "start"
+      ],
+      "raw_values": [
+        "change",
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "open",
+        "exec"
+      ],
+      "raw_values": [
+        "open",
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "sequence by container.id, user.id with maxspan=5s\n  [any where host.os.type == \"linux\" and event.category in (\"file\", \"process\") and process.interactive == true and container.id like \"*\" and (\n    (event.category == \"file\" and event.type == \"change\" and event.action == \"open\" and file.path like \"/var/lib/kubelet/pods/*\") or\n    (event.category == \"process\" and event.type == \"start\" and event.action == \"exec\" and (\n      (process.name in (\"du\", \"nice\", \"find\", \"locate\", \"ls\")) or\n      (process.args in (\n        \"du\", \"/bin/du\", \"/usr/bin/du\", \"/usr/local/bin/du\",\n        \"nice\", \"/bin/nice\", \"/usr/bin/nice\", \"/usr/local/bin/nice\",\n        \"find\", \"/bin/find\", \"/usr/bin/find\", \"/usr/local/bin/find\",\n        \"locate\", \"/bin/locate\", \"/usr/bin/locate\", \"/usr/local/bin/locate\",\n        \"ls\", \"/bin/ls\", \"/usr/bin/ls\", \"/usr/local/bin/ls\"\n      ))\n    ) and process.args like \"*/var/lib/kubelet/pods/*\")\n  )] with runs=5\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/discovery_kubelet_pod_discovery_via_builtin_utilities.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

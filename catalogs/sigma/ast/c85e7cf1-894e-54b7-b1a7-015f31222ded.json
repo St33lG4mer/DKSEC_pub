@@ -1,0 +1,29 @@
+{
+  "id": "c85e7cf1-894e-54b7-b1a7-015f31222ded",
+  "catalog": "sigma",
+  "name": "proc_creation_win_aspnet_compiler_exectuion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "aspnet_compiler.exe"
+      ],
+      "raw_values": [
+        "*\\\\aspnet_compiler.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*\")) and process.executable:\"*\\\\aspnet_compiler.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_aspnet_compiler_exectuion.eql",
+  "metadata": {}
+}

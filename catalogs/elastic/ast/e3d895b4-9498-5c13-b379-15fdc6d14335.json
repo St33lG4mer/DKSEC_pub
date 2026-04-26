@@ -1,0 +1,24 @@
+{
+  "id": "e3d895b4-9498-5c13-b379-15fdc6d14335",
+  "catalog": "elastic",
+  "name": "Okta ThreatInsight Threat Suspected Promotion",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and (event.action:security.threat.detected or okta.debug_context.debug_data.threat_suspected: true)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/okta_threatinsight_threat_suspected_promotion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

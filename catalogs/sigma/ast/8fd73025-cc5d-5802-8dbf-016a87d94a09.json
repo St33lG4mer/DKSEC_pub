@@ -1,0 +1,40 @@
+{
+  "id": "8fd73025-cc5d-5802-8dbf-016a87d94a09",
+  "catalog": "sigma",
+  "name": "file_event_win_regedit_print_as_pdf",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\regedit.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".pdf"
+      ],
+      "raw_values": [
+        "*.pdf"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\regedit.exe\" and file.path:\"*.pdf\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_regedit_print_as_pdf.eql",
+  "metadata": {}
+}

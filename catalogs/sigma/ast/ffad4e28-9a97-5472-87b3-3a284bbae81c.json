@@ -1,0 +1,31 @@
+{
+  "id": "ffad4e28-9a97-5472-87b3-3a284bbae81c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mstsc_rdp_hijack_shadowing",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "noconsentprompt",
+        "shadow:"
+      ],
+      "raw_values": [
+        "*noconsentprompt*",
+        "*shadow:*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*noconsentprompt*\" and process.command_line:\"*shadow:*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mstsc_rdp_hijack_shadowing.eql",
+  "metadata": {}
+}

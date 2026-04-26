@@ -1,0 +1,65 @@
+{
+  "id": "c70e2071-496d-5a95-8ea4-f4fb24e5e5cd",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_base64_invoke",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "sqbuahyabwbragualq",
+        "kabgb2ag8aawblac0a",
+        "jag4adgbvagsazqata",
+        "sw52b2tll",
+        "ludm9rzs",
+        "jbnzva2ut"
+      ],
+      "raw_values": [
+        "*SQBuAHYAbwBrAGUALQ*",
+        "*kAbgB2AG8AawBlAC0A*",
+        "*JAG4AdgBvAGsAZQAtA*",
+        "*SW52b2tlL*",
+        "*ludm9rZS*",
+        "*JbnZva2Ut*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and process.command_line:\"* -e*\" and (process.command_line like~ (\"*SQBuAHYAbwBrAGUALQ*\", \"*kAbgB2AG8AawBlAC0A*\", \"*JAG4AdgBvAGsAZQAtA*\", \"*SW52b2tlL*\", \"*ludm9rZS*\", \"*JbnZva2Ut*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_base64_invoke.eql",
+  "metadata": {}
+}

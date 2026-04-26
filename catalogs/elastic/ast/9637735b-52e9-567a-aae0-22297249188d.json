@@ -1,0 +1,48 @@
+{
+  "id": "9637735b-52e9-567a-aae0-22297249188d",
+  "catalog": "elastic",
+  "name": "Google Workspace Password Policy Modified",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "google_workspace.admin.setting.name",
+      "raw_field": "google_workspace.admin.setting.name",
+      "operator": ":",
+      "values": [
+        "password management - enforce strong password",
+        "password management - password reset frequency",
+        "password management - enable password reuse",
+        "password management - enforce password policy at next login",
+        "password management - minimum password length",
+        "password management - maximum password length"
+      ],
+      "raw_values": [
+        "Password Management - Enforce strong password",
+        "Password Management - Password reset frequency",
+        "Password Management - Enable password reuse",
+        "Password Management - Enforce password policy at next login",
+        "Password Management - Minimum password length",
+        "Password Management - Maximum password length"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:google_workspace.admin and event.provider:admin and event.category:iam and\n  event.action:(CHANGE_APPLICATION_SETTING or CREATE_APPLICATION_SETTING) and\n  google_workspace.admin.setting.name:(\n    \"Password Management - Enforce strong password\" or\n    \"Password Management - Password reset frequency\" or\n    \"Password Management - Enable password reuse\" or\n    \"Password Management - Enforce password policy at next login\" or\n    \"Password Management - Minimum password length\" or\n    \"Password Management - Maximum password length\"\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/persistence_google_workspace_password_policy_modified.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

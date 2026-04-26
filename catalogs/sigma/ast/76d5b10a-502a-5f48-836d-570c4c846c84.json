@@ -1,0 +1,42 @@
+{
+  "id": "76d5b10a-502a-5f48-836d-570c4c846c84",
+  "catalog": "sigma",
+  "name": "create_remote_thread_win_powershell_lsass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and winlog.event_data.TargetImage:\"*\\\\lsass.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/create_remote_thread/create_remote_thread_win_powershell_lsass.eql",
+  "metadata": {}
+}

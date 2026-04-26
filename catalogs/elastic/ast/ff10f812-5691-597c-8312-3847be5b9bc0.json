@@ -1,0 +1,85 @@
+{
+  "id": "ff10f812-5691-597c-8312-3847be5b9bc0",
+  "catalog": "elastic",
+  "name": "Persistence via PowerShell profile",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "profile.ps1",
+        "microsoft.powershell_profile.ps1"
+      ],
+      "raw_values": [
+        "profile.ps1",
+        "Microsoft.Powershell_profile.ps1"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".ps1"
+      ],
+      "raw_values": [
+        "?:\\\\Users\\\\*\\\\Documents\\\\WindowsPowerShell\\\\*.ps1",
+        "?:\\\\Users\\\\*\\\\Documents\\\\PowerShell\\\\*.ps1",
+        "?:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\*.ps1",
+        "\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*\\\\Documents\\\\WindowsPowerShell\\\\*.ps1",
+        "\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*\\\\Documents\\\\PowerShell\\\\*.ps1",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\*.ps1"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and event.type != \"deletion\" and\n  file.name : (\"profile.ps1\", \"Microsoft.Powershell_profile.ps1\") and\n  file.path : (\"?:\\\\Users\\\\*\\\\Documents\\\\WindowsPowerShell\\\\*.ps1\", \n                    \"?:\\\\Users\\\\*\\\\Documents\\\\PowerShell\\\\*.ps1\", \n                    \"?:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\*.ps1\", \n                    \"\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*\\\\Documents\\\\WindowsPowerShell\\\\*.ps1\", \n                    \"\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*\\\\Documents\\\\PowerShell\\\\*.ps1\", \n                    \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\*.ps1\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_powershell_profiles.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

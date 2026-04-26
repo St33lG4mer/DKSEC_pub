@@ -1,0 +1,29 @@
+{
+  "id": "38c4e68b-6561-5a56-bacd-fdd0e5c939ae",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_cl_invocation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "syncinvoke"
+      ],
+      "raw_values": [
+        "*SyncInvoke *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*SyncInvoke *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_cl_invocation.eql",
+  "metadata": {}
+}

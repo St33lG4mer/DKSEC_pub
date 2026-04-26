@@ -1,0 +1,42 @@
+{
+  "id": "213a8bae-0ead-52a7-984e-92c418b06554",
+  "catalog": "sigma",
+  "name": "file_event_win_cve_2021_41379_msi_lpe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "application",
+        "elevation_service.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application*",
+        "*\\\\elevation_service.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\msiexec.exe\" and file.path:\"C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application*\" and file.path:\"*\\\\elevation_service.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-41379/file_event_win_cve_2021_41379_msi_lpe.eql",
+  "metadata": {}
+}

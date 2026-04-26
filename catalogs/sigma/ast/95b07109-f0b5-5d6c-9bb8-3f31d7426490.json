@@ -1,0 +1,42 @@
+{
+  "id": "95b07109-f0b5-5d6c-9bb8-3f31d7426490",
+  "catalog": "sigma",
+  "name": "registry_set_evtx_file_key_tamper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\services\\\\eventlog\\\\",
+        "\\\\file"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\EventLog\\\\*",
+        "*\\\\File"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "\\\\system32\\\\winevt\\\\logs\\\\"
+      ],
+      "raw_values": [
+        "*\\\\System32\\\\Winevt\\\\Logs\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\EventLog\\\\*\" and registry.path:\"*\\\\File\") and (not winlog.event_data.Details:\"*\\\\System32\\\\Winevt\\\\Logs\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_evtx_file_key_tamper.eql",
+  "metadata": {}
+}

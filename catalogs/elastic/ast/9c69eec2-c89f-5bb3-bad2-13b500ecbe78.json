@@ -1,0 +1,26 @@
+{
+  "id": "9c69eec2-c89f-5bb3-bad2-13b500ecbe78",
+  "catalog": "elastic",
+  "name": "Google Workspace API Access Granted via Domain-Wide Delegation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:google_workspace.admin\n  and event.provider:admin\n  and event.category:iam\n  and event.action:AUTHORIZE_API_CLIENT_ACCESS\n  and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/persistence_google_workspace_api_access_granted_via_dwd.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Persistence"
+    ]
+  }
+}

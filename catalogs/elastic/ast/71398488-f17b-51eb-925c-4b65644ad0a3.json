@@ -1,0 +1,41 @@
+{
+  "id": "71398488-f17b-51eb-925c-4b65644ad0a3",
+  "catalog": "elastic",
+  "name": "AWS First Occurrence of STS GetFederationToken Request by User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider:sts.amazonaws.com\n    and event.action:GetFederationToken\n    and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_sts_get_federation_token.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS",
+      "Data Source: AWS STS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

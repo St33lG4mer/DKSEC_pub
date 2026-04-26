@@ -1,0 +1,29 @@
+{
+  "id": "4d62b290-9570-5243-a1b6-4f101c6d3a6c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dnx_execute_csharp_code",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dnx.exe"
+      ],
+      "raw_values": [
+        "*\\\\dnx.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\dnx.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dnx_execute_csharp_code.eql",
+  "metadata": {}
+}

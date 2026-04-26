@@ -1,0 +1,49 @@
+{
+  "id": "2347206a-4cdf-55e6-a832-168913ccfd4f",
+  "catalog": "elastic",
+  "name": "First Time Seen Google Workspace OAuth Login from Third-Party Application",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "google_workspace.token"
+      ],
+      "raw_values": [
+        "google_workspace.token"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "authorize"
+      ],
+      "raw_values": [
+        "authorize"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"google_workspace.token\" and event.action: \"authorize\" and\ngoogle_workspace.token.scope.data: *Login and google_workspace.token.client.id: *apps.googleusercontent.com\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/defense_evasion_google_workspace_new_oauth_login_from_third_party_application.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Tactic: Defense Evasion",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "id": "db24589b-8700-5c59-ac3d-7fdd4ac3a6c0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_cobaltstrike_process_patterns",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "runonce.exe",
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\runonce.exe",
+        "*\\\\dllhost.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "c whoami",
+        "c echo",
+        "pipe",
+        "conhost.exe 0xffffffff -forcev1"
+      ],
+      "raw_values": [
+        "*cmd.exe /C whoami",
+        "*cmd.exe /c echo*",
+        "*> \\\\\\\\.\\\\pipe*",
+        "*conhost.exe 0xffffffff -ForceV1"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "c echo",
+        "pipe",
+        "c whoami"
+      ],
+      "raw_values": [
+        "*cmd.exe /C echo*",
+        "* > \\\\\\\\.\\\\pipe*",
+        "*/C whoami"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*cmd.exe /C whoami\" and process.parent.executable:\"C:\\\\Temp\\\\*\") or ((process.parent.executable like~ (\"*\\\\runonce.exe\", \"*\\\\dllhost.exe\")) and (process.command_line:\"*cmd.exe /c echo*\" and process.command_line:\"*> \\\\\\\\.\\\\pipe*\")) or ((process.parent.command_line:\"*cmd.exe /C echo*\" and process.parent.command_line:\"* > \\\\\\\\.\\\\pipe*\") and process.command_line:\"*conhost.exe 0xffffffff -ForceV1\") or (process.parent.command_line:\"*/C whoami\" and process.command_line:\"*conhost.exe 0xffffffff -ForceV1\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_cobaltstrike_process_patterns.eql",
+  "metadata": {}
+}

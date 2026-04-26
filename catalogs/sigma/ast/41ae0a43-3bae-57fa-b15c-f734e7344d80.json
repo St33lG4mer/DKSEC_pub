@@ -1,0 +1,40 @@
+{
+  "id": "41ae0a43-3bae-57fa-b15c-f734e7344d80",
+  "catalog": "sigma",
+  "name": "win_security_susp_dsrm_password_change",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4794"
+      ],
+      "raw_values": [
+        "4794"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and event.code:\"4794\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_dsrm_password_change.eql",
+  "metadata": {}
+}

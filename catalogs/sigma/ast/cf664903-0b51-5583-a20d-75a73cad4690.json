@@ -1,0 +1,32 @@
+{
+  "id": "cf664903-0b51-5583-a20d-75a73cad4690",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_mailboxexport_share",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "new-mailboxexportrequest",
+        "-mailbox"
+      ],
+      "raw_values": [
+        "*New-MailboxExportRequest*",
+        "* -Mailbox *",
+        "* -FilePath \\\\\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*New-MailboxExportRequest*\" and process.command_line:\"* -Mailbox *\" and process.command_line:\"* -FilePath \\\\\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_mailboxexport_share.eql",
+  "metadata": {}
+}

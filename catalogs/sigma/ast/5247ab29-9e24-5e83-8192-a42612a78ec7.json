@@ -1,0 +1,57 @@
+{
+  "id": "5247ab29-9e24-5e83-8192-a42612a78ec7",
+  "catalog": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_wow6432node_currentversion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\windows\\\\appinit_dlls",
+        "\\\\image file execution options",
+        "\\\\drivers32"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\Appinit_Dlls*",
+        "*\\\\Image File Execution Options*",
+        "*\\\\Drivers32*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\windows nt\\\\currentversion"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)",
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\image file execution options"
+      ],
+      "raw_values": [
+        "(Empty)",
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows NT\\\\CurrentVersion*\" and (registry.path like~ (\"*\\\\Windows\\\\Appinit_Dlls*\", \"*\\\\Image File Execution Options*\", \"*\\\\Drivers32*\"))) and (not (winlog.event_data.Details:\"(Empty)\" or (?winlog.event_data.Details == null) or winlog.event_data.Details:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Image File Execution Options\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_wow6432node_currentversion.eql",
+  "metadata": {}
+}

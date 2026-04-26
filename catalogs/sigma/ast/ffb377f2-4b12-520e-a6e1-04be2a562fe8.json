@@ -1,0 +1,42 @@
+{
+  "id": "ffb377f2-4b12-520e-a6e1-04be2a562fe8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_runxcmd",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "account=system",
+        "account=ti"
+      ],
+      "raw_values": [
+        "* /account=system *",
+        "* /account=ti *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "exec="
+      ],
+      "raw_values": [
+        "*/exec=*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"* /account=system *\", \"* /account=ti *\")) and process.command_line:\"*/exec=*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_runxcmd.eql",
+  "metadata": {}
+}

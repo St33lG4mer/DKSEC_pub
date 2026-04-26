@@ -1,0 +1,77 @@
+{
+  "id": "eb9b3536-54ab-5fbb-9736-f54b3697b90e",
+  "catalog": "sigma",
+  "name": "win_system_service_install_susp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": "like~",
+      "values": [
+        "-nop",
+        "-sta",
+        "-w hidden",
+        ":\\\\temp\\\\",
+        ".downloadfile(",
+        ".downloadstring(",
+        "\\\\admin$\\\\",
+        "\\\\perflogs\\\\"
+      ],
+      "raw_values": [
+        "* -nop *",
+        "* -sta *",
+        "* -w hidden *",
+        "*:\\\\Temp\\\\*",
+        "*.downloadfile(*",
+        "*.downloadstring(*",
+        "*\\\\ADMIN$\\\\*",
+        "*\\\\Perflogs\\\\*",
+        "*&&*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\" and (winlog.event_data.ImagePath like~ (\"* -nop *\", \"* -sta *\", \"* -w hidden *\", \"*:\\\\Temp\\\\*\", \"*.downloadfile(*\", \"*.downloadstring(*\", \"*\\\\ADMIN$\\\\*\", \"*\\\\Perflogs\\\\*\", \"*&&*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_service_install_susp.eql",
+  "metadata": {}
+}

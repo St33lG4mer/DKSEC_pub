@@ -1,0 +1,28 @@
+{
+  "id": "70269f99-56aa-5e71-9f6e-59f5dca9b1d6",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation via Sudoers File Modification",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.category:process and event.type:start and process.args:(echo and *NOPASSWD*ALL*)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/privilege_escalation_echo_nopasswd_sudoers.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

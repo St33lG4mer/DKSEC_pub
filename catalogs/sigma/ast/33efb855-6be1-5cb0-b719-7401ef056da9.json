@@ -1,0 +1,40 @@
+{
+  "id": "33efb855-6be1-5cb0-b719-7401ef056da9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hh_chm_remote_download_or_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "hh.exe"
+      ],
+      "raw_values": [
+        "HH.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "hh.exe"
+      ],
+      "raw_values": [
+        "*\\\\hh.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"HH.exe\" or process.executable:\"*\\\\hh.exe\") and (process.command_line like~ (\"*http://*\", \"*https://*\", \"*\\\\\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hh_chm_remote_download_or_execution.eql",
+  "metadata": {}
+}

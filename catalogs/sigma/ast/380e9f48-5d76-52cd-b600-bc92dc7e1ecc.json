@@ -1,0 +1,53 @@
+{
+  "id": "380e9f48-5d76-52cd-b600-bc92dc7e1ecc",
+  "catalog": "sigma",
+  "name": "win_security_susp_computer_name",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.samaccountname",
+      "raw_field": "winlog.event_data.SamAccountName",
+      "operator": ":",
+      "values": [
+        "samtheadmin-"
+      ],
+      "raw_values": [
+        "SAMTHEADMIN-*",
+        "*$"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetusername",
+      "raw_field": "winlog.event_data.TargetUserName",
+      "operator": ":",
+      "values": [
+        "samtheadmin-"
+      ],
+      "raw_values": [
+        "SAMTHEADMIN-*",
+        "*$"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((winlog.event_data.SamAccountName:\"SAMTHEADMIN-*\" and winlog.event_data.SamAccountName:\"*$\") or (winlog.event_data.TargetUserName:\"SAMTHEADMIN-*\" and winlog.event_data.TargetUserName:\"*$\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_computer_name.eql",
+  "metadata": {}
+}

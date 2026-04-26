@@ -1,0 +1,92 @@
+{
+  "id": "6b74dc15-b0d8-526f-8d13-3ad748ce33ed",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation via OverlayFS",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-rm",
+        "cap_setuid"
+      ],
+      "raw_values": [
+        "-r",
+        "-rm",
+        "m",
+        "*cap_setuid*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "uid_change"
+      ],
+      "raw_values": [
+        "exec",
+        "uid_change"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "unshare"
+      ],
+      "raw_values": [
+        "unshare"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.parent.entity_id, host.id with maxspan=5s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n    process.name == \"unshare\" and process.args : (\"-r\", \"-rm\", \"m\") and process.args : \"*cap_setuid*\"  and user.id != \"0\"]\n  [process where host.os.type == \"linux\" and event.action == \"uid_change\" and event.type == \"change\" and\n    user.id == \"0\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_overlayfs_local_privesc.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "id": "e574e5b8-ec6c-51c6-bea4-0be30416cad4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msbuild_susp_parent_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "devenv.exe",
+        "cmd.exe",
+        "msbuild.exe",
+        "python.exe",
+        "explorer.exe",
+        "nuget.exe"
+      ],
+      "raw_values": [
+        "*\\\\devenv.exe",
+        "*\\\\cmd.exe",
+        "*\\\\msbuild.exe",
+        "*\\\\python.exe",
+        "*\\\\explorer.exe",
+        "*\\\\nuget.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "*\\\\MSBuild.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "MSBuild.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\MSBuild.exe\" or process.pe.original_file_name:\"MSBuild.exe\") and (not (process.parent.executable like~ (\"*\\\\devenv.exe\", \"*\\\\cmd.exe\", \"*\\\\msbuild.exe\", \"*\\\\python.exe\", \"*\\\\explorer.exe\", \"*\\\\nuget.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msbuild_susp_parent_process.eql",
+  "metadata": {}
+}

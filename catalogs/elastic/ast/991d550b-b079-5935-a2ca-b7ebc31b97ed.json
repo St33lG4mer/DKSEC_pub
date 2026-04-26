@@ -1,0 +1,40 @@
+{
+  "id": "991d550b-b079-5935-a2ca-b7ebc31b97ed",
+  "catalog": "elastic",
+  "name": "Azure Compute Restore Point Collection Deleted by Unusual User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "microsoft.compute/restorepointcollections/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.COMPUTE/RESTOREPOINTCOLLECTIONS/DELETE"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: azure.activitylogs and\n    event.action: \"MICROSOFT.COMPUTE/RESTOREPOINTCOLLECTIONS/DELETE\" and\n    event.outcome: (Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/impact_azure_compute_restore_point_collection_deleted.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Storage",
+      "Data Source: Azure",
+      "Data Source: Azure Activity Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

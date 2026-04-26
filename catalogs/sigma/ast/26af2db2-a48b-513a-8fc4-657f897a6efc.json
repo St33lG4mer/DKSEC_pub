@@ -1,0 +1,62 @@
+{
+  "id": "26af2db2-a48b-513a-8fc4-657f897a6efc",
+  "catalog": "sigma",
+  "name": "win_security_hybridconnectionmgr_svc_installation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "service.name",
+      "raw_field": "service.name",
+      "operator": ":",
+      "values": [
+        "hybridconnectionmanager"
+      ],
+      "raw_values": [
+        "HybridConnectionManager"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "hybridconnectionmanager"
+      ],
+      "raw_values": [
+        "*HybridConnectionManager*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and service.name:\"HybridConnectionManager\" and winlog.event_data.ServiceFileName:\"*HybridConnectionManager*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_hybridconnectionmgr_svc_installation.eql",
+  "metadata": {}
+}

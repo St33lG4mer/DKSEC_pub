@@ -1,0 +1,31 @@
+{
+  "id": "f867741f-e0dd-55b5-972f-d019a56dbbfc",
+  "catalog": "sigma",
+  "name": "registry_delete_schtasks_hide_task_via_index_value_removal",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tree\\\\",
+        "index"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*",
+        "*Index*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*\" and registry.path:\"*Index*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_delete/registry_delete_schtasks_hide_task_via_index_value_removal.eql",
+  "metadata": {}
+}

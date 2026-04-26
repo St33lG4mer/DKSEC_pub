@@ -1,0 +1,134 @@
+{
+  "id": "fb4e4133-3880-5000-81f7-723a49e092c2",
+  "catalog": "elastic",
+  "name": "SUID/SGID Bit Set",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "u+s",
+        "g+s",
+        "keybase-redirector",
+        "fonts",
+        "ssh-agent"
+      ],
+      "raw_values": [
+        "+s",
+        "u+s",
+        "g+s",
+        "/run/*",
+        "/var/run/*",
+        "/usr/bin/keybase-redirector",
+        "/usr/local/share/fonts",
+        "/usr/bin/ssh-agent",
+        "-m"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "info",
+        "find",
+        "galaxy",
+        "package_script_service"
+      ],
+      "raw_values": [
+        "/usr/NX/*",
+        "/var/lib/docker/*",
+        "/var/lib/dpkg/info*",
+        "/tmp/newroot/*",
+        "/usr/bin/find",
+        "/opt/commvault/Base/Galaxy",
+        "/System/Library/PrivateFrameworks/PackageKit.framework/Versions/A/XPCServices/package_script_service.xpc/Contents/MacOS/package_script_service",
+        "/opt/metallic/Base/Galaxy"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/var/lib/dpkg/info/",
+        "/var/tmp/rpm-tmp",
+        "/usr/nx/"
+      ],
+      "raw_values": [
+        "/var/lib/dpkg/info/*",
+        "/var/tmp/rpm-tmp*",
+        "/usr/NX/*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "chmod",
+        "install"
+      ],
+      "raw_values": [
+        "chmod",
+        "install"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  (process.name == \"chmod\" and (process.args : (\"+s\", \"u+s\", \"g+s\") or process.args regex \"[24][0-9]{3}\")) or\n  (process.name == \"install\" and process.args : \"-m\" and\n  (process.args : (\"+s\", \"u+s\", \"g+s\") or process.args regex \"[24][0-9]{3}\"))\n) and not (\n  process.parent.executable : (\n    \"/usr/NX/*\", \"/var/lib/docker/*\", \"/var/lib/dpkg/info*\", \"/tmp/newroot/*\", \"/usr/bin/find\", \"/opt/commvault/Base/Galaxy\",\n    \"/System/Library/PrivateFrameworks/PackageKit.framework/Versions/A/XPCServices/package_script_service.xpc/Contents/MacOS/package_script_service\",\n    \"/opt/metallic/Base/Galaxy\"\n  ) or\n  process.args : (\n    \"/run/*\", \"/var/run/*\", \"/usr/bin/keybase-redirector\", \"/usr/local/share/fonts\", \"/usr/bin/ssh-agent\"\n  ) or\n  process.parent.args like (\"/var/lib/dpkg/info/*\", \"/var/tmp/rpm-tmp*\", \"/usr/NX/*\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/privilege_escalation_setuid_setgid_bit_set_via_chmod.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

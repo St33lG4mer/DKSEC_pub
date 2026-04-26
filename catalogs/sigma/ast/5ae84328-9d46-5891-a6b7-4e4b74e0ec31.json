@@ -1,0 +1,29 @@
+{
+  "id": "5ae84328-9d46-5891-a6b7-4e4b74e0ec31",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uac_bypass_fodhelper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "fodhelper.exe"
+      ],
+      "raw_values": [
+        "*\\\\fodhelper.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\fodhelper.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_fodhelper.eql",
+  "metadata": {}
+}

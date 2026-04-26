@@ -1,0 +1,29 @@
+{
+  "id": "b97a34d8-e7ee-50eb-b0c6-2b909aeac67f",
+  "catalog": "sigma",
+  "name": "registry_event_malware_snake_covert_store_key",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "security\\\\policy\\\\secrets\\\\n"
+      ],
+      "raw_values": [
+        "*SECURITY\\\\Policy\\\\Secrets\\\\n"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*SECURITY\\\\Policy\\\\Secrets\\\\n\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/SNAKE/registry_event_malware_snake_covert_store_key.eql",
+  "metadata": {}
+}

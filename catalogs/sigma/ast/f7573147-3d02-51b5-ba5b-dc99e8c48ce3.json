@@ -1,0 +1,31 @@
+{
+  "id": "f7573147-3d02-51b5-ba5b-dc99e8c48ce3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_hydra",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "^user^",
+        "^pass^"
+      ],
+      "raw_values": [
+        "*^USER^*",
+        "*^PASS^*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*-u *\" and process.command_line:\"*-p *\") and (process.command_line like~ (\"*^USER^*\", \"*^PASS^*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_hydra.eql",
+  "metadata": {}
+}

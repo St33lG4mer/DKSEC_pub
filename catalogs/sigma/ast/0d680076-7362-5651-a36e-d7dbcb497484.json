@@ -1,0 +1,65 @@
+{
+  "id": "0d680076-7362-5651-a36e-d7dbcb497484",
+  "catalog": "sigma",
+  "name": "registry_set_susp_user_shell_folders",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\user shell folders",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\shell folders",
+        "\\\\common startup",
+        "\\\\startup"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders*",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders*",
+        "*\\\\Common Startup",
+        "*\\\\Startup"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "c:\\\\programdata\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup",
+        "%programdata%\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup",
+        "%userprofile%\\\\appdata\\\\roaming\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup",
+        "%%userprofile%%\\\\appdata\\\\roaming\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup"
+      ],
+      "raw_values": [
+        "*C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*",
+        "*%ProgramData%\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*",
+        "*%USERPROFILE%\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*",
+        "*%%USERPROFILE%%\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "c:\\\\users\\\\",
+        "\\\\appdata\\\\roaming\\\\microsoft\\\\windows\\\\start menu\\\\programs\\\\startup"
+      ],
+      "raw_values": [
+        "*C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((registry.path like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders*\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Shell Folders*\")) and (registry.path like~ (\"*\\\\Common Startup\", \"*\\\\Startup\"))) and (not ((?winlog.event_data.Details == null) or (winlog.event_data.Details like~ (\"*C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*\", \"*%ProgramData%\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*\")) or (winlog.event_data.Details like~ (\"*%USERPROFILE%\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*\", \"*%%USERPROFILE%%\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*\")) or (winlog.event_data.Details:\"*C:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_susp_user_shell_folders.eql",
+  "metadata": {}
+}

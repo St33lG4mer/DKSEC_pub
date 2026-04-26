@@ -1,0 +1,25 @@
+{
+  "id": "454ce5b2-afea-5f84-94fb-08e218d4b15c",
+  "catalog": "elastic",
+  "name": "Threat Intel Hash Indicator Match",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "file.hash.*:* or process.hash.*:* or dll.hash.*:*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/threat_intel/threat_intel_indicator_match_hash.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "OS: Windows",
+      "Data Source: Elastic Endgame",
+      "Rule Type: Threat Match",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

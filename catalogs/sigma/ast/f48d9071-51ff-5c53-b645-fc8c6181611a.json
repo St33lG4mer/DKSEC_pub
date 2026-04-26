@@ -1,0 +1,75 @@
+{
+  "id": "f48d9071-51ff-5c53-b645-fc8c6181611a",
+  "catalog": "sigma",
+  "name": "win_system_service_terminated_unexpectedly",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.binary",
+      "raw_field": "winlog.event_data.Binary",
+      "operator": "like~",
+      "values": [
+        "4d0053004d005100",
+        "6d0073006d007100"
+      ],
+      "raw_values": [
+        "*4d0053004d005100*",
+        "*6d0073006d007100*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7034"
+      ],
+      "raw_values": [
+        "7034"
+      ]
+    },
+    {
+      "field": "winlog.event_data.param1",
+      "raw_field": "winlog.event_data.param1",
+      "operator": ":",
+      "values": [
+        "message queuing"
+      ],
+      "raw_values": [
+        "*Message Queuing*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and ((winlog.provider_name:\"Service Control Manager\" and event.code:\"7034\") and (winlog.event_data.param1:\"*Message Queuing*\" or (winlog.event_data.Binary like~ (\"*4d0053004d005100*\", \"*6d0073006d007100*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_service_terminated_unexpectedly.eql",
+  "metadata": {}
+}

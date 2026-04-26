@@ -1,0 +1,65 @@
+{
+  "id": "774ac7d7-440d-538f-98fc-1d69c3157f2b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_webshell_chopper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "&ipconfig&echo",
+        "&quser&echo",
+        "&whoami&echo",
+        "&c:&echo",
+        "&cd&echo",
+        "&dir&echo",
+        "&echo [e]",
+        "&echo [s]"
+      ],
+      "raw_values": [
+        "*&ipconfig&echo*",
+        "*&quser&echo*",
+        "*&whoami&echo*",
+        "*&c:&echo*",
+        "*&cd&echo*",
+        "*&dir&echo*",
+        "*&echo [E]*",
+        "*&echo [S]*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "w3wp.exe"
+      ],
+      "raw_values": [
+        "*\\\\w3wp.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "w3wp.exe"
+      ],
+      "raw_values": [
+        "*\\\\w3wp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\w3wp.exe\" or process.parent.executable:\"*\\\\w3wp.exe\") and (process.command_line like~ (\"*&ipconfig&echo*\", \"*&quser&echo*\", \"*&whoami&echo*\", \"*&c:&echo*\", \"*&cd&echo*\", \"*&dir&echo*\", \"*&echo [E]*\", \"*&echo [S]*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_webshell_chopper.eql",
+  "metadata": {}
+}

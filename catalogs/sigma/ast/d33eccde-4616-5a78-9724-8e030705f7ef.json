@@ -1,0 +1,59 @@
+{
+  "id": "d33eccde-4616-5a78-9724-8e030705f7ef",
+  "catalog": "sigma",
+  "name": "proc_creation_win_schtasks_powershell_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-windowstyle hidden",
+        "-w hidden",
+        "-ep bypass",
+        "-noni"
+      ],
+      "raw_values": [
+        "* -windowstyle hidden",
+        "* -w hidden",
+        "* -ep bypass",
+        "* -noni"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\System32\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "-k netsvcs",
+        "-s schedule"
+      ],
+      "raw_values": [
+        "*-k netsvcs*",
+        "*-s Schedule*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"C:\\\\WINDOWS\\\\System32\\\\svchost.exe\" and (process.parent.command_line:\"*-k netsvcs*\" and process.parent.command_line:\"*-s Schedule*\") and (process.command_line like~ (\"* -windowstyle hidden\", \"* -w hidden\", \"* -ep bypass\", \"* -noni\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_schtasks_powershell_persistence.eql",
+  "metadata": {}
+}

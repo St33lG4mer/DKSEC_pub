@@ -1,0 +1,54 @@
+{
+  "id": "ceb152fc-4b6d-51d4-8695-e911798b076c",
+  "catalog": "sigma",
+  "name": "proc_access_win_hktl_handlekatz_lsass_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x1440"
+      ],
+      "raw_values": [
+        "0x1440"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\ntdll.dll+",
+        "|unknown("
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\ntdll.dll+*",
+        "*|UNKNOWN(*",
+        "*)"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and winlog.event_data.GrantedAccess:\"0x1440\" and winlog.event_data.CallTrace:\"C:\\\\Windows\\\\System32\\\\ntdll.dll+*\" and winlog.event_data.CallTrace:\"*|UNKNOWN(*\" and winlog.event_data.CallTrace:\"*)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_access/proc_access_win_hktl_handlekatz_lsass_access.eql",
+  "metadata": {}
+}

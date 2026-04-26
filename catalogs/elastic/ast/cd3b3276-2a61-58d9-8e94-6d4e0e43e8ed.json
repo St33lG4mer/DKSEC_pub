@@ -1,0 +1,66 @@
+{
+  "id": "cd3b3276-2a61-58d9-8e94-6d4e0e43e8ed",
+  "catalog": "elastic",
+  "name": "SSH Authorized Key File Activity Detected via Defend for Containers",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "change",
+        "creation"
+      ],
+      "raw_values": [
+        "change",
+        "creation"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "in",
+      "values": [
+        "authorized_keys",
+        "authorized_keys2"
+      ],
+      "raw_values": [
+        "authorized_keys",
+        "authorized_keys2"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type in (\"change\", \"creation\") and\nfile.name in (\"authorized_keys\", \"authorized_keys2\") and\nprocess.interactive == true and container.id like \"*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/persistence_ssh_authorized_keys_modification_inside_a_container.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

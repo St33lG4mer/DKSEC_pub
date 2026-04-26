@@ -1,0 +1,65 @@
+{
+  "id": "747ef6d3-0c34-5a5d-a347-409011a56ff5",
+  "catalog": "elastic",
+  "name": "Enumeration of Privileged Local Groups Membership",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "group.name",
+      "raw_field": "group.name",
+      "operator": ":",
+      "values": [
+        "remotedesktopusers"
+      ],
+      "raw_values": [
+        "RemoteDesktopUsers"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetsid",
+      "raw_field": "winlog.event_data.TargetSid",
+      "operator": ":",
+      "values": [
+        "s-1-5-32-544",
+        "s-1-5-32-555"
+      ],
+      "raw_values": [
+        "S-1-5-32-544",
+        "S-1-5-32-555"
+      ]
+    },
+    {
+      "field": "winlog.event_data.subjectusersid",
+      "raw_field": "winlog.event_data.SubjectUserSid",
+      "operator": ":",
+      "values": [
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:windows and event.category:iam and event.action:user-member-enumerated and \n  (\n    group.name:(*Admin* or \"RemoteDesktopUsers\") or\n    winlog.event_data.TargetSid:(\"S-1-5-32-544\" or \"S-1-5-32-555\")\n  ) and \n  not (\n    winlog.event_data.SubjectUserName: *$ or\n    winlog.event_data.SubjectUserSid: (\"S-1-5-19\" or \"S-1-5-20\") or \n    winlog.event_data.CallerProcessName:(\"-\" or \n                                       C\\:\\\\Windows\\\\System32\\\\VSSVC.exe or \n                                       C\\:\\\\Windows\\\\System32\\\\SearchIndexer.exe or \n                                       C\\:\\\\Windows\\\\System32\\\\CompatTelRunner.exe or \n                                       C\\:\\\\Windows\\\\System32\\\\oobe\\\\msoobe.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\net1.exe or \n                                       C\\:\\\\Windows\\\\System32\\\\svchost.exe or \n                                       C\\:\\\\Windows\\\\System32\\\\Netplwiz.exe or \n                                       C\\:\\\\Windows\\\\System32\\\\msiexec.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\CloudExperienceHostBroker.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\RuntimeBroker.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\SrTasks.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\diskshadow.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\dfsrs.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\vssadmin.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\dllhost.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\mmc.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\SettingSyncHost.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\inetsrv\\\\w3wp.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\wsmprovhost.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\mstsc.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\esentutl.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\RecoveryDrive.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\SystemPropertiesComputerName.exe or\n                                       C\\:\\\\Windows\\\\SysWOW64\\\\msiexec.exe or\n                                       C\\:\\\\Windows\\\\System32\\\\taskhostw.exe or\n                                       C\\:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe or\n                                       C\\:\\\\Windows\\\\Temp\\\\rubrik_vmware*\\\\snaptool.exe or\n                                       C\\:\\\\Windows\\\\VeeamVssSupport\\\\VeeamGuestHelper.exe or\n                                       C\\:\\\\WindowsAzure\\\\*WaAppAgent.exe or\n                                       C\\:\\\\$WINDOWS.~BT\\\\Sources\\\\*.exe\n                                      )\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/discovery_privileged_localgroup_membership.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

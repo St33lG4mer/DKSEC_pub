@@ -1,0 +1,33 @@
+{
+  "id": "5d5093c9-37ed-5136-afe8-2206948294b3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uninstall_crowdstrike_falcon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "windowssensor.exe",
+        "uninstall",
+        "quiet"
+      ],
+      "raw_values": [
+        "*\\\\WindowsSensor.exe*",
+        "* /uninstall*",
+        "* /quiet*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\WindowsSensor.exe*\" and process.command_line:\"* /uninstall*\" and process.command_line:\"* /quiet*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uninstall_crowdstrike_falcon.eql",
+  "metadata": {}
+}

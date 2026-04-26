@@ -1,0 +1,41 @@
+{
+  "id": "f490f9d5-3475-5812-b95f-d634502bba17",
+  "catalog": "sigma",
+  "name": "image_load_side_load_appverifui",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "appverif.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\SysWOW64\\\\appverif.exe",
+        "C:\\\\Windows\\\\System32\\\\appverif.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "appverifui.dll"
+      ],
+      "raw_values": [
+        "*\\\\appverifUI.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\appverifUI.dll\" and (not ((process.executable like~ (\"C:\\\\Windows\\\\SysWOW64\\\\appverif.exe\", \"C:\\\\Windows\\\\System32\\\\appverif.exe\")) and (file.path like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_appverifui.eql",
+  "metadata": {}
+}

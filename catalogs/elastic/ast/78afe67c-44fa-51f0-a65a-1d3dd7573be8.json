@@ -1,0 +1,38 @@
+{
+  "id": "78afe67c-44fa-51f0-a65a-1d3dd7573be8",
+  "catalog": "elastic",
+  "name": "Azure Storage Account Key Regenerated",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.storage/storageaccounts/regeneratekey/action"
+      ],
+      "raw_values": [
+        "MICROSOFT.STORAGE/STORAGEACCOUNTS/REGENERATEKEY/ACTION"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.STORAGE/STORAGEACCOUNTS/REGENERATEKEY/ACTION\" and event.outcome:(Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/credential_access_storage_account_key_regenerated.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

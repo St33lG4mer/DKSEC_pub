@@ -1,0 +1,55 @@
+{
+  "id": "6ab8b087-841d-5ef3-9082-3d71ec50698e",
+  "catalog": "sigma",
+  "name": "file_event_win_startup_folder_file_write",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wuauclt.exe",
+        "wuaucltcore.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\wuauclt.exe",
+        "C:\\\\Windows\\\\uus\\\\ARM64\\\\wuaucltcore.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "startup",
+        "send to onenote.lnk"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\StartUp*",
+        "*\\\\Send to OneNote.lnk"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "onenote.exe"
+      ],
+      "raw_values": [
+        "*\\\\ONENOTE.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\StartUp*\" and (not ((process.executable like~ (\"C:\\\\Windows\\\\System32\\\\wuauclt.exe\", \"C:\\\\Windows\\\\uus\\\\ARM64\\\\wuaucltcore.exe\")) or (file.path like~ (\"C:\\\\$WINDOWS.~BT\\\\NewOS\\\\*\", \"C:\\\\$WinREAgent\\\\Scratch\\\\Mount\\\\*\")))) and (not (process.executable:\"*\\\\ONENOTE.EXE\" and file.path:\"*\\\\Send to OneNote.lnk\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_startup_folder_file_write.eql",
+  "metadata": {}
+}

@@ -1,0 +1,53 @@
+{
+  "id": "b5561ccd-345b-5efe-a007-a6fe225da23a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_setspn_spn_enumeration",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "setspn.exe"
+      ],
+      "raw_values": [
+        "*\\\\setspn.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "setspn.exe"
+      ],
+      "raw_values": [
+        "setspn.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "query or reset the computer",
+        "spn attribute"
+      ],
+      "raw_values": [
+        "*Query or reset the computer*",
+        "*SPN attribute*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\setspn.exe\" or process.pe.original_file_name:\"setspn.exe\" or (process.pe.description:\"*Query or reset the computer*\" and process.pe.description:\"*SPN attribute*\")) and (process.command_line like~ (\"* -q *\", \"* /q *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_setspn_spn_enumeration.eql",
+  "metadata": {}
+}

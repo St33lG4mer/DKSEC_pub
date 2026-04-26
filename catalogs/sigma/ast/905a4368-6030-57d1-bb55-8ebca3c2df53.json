@@ -1,0 +1,62 @@
+{
+  "id": "905a4368-6030-57d1-bb55-8ebca3c2df53",
+  "catalog": "sigma",
+  "name": "win_security_external_device",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "6416"
+      ],
+      "raw_values": [
+        "6416"
+      ]
+    },
+    {
+      "field": "winlog.event_data.classname",
+      "raw_field": "winlog.event_data.ClassName",
+      "operator": ":",
+      "values": [
+        "diskdrive"
+      ],
+      "raw_values": [
+        "DiskDrive"
+      ]
+    },
+    {
+      "field": "winlog.event_data.devicedescription",
+      "raw_field": "winlog.event_data.DeviceDescription",
+      "operator": ":",
+      "values": [
+        "usb mass storage device"
+      ],
+      "raw_values": [
+        "USB Mass Storage Device"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"6416\" and (winlog.event_data.ClassName:\"DiskDrive\" or winlog.event_data.DeviceDescription:\"USB Mass Storage Device\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_external_device.eql",
+  "metadata": {}
+}

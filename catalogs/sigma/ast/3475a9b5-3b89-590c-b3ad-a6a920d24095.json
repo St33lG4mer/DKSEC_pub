@@ -1,0 +1,29 @@
+{
+  "id": "3475a9b5-3b89-590c-b3ad-a6a920d24095",
+  "catalog": "sigma",
+  "name": "file_event_win_moriya_rootkit",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "moriyastreamwatchmen.sys"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\drivers\\\\MoriyaStreamWatchmen.sys"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\System32\\\\drivers\\\\MoriyaStreamWatchmen.sys\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Moriya-Rootkit/file_event_win_moriya_rootkit.eql",
+  "metadata": {}
+}

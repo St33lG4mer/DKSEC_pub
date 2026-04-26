@@ -1,0 +1,70 @@
+{
+  "id": "e4c40cfb-938c-5ccb-8065-a9bbf17bf807",
+  "catalog": "sigma",
+  "name": "proc_creation_win_certutil_certificate_installation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-addstore",
+        "addstore",
+        "–addstore",
+        "—addstore",
+        "―addstore"
+      ],
+      "raw_values": [
+        "*-addstore*",
+        "*/addstore*",
+        "*–addstore*",
+        "*—addstore*",
+        "*―addstore*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "root"
+      ],
+      "raw_values": [
+        "*root*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\certutil.exe\" or process.pe.original_file_name:\"CertUtil.exe\") and process.command_line like~ (\"*-addstore*\", \"*/addstore*\", \"*–addstore*\", \"*—addstore*\", \"*―addstore*\") and process.command_line:\"*root*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_certutil_certificate_installation.eql",
+  "metadata": {}
+}

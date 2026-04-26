@@ -1,0 +1,70 @@
+{
+  "id": "7c7ddbfd-05d5-5094-81a9-f6972f6e0114",
+  "catalog": "sigma",
+  "name": "proc_creation_win_netsh_fw_allow_rdp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "portopening",
+        "allow"
+      ],
+      "raw_values": [
+        "*portopening*",
+        "*allow*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "firewall",
+        "add",
+        "tcp",
+        "3389"
+      ],
+      "raw_values": [
+        "*firewall *",
+        "*add *",
+        "*tcp *",
+        "*3389*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\netsh.exe\" or process.pe.original_file_name:\"netsh.exe\") and ((process.command_line:\"*firewall *\" and process.command_line:\"*add *\" and process.command_line:\"*tcp *\" and process.command_line:\"*3389*\") and (process.command_line like~ (\"*portopening*\", \"*allow*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_netsh_fw_allow_rdp.eql",
+  "metadata": {}
+}

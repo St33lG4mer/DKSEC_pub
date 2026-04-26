@@ -1,0 +1,25 @@
+{
+  "id": "d57295fc-28b7-5002-bb6a-b5dc2d2d8ecc",
+  "catalog": "elastic",
+  "name": "Google SecOps External Alerts",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind: alert and data_stream.dataset: google_secops.alert\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/google_secops_external_alerts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Google SecOps",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide",
+      "Promotion: External Alerts"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "5468cf05-8b6e-50e7-bf44-3742736af750",
+  "catalog": "sigma",
+  "name": "file_event_win_apt_cozy_bear_phishing_campaign_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "ds7002.lnk",
+        "ds7002.pdf",
+        "ds7002.zip"
+      ],
+      "raw_values": [
+        "*ds7002.lnk*",
+        "*ds7002.pdf*",
+        "*ds7002.zip*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*ds7002.lnk*\", \"*ds7002.pdf*\", \"*ds7002.zip*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2018/TA/APT29-CozyBear/file_event_win_apt_cozy_bear_phishing_campaign_indicators.eql",
+  "metadata": {}
+}

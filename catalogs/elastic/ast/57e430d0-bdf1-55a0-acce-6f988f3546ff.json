@@ -1,0 +1,103 @@
+{
+  "id": "57e430d0-bdf1-55a0-acce-6f988f3546ff",
+  "catalog": "elastic",
+  "name": "AWS EC2 User Data Retrieval for EC2 Instance",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "aws.cloudtrail.user_identity.invoked_by",
+      "raw_field": "aws.cloudtrail.user_identity.invoked_by",
+      "operator": ":",
+      "values": [
+        "aws internal",
+        "cloudformation.amazonaws.com",
+        "aidevops.amazonaws.com",
+        "elasticmapreduce.amazonaws.com",
+        "aiops.amazonaws.com"
+      ],
+      "raw_values": [
+        "AWS Internal",
+        "cloudformation.amazonaws.com",
+        "aidevops.amazonaws.com",
+        "elasticmapreduce.amazonaws.com",
+        "aiops.amazonaws.com"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "describeinstanceattribute"
+      ],
+      "raw_values": [
+        "DescribeInstanceAttribute"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.flattened.request_parameters.attribute",
+      "raw_field": "aws.cloudtrail.flattened.request_parameters.attribute",
+      "operator": ":",
+      "values": [
+        "userdata"
+      ],
+      "raw_values": [
+        "userData"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ec2.amazonaws.com\"\n    and event.action: \"DescribeInstanceAttribute\"\n    and event.outcome: \"success\"\n    and aws.cloudtrail.flattened.request_parameters.attribute: \"userData\"\n    and not aws.cloudtrail.user_identity.invoked_by: (\n        \"AWS Internal\" or\n        \"cloudformation.amazonaws.com\" or \n        \"aidevops.amazonaws.com\" or \n        \"elasticmapreduce.amazonaws.com\" or \n        \"aiops.amazonaws.com\"\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/discovery_ec2_userdata_request_for_ec2_instance.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: Amazon EC2",
+      "Resources: Investigation Guide",
+      "Use Case: Log Auditing",
+      "Tactic: Discovery"
+    ]
+  }
+}

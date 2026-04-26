@@ -1,0 +1,52 @@
+{
+  "id": "035ffc20-9863-579e-a086-a372af8688bc",
+  "catalog": "elastic",
+  "name": "Potential ADIDNS Poisoning via Wildcard Record Creation",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "5137"
+      ],
+      "raw_values": [
+        "5137"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and event.code == \"5137\" and\n    startsWith(winlog.event_data.ObjectDN, \"DC=*,\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_adidns_wildcard.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Active Directory",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

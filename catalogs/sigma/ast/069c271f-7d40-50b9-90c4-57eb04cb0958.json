@@ -1,0 +1,42 @@
+{
+  "id": "069c271f-7d40-50b9-90c4-57eb04cb0958",
+  "catalog": "sigma",
+  "name": "proc_creation_win_tscon_localsystem",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tscon.exe"
+      ],
+      "raw_values": [
+        "*\\\\tscon.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) and process.executable:\"*\\\\tscon.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_tscon_localsystem.eql",
+  "metadata": {}
+}

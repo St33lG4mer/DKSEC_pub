@@ -1,0 +1,30 @@
+{
+  "id": "1aa85eec-5b07-50c9-9c4d-989ffd0aa2ae",
+  "catalog": "sigma",
+  "name": "file_event_win_writing_local_admin_share",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "127.0.0"
+      ],
+      "raw_values": [
+        "*\\\\\\\\127.0.0*",
+        "*\\\\ADMIN$\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\\\\\127.0.0*\" and file.path:\"*\\\\ADMIN$\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_writing_local_admin_share.eql",
+  "metadata": {}
+}

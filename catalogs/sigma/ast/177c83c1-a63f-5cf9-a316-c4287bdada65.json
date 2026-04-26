@@ -1,0 +1,41 @@
+{
+  "id": "177c83c1-a63f-5cf9-a316-c4287bdada65",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_goofy_guineapig_googleupdate_uncommon_child_instance",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "googleupdate.exe"
+      ],
+      "raw_values": [
+        "*\\\\GoogleUpdate.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "googleupdate.exe"
+      ],
+      "raw_values": [
+        "*\\\\GoogleUpdate.exe",
+        "*\\\\AppData\\\\Local\\\\Google\\\\Update\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\GoogleUpdate.exe\" and process.executable:\"*\\\\GoogleUpdate.exe\") and (not ((process.executable like~ (\"C:\\\\Program Files\\\\Google\\\\*\", \"C:\\\\Program Files (x86)\\\\Google\\\\*\")) or process.executable:\"*\\\\AppData\\\\Local\\\\Google\\\\Update\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Goofy-Guineapig/proc_creation_win_malware_goofy_guineapig_googleupdate_uncommon_child_instance.eql",
+  "metadata": {}
+}

@@ -1,0 +1,74 @@
+{
+  "id": "6f89277d-aa3b-5dca-943c-60ed19de5c04",
+  "catalog": "elastic",
+  "name": "Kubernetes Creation of a RoleBinding Referencing a ServiceAccount",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "rolebindings",
+        "clusterrolebindings"
+      ],
+      "raw_values": [
+        "rolebindings",
+        "clusterrolebindings"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "create"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"kubernetes.audit_logs\" and kubernetes.audit.requestObject.spec.serviceAccountName:* and\nkubernetes.audit.verb:\"create\" and kubernetes.audit.objectRef.resource:(\"rolebindings\" or \"clusterrolebindings\") and\nkubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/persistence_service_account_bound_to_clusterrole.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

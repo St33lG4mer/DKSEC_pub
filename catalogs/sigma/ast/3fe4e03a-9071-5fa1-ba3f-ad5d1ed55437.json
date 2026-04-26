@@ -1,0 +1,50 @@
+{
+  "id": "3fe4e03a-9071-5fa1-ba3f-ad5d1ed55437",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_windows_terminal_profile",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "settings.json"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\\\LocalState\\\\settings.json"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\")) and file.path:\"*\\\\AppData\\\\Local\\\\Packages\\\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\\\LocalState\\\\settings.json\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_windows_terminal_profile.eql",
+  "metadata": {}
+}

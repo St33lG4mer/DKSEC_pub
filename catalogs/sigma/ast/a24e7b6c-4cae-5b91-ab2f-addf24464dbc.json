@@ -1,0 +1,40 @@
+{
+  "id": "a24e7b6c-4cae-5b91-ab2f-addf24464dbc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_visual_basic_compiler",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "vbc.exe"
+      ],
+      "raw_values": [
+        "*\\\\vbc.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cvtres.exe"
+      ],
+      "raw_values": [
+        "*\\\\cvtres.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\vbc.exe\" and process.executable:\"*\\\\cvtres.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_visual_basic_compiler.eql",
+  "metadata": {}
+}

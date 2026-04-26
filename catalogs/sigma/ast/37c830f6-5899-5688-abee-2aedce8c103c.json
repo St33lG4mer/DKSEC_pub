@@ -1,0 +1,71 @@
+{
+  "id": "37c830f6-5899-5688-abee-2aedce8c103c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_automated_collection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".doc",
+        ".docx",
+        ".xls",
+        ".xlsx",
+        ".ppt",
+        ".pptx",
+        ".rtf",
+        ".pdf",
+        ".txt"
+      ],
+      "raw_values": [
+        "*.doc*",
+        "*.docx*",
+        "*.xls*",
+        "*.xlsx*",
+        "*.ppt*",
+        "*.pptx*",
+        "*.rtf*",
+        "*.pdf*",
+        "*.txt*",
+        "* /e *",
+        "* /si *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dir"
+      ],
+      "raw_values": [
+        "*dir *",
+        "* /b *",
+        "* /s *"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "FINDSTR.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*.doc*\", \"*.docx*\", \"*.xls*\", \"*.xlsx*\", \"*.ppt*\", \"*.pptx*\", \"*.rtf*\", \"*.pdf*\", \"*.txt*\")) and ((process.command_line:\"*dir *\" and process.command_line:\"* /b *\" and process.command_line:\"* /s *\") or (process.pe.original_file_name:\"FINDSTR.EXE\" and (process.command_line like~ (\"* /e *\", \"* /si *\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_automated_collection.eql",
+  "metadata": {}
+}

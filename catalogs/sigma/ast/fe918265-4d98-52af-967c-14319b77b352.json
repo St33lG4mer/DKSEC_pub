@@ -1,0 +1,59 @@
+{
+  "id": "fe918265-4d98-52af-967c-14319b77b352",
+  "catalog": "sigma",
+  "name": "proc_creation_win_remote_access_tools_screenconnect_remote_execution_susp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bitsadmin.exe",
+        "cmd.exe",
+        "curl.exe",
+        "dllhost.exe",
+        "net.exe",
+        "nltest.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "rundll32.exe",
+        "wevtutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\bitsadmin.exe",
+        "*\\\\cmd.exe",
+        "*\\\\curl.exe",
+        "*\\\\dllhost.exe",
+        "*\\\\net.exe",
+        "*\\\\nltest.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wevtutil.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "run.cmd"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\TEMP\\\\ScreenConnect\\\\*",
+        "*run.cmd*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.command_line:\"*:\\\\Windows\\\\TEMP\\\\ScreenConnect\\\\*\" and process.parent.command_line:\"*run.cmd*\") and (process.executable like~ (\"*\\\\bitsadmin.exe\", \"*\\\\cmd.exe\", \"*\\\\curl.exe\", \"*\\\\dllhost.exe\", \"*\\\\net.exe\", \"*\\\\nltest.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\rundll32.exe\", \"*\\\\wevtutil.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_screenconnect_remote_execution_susp.eql",
+  "metadata": {}
+}

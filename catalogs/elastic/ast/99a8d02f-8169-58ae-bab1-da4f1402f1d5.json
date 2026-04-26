@@ -1,0 +1,25 @@
+{
+  "id": "99a8d02f-8169-58ae-bab1-da4f1402f1d5",
+  "catalog": "elastic",
+  "name": "Attempt to Revoke Okta API Token",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:system.api_token.revoke\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/impact_attempt_to_revoke_okta_api_token.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

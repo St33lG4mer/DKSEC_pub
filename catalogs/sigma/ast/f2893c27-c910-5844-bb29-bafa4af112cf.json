@@ -1,0 +1,53 @@
+{
+  "id": "f2893c27-c910-5844-bb29-bafa4af112cf",
+  "catalog": "sigma",
+  "name": "win_security_vssaudit_secevent_source_registration",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4904",
+        "4905"
+      ],
+      "raw_values": [
+        "4904",
+        "4905"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.auditsourcename",
+      "raw_field": "winlog.event_data.AuditSourceName",
+      "operator": ":",
+      "values": [
+        "vssaudit"
+      ],
+      "raw_values": [
+        "VSSAudit"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (winlog.event_data.AuditSourceName:\"VSSAudit\" and (event.code like~ (\"4904\", \"4905\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_vssaudit_secevent_source_registration.eql",
+  "metadata": {}
+}

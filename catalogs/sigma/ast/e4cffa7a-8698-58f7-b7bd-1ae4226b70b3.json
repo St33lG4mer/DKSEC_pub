@@ -1,0 +1,53 @@
+{
+  "id": "e4cffa7a-8698-58f7-b7bd-1ae4226b70b3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_browsers_tor_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "tor.exe",
+        "firefox.exe"
+      ],
+      "raw_values": [
+        "*\\\\tor.exe",
+        "*\\\\Tor Browser\\\\Browser\\\\firefox.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "tor browser"
+      ],
+      "raw_values": [
+        "Tor Browser"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "tor browser"
+      ],
+      "raw_values": [
+        "Tor Browser"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.description:\"Tor Browser\" or process.pe.product:\"Tor Browser\" or (process.executable like~ (\"*\\\\tor.exe\", \"*\\\\Tor Browser\\\\Browser\\\\firefox.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_browsers_tor_execution.eql",
+  "metadata": {}
+}

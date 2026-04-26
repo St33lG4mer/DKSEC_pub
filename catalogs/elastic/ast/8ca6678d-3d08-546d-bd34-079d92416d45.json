@@ -1,0 +1,118 @@
+{
+  "id": "8ca6678d-3d08-546d-bd34-079d92416d45",
+  "catalog": "elastic",
+  "name": "Sensitive Files Compression Inside A Container",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".bash_history",
+        "hosts",
+        "group",
+        "passwd",
+        "shadow",
+        "gshadow"
+      ],
+      "raw_values": [
+        "*/root/.ssh/*",
+        "*/home/*/.ssh/*",
+        "*/root/.bash_history*",
+        "*/etc/hosts*",
+        "*/root/.aws/*",
+        "*/home/*/.aws/*",
+        "*/root/.docker/*",
+        "*/home/*/.docker/*",
+        "*/etc/group*",
+        "*/etc/passwd*",
+        "*/etc/shadow*",
+        "*/etc/gshadow*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "zip",
+        "tar",
+        "gzip",
+        "hdiutil"
+      ],
+      "raw_values": [
+        "zip",
+        "tar",
+        "gzip",
+        "hdiutil",
+        "7z"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.entry_leader.entry_meta.type",
+      "raw_field": "process.entry_leader.entry_meta.type",
+      "operator": "==",
+      "values": [
+        "container"
+      ],
+      "raw_values": [
+        "container"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.entry_leader.entry_meta.type == \"container\" and process.name in (\"zip\", \"tar\", \"gzip\", \"hdiutil\", \"7z\") and\nprocess.command_line like~ (\n  \"*/root/.ssh/*\", \"*/home/*/.ssh/*\", \"*/root/.bash_history*\", \"*/etc/hosts*\", \"*/root/.aws/*\", \"*/home/*/.aws/*\",\n  \"*/root/.docker/*\", \"*/home/*/.docker/*\", \"*/etc/group*\", \"*/etc/passwd*\", \"*/etc/shadow*\", \"*/etc/gshadow*\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_collection_sensitive_files_compression_inside_container.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Collection",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

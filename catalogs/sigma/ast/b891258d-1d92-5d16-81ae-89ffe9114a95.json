@@ -1,0 +1,42 @@
+{
+  "id": "b891258d-1d92-5d16-81ae-89ffe9114a95",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_equationgroup_dll_u_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ",dll_u",
+        "dll_u"
+      ],
+      "raw_values": [
+        "*,dll_u",
+        "* dll_u"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-export dll_u"
+      ],
+      "raw_values": [
+        "*-export dll_u*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*-export dll_u*\" or (process.command_line like~ (\"*,dll_u\", \"* dll_u\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/TA/EquationGroup/proc_creation_win_apt_equationgroup_dll_u_load.eql",
+  "metadata": {}
+}

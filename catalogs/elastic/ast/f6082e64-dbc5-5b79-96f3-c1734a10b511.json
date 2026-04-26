@@ -1,0 +1,63 @@
+{
+  "id": "f6082e64-dbc5-5b79-96f3-c1734a10b511",
+  "catalog": "elastic",
+  "name": "Potential Defense Evasion via Doas",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "==",
+      "values": [
+        "doas.conf"
+      ],
+      "raw_values": [
+        "/etc/doas.conf"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type != \"deletion\" and file.path == \"/etc/doas.conf\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_doas_configuration_creation_or_rename.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

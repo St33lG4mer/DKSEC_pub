@@ -1,0 +1,40 @@
+{
+  "id": "ac51b19f-5c25-5753-95bb-6149ef35832d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_kd_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "kd.exe"
+      ],
+      "raw_values": [
+        "*\\\\kd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "kd.exe"
+      ],
+      "raw_values": [
+        "kd.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\kd.exe\" or process.pe.original_file_name:\"kd.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_kd_execution.eql",
+  "metadata": {}
+}

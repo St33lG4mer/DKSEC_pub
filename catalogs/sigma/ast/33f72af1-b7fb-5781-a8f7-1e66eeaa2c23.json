@@ -1,0 +1,56 @@
+{
+  "id": "33f72af1-b7fb-5781-a8f7-1e66eeaa2c23",
+  "catalog": "sigma",
+  "name": "proc_creation_win_qemu_suspicious_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-m 1m",
+        "-m 2m",
+        "-m 3m",
+        "-cdrom",
+        "type=virt",
+        "-blockdev"
+      ],
+      "raw_values": [
+        "*-m 1M*",
+        "*-m 2M*",
+        "*-m 3M*",
+        "* -cdrom *",
+        "* type=virt *",
+        "* -blockdev *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "restrict=off",
+        "-netdev",
+        "connect=",
+        "-nographic"
+      ],
+      "raw_values": [
+        "*restrict=off*",
+        "*-netdev *",
+        "*connect=*",
+        "*-nographic*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.command_line like~ (\"*-m 1M*\", \"*-m 2M*\", \"*-m 3M*\")) and (process.command_line:\"*restrict=off*\" and process.command_line:\"*-netdev *\" and process.command_line:\"*connect=*\" and process.command_line:\"*-nographic*\")) and (not (process.command_line like~ (\"* -cdrom *\", \"* type=virt *\", \"* -blockdev *\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_qemu_suspicious_execution.eql",
+  "metadata": {}
+}

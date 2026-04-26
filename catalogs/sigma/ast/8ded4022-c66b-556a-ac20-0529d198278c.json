@@ -1,0 +1,53 @@
+{
+  "id": "8ded4022-c66b-556a-ac20-0529d198278c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_extrac32",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "extrac32.exe",
+        ".cab"
+      ],
+      "raw_values": [
+        "*extrac32.exe*",
+        "*.cab*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "extrac32.exe"
+      ],
+      "raw_values": [
+        "*\\\\extrac32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "extrac32.exe"
+      ],
+      "raw_values": [
+        "extrac32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*extrac32.exe*\" or process.executable:\"*\\\\extrac32.exe\" or process.pe.original_file_name:\"extrac32.exe\") and process.command_line:\"*.cab*\" and (process.command_line like~ (\"*/C*\", \"*/Y*\", \"* \\\\\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_extrac32.eql",
+  "metadata": {}
+}

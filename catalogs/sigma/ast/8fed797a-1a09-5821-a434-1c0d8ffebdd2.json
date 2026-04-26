@@ -1,0 +1,62 @@
+{
+  "id": "8fed797a-1a09-5821-a434-1c0d8ffebdd2",
+  "catalog": "sigma",
+  "name": "win_security_apt_diamond_sleet_scheduled_task",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4698"
+      ],
+      "raw_values": [
+        "4698"
+      ]
+    },
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": ":",
+      "values": [
+        "\\\\windows teamcity settings user interface"
+      ],
+      "raw_values": [
+        "\\\\Windows TeamCity Settings User Interface"
+      ]
+    },
+    {
+      "field": "winlog.event_data.taskcontent",
+      "raw_field": "winlog.event_data.TaskContent",
+      "operator": ":",
+      "values": [
+        "utynkfkxhizrx3kj"
+      ],
+      "raw_values": [
+        "*uTYNkfKxHiZrx3KJ*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4698\" and winlog.event_data.TaskName:\"\\\\Windows TeamCity Settings User Interface\" and winlog.event_data.TaskContent:\"*uTYNkfKxHiZrx3KJ*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Diamond-Sleet/win_security_apt_diamond_sleet_scheduled_task.eql",
+  "metadata": {}
+}

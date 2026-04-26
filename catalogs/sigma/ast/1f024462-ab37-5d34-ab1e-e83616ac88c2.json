@@ -1,0 +1,50 @@
+{
+  "id": "1f024462-ab37-5d34-ab1e-e83616ac88c2",
+  "catalog": "sigma",
+  "name": "registry_set_office_trust_record_susp_location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "/appdata/local/microsoft/windows/inetcache/",
+        "/appdata/local/temp/",
+        "/perflogs/",
+        "c:/users/public/",
+        "file:///d:/",
+        "file:///e:/"
+      ],
+      "raw_values": [
+        "*/AppData/Local/Microsoft/Windows/INetCache/*",
+        "*/AppData/Local/Temp/*",
+        "*/PerfLogs/*",
+        "*C:/Users/Public/*",
+        "*file:///D:/*",
+        "*file:///E:/*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\security\\\\trusted documents\\\\trustrecords"
+      ],
+      "raw_values": [
+        "*\\\\Security\\\\Trusted Documents\\\\TrustRecords*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Security\\\\Trusted Documents\\\\TrustRecords*\" and (registry.path like~ (\"*/AppData/Local/Microsoft/Windows/INetCache/*\", \"*/AppData/Local/Temp/*\", \"*/PerfLogs/*\", \"*C:/Users/Public/*\", \"*file:///D:/*\", \"*file:///E:/*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_office_trust_record_susp_location.eql",
+  "metadata": {}
+}

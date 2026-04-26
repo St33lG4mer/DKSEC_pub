@@ -1,0 +1,85 @@
+{
+  "id": "39b29e39-1ab7-52eb-9d4d-df720d473268",
+  "catalog": "elastic",
+  "name": "Executable File Download via Wget",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.ext.header_bytes",
+      "raw_field": "file.Ext.header_bytes",
+      "operator": "like~",
+      "values": [
+        "cffaedfe",
+        "cafebabe"
+      ],
+      "raw_values": [
+        "cffaedfe*",
+        "cafebabe*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "wget"
+      ],
+      "raw_values": [
+        "wget"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modification"
+      ],
+      "raw_values": [
+        "modification"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=30s\n  [network where host.os.type == \"macos\" and event.type == \"start\" and process.name == \"wget\"]\n  [file where host.os.type == \"macos\" and event.action == \"modification\" and \n    process.name == \"wget\" and \n    file.path like (\"/tmp/*\", \"/private/tmp/*\", \"/private/var/tmp/*\", \"/var/tmp/*\", \"/Users/Shared/*\") and\n    file.Ext.header_bytes like~ (\"cffaedfe*\", \"cafebabe*\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/command_and_control_executable_download_via_wget.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

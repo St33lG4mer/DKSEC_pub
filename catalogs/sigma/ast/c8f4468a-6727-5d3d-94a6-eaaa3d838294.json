@@ -1,0 +1,116 @@
+{
+  "id": "c8f4468a-6727-5d3d-94a6-eaaa3d838294",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_susp_child_processes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bash.exe",
+        "bitsadmin.exe",
+        "certutil.exe",
+        "cscript.exe",
+        "forfiles.exe",
+        "hh.exe",
+        "mshta.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "schtasks.exe",
+        "scrcons.exe",
+        "scriptrunner.exe",
+        "sh.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\bash.exe",
+        "*\\\\bitsadmin.exe",
+        "*\\\\certutil.exe",
+        "*\\\\cscript.exe",
+        "*\\\\forfiles.exe",
+        "*\\\\hh.exe",
+        "*\\\\mshta.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\scrcons.exe",
+        "*\\\\scriptrunner.exe",
+        "*\\\\sh.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "qfe list",
+        "diskdrive",
+        "csproduct",
+        "computersystem"
+      ],
+      "raw_values": [
+        "*qfe list*",
+        "*diskdrive *",
+        "*csproduct *",
+        "*computersystem *",
+        "* os *",
+        "*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe",
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe",
+        "*\\\\wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-verifystore"
+      ],
+      "raw_values": [
+        "*-verifystore *",
+        "*\\\\Program Files\\\\Amazon\\\\WorkspacesConfig\\\\Scripts\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.executable like~ (\"*\\\\bash.exe\", \"*\\\\bitsadmin.exe\", \"*\\\\certutil.exe\", \"*\\\\cscript.exe\", \"*\\\\forfiles.exe\", \"*\\\\hh.exe\", \"*\\\\mshta.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\schtasks.exe\", \"*\\\\scrcons.exe\", \"*\\\\scriptrunner.exe\", \"*\\\\sh.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\"))) and (not ((process.executable:\"*\\\\certutil.exe\" and process.command_line:\"*-verifystore *\") or (process.executable:\"*\\\\wmic.exe\" and (process.command_line like~ (\"*qfe list*\", \"*diskdrive *\", \"*csproduct *\", \"*computersystem *\", \"* os *\", \"*\"))))) and (not (process.parent.command_line:\"*\\\\Program Files\\\\Amazon\\\\WorkspacesConfig\\\\Scripts\\\\*\" and process.command_line:\"*\\\\Program Files\\\\Amazon\\\\WorkspacesConfig\\\\Scripts\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_powershell_susp_child_processes.eql",
+  "metadata": {}
+}

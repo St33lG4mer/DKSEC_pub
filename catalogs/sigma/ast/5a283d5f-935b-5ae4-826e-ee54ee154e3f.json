@@ -1,0 +1,41 @@
+{
+  "id": "5a283d5f-935b-5ae4-826e-ee54ee154e3f",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_executable_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "$recycle.bin.exe",
+        "documents and settings.exe",
+        "msocache.exe",
+        "perflogs.exe",
+        "recovery.exe",
+        ".bat.exe",
+        ".sys.exe"
+      ],
+      "raw_values": [
+        "*:\\\\$Recycle.Bin.exe",
+        "*:\\\\Documents and Settings.exe",
+        "*:\\\\MSOCache.exe",
+        "*:\\\\PerfLogs.exe",
+        "*:\\\\Recovery.exe",
+        "*.bat.exe",
+        "*.sys.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*:\\\\$Recycle.Bin.exe\", \"*:\\\\Documents and Settings.exe\", \"*:\\\\MSOCache.exe\", \"*:\\\\PerfLogs.exe\", \"*:\\\\Recovery.exe\", \"*.bat.exe\", \"*.sys.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_executable_creation.eql",
+  "metadata": {}
+}

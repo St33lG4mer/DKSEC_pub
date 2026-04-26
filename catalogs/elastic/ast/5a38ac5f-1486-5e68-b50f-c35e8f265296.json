@@ -1,0 +1,137 @@
+{
+  "id": "5a38ac5f-1486-5e68-b50f-c35e8f265296",
+  "catalog": "elastic",
+  "name": "Potential Linux Local Account Brute Force Detected",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "not",
+      "raw_field": "not",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "clickhouse-server",
+        "gitlab-runner",
+        "updatedb.findutils",
+        "cron",
+        "perl",
+        "sudo",
+        "java",
+        "cloud-app-identify",
+        "ambari-sudo.sh",
+        "runc",
+        "cau9sat.exe",
+        "git-pull.sh",
+        "distributor-pulltabs-devel-live",
+        "p_ctmag",
+        "backup_agent_main",
+        "sshd",
+        "nxpgsql",
+        "cau9cli.exe",
+        "autopostgresqlbackup"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "clickhouse-server",
+        "ma",
+        "gitlab-runner",
+        "updatedb.findutils",
+        "cron",
+        "perl",
+        "sudo",
+        "java",
+        "cloud-app-identify",
+        "ambari-sudo.sh",
+        "runc",
+        "cau9sat.exe",
+        "git-pull.sh",
+        "distributor-pulltabs-devel-live",
+        "p_ctmag",
+        "backup_agent_main",
+        "sshd",
+        "nxpgsql",
+        "cau9cli.exe",
+        "autopostgresqlbackup"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "==",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    }
+  ],
+  "raw_query": "from logs-endpoint.events.process* metadata _id, _index, _version\n\n// Create 1-minute time buckets\n| eval Esql.time_window_date_trunc = date_trunc(1 minute, @timestamp)\n\n// Ensure event.action values in a list are expanded\n| mv_expand event.action \n\n| where\n  event.category == \"process\" and event.type == \"start\" and event.action == \"exec\" and process.name == \"su\" and \n  process.parent.name not in (\n    \"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"clickhouse-server\", \"ma\", \"gitlab-runner\",\n    \"updatedb.findutils\", \"cron\", \"perl\", \"sudo\", \"java\", \"cloud-app-identify\", \"ambari-sudo.sh\", \"runc\",\n    \"cau9sat.exe\", \"git-pull.sh\", \"distributor-pulltabs-devel-live\", \"p_ctmag\", \"backup_agent_main\", \"sshd\",\n    \"nxpgsql\", \"cau9cli.exe\", \"autopostgresqlbackup\"\n  ) and\n  not process.parent.command_line == \"runc init\"\n\n// Keep relevant fields\n| keep\n   @timestamp,\n   event.action,\n   event.category,\n   event.type,\n   process.name,\n   process.parent.name,\n   process.parent.command_line,\n   process.command_line,\n   user.name,\n   data_stream.dataset,\n   data_stream.namespace,\n   process.parent.executable,\n   agent.id,\n   user.id,\n   Esql.time_window_date_trunc\n\n| stats\n  Esql.event_count = count(*),\n  Esql.process_command_line_values = values(process.command_line),\n  Esql.process_parent_command_line_values = values(process.parent.command_line),\n  Esql.user_name_values = values(user.name),\n  Esql.data_stream_dataset_values = values(data_stream.dataset),\n  Esql.data_stream_namespace_values = values(data_stream.namespace)\n\n  by process.parent.executable, agent.id, user.id, Esql.time_window_date_trunc\n\n| where Esql.event_count >= 10\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_potential_linux_local_account_bruteforce.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

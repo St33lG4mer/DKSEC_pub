@@ -1,0 +1,51 @@
+{
+  "id": "b0eeb2d9-f455-5353-82d3-94e5321664b6",
+  "catalog": "sigma",
+  "name": "pipe_created_hktl_cobaltstrike",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "msse-",
+        "-server",
+        "postex_",
+        "status_",
+        "msagent_",
+        "mojo_",
+        "interprocess_",
+        "samr_",
+        "netlogon_",
+        "srvsvc_",
+        "lsarpc_",
+        "wkssvc_"
+      ],
+      "raw_values": [
+        "*\\\\MSSE-*",
+        "*-server*",
+        "\\\\postex_*",
+        "\\\\status_*",
+        "\\\\msagent_*",
+        "\\\\mojo_*",
+        "\\\\interprocess_*",
+        "\\\\samr_*",
+        "\\\\netlogon_*",
+        "\\\\srvsvc_*",
+        "\\\\lsarpc_*",
+        "\\\\wkssvc_*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.name:\"*\\\\MSSE-*\" and file.name:\"*-server*\") or file.name:\"\\\\postex_*\" or file.name:\"\\\\status_*\" or file.name:\"\\\\msagent_*\" or file.name:\"\\\\mojo_*\" or file.name:\"\\\\interprocess_*\" or file.name:\"\\\\samr_*\" or file.name:\"\\\\netlogon_*\" or file.name:\"\\\\srvsvc_*\" or file.name:\"\\\\lsarpc_*\" or file.name:\"\\\\wkssvc_*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_hktl_cobaltstrike.eql",
+  "metadata": {}
+}

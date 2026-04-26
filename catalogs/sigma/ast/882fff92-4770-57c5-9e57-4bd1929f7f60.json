@@ -1,0 +1,40 @@
+{
+  "id": "882fff92-4770-57c5-9e57-4bd1929f7f60",
+  "catalog": "sigma",
+  "name": "image_load_exploit_cve_2021_1675_spoolsv_dll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "spoolsv.exe"
+      ],
+      "raw_values": [
+        "*\\\\spoolsv.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "*.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\spoolsv.exe\" and (file.path like~ (\"*\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\3\\\\*\", \"*\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\4\\\\*\")) and file.path:\"*.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-1675/image_load_exploit_cve_2021_1675_spoolsv_dll_load.eql",
+  "metadata": {}
+}

@@ -1,0 +1,81 @@
+{
+  "id": "04e1bd98-3f54-5d67-a7ce-77f9ca0788a6",
+  "catalog": "sigma",
+  "name": "image_load_wmi_module_load_by_uncommon_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "fastprox.dll",
+        "wbemcomn.dll",
+        "wbemprox.dll",
+        "wbemsvc.dll",
+        "wmiaprpl.dll",
+        "wmiclnt.dll",
+        "wminet_utils.dll",
+        "wmiprov.dll",
+        "wmiutils.dll"
+      ],
+      "raw_values": [
+        "*\\\\fastprox.dll",
+        "*\\\\wbemcomn.dll",
+        "*\\\\wbemprox.dll",
+        "*\\\\wbemsvc.dll",
+        "*\\\\WmiApRpl.dll",
+        "*\\\\wmiclnt.dll",
+        "*\\\\WMINet_Utils.dll",
+        "*\\\\wmiprov.dll",
+        "*\\\\wmiutils.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "windowsazureguestagent.exe",
+        "waappagent.exe",
+        "thor.exe",
+        "thor64.exe",
+        "teams.exe",
+        "update.exe",
+        "sysmon.exe",
+        "sysmon64.exe"
+      ],
+      "raw_values": [
+        "*\\\\WindowsAzureGuestAgent.exe",
+        "*\\\\WaAppAgent.exe",
+        "*\\\\thor.exe",
+        "*\\\\thor64.exe",
+        "*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe*",
+        "*\\\\Microsoft\\\\Teams\\\\Update.exe*",
+        "*:\\\\Windows\\\\Sysmon.exe",
+        "*:\\\\Windows\\\\Sysmon64.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*\\\\MsMpEng.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\fastprox.dll\", \"*\\\\wbemcomn.dll\", \"*\\\\wbemprox.dll\", \"*\\\\wbemsvc.dll\", \"*\\\\WmiApRpl.dll\", \"*\\\\wmiclnt.dll\", \"*\\\\WMINet_Utils.dll\", \"*\\\\wmiprov.dll\", \"*\\\\wmiutils.dll\")) and (not (process.executable like~ (\"*:\\\\Program Files (x86)\\\\*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\Windows\\\\explorer.exe*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\"))) and (not ((process.executable like~ (\"*\\\\WindowsAzureGuestAgent.exe\", \"*\\\\WaAppAgent.exe\")) or (process.executable like~ (\"*\\\\thor.exe\", \"*\\\\thor64.exe\")) or process.executable:\"*\\\\MsMpEng.exe\" or (process.executable like~ (\"*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe*\", \"*\\\\Microsoft\\\\Teams\\\\Update.exe*\")) or (process.executable like~ (\"*:\\\\Windows\\\\Sysmon.exe\", \"*:\\\\Windows\\\\Sysmon64.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/image_load/image_load_wmi_module_load_by_uncommon_process.eql",
+  "metadata": {}
+}

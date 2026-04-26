@@ -1,0 +1,40 @@
+{
+  "id": "ad54ba9d-1104-5e1d-a7a1-7e8c8406cc91",
+  "catalog": "sigma",
+  "name": "win_security_replay_attack_detected",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4649"
+      ],
+      "raw_values": [
+        "4649"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and event.code:\"4649\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_replay_attack_detected.eql",
+  "metadata": {}
+}

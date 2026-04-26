@@ -1,0 +1,62 @@
+{
+  "id": "7adffde0-bc07-505d-8ceb-c4e4e9e3f555",
+  "catalog": "elastic",
+  "name": "Process Injection by the Microsoft Build Engine",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "microsoft-windows-sysmon"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Sysmon"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "MSBuild.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and\n  event.provider == \"Microsoft-Windows-Sysmon\" and\n  /* CreateRemoteThread */\n  event.code == \"8\" and process.name: \"MSBuild.exe\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_injection_msbuild.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Privilege Escalation",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

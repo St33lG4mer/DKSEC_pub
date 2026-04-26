@@ -1,0 +1,29 @@
+{
+  "id": "c045be6a-6ea6-59f9-8432-976ee406ab14",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_reflectdebugger",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\windows error reporting\\\\hangs\\\\reflectdebugger"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\Hangs\\\\ReflectDebugger"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\Hangs\\\\ReflectDebugger\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_reflectdebugger.eql",
+  "metadata": {}
+}

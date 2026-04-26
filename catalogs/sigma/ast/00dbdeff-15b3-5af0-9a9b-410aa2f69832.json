@@ -1,0 +1,42 @@
+{
+  "id": "00dbdeff-15b3-5af0-9a9b-410aa2f69832",
+  "catalog": "sigma",
+  "name": "image_load_side_load_abused_dlls_susp_paths",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "coreclr.dll",
+        "facesdk.dll",
+        "hpcustpartui.dll",
+        "libcef.dll",
+        "zipdll.dll",
+        "temporary internet"
+      ],
+      "raw_values": [
+        "*\\\\coreclr.dll",
+        "*\\\\facesdk.dll",
+        "*\\\\HPCustPartUI.dll",
+        "*\\\\libcef.dll",
+        "*\\\\ZIPDLL.dll",
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*\\\\Temporary Internet*",
+        "*\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\coreclr.dll\", \"*\\\\facesdk.dll\", \"*\\\\HPCustPartUI.dll\", \"*\\\\libcef.dll\", \"*\\\\ZIPDLL.dll\")) and ((file.path like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*\\\\Temporary Internet*\", \"*\\\\Windows\\\\Temp\\\\*\")) or ((file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\Favorites\\\\*\") or (file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\Favourites\\\\*\") or (file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\Contacts\\\\*\") or (file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\Pictures\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_abused_dlls_susp_paths.eql",
+  "metadata": {}
+}

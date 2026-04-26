@@ -1,0 +1,73 @@
+{
+  "id": "383636ed-2e71-5200-afe6-5b22ec6bb3a1",
+  "catalog": "elastic",
+  "name": "Suspicious pbpaste High Volume Activity",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "pbpaste"
+      ],
+      "raw_values": [
+        "pbpaste"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.hostname, host.id with maxspan=1m\n[process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and process.name: \"pbpaste\"] with runs = 5\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/credential_access_high_volume_of_pbpaste.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Jamf Protect",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

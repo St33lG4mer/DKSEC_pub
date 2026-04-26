@@ -1,0 +1,29 @@
+{
+  "id": "774619a6-0964-53ed-9161-a34baf8e551c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_link_uncommon_parent_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "link.exe"
+      ],
+      "raw_values": [
+        "*\\\\link.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\link.exe\" and process.command_line:\"*LINK /*\") and (not ((process.parent.executable like~ (\"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\*\", \"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\*\")) and (process.parent.executable like~ (\"*\\\\VC\\\\bin\\\\*\", \"*\\\\VC\\\\Tools\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_link_uncommon_parent_process.eql",
+  "metadata": {}
+}

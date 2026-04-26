@@ -1,0 +1,54 @@
+{
+  "id": "e62a9a58-3969-5467-9936-9271744e7d7f",
+  "catalog": "sigma",
+  "name": "registry_set_hide_function_user",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\hideclock",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\hidescahealth",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\hidescanetwork",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\hidescapower",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\hidescavolume",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\advanced\\\\showinfotip",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\advanced\\\\showcompcolor"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideClock",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAHealth",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCANetwork",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAPower",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAVolume",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\ShowInfoTip",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\ShowCompColor"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)",
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)",
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where ((registry.path like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideClock\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAHealth\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCANetwork\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAPower\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\HideSCAVolume\")) and winlog.event_data.Details:\"DWORD (0x00000001)\") or ((registry.path like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\ShowInfoTip\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\Advanced\\\\ShowCompColor\")) and winlog.event_data.Details:\"DWORD (0x00000000)\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_hide_function_user.eql",
+  "metadata": {}
+}

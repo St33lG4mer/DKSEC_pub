@@ -1,0 +1,57 @@
+{
+  "id": "07953d2a-d226-572b-b9f2-f8db0075b16a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_iis_appcmd_http_logging",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "appcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\appcmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "appcmd.exe"
+      ],
+      "raw_values": [
+        "appcmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "set",
+        "config",
+        "section:httplogging",
+        "dontlog:true"
+      ],
+      "raw_values": [
+        "*set*",
+        "*config*",
+        "*section:httplogging*",
+        "*dontLog:true*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\appcmd.exe\" or process.pe.original_file_name:\"appcmd.exe\") and (process.command_line:\"*set*\" and process.command_line:\"*config*\" and process.command_line:\"*section:httplogging*\" and process.command_line:\"*dontLog:true*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_iis_appcmd_http_logging.eql",
+  "metadata": {}
+}

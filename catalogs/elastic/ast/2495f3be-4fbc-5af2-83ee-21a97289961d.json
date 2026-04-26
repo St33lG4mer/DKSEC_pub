@@ -1,0 +1,59 @@
+{
+  "id": "2495f3be-4fbc-5af2-83ee-21a97289961d",
+  "catalog": "elastic",
+  "name": "Google Drive Ownership Transferred via Google Workspace",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "google_workspace.admin"
+      ],
+      "raw_values": [
+        "google_workspace.admin"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "create_data_transfer_request"
+      ],
+      "raw_values": [
+        "CREATE_DATA_TRANSFER_REQUEST"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "iam"
+      ],
+      "raw_values": [
+        "iam"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"google_workspace.admin\" and event.action:\"CREATE_DATA_TRANSFER_REQUEST\"\n  and event.category:\"iam\" and google_workspace.admin.application.name:Drive*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/collection_google_drive_ownership_transferred_via_google_workspace.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

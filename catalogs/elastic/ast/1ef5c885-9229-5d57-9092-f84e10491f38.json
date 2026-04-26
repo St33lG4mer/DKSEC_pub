@@ -1,0 +1,77 @@
+{
+  "id": "1ef5c885-9229-5d57-9092-f84e10491f38",
+  "catalog": "elastic",
+  "name": "Potential SSH Password Grabbing via strace",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "end",
+        "start"
+      ],
+      "raw_values": [
+        "end",
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sshd",
+        "strace"
+      ],
+      "raw_values": [
+        "sshd",
+        "strace"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=3s\n  [process where host.os.type == \"linux\" and event.type == \"end\" and process.name == \"sshd\"]\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.name == \"strace\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_ssh_password_grabbing_via_strace.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

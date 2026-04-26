@@ -1,0 +1,60 @@
+{
+  "id": "eb1cbba5-c3e2-50c5-ac99-aff9da253d0b",
+  "catalog": "sigma",
+  "name": "pipe_created_adfs_namedpipe_connection_uncommon_tool",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mmc.exe",
+        "svchost.exe",
+        "wsmprovhost.exe",
+        "sqlwriter.exe",
+        "azureadconnect.exe",
+        "microsoft.identity.health.adfs.pshsurrogate.exe",
+        "microsoft.identityserver.servicehost.exe",
+        "microsoft.tri.sensor.exe",
+        "sqlservr.exe",
+        "tssdis.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\mmc.exe",
+        "*:\\\\Windows\\\\system32\\\\svchost.exe",
+        "*:\\\\Windows\\\\System32\\\\wsmprovhost.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\mmc.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\wsmprovhost.exe",
+        "*:\\\\Windows\\\\WID\\\\Binn\\\\sqlwriter.exe",
+        "*\\\\AzureADConnect.exe",
+        "*\\\\Microsoft.Identity.Health.Adfs.PshSurrogate.exe",
+        "*\\\\Microsoft.IdentityServer.ServiceHost.exe",
+        "*\\\\Microsoft.Tri.Sensor.exe",
+        "*\\\\sqlservr.exe",
+        "*\\\\tssdis.exe"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "query"
+      ],
+      "raw_values": [
+        "\\\\MICROSOFT##WID\\\\tsql\\\\query"
+      ]
+    }
+  ],
+  "raw_query": "any where file.name:\"\\\\MICROSOFT##WID\\\\tsql\\\\query\" and (not (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\mmc.exe\", \"*:\\\\Windows\\\\system32\\\\svchost.exe\", \"*:\\\\Windows\\\\System32\\\\wsmprovhost.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\mmc.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\wsmprovhost.exe\", \"*:\\\\Windows\\\\WID\\\\Binn\\\\sqlwriter.exe\", \"*\\\\AzureADConnect.exe\", \"*\\\\Microsoft.Identity.Health.Adfs.PshSurrogate.exe\", \"*\\\\Microsoft.IdentityServer.ServiceHost.exe\", \"*\\\\Microsoft.Tri.Sensor.exe\", \"*\\\\sqlservr.exe\", \"*\\\\tssdis.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_adfs_namedpipe_connection_uncommon_tool.eql",
+  "metadata": {}
+}

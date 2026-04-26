@@ -1,0 +1,40 @@
+{
+  "id": "fdb1b154-2611-5a8e-ab37-d31504fc079f",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_pingback_backdoor",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "updata.exe"
+      ],
+      "raw_values": [
+        "*updata.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "oci.dll"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\oci.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*updata.exe\" and file.path:\"C:\\\\Windows\\\\oci.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Pingback/file_event_win_malware_pingback_backdoor.eql",
+  "metadata": {}
+}

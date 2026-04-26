@@ -1,0 +1,203 @@
+{
+  "id": "3789b583-68ff-5f4c-93d5-669ac0d23798",
+  "catalog": "elastic",
+  "name": "DNF Package Manager Plugin File Creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmis."
+      ],
+      "raw_values": [
+        "/nix/store/*",
+        "/var/lib/dpkg/*",
+        "/tmp/vmis.*",
+        "/snap/*",
+        "/dev/fd/*",
+        "/usr/lib/*",
+        "/usr/libexec/*",
+        "/etc/kernel/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "ssm-agent-worker, ninjaorbit",
+        "python"
+      ],
+      "raw_values": [
+        "ssm-agent-worker, NinjaOrbit",
+        "python*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "rename",
+        "creation"
+      ],
+      "raw_values": [
+        "rename",
+        "creation"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "dockerd",
+        "microdnf",
+        "rpm",
+        "snapd",
+        "yum",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "apk",
+        "puppet",
+        "chef-client",
+        "autossl_check",
+        "exe",
+        "generate",
+        "dnf5",
+        "needs-restarting",
+        "crio",
+        "insights-client",
+        "executor"
+      ],
+      "raw_values": [
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/sbin/dockerd",
+        "/bin/microdnf",
+        "/usr/bin/microdnf",
+        "/bin/rpm",
+        "/usr/bin/rpm",
+        "/bin/snapd",
+        "/usr/bin/snapd",
+        "/bin/yum",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "/usr/bin/dnf",
+        "/bin/podman",
+        "/usr/bin/podman",
+        "/bin/dnf-automatic",
+        "/usr/bin/dnf-automatic",
+        "/sbin/apk",
+        "/usr/sbin/apk",
+        "/usr/local/sbin/apk",
+        "/usr/bin/puppet",
+        "/bin/puppet",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/bin/chef-client",
+        "/bin/chef-client",
+        "/bin/autossl_check",
+        "/usr/bin/autossl_check",
+        "/proc/self/exe",
+        "/usr/lib/snapd/snapd",
+        "/usr/local/bin/dockerd",
+        "/usr/libexec/netplan/generate",
+        "./usr/bin/podman",
+        "/usr/bin/dnf5",
+        "/bin/needs-restarting",
+        "/usr/bin/crio",
+        "/usr/bin/insights-client",
+        "/kaniko/executor"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swp",
+        "swpx",
+        "swx"
+      ],
+      "raw_values": [
+        "swp",
+        "swpx",
+        "swx"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sed",
+        "perl"
+      ],
+      "raw_values": [
+        "sed",
+        "perl"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "sed",
+        "e2scrub_all.tmp"
+      ],
+      "raw_values": [
+        "sed*",
+        "e2scrub_all.tmp*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".ansible_tmp"
+      ],
+      "raw_values": [
+        "/etc/dnf/plugins/.ansible_tmp*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"rename\", \"creation\") and\nfile.path like (\"/usr/lib/python*/site-packages/dnf-plugins/*\", \"/etc/dnf/plugins/*\") and not (\n  process.executable in (\n    \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/sbin/dockerd\", \"/bin/microdnf\", \"/usr/bin/microdnf\", \"/bin/rpm\",\n    \"/usr/bin/rpm\", \"/bin/snapd\", \"/usr/bin/snapd\", \"/bin/yum\", \"/usr/bin/yum\", \"/bin/dnf\", \"/usr/bin/dnf\",\n    \"/bin/podman\", \"/usr/bin/podman\", \"/bin/dnf-automatic\", \"/usr/bin/dnf-automatic\", \"/sbin/apk\", \"/usr/sbin/apk\",\n    \"/usr/local/sbin/apk\", \"/bin/podman\", \"/usr/bin/podman\", \"/usr/bin/puppet\", \"/bin/puppet\",\n    \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/bin/chef-client\", \"/bin/chef-client\", \"/bin/autossl_check\",\n    \"/usr/bin/autossl_check\", \"/proc/self/exe\", \"/usr/lib/snapd/snapd\", \"/usr/local/bin/dockerd\",\n    \"/usr/libexec/netplan/generate\", \"./usr/bin/podman\", \"/usr/bin/dnf5\", \"/bin/needs-restarting\",\n    \"/usr/bin/crio\", \"/usr/bin/insights-client\", \"/kaniko/executor\"\n  ) or\n  file.extension in (\"swp\", \"swpx\", \"swx\") or\n  process.executable : (\n    \"/nix/store/*\", \"/var/lib/dpkg/*\", \"/tmp/vmis.*\", \"/snap/*\", \"/dev/fd/*\", \"/usr/lib/*\", \"/usr/libexec/*\",\n    \"/etc/kernel/*\"\n  ) or\n  process.executable == null or\n  (process.name == \"sed\" and file.name : \"sed*\") or\n  (process.name == \"perl\" and file.name : \"e2scrub_all.tmp*\") or\n  file.path like~ \"/etc/dnf/plugins/.ansible_tmp*\" or\n  process.name like~ (\"ssm-agent-worker, NinjaOrbit\", \"python*\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_dnf_package_manager_plugin_file_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

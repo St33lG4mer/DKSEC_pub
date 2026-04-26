@@ -1,0 +1,40 @@
+{
+  "id": "787c4f87-80a9-5706-b0f1-83b567633a8a",
+  "catalog": "sigma",
+  "name": "win_system_adcs_enrollment_request_denied",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-certificationauthority"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CertificationAuthority"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Microsoft-Windows-CertificationAuthority\" and event.code:\"53\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/microsoft_windows_certification_authority/win_system_adcs_enrollment_request_denied.eql",
+  "metadata": {}
+}

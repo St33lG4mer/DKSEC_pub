@@ -1,0 +1,61 @@
+{
+  "id": "9a1b6dd3-1bde-595b-842e-4efc9d942643",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_emotet_loader_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "explorer.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\explorer.exe",
+        "*\\\\powershell.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "findstr",
+        ".vbs",
+        ".lnk"
+      ],
+      "raw_values": [
+        "*findstr*",
+        "*.vbs*",
+        "*.lnk*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\explorer.exe\", \"*\\\\powershell.exe\")) and (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\")) and (process.command_line:\"*findstr*\" and process.command_line:\"*.vbs*\" and process.command_line:\"*.lnk*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Malware/Emotet/proc_creation_win_malware_emotet_loader_execution.eql",
+  "metadata": {}
+}

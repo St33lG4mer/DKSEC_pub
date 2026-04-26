@@ -1,0 +1,29 @@
+{
+  "id": "81dd9a2c-0544-5f89-8aa6-8b1349868558",
+  "catalog": "sigma",
+  "name": "posh_pm_susp_reset_computermachinepassword",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "powershell"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": ":",
+      "values": [
+        "reset-computermachinepassword"
+      ],
+      "raw_values": [
+        "*Reset-ComputerMachinePassword*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.ContextInfo:\"*Reset-ComputerMachinePassword*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/powershell/powershell_module/posh_pm_susp_reset_computermachinepassword.eql",
+  "metadata": {}
+}

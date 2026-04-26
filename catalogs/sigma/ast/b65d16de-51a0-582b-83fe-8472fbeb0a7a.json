@@ -1,0 +1,62 @@
+{
+  "id": "b65d16de-51a0-582b-83fe-8472fbeb0a7a",
+  "catalog": "sigma",
+  "name": "win_security_susp_rc4_kerberos",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4769"
+      ],
+      "raw_values": [
+        "4769"
+      ]
+    },
+    {
+      "field": "winlog.event_data.ticketoptions",
+      "raw_field": "winlog.event_data.TicketOptions",
+      "operator": ":",
+      "values": [
+        "0x40810000"
+      ],
+      "raw_values": [
+        "0x40810000"
+      ]
+    },
+    {
+      "field": "winlog.event_data.ticketencryptiontype",
+      "raw_field": "winlog.event_data.TicketEncryptionType",
+      "operator": ":",
+      "values": [
+        "0x17"
+      ],
+      "raw_values": [
+        "0x17"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4769\" and winlog.event_data.TicketOptions:\"0x40810000\" and winlog.event_data.TicketEncryptionType:\"0x17\") and (not service.name:\"*$\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_rc4_kerberos.eql",
+  "metadata": {}
+}

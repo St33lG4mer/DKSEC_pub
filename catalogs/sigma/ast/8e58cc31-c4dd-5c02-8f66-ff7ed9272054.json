@@ -1,0 +1,79 @@
+{
+  "id": "8e58cc31-c4dd-5c02-8f66-ff7ed9272054",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_raspberry_robin_external_drive_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        ".bin",
+        ".ico",
+        ".lnk",
+        ".lo",
+        ".sv",
+        ".usb"
+      ],
+      "raw_values": [
+        "*.bin",
+        "*.ico",
+        "*.lnk",
+        "*.lo",
+        "*.sv",
+        "*.usb"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "http:",
+        "https:"
+      ],
+      "raw_values": [
+        "*-q*",
+        "*/q*",
+        "*–q*",
+        "*—q*",
+        "*―q*",
+        "*http:*",
+        "*https:*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\cmd.exe\" and process.parent.command_line:\"*/r*\" and (process.parent.command_line like~ (\"*.bin\", \"*.ico\", \"*.lnk\", \"*.lo\", \"*.sv\", \"*.usb\"))) and (process.executable:\"*\\\\msiexec.exe\" and process.command_line like~ (\"*-q*\", \"*/q*\", \"*–q*\", \"*—q*\", \"*―q*\")) and (process.command_line like~ (\"*http:*\", \"*https:*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Malware/Raspberry-Robin/proc_creation_win_malware_raspberry_robin_external_drive_exec.eql",
+  "metadata": {}
+}

@@ -1,0 +1,66 @@
+{
+  "id": "25dc0d7e-d51a-544e-8d1e-c41efd77af88",
+  "catalog": "elastic",
+  "name": "First Time Seen Removable Device",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "registry"
+      ],
+      "raw_values": [
+        "registry"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "friendlyname"
+      ],
+      "raw_values": [
+        "FriendlyName"
+      ]
+    }
+  ],
+  "raw_query": "event.category:\"registry\" and host.os.type:\"windows\" and registry.value:\"FriendlyName\" and registry.path:*USBSTOR*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/initial_access_exfiltration_first_time_seen_usb.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Exfiltration",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

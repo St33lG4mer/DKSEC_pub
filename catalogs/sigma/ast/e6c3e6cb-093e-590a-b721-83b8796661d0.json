@@ -1,0 +1,44 @@
+{
+  "id": "e6c3e6cb-093e-590a-b721-83b8796661d0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_htran_or_natbypass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "htran.exe",
+        "lcx.exe"
+      ],
+      "raw_values": [
+        "*\\\\htran.exe",
+        "*\\\\lcx.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".exe -tran",
+        ".exe -slave"
+      ],
+      "raw_values": [
+        "*.exe -tran *",
+        "*.exe -slave *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\htran.exe\", \"*\\\\lcx.exe\")) or (process.command_line like~ (\"*.exe -tran *\", \"*.exe -slave *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_htran_or_natbypass.eql",
+  "metadata": {}
+}

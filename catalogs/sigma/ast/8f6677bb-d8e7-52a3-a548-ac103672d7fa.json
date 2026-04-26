@@ -1,0 +1,59 @@
+{
+  "id": "8f6677bb-d8e7-52a3-a548-ac103672d7fa",
+  "catalog": "sigma",
+  "name": "file_access_win_browsers_chromium_sensitive_files",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "cookies",
+        "history",
+        "web data"
+      ],
+      "raw_values": [
+        "*\\\\User Data\\\\Default\\\\Cookies*",
+        "*\\\\User Data\\\\Default\\\\History*",
+        "*\\\\User Data\\\\Default\\\\Network\\\\Cookies*",
+        "*\\\\User Data\\\\Default\\\\Web Data*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mpcopyaccelerator.exe",
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*\\\\MpCopyAccelerator.exe",
+        "*\\\\MsMpEng.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System",
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\User Data\\\\Default\\\\Cookies*\", \"*\\\\User Data\\\\Default\\\\History*\", \"*\\\\User Data\\\\Default\\\\Network\\\\Cookies*\", \"*\\\\User Data\\\\Default\\\\Web Data*\")) and (not (process.executable:\"System\" or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Program Files\\\\*\", \"C:\\\\Windows\\\\system32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")))) and (not (process.executable:\"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\*\" and (process.executable like~ (\"*\\\\MpCopyAccelerator.exe\", \"*\\\\MsMpEng.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_access/file_access_win_browsers_chromium_sensitive_files.eql",
+  "metadata": {}
+}

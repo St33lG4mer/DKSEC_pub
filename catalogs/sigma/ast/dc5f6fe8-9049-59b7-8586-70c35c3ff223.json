@@ -1,0 +1,40 @@
+{
+  "id": "dc5f6fe8-9049-59b7-8586-70c35c3ff223",
+  "catalog": "sigma",
+  "name": "proc_creation_win_curl_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "the curl executable"
+      ],
+      "raw_values": [
+        "The curl executable"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\curl.exe\" or process.pe.product:\"The curl executable\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_curl_execution.eql",
+  "metadata": {}
+}

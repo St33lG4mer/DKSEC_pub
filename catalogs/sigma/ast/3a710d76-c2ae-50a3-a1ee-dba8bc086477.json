@@ -1,0 +1,51 @@
+{
+  "id": "3a710d76-c2ae-50a3-a1ee-dba8bc086477",
+  "catalog": "sigma",
+  "name": "registry_event_hybridconnectionmgr_svc_installation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\services\\\\hybridconnectionmanager"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\HybridConnectionManager*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.eventtype",
+      "raw_field": "winlog.event_data.EventType",
+      "operator": ":",
+      "values": [
+        "setvalue"
+      ],
+      "raw_values": [
+        "SetValue"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "microsoft.hybridconnectionmanager.listener.exe"
+      ],
+      "raw_values": [
+        "*Microsoft.HybridConnectionManager.Listener.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Services\\\\HybridConnectionManager*\" or (winlog.event_data.EventType:\"SetValue\" and winlog.event_data.Details:\"*Microsoft.HybridConnectionManager.Listener.exe*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_hybridconnectionmgr_svc_installation.eql",
+  "metadata": {}
+}

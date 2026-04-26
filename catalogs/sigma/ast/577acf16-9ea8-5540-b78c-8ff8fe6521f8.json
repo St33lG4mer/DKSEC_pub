@@ -1,0 +1,29 @@
+{
+  "id": "577acf16-9ea8-5540-b78c-8ff8fe6521f8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_execution_via_pe_metadata",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "cube0x0"
+      ],
+      "raw_values": [
+        "Cube0x0"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.company:\"Cube0x0\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_execution_via_pe_metadata.eql",
+  "metadata": {}
+}

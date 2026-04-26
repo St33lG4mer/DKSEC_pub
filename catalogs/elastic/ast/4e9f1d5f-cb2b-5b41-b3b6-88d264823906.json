@@ -1,0 +1,30 @@
+{
+  "id": "4e9f1d5f-cb2b-5b41-b3b6-88d264823906",
+  "catalog": "elastic",
+  "name": "Entra ID Service Principal with Unusual Source ASN",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:azure.signinlogs\n    and azure.signinlogs.category:ServicePrincipalSignInLogs\n    and azure.signinlogs.properties.status.error_code:0\n    and azure.signinlogs.properties.service_principal_id:*\n    and source.as.number:*\n    and not source.as.organization.name:(*MICROSOFT* or *Microsoft*)\n    and not azure.signinlogs.properties.app_owner_tenant_id:(72f988bf-86f1-41af-91ab-2d7cd011db47 or f8cdef31-a31e-4b4a-93e4-5f571e91255a)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_service_principal_signin_unusual_source_asn.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Sign-In Logs",
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

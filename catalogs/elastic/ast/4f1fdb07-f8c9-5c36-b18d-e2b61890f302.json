@@ -1,0 +1,84 @@
+{
+  "id": "4f1fdb07-f8c9-5c36-b18d-e2b61890f302",
+  "catalog": "elastic",
+  "name": "Unusual AWS S3 Object Encryption with SSE-C",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "putobject"
+      ],
+      "raw_values": [
+        "PutObject"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "algorithm",
+      "raw_field": "algorithm",
+      "operator": ":",
+      "values": [
+        "aes256"
+      ],
+      "raw_values": [
+        "AES256"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"s3.amazonaws.com\"\n    and event.action: \"PutObject\"\n    and event.outcome: \"success\"\n    and aws.cloudtrail.flattened.request_parameters.x-amz-server-side-encryption-customer-algorithm: \"AES256\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_s3_unusual_object_encryption_with_sse_c.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS S3",
+      "Resources: Investigation Guide",
+      "Use Case: Threat Detection",
+      "Tactic: Impact"
+    ]
+  }
+}

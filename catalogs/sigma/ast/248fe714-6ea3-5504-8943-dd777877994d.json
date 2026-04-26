@@ -1,0 +1,65 @@
+{
+  "id": "248fe714-6ea3-5504-8943-dd777877994d",
+  "catalog": "sigma",
+  "name": "registry_set_office_disable_protected_view_features",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\disableattachementsinpv",
+        "\\\\disableinternetfilesinpv",
+        "\\\\disableintranetcheck",
+        "\\\\disableunsafelocationsinpv",
+        "\\\\enabledatabasefileprotectedview",
+        "\\\\enableforeigntextfileprotectedview"
+      ],
+      "raw_values": [
+        "*\\\\DisableAttachementsInPV",
+        "*\\\\DisableInternetFilesInPV",
+        "*\\\\DisableIntranetCheck",
+        "*\\\\DisableUnsafeLocationsInPV",
+        "*\\\\enabledatabasefileprotectedview",
+        "*\\\\enableforeigntextfileprotectedview"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\office\\\\",
+        "\\\\security\\\\protectedview\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Security\\\\ProtectedView\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)",
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)",
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\" and registry.path:\"*\\\\Security\\\\ProtectedView\\\\*\") and ((winlog.event_data.Details:\"DWORD (0x00000001)\" and (registry.path like~ (\"*\\\\DisableAttachementsInPV\", \"*\\\\DisableInternetFilesInPV\", \"*\\\\DisableIntranetCheck\", \"*\\\\DisableUnsafeLocationsInPV\"))) or (winlog.event_data.Details:\"DWORD (0x00000000)\" and (registry.path like~ (\"*\\\\enabledatabasefileprotectedview\", \"*\\\\enableforeigntextfileprotectedview\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_office_disable_protected_view_features.eql",
+  "metadata": {}
+}

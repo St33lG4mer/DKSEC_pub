@@ -1,0 +1,92 @@
+{
+  "id": "9a2a8a52-d8c9-547a-b902-7d6f59bc4e4b",
+  "catalog": "elastic",
+  "name": "Pluggable Authentication Module (PAM) Source Download",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "wget"
+      ],
+      "raw_values": [
+        "curl",
+        "wget"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "linux-pam-*.tar.xz"
+      ],
+      "raw_values": [
+        "https://github.com/linux-pam/linux-pam/releases/download/v*/Linux-PAM-*.tar.xz"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"ProcessRollup2\") and\nprocess.name in (\"curl\", \"wget\") and\nprocess.args like~ \"https://github.com/linux-pam/linux-pam/releases/download/v*/Linux-PAM-*.tar.xz\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_pluggable_authentication_module_source_download.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

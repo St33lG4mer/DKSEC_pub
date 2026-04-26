@@ -1,0 +1,26 @@
+{
+  "id": "3a7a93e6-a0ec-52f2-8df6-697c84fd2b59",
+  "catalog": "elastic",
+  "name": "Spike in Privileged Command Execution by a User",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/pad/privileged_access_ml_linux_high_count_privileged_process_events_by_user.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Privileged Access Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "044c97af-2b23-5194-85dc-8f70e2d32e6a",
+  "catalog": "sigma",
+  "name": "registry_set_tls_protocol_old_version_enabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\control\\\\securityproviders\\\\schannel\\\\protocols\\\\tls 1.0\\\\",
+        "\\\\control\\\\securityproviders\\\\schannel\\\\protocols\\\\tls 1.1\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS 1.0\\\\*",
+        "*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS 1.1\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\enabled"
+      ],
+      "raw_values": [
+        "*\\\\Enabled"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS 1.0\\\\*\", \"*\\\\Control\\\\SecurityProviders\\\\SCHANNEL\\\\Protocols\\\\TLS 1.1\\\\*\")) and registry.path:\"*\\\\Enabled\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_tls_protocol_old_version_enabled.eql",
+  "metadata": {}
+}

@@ -1,0 +1,146 @@
+{
+  "id": "34b0fd1f-2231-5db5-b534-4ad736c92666",
+  "catalog": "elastic",
+  "name": "External IP Address Discovery via Curl",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ip-api.com",
+        "ipwho.is",
+        "checkip.dyndns.org",
+        "api.ipify.org",
+        "whatismyip.akamai.com",
+        "ifcfg.me",
+        "ifconfig.me",
+        "ident.me",
+        "icanhazip.com",
+        "ipecho.net",
+        "api.myip.com",
+        "checkip.amazonaws.com",
+        "wtfismyip.com",
+        "iplogger.",
+        "freegeoip.net",
+        "ipinfo.io",
+        "geoplugin.net",
+        "httpbin.org",
+        "myip.opendns.com"
+      ],
+      "raw_values": [
+        "*ip-api.com*",
+        "*ipwho.is*",
+        "*checkip.dyndns.org*",
+        "*api.ipify.org*",
+        "*whatismyip.akamai.com*",
+        "*ifcfg.me*",
+        "*ifconfig.me*",
+        "*ident.me*",
+        "*icanhazip.com*",
+        "*ipecho.net*",
+        "*api.myip.com*",
+        "*checkip.amazonaws.com*",
+        "*wtfismyip.com*",
+        "*iplogger.*",
+        "*freegeoip.net*",
+        "*ipinfo.io*",
+        "*geoplugin.net*",
+        "*httpbin.org*",
+        "*myip.opendns.com*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "bash",
+        "sh",
+        "zsh"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "nscurl"
+      ],
+      "raw_values": [
+        "curl",
+        "nscurl"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "*http*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and\n  ((process.parent.executable like (\"/Applications/*\", \"/Volumes/*\", \"/private/var/folders/*\")) or\n   (process.parent.name in (\"bash\", \"sh\", \"zsh\") and process.parent.command_line like \"*http*\") or\n   (process.parent.code_signature.trusted == false or process.code_signature.exists == false)) and\n  process.name in (\"curl\", \"nscurl\") and\n  process.args_count <= 5 and\n  process.command_line like (\"*ip-api.com*\", \"*ipwho.is*\", \"*checkip.dyndns.org*\", \"*api.ipify.org*\",\n                             \"*whatismyip.akamai.com*\", \"*ifcfg.me*\", \"*ifconfig.me*\", \"*ident.me*\",\n                             \"*icanhazip.com*\", \"*ipecho.net*\", \"*api.myip.com*\", \"*checkip.amazonaws.com*\",\n                             \"*wtfismyip.com*\", \"*iplogger.*\", \"*freegeoip.net*\", \"*ipinfo.io*\",\n                             \"*geoplugin.net*\", \"*httpbin.org*\", \"*myip.opendns.com*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/discovery_external_ip_address_discovery_via_curl.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

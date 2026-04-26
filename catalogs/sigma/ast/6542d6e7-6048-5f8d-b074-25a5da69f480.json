@@ -1,0 +1,53 @@
+{
+  "id": "6542d6e7-6048-5f8d-b074-25a5da69f480",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sysinternals_pssuspend_susp_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "pssuspend.exe",
+        "pssuspend64.exe"
+      ],
+      "raw_values": [
+        "*\\\\pssuspend.exe",
+        "*\\\\pssuspend64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "pssuspend.exe"
+      ],
+      "raw_values": [
+        "pssuspend.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*msmpeng.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"pssuspend.exe\" or (process.executable like~ (\"*\\\\pssuspend.exe\", \"*\\\\pssuspend64.exe\"))) and process.command_line:\"*msmpeng.exe*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sysinternals_pssuspend_susp_execution.eql",
+  "metadata": {}
+}

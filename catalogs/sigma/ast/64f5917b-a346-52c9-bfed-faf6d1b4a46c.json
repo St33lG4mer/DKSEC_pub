@@ -1,0 +1,56 @@
+{
+  "id": "64f5917b-a346-52c9-bfed-faf6d1b4a46c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_elise",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "navshext.dll"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Roaming\\\\MICROS~1\\\\Windows\\\\Caches\\\\NavShExt.dll",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Caches\\\\NavShExt.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Network\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "navshext.dll",
+        "c del",
+        ",setting"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\Caches\\\\NavShExt.dll*",
+        "*/c del*",
+        "*,Setting*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\Microsoft\\\\Network\\\\svchost.exe\" or (process.command_line:\"*\\\\Windows\\\\Caches\\\\NavShExt.dll*\" and process.command_line:\"*/c del*\")) or ((process.command_line like~ (\"*\\\\AppData\\\\Roaming\\\\MICROS~1\\\\Windows\\\\Caches\\\\NavShExt.dll\", \"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Caches\\\\NavShExt.dll\")) and process.command_line:\"*,Setting*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2018/Malware/Elise-Backdoor/proc_creation_win_malware_elise.eql",
+  "metadata": {}
+}

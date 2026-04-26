@@ -1,0 +1,74 @@
+{
+  "id": "2f94cdf5-9622-5256-bc27-2e6bd9d88461",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_app_paths",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "\\\\users\\\\public",
+        "\\\\appdata\\\\local\\\\temp\\\\",
+        "\\\\windows\\\\temp\\\\",
+        "\\\\desktop\\\\",
+        "\\\\downloads\\\\",
+        "%temp%",
+        "%tmp%",
+        "iex",
+        "invoke-",
+        "rundll32",
+        "regsvr32",
+        "mshta",
+        "cscript",
+        "wscript",
+        ".bat",
+        ".hta",
+        ".dll",
+        ".ps1"
+      ],
+      "raw_values": [
+        "*\\\\Users\\\\Public*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*%temp%*",
+        "*%tmp%*",
+        "*iex*",
+        "*Invoke-*",
+        "*rundll32*",
+        "*regsvr32*",
+        "*mshta*",
+        "*cscript*",
+        "*wscript*",
+        "*.bat*",
+        "*.hta*",
+        "*.dll*",
+        "*.ps1*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\app paths"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\App Paths*\" and (registry.path like~ (\"*(Default)\", \"*Path\")) and (winlog.event_data.Details like~ (\"*\\\\Users\\\\Public*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*%temp%*\", \"*%tmp%*\", \"*iex*\", \"*Invoke-*\", \"*rundll32*\", \"*regsvr32*\", \"*mshta*\", \"*cscript*\", \"*wscript*\", \"*.bat*\", \"*.hta*\", \"*.dll*\", \"*.ps1*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_app_paths.eql",
+  "metadata": {}
+}

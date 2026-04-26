@@ -1,0 +1,42 @@
+{
+  "id": "0f250ee2-90e6-530f-991c-7be8b191ee65",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2021_26857_msexchange",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wermgr.exe",
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*wermgr.exe",
+        "*WerFault.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "umworkerprocess.exe"
+      ],
+      "raw_values": [
+        "*\\\\UMWorkerProcess.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\UMWorkerProcess.exe\" and (not (process.executable like~ (\"*wermgr.exe\", \"*WerFault.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-26857/proc_creation_win_exploit_cve_2021_26857_msexchange.eql",
+  "metadata": {}
+}

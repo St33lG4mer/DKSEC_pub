@@ -1,0 +1,51 @@
+{
+  "id": "5e83d8f8-57f2-5543-b035-84d4eaffd214",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_rmdir_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rmdir"
+      ],
+      "raw_values": [
+        "*rmdir*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and process.command_line:\"*rmdir*\" and (process.command_line like~ (\"*/s*\", \"*/q*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_rmdir_execution.eql",
+  "metadata": {}
+}

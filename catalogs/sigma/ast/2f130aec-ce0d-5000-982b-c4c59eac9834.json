@@ -1,0 +1,65 @@
+{
+  "id": "2f130aec-ce0d-5000-982b-c4c59eac9834",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_adfind_susp_usage",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "domainlist",
+        "trustdmp",
+        "dcmodes",
+        "adinfo",
+        "-sc dclist",
+        "computer_pwdnotreqd",
+        "objectcategory=",
+        "-subnets -f",
+        "-sc u:",
+        "domainncs",
+        "dompol",
+        "oudmp",
+        "subnetdmp",
+        "gpodmp",
+        "fspdmp",
+        "users_noexpire",
+        "computers_active",
+        "computers_pwdnotreqd"
+      ],
+      "raw_values": [
+        "*domainlist*",
+        "*trustdmp*",
+        "*dcmodes*",
+        "*adinfo*",
+        "*-sc dclist*",
+        "*computer_pwdnotreqd*",
+        "*objectcategory=*",
+        "*-subnets -f*",
+        "*name=\\",
+        "*",
+        "*-sc u:*",
+        "*domainncs*",
+        "*dompol*",
+        "* oudmp *",
+        "*subnetdmp*",
+        "*gpodmp*",
+        "*fspdmp*",
+        "*users_noexpire*",
+        "*computers_active*",
+        "*computers_pwdnotreqd*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*domainlist*\", \"*trustdmp*\", \"*dcmodes*\", \"*adinfo*\", \"*-sc dclist*\", \"*computer_pwdnotreqd*\", \"*objectcategory=*\", \"*-subnets -f*\", \"*name=\\\"Domain Admins\\\"*\", \"*-sc u:*\", \"*domainncs*\", \"*dompol*\", \"* oudmp *\", \"*subnetdmp*\", \"*gpodmp*\", \"*fspdmp*\", \"*users_noexpire*\", \"*computers_active*\", \"*computers_pwdnotreqd*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_adfind_susp_usage.eql",
+  "metadata": {}
+}

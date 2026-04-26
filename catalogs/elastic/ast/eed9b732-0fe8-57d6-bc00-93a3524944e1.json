@@ -1,0 +1,27 @@
+{
+  "id": "eed9b732-0fe8-57d6-bc00-93a3524944e1",
+  "catalog": "elastic",
+  "name": "First Time Seen AWS Secret Value Accessed in Secrets Manager",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: secretsmanager.amazonaws.com \n    and event.action: GetSecretValue \n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/credential_access_new_terms_secretsmanager_getsecretvalue.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Secrets Manager",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

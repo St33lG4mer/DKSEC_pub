@@ -1,0 +1,69 @@
+{
+  "id": "57a89020-2ad0-583c-be96-59e90f6cbdf5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_expand_cabinet_files",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-f:",
+        "–f:",
+        "—f:",
+        "―f:",
+        "programdata",
+        "temporary internet"
+      ],
+      "raw_values": [
+        "*-F:*",
+        "*/F:*",
+        "*–F:*",
+        "*—F:*",
+        "*―F:*",
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\ProgramData*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\Admin$\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*\\\\C$\\\\*",
+        "*\\\\Temporary Internet*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "expand.exe"
+      ],
+      "raw_values": [
+        "*\\\\expand.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "serviceshell.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files (x86)\\\\Dell\\\\UpdateService\\\\ServiceShell.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\expand.exe\" and process.command_line like~ (\"*-F:*\", \"*/F:*\", \"*–F:*\", \"*—F:*\", \"*―F:*\")) and ((process.command_line like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\ProgramData*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\Admin$\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*\\\\C$\\\\*\", \"*\\\\Temporary Internet*\")) or ((process.command_line:\"*:\\\\Users\\\\*\" and process.command_line:\"*\\\\Favorites\\\\*\") or (process.command_line:\"*:\\\\Users\\\\*\" and process.command_line:\"*\\\\Favourites\\\\*\") or (process.command_line:\"*:\\\\Users\\\\*\" and process.command_line:\"*\\\\Contacts\\\\*\"))) and (not (process.parent.executable:\"C:\\\\Program Files (x86)\\\\Dell\\\\UpdateService\\\\ServiceShell.exe\" and process.command_line:\"*C:\\\\ProgramData\\\\Dell\\\\UpdateService\\\\Temp\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_expand_cabinet_files.eql",
+  "metadata": {}
+}

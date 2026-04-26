@@ -1,0 +1,88 @@
+{
+  "id": "2bce4558-f21b-53a0-b43a-f0feeb77623c",
+  "catalog": "elastic",
+  "name": "Disable Windows Firewall Rules via Netsh",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "disable",
+        "firewall",
+        "set",
+        "advfirewall",
+        "off",
+        "state"
+      ],
+      "raw_values": [
+        "disable",
+        "firewall",
+        "set",
+        "advfirewall",
+        "off",
+        "state"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : \"netsh.exe\" and\n  (\n    (process.args : \"disable\" and process.args : \"firewall\" and process.args : \"set\") or\n    (process.args : \"advfirewall\" and process.args : \"off\" and process.args : \"state\")\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_disable_windows_firewall_rules_with_netsh.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

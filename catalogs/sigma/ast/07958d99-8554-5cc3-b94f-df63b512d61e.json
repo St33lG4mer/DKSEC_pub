@@ -1,0 +1,32 @@
+{
+  "id": "07958d99-8554-5cc3-b94f-df63b512d61e",
+  "catalog": "sigma",
+  "name": "file_event_win_create_evtx_non_common_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".evtx"
+      ],
+      "raw_values": [
+        "*.evtx",
+        "C:\\\\Windows\\\\System32\\\\winevt\\\\Logs\\\\*",
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Containers\\\\BaseImages\\\\*",
+        "*\\\\Windows\\\\System32\\\\winevt\\\\Logs\\\\"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*.evtx\" and (not (file.path:\"C:\\\\Windows\\\\System32\\\\winevt\\\\Logs\\\\*\" or (file.path:\"C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Containers\\\\BaseImages\\\\*\" and file.path:\"*\\\\Windows\\\\System32\\\\winevt\\\\Logs\\\\\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_create_evtx_non_common_locations.eql",
+  "metadata": {}
+}

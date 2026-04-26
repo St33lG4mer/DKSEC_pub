@@ -1,0 +1,106 @@
+{
+  "id": "d9af58c5-6bfe-59c7-96a3-a9f7f50b6b6a",
+  "catalog": "elastic",
+  "name": "Suspicious File Made Executable via Chmod Inside A Container",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "chmod",
+        "chown"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "4755",
+        "755",
+        "000",
+        "777",
+        "444"
+      ],
+      "raw_values": [
+        "4755",
+        "755",
+        "000",
+        "777",
+        "444",
+        "+x"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.entry_leader.entry_meta.type",
+      "raw_field": "process.entry_leader.entry_meta.type",
+      "operator": "==",
+      "values": [
+        "container"
+      ],
+      "raw_values": [
+        "container"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.entry_leader.entry_meta.type == \"container\" and process.name in (\"chmod\", \"chown\") and\nprocess.args in (\"4755\", \"755\", \"000\", \"777\", \"444\", \"+x\") and\nprocess.args like (\"/dev/shm/*\", \"/tmp/*\", \"/var/tmp/*\", \"/run/*\", \"/var/run/*\", \"/mnt/*\", \"/media/*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_file_made_executable_via_chmod_inside_container.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

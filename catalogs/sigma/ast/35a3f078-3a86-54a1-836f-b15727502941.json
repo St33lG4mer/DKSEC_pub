@@ -1,0 +1,51 @@
+{
+  "id": "35a3f078-3a86-54a1-836f-b15727502941",
+  "catalog": "sigma",
+  "name": "win_security_register_new_logon_process_by_rubeus",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4611"
+      ],
+      "raw_values": [
+        "4611"
+      ]
+    },
+    {
+      "field": "winlog.event_data.logonprocessname",
+      "raw_field": "winlog.event_data.LogonProcessName",
+      "operator": ":",
+      "values": [
+        "user32logonprocesss"
+      ],
+      "raw_values": [
+        "User32LogonProcesss"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4611\" and winlog.event_data.LogonProcessName:\"User32LogonProcesss\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_register_new_logon_process_by_rubeus.eql",
+  "metadata": {}
+}

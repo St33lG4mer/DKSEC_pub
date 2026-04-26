@@ -1,0 +1,96 @@
+{
+  "id": "20c89e94-9af0-5655-bcf3-3dd1bb7ad1b0",
+  "catalog": "elastic",
+  "name": "Entra ID User Sign-in with Unusual Authentication Type",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.signinlogs"
+      ],
+      "raw_values": [
+        "azure.signinlogs"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "authentication"
+      ],
+      "raw_values": [
+        "authentication"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.user_type",
+      "raw_field": "azure.signinlogs.properties.user_type",
+      "operator": ":",
+      "values": [
+        "member"
+      ],
+      "raw_values": [
+        "Member"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.authentication_details.authentication_method",
+      "raw_field": "azure.signinlogs.properties.authentication_details.authentication_method",
+      "operator": ":",
+      "values": [
+        "password"
+      ],
+      "raw_values": [
+        "Password"
+      ]
+    },
+    {
+      "field": "source.as.organization.name",
+      "raw_field": "source.as.organization.name",
+      "operator": ":",
+      "values": [
+        "microsoft-corp-msn-as-block"
+      ],
+      "raw_values": [
+        "MICROSOFT-CORP-MSN-AS-BLOCK"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.authentication_requirement",
+      "raw_field": "azure.signinlogs.properties.authentication_requirement",
+      "operator": ":",
+      "values": [
+        "multifactorauthentication"
+      ],
+      "raw_values": [
+        "multiFactorAuthentication"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"azure.signinlogs\" and event.category: \"authentication\"\n    and azure.signinlogs.properties.user_type: \"Member\"\n    and azure.signinlogs.properties.authentication_details.authentication_method: \"Password\"\n    and not azure.signinlogs.properties.device_detail.browser: *\n    and not source.as.organization.name: \"MICROSOFT-CORP-MSN-AS-BLOCK\"\n    and not azure.signinlogs.properties.authentication_requirement: \"multiFactorAuthentication\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_rare_authentication_requirement_for_principal_user.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Sign-in Logs",
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

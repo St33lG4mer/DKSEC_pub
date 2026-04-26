@@ -1,0 +1,31 @@
+{
+  "id": "400cc11d-8569-50a7-b0f9-f290409b8ddb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_nslookup_domain_discovery",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "nslookup",
+        "_ldap._tcp.dc._msdcs."
+      ],
+      "raw_values": [
+        "*nslookup*",
+        "*_ldap._tcp.dc._msdcs.*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*nslookup*\" and process.command_line:\"*_ldap._tcp.dc._msdcs.*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_nslookup_domain_discovery.eql",
+  "metadata": {}
+}

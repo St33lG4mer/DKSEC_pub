@@ -1,0 +1,281 @@
+{
+  "id": "4409ab0d-3949-572f-b581-61712b83ea6a",
+  "catalog": "elastic",
+  "name": "Loadable Kernel Module Configuration File Creation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "modules"
+      ],
+      "raw_values": [
+        "/etc/modules",
+        "/etc/modprobe.d/*",
+        "/run/modprobe.d/*",
+        "/usr/local/lib/modprobe.d/*",
+        "/usr/lib/modprobe.d/*",
+        "/lib/modprobe.d/*",
+        "/etc/modules-load.d/*",
+        "/run/modules-load.d/*",
+        "/usr/local/lib/modules-load.d/*",
+        "/usr/lib/modules-load.d/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "kmod.postinst",
+        "vmis.",
+        "platform-python",
+        "snap-update-ns"
+      ],
+      "raw_values": [
+        "/nix/store/*",
+        "/var/lib/dpkg/info/kmod.postinst",
+        "/tmp/vmis.*",
+        "/snap/*",
+        "/dev/fd/*",
+        "/usr/libexec/platform-python*",
+        "./snap/snapd/*/snap-update-ns"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "dpkg",
+        "dockerd",
+        "microdnf",
+        "rpm",
+        "snapd",
+        "yum",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "pacman",
+        "dpkg-divert",
+        "apk",
+        "apt",
+        "puppet",
+        "chef-client",
+        "autossl_check",
+        "exe",
+        "pamac-daemon",
+        "platform-engine",
+        "ruby",
+        "platform-python",
+        "python3",
+        "utild",
+        "anacron",
+        "kaniko-executor",
+        "prime-select",
+        "dracut-install",
+        "dnf5",
+        "packagekitd",
+        "buildah",
+        "snap-update-ns",
+        "yum-cron",
+        "qemu-aarch64-static",
+        "envbuilder",
+        "crond",
+        "executor",
+        "droplet-agent.postinst",
+        "cf-agent",
+        "schedd",
+        "imunify-notifier",
+        "perl",
+        "jumpcloud-agent",
+        "crio",
+        "dnf_install"
+      ],
+      "raw_values": [
+        "/bin/dpkg",
+        "/usr/bin/dpkg",
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/sbin/dockerd",
+        "/bin/microdnf",
+        "/usr/bin/microdnf",
+        "/bin/rpm",
+        "/usr/bin/rpm",
+        "/bin/snapd",
+        "/usr/bin/snapd",
+        "/bin/yum",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "/usr/bin/dnf",
+        "/bin/podman",
+        "/usr/bin/podman",
+        "/bin/dnf-automatic",
+        "/usr/bin/dnf-automatic",
+        "/bin/pacman",
+        "/usr/bin/pacman",
+        "/usr/bin/dpkg-divert",
+        "/bin/dpkg-divert",
+        "/sbin/apk",
+        "/usr/sbin/apk",
+        "/usr/local/sbin/apk",
+        "/usr/bin/apt",
+        "/usr/sbin/pacman",
+        "/usr/bin/puppet",
+        "/bin/puppet",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/bin/chef-client",
+        "/bin/chef-client",
+        "/bin/autossl_check",
+        "/usr/bin/autossl_check",
+        "/proc/self/exe",
+        "/dev/fd/*",
+        "/usr/bin/pamac-daemon",
+        "/bin/pamac-daemon",
+        "/usr/local/bin/dockerd",
+        "/opt/elasticbeanstalk/bin/platform-engine",
+        "/opt/puppetlabs/puppet/bin/ruby",
+        "/usr/libexec/platform-python",
+        "/opt/imunify360/venv/bin/python3",
+        "/opt/eset/efs/lib/utild",
+        "/usr/sbin/anacron",
+        "/kaniko/kaniko-executor",
+        "/usr/bin/prime-select",
+        "/usr/lib/dracut/dracut-install",
+        "/usr/bin/dnf5",
+        "./usr/bin/podman",
+        "/usr/libexec/packagekitd",
+        "/usr/bin/buildah",
+        "./usr/lib/snapd/snap-update-ns",
+        "/usr/lib/snapd/snapd",
+        "/usr/local/bin/podman",
+        "/usr/sbin/yum-cron",
+        "./usr/bin/qemu-aarch64-static",
+        "/.envbuilder/bin/envbuilder",
+        "crond",
+        "executor",
+        "puppet",
+        "droplet-agent.postinst",
+        "cf-agent",
+        "schedd",
+        "imunify-notifier",
+        "perl",
+        "jumpcloud-agent",
+        "crio",
+        "dnf_install",
+        "utild",
+        "dockerd"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ],
+      "raw_values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "file.ext.original.extension",
+      "raw_field": "file.Ext.original.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sed",
+        "perl"
+      ],
+      "raw_values": [
+        "sed",
+        "perl"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "sed",
+        "e2scrub_all.tmp"
+      ],
+      "raw_values": [
+        "sed*",
+        "e2scrub_all.tmp*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.action == \"creation\" and process.executable != null and\nfile.path like (\n  \"/etc/modules\", \"/etc/modprobe.d/*\", \"/run/modprobe.d/*\", \"/usr/local/lib/modprobe.d/*\", \"/usr/lib/modprobe.d/*\",\n  \"/lib/modprobe.d/*\", \"/etc/modules-load.d/*\", \"/run/modules-load.d/*\", \"/usr/local/lib/modules-load.d/*\",\n  \"/usr/lib/modules-load.d/*\"\n) and not (\n  process.executable in (\n    \"/bin/dpkg\", \"/usr/bin/dpkg\", \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/sbin/dockerd\", \"/bin/microdnf\",\n    \"/usr/bin/microdnf\", \"/bin/rpm\", \"/usr/bin/rpm\", \"/bin/snapd\", \"/usr/bin/snapd\", \"/bin/yum\", \"/usr/bin/yum\",\n    \"/bin/dnf\", \"/usr/bin/dnf\", \"/bin/podman\", \"/usr/bin/podman\", \"/bin/dnf-automatic\", \"/usr/bin/dnf-automatic\",\n    \"/bin/pacman\", \"/usr/bin/pacman\", \"/usr/bin/dpkg-divert\", \"/bin/dpkg-divert\", \"/sbin/apk\", \"/usr/sbin/apk\",\n    \"/usr/local/sbin/apk\", \"/usr/bin/apt\", \"/usr/sbin/pacman\", \"/bin/podman\", \"/usr/bin/podman\", \"/usr/bin/puppet\",\n    \"/bin/puppet\", \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/bin/chef-client\", \"/bin/chef-client\",\n    \"/bin/autossl_check\", \"/usr/bin/autossl_check\", \"/proc/self/exe\", \"/dev/fd/*\",  \"/usr/bin/pamac-daemon\",\n    \"/bin/pamac-daemon\", \"/usr/local/bin/dockerd\", \"/opt/elasticbeanstalk/bin/platform-engine\",\n    \"/opt/puppetlabs/puppet/bin/ruby\", \"/usr/libexec/platform-python\", \"/opt/imunify360/venv/bin/python3\",\n    \"/opt/eset/efs/lib/utild\", \"/usr/sbin/anacron\", \"/usr/bin/podman\", \"/kaniko/kaniko-executor\", \"/usr/bin/prime-select\",\n    \"/usr/lib/dracut/dracut-install\", \"/usr/bin/dnf5\", \"./usr/bin/podman\", \"/usr/libexec/packagekitd\", \"/usr/bin/buildah\",\n    \"./usr/lib/snapd/snap-update-ns\", \"/usr/lib/snapd/snapd\", \"/usr/local/bin/podman\", \"/usr/sbin/yum-cron\",\n    \"./usr/bin/qemu-aarch64-static\", \"/.envbuilder/bin/envbuilder\"\n  ) or\n  file.extension in (\"swp\", \"swpx\", \"swx\", \"dpkg-remove\") or\n  file.Ext.original.extension == \"dpkg-new\" or\n  process.executable like (\n    \"/nix/store/*\", \"/var/lib/dpkg/info/kmod.postinst\", \"/tmp/vmis.*\", \"/snap/*\", \"/dev/fd/*\",\n    \"/usr/libexec/platform-python*\", \"./snap/snapd/*/snap-update-ns\"\n  ) or\n  process.executable == null or\n  process.name in (\n    \"crond\", \"executor\", \"puppet\", \"droplet-agent.postinst\", \"cf-agent\", \"schedd\", \"imunify-notifier\", \"perl\",\n    \"jumpcloud-agent\", \"crio\", \"dnf_install\", \"utild\", \"dockerd\"\n  ) or\n  process.name like \"python*\" or\n  (process.name == \"sed\" and file.name : \"sed*\") or\n  (process.name == \"perl\" and file.name : \"e2scrub_all.tmp*\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_lkm_configuration_file_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

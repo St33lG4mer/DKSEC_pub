@@ -1,0 +1,58 @@
+{
+  "id": "2dea7686-dd65-5b05-b42c-bd5835bcc6fd",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_defender_exclusion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "paths"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows Defender\\\\Exclusions\\\\Paths*",
+        "*SOFTWARE\\\\Microsoft\\\\Microsoft Antimalware\\\\Exclusions\\\\Paths*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "reg_dword"
+      ],
+      "raw_values": [
+        "*ADD *",
+        "*/t *",
+        "*REG_DWORD *",
+        "*/v *",
+        "*/d *",
+        "*0*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\reg.exe\" and (process.command_line like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows Defender\\\\Exclusions\\\\Paths*\", \"*SOFTWARE\\\\Microsoft\\\\Microsoft Antimalware\\\\Exclusions\\\\Paths*\")) and (process.command_line:\"*ADD *\" and process.command_line:\"*/t *\" and process.command_line:\"*REG_DWORD *\" and process.command_line:\"*/v *\" and process.command_line:\"*/d *\" and process.command_line:\"*0*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_defender_exclusion.eql",
+  "metadata": {}
+}

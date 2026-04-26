@@ -1,0 +1,64 @@
+{
+  "id": "fe249f9c-3b86-59bd-98d5-5ca95e612a08",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regedit_export_critical_keys",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "hklm",
+        "hkey_local_machine",
+        "system",
+        "sam",
+        "security"
+      ],
+      "raw_values": [
+        "* -E *",
+        "* /E *",
+        "* –E *",
+        "* —E *",
+        "* ―E *",
+        "*hklm*",
+        "*hkey_local_machine*",
+        "*\\\\system",
+        "*\\\\sam",
+        "*\\\\security"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\regedit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "REGEDIT.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\regedit.exe\" or process.pe.original_file_name:\"REGEDIT.EXE\") and process.command_line like~ (\"* -E *\", \"* /E *\", \"* –E *\", \"* —E *\", \"* ―E *\") and (process.command_line like~ (\"*hklm*\", \"*hkey_local_machine*\")) and (process.command_line like~ (\"*\\\\system\", \"*\\\\sam\", \"*\\\\security\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regedit_export_critical_keys.eql",
+  "metadata": {}
+}

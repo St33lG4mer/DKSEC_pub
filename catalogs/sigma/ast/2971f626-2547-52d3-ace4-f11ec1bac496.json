@@ -1,0 +1,46 @@
+{
+  "id": "2971f626-2547-52d3-ace4-f11ec1bac496",
+  "catalog": "sigma",
+  "name": "registry_set_malware_kamikakabot_winlogon_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\shell"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "-nop -w h",
+        "$env",
+        "explorer.exe",
+        "start-process"
+      ],
+      "raw_values": [
+        "*-nop -w h*",
+        "*$env*",
+        "*explorer.exe*",
+        "*Start-Process*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell\" and (winlog.event_data.Details:\"*-nop -w h*\" and winlog.event_data.Details:\"*$env*\" and winlog.event_data.Details:\"*explorer.exe*\" and winlog.event_data.Details:\"*Start-Process*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/KamiKakaBot/registry_set_malware_kamikakabot_winlogon_persistence.eql",
+  "metadata": {}
+}

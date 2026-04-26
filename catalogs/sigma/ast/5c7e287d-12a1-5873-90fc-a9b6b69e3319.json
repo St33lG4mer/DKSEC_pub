@@ -1,0 +1,40 @@
+{
+  "id": "5c7e287d-12a1-5873-90fc-a9b6b69e3319",
+  "catalog": "sigma",
+  "name": "registry_set_allow_rdp_remote_assistance_feature",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "system\\\\currentcontrolset\\\\control\\\\terminal server\\\\fallowtogethelp"
+      ],
+      "raw_values": [
+        "*System\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\fAllowToGetHelp"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*System\\\\CurrentControlSet\\\\Control\\\\Terminal Server\\\\fAllowToGetHelp\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_allow_rdp_remote_assistance_feature.eql",
+  "metadata": {}
+}

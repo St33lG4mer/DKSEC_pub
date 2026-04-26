@@ -1,0 +1,42 @@
+{
+  "id": "92b0dd62-3b70-5c93-b036-040b26734376",
+  "catalog": "sigma",
+  "name": "win_security_security_enabled_global_group_deleted",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4730",
+        "634"
+      ],
+      "raw_values": [
+        "4730",
+        "634"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code like~ (\"4730\", \"634\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/account_management/win_security_security_enabled_global_group_deleted.eql",
+  "metadata": {}
+}

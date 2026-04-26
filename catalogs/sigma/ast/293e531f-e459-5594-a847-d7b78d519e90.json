@@ -1,0 +1,17 @@
+{
+  "id": "293e531f-e459-5594-a847-d7b78d519e90",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_recycle_bin_fake_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [],
+  "raw_query": "any where (process.executable like~ (\"*RECYCLERS.BIN\\\\*\", \"*RECYCLER.BIN\\\\*\")) or (file.path like~ (\"*RECYCLERS.BIN\\\\*\", \"*RECYCLER.BIN\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_recycle_bin_fake_exec.eql",
+  "metadata": {}
+}

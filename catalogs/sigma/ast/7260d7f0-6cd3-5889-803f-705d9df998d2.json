@@ -1,0 +1,54 @@
+{
+  "id": "7260d7f0-6cd3-5889-803f-705d9df998d2",
+  "catalog": "sigma",
+  "name": "file_event_win_dump_file_susp_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".dmp",
+        ".dump",
+        ".hdmp"
+      ],
+      "raw_values": [
+        "*.dmp",
+        "*.dump",
+        "*.hdmp"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\")) and (file.path like~ (\"*.dmp\", \"*.dump\", \"*.hdmp\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_dump_file_susp_creation.eql",
+  "metadata": {}
+}

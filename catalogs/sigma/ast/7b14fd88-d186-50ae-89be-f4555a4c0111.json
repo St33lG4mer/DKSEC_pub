@@ -1,0 +1,71 @@
+{
+  "id": "7b14fd88-d186-50ae-89be-f4555a4c0111",
+  "catalog": "sigma",
+  "name": "win_security_malware_kapeka_backdoor_scheduled_task_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.taskcontent",
+      "raw_field": "winlog.event_data.TaskContent",
+      "operator": "like~",
+      "values": [
+        ":\\\\programdata\\\\",
+        "\\\\appdata\\\\local\\\\",
+        "onedrive",
+        "sens api"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*OneDrive*",
+        "*Sens Api*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4698"
+      ],
+      "raw_values": [
+        "4698"
+      ]
+    },
+    {
+      "field": "winlog.event_data.taskcontent",
+      "raw_field": "winlog.event_data.TaskContent",
+      "operator": ":",
+      "values": [
+        "rundll32",
+        ".wll"
+      ],
+      "raw_values": [
+        "*rundll32*",
+        "*.wll*",
+        "*#1*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4698\" and (winlog.event_data.TaskContent like~ (\"*:\\\\ProgramData\\\\*\", \"*\\\\AppData\\\\Local\\\\*\")) and (winlog.event_data.TaskContent:\"*rundll32*\" and winlog.event_data.TaskContent:\"*.wll*\" and winlog.event_data.TaskContent:\"*#1*\") and (winlog.event_data.TaskContent like~ (\"*OneDrive*\", \"*Sens Api*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/kapeka/win_security_malware_kapeka_backdoor_scheduled_task_creation.eql",
+  "metadata": {}
+}

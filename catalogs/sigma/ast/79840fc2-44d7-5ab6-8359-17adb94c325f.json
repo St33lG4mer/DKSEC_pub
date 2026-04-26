@@ -1,0 +1,31 @@
+{
+  "id": "79840fc2-44d7-5ab6-8359-17adb94c325f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_zip_compress",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "compress-archive -path*-destinationpath $env:temp"
+      ],
+      "raw_values": [
+        "*Compress-Archive -Path*-DestinationPath $env:TEMP*",
+        "*Compress-Archive -Path*-DestinationPath*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*Compress-Archive -Path*-DestinationPath*:\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*Compress-Archive -Path*-DestinationPath $env:TEMP*\", \"*Compress-Archive -Path*-DestinationPath*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*Compress-Archive -Path*-DestinationPath*:\\\\Windows\\\\Temp\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_zip_compress.eql",
+  "metadata": {}
+}

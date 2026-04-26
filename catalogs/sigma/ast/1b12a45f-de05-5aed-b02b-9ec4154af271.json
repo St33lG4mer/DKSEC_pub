@@ -1,0 +1,40 @@
+{
+  "id": "1b12a45f-de05-5aed-b02b-9ec4154af271",
+  "catalog": "sigma",
+  "name": "registry_delete_exploit_guard_protected_folders",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.eventtype",
+      "raw_field": "winlog.event_data.EventType",
+      "operator": ":",
+      "values": [
+        "deletevalue"
+      ],
+      "raw_values": [
+        "DeleteValue"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\microsoft\\\\windows defender\\\\windows defender exploit guard\\\\controlled folder access\\\\protectedfolders"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows Defender\\\\Windows Defender Exploit Guard\\\\Controlled Folder Access\\\\ProtectedFolders*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.EventType:\"DeleteValue\" and registry.path:\"*SOFTWARE\\\\Microsoft\\\\Windows Defender\\\\Windows Defender Exploit Guard\\\\Controlled Folder Access\\\\ProtectedFolders*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_delete/registry_delete_exploit_guard_protected_folders.eql",
+  "metadata": {}
+}

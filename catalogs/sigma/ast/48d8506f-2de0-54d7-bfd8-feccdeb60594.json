@@ -1,0 +1,52 @@
+{
+  "id": "48d8506f-2de0-54d7-bfd8-feccdeb60594",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dotnet_trace_lolbin_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dotnet-trace.exe"
+      ],
+      "raw_values": [
+        "*\\\\dotnet-trace.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dotnet-trace.dll"
+      ],
+      "raw_values": [
+        "dotnet-trace.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "collect"
+      ],
+      "raw_values": [
+        "*-- *",
+        "*collect*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\dotnet-trace.exe\" or process.pe.original_file_name:\"dotnet-trace.dll\") and (process.command_line:\"*-- *\" and process.command_line:\"*collect*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dotnet_trace_lolbin_execution.eql",
+  "metadata": {}
+}

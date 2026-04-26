@@ -1,0 +1,65 @@
+{
+  "id": "733dfdd5-6c24-59c0-9e3d-b927e3a552cc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sqlcmd_veeam_db_recon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "backuprepositories",
+        "backups",
+        "credentials",
+        "hostcreds",
+        "smbfileshares",
+        "ssh_creds",
+        "vsphereinfo"
+      ],
+      "raw_values": [
+        "*BackupRepositories*",
+        "*Backups*",
+        "*Credentials*",
+        "*HostCreds*",
+        "*SmbFileShares*",
+        "*Ssh_creds*",
+        "*VSphereInfo*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqlcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlcmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "veeambackup",
+        "from"
+      ],
+      "raw_values": [
+        "*VeeamBackup*",
+        "*From *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\sqlcmd.exe\" and (process.command_line:\"*VeeamBackup*\" and process.command_line:\"*From *\")) and (process.command_line like~ (\"*BackupRepositories*\", \"*Backups*\", \"*Credentials*\", \"*HostCreds*\", \"*SmbFileShares*\", \"*Ssh_creds*\", \"*VSphereInfo*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sqlcmd_veeam_db_recon.eql",
+  "metadata": {}
+}

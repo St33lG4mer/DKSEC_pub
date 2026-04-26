@@ -1,0 +1,42 @@
+{
+  "id": "e031bc24-e5b0-58e9-84ee-7fb4cff668bd",
+  "catalog": "sigma",
+  "name": "win_security_member_added_security_enabled_global_group",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4728",
+        "632"
+      ],
+      "raw_values": [
+        "4728",
+        "632"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code like~ (\"4728\", \"632\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/account_management/win_security_member_added_security_enabled_global_group.eql",
+  "metadata": {}
+}

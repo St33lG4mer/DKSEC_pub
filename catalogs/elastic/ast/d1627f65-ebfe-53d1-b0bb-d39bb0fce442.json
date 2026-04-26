@@ -1,0 +1,104 @@
+{
+  "id": "d1627f65-ebfe-53d1-b0bb-d39bb0fce442",
+  "catalog": "elastic",
+  "name": "Linux Audio Recording Activity Detected",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exec",
+        "exec_event",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "arecord",
+        "parec",
+        "pw-record",
+        "ecasound",
+        "pw-cat",
+        "ffmpeg"
+      ],
+      "raw_values": [
+        "arecord",
+        "parec",
+        "pw-record",
+        "ecasound",
+        "pw-cat",
+        "ffmpeg"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--help",
+        "--version"
+      ],
+      "raw_values": [
+        "-h",
+        "--help",
+        "--version",
+        "-r",
+        "-i"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:\"linux\" and event.type:\"start\" and event.action:(\"exec\" or \"exec_event\" or \"start\") and (\n  process.name:(\"arecord\" or \"parec\" or \"pw-record\" or \"ecasound\") or\n  (process.name:\"pw-cat\" and process.args:\"-r\") or\n  (process.name:\"ffmpeg\" and process.args:\"-i\")\n) and\nnot process.args:(\"-h\" or \"--help\" or \"--version\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/collection_potential_audio_recording_activity.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

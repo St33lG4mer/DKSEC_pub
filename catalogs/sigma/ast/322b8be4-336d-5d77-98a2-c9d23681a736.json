@@ -1,0 +1,83 @@
+{
+  "id": "322b8be4-336d-5d77-98a2-c9d23681a736",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_lolbin_exec_from_non_c_drive",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "calc.exe",
+        "certutil.exe",
+        "cmstp.exe",
+        "cscript.exe",
+        "installutil.exe",
+        "mshta.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe",
+        "*\\\\certutil.exe",
+        "*\\\\cmstp.exe",
+        "*\\\\cscript.exe",
+        "*\\\\installutil.exe",
+        "*\\\\mshta.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "calc.exe",
+        "certutil.exe",
+        "cmstp.exe",
+        "cscript.exe",
+        "installutil.exe",
+        "mshta.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "CALC.EXE",
+        "CertUtil.exe",
+        "CMSTP.EXE",
+        "cscript.exe",
+        "installutil.exe",
+        "MSHTA.EXE",
+        "REGSVR32.EXE",
+        "RUNDLL32.EXE",
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "c:\\\\"
+      ],
+      "raw_values": [
+        "*C:\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\calc.exe\", \"*\\\\certutil.exe\", \"*\\\\cmstp.exe\", \"*\\\\cscript.exe\", \"*\\\\installutil.exe\", \"*\\\\mshta.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wscript.exe\")) or (process.pe.original_file_name like~ (\"CALC.EXE\", \"CertUtil.exe\", \"CMSTP.EXE\", \"cscript.exe\", \"installutil.exe\", \"MSHTA.EXE\", \"REGSVR32.EXE\", \"RUNDLL32.EXE\", \"wscript.exe\"))) and (not (process.working_directory:\"*C:\\\\*\" or process.working_directory==\"\" or (?process.working_directory == null)))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_lolbin_exec_from_non_c_drive.eql",
+  "metadata": {}
+}

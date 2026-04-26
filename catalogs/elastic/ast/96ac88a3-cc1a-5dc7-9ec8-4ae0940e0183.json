@@ -1,0 +1,89 @@
+{
+  "id": "96ac88a3-cc1a-5dc7-9ec8-4ae0940e0183",
+  "catalog": "elastic",
+  "name": "Startup Folder Persistence via Unsigned Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*.exe",
+        "C:\\\\ProgramData\\\\*.exe",
+        "C:\\\\Windows\\\\Temp\\\\*.exe",
+        "C:\\\\Windows\\\\Tasks\\\\*.exe",
+        "C:\\\\Intel\\\\*.exe",
+        "C:\\\\PerfLogs\\\\*.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "user.domain",
+      "raw_field": "user.domain",
+      "operator": "!=",
+      "values": [
+        "nt authority"
+      ],
+      "raw_values": [
+        "NT AUTHORITY"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=5s\n  [process where host.os.type == \"windows\" and event.type == \"start\" and process.code_signature.trusted == false and\n  /* suspicious paths can be added here  */\n   process.executable : (\"C:\\\\Users\\\\*.exe\",\n                         \"C:\\\\ProgramData\\\\*.exe\",\n                         \"C:\\\\Windows\\\\Temp\\\\*.exe\",\n                         \"C:\\\\Windows\\\\Tasks\\\\*.exe\",\n                         \"C:\\\\Intel\\\\*.exe\",\n                         \"C:\\\\PerfLogs\\\\*.exe\")\n   ]\n   [file where host.os.type == \"windows\" and event.type != \"deletion\" and user.domain != \"NT AUTHORITY\" and\n    file.path : (\"C:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*\",\n                 \"C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\StartUp\\\\*\")\n   ]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_startup_folder_file_written_by_unsigned_process.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

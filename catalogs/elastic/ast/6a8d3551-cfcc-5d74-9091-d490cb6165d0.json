@@ -1,0 +1,77 @@
+{
+  "id": "6a8d3551-cfcc-5d74-9091-d490cb6165d0",
+  "catalog": "elastic",
+  "name": "TCC Bypass via Mounted APFS Snapshot Access",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "mount_apfs"
+      ],
+      "raw_values": [
+        "mount_apfs"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "data",
+        "noowners"
+      ],
+      "raw_values": [
+        "/System/Volumes/Data",
+        "noowners"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and process.name == \"mount_apfs\" and\n process.args like~ \"/System/Volumes/Data\" and process.args like~ \"noowners\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/defense_evasion_tcc_bypass_mounted_apfs_access.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

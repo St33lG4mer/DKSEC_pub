@@ -1,0 +1,64 @@
+{
+  "id": "9e15460e-6546-537e-a6ac-157ddac2bb3b",
+  "catalog": "elastic",
+  "name": "New GitHub Self Hosted Action Runner",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "repo.register_self_hosted_runner",
+        "org.register_self_hosted_runner",
+        "enterprise.register_self_hosted_runner"
+      ],
+      "raw_values": [
+        "repo.register_self_hosted_runner",
+        "org.register_self_hosted_runner",
+        "enterprise.register_self_hosted_runner"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "configuration"
+      ],
+      "raw_values": [
+        "configuration"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"github.audit\" and\n    event.category:\"configuration\" and\n    event.action: (\n        \"repo.register_self_hosted_runner\" or\n        \"org.register_self_hosted_runner\" or\n        \"enterprise.register_self_hosted_runner\"\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/github/initial_access_github_register_self_hosted_runner.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Data Source: Github",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

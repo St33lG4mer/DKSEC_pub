@@ -1,0 +1,66 @@
+{
+  "id": "b75b7fdf-9c10-54da-a8d1-11156a2c76de",
+  "catalog": "sigma",
+  "name": "proc_creation_win_findstr_password_recon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "contraseña",
+        "hasło",
+        "heslo",
+        "parola",
+        "passe",
+        "passw",
+        "senha",
+        "senord"
+      ],
+      "raw_values": [
+        "*contraseña*",
+        "*hasło*",
+        "*heslo*",
+        "*parola*",
+        "*passe*",
+        "*passw*",
+        "*senha*",
+        "*senord*",
+        "*密碼*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "*\\\\findstr.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "FINDSTR.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\findstr.exe\" or process.pe.original_file_name:\"FINDSTR.EXE\") and (process.command_line like~ (\"*contraseña*\", \"*hasło*\", \"*heslo*\", \"*parola*\", \"*passe*\", \"*passw*\", \"*senha*\", \"*senord*\", \"*密碼*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_findstr_password_recon.eql",
+  "metadata": {}
+}

@@ -1,0 +1,33 @@
+{
+  "id": "8b77a7ad-a39b-5424-bfde-f20deea6078a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_crackmapexec_execution_patterns",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "2>&1"
+      ],
+      "raw_values": [
+        "*cmd.exe /Q /c * 1> \\\\\\\\*\\\\*\\\\* 2>&1*",
+        "*cmd.exe /C * > \\\\\\\\*\\\\*\\\\* 2>&1*",
+        "*cmd.exe /C * > *\\\\Temp\\\\* 2>&1*",
+        "*powershell.exe -exec bypass -noni -nop -w 1 -C \\",
+        ", "
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*cmd.exe /Q /c * 1> \\\\\\\\*\\\\*\\\\* 2>&1*\", \"*cmd.exe /C * > \\\\\\\\*\\\\*\\\\* 2>&1*\", \"*cmd.exe /C * > *\\\\Temp\\\\* 2>&1*\", \"*powershell.exe -exec bypass -noni -nop -w 1 -C \\\"*\", \"*powershell.exe -noni -nop -w 1 -enc *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_crackmapexec_execution_patterns.eql",
+  "metadata": {}
+}

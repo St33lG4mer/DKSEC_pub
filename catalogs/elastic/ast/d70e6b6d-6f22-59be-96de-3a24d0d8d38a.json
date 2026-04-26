@@ -1,0 +1,89 @@
+{
+  "id": "d70e6b6d-6f22-59be-96de-3a24d0d8d38a",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation via Python cap_setuid",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "uid_change",
+        "gid_change"
+      ],
+      "raw_values": [
+        "uid_change",
+        "gid_change"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "import os;os.set?id(0);os.system(*)",
+        "python"
+      ],
+      "raw_values": [
+        "import os;os.set?id(0);os.system(*)",
+        "*python*"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=1s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.args : \"import os;os.set?id(0);os.system(*)\" and process.args : \"*python*\" and user.id != \"0\"]\n  [process where host.os.type == \"linux\" and event.action in (\"uid_change\", \"gid_change\") and event.type == \"change\" and\n   (user.id == \"0\" or group.id == \"0\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_suspicious_cap_setuid_python_execution.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

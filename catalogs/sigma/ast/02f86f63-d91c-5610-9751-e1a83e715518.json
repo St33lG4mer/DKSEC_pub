@@ -1,0 +1,56 @@
+{
+  "id": "02f86f63-d91c-5610-9751-e1a83e715518",
+  "catalog": "sigma",
+  "name": "file_event_win_mysqld_uncommon_file_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mysqld.exe",
+        "mysqld-nt.exe"
+      ],
+      "raw_values": [
+        "*\\\\mysqld.exe",
+        "*\\\\mysqld-nt.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".dat",
+        ".dll",
+        ".exe",
+        ".ps1",
+        ".psm1",
+        ".vbe",
+        ".vbs"
+      ],
+      "raw_values": [
+        "*.bat",
+        "*.dat",
+        "*.dll",
+        "*.exe",
+        "*.ps1",
+        "*.psm1",
+        "*.vbe",
+        "*.vbs"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\mysqld.exe\", \"*\\\\mysqld-nt.exe\")) and (file.path like~ (\"*.bat\", \"*.dat\", \"*.dll\", \"*.exe\", \"*.ps1\", \"*.psm1\", \"*.vbe\", \"*.vbs\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_mysqld_uncommon_file_creation.eql",
+  "metadata": {}
+}

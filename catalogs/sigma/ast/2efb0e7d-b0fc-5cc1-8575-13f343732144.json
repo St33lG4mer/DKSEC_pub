@@ -1,0 +1,76 @@
+{
+  "id": "2efb0e7d-b0fc-5cc1-8575-13f343732144",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_elevated_system_shell",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.dll",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "powershell_ise.EXE",
+        "pwsh.dll",
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.logonid",
+      "raw_field": "winlog.event_data.LogonId",
+      "operator": ":",
+      "values": [
+        "0x3e7"
+      ],
+      "raw_values": [
+        "0x3e7"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\pwsh.exe\", \"*\\\\cmd.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"powershell_ise.EXE\", \"pwsh.dll\", \"Cmd.Exe\"))) and ((user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) and winlog.event_data.LogonId:\"0x3e7\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_elevated_system_shell.eql",
+  "metadata": {}
+}

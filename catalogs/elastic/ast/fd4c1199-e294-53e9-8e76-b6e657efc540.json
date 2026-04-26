@@ -1,0 +1,71 @@
+{
+  "id": "fd4c1199-e294-53e9-8e76-b6e657efc540",
+  "catalog": "elastic",
+  "name": "Kubernetes Events Deleted",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": "==",
+      "values": [
+        "delete"
+      ],
+      "raw_values": [
+        "delete"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": "==",
+      "values": [
+        "events"
+      ],
+      "raw_values": [
+        "events"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": "==",
+      "values": [
+        "responsecomplete"
+      ],
+      "raw_values": [
+        "ResponseComplete"
+      ]
+    }
+  ],
+  "raw_query": "any where data_stream.dataset == \"kubernetes.audit_logs\" and kubernetes.audit.verb == \"delete\" and\nkubernetes.audit.objectRef.resource == \"events\" and kubernetes.audit.stage == \"ResponseComplete\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/defense_evasion_events_deleted.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

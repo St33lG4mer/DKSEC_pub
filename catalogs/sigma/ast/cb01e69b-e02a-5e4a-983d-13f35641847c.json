@@ -1,0 +1,44 @@
+{
+  "id": "cb01e69b-e02a-5e4a-983d-13f35641847c",
+  "catalog": "sigma",
+  "name": "file_event_win_exploit_cve_2024_1709_user_database_modification_screenconnect",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".xml",
+        "temp",
+        "screenconnect"
+      ],
+      "raw_values": [
+        "*.xml",
+        "*Temp*",
+        "*ScreenConnect*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "screenconnect.service.exe"
+      ],
+      "raw_values": [
+        "*\\\\ScreenConnect.Service.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*.xml\" and (file.path:\"*Temp*\" and file.path:\"*ScreenConnect*\") and process.executable:\"*\\\\ScreenConnect.Service.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Exploits/CVE-2024-1709/file_event_win_exploit_cve_2024_1709_user_database_modification_screenconnect.eql",
+  "metadata": {}
+}

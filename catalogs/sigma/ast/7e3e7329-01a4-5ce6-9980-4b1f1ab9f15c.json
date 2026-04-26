@@ -1,0 +1,29 @@
+{
+  "id": "7e3e7329-01a4-5ce6-9980-4b1f1ab9f15c",
+  "catalog": "sigma",
+  "name": "file_event_win_sysinternals_livekd_default_dump_name",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "livekd.dmp"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\livekd.dmp"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\livekd.dmp\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_sysinternals_livekd_default_dump_name.eql",
+  "metadata": {}
+}

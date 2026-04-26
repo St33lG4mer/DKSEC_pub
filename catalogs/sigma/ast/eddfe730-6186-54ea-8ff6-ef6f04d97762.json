@@ -1,0 +1,44 @@
+{
+  "id": "eddfe730-6186-54ea-8ff6-ef6f04d97762",
+  "catalog": "sigma",
+  "name": "proc_creation_win_taskmgr_susp_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mmc.exe",
+        "resmon.exe",
+        "taskmgr.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\mmc.exe",
+        "*:\\\\Windows\\\\System32\\\\resmon.exe",
+        "*:\\\\Windows\\\\System32\\\\Taskmgr.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "taskmgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\taskmgr.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\taskmgr.exe\" and (not (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\mmc.exe\", \"*:\\\\Windows\\\\System32\\\\resmon.exe\", \"*:\\\\Windows\\\\System32\\\\Taskmgr.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_taskmgr_susp_child_process.eql",
+  "metadata": {}
+}

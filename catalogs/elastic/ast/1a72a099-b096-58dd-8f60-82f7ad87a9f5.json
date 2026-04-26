@@ -1,0 +1,39 @@
+{
+  "id": "1a72a099-b096-58dd-8f60-82f7ad87a9f5",
+  "catalog": "elastic",
+  "name": "Potential Malicious PowerShell Based on Alert Correlation",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.name",
+      "raw_field": "kibana.alert.rule.name",
+      "operator": "like",
+      "values": [
+        "powershell"
+      ],
+      "raw_values": [
+        "*PowerShell*"
+      ]
+    }
+  ],
+  "raw_query": "from .alerts-security.* metadata _id\n\n// Filter for PowerShell related alerts\n| where kibana.alert.rule.name like \"*PowerShell*\"\n\n// as alerts don't have non-ECS fields, parse the script block ID using grok\n| grok message \"ScriptBlock ID: (?<Esql.script_block_id>.+)\"\n| where Esql.script_block_id is not null\n\n// keep relevant fields for further processing\n| keep kibana.alert.rule.name, Esql.script_block_id, _id\n\n// count distinct alerts and filter for matches above the threshold\n| stats\n    Esql.kibana_alert_rule_name_count_distinct = count_distinct(kibana.alert.rule.name),\n    Esql.kibana_alert_rule_name_values = values(kibana.alert.rule.name),\n    Esql._id_values = values(_id)\n  by Esql.script_block_id\n\n// Apply detection threshold\n| where Esql.kibana_alert_rule_name_count_distinct >= 5\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_posh_malicious_script_agg.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

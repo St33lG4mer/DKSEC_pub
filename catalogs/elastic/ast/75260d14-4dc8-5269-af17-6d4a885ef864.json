@@ -1,0 +1,141 @@
+{
+  "id": "75260d14-4dc8-5269-af17-6d4a885ef864",
+  "catalog": "elastic",
+  "name": "Shadow File Modification by Unusual Process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.ext.original.name",
+      "raw_field": "file.Ext.original.name",
+      "operator": "in",
+      "values": [
+        "shadow+",
+        "nshadow"
+      ],
+      "raw_values": [
+        "shadow+",
+        "nshadow"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "usermod",
+        "useradd",
+        "passwd",
+        "chage",
+        "systemd-sysusers",
+        "chpasswd",
+        "userdel",
+        "adduser",
+        "update-passwd",
+        "perl",
+        "containerd",
+        "dnf",
+        "yum",
+        "qemu-aarch64-static",
+        "xml-api",
+        "whostmgr5",
+        "security"
+      ],
+      "raw_values": [
+        "usermod",
+        "useradd",
+        "passwd",
+        "chage",
+        "systemd-sysusers",
+        "chpasswd",
+        "userdel",
+        "adduser",
+        "update-passwd",
+        "perl",
+        "/usr/bin/containerd",
+        "/usr/bin/dnf",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "./usr/bin/qemu-aarch64-static",
+        "/usr/local/cpanel/whostmgr/bin/xml-api",
+        "/usr/local/cpanel/whostmgr/bin/whostmgr5",
+        "/usr/local/cpanel/bin/admin/Cpanel/security"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "rename"
+      ],
+      "raw_values": [
+        "rename"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "==",
+      "values": [
+        "shadow"
+      ],
+      "raw_values": [
+        "/etc/shadow"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like",
+      "values": [
+        "platform-python"
+      ],
+      "raw_values": [
+        "/usr/libexec/platform-python*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"change\" and event.action == \"rename\" and\nfile.path == \"/etc/shadow\" and file.Ext.original.path != null and \nnot (\n  file.Ext.original.name in (\"shadow+\", \"nshadow\") or\n  process.name in (\n    \"usermod\", \"useradd\", \"passwd\", \"chage\", \"systemd-sysusers\", \"chpasswd\", \"userdel\", \"adduser\", \"update-passwd\", \"perl\"\n  ) or\n  process.executable like \"/usr/libexec/platform-python*\" or\n  process.executable in (\n    \"/usr/bin/containerd\", \"/usr/bin/dnf\", \"/usr/bin/yum\", \"/bin/dnf\", \"./usr/bin/qemu-aarch64-static\",\n    \"/usr/local/cpanel/whostmgr/bin/xml-api\", \"/usr/local/cpanel/whostmgr/bin/whostmgr5\",\n    \"/usr/local/cpanel/bin/admin/Cpanel/security\"\n  )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_shadow_file_modification.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

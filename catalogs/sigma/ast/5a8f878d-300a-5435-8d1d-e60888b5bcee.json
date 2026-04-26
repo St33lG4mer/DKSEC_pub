@@ -1,0 +1,40 @@
+{
+  "id": "5a8f878d-300a-5435-8d1d-e60888b5bcee",
+  "catalog": "sigma",
+  "name": "registry_set_file_association_exefile",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "classes\\\\."
+      ],
+      "raw_values": [
+        "*Classes\\\\.*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "exefile"
+      ],
+      "raw_values": [
+        "exefile"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*Classes\\\\.*\" and winlog.event_data.Details:\"exefile\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_file_association_exefile.eql",
+  "metadata": {}
+}

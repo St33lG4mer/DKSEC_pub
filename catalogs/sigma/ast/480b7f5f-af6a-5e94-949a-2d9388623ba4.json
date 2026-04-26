@@ -1,0 +1,29 @@
+{
+  "id": "480b7f5f-af6a-5e94-949a-2d9388623ba4",
+  "catalog": "sigma",
+  "name": "registry_event_apt_pandemic",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\services\\\\null\\\\instance"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\CurrentControlSet\\\\services\\\\null\\\\Instance*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SYSTEM\\\\CurrentControlSet\\\\services\\\\null\\\\Instance*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/TA/Pandemic/registry_event_apt_pandemic.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "05867fa5-675e-5c4a-ae59-d8be347b79b0",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_portmap",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        ".portmap.io"
+      ],
+      "raw_values": [
+        "*.portmap.io"
+      ]
+    }
+  ],
+  "raw_query": "any where network.direction:\"true\" and destination.domain:\"*.portmap.io\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_portmap.eql",
+  "metadata": {}
+}

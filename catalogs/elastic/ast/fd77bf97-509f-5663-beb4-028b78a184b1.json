@@ -1,0 +1,42 @@
+{
+  "id": "fd77bf97-509f-5663-beb4-028b78a184b1",
+  "catalog": "elastic",
+  "name": "Web Server Discovery or Fuzzing Activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "http.request.method",
+      "raw_field": "http.request.method",
+      "operator": "==",
+      "values": [
+        "get"
+      ],
+      "raw_values": [
+        "GET"
+      ]
+    }
+  ],
+  "raw_query": "from logs-nginx.access-*, logs-apache.access-*, logs-apache_tomcat.access-*, logs-iis.access-*, logs-traefik.access-*\n| where\n    http.request.method == \"GET\" and \n    http.response.status_code in (404, 403)\n\n| eval Esql.url_original_to_lower = to_lower(url.original)\n\n| keep\n    @timestamp,\n    data_stream.dataset,\n    http.request.method,\n    http.response.status_code,\n    source.ip,\n    agent.id,\n    agent.name,\n    Esql.url_original_to_lower,\n    data_stream.namespace\n\n| stats\n    Esql.event_count = count(),\n    Esql.url_original_count_distinct = count_distinct(Esql.url_original_to_lower),\n    Esql.agent_name_values = values(agent.name),\n    Esql.agent_id_values = values(agent.id),\n    Esql.http_request_method_values = values(http.request.method),\n    Esql.http_response_status_code_values = values(http.response.status_code),\n    Esql.url_original_values = values(Esql.url_original_to_lower),\n    Esql.data_stream_dataset_values = values(data_stream.dataset),\n    Esql.data_stream_namespace_values = values(data_stream.namespace)\n    by source.ip\n| where\n  Esql.event_count > 500 and Esql.url_original_count_distinct > 250\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/reconnaissance_web_server_discovery_or_fuzzing_activity.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Web",
+      "Use Case: Threat Detection",
+      "Tactic: Reconnaissance",
+      "Data Source: Nginx",
+      "Data Source: Apache",
+      "Data Source: Apache Tomcat",
+      "Data Source: IIS",
+      "Data Source: Traefik",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

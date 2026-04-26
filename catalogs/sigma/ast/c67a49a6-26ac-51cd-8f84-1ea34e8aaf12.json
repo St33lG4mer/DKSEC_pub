@@ -1,0 +1,29 @@
+{
+  "id": "c67a49a6-26ac-51cd-8f84-1ea34e8aaf12",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_msexchange_transport_agent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "install-transportagent"
+      ],
+      "raw_values": [
+        "*Install-TransportAgent*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*Install-TransportAgent*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_msexchange_transport_agent.eql",
+  "metadata": {}
+}

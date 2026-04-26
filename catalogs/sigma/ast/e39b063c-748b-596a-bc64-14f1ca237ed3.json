@@ -1,0 +1,51 @@
+{
+  "id": "e39b063c-748b-596a-bc64-14f1ca237ed3",
+  "catalog": "sigma",
+  "name": "win_system_krbrelayup_service_installation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicename",
+      "raw_field": "winlog.event_data.ServiceName",
+      "operator": ":",
+      "values": [
+        "krbscm"
+      ],
+      "raw_values": [
+        "KrbSCM"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (event.code:\"7045\" and winlog.event_data.ServiceName:\"KrbSCM\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_krbrelayup_service_installation.eql",
+  "metadata": {}
+}

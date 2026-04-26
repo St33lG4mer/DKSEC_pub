@@ -1,0 +1,51 @@
+{
+  "id": "b465bd5a-350d-5b30-bd60-c2ea1719ecd3",
+  "catalog": "sigma",
+  "name": "win_security_windows_defender_exclusions_registry_modified",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4657"
+      ],
+      "raw_values": [
+        "4657"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows defender\\\\exclusions\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows Defender\\\\Exclusions\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4657\" and winlog.event_data.ObjectName:\"*\\\\Microsoft\\\\Windows Defender\\\\Exclusions\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_windows_defender_exclusions_registry_modified.eql",
+  "metadata": {}
+}

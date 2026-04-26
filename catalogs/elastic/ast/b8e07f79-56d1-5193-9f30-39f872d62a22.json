@@ -1,0 +1,40 @@
+{
+  "id": "b8e07f79-56d1-5193-9f30-39f872d62a22",
+  "catalog": "elastic",
+  "name": "RPM Package Installed by Unusual Parent Process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--install"
+      ],
+      "raw_values": [
+        "-i",
+        "--install"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:linux and event.category:process and event.type:start and event.action:exec and process.name:rpm and\nprocess.args:(\"-i\" or \"--install\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_rpm_package_installation_from_unusual_parent.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

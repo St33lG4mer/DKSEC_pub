@@ -1,0 +1,195 @@
+{
+  "id": "e6cecf49-c26a-59e7-b4f7-3ee5b3d20345",
+  "catalog": "elastic",
+  "name": "Tool Installation Detected via Defend for Containers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "curl",
+        "wget",
+        "socat",
+        "busybox",
+        "openssl",
+        "torsocks",
+        "netcat",
+        "netcat-openbsd",
+        "netcat-traditional",
+        "ncat",
+        "tor",
+        "python",
+        "perl",
+        "node",
+        "nodejs",
+        "ruby",
+        "lua",
+        "bash",
+        "dash",
+        "zsh",
+        "fish",
+        "tcsh",
+        "csh",
+        "ksh"
+      ],
+      "raw_values": [
+        "curl",
+        "wget",
+        "socat",
+        "busybox",
+        "openssl",
+        "torsocks",
+        "netcat",
+        "netcat-openbsd",
+        "netcat-traditional",
+        "ncat",
+        "tor",
+        "python*",
+        "perl",
+        "node",
+        "nodejs",
+        "ruby",
+        "lua",
+        "bash",
+        "sh",
+        "dash",
+        "zsh",
+        "fish",
+        "tcsh",
+        "csh",
+        "ksh"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "apt",
+        "apt-get",
+        "dnf",
+        "microdnf",
+        "yum",
+        "zypper",
+        "tdnf",
+        "rpm",
+        "dpkg"
+      ],
+      "raw_values": [
+        "apt",
+        "apt-get",
+        "dnf",
+        "microdnf",
+        "yum",
+        "zypper",
+        "tdnf",
+        "rpm",
+        "dpkg"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--install"
+      ],
+      "raw_values": [
+        "-i",
+        "--install"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "install",
+        "add"
+      ],
+      "raw_values": [
+        "install",
+        "add"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "apk",
+        "pacman"
+      ],
+      "raw_values": [
+        "apk",
+        "pacman"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "-*s"
+      ],
+      "raw_values": [
+        "-*S*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.interactive == true and (\n  (process.name in (\"apt\", \"apt-get\", \"dnf\", \"microdnf\", \"yum\", \"zypper\", \"tdnf\") and process.args == \"install\") or\n  (process.name == \"apk\" and process.args == \"add\") or\n  (process.name == \"pacman\" and process.args like \"-*S*\") or\n  (process.name in (\"rpm\", \"dpkg\") and process.args in (\"-i\", \"--install\"))\n) and process.args like (\n  \"curl\", \"wget\", \"socat\", \"busybox\", \"openssl\", \"torsocks\",\n  \"netcat\", \"netcat-openbsd\", \"netcat-traditional\", \"ncat\", \"tor\",\n  \"python*\", \"perl\", \"node\", \"nodejs\", \"ruby\", \"lua\", \"bash\", \"sh\",\n  \"dash\", \"zsh\", \"fish\", \"tcsh\", \"csh\", \"ksh\"\n) and container.id like \"?*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/execution_tool_installation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

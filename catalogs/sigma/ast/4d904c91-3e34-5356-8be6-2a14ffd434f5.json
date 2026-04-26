@@ -1,0 +1,46 @@
+{
+  "id": "4d904c91-3e34-5356-8be6-2a14ffd434f5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2020_1048",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".exe",
+        ".dll",
+        ".bat"
+      ],
+      "raw_values": [
+        "*.exe*",
+        "*.dll*",
+        "*.bat*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add-printerport -name",
+        "text only"
+      ],
+      "raw_values": [
+        "*Add-PrinterPort -Name*",
+        "*Generic / Text Only*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*Add-PrinterPort -Name*\" and (process.command_line like~ (\"*.exe*\", \"*.dll*\", \"*.bat*\"))) or process.command_line:\"*Generic / Text Only*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Exploits/CVE-2020-1048/proc_creation_win_exploit_cve_2020_1048.eql",
+  "metadata": {}
+}

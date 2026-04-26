@@ -1,0 +1,40 @@
+{
+  "id": "385843dc-fdeb-5bfb-97ea-496d09d619d3",
+  "catalog": "sigma",
+  "name": "win_codeintegrity_blocked_protected_process_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-codeintegrity/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CodeIntegrity/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "3104"
+      ],
+      "raw_values": [
+        "3104"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CodeIntegrity/Operational\" and event.code:\"3104\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/code_integrity/win_codeintegrity_blocked_protected_process_file.eql",
+  "metadata": {}
+}

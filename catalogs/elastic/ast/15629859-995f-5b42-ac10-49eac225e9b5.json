@@ -1,0 +1,93 @@
+{
+  "id": "15629859-995f-5b42-ac10-49eac225e9b5",
+  "catalog": "elastic",
+  "name": "Potential CVE-2025-33053 Exploitation",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "route.exe",
+        "netsh.exe",
+        "ipconfig.exe",
+        "dxdiag.exe",
+        "conhost.exe",
+        "makecab.exe"
+      ],
+      "raw_values": [
+        "route.exe",
+        "netsh.exe",
+        "ipconfig.exe",
+        "dxdiag.exe",
+        "conhost.exe",
+        "makecab.exe",
+        "C:\\\\Windows\\\\System32\\\\route.exe",
+        "C:\\\\Windows\\\\System32\\\\netsh.exe",
+        "C:\\\\Windows\\\\System32\\\\ipconfig.exe",
+        "C:\\\\Windows\\\\System32\\\\dxdiag.exe",
+        "C:\\\\Windows\\\\System32\\\\conhost.exe",
+        "C:\\\\Windows\\\\System32\\\\makecab.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "iediagcmd.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Internet Explorer\\\\iediagcmd.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.parent.executable : \"C:\\\\Program Files\\\\Internet Explorer\\\\iediagcmd.exe\" and\n  process.name : (\"route.exe\", \"netsh.exe\", \"ipconfig.exe\", \"dxdiag.exe\", \"conhost.exe\", \"makecab.exe\") and\n  process.executable != null and\n  not process.executable : (\"C:\\\\Windows\\\\System32\\\\route.exe\",\n                            \"C:\\\\Windows\\\\System32\\\\netsh.exe\",\n                            \"C:\\\\Windows\\\\System32\\\\ipconfig.exe\",\n                            \"C:\\\\Windows\\\\System32\\\\dxdiag.exe\",\n                            \"C:\\\\Windows\\\\System32\\\\conhost.exe\",\n                            \"C:\\\\Windows\\\\System32\\\\makecab.exe\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/initial_access_url_cve_2025_33053.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "072d1852-7932-5136-8439-c0d78dbfd42e",
+  "catalog": "sigma",
+  "name": "dns_query_win_regsvr32_dns_query",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\regsvr32.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_regsvr32_dns_query.eql",
+  "metadata": {}
+}

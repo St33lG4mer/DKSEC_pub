@@ -1,0 +1,76 @@
+{
+  "id": "87c5bde7-9c9a-50fd-a9e6-190f540e2164",
+  "catalog": "elastic",
+  "name": "Persistence via Microsoft Office AddIns",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "wll",
+        "xll",
+        "ppa",
+        "ppam",
+        "xla",
+        "xlam"
+      ],
+      "raw_values": [
+        "wll",
+        "xll",
+        "ppa",
+        "ppam",
+        "xla",
+        "xlam"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and event.type != \"deletion\" and\n file.extension : (\"wll\",\"xll\",\"ppa\",\"ppam\",\"xla\",\"xlam\") and\n file.path : (\n    \"C:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Word\\\\Startup\\\\*\",\n    \"C:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\AddIns\\\\*\",\n    \"C:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Excel\\\\XLSTART\\\\*\",\n\n    /* Crowdstrike specific condition as it uses NT Object paths */\n    \"\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Word\\\\Startup\\\\*\",\n    \"\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\AddIns\\\\*\",\n    \"\\\\Device\\\\HarddiskVolume*\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Excel\\\\XLSTART\\\\*\"\n )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_ms_office_addins_file.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

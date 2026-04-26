@@ -1,0 +1,63 @@
+{
+  "id": "fcaa036f-2b3e-5946-9a66-368c647b272d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_netsh_fw_enable_group_rule",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "advfirewall",
+        "firewall",
+        "set",
+        "rule",
+        "group=",
+        "new",
+        "enable=yes"
+      ],
+      "raw_values": [
+        "*advfirewall*",
+        "*firewall*",
+        "*set*",
+        "*rule*",
+        "*group=*",
+        "*new*",
+        "*enable=Yes*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\netsh.exe\" or process.pe.original_file_name:\"netsh.exe\") and (process.command_line:\"*advfirewall*\" and process.command_line:\"*firewall*\" and process.command_line:\"*set*\" and process.command_line:\"*rule*\" and process.command_line:\"*group=*\" and process.command_line:\"*new*\" and process.command_line:\"*enable=Yes*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_netsh_fw_enable_group_rule.eql",
+  "metadata": {}
+}

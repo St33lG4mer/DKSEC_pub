@@ -1,0 +1,56 @@
+{
+  "id": "01e6c08d-c293-5d16-b806-0a52b014c556",
+  "catalog": "sigma",
+  "name": "registry_event_susp_mic_cam_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "microphone",
+        "webcam",
+        ":#windows#temp#",
+        ":#$recycle.bin#",
+        ":#temp#",
+        ":#users#public#",
+        ":#users#default#",
+        ":#users#desktop#"
+      ],
+      "raw_values": [
+        "*microphone*",
+        "*webcam*",
+        "*:#Windows#Temp#*",
+        "*:#$Recycle.bin#*",
+        "*:#Temp#*",
+        "*:#Users#Public#*",
+        "*:#Users#Default#*",
+        "*:#Users#Desktop#*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\capabilityaccessmanager\\\\consentstore\\\\",
+        "\\\\nonpackaged"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\CapabilityAccessManager\\\\ConsentStore\\\\*",
+        "*\\\\NonPackaged*"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\CapabilityAccessManager\\\\ConsentStore\\\\*\" and registry.path:\"*\\\\NonPackaged*\") and (registry.path like~ (\"*microphone*\", \"*webcam*\")) and (registry.path like~ (\"*:#Windows#Temp#*\", \"*:#$Recycle.bin#*\", \"*:#Temp#*\", \"*:#Users#Public#*\", \"*:#Users#Default#*\", \"*:#Users#Desktop#*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_susp_mic_cam_access.eql",
+  "metadata": {}
+}

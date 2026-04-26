@@ -1,0 +1,98 @@
+{
+  "id": "d600597d-03b6-59c6-a2db-b44ad573329d",
+  "catalog": "elastic",
+  "name": "Linux init (PID 1) Secret Dump via GDB",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--pid"
+      ],
+      "raw_values": [
+        "--pid",
+        "-p"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "gdb"
+      ],
+      "raw_values": [
+        "gdb"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name == \"gdb\" and process.args in (\"--pid\", \"-p\") and process.args == \"1\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_gdb_init_process_hooking.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

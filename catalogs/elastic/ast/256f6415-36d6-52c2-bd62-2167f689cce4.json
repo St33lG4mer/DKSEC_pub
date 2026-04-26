@@ -1,0 +1,155 @@
+{
+  "id": "256f6415-36d6-52c2-bd62-2167f689cce4",
+  "catalog": "elastic",
+  "name": "Manual Dracut Execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dracut.postinst",
+        "xargs",
+        "dkms",
+        "mkinitrd",
+        "timeout",
+        "systemd-inhibit"
+      ],
+      "raw_values": [
+        "/usr/lib/kernel/*",
+        "/etc/kernel/install.d/*",
+        "/var/lib/dpkg/info/dracut.postinst",
+        "/tmp/newroot/*",
+        "/usr/lib/module-init-tools/*",
+        "/usr/bin/xargs",
+        "/sbin/dkms",
+        "/sbin/mkinitrd",
+        "/usr/bin/timeout",
+        "/usr/sbin/dkms",
+        "/usr/bin/systemd-inhibit"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "like~",
+      "values": [
+        "/usr/bin/dracut-rebuild",
+        "/var/tmp/rpm-tmp."
+      ],
+      "raw_values": [
+        "/usr/bin/dracut-rebuild",
+        "/var/tmp/rpm-tmp.*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "dracut-install",
+        "dracut",
+        "run-parts",
+        "weak-modules",
+        "mkdumprd",
+        "new-kernel-pkg",
+        "sudo"
+      ],
+      "raw_values": [
+        "dracut-install",
+        "dracut",
+        "run-parts",
+        "weak-modules",
+        "mkdumprd",
+        "new-kernel-pkg",
+        "sudo"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "dracut"
+      ],
+      "raw_values": [
+        "dracut"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "sh -c if command -v mkinitcpio"
+      ],
+      "raw_values": [
+        "/bin/sh -c if command -v mkinitcpio*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\nprocess.name == \"dracut\" and process.parent.executable != null and not (\n  process.parent.executable like (\n    \"/usr/lib/kernel/*\", \"/etc/kernel/install.d/*\", \"/var/lib/dpkg/info/dracut.postinst\",\n    \"/tmp/newroot/*\", \"/usr/lib/module-init-tools/*\", \"/usr/bin/xargs\", \"/sbin/dkms\",\n    \"/sbin/mkinitrd\", \"/usr/bin/timeout\", \"/usr/sbin/dkms\", \"/usr/bin/systemd-inhibit\"\n  ) or\n  process.parent.name in (\n    \"dracut-install\", \"dracut\", \"run-parts\", \"weak-modules\", \"mkdumprd\", \"new-kernel-pkg\", \"sudo\"\n  ) or\n  process.parent.args like~ (\"/usr/bin/dracut-rebuild\", \"/var/tmp/rpm-tmp.*\") or\n  process.parent.command_line like~ \"/bin/sh -c if command -v mkinitcpio*\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_manual_dracut_execution.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Execution",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

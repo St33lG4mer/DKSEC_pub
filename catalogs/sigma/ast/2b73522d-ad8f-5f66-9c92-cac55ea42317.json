@@ -1,0 +1,40 @@
+{
+  "id": "2b73522d-ad8f-5f66-9c92-cac55ea42317",
+  "catalog": "sigma",
+  "name": "proc_creation_win_forfiles_proxy_execution_",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "forfiles.exe"
+      ],
+      "raw_values": [
+        "*\\\\forfiles.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "forfiles.exe"
+      ],
+      "raw_values": [
+        "forfiles.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\forfiles.exe\" or process.pe.original_file_name:\"forfiles.exe\") and process.command_line like~ (\"* -c *\", \"* /c *\", \"* –c *\", \"* —c *\", \"* ―c *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_forfiles_proxy_execution_.eql",
+  "metadata": {}
+}

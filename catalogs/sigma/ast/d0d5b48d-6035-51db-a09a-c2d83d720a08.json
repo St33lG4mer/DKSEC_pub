@@ -1,0 +1,29 @@
+{
+  "id": "d0d5b48d-6035-51db-a09a-c2d83d720a08",
+  "catalog": "sigma",
+  "name": "registry_set_bginfo_custom_vbscript",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\winternals\\\\bginfo\\\\userfields\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Winternals\\\\BGInfo\\\\UserFields\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Winternals\\\\BGInfo\\\\UserFields\\\\*\" and winlog.event_data.Details:\"4*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_bginfo_custom_vbscript.eql",
+  "metadata": {}
+}

@@ -1,0 +1,93 @@
+{
+  "id": "42bf61b2-e3f8-5a12-a1b1-47752071876e",
+  "catalog": "elastic",
+  "name": "Persistence via BITS Job Notify Cmdline",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfaultsecure.exe",
+        "werfault.exe",
+        "wermgr.exe",
+        "directxdatabaseupdater.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\WerFaultSecure.exe",
+        "?:\\\\Windows\\\\System32\\\\WerFault.exe",
+        "?:\\\\Windows\\\\System32\\\\wermgr.exe",
+        "?:\\\\WINDOWS\\\\system32\\\\directxdatabaseupdater.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "svchost.exe"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "bits"
+      ],
+      "raw_values": [
+        "BITS"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.parent.name : \"svchost.exe\" and process.parent.args : \"BITS\" and\n  not process.executable :\n              (\"?:\\\\Windows\\\\System32\\\\WerFaultSecure.exe\",\n               \"?:\\\\Windows\\\\System32\\\\WerFault.exe\",\n               \"?:\\\\Windows\\\\System32\\\\wermgr.exe\",\n               \"?:\\\\WINDOWS\\\\system32\\\\directxdatabaseupdater.exe\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_via_bits_job_notify_command.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

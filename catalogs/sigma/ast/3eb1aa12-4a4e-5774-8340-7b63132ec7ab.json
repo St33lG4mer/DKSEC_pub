@@ -1,0 +1,43 @@
+{
+  "id": "3eb1aa12-4a4e-5774-8340-7b63132ec7ab",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmi_backdoor_exchange_transport_agent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "edgetransport.exe"
+      ],
+      "raw_values": [
+        "*\\\\EdgeTransport.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "conhost.exe",
+        "oleconverter.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\conhost.exe",
+        "C:\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\*",
+        "*\\\\Bin\\\\OleConverter.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\EdgeTransport.exe\" and (not (process.executable:\"C:\\\\Windows\\\\System32\\\\conhost.exe\" or (process.executable:\"C:\\\\Program Files\\\\Microsoft\\\\Exchange Server\\\\*\" and process.executable:\"*\\\\Bin\\\\OleConverter.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmi_backdoor_exchange_transport_agent.eql",
+  "metadata": {}
+}

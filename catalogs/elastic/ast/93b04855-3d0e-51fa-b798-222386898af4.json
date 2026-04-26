@@ -1,0 +1,59 @@
+{
+  "id": "93b04855-3d0e-51fa-b798-222386898af4",
+  "catalog": "elastic",
+  "name": "New Okta Identity Provider (IdP) Added by Admin",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "system.idp.lifecycle.create"
+      ],
+      "raw_values": [
+        "system.idp.lifecycle.create"
+      ]
+    },
+    {
+      "field": "okta.outcome.result",
+      "raw_field": "okta.outcome.result",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "SUCCESS"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"okta.system\" and event.action: \"system.idp.lifecycle.create\" and okta.outcome.result: \"SUCCESS\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/persistence_new_idp_successfully_added_by_admin.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Data Source: Okta",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "id": "d805b684-4071-5ec9-8441-00aff69e75db",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mshta_susp_child_processes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "sh.exe",
+        "bash.exe",
+        "reg.exe",
+        "regsvr32.exe",
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe",
+        "*\\\\sh.exe",
+        "*\\\\bash.exe",
+        "*\\\\reg.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\bitsadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.dll",
+        "wscript.exe",
+        "cscript.exe",
+        "bash.exe",
+        "reg.exe",
+        "regsvr32.exe",
+        "bitsadmin.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe",
+        "PowerShell.EXE",
+        "pwsh.dll",
+        "wscript.exe",
+        "cscript.exe",
+        "Bash.exe",
+        "reg.exe",
+        "REGSVR32.EXE",
+        "bitsadmin.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "*\\\\mshta.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\mshta.exe\" and ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\", \"*\\\\cscript.exe\", \"*\\\\sh.exe\", \"*\\\\bash.exe\", \"*\\\\reg.exe\", \"*\\\\regsvr32.exe\", \"*\\\\bitsadmin.exe\")) or (process.pe.original_file_name like~ (\"Cmd.Exe\", \"PowerShell.EXE\", \"pwsh.dll\", \"wscript.exe\", \"cscript.exe\", \"Bash.exe\", \"reg.exe\", \"REGSVR32.EXE\", \"bitsadmin.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mshta_susp_child_processes.eql",
+  "metadata": {}
+}

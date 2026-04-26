@@ -1,0 +1,35 @@
+{
+  "id": "a1744307-81a0-5ac8-aa28-15a1f61469c3",
+  "catalog": "sigma",
+  "name": "dns_query_win_cloudflared_communication",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        ".v2.argotunnel.com",
+        "protocol-v2.argotunnel.com",
+        "trycloudflare.com",
+        "update.argotunnel.com"
+      ],
+      "raw_values": [
+        "*.v2.argotunnel.com",
+        "*protocol-v2.argotunnel.com",
+        "*trycloudflare.com",
+        "*update.argotunnel.com"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name like~ (\"*.v2.argotunnel.com\", \"*protocol-v2.argotunnel.com\", \"*trycloudflare.com\", \"*update.argotunnel.com\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_cloudflared_communication.eql",
+  "metadata": {}
+}

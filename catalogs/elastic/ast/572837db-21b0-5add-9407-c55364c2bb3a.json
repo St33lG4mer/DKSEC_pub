@@ -1,0 +1,77 @@
+{
+  "id": "572837db-21b0-5add-9407-c55364c2bb3a",
+  "catalog": "elastic",
+  "name": "Suspicious Inter-Process Communication via Outlook",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe",
+        "regsvr32.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "rundll32.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe",
+        "regsvr32.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "OUTLOOK.EXE"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "sequence with maxspan=1m\n[process where host.os.type == \"windows\" and event.action == \"start\" and\n  (\n    process.name : (\n      \"rundll32.exe\", \"mshta.exe\", \"powershell.exe\", \"pwsh.exe\",\n      \"cmd.exe\", \"regsvr32.exe\", \"cscript.exe\", \"wscript.exe\"\n    ) or\n    (\n      (process.code_signature.trusted == false or process.code_signature.exists == false) and\n      (process.Ext.relative_file_creation_time <= 500 or process.Ext.relative_file_name_modify_time <= 500)\n    )\n  )\n] by process.entity_id\n[process where host.os.type == \"windows\" and event.action == \"start\" and process.name : \"OUTLOOK.EXE\" and\n  process.Ext.effective_parent.name != null] by process.Ext.effective_parent.entity_id\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/collection_email_outlook_mailbox_via_com.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

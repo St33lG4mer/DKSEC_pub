@@ -1,0 +1,103 @@
+{
+  "id": "60e24111-39ef-55b1-961a-010d7de03dd0",
+  "catalog": "sigma",
+  "name": "file_change_win_date_changed_to_another_year",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".tmp",
+        ".temp"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\*",
+        "*.tmp",
+        "*.temp"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "provtool.exe",
+        "usocoreworker.exe",
+        "systemsettings.exe",
+        "tiworker.exe",
+        "svchost.exe",
+        "sihclient.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\*",
+        "C:\\\\Windows\\\\system32\\\\ProvTool.exe",
+        "C:\\\\Windows\\\\System32\\\\usocoreworker.exe",
+        "C:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe",
+        "*\\\\TiWorker.exe",
+        "*\\\\svchost.exe",
+        "*\\\\sihclient.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.previouscreationutctime",
+      "raw_field": "winlog.event_data.PreviousCreationUtcTime",
+      "operator": ":",
+      "values": [
+        "202"
+      ],
+      "raw_values": [
+        "202*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.creationutctime",
+      "raw_field": "winlog.event_data.CreationUtcTime",
+      "operator": ":",
+      "values": [
+        "202"
+      ],
+      "raw_values": [
+        "202*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".cab"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\USOPrivate\\\\UpdateStore\\\\*",
+        "*.cab"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe",
+        "vcredi~1.exe"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\System32\\\\*",
+        "C:\\\\Windows\\\\system32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\VCREDI~1.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.PreviousCreationUtcTime:\"202*\" and (not (winlog.event_data.CreationUtcTime:\"202*\" or ((file.path like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\")) or (process.executable like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\"))))) and (not (((process.executable like~ (\"C:\\\\Windows\\\\system32\\\\ProvTool.exe\", \"C:\\\\Windows\\\\System32\\\\usocoreworker.exe\", \"C:\\\\Windows\\\\ImmersiveControlPanel\\\\SystemSettings.exe\")) or file.path:\"C:\\\\ProgramData\\\\USOPrivate\\\\UpdateStore\\\\*\" or (file.path like~ (\"*.tmp\", \"*.temp\"))) or (process.executable:\"C:\\\\WINDOWS\\\\System32\\\\*\" and (process.executable like~ (\"*\\\\TiWorker.exe\", \"*\\\\svchost.exe\", \"*\\\\sihclient.exe\")) and file.path:\"*.cab\") or process.executable:\"C:\\\\Windows\\\\system32\\\\msiexec.exe\" or (process.executable:\"C:\\\\Windows\\\\Temp\\\\*\" and process.executable:\"*\\\\VCREDI~1.EXE\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_change/file_change_win_date_changed_to_another_year.eql",
+  "metadata": {}
+}

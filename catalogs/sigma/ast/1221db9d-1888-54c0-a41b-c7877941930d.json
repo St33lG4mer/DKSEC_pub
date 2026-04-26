@@ -1,0 +1,40 @@
+{
+  "id": "1221db9d-1888-54c0-a41b-c7877941930d",
+  "catalog": "sigma",
+  "name": "win_susp_ntlm_auth",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-ntlm/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-NTLM/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "8002"
+      ],
+      "raw_values": [
+        "8002"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-NTLM/Operational\" and event.code:\"8002\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/ntlm/win_susp_ntlm_auth.eql",
+  "metadata": {}
+}

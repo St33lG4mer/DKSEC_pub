@@ -1,0 +1,29 @@
+{
+  "id": "217a8f4e-96c6-561c-bb06-0bdbb849693f",
+  "catalog": "sigma",
+  "name": "image_load_hktl_silenttrinity_stager",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.pe.description",
+      "raw_field": "file.pe.description",
+      "operator": ":",
+      "values": [
+        "st2stager"
+      ],
+      "raw_values": [
+        "*st2stager*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.pe.description:\"*st2stager*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_hktl_silenttrinity_stager.eql",
+  "metadata": {}
+}

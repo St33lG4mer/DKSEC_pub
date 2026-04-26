@@ -1,0 +1,97 @@
+{
+  "id": "c996920c-c83e-521b-bb8b-5aaaab5e6407",
+  "catalog": "elastic",
+  "name": "Binary Executed from Shared Memory Directory",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "argoexec",
+        "sandfly"
+      ],
+      "raw_values": [
+        "/dev/shm/*",
+        "/run/shm/*",
+        "/var/run/*",
+        "/var/lock/*",
+        "/var/run/docker/*",
+        "/var/run/utsns/*",
+        "/var/run/s6/*",
+        "/var/run/cloudera-scm-agent/*",
+        "/var/run/argo/argoexec",
+        "/dev/shm/*.*/sandfly"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "==",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "/usr/bin/runc init"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\") and\nuser.id == \"0\" and process.executable like (\"/dev/shm/*\", \"/run/shm/*\", \"/var/run/*\", \"/var/lock/*\") and\nnot (\n  process.executable : (\n    \"/var/run/docker/*\", \"/var/run/utsns/*\", \"/var/run/s6/*\", \"/var/run/cloudera-scm-agent/*\",\n    \"/var/run/argo/argoexec\", \"/dev/shm/*.*/sandfly\"\n  ) or\n  process.parent.command_line == \"/usr/bin/runc init\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_process_started_in_shared_memory_directory.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Threat: BPFDoor",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

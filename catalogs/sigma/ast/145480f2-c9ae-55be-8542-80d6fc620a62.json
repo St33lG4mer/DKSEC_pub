@@ -1,0 +1,29 @@
+{
+  "id": "145480f2-c9ae-55be-8542-80d6fc620a62",
+  "catalog": "sigma",
+  "name": "registry_event_disable_wdigest_credential_guard",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\iscredguardenabled"
+      ],
+      "raw_values": [
+        "*\\\\IsCredGuardEnabled"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\IsCredGuardEnabled\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_disable_wdigest_credential_guard.eql",
+  "metadata": {}
+}

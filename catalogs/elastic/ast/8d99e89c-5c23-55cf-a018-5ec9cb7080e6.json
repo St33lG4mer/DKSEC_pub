@@ -1,0 +1,105 @@
+{
+  "id": "8d99e89c-5c23-55cf-a018-5ec9cb7080e6",
+  "catalog": "elastic",
+  "name": "Node.js Pre or Post-Install Script Execution",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "linux",
+        "macos"
+      ],
+      "raw_values": [
+        "linux",
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "processrollup2",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "ProcessRollup2",
+        "start"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "node"
+      ],
+      "raw_values": [
+        "node"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "install"
+      ],
+      "raw_values": [
+        "install"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "node"
+      ],
+      "raw_values": [
+        "node"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=10s\n  [process where host.os.type in (\"linux\", \"macos\") and event.type == \"start\" and event.action in (\"exec\", \"ProcessRollup2\", \"start\") and process.name == \"node\" and process.args == \"install\"] by process.entity_id\n  [process where host.os.type in (\"linux\", \"macos\") and event.type == \"start\" and event.action in (\"exec\", \"ProcessRollup2\", \"start\") and process.parent.name == \"node\"] by process.parent.entity_id\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_nodejs_pre_or_post_install_script_execution.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Execution",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

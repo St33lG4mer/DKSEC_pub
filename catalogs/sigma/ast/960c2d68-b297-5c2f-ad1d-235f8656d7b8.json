@@ -1,0 +1,42 @@
+{
+  "id": "960c2d68-b297-5c2f-ad1d-235f8656d7b8",
+  "catalog": "sigma",
+  "name": "registry_set_custom_file_open_handler_powershell_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "shell\\\\open\\\\command\\\\"
+      ],
+      "raw_values": [
+        "*shell\\\\open\\\\command\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "powershell",
+        "-command"
+      ],
+      "raw_values": [
+        "*powershell*",
+        "*-command*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*shell\\\\open\\\\command\\\\*\" and (winlog.event_data.Details:\"*powershell*\" and winlog.event_data.Details:\"*-command*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_custom_file_open_handler_powershell_execution.eql",
+  "metadata": {}
+}

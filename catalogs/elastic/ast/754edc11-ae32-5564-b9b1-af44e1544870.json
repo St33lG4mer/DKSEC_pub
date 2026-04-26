@@ -1,0 +1,101 @@
+{
+  "id": "754edc11-ae32-5564-b9b1-af44e1544870",
+  "catalog": "elastic",
+  "name": "Screensaver Plist File Modified by Unexpected Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "curl",
+        "mktemp",
+        "tail",
+        "funzip",
+        "python",
+        "osascript",
+        "perl"
+      ],
+      "raw_values": [
+        "curl",
+        "mktemp",
+        "tail",
+        "funzip",
+        "python*",
+        "osascript",
+        "perl"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cfprefsd",
+        "xpcproxy",
+        "mcxcompositor",
+        "managedclient"
+      ],
+      "raw_values": [
+        "/usr/sbin/cfprefsd",
+        "/usr/libexec/xpcproxy",
+        "/System/Library/CoreServices/ManagedClient.app/Contents/Resources/MCXCompositor",
+        "/System/Library/CoreServices/ManagedClient.app/Contents/MacOS/ManagedClient"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modification"
+      ],
+      "raw_values": [
+        "modification"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "com.apple.screensaver.*.plist"
+      ],
+      "raw_values": [
+        "com.apple.screensaver.*.plist"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.action == \"modification\" and\n  file.name like~ \"com.apple.screensaver.*.plist\" and\n   file.path like (\n      \"/Users/*/Library/Preferences/ByHost/*\",\n      \"/Library/Managed Preferences/*\",\n      \"/System/Library/Preferences/*\"\n      ) and\n  (\n    process.code_signature.trusted == false or\n    process.code_signature.exists == false or\n\n    /* common script interpreters and abused native macOS bins */\n    process.name like~ (\n      \"curl\",\n      \"mktemp\",\n      \"tail\",\n      \"funzip\",\n      \"python*\",\n      \"osascript\",\n      \"perl\"\n      )\n   ) and\n\n  /* Filter OS processes modifying screensaver plist files */\n  not process.executable like (\n    \"/usr/sbin/cfprefsd\",\n    \"/usr/libexec/xpcproxy\",\n    \"/System/Library/CoreServices/ManagedClient.app/Contents/Resources/MCXCompositor\",\n    \"/System/Library/CoreServices/ManagedClient.app/Contents/MacOS/ManagedClient\"\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_screensaver_plist_file_modification.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

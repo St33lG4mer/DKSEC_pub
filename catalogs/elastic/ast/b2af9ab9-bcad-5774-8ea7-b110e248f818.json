@@ -1,0 +1,98 @@
+{
+  "id": "b2af9ab9-bcad-5774-8ea7-b110e248f818",
+  "catalog": "elastic",
+  "name": "Pbpaste Execution via Unusual Parent Process",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "node",
+        "osascript"
+      ],
+      "raw_values": [
+        "node",
+        "osascript"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "pbpaste"
+      ],
+      "raw_values": [
+        "pbpaste"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like",
+      "values": [
+        "python",
+        "python3"
+      ],
+      "raw_values": [
+        "python*",
+        "/Users/*/.pyenv/versions/*/bin/python3*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and\n  process.name == \"pbpaste\" and process.args_count == 1 and\n  (process.parent.name in (\"node\", \"osascript\") or process.parent.name like \"python*\") and\n  not process.parent.executable like \"/Users/*/.pyenv/versions/*/bin/python3*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/collection_pbpaste_execution_via_unusual_parent.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

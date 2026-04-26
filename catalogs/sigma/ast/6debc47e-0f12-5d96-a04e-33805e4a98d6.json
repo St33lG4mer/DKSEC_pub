@@ -1,0 +1,66 @@
+{
+  "id": "6debc47e-0f12-5d96-a04e-33805e4a98d6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_agentexecutor_susp_usage",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-powershell",
+        "-remediationscript"
+      ],
+      "raw_values": [
+        "* -powershell*",
+        "* -remediationScript*",
+        "*C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\*",
+        "*C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "agentexecutor.exe"
+      ],
+      "raw_values": [
+        "*\\\\AgentExecutor.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "agentexecutor.exe"
+      ],
+      "raw_values": [
+        "AgentExecutor.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "microsoft.management.services.intunewindowsagent.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft.Management.Services.IntuneWindowsAgent.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\AgentExecutor.exe\" or process.pe.original_file_name:\"AgentExecutor.exe\") and (process.command_line like~ (\"* -powershell*\", \"* -remediationScript*\"))) and (not ((process.command_line like~ (\"*C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\*\", \"*C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\*\")) or process.parent.executable:\"*\\\\Microsoft.Management.Services.IntuneWindowsAgent.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_agentexecutor_susp_usage.eql",
+  "metadata": {}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "9b79d8d1-efca-561b-bec4-c6dc605229d3",
+  "catalog": "sigma",
+  "name": "registry_set_susp_pendingfilerenameoperations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "reg.exe",
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe",
+        "*\\\\regedit.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\currentcontrolset\\\\control\\\\session manager\\\\pendingfilerenameoperations"
+      ],
+      "raw_values": [
+        "*\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\PendingFileRenameOperations*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\CurrentControlSet\\\\Control\\\\Session Manager\\\\PendingFileRenameOperations*\" and (process.executable:\"*\\\\Users\\\\Public\\\\*\" or (process.executable like~ (\"*\\\\reg.exe\", \"*\\\\regedit.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_susp_pendingfilerenameoperations.eql",
+  "metadata": {}
+}

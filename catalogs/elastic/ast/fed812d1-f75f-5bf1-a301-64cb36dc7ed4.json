@@ -1,0 +1,95 @@
+{
+  "id": "fed812d1-f75f-5bf1-a301-64cb36dc7ed4",
+  "catalog": "elastic",
+  "name": "PowerShell Script Block Logging Disabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000000"
+      ],
+      "raw_values": [
+        "0",
+        "0x00000000"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe",
+        "deviceenroller.exe",
+        "omadmclient.exe",
+        "cloudendpointservice.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\svchost.exe",
+        "?:\\\\Windows\\\\System32\\\\DeviceEnroller.exe",
+        "?:\\\\Windows\\\\system32\\\\omadmclient.exe",
+        "?:\\\\Program Files\\\\Trend Micro\\\\Cloud Endpoint\\\\CloudEndpointService.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "enablescriptblocklogging"
+      ],
+      "raw_values": [
+        "EnableScriptBlockLogging"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n    registry.value : \"EnableScriptBlockLogging\" and\n    registry.data.strings : (\"0\", \"0x00000000\") and\n    not process.executable : (\n          \"?:\\\\Windows\\\\System32\\\\svchost.exe\",\n          \"?:\\\\Windows\\\\System32\\\\DeviceEnroller.exe\",\n          \"?:\\\\Windows\\\\system32\\\\omadmclient.exe\",\n          \"?:\\\\Program Files\\\\Trend Micro\\\\Cloud Endpoint\\\\CloudEndpointService.exe\",\n          \"?:\\\\Program Files (x86)\\\\N-able Technologies\\\\AutomationManagerAgent\\\\AutomationManager.AgentService.exe\",\n          \n          /* Crowdstrike specific exclusion as it uses NT Object paths */\n          \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\svchost.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\DeviceEnroller.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\system32\\\\omadmclient.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Program Files\\\\Trend Micro\\\\Cloud Endpoint\\\\CloudEndpointService.exe\",\n          \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\N-able Technologies\\\\AutomationManagerAgent\\\\AutomationManager.AgentService.exe\"\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_disable_posh_scriptblocklogging.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

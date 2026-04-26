@@ -1,0 +1,46 @@
+{
+  "id": "8d92fc13-5ce8-54aa-a6b8-4c7b0daceca0",
+  "catalog": "sigma",
+  "name": "registry_event_runonce_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\active setup\\\\installed components",
+        "\\\\stubpath"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Active Setup\\\\Installed Components*",
+        "*\\\\StubPath"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "c:\\\\program files\\\\google\\\\chrome\\\\application\\\\",
+        "\\\\installer\\\\chrmstp.exe\\",
+        "\\\\installer\\\\setup.exe\\"
+      ],
+      "raw_values": [
+        "*C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\*",
+        "*\\\\Installer\\\\chrmstp.exe\\",
+        "*\\\\Installer\\\\setup.exe\\"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\Microsoft\\\\Active Setup\\\\Installed Components*\" and registry.path:\"*\\\\StubPath\") and (not ((winlog.event_data.Details:\"*C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\*\" and winlog.event_data.Details:\"*\\\\Installer\\\\chrmstp.exe\\\" --configure-user-settings --verbose-logging --system-level*\") or ((winlog.event_data.Details like~ (\"*C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\*\", \"*C:\\\\Program Files\\\\Microsoft\\\\Edge\\\\Application\\\\*\")) and winlog.event_data.Details:\"*\\\\Installer\\\\setup.exe\\\" --configure-user-settings --verbose-logging --system-level --msedge --channel=stable\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_runonce_persistence.eql",
+  "metadata": {}
+}

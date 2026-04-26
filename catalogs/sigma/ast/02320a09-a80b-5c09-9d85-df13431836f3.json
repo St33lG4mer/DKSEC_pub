@@ -1,0 +1,30 @@
+{
+  "id": "02320a09-a80b-5c09-9d85-df13431836f3",
+  "catalog": "sigma",
+  "name": "registry_delete_schtasks_hide_task_via_sd_value_removal",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tree\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*",
+        "*SD*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*\" and registry.path:\"*SD*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_delete/registry_delete_schtasks_hide_task_via_sd_value_removal.eql",
+  "metadata": {}
+}

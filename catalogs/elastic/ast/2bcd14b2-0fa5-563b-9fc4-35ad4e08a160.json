@@ -1,0 +1,63 @@
+{
+  "id": "2bcd14b2-0fa5-563b-9fc4-35ad4e08a160",
+  "catalog": "elastic",
+  "name": "Unusual Network Connection via DllHost",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "dllhost.exe"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=1m\n  [process where host.os.type == \"windows\" and event.type == \"start\" and process.name : \"dllhost.exe\" and process.args_count == 1]\n  [network where host.os.type == \"windows\" and process.name : \"dllhost.exe\" and\n   not cidrmatch(destination.ip, \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\", \"192.0.0.0/24\",\n    \"192.0.0.0/29\", \"192.0.0.8/32\", \"192.0.0.9/32\", \"192.0.0.10/32\", \"192.0.0.170/32\", \"192.0.0.171/32\", \"192.0.2.0/24\",\n    \"192.31.196.0/24\", \"192.52.193.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\", \"224.0.0.0/4\", \"100.64.0.0/10\",\n    \"192.175.48.0/24\", \"198.18.0.0/15\", \"198.51.100.0/24\", \"203.0.113.0/24\", \"240.0.0.0/4\", \"::1\", \"FE80::/10\",\n    \"FF00::/8\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_unusual_network_connection_via_dllhost.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

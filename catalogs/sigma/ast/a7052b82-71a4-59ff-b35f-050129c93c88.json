@@ -1,0 +1,59 @@
+{
+  "id": "a7052b82-71a4-59ff-b35f-050129c93c88",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_download_iex",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".downloadstring(",
+        ".downloadfile(",
+        "invoke-webrequest",
+        "iwr",
+        "invoke-restmethod",
+        "irm",
+        ";iex $",
+        "| iex",
+        "|iex",
+        "i`e`x",
+        "i`ex",
+        "ie`x",
+        "iex",
+        "iex (",
+        "iex(",
+        "invoke-expression"
+      ],
+      "raw_values": [
+        "*.DownloadString(*",
+        "*.DownloadFile(*",
+        "*Invoke-WebRequest *",
+        "*iwr *",
+        "*Invoke-RestMethod *",
+        "*irm *",
+        "*;iex $*",
+        "*| IEX*",
+        "*|IEX *",
+        "*I`E`X*",
+        "*I`EX*",
+        "*IE`X*",
+        "*iex *",
+        "*IEX (*",
+        "*IEX(*",
+        "*Invoke-Expression*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*.DownloadString(*\", \"*.DownloadFile(*\", \"*Invoke-WebRequest *\", \"*iwr *\", \"*Invoke-RestMethod *\", \"*irm *\")) and (process.command_line like~ (\"*;iex $*\", \"*| IEX*\", \"*|IEX *\", \"*I`E`X*\", \"*I`EX*\", \"*IE`X*\", \"*iex *\", \"*IEX (*\", \"*IEX(*\", \"*Invoke-Expression*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_download_iex.eql",
+  "metadata": {}
+}

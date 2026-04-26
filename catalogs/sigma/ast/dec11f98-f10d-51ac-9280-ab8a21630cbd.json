@@ -1,0 +1,29 @@
+{
+  "id": "dec11f98-f10d-51ac-9280-ab8a21630cbd",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rar_compression_with_password",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-hp"
+      ],
+      "raw_values": [
+        "* -hp*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"* -hp*\" and (process.command_line like~ (\"* -m*\", \"* a *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rar_compression_with_password.eql",
+  "metadata": {}
+}

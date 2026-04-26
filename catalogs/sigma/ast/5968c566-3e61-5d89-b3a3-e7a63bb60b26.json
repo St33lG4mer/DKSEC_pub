@@ -1,0 +1,58 @@
+{
+  "id": "5968c566-3e61-5d89-b3a3-e7a63bb60b26",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_dir_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "dir*-s",
+        "dir*–s",
+        "dir*—s",
+        "dir*―s"
+      ],
+      "raw_values": [
+        "*dir*-s*",
+        "*dir*/s*",
+        "*dir*–s*",
+        "*dir*—s*",
+        "*dir*―s*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and process.command_line like~ (\"*dir*-s*\", \"*dir*/s*\", \"*dir*–s*\", \"*dir*—s*\", \"*dir*―s*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_dir_execution.eql",
+  "metadata": {}
+}

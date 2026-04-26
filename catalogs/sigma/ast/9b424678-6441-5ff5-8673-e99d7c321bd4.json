@@ -1,0 +1,29 @@
+{
+  "id": "9b424678-6441-5ff5-8673-e99d7c321bd4",
+  "catalog": "sigma",
+  "name": "image_load_malware_foggyweb_nobelium",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "version.dll"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\ADFS\\\\version.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\ADFS\\\\version.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/FoggyWeb/image_load_malware_foggyweb_nobelium.eql",
+  "metadata": {}
+}

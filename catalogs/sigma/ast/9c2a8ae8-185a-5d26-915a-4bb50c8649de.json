@@ -1,0 +1,29 @@
+{
+  "id": "9c2a8ae8-185a-5d26-915a-4bb50c8649de",
+  "catalog": "sigma",
+  "name": "proc_creation_win_bitlockertogo_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "bitlockertogo.exe"
+      ],
+      "raw_values": [
+        "*\\\\BitLockerToGo.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\BitLockerToGo.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_bitlockertogo_execution.eql",
+  "metadata": {}
+}

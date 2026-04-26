@@ -1,0 +1,40 @@
+{
+  "id": "4be00ea0-83e1-5759-b09d-f3dab3016199",
+  "catalog": "sigma",
+  "name": "win_system_exploit_cve_2019_0708",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "termdd"
+      ],
+      "raw_values": [
+        "TermDD"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and ((event.code like~ (\"56\", \"50\")) and winlog.provider_name:\"TermDD\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/Exploits/CVE-2019-0708/win_system_exploit_cve_2019_0708.eql",
+  "metadata": {}
+}

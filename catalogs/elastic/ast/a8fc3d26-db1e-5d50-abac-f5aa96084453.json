@@ -1,0 +1,63 @@
+{
+  "id": "a8fc3d26-db1e-5d50-abac-f5aa96084453",
+  "catalog": "elastic",
+  "name": "Potential Shadow Credentials added to AD Object",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5136"
+      ],
+      "raw_values": [
+        "5136"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": ":",
+      "values": [
+        "msds-keycredentiallink"
+      ],
+      "raw_values": [
+        "msDS-KeyCredentialLink"
+      ]
+    }
+  ],
+  "raw_query": "event.code:\"5136\" and host.os.type:\"windows\" and winlog.event_data.AttributeLDAPDisplayName:\"msDS-KeyCredentialLink\" and\n  winlog.event_data.AttributeValue :B\\:828* and\n  not winlog.event_data.SubjectUserName: MSOL_*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_shadow_credentials.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Active Directory",
+      "Resources: Investigation Guide",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

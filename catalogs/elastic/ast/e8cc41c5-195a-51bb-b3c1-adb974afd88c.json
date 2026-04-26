@@ -1,0 +1,53 @@
+{
+  "id": "e8cc41c5-195a-51bb-b3c1-adb974afd88c",
+  "catalog": "elastic",
+  "name": "PowerShell Script with Webcam Video Capture Capabilities",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "newframeeventhandler",
+        "videocapturedevice",
+        "directx.capture.filters",
+        "videocompressors",
+        "start-webcamrecorder",
+        "capcreatecapturewindowa",
+        "capcreatecapturewindow",
+        "capgetdriverdescription"
+      ],
+      "raw_values": [
+        "NewFrameEventHandler",
+        "VideoCaptureDevice",
+        "DirectX.Capture.Filters",
+        "VideoCompressors",
+        "Start-WebcamRecorder",
+        "capCreateCaptureWindowA",
+        "capCreateCaptureWindow",
+        "capGetDriverDescription"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n    \"NewFrameEventHandler\" or\n    \"VideoCaptureDevice\" or\n    \"DirectX.Capture.Filters\" or\n    \"VideoCompressors\" or\n    \"Start-WebcamRecorder\" or\n    (\n      (\"capCreateCaptureWindowA\" or\n       \"capCreateCaptureWindow\" or\n       \"capGetDriverDescription\") and\n      (\"avicap32.dll\" or \"avicap32\")\n    )\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/collection_posh_webcam_video_capture.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Data Source: PowerShell Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

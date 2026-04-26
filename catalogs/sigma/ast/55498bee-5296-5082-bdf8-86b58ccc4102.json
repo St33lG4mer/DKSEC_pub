@@ -1,0 +1,42 @@
+{
+  "id": "55498bee-5296-5082-bdf8-86b58ccc4102",
+  "catalog": "sigma",
+  "name": "file_event_win_office_outlook_newform",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "ipm",
+        "forms"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\FORMS\\\\IPM*",
+        "*\\\\Local Settings\\\\Application Data\\\\Microsoft\\\\Forms*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\outlook.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\outlook.exe\" and (file.path like~ (\"*\\\\AppData\\\\Local\\\\Microsoft\\\\FORMS\\\\IPM*\", \"*\\\\Local Settings\\\\Application Data\\\\Microsoft\\\\Forms*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_outlook_newform.eql",
+  "metadata": {}
+}

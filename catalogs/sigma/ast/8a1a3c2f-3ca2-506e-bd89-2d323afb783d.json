@@ -1,0 +1,51 @@
+{
+  "id": "8a1a3c2f-3ca2-506e-bd89-2d323afb783d",
+  "catalog": "sigma",
+  "name": "win_mssql_failed_logon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "application"
+      ],
+      "raw_values": [
+        "Application"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "mssql"
+      ],
+      "raw_values": [
+        "*MSSQL*"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "18456"
+      ],
+      "raw_values": [
+        "18456"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Application\" and (winlog.provider_name:\"*MSSQL*\" and event.code:\"18456\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/application/mssqlserver/win_mssql_failed_logon.eql",
+  "metadata": {}
+}

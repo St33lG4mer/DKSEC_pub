@@ -1,0 +1,63 @@
+{
+  "id": "8c7e6d40-b88c-517e-a131-f709580d351f",
+  "catalog": "elastic",
+  "name": "Command Line Obfuscation via Whitespace Padding",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "fork"
+      ],
+      "raw_values": [
+        "fork"
+      ]
+    }
+  ],
+  "raw_query": "FROM logs-* metadata _id, _version, _index \n| where event.category == \"process\" and event.type == \"start\" and event.action != \"fork\"\n// more than 100 spaces in process.command_line\n| eval multi_spaces = LOCATE(process.command_line, space(100)) \n| where multi_spaces > 0 \n| keep user.name, host.id, host.name, process.command_line, process.executable, process.parent.executable, _id, _version, _index\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/defense_evasion_whitespace_padding_command_line.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "OS: macOS",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

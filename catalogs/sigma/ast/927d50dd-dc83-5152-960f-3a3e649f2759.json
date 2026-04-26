@@ -1,0 +1,17 @@
+{
+  "id": "927d50dd-dc83-5152-960f-3a3e649f2759",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_recycle_bin_fake_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.executable like~ (\"*RECYCLERS.BIN\\\\*\", \"*RECYCLER.BIN\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_recycle_bin_fake_execution.eql",
+  "metadata": {}
+}

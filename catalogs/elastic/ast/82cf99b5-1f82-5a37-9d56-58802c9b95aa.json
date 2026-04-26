@@ -1,0 +1,25 @@
+{
+  "id": "82cf99b5-1f82-5a37-9d56-58802c9b95aa",
+  "catalog": "elastic",
+  "name": "Okta User Session Impersonation",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:user.session.impersonation.initiate\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/credential_access_user_impersonation_access.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Tactic: Credential Access",
+      "Data Source: Okta",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

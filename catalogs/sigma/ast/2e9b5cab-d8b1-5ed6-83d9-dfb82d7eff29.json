@@ -1,0 +1,65 @@
+{
+  "id": "2e9b5cab-d8b1-5ed6-83d9-dfb82d7eff29",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_shadow_copies_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "wmic.exe",
+        "vssadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wmic.exe",
+        "*\\\\vssadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll",
+        "wmic.exe",
+        "vssadmin.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll",
+        "wmic.exe",
+        "VSSADMIN.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shadow",
+        "create"
+      ],
+      "raw_values": [
+        "*shadow*",
+        "*create*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wmic.exe\", \"*\\\\vssadmin.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\", \"wmic.exe\", \"VSSADMIN.EXE\"))) and (process.command_line:\"*shadow*\" and process.command_line:\"*create*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_shadow_copies_creation.eql",
+  "metadata": {}
+}

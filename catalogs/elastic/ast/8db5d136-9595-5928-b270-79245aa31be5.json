@@ -1,0 +1,66 @@
+{
+  "id": "8db5d136-9595-5928-b270-79245aa31be5",
+  "catalog": "elastic",
+  "name": "Unusual Pkexec Execution",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "gvfsd-admin",
+        "udevadm",
+        "stop-forticlient.sh",
+        "gparted",
+        "dpkg",
+        "input-remapper-control",
+        "do-partial-upgrade"
+      ],
+      "raw_values": [
+        "/usr/libexec/gvfsd-admin",
+        "udevadm",
+        "/opt/forticlient/stop-forticlient.sh",
+        "/usr/bin/gparted",
+        "dpkg",
+        "/usr/sbin/gparted",
+        "input-remapper-control",
+        "/usr/lib/ubuntu-release-upgrader/do-partial-upgrade"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/usr/bin/timeshift-launcher"
+      ],
+      "raw_values": [
+        "/usr/bin/timeshift-launcher"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and\nevent.action:(exec or exec_event or start or ProcessRollup2) and process.name:pkexec and\nprocess.args:pkexec and process.parent.name:(bash or dash or sh or tcsh or csh or zsh or ksh or fish) and\nnot (\n  process.args:(\n    \"/usr/libexec/gvfsd-admin\" or \"udevadm\" or \"/opt/forticlient/stop-forticlient.sh\" or \"/usr/bin/gparted\" or\n    \"dpkg\" or \"/usr/sbin/gparted\" or \"input-remapper-control\" or \"/usr/lib/ubuntu-release-upgrader/do-partial-upgrade\"\n  ) or\n  process.parent.command_line:*/home/*/.claude/shell-snapshots/* or\n  process.parent.args:\"/usr/bin/timeshift-launcher\"\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_unusual_pkexec_execution.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Persistence",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

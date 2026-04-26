@@ -1,0 +1,95 @@
+{
+  "id": "85e7b8ee-27b6-5fab-ba43-243a35a879e6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sdiagnhost_susp_child",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe",
+        "mshta.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "taskkill.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "calc.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\cmd.exe",
+        "*\\\\mshta.exe",
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe",
+        "*\\\\taskkill.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\calc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-noprofile -",
+        "-noprofile"
+      ],
+      "raw_values": [
+        "*-noprofile -",
+        "*-noprofile"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sdiagnhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\sdiagnhost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "bits"
+      ],
+      "raw_values": [
+        "*bits*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\sdiagnhost.exe\" and (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\cmd.exe\", \"*\\\\mshta.exe\", \"*\\\\cscript.exe\", \"*\\\\wscript.exe\", \"*\\\\taskkill.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\calc.exe\"))) and (not ((process.executable:\"*\\\\cmd.exe\" and process.command_line:\"*bits*\") or (process.executable:\"*\\\\powershell.exe\" and (process.command_line like~ (\"*-noprofile -\", \"*-noprofile\")))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sdiagnhost_susp_child.eql",
+  "metadata": {}
+}

@@ -1,0 +1,115 @@
+{
+  "id": "aaef9cb7-871d-5bca-b5df-8f751c2e147b",
+  "catalog": "elastic",
+  "name": "Potential Port Scanning Activity from Compromised Host",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "java",
+        "node",
+        "jsvc",
+        "dotnet",
+        "haproxy",
+        "kesl",
+        "edfbackend",
+        "longhorn-instance-manager"
+      ],
+      "raw_values": [
+        "java",
+        "node",
+        "/opt/dbtk/bin/jsvc",
+        "/usr/lib/dotnet/dotnet",
+        "/usr/sbin/haproxy",
+        "/opt/kaspersky/kesl/libexec/kesl",
+        "/usr/bin/dotnet",
+        "/usr/sap/SAPBusinessOne/EDS/bin/EDFBackend",
+        "/usr/local/bin/longhorn-instance-manager"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": "==",
+      "values": [
+        "egress"
+      ],
+      "raw_values": [
+        "egress"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python",
+        "kesl",
+        "chrome"
+      ],
+      "raw_values": [
+        "python*",
+        "/var/opt/kaspersky/kesl/*kesl",
+        "/opt/google/chrome*",
+        "/snap/*",
+        "/home/*/.local/share/JetBrains/*"
+      ]
+    }
+  ],
+  "raw_query": "from logs-endpoint.events.network-* metadata _id, _index, _version\n| mv_expand event.action\n| where\n    host.os.type == \"linux\" and\n    event.type == \"start\" and\n    event.action == \"connection_attempted\" and\n    network.direction  == \"egress\" and\n    destination.port < 32768 and\n    not (\n      cidr_match(destination.ip, \"127.0.0.0/8\", \"::1\", \"FE80::/10\", \"FF00::/8\") or\n      process.name in (\"java\", \"node\") or\n      process.name like \"python*\" or\n      process.executable in (\n        \"/opt/dbtk/bin/jsvc\", \"/usr/lib/dotnet/dotnet\", \"/usr/sbin/haproxy\", \"/opt/kaspersky/kesl/libexec/kesl\",\n        \"/usr/bin/dotnet\", \"/usr/sap/SAPBusinessOne/EDS/bin/EDFBackend\", \"/usr/local/bin/longhorn-instance-manager\"\n      ) or\n      process.executable like \"/var/opt/kaspersky/kesl/*kesl\" or\n      process.executable like \"/opt/google/chrome*\" or\n      process.executable like \"/snap/*\" or\n      process.executable like \"/home/*/.local/share/JetBrains/*\"\n    )\n| keep\n    @timestamp,\n    _id,\n    _index,\n    _version,\n    host.os.type,\n    event.type,\n    event.action,\n    network.direction,\n    destination.port,\n    process.executable,\n    process.name,\n    destination.ip,\n    source.ip,\n    agent.id,\n    host.name,\n    data_stream.dataset,\n    data_stream.namespace\n\n| stats\n    Esql.event_count = count(),\n    Esql.destination_port_count_distinct = count_distinct(destination.port),\n    Esql.agent_id_count_distinct = count_distinct(agent.id),\n    Esql.host_name_values = values(host.name),\n    Esql.agent_id_values = values(agent.id),\n    Esql.source_ip_values = values(source.ip),\n    Esql.data_stream_dataset_values = values(data_stream.dataset),\n    Esql.data_stream_namespace_values = values(data_stream.namespace)\n    by process.executable, destination.ip\n| where\n    Esql.agent_id_count_distinct == 1 and\n    Esql.destination_port_count_distinct > 100\n| sort Esql.event_count asc\n\n// Extract unique values to ECS fields for alerts exclusion\n| eval agent.id = mv_min(Esql.agent_id_values),\n       host.name = mv_min(Esql.host_name_values)\n\n| keep agent.id, host.name, process.executable, destination.ip, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_port_scanning_activity_from_compromised_host.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

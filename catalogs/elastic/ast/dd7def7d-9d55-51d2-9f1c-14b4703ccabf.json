@@ -1,0 +1,110 @@
+{
+  "id": "dd7def7d-9d55-51d2-9f1c-14b4703ccabf",
+  "catalog": "elastic",
+  "name": "Manual Memory Dumping via Proc Filesystem",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "cat",
+        "grep",
+        "tail",
+        "less",
+        "more",
+        "egrep",
+        "fgrep"
+      ],
+      "raw_values": [
+        "cat",
+        "grep",
+        "tail",
+        "less",
+        "more",
+        "egrep",
+        "fgrep"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like",
+      "values": [
+        "mem"
+      ],
+      "raw_values": [
+        "/proc/*/mem"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name in (\"cat\", \"grep\", \"tail\", \"less\", \"more\", \"egrep\", \"fgrep\") and process.command_line like \"/proc/*/mem\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_manual_memory_dumping.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

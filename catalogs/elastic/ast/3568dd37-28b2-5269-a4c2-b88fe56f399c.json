@@ -1,0 +1,80 @@
+{
+  "id": "3568dd37-28b2-5269-a4c2-b88fe56f399c",
+  "catalog": "elastic",
+  "name": "Modification of Safari Settings via Defaults Command",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "includedevelopmenu",
+        "javascript",
+        "write",
+        "com.apple.safari"
+      ],
+      "raw_values": [
+        "*IncludeDevelopMenu*",
+        "*JavaScript*",
+        "write",
+        "*com.apple.Safari*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "defaults"
+      ],
+      "raw_values": [
+        "defaults"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n  process.name == \"defaults\" and process.args like~ \"write\" and\n  process.command_line like~ \"*com.apple.Safari*\" and \n  process.command_line like~ (\"*IncludeDevelopMenu*\", \"*JavaScript*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/defense_evasion_safari_config_change.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

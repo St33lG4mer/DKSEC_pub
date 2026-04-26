@@ -1,0 +1,49 @@
+{
+  "id": "c239408a-8c62-5865-b083-f747110ecd15",
+  "catalog": "sigma",
+  "name": "proc_creation_win_aspnet_compiler_susp_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "calc.exe",
+        "notepad.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe",
+        "*\\\\notepad.exe",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Roaming\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\System32\\\\Tasks\\\\*",
+        "*:\\\\Windows\\\\Tasks\\\\*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "aspnet_compiler.exe"
+      ],
+      "raw_values": [
+        "*\\\\aspnet_compiler.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\aspnet_compiler.exe\" and ((process.executable like~ (\"*\\\\calc.exe\", \"*\\\\notepad.exe\")) or (process.executable like~ (\"*\\\\Users\\\\Public\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Roaming\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*:\\\\Windows\\\\System32\\\\Tasks\\\\*\", \"*:\\\\Windows\\\\Tasks\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_aspnet_compiler_susp_child_process.eql",
+  "metadata": {}
+}

@@ -1,0 +1,40 @@
+{
+  "id": "7eb159b9-d2b4-5032-9a40-0b6d180546f4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_wfc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wfc.exe"
+      ],
+      "raw_values": [
+        "*\\\\wfc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wfc.exe"
+      ],
+      "raw_values": [
+        "wfc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\wfc.exe\" or process.pe.original_file_name:\"wfc.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_wfc.eql",
+  "metadata": {}
+}

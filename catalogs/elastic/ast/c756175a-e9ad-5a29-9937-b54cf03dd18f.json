@@ -1,0 +1,128 @@
+{
+  "id": "c756175a-e9ad-5a29-9937-b54cf03dd18f",
+  "catalog": "elastic",
+  "name": "Execution via OpenClaw Agent",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "node",
+        "node.exe"
+      ],
+      "raw_values": [
+        "node",
+        "node.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "openclaw",
+        "moltbot",
+        "clawdbot"
+      ],
+      "raw_values": [
+        "*openclaw*",
+        "*moltbot*",
+        "*clawdbot*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "zsh",
+        "bash.exe",
+        "cmd.exe",
+        "powershell.exe",
+        "curl.exe",
+        "curl",
+        "base64",
+        "xattr",
+        "osascript",
+        "python",
+        "chmod",
+        "certutil.exe",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "bash",
+        "sh",
+        "zsh",
+        "bash.exe",
+        "cmd.exe",
+        "powershell.exe",
+        "curl.exe",
+        "curl",
+        "base64",
+        "xattr",
+        "osascript",
+        "python*",
+        "chmod",
+        "certutil.exe",
+        "rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "ip neigh show",
+        "arp -a -n -l",
+        "ip neighbor show dev wlan0",
+        "ip neighbor show dev eth0",
+        "c:---"
+      ],
+      "raw_values": [
+        "ip neigh show",
+        "arp -a -n -l",
+        "ip neighbor show dev wlan0",
+        "ip neighbor show dev eth0",
+        "arp -a | findstr /C:---"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type == \"start\" and\n  process.parent.name : (\"node\", \"node.exe\") and \n  process.parent.command_line : (\"*openclaw*\", \"*moltbot*\", \"*clawdbot*\") and\n   process.name : (\"bash\", \"sh\", \"zsh\", \"bash.exe\", \"cmd.exe\", \"powershell.exe\", \"curl.exe\", \"curl\", \"base64\", \"xattr\", \"osascript\", \"python*\", \"chmod\", \"certutil.exe\", \"rundll32.exe\") and\n   not process.args in (\n     \"ip neigh show\",\n     \"arp -a -n -l\",\n     \"ip neighbor show dev wlan0\",\n     \"ip neighbor show dev eth0\",\n     \"arp -a | findstr /C:---\"\n   )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_openclaw_agent_child_process.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: LLM",
+      "OS: Linux",
+      "OS: macOS",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

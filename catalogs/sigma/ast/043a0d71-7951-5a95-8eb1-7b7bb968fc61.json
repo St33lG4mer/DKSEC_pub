@@ -1,0 +1,17 @@
+{
+  "id": "043a0d71-7951-5a95-8eb1-7b7bb968fc61",
+  "catalog": "sigma",
+  "name": "file_access_win_susp_gpo_access_uncommon_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [],
+  "raw_query": "any where (file.path:\"\\\\*\" and (file.path:\"*\\\\sysvol\\\\*\" and file.path:\"*\\\\Policies\\\\*\")) and (not (process.executable like~ (\"*:\\\\Program Files (x86)\\\\*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\Windows\\\\explorer.exe*\", \"*:\\\\Windows\\\\system32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_access/file_access_win_susp_gpo_access_uncommon_process.eql",
+  "metadata": {}
+}

@@ -1,0 +1,96 @@
+{
+  "id": "3647e22f-bbe3-5aaf-98e9-723600955e97",
+  "catalog": "elastic",
+  "name": "Potential Account Takeover - Logon from New Source IP",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.logon.type",
+      "raw_field": "winlog.logon.type",
+      "operator": "in",
+      "values": [
+        "network",
+        "remoteinteractive"
+      ],
+      "raw_values": [
+        "Network",
+        "RemoteInteractive"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "authentication"
+      ],
+      "raw_values": [
+        "authentication"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "logged-in"
+      ],
+      "raw_values": [
+        "logged-in"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "winlog.event_id",
+      "operator": "==",
+      "values": [
+        "4624"
+      ],
+      "raw_values": [
+        "4624"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "127.0.0.1"
+      ]
+    }
+  ],
+  "raw_query": "from logs-system.security*, logs-windows.forwarded*, winlogbeat-* metadata _id, _version, _index\n| where event.category == \"authentication\" and event.action == \"logged-in\" and winlog.event_id == \"4624\" and \n        event.outcome == \"success\" and winlog.logon.type in (\"Network\", \"RemoteInteractive\") and \n\t\tsource.ip is not null and source.ip != \"127.0.0.1\" and not to_string(source.ip) like \"*::*\" and not user.name like \"*$\"\n| stats logon_count = COUNT(*), host_names = VALUES(host.name) by user.name, user.id, source.ip\n| stats \n    Esql.max_logon = MAX(logon_count),\n    Esql.min_logon = MIN(logon_count),\n    Esql.unique_host_count = COUNT_DISTINCT(host_names),\n    Esql.host_name_values = VALUES(host_names),\n    Esql.source_ip_values = VALUES(source.ip),\n    Esql.count_distinct_source_ip = COUNT_DISTINCT(source.ip) by user.name, user.id\n\n// high count of logons is often associated with service account tied to a specific source.ip, if observed in use from a new source.ip it's suspicious\n| where Esql.max_logon >= 1000 and (Esql.min_logon >= 1 and Esql.min_logon <= 5) and Esql.count_distinct_source_ip == 2 and Esql.unique_host_count >= 2\n| eval source.ip = MV_FIRST(Esql.source_ip_values), host.name = MV_FIRST(Esql.host_name_values)\n| KEEP user.name, user.id, host.name, source.ip, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_takeover_new_source_ip.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

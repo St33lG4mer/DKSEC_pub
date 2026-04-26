@@ -1,0 +1,29 @@
+{
+  "id": "a2f80f5c-d216-529f-b916-440384ceedb9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_odbcconf_uncommon_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "odbcconf.exe"
+      ],
+      "raw_values": [
+        "*\\\\odbcconf.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\odbcconf.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_odbcconf_uncommon_child_process.eql",
+  "metadata": {}
+}

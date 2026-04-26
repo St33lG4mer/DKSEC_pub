@@ -1,0 +1,40 @@
+{
+  "id": "062ea363-26c7-5038-8d4b-ea62d63bdd0e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msxsl_remote_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msxsl.exe"
+      ],
+      "raw_values": [
+        "*\\\\msxsl.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "*http*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\msxsl.exe\" and process.command_line:\"*http*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msxsl_remote_execution.eql",
+  "metadata": {}
+}

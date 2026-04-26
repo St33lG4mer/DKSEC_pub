@@ -1,0 +1,52 @@
+{
+  "id": "77442b9f-67ab-5809-be80-1a4f3886c35d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_email_exfil",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add-pssnapin",
+        "get-recipient",
+        "-expandproperty",
+        "emailaddresses",
+        "smtpaddress",
+        "-hidetableheaders"
+      ],
+      "raw_values": [
+        "*Add-PSSnapin*",
+        "*Get-Recipient*",
+        "*-ExpandProperty*",
+        "*EmailAddresses*",
+        "*SmtpAddress*",
+        "*-hidetableheaders*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.command_line:\"*Add-PSSnapin*\" and process.command_line:\"*Get-Recipient*\" and process.command_line:\"*-ExpandProperty*\" and process.command_line:\"*EmailAddresses*\" and process.command_line:\"*SmtpAddress*\" and process.command_line:\"*-hidetableheaders*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_email_exfil.eql",
+  "metadata": {}
+}

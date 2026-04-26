@@ -1,0 +1,40 @@
+{
+  "id": "502882d9-00b8-5a78-9d86-6cd9a2805a6d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mspub_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mspub.exe"
+      ],
+      "raw_values": [
+        "*\\\\MSPUB.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mspub.exe"
+      ],
+      "raw_values": [
+        "MSPUB.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\MSPUB.exe\" or process.pe.original_file_name:\"MSPUB.exe\") and (process.command_line like~ (\"*ftp://*\", \"*http://*\", \"*https://*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mspub_download.eql",
+  "metadata": {}
+}

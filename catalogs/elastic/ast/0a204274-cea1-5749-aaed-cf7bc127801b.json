@@ -1,0 +1,38 @@
+{
+  "id": "0a204274-cea1-5749-aaed-cf7bc127801b",
+  "catalog": "elastic",
+  "name": "GCP Storage Bucket Deletion",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "storage.buckets.delete"
+      ],
+      "raw_values": [
+        "storage.buckets.delete"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:\"storage.buckets.delete\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/impact_gcp_storage_bucket_deleted.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

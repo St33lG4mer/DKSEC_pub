@@ -1,0 +1,43 @@
+{
+  "id": "cee68c86-2eab-503b-ae45-8ee9ac5018f8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_apt10_cloud_hopper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shell",
+        ".log"
+      ],
+      "raw_values": [
+        "*.vbs /shell *",
+        "*csvde -f C:\\\\windows\\\\web\\\\*",
+        "*.log*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cscript.exe\" and process.command_line:\"*.vbs /shell *\") or (process.command_line:\"*csvde -f C:\\\\windows\\\\web\\\\*\" and process.command_line:\"*.log*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/TA/APT10/proc_creation_win_apt_apt10_cloud_hopper.eql",
+  "metadata": {}
+}

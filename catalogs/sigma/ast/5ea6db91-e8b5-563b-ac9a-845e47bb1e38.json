@@ -1,0 +1,33 @@
+{
+  "id": "5ea6db91-e8b5-563b-ac9a-845e47bb1e38",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_getprocess_lsass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "get-process lsas",
+        "ps lsas",
+        "gps lsas"
+      ],
+      "raw_values": [
+        "*Get-Process lsas*",
+        "*ps lsas*",
+        "*gps lsas*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*Get-Process lsas*\", \"*ps lsas*\", \"*gps lsas*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_getprocess_lsass.eql",
+  "metadata": {}
+}

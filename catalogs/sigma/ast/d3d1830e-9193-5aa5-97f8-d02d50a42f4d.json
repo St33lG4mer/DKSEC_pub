@@ -1,0 +1,51 @@
+{
+  "id": "d3d1830e-9193-5aa5-97f8-d02d50a42f4d",
+  "catalog": "sigma",
+  "name": "win_susp_ntlm_rdp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-ntlm/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-NTLM/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "8001"
+      ],
+      "raw_values": [
+        "8001"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetname",
+      "raw_field": "winlog.event_data.TargetName",
+      "operator": ":",
+      "values": [
+        "termsrv"
+      ],
+      "raw_values": [
+        "TERMSRV*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-NTLM/Operational\" and (event.code:\"8001\" and winlog.event_data.TargetName:\"TERMSRV*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/ntlm/win_susp_ntlm_rdp.eql",
+  "metadata": {}
+}

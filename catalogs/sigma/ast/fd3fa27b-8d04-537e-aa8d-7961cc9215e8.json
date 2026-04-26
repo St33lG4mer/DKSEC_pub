@@ -1,0 +1,67 @@
+{
+  "id": "fd3fa27b-8d04-537e-aa8d-7961cc9215e8",
+  "catalog": "sigma",
+  "name": "win_security_pcap_drivers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": "like~",
+      "values": [
+        "pcap",
+        "npcap",
+        "npf",
+        "nm3",
+        "ndiscap",
+        "nmnt",
+        "windivert",
+        "usbpcap",
+        "pktmon"
+      ],
+      "raw_values": [
+        "*pcap*",
+        "*npcap*",
+        "*npf*",
+        "*nm3*",
+        "*ndiscap*",
+        "*nmnt*",
+        "*windivert*",
+        "*USBPcap*",
+        "*pktmon*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (winlog.event_data.ServiceFileName like~ (\"*pcap*\", \"*npcap*\", \"*npf*\", \"*nm3*\", \"*ndiscap*\", \"*nmnt*\", \"*windivert*\", \"*USBPcap*\", \"*pktmon*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_pcap_drivers.eql",
+  "metadata": {}
+}

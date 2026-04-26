@@ -1,0 +1,53 @@
+{
+  "id": "037860c9-01e1-5994-a7d2-515ee067f2c7",
+  "catalog": "sigma",
+  "name": "registry_set_disabled_tamper_protection_on_microsoft_defender",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows defender\\\\features\\\\tamperprotection"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows Defender\\\\Features\\\\TamperProtection*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*",
+        "*\\\\MsMpEng.exe",
+        "C:\\\\Program Files\\\\Windows Defender\\\\MsMpEng.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\Microsoft\\\\Windows Defender\\\\Features\\\\TamperProtection*\" and winlog.event_data.Details:\"DWORD (0x00000000)\") and (not ((process.executable:\"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\" and process.executable:\"*\\\\MsMpEng.exe\") or process.executable:\"C:\\\\Program Files\\\\Windows Defender\\\\MsMpEng.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disabled_tamper_protection_on_microsoft_defender.eql",
+  "metadata": {}
+}

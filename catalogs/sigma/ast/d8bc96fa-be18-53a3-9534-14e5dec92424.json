@@ -1,0 +1,44 @@
+{
+  "id": "d8bc96fa-be18-53a3-9534-14e5dec92424",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_coldsteel_service_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-k msupdate",
+        "-k msupdate2",
+        "-k alg"
+      ],
+      "raw_values": [
+        "* -k msupdate",
+        "* -k msupdate2",
+        "* -k alg"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\svchost.exe\" and (process.command_line like~ (\"* -k msupdate\", \"* -k msupdate2\", \"* -k alg\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/COLDSTEEL/proc_creation_win_malware_coldsteel_service_persistence.eql",
+  "metadata": {}
+}

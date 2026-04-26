@@ -1,0 +1,115 @@
+{
+  "id": "c836d491-c9b7-50d1-91cd-453e06077353",
+  "catalog": "elastic",
+  "name": "Execution of File Written or Modified by Microsoft Office",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "exe"
+      ],
+      "raw_values": [
+        "exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "winword.exe",
+        "excel.exe",
+        "outlook.exe",
+        "powerpnt.exe",
+        "eqnedt32.exe",
+        "fltldr.exe",
+        "mspub.exe",
+        "msaccess.exe",
+        "newoutlookinstaller.exe",
+        "sharefileforoutlook-v*.exe"
+      ],
+      "raw_values": [
+        "WINWORD.EXE",
+        "EXCEL.EXE",
+        "OUTLOOK.EXE",
+        "POWERPNT.EXE",
+        "eqnedt32.exe",
+        "fltldr.exe",
+        "MSPUB.EXE",
+        "MSACCESS.EXE",
+        "NewOutlookInstaller.exe",
+        "ShareFileForOutlook-v*.exe"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": ":",
+      "values": [
+        "microsoft corporation",
+        "citrix systems, inc."
+      ],
+      "raw_values": [
+        "Microsoft Corporation",
+        "Citrix Systems, Inc."
+      ]
+    }
+  ],
+  "raw_query": "sequence with maxspan=2h\n  [file where host.os.type == \"windows\" and event.type != \"deletion\" and file.extension : \"exe\" and\n     (process.name : \"WINWORD.EXE\" or\n      process.name : \"EXCEL.EXE\" or\n      process.name : \"OUTLOOK.EXE\" or\n      process.name : \"POWERPNT.EXE\" or\n      process.name : \"eqnedt32.exe\" or\n      process.name : \"fltldr.exe\" or\n      process.name : \"MSPUB.EXE\" or\n      process.name : \"MSACCESS.EXE\")\n  ] by host.id, file.path\n  [process where host.os.type == \"windows\" and event.type == \"start\" and \n   not (process.name : \"NewOutlookInstaller.exe\" and process.code_signature.subject_name : \"Microsoft Corporation\" and process.code_signature.trusted == true) and \n   not (process.name : \"ShareFileForOutlook-v*.exe\" and process.code_signature.subject_name : \"Citrix Systems, Inc.\" and process.code_signature.trusted == true)\n  ] by host.id, process.executable\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_ms_office_written_file.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

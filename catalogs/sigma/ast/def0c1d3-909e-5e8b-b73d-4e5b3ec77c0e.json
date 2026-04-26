@@ -1,0 +1,33 @@
+{
+  "id": "def0c1d3-909e-5e8b-b73d-4e5b3ec77c0e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_fin7_powertrash_lateral_movement",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "admin$",
+        "-ex bypass -noprof -nolog -nonint -f"
+      ],
+      "raw_values": [
+        "*-noni -nop -exe bypass -f \\\\\\\\*",
+        "*ADMIN$*",
+        "*-ex bypass -noprof -nolog -nonint -f*",
+        "*C:\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*-noni -nop -exe bypass -f \\\\\\\\*\" and process.command_line:\"*ADMIN$*\") or (process.command_line:\"*-ex bypass -noprof -nolog -nonint -f*\" and process.command_line:\"*C:\\\\Windows\\\\Temp\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/FIN7/proc_creation_win_apt_fin7_powertrash_lateral_movement.eql",
+  "metadata": {}
+}

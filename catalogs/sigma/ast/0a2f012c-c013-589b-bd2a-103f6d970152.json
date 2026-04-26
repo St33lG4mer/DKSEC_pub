@@ -1,0 +1,51 @@
+{
+  "id": "0a2f012c-c013-589b-bd2a-103f6d970152",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_base64_reflection_assembly_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "wwbsaguazgbsaguaywb0agkabwbuac4aqqbzahmazqbtagiabab5af0aoga6aewabwbhagqaka",
+        "saugblagyabablagmadabpag8abgauaeeacwbzaguabqbiagwaeqbdadoaogbmag8ayqbkacga",
+        "bafiazqbmagwazqbjahqaaqbvag4algbbahmacwblag0aygbsahkaxqa6adoatabvageazaaoa",
+        "afsacgblagyabablagmadabpag8abgauageacwbzaguabqbiagwaeqbdadoaogaoaciatabvageazaaiac",
+        "bbahiazqbmagwazqbjahqaaqbvag4algbhahmacwblag0aygbsahkaxqa6adoakaaiaewabwbhagqaigap",
+        "awwbyaguazgbsaguaywb0agkabwbuac4ayqbzahmazqbtagiabab5af0aoga6acgaigbmag8ayqbkaciak",
+        "wwbsaguazgbsaguaywb0agkabwbuac4aqqbzahmazqbtagiabab5af0aoga6acgaigbmag8ayqbkaciakq",
+        "saugblagyabablagmadabpag8abgauaeeacwbzaguabqbiagwaeqbdadoaogaoaciatabvageazaaiacka",
+        "bafiazqbmagwazqbjahqaaqbvag4algbbahmacwblag0aygbsahkaxqa6adoakaaiaewabwbhagqaigapa",
+        "wwbyaguazgbsaguaywb0agkabwbuac4ayqbzahmazqbtagiabab5af0aoga6aewabwbhagqaka",
+        "sacgblagyabablagmadabpag8abgauageacwbzaguabqbiagwaeqbdadoaogbmag8ayqbkacga",
+        "bahiazqbmagwazqbjahqaaqbvag4algbhahmacwblag0aygbsahkaxqa6adoatabvageazaaoa"
+      ],
+      "raw_values": [
+        "*WwBSAGUAZgBsAGUAYwB0AGkAbwBuAC4AQQBzAHMAZQBtAGIAbAB5AF0AOgA6AEwAbwBhAGQAKA*",
+        "*sAUgBlAGYAbABlAGMAdABpAG8AbgAuAEEAcwBzAGUAbQBiAGwAeQBdADoAOgBMAG8AYQBkACgA*",
+        "*bAFIAZQBmAGwAZQBjAHQAaQBvAG4ALgBBAHMAcwBlAG0AYgBsAHkAXQA6ADoATABvAGEAZAAoA*",
+        "*AFsAcgBlAGYAbABlAGMAdABpAG8AbgAuAGEAcwBzAGUAbQBiAGwAeQBdADoAOgAoACIATABvAGEAZAAiAC*",
+        "*BbAHIAZQBmAGwAZQBjAHQAaQBvAG4ALgBhAHMAcwBlAG0AYgBsAHkAXQA6ADoAKAAiAEwAbwBhAGQAIgAp*",
+        "*AWwByAGUAZgBsAGUAYwB0AGkAbwBuAC4AYQBzAHMAZQBtAGIAbAB5AF0AOgA6ACgAIgBMAG8AYQBkACIAK*",
+        "*WwBSAGUAZgBsAGUAYwB0AGkAbwBuAC4AQQBzAHMAZQBtAGIAbAB5AF0AOgA6ACgAIgBMAG8AYQBkACIAKQ*",
+        "*sAUgBlAGYAbABlAGMAdABpAG8AbgAuAEEAcwBzAGUAbQBiAGwAeQBdADoAOgAoACIATABvAGEAZAAiACkA*",
+        "*bAFIAZQBmAGwAZQBjAHQAaQBvAG4ALgBBAHMAcwBlAG0AYgBsAHkAXQA6ADoAKAAiAEwAbwBhAGQAIgApA*",
+        "*WwByAGUAZgBsAGUAYwB0AGkAbwBuAC4AYQBzAHMAZQBtAGIAbAB5AF0AOgA6AEwAbwBhAGQAKA*",
+        "*sAcgBlAGYAbABlAGMAdABpAG8AbgAuAGEAcwBzAGUAbQBiAGwAeQBdADoAOgBMAG8AYQBkACgA*",
+        "*bAHIAZQBmAGwAZQBjAHQAaQBvAG4ALgBhAHMAcwBlAG0AYgBsAHkAXQA6ADoATABvAGEAZAAoA*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*WwBSAGUAZgBsAGUAYwB0AGkAbwBuAC4AQQBzAHMAZQBtAGIAbAB5AF0AOgA6AEwAbwBhAGQAKA*\", \"*sAUgBlAGYAbABlAGMAdABpAG8AbgAuAEEAcwBzAGUAbQBiAGwAeQBdADoAOgBMAG8AYQBkACgA*\", \"*bAFIAZQBmAGwAZQBjAHQAaQBvAG4ALgBBAHMAcwBlAG0AYgBsAHkAXQA6ADoATABvAGEAZAAoA*\", \"*AFsAcgBlAGYAbABlAGMAdABpAG8AbgAuAGEAcwBzAGUAbQBiAGwAeQBdADoAOgAoACIATABvAGEAZAAiAC*\", \"*BbAHIAZQBmAGwAZQBjAHQAaQBvAG4ALgBhAHMAcwBlAG0AYgBsAHkAXQA6ADoAKAAiAEwAbwBhAGQAIgAp*\", \"*AWwByAGUAZgBsAGUAYwB0AGkAbwBuAC4AYQBzAHMAZQBtAGIAbAB5AF0AOgA6ACgAIgBMAG8AYQBkACIAK*\", \"*WwBSAGUAZgBsAGUAYwB0AGkAbwBuAC4AQQBzAHMAZQBtAGIAbAB5AF0AOgA6ACgAIgBMAG8AYQBkACIAKQ*\", \"*sAUgBlAGYAbABlAGMAdABpAG8AbgAuAEEAcwBzAGUAbQBiAGwAeQBdADoAOgAoACIATABvAGEAZAAiACkA*\", \"*bAFIAZQBmAGwAZQBjAHQAaQBvAG4ALgBBAHMAcwBlAG0AYgBsAHkAXQA6ADoAKAAiAEwAbwBhAGQAIgApA*\", \"*WwByAGUAZgBsAGUAYwB0AGkAbwBuAC4AYQBzAHMAZQBtAGIAbAB5AF0AOgA6AEwAbwBhAGQAKA*\", \"*sAcgBlAGYAbABlAGMAdABpAG8AbgAuAGEAcwBzAGUAbQBiAGwAeQBdADoAOgBMAG8AYQBkACgA*\", \"*bAHIAZQBmAGwAZQBjAHQAaQBvAG4ALgBhAHMAcwBlAG0AYgBsAHkAXQA6ADoATABvAGEAZAAoA*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_base64_reflection_assembly_load.eql",
+  "metadata": {}
+}

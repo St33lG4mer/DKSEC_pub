@@ -1,0 +1,37 @@
+{
+  "id": "ec9f1f59-ee21-5af4-8f98-ebfe0220b770",
+  "catalog": "elastic",
+  "name": "Okta FastPass Phishing Detection",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "okta.outcome.reason",
+      "raw_field": "okta.outcome.reason",
+      "operator": ":",
+      "values": [
+        "fastpass declined phishing attempt"
+      ],
+      "raw_values": [
+        "FastPass declined phishing attempt"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:okta.system and event.category:authentication and\n  okta.event_type:user.authentication.auth_via_mfa and event.outcome:failure and okta.outcome.reason:\"FastPass declined phishing attempt\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/initial_access_okta_fastpass_phishing.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Tactic: Initial Access",
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

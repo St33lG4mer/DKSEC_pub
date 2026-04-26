@@ -1,0 +1,29 @@
+{
+  "id": "7e3691ae-87e1-5f6b-b8e5-e00c8d599027",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_btunnels",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        ".btunnel.co.in"
+      ],
+      "raw_values": [
+        "*.btunnel.co.in"
+      ]
+    }
+  ],
+  "raw_query": "any where network.direction:\"true\" and destination.domain:\"*.btunnel.co.in\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_btunnels.eql",
+  "metadata": {}
+}

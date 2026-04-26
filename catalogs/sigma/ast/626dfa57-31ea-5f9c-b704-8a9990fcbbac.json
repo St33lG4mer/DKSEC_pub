@@ -1,0 +1,31 @@
+{
+  "id": "626dfa57-31ea-5f9c-b704-8a9990fcbbac",
+  "catalog": "sigma",
+  "name": "zeek_dns_nkn",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        "seed",
+        ".nkn.org"
+      ],
+      "raw_values": [
+        "*seed*",
+        "*.nkn.org*"
+      ]
+    }
+  ],
+  "raw_query": "any where query:\"*seed*\" and query:\"*.nkn.org*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/network/zeek/zeek_dns_nkn.eql",
+  "metadata": {}
+}

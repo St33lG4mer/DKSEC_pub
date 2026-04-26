@@ -1,0 +1,63 @@
+{
+  "id": "1818384a-54d4-551a-931f-f057f3cb0be9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_tracker",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "*\\\\Msbuild\\\\Current\\\\Bin\\\\MSBuild.exe",
+        "*\\\\Msbuild\\\\Current\\\\Bin\\\\amd64\\\\MSBuild.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tracker.exe"
+      ],
+      "raw_values": [
+        "*\\\\tracker.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "tracker"
+      ],
+      "raw_values": [
+        "Tracker"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "errorreport:prompt"
+      ],
+      "raw_values": [
+        "* /ERRORREPORT:PROMPT *"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\tracker.exe\" or process.pe.description:\"Tracker\") and (process.command_line like~ (\"* /d *\", \"* /c *\"))) and (not (process.command_line:\"* /ERRORREPORT:PROMPT *\" or (process.parent.executable like~ (\"*\\\\Msbuild\\\\Current\\\\Bin\\\\MSBuild.exe\", \"*\\\\Msbuild\\\\Current\\\\Bin\\\\amd64\\\\MSBuild.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_tracker.eql",
+  "metadata": {}
+}

@@ -1,0 +1,53 @@
+{
+  "id": "9711b428-cd40-5c87-9bef-fa139b1c04f9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_chisel",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "exe client",
+        "exe server",
+        "-socks5",
+        "-reverse",
+        ":127.0.0.1:",
+        "-tls-skip-verify",
+        ":socks"
+      ],
+      "raw_values": [
+        "*exe client *",
+        "*exe server *",
+        "*-socks5*",
+        "*-reverse*",
+        "* r:*",
+        "*:127.0.0.1:*",
+        "*-tls-skip-verify *",
+        "*:socks*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "chisel.exe"
+      ],
+      "raw_values": [
+        "*\\\\chisel.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\chisel.exe\" or ((process.command_line like~ (\"*exe client *\", \"*exe server *\")) and (process.command_line like~ (\"*-socks5*\", \"*-reverse*\", \"* r:*\", \"*:127.0.0.1:*\", \"*-tls-skip-verify *\", \"*:socks*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_chisel.eql",
+  "metadata": {}
+}

@@ -1,0 +1,39 @@
+{
+  "id": "6684d5cf-d528-58b9-ab45-6b731da72181",
+  "catalog": "sigma",
+  "name": "file_event_win_office_macro_files_created",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".docm",
+        ".dotm",
+        ".xlsm",
+        ".xltm",
+        ".potm",
+        ".pptm"
+      ],
+      "raw_values": [
+        "*.docm",
+        "*.dotm",
+        "*.xlsm",
+        "*.xltm",
+        "*.potm",
+        "*.pptm"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*.docm\", \"*.dotm\", \"*.xlsm\", \"*.xltm\", \"*.potm\", \"*.pptm\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_macro_files_created.eql",
+  "metadata": {}
+}

@@ -1,0 +1,40 @@
+{
+  "id": "6281325b-0b65-5163-ac84-5fab10fe45c9",
+  "catalog": "sigma",
+  "name": "registry_set_bypass_uac_using_silentcleanup_task",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\environment\\\\windir"
+      ],
+      "raw_values": [
+        "*\\\\Environment\\\\windir"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "%systemroot%"
+      ],
+      "raw_values": [
+        "%SystemRoot%"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Environment\\\\windir\" and (not winlog.event_data.Details:\"%SystemRoot%\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_bypass_uac_using_silentcleanup_task.eql",
+  "metadata": {}
+}

@@ -1,0 +1,153 @@
+{
+  "id": "6e6c0556-4834-59d7-ad28-65b82112246b",
+  "catalog": "elastic",
+  "name": "Shared Object Created by Previously Unknown Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "creation",
+        "file_create_event"
+      ],
+      "raw_values": [
+        "creation",
+        "file_create_event"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "dockerd",
+        "dpkg",
+        "rpm",
+        "snapd",
+        "yum",
+        "vmis-launcher",
+        "pacman",
+        "apt-get",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "unattended-upgrade",
+        "apk",
+        "snap-update-ns",
+        "install",
+        "exe",
+        "systemd",
+        "root",
+        "sshd",
+        "pip",
+        "jlink",
+        "update-alternatives",
+        "crio",
+        "packagekitd",
+        "executor",
+        "buildah",
+        "microdnf",
+        "yum-cron",
+        "cmk-update-agent",
+        "pamac-daemon",
+        "dnf5",
+        "dracut-install",
+        "crond",
+        "qemu-aarch64-static",
+        "nvidia-installer",
+        "cmake",
+        "gdm",
+        "fortify-scap-plugin",
+        "qemu-aarch64",
+        "dnf_install",
+        "vmware-install.pl",
+        "ssm-agent-worker"
+      ],
+      "raw_values": [
+        "dockerd",
+        "dpkg",
+        "rpm",
+        "snapd",
+        "yum",
+        "vmis-launcher",
+        "pacman",
+        "apt-get",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "unattended-upgrade",
+        "apk",
+        "snap-update-ns",
+        "install",
+        "exe",
+        "systemd",
+        "root",
+        "sshd",
+        "pip",
+        "jlink",
+        "update-alternatives",
+        "crio",
+        "packagekitd",
+        "/",
+        "/kaniko/executor",
+        "/usr/bin/buildah",
+        "/usr/bin/microdnf",
+        "/usr/sbin/yum-cron",
+        "/usr/lib/check_mk_agent/plugins/3600/cmk-update-agent",
+        "/usr/bin/pamac-daemon",
+        "/usr/bin/dnf5",
+        "3600/cmk-update-agent",
+        "/usr/lib/dracut/dracut-install",
+        "/usr/bin/dockerd",
+        "/usr/sbin/crond",
+        "./usr/bin/qemu-aarch64-static",
+        "/usr/bin/nvidia-installer",
+        "./nvidia-installer",
+        "/usr/bin/cmake",
+        "/usr/sbin/gdm",
+        "/opt/ITSPlatform/plugin/scap/fortify-scap-plugin",
+        "./usr/bin/qemu-aarch64",
+        "/usr/local/bin/cmake",
+        "/usr/lib/snapd/snap-update-ns",
+        "/sbin/yum-cron",
+        "/usr/local/psa/bin/dnf_install",
+        "vmware-install.pl",
+        "ssm-agent-worker"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    }
+  ],
+  "raw_query": "event.category:file and host.os.type:\"linux\" and event.action:(\"creation\" or \"file_create_event\") and\n(file.extension:\"so\" or file.name:*.so.*) and\nfile.path:(\n  /dev/shm/* or /usr/lib/* or /usr/lib64/* or /usr/local/lib/* or /usr/local/lib64/* or /lib/x86_64-linux-gnu/* or\n  /usr/lib/x86_64-linux-gnu/* or /lib/i386-linux-gnu/* or /usr/lib/i386-linux-gnu/* or /lib/* or /lib64/*\n) and not (\n  process.name:(\n    \"dockerd\" or \"dpkg\" or \"rpm\" or \"snapd\" or \"yum\" or \"vmis-launcher\" or \"pacman\" or \"apt-get\" or \"dnf\" or \"podman\" or\n    platform-python* or \"dnf-automatic\" or \"unattended-upgrade\" or \"apk\" or \"snap-update-ns\" or \"install\" or \"exe\" or\n    \"systemd\" or \"root\" or \"sshd\" or \"pip\" or \"jlink\" or python* or \"update-alternatives\" or pip* or \"crio\" or \"packagekitd\"\n  ) or \n  (process.name:\"vmware-install.pl\" and file.path:/usr/lib/vmware-tools/*) or\n  (process.name:\"ssm-agent-worker\" and file.path:/usr/lib/jvm/java*) or \n  process.executable : (\n    /dev/fd/* or \"/\" or \"/kaniko/executor\" or \"/usr/bin/buildah\" or \"/usr/bin/microdnf\" or \"/usr/sbin/yum-cron\" or\n    \"/usr/lib/check_mk_agent/plugins/3600/cmk-update-agent\" or \"/usr/bin/pamac-daemon\" or \"/usr/bin/dnf5\" or\n    \"3600/cmk-update-agent\" or \"/usr/lib/dracut/dracut-install\" or \"/usr/bin/dockerd\" or \"/usr/sbin/crond\" or\n    \"./usr/bin/qemu-aarch64-static\" or \"/usr/bin/nvidia-installer\" or \"./nvidia-installer\" or \"/usr/bin/cmake\" or\n    /var/lib/docker/overlay2/* or \"/usr/sbin/gdm\" or \"/opt/ITSPlatform/plugin/scap/fortify-scap-plugin\" or\n    /tmp/makeself* or /tmp/selfgz* or \"./usr/bin/qemu-aarch64\" or \"/usr/local/bin/cmake\" or /opt/lpruitt/tmp/selfgz* or\n    \"/usr/lib/snapd/snap-update-ns\" or \"/sbin/yum-cron\" or \"/usr/local/psa/bin/dnf_install\" or /opt/lmanteuffel/useful/tmp/makeself*\n  ) or\n  file.name:libnvidia*\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_shared_object_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

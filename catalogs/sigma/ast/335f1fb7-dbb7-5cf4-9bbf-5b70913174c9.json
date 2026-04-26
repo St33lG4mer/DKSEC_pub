@@ -1,0 +1,56 @@
+{
+  "id": "335f1fb7-dbb7-5cf4-9bbf-5b70913174c9",
+  "catalog": "sigma",
+  "name": "image_load_office_vbadll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "excel.exe",
+        "mspub.exe",
+        "onenote.exe",
+        "onenoteim.exe",
+        "outlook.exe",
+        "powerpnt.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe",
+        "*\\\\mspub.exe",
+        "*\\\\onenote.exe",
+        "*\\\\onenoteim.exe",
+        "*\\\\outlook.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "vbe7.dll",
+        "vbeui.dll",
+        "vbe7intl.dll"
+      ],
+      "raw_values": [
+        "*\\\\VBE7.DLL",
+        "*\\\\VBEUI.DLL",
+        "*\\\\VBE7INTL.DLL"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\excel.exe\", \"*\\\\mspub.exe\", \"*\\\\onenote.exe\", \"*\\\\onenoteim.exe\", \"*\\\\outlook.exe\", \"*\\\\powerpnt.exe\", \"*\\\\winword.exe\")) and (file.path like~ (\"*\\\\VBE7.DLL\", \"*\\\\VBEUI.DLL\", \"*\\\\VBE7INTL.DLL\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_office_vbadll_load.eql",
+  "metadata": {}
+}

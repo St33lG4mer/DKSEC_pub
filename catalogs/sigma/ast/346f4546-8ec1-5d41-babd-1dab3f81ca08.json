@@ -1,0 +1,71 @@
+{
+  "id": "346f4546-8ec1-5d41-babd-1dab3f81ca08",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rdrleakdiag_process_dumping",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-memdmp",
+        "memdmp",
+        "–memdmp",
+        "—memdmp",
+        "―memdmp",
+        "fullmemdmp"
+      ],
+      "raw_values": [
+        "*-memdmp*",
+        "*/memdmp*",
+        "*–memdmp*",
+        "*—memdmp*",
+        "*―memdmp*",
+        "*fullmemdmp*",
+        "* -o *",
+        "* /o *",
+        "* –o *",
+        "* —o *",
+        "* ―o *",
+        "* -p *",
+        "* /p *",
+        "* –p *",
+        "* —p *",
+        "* ―p *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rdrleakdiag.exe"
+      ],
+      "raw_values": [
+        "*\\\\rdrleakdiag.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rdrleakdiag.exe"
+      ],
+      "raw_values": [
+        "RdrLeakDiag.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\rdrleakdiag.exe\" or process.pe.original_file_name:\"RdrLeakDiag.exe\") and (process.command_line like~ (\"*-memdmp*\", \"*/memdmp*\", \"*–memdmp*\", \"*—memdmp*\", \"*―memdmp*\") or process.command_line like~ (\"*fullmemdmp*\")) and (process.command_line like~ (\"* -o *\", \"* /o *\", \"* –o *\", \"* —o *\", \"* ―o *\") or process.command_line like~ (\"* -p *\", \"* /p *\", \"* –p *\", \"* —p *\", \"* ―p *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rdrleakdiag_process_dumping.eql",
+  "metadata": {}
+}

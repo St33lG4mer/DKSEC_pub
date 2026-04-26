@@ -1,0 +1,115 @@
+{
+  "id": "ea5c91d4-77d3-5a67-98c1-ce87439b96fa",
+  "catalog": "elastic",
+  "name": "Clearing Windows Event Logs",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "e:false",
+        "clear-log",
+        "clear-eventlog"
+      ],
+      "raw_values": [
+        "/e:false",
+        "cl",
+        "clear-log",
+        "Clear-EventLog"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "wevtutil.exe"
+      ],
+      "raw_values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "wevtutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "in",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll",
+        "powershell_ise.EXE"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "wevtutil.exe"
+      ],
+      "raw_values": [
+        "wevtutil.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n(\n  (\n    (process.name : \"wevtutil.exe\" or ?process.pe.original_file_name == \"wevtutil.exe\") and\n    process.args : (\"/e:false\", \"cl\", \"clear-log\")\n  ) or\n  (\n    (\n      process.name : (\"powershell.exe\", \"pwsh.exe\", \"powershell_ise.exe\") or\n      ?process.pe.original_file_name in (\"PowerShell.EXE\", \"pwsh.dll\", \"powershell_ise.EXE\")\n    ) and\n    process.args : \"Clear-EventLog\"\n  )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_clearing_windows_event_logs.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "id": "7149a69b-612f-5d6f-ba26-96050c862071",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_rcedit_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rcedit-x64.exe",
+        "rcedit-x86.exe"
+      ],
+      "raw_values": [
+        "*\\\\rcedit-x64.exe",
+        "*\\\\rcedit-x86.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "originalfilename",
+        "companyname",
+        "filedescription",
+        "productname",
+        "productversion",
+        "legalcopyright"
+      ],
+      "raw_values": [
+        "*OriginalFileName*",
+        "*CompanyName*",
+        "*FileDescription*",
+        "*ProductName*",
+        "*ProductVersion*",
+        "*LegalCopyright*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "edit resources of exe"
+      ],
+      "raw_values": [
+        "Edit resources of exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "rcedit"
+      ],
+      "raw_values": [
+        "rcedit"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--set-"
+      ],
+      "raw_values": [
+        "*--set-*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\rcedit-x64.exe\", \"*\\\\rcedit-x86.exe\")) or process.pe.description:\"Edit resources of exe\" or process.pe.product:\"rcedit\") and process.command_line:\"*--set-*\" and (process.command_line like~ (\"*OriginalFileName*\", \"*CompanyName*\", \"*FileDescription*\", \"*ProductName*\", \"*ProductVersion*\", \"*LegalCopyright*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_rcedit_execution.eql",
+  "metadata": {}
+}

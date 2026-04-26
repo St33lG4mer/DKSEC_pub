@@ -1,0 +1,73 @@
+{
+  "id": "99ac3848-824e-5851-9274-656e46562ccc",
+  "catalog": "elastic",
+  "name": "AWS DynamoDB Table Exported to S3",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "dynamodb.amazonaws.com"
+      ],
+      "raw_values": [
+        "dynamodb.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exporttabletopointintime"
+      ],
+      "raw_values": [
+        "ExportTableToPointInTime"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"dynamodb.amazonaws.com\"\n    and event.action: \"ExportTableToPointInTime\"\n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/exfiltration_dynamodb_table_exported_to_s3.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS DynamoDB",
+      "Resources: Investigation Guide",
+      "Use Case: Threat Detection",
+      "Tactic: Exfiltration"
+    ]
+  }
+}

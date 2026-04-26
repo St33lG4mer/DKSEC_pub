@@ -1,0 +1,111 @@
+{
+  "id": "b9699f47-c9f4-5644-b3c9-21f14c648d5b",
+  "catalog": "elastic",
+  "name": "File Transfer or Listener Established via Netcat",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "-*l",
+        "-*p",
+        "-*e"
+      ],
+      "raw_values": [
+        "-*l*",
+        "-*p*",
+        "-*e*",
+        ">",
+        "<",
+        "|"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "ncat",
+        "netcat",
+        "netcat.openbsd",
+        "netcat.traditional"
+      ],
+      "raw_values": [
+        "nc",
+        "ncat",
+        "netcat",
+        "netcat.openbsd",
+        "netcat.traditional"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name in (\"nc\",\"ncat\",\"netcat\",\"netcat.openbsd\",\"netcat.traditional\") and\nprocess.args like~ (\n  /* bind shell to specific port or listener */\n  \"-*l*\",\"-*p*\",\n  /* reverse shell to command-line interpreter used for command execution */\n  \"-*e*\",\n  /* file transfer via stdout/pipe */\n  \">\",\"<\", \"|\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_file_transfer_or_listener_established_via_netcat.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

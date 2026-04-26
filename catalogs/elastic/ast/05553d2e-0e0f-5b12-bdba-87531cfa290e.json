@@ -1,0 +1,25 @@
+{
+  "id": "05553d2e-0e0f-5b12-bdba-87531cfa290e",
+  "catalog": "elastic",
+  "name": "Process Injection - Detected - Elastic Endgame",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind:alert and event.module:endgame and endgame.metadata.type:detection and (event.action:kernel_shellcode_event or endgame.event_subtype_full:kernel_shellcode_event)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/privilege_escalation_endgame_process_injection_detected.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Data Source: Elastic Endgame",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

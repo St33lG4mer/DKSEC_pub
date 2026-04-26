@@ -1,0 +1,89 @@
+{
+  "id": "916297f0-965a-5a81-bfbf-d7fdbd98e082",
+  "catalog": "sigma",
+  "name": "win_system_susp_service_installation_script",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": "like~",
+      "values": [
+        "cscript",
+        "mshta",
+        "powershell",
+        "pwsh",
+        "regsvr32",
+        "rundll32",
+        "wscript"
+      ],
+      "raw_values": [
+        "* -c *",
+        "* /c *",
+        "* –c *",
+        "* —c *",
+        "* ―c *",
+        "* -r *",
+        "* /r *",
+        "* –r *",
+        "* —r *",
+        "* ―r *",
+        "* -k *",
+        "* /k *",
+        "* –k *",
+        "* —k *",
+        "* ―k *",
+        "*cscript*",
+        "*mshta*",
+        "*powershell*",
+        "*pwsh*",
+        "*regsvr32*",
+        "*rundll32*",
+        "*wscript*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and ((winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\") and (winlog.event_data.ImagePath like~ (\"* -c *\", \"* /c *\", \"* –c *\", \"* —c *\", \"* ―c *\") or winlog.event_data.ImagePath like~ (\"* -r *\", \"* /r *\", \"* –r *\", \"* —r *\", \"* ―r *\") or winlog.event_data.ImagePath like~ (\"* -k *\", \"* /k *\", \"* –k *\", \"* —k *\", \"* ―k *\")) and (winlog.event_data.ImagePath like~ (\"*cscript*\", \"*mshta*\", \"*powershell*\", \"*pwsh*\", \"*regsvr32*\", \"*rundll32*\", \"*wscript*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_susp_service_installation_script.eql",
+  "metadata": {}
+}

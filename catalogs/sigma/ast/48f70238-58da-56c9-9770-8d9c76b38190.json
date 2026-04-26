@@ -1,0 +1,30 @@
+{
+  "id": "48f70238-58da-56c9-9770-8d9c76b38190",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dll_sideload_vmware_xfer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmwarexferlogs.exe"
+      ],
+      "raw_values": [
+        "*\\\\VMwareXferlogs.exe",
+        "C:\\\\Program Files\\\\VMware\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\VMwareXferlogs.exe\" and (not process.executable:\"C:\\\\Program Files\\\\VMware\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dll_sideload_vmware_xfer.eql",
+  "metadata": {}
+}

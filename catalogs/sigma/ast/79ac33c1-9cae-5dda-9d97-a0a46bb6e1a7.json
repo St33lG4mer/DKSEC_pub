@@ -1,0 +1,29 @@
+{
+  "id": "79ac33c1-9cae-5dda-9d97-a0a46bb6e1a7",
+  "catalog": "sigma",
+  "name": "pipe_created_powershell_execution_pipe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "pshost"
+      ],
+      "raw_values": [
+        "\\\\PSHost*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.name:\"\\\\PSHost*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_powershell_execution_pipe.eql",
+  "metadata": {}
+}

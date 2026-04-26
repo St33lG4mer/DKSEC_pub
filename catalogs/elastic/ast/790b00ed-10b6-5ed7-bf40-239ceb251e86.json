@@ -1,0 +1,106 @@
+{
+  "id": "790b00ed-10b6-5ed7-bf40-239ceb251e86",
+  "catalog": "elastic",
+  "name": "AWS Secrets Manager Rapid Secrets Retrieval",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user_agent.name",
+      "raw_field": "user_agent.name",
+      "operator": ":",
+      "values": [
+        "chrome",
+        "firefox",
+        "safari",
+        "edge",
+        "brave",
+        "opera"
+      ],
+      "raw_values": [
+        "Chrome",
+        "Firefox",
+        "Safari",
+        "Edge",
+        "Brave",
+        "Opera"
+      ]
+    },
+    {
+      "field": "source.address",
+      "raw_field": "source.address",
+      "operator": ":",
+      "values": [
+        "kafka.amazonaws.com",
+        "apidestinations.events.amazonaws.com"
+      ],
+      "raw_values": [
+        "kafka.amazonaws.com",
+        "apidestinations.events.amazonaws.com"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "secretsmanager.amazonaws.com"
+      ],
+      "raw_values": [
+        "secretsmanager.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "getsecretvalue"
+      ],
+      "raw_values": [
+        "GetSecretValue"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" \n    and event.provider: \"secretsmanager.amazonaws.com\" \n    and event.action: \"GetSecretValue\" \n    and event.outcome: \"success\" \n    and not (\n        user_agent.name: (\"Chrome\" or \"Firefox\" or \"Safari\" or \"Edge\" or \"Brave\" or \"Opera\") \n        or source.address: (\"kafka.amazonaws.com\" or \"apidestinations.events.amazonaws.com\")\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/credential_access_rapid_secret_retrieval_attempts_from_secretsmanager.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Secrets Manager",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

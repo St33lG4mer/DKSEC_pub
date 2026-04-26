@@ -1,0 +1,41 @@
+{
+  "id": "2824ea7d-d738-5502-817a-9451cdb34cc1",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_ngrok_tunnel",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        "tunnel.us.ngrok.com",
+        "tunnel.eu.ngrok.com",
+        "tunnel.ap.ngrok.com",
+        "tunnel.au.ngrok.com",
+        "tunnel.sa.ngrok.com",
+        "tunnel.jp.ngrok.com",
+        "tunnel.in.ngrok.com"
+      ],
+      "raw_values": [
+        "*tunnel.us.ngrok.com*",
+        "*tunnel.eu.ngrok.com*",
+        "*tunnel.ap.ngrok.com*",
+        "*tunnel.au.ngrok.com*",
+        "*tunnel.sa.ngrok.com*",
+        "*tunnel.jp.ngrok.com*",
+        "*tunnel.in.ngrok.com*"
+      ]
+    }
+  ],
+  "raw_query": "any where destination.domain like~ (\"*tunnel.us.ngrok.com*\", \"*tunnel.eu.ngrok.com*\", \"*tunnel.ap.ngrok.com*\", \"*tunnel.au.ngrok.com*\", \"*tunnel.sa.ngrok.com*\", \"*tunnel.jp.ngrok.com*\", \"*tunnel.in.ngrok.com*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_ngrok_tunnel.eql",
+  "metadata": {}
+}

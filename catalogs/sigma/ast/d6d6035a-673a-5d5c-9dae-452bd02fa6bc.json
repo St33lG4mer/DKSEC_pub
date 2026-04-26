@@ -1,0 +1,56 @@
+{
+  "id": "d6d6035a-673a-5d5c-9dae-452bd02fa6bc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_iis_susp_module_registration",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "w3wp.exe"
+      ],
+      "raw_values": [
+        "*\\\\w3wp.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "appcmd.exe add module",
+        "system.enterpriseservices.internal.publish",
+        "gacutil"
+      ],
+      "raw_values": [
+        "*appcmd.exe add module*",
+        "* system.enterpriseservices.internal.publish*",
+        "*gacutil*",
+        "* /I*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\w3wp.exe\" and (process.command_line:\"*appcmd.exe add module*\" or (process.command_line:\"* system.enterpriseservices.internal.publish*\" and process.executable:\"*\\\\powershell.exe\") or (process.command_line:\"*gacutil*\" and process.command_line:\"* /I*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_iis_susp_module_registration.eql",
+  "metadata": {}
+}

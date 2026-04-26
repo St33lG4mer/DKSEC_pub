@@ -1,0 +1,28 @@
+{
+  "id": "ed4bd8cb-13e8-58ab-848c-d6a3987297bb",
+  "catalog": "elastic",
+  "name": "AWS Lambda Layer Added to Existing Function",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail\n    and event.provider: lambda.amazonaws.com\n    and event.outcome: success\n    and event.action: (PublishLayerVersion* or UpdateFunctionConfiguration*)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/execution_lambda_external_layer_added_to_function.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Lambda",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

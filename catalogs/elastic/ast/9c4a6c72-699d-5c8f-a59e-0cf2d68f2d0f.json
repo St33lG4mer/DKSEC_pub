@@ -1,0 +1,139 @@
+{
+  "id": "9c4a6c72-699d-5c8f-a59e-0cf2d68f2d0f",
+  "catalog": "elastic",
+  "name": "Polkit Version Discovery",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "perl",
+        "topiad"
+      ],
+      "raw_values": [
+        "/usr/local/cpanel/3rdparty/perl/*/bin/perl",
+        "/usr/share/vicarius/topiad"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "process_started",
+        "executed"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "process_started",
+        "executed"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "in",
+      "values": [
+        "/opt/msp-agent",
+        "/opt/cybercnsagent"
+      ],
+      "raw_values": [
+        "/opt/msp-agent",
+        "/opt/CyberCNSAgent"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "dnf",
+        "rpm",
+        "apt",
+        "pkaction"
+      ],
+      "raw_values": [
+        "dnf",
+        "rpm",
+        "apt",
+        "pkaction"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "dnf",
+        "info",
+        "polkit",
+        "show",
+        "policykit-1",
+        "--version"
+      ],
+      "raw_values": [
+        "dnf",
+        "info",
+        "polkit",
+        "show",
+        "policykit-1",
+        "--version"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"process_started\", \"executed\") and (\n  (process.name == \"dnf\" and process.args == \"dnf\" and process.args == \"info\" and process.args == \"polkit\") or\n  (process.name == \"rpm\" and process.args == \"polkit\") or\n  (process.name == \"apt\" and process.args == \"show\" and process.args == \"policykit-1\") or\n  (process.name == \"pkaction\" and process.args == \"--version\")\n) and\nnot (\n  ?process.working_directory in (\"/opt/msp-agent\", \"/opt/CyberCNSAgent\") or\n  ?process.parent.executable like (\"/usr/local/cpanel/3rdparty/perl/*/bin/perl\", \"/usr/share/vicarius/topiad\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_polkit_version_discovery.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

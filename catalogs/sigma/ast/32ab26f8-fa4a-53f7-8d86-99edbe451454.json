@@ -1,0 +1,40 @@
+{
+  "id": "32ab26f8-fa4a-53f7-8d86-99edbe451454",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dxcap_arbitrary_binary_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dxcap.exe"
+      ],
+      "raw_values": [
+        "*\\\\DXCap.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dxcap.exe"
+      ],
+      "raw_values": [
+        "DXCap.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\DXCap.exe\" or process.pe.original_file_name:\"DXCap.exe\") and process.command_line:\"* -c *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dxcap_arbitrary_binary_execution.eql",
+  "metadata": {}
+}

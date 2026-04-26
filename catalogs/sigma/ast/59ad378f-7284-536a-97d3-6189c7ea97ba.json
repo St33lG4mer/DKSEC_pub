@@ -1,0 +1,46 @@
+{
+  "id": "59ad378f-7284-536a-97d3-6189c7ea97ba",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_invoke_obfuscation_via_compress",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "system.io.compression.deflatestream",
+        "system.io.streamreader",
+        "readtoend("
+      ],
+      "raw_values": [
+        "*system.io.compression.deflatestream*",
+        "*system.io.streamreader*",
+        "*readtoend(*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "new-object",
+        "text.encoding]::ascii"
+      ],
+      "raw_values": [
+        "*new-object*",
+        "*text.encoding]::ascii*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*new-object*\" and process.command_line:\"*text.encoding]::ascii*\") and (process.command_line like~ (\"*system.io.compression.deflatestream*\", \"*system.io.streamreader*\", \"*readtoend(*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_invoke_obfuscation_via_compress.eql",
+  "metadata": {}
+}

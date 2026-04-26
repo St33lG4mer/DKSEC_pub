@@ -1,0 +1,44 @@
+{
+  "id": "5bc73a13-7727-5c0a-a946-0c3a5551757b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_pypykatz",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "pypykatz.exe",
+        "python.exe"
+      ],
+      "raw_values": [
+        "*\\\\pypykatz.exe",
+        "*\\\\python.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "live",
+        "registry"
+      ],
+      "raw_values": [
+        "*live*",
+        "*registry*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\pypykatz.exe\", \"*\\\\python.exe\")) and (process.command_line:\"*live*\" and process.command_line:\"*registry*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_pypykatz.eql",
+  "metadata": {}
+}

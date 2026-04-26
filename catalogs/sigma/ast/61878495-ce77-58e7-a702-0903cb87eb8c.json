@@ -1,0 +1,29 @@
+{
+  "id": "61878495-ce77-58e7-a702-0903cb87eb8c",
+  "catalog": "sigma",
+  "name": "file_access_win_susp_unattend_xml",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "unattend.xml"
+      ],
+      "raw_values": [
+        "*\\\\Panther\\\\unattend.xml"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Panther\\\\unattend.xml\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_access/file_access_win_susp_unattend_xml.eql",
+  "metadata": {}
+}

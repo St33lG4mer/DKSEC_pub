@@ -1,0 +1,40 @@
+{
+  "id": "79b9f152-6eb5-5d3f-9904-5b97a668dc2e",
+  "catalog": "sigma",
+  "name": "image_load_side_load_solidpdfcreator",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "solidpdfcreator.dll"
+      ],
+      "raw_values": [
+        "*\\\\SolidPDFCreator.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "solidpdfcreator.exe"
+      ],
+      "raw_values": [
+        "*\\\\SolidPDFCreator.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\SolidPDFCreator.dll\" and (not (process.executable:\"*\\\\SolidPDFCreator.exe\" and (file.path like~ (\"C:\\\\Program Files (x86)\\\\SolidDocuments\\\\SolidPDFCreator\\\\*\", \"C:\\\\Program Files\\\\SolidDocuments\\\\SolidPDFCreator\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_solidpdfcreator.eql",
+  "metadata": {}
+}

@@ -1,0 +1,38 @@
+{
+  "id": "63dc83d7-5d4d-5c3b-ba56-52ac53819723",
+  "catalog": "elastic",
+  "name": "Azure Blob Storage Container Access Level Modified",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.storage/storageaccounts/blobservices/containers/write"
+      ],
+      "raw_values": [
+        "MICROSOFT.STORAGE/STORAGEACCOUNTS/BLOBSERVICES/CONTAINERS/WRITE"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.STORAGE/STORAGEACCOUNTS/BLOBSERVICES/CONTAINERS/WRITE\" and event.outcome:(Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/discovery_storage_blob_container_access_modification.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Asset Visibility",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

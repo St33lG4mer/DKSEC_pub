@@ -1,0 +1,42 @@
+{
+  "id": "621db0d2-bc29-51ff-9a42-0581a37949d1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_cimprovider_dll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "register-cimprovider.exe"
+      ],
+      "raw_values": [
+        "*\\\\register-cimprovider.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-path",
+        "dll"
+      ],
+      "raw_values": [
+        "*-path*",
+        "*dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\register-cimprovider.exe\" and (process.command_line:\"*-path*\" and process.command_line:\"*dll*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_cimprovider_dll_load.eql",
+  "metadata": {}
+}

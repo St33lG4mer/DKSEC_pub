@@ -1,0 +1,73 @@
+{
+  "id": "a8f2af35-ca43-5a7a-b9b8-fb1a37d26baa",
+  "catalog": "elastic",
+  "name": "AWS S3 Bucket Server Access Logging Disabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "putbucketlogging"
+      ],
+      "raw_values": [
+        "PutBucketLogging"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n   and event.provider == \"s3.amazonaws.com\"\n   and event.action == \"PutBucketLogging\"\n   and event.outcome == \"success\"\n   and not stringContains(aws.cloudtrail.request_parameters, \"LoggingEnabled\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_s3_bucket_server_access_logging_disabled.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: Amazon S3",
+      "Use Case: Asset Visibility",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "id": "4437c6cb-d360-52cc-adff-b7c1abec6b4a",
+  "catalog": "elastic",
+  "name": "Hidden Directory Creation via Unusual Parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "buildah",
+        "python-build.",
+        "cliphist-wofi-img",
+        "snap.rootfs_",
+        "acme.sh",
+        "test-compile"
+      ],
+      "raw_values": [
+        "/dev/shm/*",
+        "/tmp/*",
+        "/var/tmp/*",
+        "/var/run/*",
+        "/root/*",
+        "/boot/*",
+        "/var/www/html/*",
+        "/opt/.*",
+        "/tmp/pear/temp/*",
+        "/var/tmp/buildah*",
+        "/tmp/python-build.*",
+        "/tmp/cliphist-wofi-img",
+        "/tmp/snap.rootfs_*",
+        "/root/.acme.sh/acme.sh",
+        "/tmp/buildpacks/*go/bin/test-compile",
+        "/tmp/newroot/*",
+        "/run/containerd/*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "mkdir -p .",
+        ".ssh",
+        "install4j"
+      ],
+      "raw_values": [
+        ".*",
+        "/*/.*",
+        "mkdir -p .",
+        "mkdir ./*",
+        "/root/.ssh",
+        "/home/*/.ssh",
+        "/root/.cache/install4j"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "start",
+        "exec_event"
+      ],
+      "raw_values": [
+        "exec",
+        "start",
+        "exec_event"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "libtool",
+        "jpenable",
+        "configure"
+      ],
+      "raw_values": [
+        "libtool",
+        "jpenable",
+        "configure"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "mkdir"
+      ],
+      "raw_values": [
+        "mkdir"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"start\", \"exec_event\") and\nprocess.name == \"mkdir\" and process.parent.executable like (\n  \"/dev/shm/*\", \"/tmp/*\", \"/var/tmp/*\", \"/var/run/*\", \"/root/*\", \"/boot/*\", \"/var/www/html/*\", \"/opt/.*\"\n) and process.args like (\".*\", \"/*/.*\") and process.args_count <= 3 and\nnot (\n  process.command_line like (\"mkdir -p .\", \"mkdir ./*\") or\n  process.args like (\"/root/.ssh\", \"/home/*/.ssh\", \"/root/.cache/install4j\") or\n  process.parent.executable like (\n    \"/tmp/pear/temp/*\", \"/var/tmp/buildah*\", \"/tmp/python-build.*\", \"/tmp/cliphist-wofi-img\", \"/tmp/snap.rootfs_*\",\n    \"/root/.acme.sh/acme.sh\", \"/tmp/buildpacks/*go/bin/test-compile\", \"/tmp/newroot/*\", \"/run/containerd/*\"\n  ) or\n  process.parent.name in (\"libtool\", \"jpenable\", \"configure\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_hidden_directory_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Tactic: Persistence",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

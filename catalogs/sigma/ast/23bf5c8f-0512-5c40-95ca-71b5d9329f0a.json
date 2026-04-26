@@ -1,0 +1,40 @@
+{
+  "id": "23bf5c8f-0512-5c40-95ca-71b5d9329f0a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_visualuiaverifynative",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "visualuiaverifynative.exe"
+      ],
+      "raw_values": [
+        "*\\\\VisualUiaVerifyNative.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "visualuiaverifynative.exe"
+      ],
+      "raw_values": [
+        "VisualUiaVerifyNative.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\VisualUiaVerifyNative.exe\" or process.pe.original_file_name:\"VisualUiaVerifyNative.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_visualuiaverifynative.eql",
+  "metadata": {}
+}

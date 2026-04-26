@@ -1,0 +1,77 @@
+{
+  "id": "e782b89b-8c5e-5078-9274-a7cc3e49bf0c",
+  "catalog": "sigma",
+  "name": "win_system_defender_disabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.param1",
+      "raw_field": "winlog.event_data.param1",
+      "operator": "like~",
+      "values": [
+        "windows defender antivirus service",
+        "service antivirus microsoft defender"
+      ],
+      "raw_values": [
+        "Windows Defender Antivirus Service",
+        "Service antivirus Microsoft Defender"
+      ]
+    },
+    {
+      "field": "winlog.event_data.param2",
+      "raw_field": "winlog.event_data.param2",
+      "operator": "like~",
+      "values": [
+        "stopped",
+        "arrêté"
+      ],
+      "raw_values": [
+        "stopped",
+        "arrêté"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7036"
+      ],
+      "raw_values": [
+        "7036"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (event.code:\"7036\" and winlog.provider_name:\"Service Control Manager\" and (winlog.event_data.param1 like~ (\"Windows Defender Antivirus Service\", \"Service antivirus Microsoft Defender\")) and (winlog.event_data.param2 like~ (\"stopped\", \"arrêté\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_defender_disabled.eql",
+  "metadata": {}
+}

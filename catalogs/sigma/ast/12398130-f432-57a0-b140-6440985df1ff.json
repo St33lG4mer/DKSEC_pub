@@ -1,0 +1,33 @@
+{
+  "id": "12398130-f432-57a0-b140-6440985df1ff",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_frombase64string_archive",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "frombase64string",
+        "memorystream",
+        "h4si"
+      ],
+      "raw_values": [
+        "*FromBase64String*",
+        "*MemoryStream*",
+        "*H4sI*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*FromBase64String*\" and process.command_line:\"*MemoryStream*\" and process.command_line:\"*H4sI*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_frombase64string_archive.eql",
+  "metadata": {}
+}

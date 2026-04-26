@@ -1,0 +1,29 @@
+{
+  "id": "36b9e092-5835-5250-a3ac-ca0b800f30cb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_hidden_dir_index_allocation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "::$index_allocation"
+      ],
+      "raw_values": [
+        "*::$index_allocation*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*::$index_allocation*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_hidden_dir_index_allocation.eql",
+  "metadata": {}
+}

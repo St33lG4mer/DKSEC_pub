@@ -1,0 +1,44 @@
+{
+  "id": "95ee63d8-7fb5-577d-affe-ad5f9fc3cf27",
+  "catalog": "elastic",
+  "name": "Entra ID Domain Federation Configuration Change",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "set domain authentication",
+        "set federation settings on domain"
+      ],
+      "raw_values": [
+        "Set domain authentication",
+        "Set federation settings on domain"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: azure.auditlogs\n    and azure.auditlogs.properties.category: DirectoryManagement\n    and event.action: (\"Set domain authentication\" or \"Set federation settings on domain\")\n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/privilege_escalation_entra_id_tenant_domain_federation_via_audit_logs.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

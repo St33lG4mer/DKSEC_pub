@@ -1,0 +1,51 @@
+{
+  "id": "1efe6bd1-d274-5629-a000-c76cc6239b21",
+  "catalog": "sigma",
+  "name": "win_system_volume_shadow_copy_mount",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-ntfs"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Ntfs"
+      ]
+    },
+    {
+      "field": "winlog.event_data.devicename",
+      "raw_field": "winlog.event_data.DeviceName",
+      "operator": ":",
+      "values": [
+        "harddiskvolumeshadowcopy"
+      ],
+      "raw_values": [
+        "*HarddiskVolumeShadowCopy*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Microsoft-Windows-Ntfs\" and event.code:\"98\" and winlog.event_data.DeviceName:\"*HarddiskVolumeShadowCopy*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/microsoft_windows_ntfs/win_system_volume_shadow_copy_mount.eql",
+  "metadata": {}
+}

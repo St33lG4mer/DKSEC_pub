@@ -1,0 +1,65 @@
+{
+  "id": "948bc07e-7fe4-5848-a48b-d269175b4af4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_certoc_load_dll_susp_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-loaddll",
+        "loaddll",
+        "–loaddll",
+        "—loaddll",
+        "―loaddll"
+      ],
+      "raw_values": [
+        "* -LoadDLL *",
+        "* /LoadDLL *",
+        "* –LoadDLL *",
+        "* —LoadDLL *",
+        "* ―LoadDLL *",
+        "*\\\\Appdata\\\\Local\\\\Temp\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*C:\\\\Windows\\\\Tasks\\\\*",
+        "*C:\\\\Windows\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certoc.exe"
+      ],
+      "raw_values": [
+        "*\\\\certoc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certoc.exe"
+      ],
+      "raw_values": [
+        "CertOC.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\certoc.exe\" or process.pe.original_file_name:\"CertOC.exe\") and process.command_line like~ (\"* -LoadDLL *\", \"* /LoadDLL *\", \"* –LoadDLL *\", \"* —LoadDLL *\", \"* ―LoadDLL *\") and (process.command_line like~ (\"*\\\\Appdata\\\\Local\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*C:\\\\Windows\\\\Tasks\\\\*\", \"*C:\\\\Windows\\\\Temp\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_certoc_load_dll_susp_locations.eql",
+  "metadata": {}
+}

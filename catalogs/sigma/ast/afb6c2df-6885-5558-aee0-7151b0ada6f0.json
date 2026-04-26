@@ -1,0 +1,53 @@
+{
+  "id": "afb6c2df-6885-5558-aee0-7151b0ada6f0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mssql_sqltoolsps_susp_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqltoolsps.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqltoolsps.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sqltoolsps.exe",
+        "smss.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqltoolsps.exe",
+        "*\\\\smss.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\sqltoolsps.exe"
+      ],
+      "raw_values": [
+        "\\\\sqltoolsps.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\sqltoolsps.exe\" or process.parent.executable:\"*\\\\sqltoolsps.exe\" or process.pe.original_file_name:\"\\\\sqltoolsps.exe\") and (not process.parent.executable:\"*\\\\smss.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mssql_sqltoolsps_susp_execution.eql",
+  "metadata": {}
+}

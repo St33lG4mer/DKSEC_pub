@@ -1,0 +1,41 @@
+{
+  "id": "58c4e57b-490d-510a-9b49-3a959d374a52",
+  "catalog": "sigma",
+  "name": "file_event_win_apt_diamond_sleet_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "4800-84dc-063a6a41c5c",
+        "clip.exe",
+        "dsrole.dll",
+        "forest64.exe",
+        "readme.md",
+        "version.dll",
+        "wsmprovhost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\4800-84DC-063A6A41C5C",
+        "*:\\\\ProgramData\\\\clip.exe",
+        "*:\\\\ProgramData\\\\DSROLE.dll",
+        "*:\\\\ProgramData\\\\Forest64.exe",
+        "*:\\\\ProgramData\\\\readme.md",
+        "*:\\\\ProgramData\\\\Version.dll",
+        "*:\\\\ProgramData\\\\wsmprovhost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*:\\\\ProgramData\\\\4800-84DC-063A6A41C5C\", \"*:\\\\ProgramData\\\\clip.exe\", \"*:\\\\ProgramData\\\\DSROLE.dll\", \"*:\\\\ProgramData\\\\Forest64.exe\", \"*:\\\\ProgramData\\\\readme.md\", \"*:\\\\ProgramData\\\\Version.dll\", \"*:\\\\ProgramData\\\\wsmprovhost.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Diamond-Sleet/file_event_win_apt_diamond_sleet_indicators.eql",
+  "metadata": {}
+}

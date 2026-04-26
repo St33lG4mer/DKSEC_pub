@@ -1,0 +1,51 @@
+{
+  "id": "577ffa5f-f0ca-5461-8662-4aa221da0bd3",
+  "catalog": "sigma",
+  "name": "win_security_mal_cosmik_duke_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "service.name",
+      "raw_field": "service.name",
+      "operator": ":",
+      "values": [
+        "javamtsup"
+      ],
+      "raw_values": [
+        "javamtsup"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and service.name:\"javamtsup\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/Malware/CosmicDuke/win_security_mal_cosmik_duke_persistence.eql",
+  "metadata": {}
+}

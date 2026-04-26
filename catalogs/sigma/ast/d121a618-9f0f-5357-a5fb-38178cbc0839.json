@@ -1,0 +1,40 @@
+{
+  "id": "d121a618-9f0f-5357-a5fb-38178cbc0839",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hwp_exploits",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "hwp.exe"
+      ],
+      "raw_values": [
+        "*\\\\Hwp.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gbb.exe"
+      ],
+      "raw_values": [
+        "*\\\\gbb.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\Hwp.exe\" and process.executable:\"*\\\\gbb.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hwp_exploits.eql",
+  "metadata": {}
+}

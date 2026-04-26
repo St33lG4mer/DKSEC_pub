@@ -1,0 +1,40 @@
+{
+  "id": "ec4d2677-20fc-58fa-ad11-9ec73626012e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_calc_uncommon_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "calc.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "calc.exe"
+      ],
+      "raw_values": [
+        "*\\\\calc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\calc.exe *\" or (process.executable:\"*\\\\calc.exe\" and (not (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\", \"*:\\\\Windows\\\\WinSxS\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_calc_uncommon_exec.eql",
+  "metadata": {}
+}

@@ -1,0 +1,51 @@
+{
+  "id": "60be7d5f-2091-52b4-8f25-874ee3c5b683",
+  "catalog": "sigma",
+  "name": "win_appxdeployment_server_appx_package_deployment_failed_signing_requirements",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-appxdeploymentserver/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-AppXDeploymentServer/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "401"
+      ],
+      "raw_values": [
+        "401"
+      ]
+    },
+    {
+      "field": "winlog.event_data.errorcode",
+      "raw_field": "winlog.event_data.ErrorCode",
+      "operator": ":",
+      "values": [
+        "0x80073cff"
+      ],
+      "raw_values": [
+        "0x80073cff"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-AppXDeploymentServer/Operational\" and (event.code:\"401\" and winlog.event_data.ErrorCode:\"0x80073cff\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/appxdeployment_server/win_appxdeployment_server_appx_package_deployment_failed_signing_requirements.eql",
+  "metadata": {}
+}

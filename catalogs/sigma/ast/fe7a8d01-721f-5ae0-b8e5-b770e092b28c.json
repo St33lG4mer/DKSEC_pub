@@ -1,0 +1,40 @@
+{
+  "id": "fe7a8d01-721f-5ae0-b8e5-b770e092b28c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_rundll32_dllregisterserver",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dllregisterserver"
+      ],
+      "raw_values": [
+        "*DllRegisterServer*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*DllRegisterServer*\" and (not process.executable:\"*\\\\rundll32.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_rundll32_dllregisterserver.eql",
+  "metadata": {}
+}

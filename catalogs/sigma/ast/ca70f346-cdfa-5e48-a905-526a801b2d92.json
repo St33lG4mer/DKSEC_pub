@@ -1,0 +1,46 @@
+{
+  "id": "ca70f346-cdfa-5e48-a905-526a801b2d92",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msiexec_execute_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "mdnsnsp.dll"
+      ],
+      "raw_values": [
+        "* -y*",
+        "* /y*",
+        "* –y*",
+        "* —y*",
+        "* ―y*",
+        "*\\\\MsiExec.exe\\",
+        "C:\\\\Program Files\\\\Bonjour\\\\mdnsNSP.dll*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\msiexec.exe\" and process.command_line like~ (\"* -y*\", \"* /y*\", \"* –y*\", \"* —y*\", \"* ―y*\")) and (not (process.command_line like~ (\"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Program Files\\\\Bonjour\\\\mdnsNSP.dll*\", \"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Program Files (x86)\\\\Bonjour\\\\mdnsNSP.dll*\", \"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Program Files (x86)\\\\Apple Software Update\\\\ScriptingObjectModel.dll*\", \"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Program Files (x86)\\\\Apple Software Update\\\\SoftwareUpdateAdmin.dll*\", \"*\\\\MsiExec.exe\\\" /Y \\\"C:\\\\Windows\\\\CCM\\\\*\", \"*\\\\MsiExec.exe\\\" /Y C:\\\\Windows\\\\CCM\\\\*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Program Files\\\\Bonjour\\\\mdnsNSP.dll*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Program Files (x86)\\\\Bonjour\\\\mdnsNSP.dll*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Program Files (x86)\\\\Apple Software Update\\\\ScriptingObjectModel.dll*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Program Files (x86)\\\\Apple Software Update\\\\SoftwareUpdateAdmin.dll*\", \"*\\\\MsiExec.exe\\\" -Y \\\"C:\\\\Windows\\\\CCM\\\\*\", \"*\\\\MsiExec.exe\\\" -Y C:\\\\Windows\\\\CCM\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msiexec_execute_dll.eql",
+  "metadata": {}
+}

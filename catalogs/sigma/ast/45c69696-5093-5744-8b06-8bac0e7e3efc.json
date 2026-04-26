@@ -1,0 +1,73 @@
+{
+  "id": "45c69696-5093-5744-8b06-8bac0e7e3efc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_mimikatz_command_line",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "dumpcreds",
+        "mimikatz",
+        "::aadcookie",
+        "::detours",
+        "::memssp",
+        "::mflt",
+        "::ncroutemon",
+        "::ngcsign",
+        "::printnightmare",
+        "::skeleton",
+        "::preshutdown",
+        "::mstsc",
+        "::multirdp",
+        "rpc::",
+        "token::",
+        "crypto::",
+        "dpapi::",
+        "sekurlsa::",
+        "kerberos::",
+        "lsadump::",
+        "privilege::",
+        "process::",
+        "vault::"
+      ],
+      "raw_values": [
+        "*DumpCreds*",
+        "*mimikatz*",
+        "*::aadcookie*",
+        "*::detours*",
+        "*::memssp*",
+        "*::mflt*",
+        "*::ncroutemon*",
+        "*::ngcsign*",
+        "*::printnightmare*",
+        "*::skeleton*",
+        "*::preshutdown*",
+        "*::mstsc*",
+        "*::multirdp*",
+        "*rpc::*",
+        "*token::*",
+        "*crypto::*",
+        "*dpapi::*",
+        "*sekurlsa::*",
+        "*kerberos::*",
+        "*lsadump::*",
+        "*privilege::*",
+        "*process::*",
+        "*vault::*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*DumpCreds*\", \"*mimikatz*\")) or (process.command_line like~ (\"*::aadcookie*\", \"*::detours*\", \"*::memssp*\", \"*::mflt*\", \"*::ncroutemon*\", \"*::ngcsign*\", \"*::printnightmare*\", \"*::skeleton*\", \"*::preshutdown*\", \"*::mstsc*\", \"*::multirdp*\")) or (process.command_line like~ (\"*rpc::*\", \"*token::*\", \"*crypto::*\", \"*dpapi::*\", \"*sekurlsa::*\", \"*kerberos::*\", \"*lsadump::*\", \"*privilege::*\", \"*process::*\", \"*vault::*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_mimikatz_command_line.eql",
+  "metadata": {}
+}

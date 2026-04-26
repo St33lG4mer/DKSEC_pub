@@ -1,0 +1,29 @@
+{
+  "id": "8bdae3b1-e891-5a1f-af57-bd7043621821",
+  "catalog": "sigma",
+  "name": "net_dns_susp_b64_queries",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        "==."
+      ],
+      "raw_values": [
+        "*==.*"
+      ]
+    }
+  ],
+  "raw_query": "any where query:\"*==.*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/network/dns/net_dns_susp_b64_queries.eql",
+  "metadata": {}
+}

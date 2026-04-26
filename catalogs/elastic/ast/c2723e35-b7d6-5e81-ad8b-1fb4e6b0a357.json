@@ -1,0 +1,73 @@
+{
+  "id": "c2723e35-b7d6-5e81-ad8b-1fb4e6b0a357",
+  "catalog": "elastic",
+  "name": "FortiGate Administrator Account Creation from Unusual Source",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "fortinet_fortigate.log"
+      ],
+      "raw_values": [
+        "fortinet_fortigate.log"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "0100044547"
+      ],
+      "raw_values": [
+        "0100044547"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.cfgpath",
+      "raw_field": "fortinet.firewall.cfgpath",
+      "operator": ":",
+      "values": [
+        "system.admin"
+      ],
+      "raw_values": [
+        "system.admin"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.action",
+      "raw_field": "fortinet.firewall.action",
+      "operator": ":",
+      "values": [
+        "add"
+      ],
+      "raw_values": [
+        "Add"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"fortinet_fortigate.log\" and\n    event.code: \"0100044547\" and\n    fortinet.firewall.cfgpath: \"system.admin\" and\n    fortinet.firewall.action: \"Add\" and\n    fortinet.firewall.ui: (* and not \"\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/network/persistence_fortigate_admin_creation_unusual_source.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide",
+      "Domain: Network",
+      "Domain: Identity",
+      "Data Source: Fortinet",
+      "Data Source: Fortinet FortiGate"
+    ]
+  }
+}

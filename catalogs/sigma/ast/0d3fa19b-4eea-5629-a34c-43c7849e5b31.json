@@ -1,0 +1,29 @@
+{
+  "id": "0d3fa19b-4eea-5629-a34c-43c7849e5b31",
+  "catalog": "sigma",
+  "name": "proc_access_win_cmstp_execution_by_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "cmlua.dll"
+      ],
+      "raw_values": [
+        "*cmlua.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.CallTrace:\"*cmlua.dll*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_access/proc_access_win_cmstp_execution_by_access.eql",
+  "metadata": {}
+}

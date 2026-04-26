@@ -1,0 +1,40 @@
+{
+  "id": "9cadaaff-e4c0-5f1d-bc8b-a71c98159ab9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_rasautou_dll_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rasautou.exe"
+      ],
+      "raw_values": [
+        "*\\\\rasautou.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rasdlui.exe"
+      ],
+      "raw_values": [
+        "rasdlui.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\rasautou.exe\" or process.pe.original_file_name:\"rasdlui.exe\") and (process.command_line:\"* -d *\" and process.command_line:\"* -p *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_rasautou_dll_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,40 @@
+{
+  "id": "56e0ec60-3454-57b6-9adc-9d94665532df",
+  "catalog": "sigma",
+  "name": "proc_creation_win_customshellhost_susp_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "customshellhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\CustomShellHost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\explorer.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\CustomShellHost.exe\" and (not process.executable:\"C:\\\\Windows\\\\explorer.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_customshellhost_susp_exec.eql",
+  "metadata": {}
+}

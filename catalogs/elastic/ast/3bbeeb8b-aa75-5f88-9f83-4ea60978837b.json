@@ -1,0 +1,138 @@
+{
+  "id": "3bbeeb8b-aa75-5f88-9f83-4ea60978837b",
+  "catalog": "elastic",
+  "name": "Remote Execution via File Shares",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "exe",
+        "scr",
+        "pif",
+        "com"
+      ],
+      "raw_values": [
+        "exe",
+        "scr",
+        "pif",
+        "com"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": ":",
+      "values": [
+        "veeam software group gmbh",
+        "elasticsearch, inc.",
+        "pdq.com corporation",
+        "crowdstrike, inc.",
+        "microsoft windows hardware compatibility publisher",
+        "zoho corporation private limited",
+        "beyondtrust corporation",
+        "cyberark software ltd.",
+        "sophos ltd",
+        "microsoft corporation"
+      ],
+      "raw_values": [
+        "Veeam Software Group GmbH",
+        "Elasticsearch, Inc.",
+        "PDQ.com Corporation",
+        "CrowdStrike, Inc.",
+        "Microsoft Windows Hardware Compatibility Publisher",
+        "ZOHO Corporation Private Limited",
+        "BeyondTrust Corporation",
+        "CyberArk Software Ltd.",
+        "Sophos Ltd",
+        "Microsoft Corporation"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ccmsetup.exe",
+        "am_delta*.exe",
+        "cainvokerservice.exe",
+        "srvboot.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\ccmsetup\\\\ccmsetup.exe",
+        "?:\\\\Windows\\\\SoftwareDistribution\\\\Download\\\\Install\\\\AM_Delta*.exe",
+        "?:\\\\Windows\\\\CAInvokerService.exe",
+        "G:\\\\SMS_*\\\\srvboot.exe"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "creation",
+        "change"
+      ],
+      "raw_values": [
+        "creation",
+        "change"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "file.ext.header_bytes",
+      "raw_field": "file.Ext.header_bytes",
+      "operator": ":",
+      "values": [
+        "4d5a"
+      ],
+      "raw_values": [
+        "4d5a*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "sequence with maxspan=1m\n  [file where host.os.type == \"windows\" and event.type in (\"creation\", \"change\") and \n   process.pid == 4 and (file.extension : (\"exe\", \"scr\", \"pif\", \"com\") or file.Ext.header_bytes : \"4d5a*\")] by host.id, file.path\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n    not (\n      (\n        process.code_signature.trusted == true and\n        process.code_signature.subject_name : (\n              \"Veeam Software Group GmbH\",\n              \"Elasticsearch, Inc.\",\n              \"PDQ.com Corporation\",\n              \"CrowdStrike, Inc.\",\n              \"Microsoft Windows Hardware Compatibility Publisher\",\n              \"ZOHO Corporation Private Limited\",\n              \"BeyondTrust Corporation\", \n              \"CyberArk Software Ltd.\", \n              \"Sophos Ltd\"\n        )\n      ) or\n      (\n        process.executable : (\n          \"?:\\\\Windows\\\\ccmsetup\\\\ccmsetup.exe\",\n          \"?:\\\\Windows\\\\SoftwareDistribution\\\\Download\\\\Install\\\\AM_Delta*.exe\",\n          \"?:\\\\Windows\\\\CAInvokerService.exe\"\n        ) and process.code_signature.trusted == true\n      ) or\n      (\n        process.executable : \"G:\\\\SMS_*\\\\srvboot.exe\" and \n        process.code_signature.trusted == true and process.code_signature.subject_name : \"Microsoft Corporation\"\n      )\n    )\n  ] by host.id, process.executable\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/lateral_movement_execution_via_file_shares_sequence.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

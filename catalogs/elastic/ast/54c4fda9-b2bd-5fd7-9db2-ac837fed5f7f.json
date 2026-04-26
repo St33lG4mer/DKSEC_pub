@@ -1,0 +1,39 @@
+{
+  "id": "54c4fda9-b2bd-5fd7-9db2-ac837fed5f7f",
+  "catalog": "elastic",
+  "name": "PowerShell MiniDump Script",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and powershell.file.script_block_text:(MiniDumpWriteDump or MiniDumpWithFullMemory or pmuDetirWpmuDiniM) and not user.id : \"S-1-5-18\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_posh_minidump.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

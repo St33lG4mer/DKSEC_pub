@@ -1,0 +1,82 @@
+{
+  "id": "6432701e-32ae-5773-a818-55d9325190fc",
+  "catalog": "elastic",
+  "name": "Potential PowerShell Obfuscation via String Reordering",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "4104"
+      ],
+      "raw_values": [
+        "4104"
+      ]
+    },
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": "like",
+      "values": [
+        "{0}",
+        "sentinelbreakpoints",
+        ":::::\\\\\\\\windows\\\\\\\\sentinel",
+        "$local:bypassed",
+        "origpsexecutionpolicypreference"
+      ],
+      "raw_values": [
+        "*{0}*",
+        "*sentinelbreakpoints*",
+        "*:::::\\\\\\\\windows\\\\\\\\sentinel*",
+        "*$local:Bypassed*",
+        "*origPSExecutionPolicyPreference*"
+      ]
+    },
+    {
+      "field": "file.directory",
+      "raw_field": "file.directory",
+      "operator": "==",
+      "values": [
+        "c:\\\\program files\\\\windowspowershell\\\\modules\\\\icinga-powershell-framework\\\\cache"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\WindowsPowerShell\\\\Modules\\\\icinga-powershell-framework\\\\cache"
+      ]
+    },
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": "==",
+      "values": [
+        "gitbranchstatus",
+        "$s.branchbehindstatussymbol.text"
+      ],
+      "raw_values": [
+        "*GitBranchStatus*",
+        "*$s.BranchBehindStatusSymbol.Text*"
+      ]
+    }
+  ],
+  "raw_query": "from logs-windows.powershell_operational* metadata _id, _version, _index\n| where event.code == \"4104\" and powershell.file.script_block_text like \"*{0}*\"\n\n// Filter out smaller scripts that are unlikely to implement obfuscation using the patterns we are looking for\n| eval Esql.script_block_length = length(powershell.file.script_block_text)\n| where Esql.script_block_length > 500\n\n// replace the patterns we are looking for with the 🔥 emoji to enable counting them\n// The emoji is used because it's unlikely to appear in scripts and has a consistent character length of 1\n| eval Esql.script_block_tmp = replace(\n    powershell.file.script_block_text,\n    \"\"\"((\\{\\d+\\}){2,}[\"']\\s?-f|::Format[^\\{]+(\\{\\d+\\}){2,})\"\"\",\n    \"🔥\"\n)\n\n// count how many patterns were detected by calculating the number of 🔥 characters inserted\n| eval Esql.script_block_pattern_count = length(Esql.script_block_tmp) - length(replace(Esql.script_block_tmp, \"🔥\", \"\"))\n\n// keep the fields relevant to the query, although this is not needed as the alert is populated using _id\n| keep\n    Esql.script_block_pattern_count,\n    Esql.script_block_length,\n    Esql.script_block_tmp,\n    powershell.file.*,\n    file.path,\n    file.directory,\n    powershell.sequence,\n    powershell.total,\n    _id,\n    _version,\n    _index,\n    host.name,\n    host.id,\n    agent.id,\n    user.id\n\n// Filter for scripts that match the pattern at least five times\n| where Esql.script_block_pattern_count >= 5\n\n// Exclude Noisy Patterns\n\n// Icinga Framework\n| where not file.directory == \"C:\\\\Program Files\\\\WindowsPowerShell\\\\Modules\\\\icinga-powershell-framework\\\\cache\"\n  // ESQL requires this condition, otherwise it only returns matches where file.directory exists.\n  or file.directory IS NULL\n\n| where not (powershell.file.script_block_text LIKE \"*GitBranchStatus*\" AND \n    powershell.file.script_block_text LIKE \"*$s.BranchBehindStatusSymbol.Text*\")\n| where not\n    // https://wtfbins.wtf/17\n    (\n        (powershell.file.script_block_text like \"*sentinelbreakpoints*\" or\n         powershell.file.script_block_text like \"*:::::\\\\\\\\windows\\\\\\\\sentinel*\")\n        and\n        (powershell.file.script_block_text like \"*$local:Bypassed*\" or\n         powershell.file.script_block_text like \"*origPSExecutionPolicyPreference*\")\n    )\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_posh_obfuscation_string_format.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: PowerShell Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

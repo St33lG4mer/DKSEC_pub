@@ -1,0 +1,40 @@
+{
+  "id": "4156b769-1ac7-572e-bffd-2290a66a0c01",
+  "catalog": "sigma",
+  "name": "win_security_samaccountname_spoofing_cve_2021_42287",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4781"
+      ],
+      "raw_values": [
+        "4781"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4781\" and winlog.event_data.OldTargetUserName:\"*$*\") and (not winlog.event_data.NewTargetUserName:\"*$*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-42287/win_security_samaccountname_spoofing_cve_2021_42287.eql",
+  "metadata": {}
+}

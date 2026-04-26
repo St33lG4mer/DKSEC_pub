@@ -1,0 +1,66 @@
+{
+  "id": "523ecc8b-127d-5625-b1bb-754b4dc0fe43",
+  "catalog": "sigma",
+  "name": "win_security_windows_defender_exclusions_write_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": "like~",
+      "values": [
+        "%%4417",
+        "%%4418"
+      ],
+      "raw_values": [
+        "*%%4417*",
+        "*%%4418*"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4656",
+        "4663"
+      ],
+      "raw_values": [
+        "4656",
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows defender\\\\exclusions\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows Defender\\\\Exclusions\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((winlog.event_data.AccessList like~ (\"*%%4417*\", \"*%%4418*\")) and (event.code like~ (\"4656\", \"4663\")) and winlog.event_data.ObjectName:\"*\\\\Microsoft\\\\Windows Defender\\\\Exclusions\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_windows_defender_exclusions_write_access.eql",
+  "metadata": {}
+}

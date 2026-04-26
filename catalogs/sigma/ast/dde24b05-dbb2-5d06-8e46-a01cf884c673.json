@@ -1,0 +1,29 @@
+{
+  "id": "dde24b05-dbb2-5d06-8e46-a01cf884c673",
+  "catalog": "sigma",
+  "name": "image_load_side_load_edputil",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "edputil.dll"
+      ],
+      "raw_values": [
+        "*\\\\edputil.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\edputil.dll\" and (not (file.path like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C\\\\Windows\\\\WinSxS\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_edputil.eql",
+  "metadata": {}
+}

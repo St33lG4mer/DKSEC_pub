@@ -1,0 +1,32 @@
+{
+  "id": "1bba60fc-d426-5167-b961-97e51bbefad7",
+  "catalog": "sigma",
+  "name": "image_load_side_load_third_party",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "commfunc.dll",
+        "tosbtkbd.dll"
+      ],
+      "raw_values": [
+        "*\\\\commfunc.dll",
+        "*\\\\AppData\\\\local\\\\Google\\\\Chrome\\\\Application\\\\*",
+        "*\\\\tosbtkbd.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\commfunc.dll\" and (not (file.path:\"*\\\\AppData\\\\local\\\\Google\\\\Chrome\\\\Application\\\\*\" or (file.path like~ (\"C:\\\\Program Files\\\\Lenovo\\\\Communications Utility\\\\*\", \"C:\\\\Program Files (x86)\\\\Lenovo\\\\Communications Utility\\\\*\"))))) or (file.path:\"*\\\\tosbtkbd.dll\" and (not (file.path like~ (\"C:\\\\Program Files\\\\Toshiba\\\\Bluetooth Toshiba Stack\\\\*\", \"C:\\\\Program Files (x86)\\\\Toshiba\\\\Bluetooth Toshiba Stack\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_third_party.eql",
+  "metadata": {}
+}

@@ -1,0 +1,50 @@
+{
+  "id": "1c3185c7-4a5b-5ab6-8f63-d56fb6928545",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_recon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "tree.com",
+        "wmic.exe",
+        "doskey.exe",
+        "sc.exe"
+      ],
+      "raw_values": [
+        "*\\\\tree.com",
+        "*\\\\WMIC.exe",
+        "*\\\\doskey.exe",
+        "*\\\\sc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "wmic.exe",
+        "doskey.exe",
+        "sc.exe"
+      ],
+      "raw_values": [
+        "wmic.exe",
+        "DOSKEY.EXE",
+        "sc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\tree.com\", \"*\\\\WMIC.exe\", \"*\\\\doskey.exe\", \"*\\\\sc.exe\")) or (process.pe.original_file_name like~ (\"wmic.exe\", \"DOSKEY.EXE\", \"sc.exe\"))) and (process.parent.command_line like~ (\"* > %TEMP%\\\\*\", \"* > %TMP%\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_recon.eql",
+  "metadata": {}
+}

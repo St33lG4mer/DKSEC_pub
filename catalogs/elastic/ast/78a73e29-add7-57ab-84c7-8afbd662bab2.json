@@ -1,0 +1,39 @@
+{
+  "id": "78a73e29-add7-57ab-84c7-8afbd662bab2",
+  "catalog": "elastic",
+  "name": "Unusual Discovery Signal Alert with Unusual Process Executable",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.rule_id",
+      "raw_field": "kibana.alert.rule.rule_id",
+      "operator": ":",
+      "values": [
+        "1d72d014-e2ab-4707-b056-9b96abe7b511"
+      ],
+      "raw_values": [
+        "1d72d014-e2ab-4707-b056-9b96abe7b511"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:windows and event.kind:signal and kibana.alert.rule.rule_id:\"1d72d014-e2ab-4707-b056-9b96abe7b511\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/discovery_signal_unusual_discovery_signal_proc_executable.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

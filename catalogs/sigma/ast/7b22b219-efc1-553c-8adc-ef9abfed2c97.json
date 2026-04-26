@@ -1,0 +1,51 @@
+{
+  "id": "7b22b219-efc1-553c-8adc-ef9abfed2c97",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_cleanwipe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sepremovaltoolnative_x64.exe",
+        "catclean.exe",
+        "netinstaller.exe",
+        "wfpunins.exe"
+      ],
+      "raw_values": [
+        "*\\\\SepRemovalToolNative_x64.exe",
+        "*\\\\CATClean.exe",
+        "*\\\\NetInstaller.exe",
+        "*\\\\WFPUnins.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--uninstall",
+        "uninstall",
+        "enterprise"
+      ],
+      "raw_values": [
+        "*--uninstall*",
+        "*-r*",
+        "*/uninstall*",
+        "*/enterprise*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\SepRemovalToolNative_x64.exe\" or (process.executable:\"*\\\\CATClean.exe\" and process.command_line:\"*--uninstall*\") or (process.executable:\"*\\\\NetInstaller.exe\" and process.command_line:\"*-r*\") or (process.executable:\"*\\\\WFPUnins.exe\" and (process.command_line:\"*/uninstall*\" and process.command_line:\"*/enterprise*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_cleanwipe.eql",
+  "metadata": {}
+}

@@ -1,0 +1,44 @@
+{
+  "id": "fd4251d2-93fa-5927-8035-fa21cffeee76",
+  "catalog": "sigma",
+  "name": "registry_set_deviceguard_hypervisorenforcedcodeintegrity_disabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\control\\\\deviceguard\\\\hypervisorenforcedcodeintegrity",
+        "\\\\control\\\\deviceguard\\\\scenarios\\\\hypervisorenforcedcodeintegrity\\\\enabled",
+        "\\\\microsoft\\\\windows\\\\deviceguard\\\\hypervisorenforcedcodeintegrity"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity",
+        "*\\\\Control\\\\DeviceGuard\\\\Scenarios\\\\HypervisorEnforcedCodeIntegrity\\\\Enabled",
+        "*\\\\Microsoft\\\\Windows\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Control\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity\", \"*\\\\Control\\\\DeviceGuard\\\\Scenarios\\\\HypervisorEnforcedCodeIntegrity\\\\Enabled\", \"*\\\\Microsoft\\\\Windows\\\\DeviceGuard\\\\HypervisorEnforcedCodeIntegrity\")) and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_deviceguard_hypervisorenforcedcodeintegrity_disabled.eql",
+  "metadata": {}
+}

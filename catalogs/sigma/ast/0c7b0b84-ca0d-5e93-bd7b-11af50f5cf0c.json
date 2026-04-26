@@ -1,0 +1,29 @@
+{
+  "id": "0c7b0b84-ca0d-5e93-bd7b-11af50f5cf0c",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_get_variable",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "get-variable.exe"
+      ],
+      "raw_values": [
+        "*Local\\\\Microsoft\\\\WindowsApps\\\\Get-Variable.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*Local\\\\Microsoft\\\\WindowsApps\\\\Get-Variable.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_get_variable.eql",
+  "metadata": {}
+}

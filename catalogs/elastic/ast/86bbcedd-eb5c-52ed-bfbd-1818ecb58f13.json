@@ -1,0 +1,80 @@
+{
+  "id": "86bbcedd-eb5c-52ed-bfbd-1818ecb58f13",
+  "catalog": "elastic",
+  "name": "Suspicious AWS S3 Connection via Script Interpreter",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "osascript",
+        "node",
+        "python"
+      ],
+      "raw_values": [
+        "osascript",
+        "node",
+        "python*"
+      ]
+    },
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "==",
+      "values": [
+        "s3.*.amazonaws.com",
+        ".s3*.amazonaws.com",
+        ".cloudfront.net"
+      ],
+      "raw_values": [
+        "s3.*.amazonaws.com",
+        "*.s3*.amazonaws.com",
+        "*.cloudfront.net"
+      ]
+    }
+  ],
+  "raw_query": "FROM logs-endpoint.events.network-*\n| WHERE host.os.type == \"macos\" \n    AND event.type == \"start\"\n    AND (process.name == \"osascript\" \n         OR process.name == \"node\" \n         OR process.name LIKE \"python*\")\n    AND (destination.domain LIKE \"s3.*.amazonaws.com\" \n         OR destination.domain LIKE \"*.s3*.amazonaws.com\" \n         OR destination.domain LIKE \"*.cloudfront.net\")\n| STATS Esql.connection_count = COUNT(*) \n  BY process.executable, user.name, host.name, destination.domain\n| WHERE Esql.connection_count >= 5\n| KEEP Esql.*, process.executable, user.name, host.name, destination.domain\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/macos/command_and_control_aws_s3_connection_via_script.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

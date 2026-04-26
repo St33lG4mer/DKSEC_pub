@@ -1,0 +1,40 @@
+{
+  "id": "5904ee7b-7dab-5a79-bbea-2a8d37878baf",
+  "catalog": "sigma",
+  "name": "proc_creation_win_finger_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "finger.exe"
+      ],
+      "raw_values": [
+        "finger.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "finger.exe"
+      ],
+      "raw_values": [
+        "*\\\\finger.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"finger.exe\" or process.executable:\"*\\\\finger.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_finger_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,90 @@
+{
+  "id": "d498afeb-3466-5aeb-8d80-88965133620c",
+  "catalog": "sigma",
+  "name": "win_security_exploit_cve_2023_23397_outlook_remote_file_query",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4656",
+        "4663"
+      ],
+      "raw_values": [
+        "4656",
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        "webclient\\\\networkprovider",
+        "lanmanworkstation\\\\networkprovider"
+      ],
+      "raw_values": [
+        "*WebClient\\\\NetworkProvider",
+        "*LanmanWorkstation\\\\NetworkProvider"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\OUTLOOK.EXE"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\registry\\\\machine\\\\system",
+        "services\\\\"
+      ],
+      "raw_values": [
+        "*\\\\REGISTRY\\\\MACHINE\\\\SYSTEM*",
+        "*Services\\\\*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": ":",
+      "values": [
+        "%%4416"
+      ],
+      "raw_values": [
+        "*%%4416*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"4656\", \"4663\")) and process.executable:\"*\\\\OUTLOOK.EXE\" and (winlog.event_data.ObjectName:\"*\\\\REGISTRY\\\\MACHINE\\\\SYSTEM*\" and winlog.event_data.ObjectName:\"*Services\\\\*\") and (winlog.event_data.ObjectName like~ (\"*WebClient\\\\NetworkProvider\", \"*LanmanWorkstation\\\\NetworkProvider\")) and winlog.event_data.AccessList:\"*%%4416*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-23397/win_security_exploit_cve_2023_23397_outlook_remote_file_query.eql",
+  "metadata": {}
+}

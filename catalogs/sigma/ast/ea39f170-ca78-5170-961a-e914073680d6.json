@@ -1,0 +1,85 @@
+{
+  "id": "ea39f170-ca78-5170-961a-e914073680d6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_dumping_sensitive_hives",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "save",
+        "export",
+        "ˢave",
+        "eˣport",
+        "hklm",
+        "hk˪m",
+        "hkey_local_machine",
+        "hkey_˪ocal_machine",
+        "hkey_loca˪_machine",
+        "hkey_˪oca˪_machine",
+        "system",
+        "sam",
+        "security",
+        "ˢystem",
+        "syˢtem",
+        "ˢyˢtem",
+        "ˢam",
+        "ˢecurity"
+      ],
+      "raw_values": [
+        "* save *",
+        "* export *",
+        "* ˢave *",
+        "* eˣport *",
+        "*hklm*",
+        "*hk˪m*",
+        "*hkey_local_machine*",
+        "*hkey_˪ocal_machine*",
+        "*hkey_loca˪_machine*",
+        "*hkey_˪oca˪_machine*",
+        "*\\\\system*",
+        "*\\\\sam*",
+        "*\\\\security*",
+        "*\\\\ˢystem*",
+        "*\\\\syˢtem*",
+        "*\\\\ˢyˢtem*",
+        "*\\\\ˢam*",
+        "*\\\\ˢecurity*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and (process.command_line like~ (\"* save *\", \"* export *\", \"* ˢave *\", \"* eˣport *\")) and (process.command_line like~ (\"*hklm*\", \"*hk˪m*\", \"*hkey_local_machine*\", \"*hkey_˪ocal_machine*\", \"*hkey_loca˪_machine*\", \"*hkey_˪oca˪_machine*\")) and (process.command_line like~ (\"*\\\\system*\", \"*\\\\sam*\", \"*\\\\security*\", \"*\\\\ˢystem*\", \"*\\\\syˢtem*\", \"*\\\\ˢyˢtem*\", \"*\\\\ˢam*\", \"*\\\\ˢecurity*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_dumping_sensitive_hives.eql",
+  "metadata": {}
+}

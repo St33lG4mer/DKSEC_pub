@@ -1,0 +1,29 @@
+{
+  "id": "d5853761-ee90-5bb3-95db-0d4ac4a7f574",
+  "catalog": "sigma",
+  "name": "registry_event_office_trust_record_modification",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\security\\\\trusted documents\\\\trustrecords"
+      ],
+      "raw_values": [
+        "*\\\\Security\\\\Trusted Documents\\\\TrustRecords*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Security\\\\Trusted Documents\\\\TrustRecords*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_office_trust_record_modification.eql",
+  "metadata": {}
+}

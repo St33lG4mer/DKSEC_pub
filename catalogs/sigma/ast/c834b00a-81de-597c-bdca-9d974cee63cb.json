@@ -1,0 +1,48 @@
+{
+  "id": "c834b00a-81de-597c-bdca-9d974cee63cb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cloudflared_tunnel_run",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-config",
+        "-credentials-contents",
+        "-credentials-file",
+        "-token"
+      ],
+      "raw_values": [
+        "*-config *",
+        "*-credentials-contents *",
+        "*-credentials-file *",
+        "*-token *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "tunnel",
+        "run"
+      ],
+      "raw_values": [
+        "* tunnel *",
+        "* run *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"* tunnel *\" and process.command_line:\"* run *\") and (process.command_line like~ (\"*-config *\", \"*-credentials-contents *\", \"*-credentials-file *\", \"*-token *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cloudflared_tunnel_run.eql",
+  "metadata": {}
+}

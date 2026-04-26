@@ -1,0 +1,67 @@
+{
+  "id": "0c932273-d098-55da-93ce-40fd4fbb77f0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mode_codepage_russian",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "=1251",
+        "=866"
+      ],
+      "raw_values": [
+        "*=1251",
+        "*=866"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mode.com"
+      ],
+      "raw_values": [
+        "*\\\\mode.com"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mode.com"
+      ],
+      "raw_values": [
+        "MODE.COM"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "con",
+        "select="
+      ],
+      "raw_values": [
+        "* con *",
+        "* cp *",
+        "* select=*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\mode.com\" or process.pe.original_file_name:\"MODE.COM\") and ((process.command_line:\"* con *\" and process.command_line:\"* cp *\" and process.command_line:\"* select=*\") and (process.command_line like~ (\"*=1251\", \"*=866\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mode_codepage_russian.eql",
+  "metadata": {}
+}

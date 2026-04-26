@@ -1,0 +1,40 @@
+{
+  "id": "776493ea-3d88-5b97-ba3d-276bc28136e5",
+  "catalog": "sigma",
+  "name": "registry_set_crashdump_disabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "system\\\\currentcontrolset\\\\control\\\\crashcontrol"
+      ],
+      "raw_values": [
+        "*SYSTEM\\\\CurrentControlSet\\\\Control\\\\CrashControl*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*SYSTEM\\\\CurrentControlSet\\\\Control\\\\CrashControl*\" and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_crashdump_disabled.eql",
+  "metadata": {}
+}

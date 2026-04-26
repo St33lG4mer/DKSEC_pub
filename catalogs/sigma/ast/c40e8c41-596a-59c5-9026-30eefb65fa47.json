@@ -1,0 +1,53 @@
+{
+  "id": "c40e8c41-596a-59c5-9026-30eefb65fa47",
+  "catalog": "sigma",
+  "name": "proc_creation_win_winget_add_custom_source",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winget.exe"
+      ],
+      "raw_values": [
+        "*\\\\winget.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "winget.exe"
+      ],
+      "raw_values": [
+        "winget.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "source",
+        "add"
+      ],
+      "raw_values": [
+        "*source *",
+        "*add *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\winget.exe\" or process.pe.original_file_name:\"winget.exe\") and (process.command_line:\"*source *\" and process.command_line:\"*add *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_winget_add_custom_source.eql",
+  "metadata": {}
+}

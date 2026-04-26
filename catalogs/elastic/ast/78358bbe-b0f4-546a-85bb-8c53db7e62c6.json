@@ -1,0 +1,25 @@
+{
+  "id": "78358bbe-b0f4-546a-85bb-8c53db7e62c6",
+  "catalog": "elastic",
+  "name": "Elastic Security External Alerts",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind: alert and data_stream.dataset: elastic_security.alert\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/elastic_security_external_alerts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Security",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide",
+      "Promotion: External Alerts"
+    ]
+  }
+}

@@ -1,0 +1,180 @@
+{
+  "id": "2773c99a-6b8c-539d-9f8d-7cfb7849a36d",
+  "catalog": "elastic",
+  "name": "Suspicious /proc/maps Discovery",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/opt/traps/deb-installer",
+        "/opt/tanium/taniumclient/"
+      ],
+      "raw_values": [
+        "/opt/traps/deb-installer",
+        "/opt/Tanium/TaniumClient/*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "thieves.sh"
+      ],
+      "raw_values": [
+        "/home/*/sunlight/thieves.sh"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "cat",
+        "grep",
+        "tail",
+        "less",
+        "more",
+        "egrep",
+        "fgrep",
+        "awk"
+      ],
+      "raw_values": [
+        "cat",
+        "grep",
+        "tail",
+        "less",
+        "more",
+        "egrep",
+        "fgrep",
+        "awk"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/usr/bin/finalrd",
+        "/sbin/chkrootkit",
+        "./uac",
+        "/usr/sbin/chkrootkit"
+      ],
+      "raw_values": [
+        "/usr/bin/finalrd",
+        "/sbin/chkrootkit",
+        "./uac",
+        "/usr/sbin/chkrootkit"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "chkrootkit",
+        "thieves.sh",
+        "setup.sh"
+      ],
+      "raw_values": [
+        "/usr/sbin/chkrootkit",
+        "/sbin/chkrootkit",
+        "/opt/secl/linux-ir-scripts-v3/thieves.sh",
+        "/opt/traps/rpm-installer/setup.sh"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "maps"
+      ],
+      "raw_values": [
+        "/proc/*/maps"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "uac"
+      ],
+      "raw_values": [
+        "uac"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name in (\"cat\", \"grep\", \"tail\", \"less\", \"more\", \"egrep\", \"fgrep\", \"awk\") and process.args like \"/proc/*/maps\" and\nnot (\n  ?process.parent.args in (\"/usr/bin/finalrd\", \"/sbin/chkrootkit\", \"./uac\", \"/usr/sbin/chkrootkit\") or\n  ?process.parent.executable in (\"/usr/sbin/chkrootkit\", \"/sbin/chkrootkit\") or\n  ?process.parent.name == \"uac\" or\n  ?process.parent.executable in (\"/opt/secl/linux-ir-scripts-v3/thieves.sh\", \"/opt/traps/rpm-installer/setup.sh\") or\n  ?process.working_directory like (\"/opt/traps/deb-installer\", \"/opt/Tanium/TaniumClient/*\") or\n  ?process.parent.executable like (\"/home/*/sunlight/thieves.sh\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_proc_maps_read.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Credential Access",
+      "Data Source: Auditd Manager",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

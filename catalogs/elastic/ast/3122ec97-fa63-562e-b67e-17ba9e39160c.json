@@ -1,0 +1,95 @@
+{
+  "id": "3122ec97-fa63-562e-b67e-17ba9e39160c",
+  "catalog": "elastic",
+  "name": "Credential Acquisition via Registry Hive Dumping",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "save",
+        "export",
+        "sam",
+        "security"
+      ],
+      "raw_values": [
+        "save",
+        "export",
+        "hklm\\\\sam",
+        "hklm\\\\security"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n (?process.pe.original_file_name == \"reg.exe\" or process.name : \"reg.exe\") and\n process.args : (\"save\", \"export\") and\n process.args : (\"hklm\\\\sam\", \"hklm\\\\security\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_dump_registry_hives.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Sysmon",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "id": "7f5c5e92-b16b-5399-aeee-602a476b042a",
+  "catalog": "sigma",
+  "name": "file_event_win_desktop_ini_created_by_uncommon_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "desktop.ini"
+      ],
+      "raw_values": [
+        "*\\\\desktop.ini",
+        "C:\\\\$WINDOWS.~BT\\\\NewOS\\\\*",
+        "*\\\\JetBrains\\\\apps\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "7z.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\JetBrains\\\\Toolbox\\\\bin\\\\7z.exe",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\desktop.ini\" and (not ((process.executable like~ (\"C:\\\\Windows\\\\*\", \"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\")) or file.path:\"C:\\\\$WINDOWS.~BT\\\\NewOS\\\\*\")) and (not ((process.executable:\"C:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\JetBrains\\\\Toolbox\\\\bin\\\\7z.exe\" and file.path:\"*\\\\JetBrains\\\\apps\\\\*\") or (process.executable:\"C:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_desktop_ini_created_by_uncommon_process.eql",
+  "metadata": {}
+}

@@ -1,0 +1,115 @@
+{
+  "id": "5b72e44e-a29a-5eb3-a995-2cb06e87e880",
+  "catalog": "sigma",
+  "name": "proc_access_win_lsass_memdump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": "like~",
+      "values": [
+        "0x1038",
+        "0x1438",
+        "0x143a",
+        "0x1fffff"
+      ],
+      "raw_values": [
+        "*0x1038*",
+        "*0x1438*",
+        "*0x143a*",
+        "*0x1fffff*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": "like~",
+      "values": [
+        "dbgcore.dll",
+        "dbghelp.dll",
+        "kernel32.dll",
+        "kernelbase.dll",
+        "ntdll.dll"
+      ],
+      "raw_values": [
+        "*dbgcore.dll*",
+        "*dbghelp.dll*",
+        "*kernel32.dll*",
+        "*kernelbase.dll*",
+        "*ntdll.dll*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.sourceuser",
+      "raw_field": "winlog.event_data.SourceUser",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\temp\\\\asgard2-agent\\\\",
+        "\\\\thor\\\\thor64.exe+",
+        "|unknown("
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\Temp\\\\asgard2-agent\\\\*",
+        "*\\\\thor\\\\thor64.exe+*",
+        "*|UNKNOWN(*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x103800"
+      ],
+      "raw_values": [
+        "0x103800"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sysmon64.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\Sysmon64.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and (winlog.event_data.GrantedAccess like~ (\"*0x1038*\", \"*0x1438*\", \"*0x143a*\", \"*0x1fffff*\")) and (winlog.event_data.CallTrace like~ (\"*dbgcore.dll*\", \"*dbghelp.dll*\", \"*kernel32.dll*\", \"*kernelbase.dll*\", \"*ntdll.dll*\"))) and (not (winlog.event_data.SourceUser like~ (\"*AUTHORI*\", \"*AUTORI*\"))) and (not (((winlog.event_data.CallTrace:\"*:\\\\Windows\\\\Temp\\\\asgard2-agent\\\\*\" and winlog.event_data.CallTrace:\"*\\\\thor\\\\thor64.exe+*\" and winlog.event_data.CallTrace:\"*|UNKNOWN(*\") and winlog.event_data.GrantedAccess:\"0x103800\") or process.executable:\"*:\\\\Windows\\\\Sysmon64.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_access/proc_access_win_lsass_memdump.eql",
+  "metadata": {}
+}

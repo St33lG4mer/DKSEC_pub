@@ -1,0 +1,40 @@
+{
+  "id": "d5177fa8-1dcc-57d7-b4bb-e7ad8a2579d3",
+  "catalog": "sigma",
+  "name": "registry_set_system_lsa_nolmhash",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "system\\\\currentcontrolset\\\\control\\\\lsa\\\\nolmhash"
+      ],
+      "raw_values": [
+        "*System\\\\CurrentControlSet\\\\Control\\\\Lsa\\\\NoLMHash"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*System\\\\CurrentControlSet\\\\Control\\\\Lsa\\\\NoLMHash\" and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_system_lsa_nolmhash.eql",
+  "metadata": {}
+}

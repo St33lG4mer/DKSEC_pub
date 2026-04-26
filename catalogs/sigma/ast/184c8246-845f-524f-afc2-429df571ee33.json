@@ -1,0 +1,72 @@
+{
+  "id": "184c8246-845f-524f-afc2-429df571ee33",
+  "catalog": "sigma",
+  "name": "proc_creation_win_netsh_fw_rules_discovery",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "config",
+        "state",
+        "rule",
+        "name=all"
+      ],
+      "raw_values": [
+        "*config *",
+        "*state *",
+        "*rule *",
+        "*name=all*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "netsh",
+        "show",
+        "firewall"
+      ],
+      "raw_values": [
+        "*netsh*",
+        "*show *",
+        "*firewall *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\netsh.exe\" or process.pe.original_file_name:\"netsh.exe\") and ((process.command_line:\"*netsh*\" and process.command_line:\"*show *\" and process.command_line:\"*firewall *\") and (process.command_line like~ (\"*config *\", \"*state *\", \"*rule *\", \"*name=all*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_netsh_fw_rules_discovery.eql",
+  "metadata": {}
+}

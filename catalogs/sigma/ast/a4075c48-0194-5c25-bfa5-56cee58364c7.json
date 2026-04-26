@@ -1,0 +1,51 @@
+{
+  "id": "a4075c48-0194-5c25-bfa5-56cee58364c7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_remote_access_tools_logmein",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "lmiguardiansvc"
+      ],
+      "raw_values": [
+        "LMIGuardianSvc"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "lmiguardiansvc"
+      ],
+      "raw_values": [
+        "LMIGuardianSvc"
+      ]
+    },
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "logmein, inc."
+      ],
+      "raw_values": [
+        "LogMeIn, Inc."
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.description:\"LMIGuardianSvc\" or process.pe.product:\"LMIGuardianSvc\" or process.pe.company:\"LogMeIn, Inc.\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_logmein.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "6d58f18f-d3dc-59dc-bc76-12b38b77d5e2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2017_11882",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "eqnedt32.exe"
+      ],
+      "raw_values": [
+        "*\\\\EQNEDT32.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\EQNEDT32.EXE\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/Exploits/CVE-2017-11882/proc_creation_win_exploit_cve_2017_11882.eql",
+  "metadata": {}
+}

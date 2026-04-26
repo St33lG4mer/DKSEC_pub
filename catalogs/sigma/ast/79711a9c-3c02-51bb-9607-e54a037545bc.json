@@ -1,0 +1,53 @@
+{
+  "id": "79711a9c-3c02-51bb-9607-e54a037545bc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_pikabot_combined_commands_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "curl",
+        "wget",
+        "timeout",
+        "ping",
+        "rundll32",
+        "mkdir"
+      ],
+      "raw_values": [
+        "* & *",
+        "* || *",
+        "* curl*",
+        "* wget*",
+        "* timeout *",
+        "* ping *",
+        "* rundll32*",
+        "* mkdir *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "cmd"
+      ],
+      "raw_values": [
+        "*cmd*",
+        "*/c*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*cmd*\" and process.command_line:\"*/c*\") and (process.command_line like~ (\"* & *\", \"* || *\")) and (process.command_line like~ (\"* curl*\", \"* wget*\", \"* timeout *\", \"* ping *\")) and (process.command_line like~ (\"* rundll32*\", \"* mkdir *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/Pikabot/proc_creation_win_malware_pikabot_combined_commands_execution.eql",
+  "metadata": {}
+}

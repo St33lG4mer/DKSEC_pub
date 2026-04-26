@@ -1,0 +1,33 @@
+{
+  "id": "10cf62ea-c2aa-53d6-b54d-0794650b09a9",
+  "catalog": "sigma",
+  "name": "pipe_created_hktl_efspotato",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "srvsvc",
+        "ctxshare"
+      ],
+      "raw_values": [
+        "*\\\\pipe\\\\*",
+        "*\\\\pipe\\\\srvsvc*",
+        "*\\\\CtxShare*",
+        "\\\\pipe\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.name like~ (\"*\\\\pipe\\\\*\", \"*\\\\pipe\\\\srvsvc*\")) and (not (file.name like~ (\"*\\\\CtxShare*\", \"\\\\pipe\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_hktl_efspotato.eql",
+  "metadata": {}
+}

@@ -1,0 +1,48 @@
+{
+  "id": "ec1eb485-f524-5384-9bb9-56ed53cff702",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_darkgate_net_user_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "*\\\\net.exe",
+        "*\\\\net1.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "user",
+        "add",
+        "darkgate",
+        "safemode"
+      ],
+      "raw_values": [
+        "*user*",
+        "*add*",
+        "*DarkGate*",
+        "*SafeMode*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) and (process.command_line:\"*user*\" and process.command_line:\"*add*\" and process.command_line:\"*DarkGate*\" and process.command_line:\"*SafeMode*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/DarkGate/proc_creation_win_malware_darkgate_net_user_creation.eql",
+  "metadata": {}
+}

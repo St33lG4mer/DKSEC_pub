@@ -1,0 +1,29 @@
+{
+  "id": "b75312ec-d7c6-5cc0-bb22-376faa4392c8",
+  "catalog": "sigma",
+  "name": "registry_set_comhijack_sdclt",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\classes\\\\folder\\\\shell\\\\open\\\\command\\\\delegateexecute"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Classes\\\\Folder\\\\shell\\\\open\\\\command\\\\DelegateExecute*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Classes\\\\Folder\\\\shell\\\\open\\\\command\\\\DelegateExecute*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_comhijack_sdclt.eql",
+  "metadata": {}
+}

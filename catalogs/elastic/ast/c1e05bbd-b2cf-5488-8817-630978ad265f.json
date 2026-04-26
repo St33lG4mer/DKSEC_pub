@@ -1,0 +1,202 @@
+{
+  "id": "c1e05bbd-b2cf-5488-8817-630978ad265f",
+  "catalog": "elastic",
+  "name": "Unusual D-Bus Daemon Child Process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "setroubleshootd",
+        "setroubleshootprivileged.py",
+        "rpm",
+        "rhsmd"
+      ],
+      "raw_values": [
+        "/usr/lib/*",
+        "/usr/local/lib/*",
+        "/usr/libexec/*",
+        "/tmp/newroot/*",
+        "/usr/sbin/setroubleshootd",
+        "/usr/share/setroubleshoot/SetroubleshootPrivileged.py",
+        "/var/lib/awx/.local/share/containers/storage/overlay/*/SetroubleshootPrivileged.py",
+        "/home/*/.local/share/containers/storage/overlay/*/SetroubleshootPrivileged.py",
+        "/bin/rpm",
+        "/run/user/*/.bubblewrap/newroot/usr/libexec/rhsmd",
+        "/opt/CrowdStrike/sandbox/usr/libexec/rhsmd",
+        "/run/user/*/.bubblewrap/*/setroubleshootd"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "software-properties-dbus",
+        "servicehelper.py",
+        "usb-creator-helper",
+        "aptd",
+        "aptk",
+        "hp-pkservice",
+        "ls-dbus-backend"
+      ],
+      "raw_values": [
+        "/usr/lib/software-properties/software-properties-dbus",
+        "/usr/share/backintime/qt/serviceHelper.py",
+        "/usr/share/usb-creator/usb-creator-helper",
+        "/usr/sbin/aptd",
+        "/usr/sbin/aptk",
+        "/usr/bin/hp-pkservice",
+        "/usr/libexec/language-selector/ls-dbus-backend"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dbus-daemon-launch-helper",
+        "gnome-keyring-daemon",
+        "abrt-dbus",
+        "aptd",
+        "usb-creator-helper"
+      ],
+      "raw_values": [
+        "dbus-daemon-launch-helper",
+        "gnome-keyring-daemon",
+        "abrt-dbus",
+        "aptd",
+        "usb-creator-helper"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "dbus-daemon"
+      ],
+      "raw_values": [
+        "dbus-daemon"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "--session"
+      ],
+      "raw_values": [
+        "--session"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "perl"
+      ],
+      "raw_values": [
+        "perl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "system-tools-backends-*.pl"
+      ],
+      "raw_values": [
+        "/usr/share/system-tools-backends-*.pl"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "like",
+      "values": [
+        "/run/user/*/.bubblewrap/newroot/var/lib/gdm/"
+      ],
+      "raw_values": [
+        "/run/user/*/.bubblewrap/newroot/var/lib/gdm/"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\") and\nprocess.parent.name == \"dbus-daemon\" and process.args_count > 1 and not (\n  process.parent.args == \"--session\" or\n  process.args in (\"/usr/lib/software-properties/software-properties-dbus\", \"/usr/share/backintime/qt/serviceHelper.py\") or\n  process.name in (\"dbus-daemon-launch-helper\", \"gnome-keyring-daemon\", \"abrt-dbus\", \"aptd\", \"usb-creator-helper\") or\n  process.executable like (\n    \"/usr/lib/*\", \"/usr/local/lib/*\", \"/usr/libexec/*\", \"/tmp/newroot/*\", \"/usr/sbin/setroubleshootd\",\n    \"/usr/share/setroubleshoot/SetroubleshootPrivileged.py\",\n    \"/var/lib/awx/.local/share/containers/storage/overlay/*/SetroubleshootPrivileged.py\",\n    \"/home/*/.local/share/containers/storage/overlay/*/SetroubleshootPrivileged.py\",\n    \"/bin/rpm\", \"/run/user/*/.bubblewrap/newroot/usr/libexec/rhsmd\", \"/opt/CrowdStrike/sandbox/usr/libexec/rhsmd\",\n    \"/run/user/*/.bubblewrap/*/setroubleshootd\"\n  ) or\n  (\n    process.name like \"python*\" and\n    process.args in (\n      \"/usr/share/usb-creator/usb-creator-helper\", \"/usr/sbin/aptd\", \"/usr/sbin/aptk\", \"/usr/bin/hp-pkservice\",\n      \"/usr/libexec/language-selector/ls-dbus-backend\"\n    )\n  ) or\n  (process.name == \"perl\" and process.args like \"/usr/share/system-tools-backends-*.pl\") or\n  ?process.working_directory like \"/run/user/*/.bubblewrap/newroot/var/lib/gdm/\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_dbus_unsual_daemon_parent_execution.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Tactic: Execution",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

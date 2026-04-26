@@ -1,0 +1,50 @@
+{
+  "id": "6109bebe-aa56-562e-80a1-3f7e1751228b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wab_unusual_parents",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "wmiprvse.exe",
+        "svchost.exe",
+        "dllhost.exe",
+        "wab.exe",
+        "wabmig.exe"
+      ],
+      "raw_values": [
+        "*\\\\WmiPrvSE.exe",
+        "*\\\\svchost.exe",
+        "*\\\\dllhost.exe",
+        "*\\\\wab.exe",
+        "*\\\\wabmig.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wab.exe",
+        "wabmig.exe"
+      ],
+      "raw_values": [
+        "*\\\\wab.exe",
+        "*\\\\wabmig.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\WmiPrvSE.exe\", \"*\\\\svchost.exe\", \"*\\\\dllhost.exe\")) and (process.executable like~ (\"*\\\\wab.exe\", \"*\\\\wabmig.exe\"))) or (process.parent.executable like~ (\"*\\\\wab.exe\", \"*\\\\wabmig.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wab_unusual_parents.eql",
+  "metadata": {}
+}

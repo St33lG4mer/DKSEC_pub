@@ -1,0 +1,196 @@
+{
+  "id": "edd8513e-6419-5a17-8e94-8f52cb639773",
+  "catalog": "elastic",
+  "name": "Potential Masquerading as Business App Installer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.code_signature.status",
+      "raw_field": "process.code_signature.status",
+      "operator": ":",
+      "values": [
+        "errorcode_endpoint",
+        "erroruntrustedroot",
+        "errorchaining"
+      ],
+      "raw_values": [
+        "errorCode_endpoint*",
+        "errorUntrustedRoot",
+        "errorChaining"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "zoom*installer*.exe",
+        "zoom*setup*.exe",
+        "zoom.exe",
+        "microsoftedge*.exe",
+        "msedge*.exe",
+        "slack*.exe",
+        "webex*.exe",
+        "teams*.exe",
+        "discord*.exe",
+        "whatsapp*.exe",
+        "outlook*.exe",
+        "msoutlookhelp-pst-viewer.exe",
+        "thunderbird*.exe",
+        "grammarly*.exe",
+        "dropbox*.exe",
+        "tableau*.exe",
+        "googledrive*.exe",
+        "office*setup*.exe",
+        "okta*.exe",
+        "onedrive*.exe",
+        "chrome*.exe",
+        "firefox*.exe",
+        "brave*.exe",
+        "googlecloud*.exe",
+        "github*.exe",
+        "notion*.exe"
+      ],
+      "raw_values": [
+        "*zoom*installer*.exe",
+        "*zoom*setup*.exe",
+        "zoom.exe",
+        "*microsoftedge*.exe",
+        "*msedge*.exe",
+        "?:\\\\Users\\\\*\\\\Downloads\\\\*",
+        "*slack*.exe",
+        "*webex*.exe",
+        "teams*.exe",
+        "*discord*.exe",
+        "*whatsapp*.exe",
+        "*outlook*.exe",
+        "MSOutlookHelp-PST-Viewer.exe",
+        "*thunderbird*.exe",
+        "*grammarly*.exe",
+        "*dropbox*.exe",
+        "*tableau*.exe",
+        "*googledrive*.exe",
+        "*office*setup*.exe",
+        "*okta*.exe",
+        "*onedrive*.exe",
+        "*chrome*.exe",
+        "*firefox*.exe",
+        "*brave*.exe",
+        "*GoogleCloud*.exe",
+        "*github*.exe",
+        "*notion*.exe"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": "in",
+      "values": [
+        "slack technologies, inc.",
+        "slack technologies, llc",
+        "cisco webex llc",
+        "cisco systems, inc.",
+        "whatsapp llc",
+        "whatsapp, inc",
+        "24803d75-212c-471a-bc57-9ef86ab91435",
+        "microsoft corporation",
+        "zoom video communications, inc.",
+        "zoom communications, inc.",
+        "google llc",
+        "google inc"
+      ],
+      "raw_values": [
+        "Slack Technologies, Inc.",
+        "Slack Technologies, LLC",
+        "Cisco WebEx LLC",
+        "Cisco Systems, Inc.",
+        "WhatsApp LLC",
+        "WhatsApp, Inc",
+        "24803D75-212C-471A-BC57-9EF86AB91435",
+        "Microsoft Corporation",
+        "Zoom Video Communications, Inc.",
+        "Zoom Communications, Inc.",
+        "Google LLC",
+        "Google Inc"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": "==",
+      "values": [
+        "microsoft corporation",
+        "discord inc.",
+        "aryson technologies pvt. ltd",
+        "mozilla corporation",
+        "grammarly, inc.",
+        "dropbox, inc",
+        "tableau software llc",
+        "google llc",
+        "okta, inc.",
+        "brave software, inc.",
+        "github, inc.",
+        "notion labs, inc."
+      ],
+      "raw_values": [
+        "Microsoft Corporation",
+        "Discord Inc.",
+        "Aryson Technologies Pvt. Ltd",
+        "Mozilla Corporation",
+        "Grammarly, Inc.",
+        "Dropbox, Inc",
+        "Tableau Software LLC",
+        "Google LLC",
+        "Okta, Inc.",
+        "Brave Software, Inc.",
+        "GitHub, Inc.",
+        "Notion Labs, Inc."
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and \n  event.type == \"start\" and process.executable : \"?:\\\\Users\\\\*\\\\Downloads\\\\*\" and\n  not process.code_signature.status like (\"errorCode_endpoint*\", \"errorUntrustedRoot\", \"errorChaining\") and process.hash.sha256 != null and \n  (\n    /* Slack */\n    (process.name : \"*slack*.exe\" and not\n      (process.code_signature.subject_name in (\n        \"Slack Technologies, Inc.\",\n        \"Slack Technologies, LLC\"\n       ) and process.code_signature.trusted == true)\n    ) or\n\n    /* WebEx */\n    (process.name : \"*webex*.exe\" and not\n      (process.code_signature.subject_name in (\"Cisco WebEx LLC\", \"Cisco Systems, Inc.\") and process.code_signature.trusted == true)\n    ) or\n\n    /* Teams */\n    (process.name : \"teams*.exe\" and not\n      (process.code_signature.subject_name == \"Microsoft Corporation\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Discord */\n    (process.name : \"*discord*.exe\" and not\n      (process.code_signature.subject_name == \"Discord Inc.\" and process.code_signature.trusted == true)\n    ) or\n\n    /* WhatsApp */\n    (process.name : \"*whatsapp*.exe\" and not\n      (process.code_signature.subject_name in (\n        \"WhatsApp LLC\",\n        \"WhatsApp, Inc\",\n        \"24803D75-212C-471A-BC57-9EF86AB91435\",\n        /* WhatsApp Installer - MS Store */\n        \"Microsoft Corporation\"\n       ) and process.code_signature.trusted == true)\n    ) or\n\n    /* Zoom */\n    (process.name : (\"*zoom*installer*.exe\", \"*zoom*setup*.exe\", \"zoom.exe\")  and not\n      (process.code_signature.subject_name in (\n        \"Zoom Video Communications, Inc.\", \"Zoom Communications, Inc.\"\n       ) and process.code_signature.trusted == true)\n    ) or\n\n    /* Outlook */\n    (process.name : \"*outlook*.exe\" and not\n      (\n        (process.code_signature.subject_name == \"Microsoft Corporation\" and process.code_signature.trusted == true) or\n        (\n          process.name: \"MSOutlookHelp-PST-Viewer.exe\" and process.code_signature.subject_name == \"Aryson Technologies Pvt. Ltd\" and\n          process.code_signature.trusted == true\n        )\n      )\n    ) or\n\n    /* Thunderbird */\n    (process.name : \"*thunderbird*.exe\" and not\n      (process.code_signature.subject_name == \"Mozilla Corporation\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Grammarly */\n    (process.name : \"*grammarly*.exe\" and not\n      (process.code_signature.subject_name == \"Grammarly, Inc.\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Dropbox */\n    (process.name : \"*dropbox*.exe\" and not\n      (process.code_signature.subject_name == \"Dropbox, Inc\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Tableau */\n    (process.name : \"*tableau*.exe\" and not\n      (process.code_signature.subject_name == \"Tableau Software LLC\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Google Drive */\n    (process.name : \"*googledrive*.exe\" and not\n      (process.code_signature.subject_name == \"Google LLC\" and process.code_signature.trusted == true)\n    ) or\n\n    /* MSOffice */\n    (process.name : \"*office*setup*.exe\" and not\n      (process.code_signature.subject_name == \"Microsoft Corporation\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Okta */\n    (process.name : \"*okta*.exe\" and not\n      (process.code_signature.subject_name == \"Okta, Inc.\" and process.code_signature.trusted == true)\n    ) or\n\n    /* OneDrive */\n    (process.name : \"*onedrive*.exe\" and not\n      (process.code_signature.subject_name == \"Microsoft Corporation\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Chrome */\n    (process.name : \"*chrome*.exe\" and not\n      (process.code_signature.subject_name in (\"Google LLC\", \"Google Inc\") and process.code_signature.trusted == true)\n    ) or\n\n    /* Firefox */\n    (process.name : \"*firefox*.exe\" and not\n      (process.code_signature.subject_name == \"Mozilla Corporation\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Edge */\n    (process.name : (\"*microsoftedge*.exe\", \"*msedge*.exe\") and not\n      (process.code_signature.subject_name == \"Microsoft Corporation\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Brave */\n    (process.name : \"*brave*.exe\" and not\n      (process.code_signature.subject_name == \"Brave Software, Inc.\" and process.code_signature.trusted == true)\n    ) or\n\n    /* GoogleCloud Related Tools */\n    (process.name : \"*GoogleCloud*.exe\" and not\n      (process.code_signature.subject_name == \"Google LLC\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Github Related Tools */\n    (process.name : \"*github*.exe\" and not\n      (process.code_signature.subject_name == \"GitHub, Inc.\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Notion */\n    (process.name : \"*notion*.exe\" and not\n      (process.code_signature.subject_name == \"Notion Labs, Inc.\" and process.code_signature.trusted == true)\n    )\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_masquerading_business_apps_installer.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Initial Access",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

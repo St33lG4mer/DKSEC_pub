@@ -1,0 +1,80 @@
+{
+  "id": "a240451a-60ec-51e1-9669-647e7426b294",
+  "catalog": "sigma",
+  "name": "proc_creation_win_office_outlook_susp_child_processes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "appvlp.exe",
+        "bash.exe",
+        "cmd.exe",
+        "cscript.exe",
+        "forfiles.exe",
+        "hh.exe",
+        "mftrace.exe",
+        "msbuild.exe",
+        "msdt.exe",
+        "mshta.exe",
+        "msiexec.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "schtasks.exe",
+        "scrcons.exe",
+        "scriptrunner.exe",
+        "sh.exe",
+        "svchost.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppVLP.exe",
+        "*\\\\bash.exe",
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\forfiles.exe",
+        "*\\\\hh.exe",
+        "*\\\\mftrace.exe",
+        "*\\\\msbuild.exe",
+        "*\\\\msdt.exe",
+        "*\\\\mshta.exe",
+        "*\\\\msiexec.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\scrcons.exe",
+        "*\\\\scriptrunner.exe",
+        "*\\\\sh.exe",
+        "*\\\\svchost.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\OUTLOOK.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\OUTLOOK.EXE\" and (process.executable like~ (\"*\\\\AppVLP.exe\", \"*\\\\bash.exe\", \"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\forfiles.exe\", \"*\\\\hh.exe\", \"*\\\\mftrace.exe\", \"*\\\\msbuild.exe\", \"*\\\\msdt.exe\", \"*\\\\mshta.exe\", \"*\\\\msiexec.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\schtasks.exe\", \"*\\\\scrcons.exe\", \"*\\\\scriptrunner.exe\", \"*\\\\sh.exe\", \"*\\\\svchost.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_office_outlook_susp_child_processes.eql",
+  "metadata": {}
+}

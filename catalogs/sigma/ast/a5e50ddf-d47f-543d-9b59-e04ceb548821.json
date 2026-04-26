@@ -1,0 +1,73 @@
+{
+  "id": "a5e50ddf-d47f-543d-9b59-e04ceb548821",
+  "catalog": "sigma",
+  "name": "win_system_service_install_pua_proceshacker",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicename",
+      "raw_field": "winlog.event_data.ServiceName",
+      "operator": ":",
+      "values": [
+        "processhacker"
+      ],
+      "raw_values": [
+        "ProcessHacker*"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": ":",
+      "values": [
+        "localsystem"
+      ],
+      "raw_values": [
+        "LocalSystem"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\" and winlog.event_data.ServiceName:\"ProcessHacker*\" and user.name:\"LocalSystem\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_service_install_pua_proceshacker.eql",
+  "metadata": {}
+}

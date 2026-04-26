@@ -1,0 +1,63 @@
+{
+  "id": "f52854a8-ef61-5b81-a897-e88ba9630e15",
+  "catalog": "elastic",
+  "name": "Suspicious Automator Workflows Execution",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "automator"
+      ],
+      "raw_values": [
+        "Automator"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=15s\n [process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and process.name == \"Automator\"]\n [network where host.os.type == \"macos\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/execution_script_via_automator_workflows.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

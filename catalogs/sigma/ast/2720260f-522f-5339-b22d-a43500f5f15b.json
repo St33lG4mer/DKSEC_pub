@@ -1,0 +1,51 @@
+{
+  "id": "2720260f-522f-5339-b22d-a43500f5f15b",
+  "catalog": "sigma",
+  "name": "win_dns_client_mega_nz",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-dns client events/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-DNS Client Events/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "3008"
+      ],
+      "raw_values": [
+        "3008"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "userstorage.mega.co.nz"
+      ],
+      "raw_values": [
+        "*userstorage.mega.co.nz*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-DNS Client Events/Operational\" and (event.code:\"3008\" and dns.question.name:\"*userstorage.mega.co.nz*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/dns_client/win_dns_client_mega_nz.eql",
+  "metadata": {}
+}

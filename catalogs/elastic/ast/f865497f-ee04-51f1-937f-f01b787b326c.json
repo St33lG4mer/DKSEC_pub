@@ -1,0 +1,28 @@
+{
+  "id": "f865497f-ee04-51f1-937f-f01b787b326c",
+  "catalog": "elastic",
+  "name": "Unusual Windows User Privilege Elevation Activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/privilege_escalation_ml_windows_rare_user_runas_event.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

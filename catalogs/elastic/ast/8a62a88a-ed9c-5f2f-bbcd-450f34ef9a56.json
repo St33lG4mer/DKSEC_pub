@@ -1,0 +1,115 @@
+{
+  "id": "8a62a88a-ed9c-5f2f-bbcd-450f34ef9a56",
+  "catalog": "elastic",
+  "name": "AWS SSM `SendCommand` with Run Shell Command Parameters",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "raw_values": [
+        "windows",
+        "macos",
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "send-command",
+        "--parameters",
+        "aws-runshellscript",
+        "aws-runpowershellscript"
+      ],
+      "raw_values": [
+        "send-command",
+        "--parameters",
+        "AWS-RunShellScript",
+        "AWS-RunPowerShellScript"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "aws"
+      ],
+      "raw_values": [
+        "aws"
+      ]
+    }
+  ],
+  "raw_query": "event.category: \"process\" and event.type: \"start\" and process.name: \"aws\"\nand (\n    host.os.type: (\"windows\" or \"macos\")\n    or (\n        host.os.type: \"linux\"\n        and event.action: (\"exec\" or \"exec_event\" or \"executed\" or \"process_started\")\n    )\n)\nand process.args: (\n    \"send-command\" and \"--parameters\" and commands=*\n    and (\"AWS-RunShellScript\" or \"AWS-RunPowerShellScript\")\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_aws_ssm_sendcommand_with_command_parameters.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Cloud",
+      "OS: Linux",
+      "OS: macOS",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

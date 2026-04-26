@@ -1,0 +1,44 @@
+{
+  "id": "787f9595-b254-532c-9bde-7ad5bf46ae28",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_babyshark",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "im cmd.exe"
+      ],
+      "raw_values": [
+        "*reg query \\",
+        "*",
+        "*cmd.exe /c taskkill /im cmd.exe*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "powershell.exe mshta.exe http",
+        ".hta"
+      ],
+      "raw_values": [
+        "*powershell.exe mshta.exe http*",
+        "*.hta*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*powershell.exe mshta.exe http*\" and process.command_line:\"*.hta*\") or (process.command_line like~ (\"*reg query \\\"HKEY_CURRENT_USER\\\\Software\\\\Microsoft\\\\Terminal Server Client\\\\Default\\\"*\", \"*cmd.exe /c taskkill /im cmd.exe*\", \"*(New-Object System.Net.WebClient).UploadFile('http*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/Malware/BabyShark/proc_creation_win_malware_babyshark.eql",
+  "metadata": {}
+}

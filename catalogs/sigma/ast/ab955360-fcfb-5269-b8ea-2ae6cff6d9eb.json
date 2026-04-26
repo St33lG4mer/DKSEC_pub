@@ -1,0 +1,31 @@
+{
+  "id": "ab955360-fcfb-5269-b8ea-2ae6cff6d9eb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dns_exfiltration_tools_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "iodine.exe",
+        "dnscat2"
+      ],
+      "raw_values": [
+        "*\\\\iodine.exe",
+        "*\\\\dnscat2*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable like~ (\"*\\\\iodine.exe\", \"*\\\\dnscat2*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dns_exfiltration_tools_execution.eql",
+  "metadata": {}
+}

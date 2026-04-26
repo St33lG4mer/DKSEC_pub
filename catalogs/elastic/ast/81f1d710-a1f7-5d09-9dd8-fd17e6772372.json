@@ -1,0 +1,29 @@
+{
+  "id": "81f1d710-a1f7-5d09-9dd8-fd17e6772372",
+  "catalog": "elastic",
+  "name": "Machine Learning Detected DGA activity using a known SUNBURST DNS domain",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "ml_is_dga.malicious_prediction:1 and dns.question.registered_domain:avsvmcloud.com\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/dga/command_and_control_ml_dga_activity_using_sunburst_domain.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Network",
+      "Domain: Endpoint",
+      "Data Source: Elastic Defend",
+      "Use Case: Domain Generation Algorithm Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Command and Control",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

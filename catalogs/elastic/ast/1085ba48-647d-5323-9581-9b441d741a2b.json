@@ -1,0 +1,62 @@
+{
+  "id": "1085ba48-647d-5323-9581-9b441d741a2b",
+  "catalog": "elastic",
+  "name": "AWS S3 Bucket Expiration Lifecycle Configuration Added",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "putbucketlifecycle"
+      ],
+      "raw_values": [
+        "PutBucketLifecycle"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n   and event.action == \"PutBucketLifecycle\"\n   and event.outcome == \"success\"\n   and stringContains(aws.cloudtrail.request_parameters, \"Expiration=\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_s3_bucket_lifecycle_expiration_added.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: Amazon S3",
+      "Use Case: Asset Visibility",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

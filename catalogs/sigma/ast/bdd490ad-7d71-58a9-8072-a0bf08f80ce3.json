@@ -1,0 +1,64 @@
+{
+  "id": "bdd490ad-7d71-58a9-8072-a0bf08f80ce3",
+  "catalog": "sigma",
+  "name": "win_security_susp_group_policy_abuse_privilege_addition",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.attributevalue",
+      "raw_field": "winlog.event_data.AttributeValue",
+      "operator": "like~",
+      "values": [
+        "827d319e-6eac-11d2-a4ea-00c04f79f83a",
+        "803e14a0-b4fb-11d0-a0d0-00a0c90f574b"
+      ],
+      "raw_values": [
+        "*827D319E-6EAC-11D2-A4EA-00C04F79F83A*",
+        "*803E14A0-B4FB-11D0-A0D0-00A0C90F574B*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5136"
+      ],
+      "raw_values": [
+        "5136"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": ":",
+      "values": [
+        "gpcmachineextensionnames"
+      ],
+      "raw_values": [
+        "gPCMachineExtensionNames"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"5136\" and winlog.event_data.AttributeLDAPDisplayName:\"gPCMachineExtensionNames\" and (winlog.event_data.AttributeValue like~ (\"*827D319E-6EAC-11D2-A4EA-00C04F79F83A*\", \"*803E14A0-B4FB-11D0-A0D0-00A0C90F574B*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_group_policy_abuse_privilege_addition.eql",
+  "metadata": {}
+}

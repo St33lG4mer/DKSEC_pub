@@ -1,0 +1,46 @@
+{
+  "id": "42cc80dd-749d-5095-bd1f-57ebb16ffb91",
+  "catalog": "sigma",
+  "name": "registry_set_legalnotice_susp_message",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\legalnoticecaption",
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\system\\\\legalnoticetext"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\LegalNoticeCaption*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\LegalNoticeText*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "encrypted",
+        "unlock-password",
+        "paying"
+      ],
+      "raw_values": [
+        "*encrypted*",
+        "*Unlock-Password*",
+        "*paying*"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\LegalNoticeCaption*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\LegalNoticeText*\")) and (winlog.event_data.Details like~ (\"*encrypted*\", \"*Unlock-Password*\", \"*paying*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_legalnotice_susp_message.eql",
+  "metadata": {}
+}

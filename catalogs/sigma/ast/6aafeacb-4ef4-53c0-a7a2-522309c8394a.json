@@ -1,0 +1,41 @@
+{
+  "id": "6aafeacb-4ef4-53c0-a7a2-522309c8394a",
+  "catalog": "sigma",
+  "name": "image_load_side_load_ualapi",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "fxssvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\fxssvc.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "ualapi.dll"
+      ],
+      "raw_values": [
+        "*ualapi.dll",
+        "C:\\\\Windows\\\\WinSxS\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\fxssvc.exe\" and file.path:\"*ualapi.dll\") and (not file.path:\"C:\\\\Windows\\\\WinSxS\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_ualapi.eql",
+  "metadata": {}
+}

@@ -1,0 +1,28 @@
+{
+  "id": "b948c60e-ad2f-502b-baad-77a669989e39",
+  "catalog": "elastic",
+  "name": "AWS IAM Roles Anywhere Profile Creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail\n    and event.provider: rolesanywhere.amazonaws.com\n    and event.action: CreateProfile\n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_iam_roles_anywhere_profile_created.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS IAM",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

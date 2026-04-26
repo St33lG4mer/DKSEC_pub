@@ -1,0 +1,64 @@
+{
+  "id": "c016b49c-a6de-59e3-a41e-ff678ae15ce0",
+  "catalog": "sigma",
+  "name": "win_security_teams_suspicious_objectaccess",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        "\\\\microsoft\\\\teams\\\\cookies",
+        "\\\\microsoft\\\\teams\\\\local storage\\\\leveldb"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Teams\\\\Cookies*",
+        "*\\\\Microsoft\\\\Teams\\\\Local Storage\\\\leveldb*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4663"
+      ],
+      "raw_values": [
+        "4663"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "teams.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4663\" and (winlog.event_data.ObjectName like~ (\"*\\\\Microsoft\\\\Teams\\\\Cookies*\", \"*\\\\Microsoft\\\\Teams\\\\Local Storage\\\\leveldb*\"))) and (not process.executable:\"*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_teams_suspicious_objectaccess.eql",
+  "metadata": {}
+}

@@ -1,0 +1,60 @@
+{
+  "id": "aa5cff39-27f2-5f50-97c9-a375784b7cc1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_cli_obfuscation_unicode_img",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\powershell.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.dll",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "Cmd.EXE",
+        "cscript.exe",
+        "PowerShell.EXE",
+        "PowerShell_ISE.EXE",
+        "pwsh.dll",
+        "wscript.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\")) and (process.pe.original_file_name like~ (\"Cmd.EXE\", \"cscript.exe\", \"PowerShell.EXE\", \"PowerShell_ISE.EXE\", \"pwsh.dll\", \"wscript.exe\"))) and (process.command_line like~ (\"*ˣ*\", \"*˪*\", \"*ˢ*\", \"*∕*\", \"*⁄*\", \"*―*\", \"*—*\", \"* *\", \"*¯*\", \"*®*\", \"*¶*\", \"*⠀*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_cli_obfuscation_unicode_img.eql",
+  "metadata": {}
+}

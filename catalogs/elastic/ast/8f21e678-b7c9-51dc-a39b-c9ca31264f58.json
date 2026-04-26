@@ -1,0 +1,85 @@
+{
+  "id": "8f21e678-b7c9-51dc-a39b-c9ca31264f58",
+  "catalog": "elastic",
+  "name": "Windows Sandbox with Sensitive Configuration",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "wsb.exe",
+        "windowssandboxclient.exe"
+      ],
+      "raw_values": [
+        "wsb.exe",
+        "WindowsSandboxClient.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "networking>",
+        "<readonly>false",
+        "<logoncommand>",
+        "<networkingenabled>true"
+      ],
+      "raw_values": [
+        "*<Networking>Enable</Networking>*",
+        "*<HostFolder>C:\\\\*<ReadOnly>false*",
+        "*<LogonCommand>*",
+        "*<NetworkingEnabled>true*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : (\"wsb.exe\", \"WindowsSandboxClient.exe\") and\n  process.command_line : (\"*<Networking>Enable</Networking>*\",\n                          \"*<HostFolder>C:\\\\*<ReadOnly>false*\",\n                          \"*<LogonCommand>*\",\n                          \"*<NetworkingEnabled>true*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_run_virt_windowssandbox.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

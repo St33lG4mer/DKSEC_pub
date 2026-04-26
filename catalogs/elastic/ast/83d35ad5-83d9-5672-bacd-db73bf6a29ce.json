@@ -1,0 +1,29 @@
+{
+  "id": "83d35ad5-83d9-5672-bacd-db73bf6a29ce",
+  "catalog": "elastic",
+  "name": "Azure Storage Blob Retrieval via AzCopy",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: azure.platformlogs and\n    event.action: GetBlob and\n    azure.platformlogs.identity.type: SAS and\n    azure.platformlogs.properties.userAgentHeader: AzCopy* and\n    azure.platformlogs.statusCode: 200\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/exfiltration_azure_storage_blob_download_azcopy_sas_token.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Storage",
+      "Data Source: Azure",
+      "Data Source: Azure Platform Logs",
+      "Data Source: Azure Storage",
+      "Use Case: Threat Detection",
+      "Tactic: Exfiltration",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

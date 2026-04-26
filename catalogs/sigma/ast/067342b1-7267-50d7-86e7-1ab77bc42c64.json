@@ -1,0 +1,66 @@
+{
+  "id": "067342b1-7267-50d7-86e7-1ab77bc42c64",
+  "catalog": "sigma",
+  "name": "proc_creation_win_nslookup_poweshell_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-q=txt",
+        "-querytype=txt"
+      ],
+      "raw_values": [
+        "* -q=txt *",
+        "* -querytype=txt *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "nslookup.exe"
+      ],
+      "raw_values": [
+        "*\\\\nslookup.exe*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\nslookup.exe"
+      ],
+      "raw_values": [
+        "\\\\nslookup.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\nslookup.exe*\" or process.pe.original_file_name:\"\\\\nslookup.exe\") and ((process.parent.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.command_line like~ (\"* -q=txt *\", \"* -querytype=txt *\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_nslookup_poweshell_download.eql",
+  "metadata": {}
+}

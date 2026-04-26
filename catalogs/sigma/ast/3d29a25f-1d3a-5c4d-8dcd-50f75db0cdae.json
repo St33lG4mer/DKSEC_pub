@@ -1,0 +1,48 @@
+{
+  "id": "3d29a25f-1d3a-5c4d-8dcd-50f75db0cdae",
+  "catalog": "sigma",
+  "name": "proc_creation_win_python_pty_spawn",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "python.exe",
+        "python3.exe",
+        "python2.exe"
+      ],
+      "raw_values": [
+        "*python.exe",
+        "*python3.exe",
+        "*python2.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "import pty",
+        ".spawn(",
+        "from pty import spawn"
+      ],
+      "raw_values": [
+        "*import pty*",
+        "*.spawn(*",
+        "*from pty import spawn*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*python.exe\", \"*python3.exe\", \"*python2.exe\")) and ((process.command_line:\"*import pty*\" and process.command_line:\"*.spawn(*\") or process.command_line:\"*from pty import spawn*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_python_pty_spawn.eql",
+  "metadata": {}
+}

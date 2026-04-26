@@ -1,0 +1,60 @@
+{
+  "id": "0c75aa7c-7465-52af-bb6a-72982ab2487e",
+  "catalog": "sigma",
+  "name": "image_load_dll_amsi_uncommon_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "sysmon64.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\explorer.exe",
+        "*:\\\\Windows\\\\Sysmon64.exe",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "amsi.dll"
+      ],
+      "raw_values": [
+        "*\\\\amsi.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ngentask.exe",
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*\\\\ngentask.exe",
+        "*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*",
+        "*\\\\MsMpEng.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\amsi.dll\" and (not ((process.executable like~ (\"*:\\\\Windows\\\\explorer.exe\", \"*:\\\\Windows\\\\Sysmon64.exe\")) or (process.executable like~ (\"*:\\\\Program Files (x86)\\\\*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\", \"*:\\\\Windows\\\\WinSxS\\\\*\")) or ((process.executable like~ (\"*:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*\")) and process.executable:\"*\\\\ngentask.exe\") or (?process.executable == null) or process.executable==\"\")) and (not (process.executable:\"*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\" and process.executable:\"*\\\\MsMpEng.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/image_load/image_load_dll_amsi_uncommon_process.eql",
+  "metadata": {}
+}

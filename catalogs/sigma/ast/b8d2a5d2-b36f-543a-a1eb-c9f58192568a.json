@@ -1,0 +1,29 @@
+{
+  "id": "b8d2a5d2-b36f-543a-a1eb-c9f58192568a",
+  "catalog": "sigma",
+  "name": "image_load_side_load_shell_chrome_api",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "shellchromeapi.dll"
+      ],
+      "raw_values": [
+        "*\\\\ShellChromeAPI.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\ShellChromeAPI.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_shell_chrome_api.eql",
+  "metadata": {}
+}

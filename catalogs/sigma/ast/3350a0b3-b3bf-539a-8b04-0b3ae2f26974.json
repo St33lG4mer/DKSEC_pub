@@ -1,0 +1,29 @@
+{
+  "id": "3350a0b3-b3bf-539a-8b04-0b3ae2f26974",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_tttracer_mod_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "tttracer.exe"
+      ],
+      "raw_values": [
+        "*\\\\tttracer.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\tttracer.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_tttracer_mod_load.eql",
+  "metadata": {}
+}

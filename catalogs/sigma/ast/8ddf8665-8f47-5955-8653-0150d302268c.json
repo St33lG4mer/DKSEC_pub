@@ -1,0 +1,40 @@
+{
+  "id": "8ddf8665-8f47-5955-8653-0150d302268c",
+  "catalog": "sigma",
+  "name": "win_certificateservicesclient_lifecycle_system_cert_exported",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-certificateservicesclient-lifecycle-system/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CertificateServicesClient-Lifecycle-System/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "1007"
+      ],
+      "raw_values": [
+        "1007"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CertificateServicesClient-Lifecycle-System/Operational\" and event.code:\"1007\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/certificate_services_client_lifecycle_system/win_certificateservicesclient_lifecycle_system_cert_exported.eql",
+  "metadata": {}
+}

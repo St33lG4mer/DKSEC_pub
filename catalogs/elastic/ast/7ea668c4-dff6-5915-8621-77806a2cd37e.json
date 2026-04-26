@@ -1,0 +1,75 @@
+{
+  "id": "7ea668c4-dff6-5915-8621-77806a2cd37e",
+  "catalog": "elastic",
+  "name": "AWS RDS DB Snapshot Shared with Another Account",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "modifydbsnapshotattribute",
+        "modifydbclustersnapshotattribute"
+      ],
+      "raw_values": [
+        "ModifyDBSnapshotAttribute",
+        "ModifyDBClusterSnapshotAttribute"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "rds.amazonaws.com"
+      ],
+      "raw_values": [
+        "rds.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n    and event.provider == \"rds.amazonaws.com\"\n    and event.outcome == \"success\"\n    and event.action in (\"ModifyDBSnapshotAttribute\", \"ModifyDBClusterSnapshotAttribute\")\n    and stringContains(aws.cloudtrail.request_parameters, \"attributeName=restore\")\n    and stringContains(aws.cloudtrail.request_parameters, \"valuesToAdd=[*]\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/exfiltration_rds_snapshot_shared_with_another_account.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS RDS",
+      "Resources: Investigation Guide",
+      "Use Case: Threat Detection",
+      "Tactic: Exfiltration"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "ff3e2e89-e97c-5681-922c-130151c82cac",
+  "catalog": "elastic",
+  "name": "New USB Storage Device Mounted",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "host.os.type:(macos or windows) and event.type:device and event.action:mount and event.outcome:success and volume.removable:true\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/initial_access_exfiltration_new_usb_device_mounted.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Use Case: Device Control",
+      "Tactic: Initial Access",
+      "Tactic: Exfiltration",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

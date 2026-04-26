@@ -1,0 +1,42 @@
+{
+  "id": "3521b356-9e4b-53d6-afcc-bb3b239b741b",
+  "catalog": "sigma",
+  "name": "file_event_win_aspnet_temp_files",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "aspnet_compiler.exe"
+      ],
+      "raw_values": [
+        "*\\\\aspnet_compiler.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "*\\\\Temporary ASP.NET Files\\\\*",
+        "*\\\\assembly\\\\tmp\\\\*",
+        "*.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\aspnet_compiler.exe\" and (file.path:\"*\\\\Temporary ASP.NET Files\\\\*\" and file.path:\"*\\\\assembly\\\\tmp\\\\*\" and file.path:\"*.dll*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_aspnet_temp_files.eql",
+  "metadata": {}
+}

@@ -1,0 +1,93 @@
+{
+  "id": "05ba0a49-ecce-5a8f-8145-69143d7d57f8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_non_exe_image",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        ".bin",
+        ".cgi",
+        ".com",
+        ".exe",
+        ".scr",
+        ".tmp",
+        "system",
+        "registry",
+        "memcompression",
+        "vmmem",
+        ".rbf",
+        ".rbs"
+      ],
+      "raw_values": [
+        "*.bin",
+        "*.cgi",
+        "*.com",
+        "*.exe",
+        "*.scr",
+        "*.tmp",
+        "System",
+        "Registry",
+        "MemCompression",
+        "vmmem",
+        "*.rbf",
+        "*.rbs",
+        "-",
+        ""
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msi",
+        ".dat",
+        ".ngn",
+        "lzma_exe",
+        "com.docker.service"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\Installer\\\\MSI*",
+        "*:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository\\\\*",
+        "*:\\\\Config.Msi\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*:\\\\$Extend\\\\$Deleted\\\\*",
+        "*NVIDIA\\\\NvBackend\\\\*",
+        "*.dat",
+        "*.ngn",
+        "*\\\\AppData\\\\Local\\\\Packages\\\\*",
+        "*\\\\LocalState\\\\rootfs\\\\*",
+        "*\\\\LZMA_EXE",
+        "*:\\\\Program Files\\\\Mozilla Firefox\\\\*",
+        "*com.docker.service"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "services.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*:\\\\ProgramData\\\\Avira\\\\*",
+        "C:\\\\Windows\\\\System32\\\\services.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (not (process.executable like~ (\"*.bin\", \"*.cgi\", \"*.com\", \"*.exe\", \"*.scr\", \"*.tmp\"))) and (not ((process.executable like~ (\"System\", \"Registry\", \"MemCompression\", \"vmmem\")) or process.executable:\"*:\\\\Windows\\\\Installer\\\\MSI*\" or process.executable:\"*:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository\\\\*\" or (process.executable:\"*:\\\\Config.Msi\\\\*\" and (process.executable like~ (\"*.rbf\", \"*.rbs\"))) or (process.parent.executable:\"*:\\\\Windows\\\\Temp\\\\*\" or process.executable:\"*:\\\\Windows\\\\Temp\\\\*\") or process.executable:\"*:\\\\$Extend\\\\$Deleted\\\\*\" or (process.executable like~ (\"-\", \"\")) or (?process.executable == null))) and (not (process.parent.executable:\"*:\\\\ProgramData\\\\Avira\\\\*\" or (process.executable:\"*NVIDIA\\\\NvBackend\\\\*\" and process.executable:\"*.dat\") or ((process.executable like~ (\"*:\\\\Program Files (x86)\\\\WINPAKPRO\\\\*\", \"*:\\\\Program Files\\\\WINPAKPRO\\\\*\")) and process.executable:\"*.ngn\") or (process.executable like~ (\"*:\\\\Program Files (x86)\\\\MyQ\\\\Server\\\\pcltool.dll\", \"*:\\\\Program Files\\\\MyQ\\\\Server\\\\pcltool.dll\")) or (process.executable:\"*\\\\AppData\\\\Local\\\\Packages\\\\*\" and process.executable:\"*\\\\LocalState\\\\rootfs\\\\*\") or process.executable:\"*\\\\LZMA_EXE\" or process.executable:\"*:\\\\Program Files\\\\Mozilla Firefox\\\\*\" or (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\services.exe\" and process.executable:\"*com.docker.service\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_non_exe_image.eql",
+  "metadata": {}
+}

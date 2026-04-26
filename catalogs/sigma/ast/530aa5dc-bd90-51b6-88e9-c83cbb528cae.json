@@ -1,0 +1,71 @@
+{
+  "id": "530aa5dc-bd90-51b6-88e9-c83cbb528cae",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sc_sdset_deny_service_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ";iu",
+        ";su",
+        ";ba",
+        ";sy",
+        ";wd"
+      ],
+      "raw_values": [
+        "*;IU*",
+        "*;SU*",
+        "*;BA*",
+        "*;SY*",
+        "*;WD*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "*\\\\sc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "sc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sdset"
+      ],
+      "raw_values": [
+        "*sdset*",
+        "*D;*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\sc.exe\" or process.pe.original_file_name:\"sc.exe\") and (process.command_line:\"*sdset*\" and process.command_line:\"*D;*\") and (process.command_line like~ (\"*;IU*\", \"*;SU*\", \"*;BA*\", \"*;SY*\", \"*;WD*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sc_sdset_deny_service_access.eql",
+  "metadata": {}
+}

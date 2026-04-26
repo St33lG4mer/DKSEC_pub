@@ -1,0 +1,70 @@
+{
+  "id": "076de7c5-0686-520a-bd1c-8fad239f0c04",
+  "catalog": "elastic",
+  "name": "Potential Remote Desktop Tunneling Detected",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ":3389"
+      ],
+      "raw_values": [
+        "-L",
+        "-R",
+        "*:3389"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  /* RDP port with SSH local or reverse port-forwarding flags */\n  process.args : \"*:3389\" and process.args : (\"-L\", \"-R\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/command_and_control_rdp_tunnel_plink.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Crowdstrike",
+      "Data Source: Sysmon"
+    ]
+  }
+}

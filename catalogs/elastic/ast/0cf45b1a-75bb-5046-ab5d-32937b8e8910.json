@@ -1,0 +1,268 @@
+{
+  "id": "0cf45b1a-75bb-5046-ab5d-32937b8e8910",
+  "catalog": "elastic",
+  "name": "GenAI Process Accessing Sensitive Files",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "openclaw",
+        "moltbot",
+        "clawdbot"
+      ],
+      "raw_values": [
+        "*openclaw*",
+        "*moltbot*",
+        "*clawdbot*"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "key?.db",
+        "logins.json",
+        "login data",
+        "local state",
+        "signons.sqlite",
+        "cookies",
+        "cookies.sqlite",
+        "cookies.binarycookies",
+        "login.keychain-db",
+        "system.keychain",
+        "credentials.db",
+        "credentials",
+        "access_tokens.db",
+        "accesstokens.json",
+        "azureprofile.json",
+        "rdcman.settings",
+        "known_hosts",
+        "keepass.config.xml",
+        "unattended.xml"
+      ],
+      "raw_values": [
+        "key?.db",
+        "logins.json",
+        "Login Data",
+        "Local State",
+        "signons.sqlite",
+        "Cookies",
+        "cookies.sqlite",
+        "Cookies.binarycookies",
+        "login.keychain-db",
+        "System.keychain",
+        "credentials.db",
+        "credentials",
+        "access_tokens.db",
+        "accessTokens.json",
+        "azureProfile.json",
+        "RDCMan.settings",
+        "known_hosts",
+        "KeePass.config.xml",
+        "Unattended.xml"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "claude.exe",
+        "claude"
+      ],
+      "raw_values": [
+        "claude.exe",
+        "Claude"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "local state"
+      ],
+      "raw_values": [
+        "?:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Claude\\\\Local State",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Packages\\\\Claude_*\\\\LocalCache\\\\Roaming\\\\Claude\\\\Local State"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "open",
+        "creation",
+        "modification"
+      ],
+      "raw_values": [
+        "open",
+        "creation",
+        "modification"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "ollama.exe",
+        "ollama",
+        "textgen.exe",
+        "textgen",
+        "text-generation-webui.exe",
+        "oobabooga.exe",
+        "lmstudio.exe",
+        "lmstudio",
+        "lm studio",
+        "claude.exe",
+        "claude",
+        "cursor.exe",
+        "cursor",
+        "copilot.exe",
+        "copilot",
+        "codex.exe",
+        "codex",
+        "jan",
+        "jan.exe",
+        "gpt4all.exe",
+        "gpt4all",
+        "gemini-cli.exe",
+        "gemini-cli",
+        "genaiscript.exe",
+        "genaiscript",
+        "grok.exe",
+        "grok",
+        "qwen.exe",
+        "qwen",
+        "koboldcpp.exe",
+        "koboldcpp",
+        "llama-server",
+        "llama-cli",
+        "node",
+        "node.exe"
+      ],
+      "raw_values": [
+        "ollama.exe",
+        "ollama",
+        "Ollama",
+        "textgen.exe",
+        "textgen",
+        "text-generation-webui.exe",
+        "oobabooga.exe",
+        "lmstudio.exe",
+        "lmstudio",
+        "LM Studio",
+        "claude.exe",
+        "claude",
+        "Claude",
+        "cursor.exe",
+        "cursor",
+        "Cursor",
+        "copilot.exe",
+        "copilot",
+        "Copilot",
+        "codex.exe",
+        "codex",
+        "Jan",
+        "jan.exe",
+        "jan",
+        "gpt4all.exe",
+        "gpt4all",
+        "GPT4All",
+        "gemini-cli.exe",
+        "gemini-cli",
+        "genaiscript.exe",
+        "genaiscript",
+        "grok.exe",
+        "grok",
+        "qwen.exe",
+        "qwen",
+        "koboldcpp.exe",
+        "koboldcpp",
+        "KoboldCpp",
+        "llama-server",
+        "llama-cli",
+        "node",
+        "node.exe"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "in",
+      "values": [
+        ".bashrc",
+        ".bash_profile",
+        ".zshrc",
+        ".zshenv",
+        ".zprofile",
+        ".profile",
+        ".bash_logout"
+      ],
+      "raw_values": [
+        ".bashrc",
+        ".bash_profile",
+        ".zshrc",
+        ".zshenv",
+        ".zprofile",
+        ".profile",
+        ".bash_logout"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    }
+  ],
+  "raw_query": "file where event.action in (\"open\", \"creation\", \"modification\") and event.outcome == \"success\" and\n\n  // GenAI process \n    (\n      process.name in (\n        \"ollama.exe\", \"ollama\", \"Ollama\",\n        \"textgen.exe\", \"textgen\", \"text-generation-webui.exe\", \"oobabooga.exe\",\n        \"lmstudio.exe\", \"lmstudio\", \"LM Studio\",\n        \"claude.exe\", \"claude\", \"Claude\",\n        \"cursor.exe\", \"cursor\", \"Cursor\",\n        \"copilot.exe\", \"copilot\", \"Copilot\",\n        \"codex.exe\", \"codex\",\n        \"Jan\", \"jan.exe\", \"jan\",\n        \"gpt4all.exe\", \"gpt4all\", \"GPT4All\",\n        \"gemini-cli.exe\", \"gemini-cli\",\n        \"genaiscript.exe\", \"genaiscript\",\n        \"grok.exe\", \"grok\",\n        \"qwen.exe\", \"qwen\",\n        \"koboldcpp.exe\", \"koboldcpp\", \"KoboldCpp\",\n        \"llama-server\", \"llama-cli\"\n      ) or\n      // OpenClaw/Moltbot/Clawdbot via Node.js\n      (process.name in (\"node\", \"node.exe\") and\n       process.command_line like~ (\"*openclaw*\", \"*moltbot*\", \"*clawdbot*\"))\n    ) and\n\n  // Sensitive file paths\n  (\n    // Persistence via Shell configs\n    file.name in (\".bashrc\", \".bash_profile\", \".zshrc\", \".zshenv\", \".zprofile\", \".profile\", \".bash_logout\") or\n\n    // Credentials In Files \n    file.name like~ \n                 (\"key?.db\", \n                  \"logins.json\", \n                  \"Login Data\", \n                  \"Local State\",\n                  \"signons.sqlite\",\n                  \"Cookies\", \n                  \"cookies.sqlite\",\n                  \"Cookies.binarycookies\", \n                  \"login.keychain-db\", \n                  \"System.keychain\", \n                  \"credentials.db\", \n                  \"credentials\", \n                  \"access_tokens.db\", \n                  \"accessTokens.json\", \n                  \"azureProfile.json\",\n                  \"RDCMan.settings\", \n                  \"known_hosts\", \n                  \"KeePass.config.xml\", \n                  \"Unattended.xml\")\n  ) and not (\n    host.os.type == \"windows\" and\n    process.name : (\"claude.exe\", \"Claude\") and\n    file.path : (\"?:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Claude\\\\Local State\",\n                 \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Packages\\\\Claude_*\\\\LocalCache\\\\Roaming\\\\Claude\\\\Local State\")\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/credential_access_genai_process_sensitive_file_access.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Domain: LLM",
+      "Mitre Atlas: T0085",
+      "Mitre Atlas: T0085.001",
+      "Mitre Atlas: T0055"
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "id": "b0526948-252d-5df4-8b28-245e9de462ed",
+  "catalog": "elastic",
+  "name": "Alerts From Multiple Integrations by Source Address",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.type",
+      "raw_field": "kibana.alert.rule.type",
+      "operator": "in",
+      "values": [
+        "threat_match",
+        "machine_learning"
+      ],
+      "raw_values": [
+        "threat_match",
+        "machine_learning"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.tags",
+      "raw_field": "kibana.alert.rule.tags",
+      "operator": ":",
+      "values": [
+        "rule type: higher-order rule"
+      ],
+      "raw_values": [
+        "Rule Type: Higher-Order Rule"
+      ]
+    }
+  ],
+  "raw_query": "from .alerts-security.*\n\n// any alerts excluding low severity and the noisy ones\n| where kibana.alert.rule.name is not null and source.ip is not null and kibana.alert.risk_score > 21 and\n        not kibana.alert.rule.type in (\"threat_match\", \"machine_learning\") and\n        not KQL(\"\"\"kibana.alert.rule.tags : \"Rule Type: Higher-Order Rule\" \"\"\")\n\n// group alerts by source.ip and extract values of interest for alert triage\n| stats Esql.event_module_distinct_count = COUNT_DISTINCT(event.module),\n        Esql.rule_name_distinct_count = COUNT_DISTINCT(kibana.alert.rule.name),\n        Esql.event_category_distinct_count = COUNT_DISTINCT(event.category),\n        Esql.rule_risk_score_distinct_count = COUNT_DISTINCT(kibana.alert.risk_score),\n        Esql.event_module_values = VALUES(event.module),\n        Esql.rule_name_values = VALUES(kibana.alert.rule.name),\n        Esql.message_values = VALUES(message),\n        Esql.event_category_values = VALUES(event.category),\n        Esql.event_action_values = VALUES(event.action),\n        Esql.destination_ip_values = VALUES(destination.ip),\n        Esql.host_id_values = VALUES(host.id),\n        Esql.agent_id_values = VALUES(agent.id),\n        Esql.user_name_values = VALUES(user.name),\n        Esql.rule_severity_values = VALUES(kibana.alert.risk_score) by source.ip\n\n// filter for alerts from same source.ip reported by different integrations with unique categories and with different severity levels\n| where Esql.event_module_distinct_count >= 2 and Esql.event_category_distinct_count >= 2 and (Esql.rule_risk_score_distinct_count >= 2 or Esql.rule_severity_values == 73 or Esql.rule_severity_values == 99)\n| keep source.ip, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/multiple_alerts_from_different_modules_by_srcip.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

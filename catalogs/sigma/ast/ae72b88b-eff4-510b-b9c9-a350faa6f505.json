@@ -1,0 +1,29 @@
+{
+  "id": "ae72b88b-eff4-510b-b9c9-a350faa6f505",
+  "catalog": "sigma",
+  "name": "image_load_rundll32_remote_share_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\rundll32.exe\" and file.path:\"\\\\\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_rundll32_remote_share_load.eql",
+  "metadata": {}
+}

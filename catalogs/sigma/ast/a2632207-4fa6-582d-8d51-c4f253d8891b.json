@@ -1,0 +1,51 @@
+{
+  "id": "a2632207-4fa6-582d-8d51-c4f253d8891b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_esentutl_webcache",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "esentutl.exe"
+      ],
+      "raw_values": [
+        "*\\\\esentutl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "esentutl.exe"
+      ],
+      "raw_values": [
+        "esentutl.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "webcache"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\WebCache*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\esentutl.exe\" or process.pe.original_file_name:\"esentutl.exe\") and process.command_line like~ (\"*-r*\", \"*/r*\", \"*–r*\", \"*—r*\", \"*―r*\") and process.command_line:\"*\\\\Windows\\\\WebCache*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_esentutl_webcache.eql",
+  "metadata": {}
+}

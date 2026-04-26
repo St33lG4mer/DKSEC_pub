@@ -1,0 +1,51 @@
+{
+  "id": "6cd7b543-b86e-5469-9862-447fe90e8687",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sc_sdset_modification",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "*\\\\sc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "sc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sdset"
+      ],
+      "raw_values": [
+        "*sdset*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\sc.exe\" or process.pe.original_file_name:\"sc.exe\") and process.command_line:\"*sdset*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sc_sdset_modification.eql",
+  "metadata": {}
+}

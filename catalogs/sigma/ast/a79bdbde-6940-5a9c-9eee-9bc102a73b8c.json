@@ -1,0 +1,73 @@
+{
+  "id": "a79bdbde-6940-5a9c-9eee-9bc102a73b8c",
+  "catalog": "sigma",
+  "name": "win_security_dpapi_domain_backupkey_extraction",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4662"
+      ],
+      "raw_values": [
+        "4662"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "secretobject"
+      ],
+      "raw_values": [
+        "SecretObject"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x2"
+      ],
+      "raw_values": [
+        "0x2"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "bckupkey"
+      ],
+      "raw_values": [
+        "*BCKUPKEY*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4662\" and winlog.event_data.ObjectType:\"SecretObject\" and winlog.event_data.AccessMask:\"0x2\" and winlog.event_data.ObjectName:\"*BCKUPKEY*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_dpapi_domain_backupkey_extraction.eql",
+  "metadata": {}
+}

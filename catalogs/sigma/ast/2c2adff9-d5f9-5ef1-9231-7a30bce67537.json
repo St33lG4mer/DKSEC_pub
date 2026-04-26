@@ -1,0 +1,29 @@
+{
+  "id": "2c2adff9-d5f9-5ef1-9231-7a30bce67537",
+  "catalog": "sigma",
+  "name": "image_load_side_load_iviewers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "iviewers.dll"
+      ],
+      "raw_values": [
+        "*\\\\iviewers.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\iviewers.dll\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\Windows Kits\\\\*\", \"C:\\\\Program Files\\\\Windows Kits\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_iviewers.eql",
+  "metadata": {}
+}

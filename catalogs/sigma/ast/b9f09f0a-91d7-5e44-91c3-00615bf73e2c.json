@@ -1,0 +1,40 @@
+{
+  "id": "b9f09f0a-91d7-5e44-91c3-00615bf73e2c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_curl_insecure_connection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "curl.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\curl.exe\" or process.pe.original_file_name:\"curl.exe\") and (process.command_line like~ (\"SigmaRegularExpression(regexp=SigmaString(['\\\\s-k\\\\s']), flags=set())\", \"*--insecure*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_curl_insecure_connection.eql",
+  "metadata": {}
+}

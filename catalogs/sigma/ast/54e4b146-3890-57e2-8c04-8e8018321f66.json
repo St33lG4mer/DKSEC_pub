@@ -1,0 +1,53 @@
+{
+  "id": "54e4b146-3890-57e2-8c04-8e8018321f66",
+  "catalog": "sigma",
+  "name": "win_dns_client_put_io",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        "api.put.io",
+        "upload.put.io"
+      ],
+      "raw_values": [
+        "*api.put.io*",
+        "*upload.put.io*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-dns client events/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-DNS Client Events/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "3008"
+      ],
+      "raw_values": [
+        "3008"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-DNS Client Events/Operational\" and (event.code:\"3008\" and (dns.question.name like~ (\"*api.put.io*\", \"*upload.put.io*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/dns_client/win_dns_client_put_io.eql",
+  "metadata": {}
+}

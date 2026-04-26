@@ -1,0 +1,64 @@
+{
+  "id": "50fe7fe3-0216-5cd5-b824-29b7bf9b613f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_gpscript",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "logon",
+        "startup"
+      ],
+      "raw_values": [
+        "* /logon*",
+        "* /startup*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gpscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\gpscript.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "gpscript.exe"
+      ],
+      "raw_values": [
+        "GPSCRIPT.EXE"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "svchost.exe -k netsvcs -p -s gpsvc"
+      ],
+      "raw_values": [
+        "C:\\\\windows\\\\system32\\\\svchost.exe -k netsvcs -p -s gpsvc"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\gpscript.exe\" or process.pe.original_file_name:\"GPSCRIPT.EXE\") and (process.command_line like~ (\"* /logon*\", \"* /startup*\"))) and (not process.parent.command_line:\"C:\\\\windows\\\\system32\\\\svchost.exe -k netsvcs -p -s gpsvc\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_gpscript.eql",
+  "metadata": {}
+}

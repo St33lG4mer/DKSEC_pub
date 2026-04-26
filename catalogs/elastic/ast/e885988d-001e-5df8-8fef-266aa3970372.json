@@ -1,0 +1,27 @@
+{
+  "id": "e885988d-001e-5df8-8fef-266aa3970372",
+  "catalog": "elastic",
+  "name": "First Occurrence of Okta User Session Started via Proxy",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and\n    okta.event_type: (\n        user.session.start or\n        user.authentication.verify or\n        user.authentication.sso or\n        user.authentication.auth_via_mfa\n    ) and\n    okta.security_context.is_proxy:true and\n    not okta.actor.id: okta*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/initial_access_first_occurrence_user_session_started_via_proxy.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Identity",
+      "Tactic: Initial Access",
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Data Source: Okta System Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "b694661a-f9ac-5760-99d2-add02ce51817",
+  "catalog": "sigma",
+  "name": "proc_creation_win_office_outlook_execution_from_temp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.executable:\"*\\\\Temporary Internet Files\\\\Content.Outlook\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_office_outlook_execution_from_temp.eql",
+  "metadata": {}
+}

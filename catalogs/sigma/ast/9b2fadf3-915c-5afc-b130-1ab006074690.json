@@ -1,0 +1,53 @@
+{
+  "id": "9b2fadf3-915c-5afc-b130-1ab006074690",
+  "catalog": "sigma",
+  "name": "win_security_susp_local_anon_logon_created",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4720"
+      ],
+      "raw_values": [
+        "4720"
+      ]
+    },
+    {
+      "field": "winlog.event_data.samaccountname",
+      "raw_field": "winlog.event_data.SamAccountName",
+      "operator": ":",
+      "values": [
+        "anonymous",
+        "logon"
+      ],
+      "raw_values": [
+        "*ANONYMOUS*",
+        "*LOGON*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4720\" and (winlog.event_data.SamAccountName:\"*ANONYMOUS*\" and winlog.event_data.SamAccountName:\"*LOGON*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_local_anon_logon_created.eql",
+  "metadata": {}
+}

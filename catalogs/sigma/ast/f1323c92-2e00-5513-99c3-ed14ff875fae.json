@@ -1,0 +1,77 @@
+{
+  "id": "f1323c92-2e00-5513-99c3-ed14ff875fae",
+  "catalog": "sigma",
+  "name": "registry_set_runmru_command_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "%appdata%\\\\1",
+        "%localappdata%\\\\1",
+        "%public%\\\\1",
+        "%temp%\\\\1",
+        "calc\\\\1",
+        "dxdiag\\\\1",
+        "explorer\\\\1",
+        "gpedit.msc\\\\1",
+        "mmc\\\\1",
+        "notepad\\\\1",
+        "regedit\\\\1",
+        "services.msc\\\\1",
+        "winver\\\\1"
+      ],
+      "raw_values": [
+        "%appdata%\\\\1",
+        "%localappdata%\\\\1",
+        "%public%\\\\1",
+        "%temp%\\\\1",
+        "calc\\\\1",
+        "dxdiag\\\\1",
+        "explorer\\\\1",
+        "gpedit.msc\\\\1",
+        "mmc\\\\1",
+        "notepad\\\\1",
+        "regedit\\\\1",
+        "services.msc\\\\1",
+        "winver\\\\1"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\runmru",
+        "\\\\mrulist"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\RunMRU*",
+        "*\\\\MRUList"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "ping"
+      ],
+      "raw_values": [
+        "*ping*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\RunMRU*\" and (not registry.path:\"*\\\\MRUList\") and (not (winlog.event_data.Details:\"*ping*\" or (winlog.event_data.Details like~ (\"%appdata%\\\\1\", \"%localappdata%\\\\1\", \"%public%\\\\1\", \"%temp%\\\\1\", \"calc\\\\1\", \"dxdiag\\\\1\", \"explorer\\\\1\", \"gpedit.msc\\\\1\", \"mmc\\\\1\", \"notepad\\\\1\", \"regedit\\\\1\", \"services.msc\\\\1\", \"winver\\\\1\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/registry/registry_set/registry_set_runmru_command_execution.eql",
+  "metadata": {}
+}

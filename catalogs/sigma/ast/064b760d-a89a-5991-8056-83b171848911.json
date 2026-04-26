@@ -1,0 +1,122 @@
+{
+  "id": "064b760d-a89a-5991-8056-83b171848911",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_data_exfiltration_via_cli",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "curl",
+        "invoke-restmethod",
+        "invoke-webrequest",
+        "irm",
+        "iwr",
+        "wget",
+        "--data",
+        "--post-data",
+        "--post-file",
+        "get-content",
+        "getbytes",
+        "hostname",
+        "ifconfig",
+        "ipconfig",
+        "netstat",
+        "nltest",
+        "qprocess",
+        "systeminfo",
+        "tasklist",
+        "tobase64string",
+        "whoami"
+      ],
+      "raw_values": [
+        "*curl *",
+        "*Invoke-RestMethod*",
+        "*Invoke-WebRequest*",
+        "*irm *",
+        "*iwr *",
+        "*wget *",
+        "* -d *",
+        "* --data *",
+        "*--post-data*",
+        "*--post-file*",
+        "*Get-Content*",
+        "*GetBytes*",
+        "*hostname*",
+        "*ifconfig*",
+        "*ipconfig*",
+        "*netstat*",
+        "*nltest*",
+        "*qprocess*",
+        "*systeminfo*",
+        "*tasklist*",
+        "*ToBase64String*",
+        "*whoami*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-ur",
+        "-me",
+        "post",
+        "--ur",
+        "type"
+      ],
+      "raw_values": [
+        "* -ur*",
+        "* -me*",
+        "* -b*",
+        "* POST *",
+        "*--ur*",
+        "*type *",
+        "* > *",
+        "* C:\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe",
+        "wget.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe",
+        "*\\\\wget.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\cmd.exe\")) and (process.command_line like~ (\"*curl *\", \"*Invoke-RestMethod*\", \"*Invoke-WebRequest*\", \"*irm *\", \"*iwr *\", \"*wget *\")) and (process.command_line:\"* -ur*\" and process.command_line:\"* -me*\" and process.command_line:\"* -b*\" and process.command_line:\"* POST *\")) or ((process.executable:\"*\\\\curl.exe\" and process.command_line:\"*--ur*\") and (process.command_line like~ (\"* -d *\", \"* --data *\"))) or (process.executable:\"*\\\\wget.exe\" and (process.command_line like~ (\"*--post-data*\", \"*--post-file*\")))) and ((process.command_line like~ (\"SigmaRegularExpression(regexp=SigmaString(['net\\\\s+view']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['sc\\\\s+query']), flags=set())\")) or (process.command_line like~ (\"*Get-Content*\", \"*GetBytes*\", \"*hostname*\", \"*ifconfig*\", \"*ipconfig*\", \"*netstat*\", \"*nltest*\", \"*qprocess*\", \"*systeminfo*\", \"*tasklist*\", \"*ToBase64String*\", \"*whoami*\")) or (process.command_line:\"*type *\" and process.command_line:\"* > *\" and process.command_line:\"* C:\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_data_exfiltration_via_cli.eql",
+  "metadata": {}
+}

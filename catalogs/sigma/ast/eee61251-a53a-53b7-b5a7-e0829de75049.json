@@ -1,0 +1,118 @@
+{
+  "id": "eee61251-a53a-53b7-b5a7-e0829de75049",
+  "catalog": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_currentcontrolset",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\terminal server\\\\winstations\\\\rdp-tcp\\\\initialprogram",
+        "\\\\terminal server\\\\wds\\\\rdpwd\\\\startupprograms",
+        "\\\\securityproviders\\\\securityproviders",
+        "\\\\safeboot\\\\alternateshell",
+        "\\\\print\\\\providers",
+        "\\\\print\\\\monitors",
+        "\\\\networkprovider\\\\order",
+        "\\\\lsa\\\\notification packages",
+        "\\\\lsa\\\\authentication packages",
+        "\\\\bootverificationprogram\\\\imagepath"
+      ],
+      "raw_values": [
+        "*\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\InitialProgram*",
+        "*\\\\Terminal Server\\\\Wds\\\\rdpwd\\\\StartupPrograms*",
+        "*\\\\SecurityProviders\\\\SecurityProviders*",
+        "*\\\\SafeBoot\\\\AlternateShell*",
+        "*\\\\Print\\\\Providers*",
+        "*\\\\Print\\\\Monitors*",
+        "*\\\\NetworkProvider\\\\Order*",
+        "*\\\\Lsa\\\\Notification Packages*",
+        "*\\\\Lsa\\\\Authentication Packages*",
+        "*\\\\BootVerificationProgram\\\\ImagePath*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "cpwmon64_v40.dll",
+        "cutepdf writer"
+      ],
+      "raw_values": [
+        "cpwmon64_v40.dll",
+        "CutePDF Writer"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\control",
+        "\\\\print\\\\monitors\\\\cutepdf writer monitor",
+        "print\\\\monitors\\\\appmon\\\\ports\\\\microsoft.office.onenote_",
+        "\\\\networkprovider\\\\order\\\\providerorder",
+        "\\\\print\\\\monitors\\\\monvnc\\\\driver"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\CurrentControlSet\\\\Control*",
+        "*\\\\Print\\\\Monitors\\\\CutePDF Writer Monitor*",
+        "*Print\\\\Monitors\\\\Appmon\\\\Ports\\\\Microsoft.Office.OneNote_*",
+        "*\\\\NetworkProvider\\\\Order\\\\ProviderOrder",
+        "*\\\\Print\\\\Monitors\\\\MONVNC\\\\Driver"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)",
+        "vncpm.dll"
+      ],
+      "raw_values": [
+        "(Empty)",
+        "VNCpm.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "spoolsv.exe",
+        "poqexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\spoolsv.exe",
+        "C:\\\\Windows\\\\System32\\\\poqexec.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\SYSTEM\\\\CurrentControlSet\\\\Control*\" and (registry.path like~ (\"*\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\InitialProgram*\", \"*\\\\Terminal Server\\\\Wds\\\\rdpwd\\\\StartupPrograms*\", \"*\\\\SecurityProviders\\\\SecurityProviders*\", \"*\\\\SafeBoot\\\\AlternateShell*\", \"*\\\\Print\\\\Providers*\", \"*\\\\Print\\\\Monitors*\", \"*\\\\NetworkProvider\\\\Order*\", \"*\\\\Lsa\\\\Notification Packages*\", \"*\\\\Lsa\\\\Authentication Packages*\", \"*\\\\BootVerificationProgram\\\\ImagePath*\"))) and (not (winlog.event_data.Details:\"(Empty)\" or (process.executable:\"C:\\\\Windows\\\\System32\\\\spoolsv.exe\" and registry.path:\"*\\\\Print\\\\Monitors\\\\CutePDF Writer Monitor*\" and (winlog.event_data.Details like~ (\"cpwmon64_v40.dll\", \"CutePDF Writer\"))) or (process.executable:\"C:\\\\Windows\\\\System32\\\\spoolsv.exe\" and registry.path:\"*Print\\\\Monitors\\\\Appmon\\\\Ports\\\\Microsoft.Office.OneNote_*\" and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\"))) or (process.executable:\"C:\\\\Windows\\\\System32\\\\poqexec.exe\" and registry.path:\"*\\\\NetworkProvider\\\\Order\\\\ProviderOrder\") or (process.executable:\"C:\\\\Windows\\\\System32\\\\spoolsv.exe\" and registry.path:\"*\\\\Print\\\\Monitors\\\\MONVNC\\\\Driver\" and winlog.event_data.Details:\"VNCpm.dll\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_currentcontrolset.eql",
+  "metadata": {}
+}

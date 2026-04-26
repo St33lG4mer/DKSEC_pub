@@ -1,0 +1,115 @@
+{
+  "id": "6fb9df10-f161-599a-b7cb-6952dedd5bc1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_uncommon_dll_extension",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".cpl",
+        ".cpl,",
+        ".dll'",
+        ".inf",
+        ".inf,",
+        ".dll"
+      ],
+      "raw_values": [
+        "*.cpl *",
+        "*.cpl,*",
+        "*.cpl\\",
+        ", ",
+        "*",
+        "*.dll'*",
+        "*.inf *",
+        "*.inf,*",
+        "*.inf\\",
+        "*.cpl",
+        "*.dll",
+        "*.inf"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-localserver",
+        ".tmp",
+        "zzzzinvokemanagedcustomactionoutofproc"
+      ],
+      "raw_values": [
+        "* -localserver *",
+        "*:\\\\Windows\\\\Installer\\\\*",
+        "*.tmp*",
+        "*zzzzInvokeManagedCustomActionOutOfProc*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "edgemitmp_",
+        "setup.exe",
+        "--install-archive=",
+        "--previous-version=",
+        "--msedgewebview --verbose-logging --do-not-launch-msedge --user-level"
+      ],
+      "raw_values": [
+        "*:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\EdgeUpdate\\\\Install\\\\{*",
+        "*\\\\EDGEMITMP_*",
+        "*.tmp\\\\setup.exe*",
+        "*--install-archive=*",
+        "*--previous-version=*",
+        "*--msedgewebview --verbose-logging --do-not-launch-msedge --user-level*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and (not ((?process.command_line == null) or process.command_line==\"\" or ((process.command_line like~ (\"*.cpl *\", \"*.cpl,*\", \"*.cpl\\\"*\", \"*.cpl'*\", \"*.dll *\", \"*.dll,*\", \"*.dll\\\"*\", \"*.dll'*\", \"*.inf *\", \"*.inf,*\", \"*.inf\\\"*\", \"*.inf'*\")) or (process.command_line like~ (\"*.cpl\", \"*.dll\", \"*.inf\"))) or process.command_line:\"* -localserver *\" or (process.parent.executable:\"*\\\\msiexec.exe\" and (process.command_line:\"*:\\\\Windows\\\\Installer\\\\*\" and process.command_line:\"*.tmp*\" and process.command_line:\"*zzzzInvokeManagedCustomActionOutOfProc*\")))) and (not (process.parent.command_line:\"*:\\\\Users\\\\*\" and process.parent.command_line:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\EdgeUpdate\\\\Install\\\\{*\" and process.parent.command_line:\"*\\\\EDGEMITMP_*\" and process.parent.command_line:\"*.tmp\\\\setup.exe*\" and process.parent.command_line:\"*--install-archive=*\" and process.parent.command_line:\"*--previous-version=*\" and process.parent.command_line:\"*--msedgewebview --verbose-logging --do-not-launch-msedge --user-level*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_uncommon_dll_extension.eql",
+  "metadata": {}
+}

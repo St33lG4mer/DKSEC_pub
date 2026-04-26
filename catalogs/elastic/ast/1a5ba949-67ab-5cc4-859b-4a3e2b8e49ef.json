@@ -1,0 +1,145 @@
+{
+  "id": "1a5ba949-67ab-5cc4-859b-4a3e2b8e49ef",
+  "catalog": "elastic",
+  "name": "Potential File Transfer via Curl for Windows",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\curl.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "rundll32.exe",
+        "explorer.exe",
+        "conhost.exe",
+        "forfiles.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "hh.exe",
+        "mmc.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "powershell.exe",
+        "rundll32.exe",
+        "explorer.exe",
+        "conhost.exe",
+        "forfiles.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "hh.exe",
+        "mmc.exe"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "windows.sysmon_operational",
+        "windows.sysmon"
+      ],
+      "raw_values": [
+        "windows.sysmon_operational",
+        "windows.sysmon"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "*http*"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "==",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    },
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "==",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.executable : (\n    \"?:\\\\Windows\\\\System32\\\\curl.exe\",\n    \"?:\\\\Windows\\\\SysWOW64\\\\curl.exe\"\n  ) and\n  process.command_line : \"*http*\" and\n  process.parent.name : (\n    \"cmd.exe\", \"powershell.exe\",\n    \"rundll32.exe\", \"explorer.exe\",\n    \"conhost.exe\", \"forfiles.exe\",\n    \"wscript.exe\", \"cscript.exe\",\n    \"mshta.exe\", \"hh.exe\", \"mmc.exe\"\n  ) and \n  not (\n    ?user.id == \"S-1-5-18\" and\n    /* Don't apply the user.id exclusion to Sysmon for compatibility */\n    not data_stream.dataset : (\"windows.sysmon_operational\", \"windows.sysmon\")\n  ) and\n  /* Exclude System Integrity Processes for Sysmon */\n  not ?winlog.event_data.IntegrityLevel == \"System\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/command_and_control_tool_transfer_via_curl.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

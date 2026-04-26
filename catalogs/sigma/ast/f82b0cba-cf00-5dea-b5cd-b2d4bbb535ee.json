@@ -1,0 +1,33 @@
+{
+  "id": "f82b0cba-cf00-5dea-b5cd-b2d4bbb535ee",
+  "catalog": "sigma",
+  "name": "file_event_win_dump_file_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".dmp",
+        ".dump",
+        ".hdmp"
+      ],
+      "raw_values": [
+        "*.dmp",
+        "*.dump",
+        "*.hdmp"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*.dmp\", \"*.dump\", \"*.hdmp\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_event/file_event_win_dump_file_creation.eql",
+  "metadata": {}
+}

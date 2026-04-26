@@ -1,0 +1,29 @@
+{
+  "id": "ef161af4-5a3f-51e2-90b8-46afadcd0a3b",
+  "catalog": "sigma",
+  "name": "dns_query_win_vscode_tunnel_communication",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        ".tunnels.api.visualstudio.com"
+      ],
+      "raw_values": [
+        "*.tunnels.api.visualstudio.com"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name:\"*.tunnels.api.visualstudio.com\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_vscode_tunnel_communication.eql",
+  "metadata": {}
+}

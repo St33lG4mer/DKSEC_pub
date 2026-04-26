@@ -1,0 +1,53 @@
+{
+  "id": "cf47c7d9-b530-5475-9b4c-181431405d73",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mssql_sqlps_susp_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sqlps.exe",
+        "sqlagent.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlps.exe",
+        "*\\\\sqlagent.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqlps.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlps.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sqlps.exe"
+      ],
+      "raw_values": [
+        "sqlps.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\sqlps.exe\" or ((process.executable:\"*\\\\sqlps.exe\" or process.pe.original_file_name:\"sqlps.exe\") and (not process.parent.executable:\"*\\\\sqlagent.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mssql_sqlps_susp_execution.eql",
+  "metadata": {}
+}

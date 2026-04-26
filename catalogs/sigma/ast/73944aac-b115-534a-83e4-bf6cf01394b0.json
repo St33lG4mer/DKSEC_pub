@@ -1,0 +1,40 @@
+{
+  "id": "73944aac-b115-534a-83e4-bf6cf01394b0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_winrm_remote_powershell_session_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wsmprovhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\wsmprovhost.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wsmprovhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\wsmprovhost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\wsmprovhost.exe\" or process.parent.executable:\"*\\\\wsmprovhost.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_winrm_remote_powershell_session_process.eql",
+  "metadata": {}
+}

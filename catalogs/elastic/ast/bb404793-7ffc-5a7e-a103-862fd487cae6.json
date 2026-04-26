@@ -1,0 +1,178 @@
+{
+  "id": "bb404793-7ffc-5a7e-a103-862fd487cae6",
+  "catalog": "elastic",
+  "name": "Suspicious Communication App Child Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "slack.exe",
+        "ciscocollabhost.exe",
+        "webexhost.exe",
+        "teams.exe",
+        "discord.exe",
+        "whatsapp.exe",
+        "zoom.exe",
+        "thunderbird.exe"
+      ],
+      "raw_values": [
+        "slack.exe",
+        "CiscoCollabHost.exe",
+        "WebexHost.exe",
+        "Teams.exe",
+        "Discord.exe",
+        "Whatsapp.exe",
+        "Zoom.exe",
+        "thunderbird.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "chrome.exe",
+        "island.exe",
+        "firefox.exe",
+        "opera.exe",
+        "zoom.exe",
+        "rundll32.exe",
+        "notepad.exe",
+        "browsercore.exe",
+        "teams.exe",
+        "reg.exe",
+        "brave.exe",
+        "splwow64.exe",
+        "powershell.exe",
+        "cmd.exe",
+        "taskkill.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\*.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Island\\\\Island\\\\Application\\\\Island.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Mozilla Firefox\\\\firefox.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Programs\\\\Opera\\\\opera.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Zoom\\\\bin*\\\\Zoom.exe",
+        "?:\\\\Windows\\\\System32\\\\rundll32.exe",
+        "?:\\\\Windows\\\\System32\\\\notepad.exe",
+        "?:\\\\Windows\\\\BrowserCore\\\\BrowserCore.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe",
+        "?:\\\\Windows\\\\System32\\\\reg.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\reg.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\BraveSoftware\\\\Brave-Browser\\\\Application\\\\brave.exe",
+        "?:\\\\Windows\\\\splwow64.exe",
+        "?:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\3\\\\*.EXE",
+        "powershell.exe",
+        "cmd.exe",
+        "taskkill.exe"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": ":",
+      "values": [
+        "slack technologies, inc.",
+        "slack technologies, llc",
+        "cisco systems, inc.",
+        "cisco webex llc",
+        "cisco systems inc.",
+        "microsoft corporation",
+        "microsoft 3rd party application component",
+        "discord inc.",
+        "whatsapp llc",
+        "whatsapp, inc",
+        "24803d75-212c-471a-bc57-9ef86ab91435",
+        "zoom video communications, inc.",
+        "zoom communications, inc.",
+        "mozilla corporation"
+      ],
+      "raw_values": [
+        "Slack Technologies, Inc.",
+        "Slack Technologies, LLC",
+        "Cisco Systems, Inc.",
+        "Cisco WebEx LLC",
+        "Cisco Systems Inc.",
+        "Microsoft Corporation",
+        "Microsoft 3rd Party Application Component",
+        "Discord Inc.",
+        "WhatsApp LLC",
+        "WhatsApp, Inc",
+        "24803D75-212C-471A-BC57-9EF86AB91435",
+        "Zoom Video Communications, Inc.",
+        "Zoom Communications, Inc.",
+        "Mozilla Corporation"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "nvidia-smi.exe",
+        "teams.exe"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\system32\\\\cmd.exe /d /s /c \\",
+        "",
+        "C:\\\\WINDOWS\\\\system32\\\\cmd.exe /q /d /s /c \\",
+        "C:\\\\WINDOWS/System32/nvidia-smi.exe",
+        "C:\\\\WINDOWS\\\\System32\\\\nvidia-smi.exe",
+        "C:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository/*/nvidia-smi.exe*",
+        "powershell.exe -c Invoke-WebRequest -Uri https://slackb.com/*",
+        "Teams.exe",
+        "C:\\\\Windows\\\\system32\\\\cmd.exe /d /s /c \\"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.parent.name : (\n    \"slack.exe\", \"CiscoCollabHost.exe\", \"WebexHost.exe\", \"Teams.exe\",\n    \"Discord.exe\", \"Whatsapp.exe\", \"Zoom.exe\", \"thunderbird.exe\"\n  ) and\n  not process.executable : (\n              \"?:\\\\Program Files\\\\*.exe\", \n              \"?:\\\\Program Files (x86)\\\\*.exe\", \n              \"?:\\\\Windows\\\\System32\\\\WerFault.exe\", \n              \"?:\\\\Windows\\\\SysWOW64\\\\WerFault.exe\"\n  ) and\n\n  /* Common Signed Browser Processes */\n  not (\n    process.executable : (\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Island\\\\Island\\\\Application\\\\Island.exe\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Mozilla Firefox\\\\firefox.exe\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Programs\\\\Opera\\\\opera.exe\"\n    ) and process.code_signature.trusted == true\n  ) and\n  (\n    /* Slack */\n    (process.parent.name : \"slack.exe\" and not\n      (\n        (\n          process.executable : (\n            \"?:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Zoom\\\\bin*\\\\Zoom.exe\",\n            \"?:\\\\Windows\\\\System32\\\\rundll32.exe\",\n            \"?:\\\\Windows\\\\System32\\\\notepad.exe\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          process.code_signature.subject_name : (\n            \"Slack Technologies, Inc.\",\n            \"Slack Technologies, LLC\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          (process.name : \"powershell.exe\" and process.command_line : \"powershell.exe -c Invoke-WebRequest -Uri https://slackb.com/*\") or\n          (process.name : \"cmd.exe\" and process.command_line : \"C:\\\\WINDOWS\\\\system32\\\\cmd.exe /d /s /c \\\"%windir%\\\\System32\\\\rundll32.exe User32.dll,SetFocus 0\\\"\")\n        )\n      )\n    ) or\n\n    /* WebEx */\n    (process.parent.name : (\"CiscoCollabHost.exe\", \"WebexHost.exe\") and not\n      (\n        process.code_signature.subject_name : (\n          \"Cisco Systems, Inc.\",\n          \"Cisco WebEx LLC\",\n          \"Cisco Systems Inc.\"\n        ) and process.code_signature.trusted == true\n      )\n    ) or\n\n    /* Teams */\n    (process.parent.name : \"Teams.exe\" and not\n      (\n        (\n          process.executable : (\n            \"?:\\\\Windows\\\\BrowserCore\\\\BrowserCore.exe\",\n            \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          process.code_signature.subject_name : (\n            \"Microsoft Corporation\",\n            \"Microsoft 3rd Party Application Component\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          (process.name : \"taskkill.exe\" and process.args : \"Teams.exe\")\n        )\n      )\n    ) or\n\n    /* Discord */\n    (process.parent.name : \"Discord.exe\" and not\n      (\n        (\n          process.executable : (\n            \"?:\\\\Windows\\\\System32\\\\reg.exe\",\n            \"?:\\\\Windows\\\\SysWOW64\\\\reg.exe\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          process.code_signature.subject_name : (\n            \"Discord Inc.\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          process.name : \"cmd.exe\" and\n          (\n            process.command_line : (\n              \"C:\\\\WINDOWS\\\\system32\\\\cmd.exe /d /s /c \\\"chcp\\\"\",\n              \"C:\\\\WINDOWS\\\\system32\\\\cmd.exe /q /d /s /c \\\"C:\\\\Program^ Files\\\\NVIDIA^ Corporation\\\\NVSMI\\\\nvidia-smi.exe\\\"\"\n            ) or\n            process.args : (\n              \"C:\\\\WINDOWS/System32/nvidia-smi.exe\",\n              \"C:\\\\WINDOWS\\\\System32\\\\nvidia-smi.exe\",\n              \"C:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository/*/nvidia-smi.exe*\"\n            )\n          )\n        )\n      )\n    ) or\n\n    /* WhatsApp */\n    (process.parent.name : \"Whatsapp.exe\" and not\n      (\n        (\n          process.executable : (\n            \"?:\\\\Windows\\\\System32\\\\reg.exe\",\n            \"?:\\\\Windows\\\\SysWOW64\\\\reg.exe\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          process.code_signature.subject_name : (\n            \"WhatsApp LLC\",\n            \"WhatsApp, Inc\",\n            \"24803D75-212C-471A-BC57-9EF86AB91435\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          (process.name : \"cmd.exe\" and process.command_line : \"C:\\\\Windows\\\\system32\\\\cmd.exe /d /s /c \\\"C:\\\\Windows\\\\system32\\\\wbem\\\\wmic.exe*\")\n        )\n      )\n    ) or\n\n    /* Zoom */\n    (process.parent.name : \"Zoom.exe\" and not\n      (\n        (\n          process.executable : (\n            \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\BraveSoftware\\\\Brave-Browser\\\\Application\\\\brave.exe\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          process.code_signature.subject_name : (\n            \"Zoom Video Communications, Inc.\",\n            \"Zoom Communications, Inc.\"\n          ) and process.code_signature.trusted == true\n        )\n      )\n    ) or\n\n    /* Thunderbird */\n    (process.parent.name : \"thunderbird.exe\" and not\n      (\n        (\n          process.executable : (\n            \"?:\\\\Windows\\\\splwow64.exe\", \n            \"?:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\3\\\\*.EXE\"\n          ) and process.code_signature.trusted == true\n        ) or\n        (\n          process.code_signature.subject_name : (\n            \"Mozilla Corporation\"\n          ) and process.code_signature.trusted == true\n        )\n      )\n    )\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_communication_apps_suspicious_child_process.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame"
+    ]
+  }
+}

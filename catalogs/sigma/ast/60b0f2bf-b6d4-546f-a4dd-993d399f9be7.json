@@ -1,0 +1,75 @@
+{
+  "id": "60b0f2bf-b6d4-546f-a4dd-993d399f9be7",
+  "catalog": "sigma",
+  "name": "win_security_meterpreter_or_cobaltstrike_getsystem_service_install",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": "like~",
+      "values": [
+        "cmd",
+        "%comspec%"
+      ],
+      "raw_values": [
+        "*cmd*",
+        "*%COMSPEC%*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "echo",
+        "\\\\pipe\\\\",
+        "rundll32",
+        ".dll,a",
+        "/p:",
+        "\\\\\\\\127.0.0.1\\\\admin$\\\\"
+      ],
+      "raw_values": [
+        "*/c*",
+        "*echo*",
+        "*\\\\pipe\\\\*",
+        "*rundll32*",
+        "*.dll,a*",
+        "*/p:*",
+        "\\\\\\\\127.0.0.1\\\\ADMIN$\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (((winlog.event_data.ServiceFileName:\"*/c*\" and winlog.event_data.ServiceFileName:\"*echo*\" and winlog.event_data.ServiceFileName:\"*\\\\pipe\\\\*\") and (winlog.event_data.ServiceFileName like~ (\"*cmd*\", \"*%COMSPEC%*\"))) or (winlog.event_data.ServiceFileName:\"*rundll32*\" and winlog.event_data.ServiceFileName:\"*.dll,a*\" and winlog.event_data.ServiceFileName:\"*/p:*\") or winlog.event_data.ServiceFileName:\"\\\\\\\\127.0.0.1\\\\ADMIN$\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_meterpreter_or_cobaltstrike_getsystem_service_install.eql",
+  "metadata": {}
+}

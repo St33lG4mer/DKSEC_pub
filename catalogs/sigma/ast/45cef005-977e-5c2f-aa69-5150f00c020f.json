@@ -1,0 +1,65 @@
+{
+  "id": "45cef005-977e-5c2f-aa69-5150f00c020f",
+  "catalog": "sigma",
+  "name": "proc_access_win_hktl_sysmonente",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": "like~",
+      "values": [
+        ":\\\\windows\\\\sysmon.exe",
+        ":\\\\windows\\\\sysmon64.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\Sysmon.exe*",
+        "*:\\\\Windows\\\\Sysmon64.exe*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x1400"
+      ],
+      "raw_values": [
+        "0x1400"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*",
+        "*\\\\MsMpEng.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "ente"
+      ],
+      "raw_values": [
+        "Ente"
+      ]
+    }
+  ],
+  "raw_query": "any where (((winlog.event_data.TargetImage like~ (\"*:\\\\Windows\\\\Sysmon.exe*\", \"*:\\\\Windows\\\\Sysmon64.exe*\")) and winlog.event_data.GrantedAccess:\"0x1400\") and (not ((process.executable like~ (\"*:\\\\Program Files (x86)\\\\*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\")) or (process.executable:\"*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\" and process.executable:\"*\\\\MsMpEng.exe\")))) or winlog.event_data.CallTrace:\"Ente\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_access/proc_access_win_hktl_sysmonente.eql",
+  "metadata": {}
+}

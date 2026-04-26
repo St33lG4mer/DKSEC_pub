@@ -1,0 +1,40 @@
+{
+  "id": "932831ca-a074-55c2-8860-1e21a9becebe",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_ftp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ftp.exe"
+      ],
+      "raw_values": [
+        "ftp.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ftp.exe"
+      ],
+      "raw_values": [
+        "*\\\\ftp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"ftp.exe\" and (not process.executable:\"*\\\\ftp.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_ftp.eql",
+  "metadata": {}
+}

@@ -1,0 +1,76 @@
+{
+  "id": "0fbf3aa9-1792-533c-b8fa-99251976bfc9",
+  "catalog": "sigma",
+  "name": "win_security_susp_logon_explicit_credentials",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "winrs.exe",
+        "wmic.exe",
+        "net.exe",
+        "net1.exe",
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\winrs.exe",
+        "*\\\\wmic.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4648"
+      ],
+      "raw_values": [
+        "4648"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetservername",
+      "raw_field": "winlog.event_data.TargetServerName",
+      "operator": ":",
+      "values": [
+        "localhost"
+      ],
+      "raw_values": [
+        "localhost"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4648\" and (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\winrs.exe\", \"*\\\\wmic.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\reg.exe\"))) and (not (winlog.event_data.TargetServerName:\"localhost\" or (user.name:\"*$\" and winlog.event_data.TargetUserName:\"*$\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_logon_explicit_credentials.eql",
+  "metadata": {}
+}

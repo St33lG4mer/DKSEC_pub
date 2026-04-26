@@ -1,0 +1,64 @@
+{
+  "id": "f011c29f-ced7-5631-a5d6-8a5531d495ce",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_add_safeboot",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "copy",
+        "add"
+      ],
+      "raw_values": [
+        "* copy *",
+        "* add *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "safeboot"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\SafeBoot*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and process.command_line:\"*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\SafeBoot*\" and (process.command_line like~ (\"* copy *\", \"* add *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_add_safeboot.eql",
+  "metadata": {}
+}

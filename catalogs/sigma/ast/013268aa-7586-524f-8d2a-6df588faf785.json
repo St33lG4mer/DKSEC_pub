@@ -1,0 +1,40 @@
+{
+  "id": "013268aa-7586-524f-8d2a-6df588faf785",
+  "catalog": "sigma",
+  "name": "proc_creation_win_php_inline_command_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "php.exe"
+      ],
+      "raw_values": [
+        "*\\\\php.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "php.exe"
+      ],
+      "raw_values": [
+        "php.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\php.exe\" or process.pe.original_file_name:\"php.exe\") and process.command_line:\"* -r*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_php_inline_command_execution.eql",
+  "metadata": {}
+}

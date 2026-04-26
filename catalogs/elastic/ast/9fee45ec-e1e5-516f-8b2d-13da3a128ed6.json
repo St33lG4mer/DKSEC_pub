@@ -1,0 +1,90 @@
+{
+  "id": "9fee45ec-e1e5-516f-8b2d-13da3a128ed6",
+  "catalog": "elastic",
+  "name": "Curl SOCKS Proxy Detected via Defend for Containers",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--socks5-hostname",
+        "--proxy",
+        "--preproxy",
+        "socks5"
+      ],
+      "raw_values": [
+        "--socks5-hostname",
+        "--proxy",
+        "--preproxy",
+        "socks5*",
+        "-x"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "curl"
+      ],
+      "raw_values": [
+        "curl"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.name == \"curl\" and process.args like (\"--socks5-hostname\", \"--proxy\", \"--preproxy\", \"socks5*\", \"-x\") and\nprocess.interactive == true and container.id like \"?*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/command_and_control_curl_socks_proxy_detected_inside_container.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

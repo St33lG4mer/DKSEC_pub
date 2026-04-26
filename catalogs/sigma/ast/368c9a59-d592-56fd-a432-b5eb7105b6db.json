@@ -1,0 +1,53 @@
+{
+  "id": "368c9a59-d592-56fd-a432-b5eb7105b6db",
+  "catalog": "sigma",
+  "name": "win_security_apt_oilrig_mar18",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": "like~",
+      "values": [
+        "sc scheduled scan",
+        "updatmachine"
+      ],
+      "raw_values": [
+        "SC Scheduled Scan",
+        "UpdatMachine"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4698"
+      ],
+      "raw_values": [
+        "4698"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4698\" and (winlog.event_data.TaskName like~ (\"SC Scheduled Scan\", \"UpdatMachine\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2018/TA/OilRig/win_security_apt_oilrig_mar18.eql",
+  "metadata": {}
+}

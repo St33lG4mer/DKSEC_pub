@@ -1,0 +1,42 @@
+{
+  "id": "f11016b4-4d3b-56be-bca4-b582d40d57cb",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_desktop_txt",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".txt"
+      ],
+      "raw_values": [
+        "*\\\\Users\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*.txt"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\cmd.exe\" and (file.path:\"*\\\\Users\\\\*\" and file.path:\"*\\\\Desktop\\\\*\") and file.path:\"*.txt\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_desktop_txt.eql",
+  "metadata": {}
+}

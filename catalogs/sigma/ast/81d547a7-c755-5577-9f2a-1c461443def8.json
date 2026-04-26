@@ -1,0 +1,62 @@
+{
+  "id": "81d547a7-c755-5577-9f2a-1c461443def8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regsvr32_dllregisterserver_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "REGSVR32.EXE"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "rpcproxy.dll"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\RpcProxy\\\\RpcProxy.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "s rpcproxy.dll"
+      ],
+      "raw_values": [
+        "regsvr32 /s rpcproxy.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\regsvr32.exe\" or process.pe.original_file_name:\"REGSVR32.EXE\") and (process.command_line like~ (\"* /s *\", \"* /e *\"))) and (not (((process.command_line like~ (\"*:\\\\Program Files (x86)*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\")) or (process.working_directory like~ (\"*:\\\\Program Files (x86)*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\"))) or (process.command_line like~ (\"* /i:*\", \"*/U *\")) or (process.parent.command_line:\"*:\\\\Windows\\\\System32\\\\RpcProxy\\\\RpcProxy.dll\" and process.command_line:\"regsvr32 /s rpcproxy.dll\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_regsvr32_dllregisterserver_exec.eql",
+  "metadata": {}
+}

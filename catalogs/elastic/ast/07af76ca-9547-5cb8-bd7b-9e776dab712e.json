@@ -1,0 +1,61 @@
+{
+  "id": "07af76ca-9547-5cb8-bd7b-9e776dab712e",
+  "catalog": "elastic",
+  "name": "Multiple Vulnerabilities by Asset via Wiz",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "wiz.vulnerability"
+      ],
+      "raw_values": [
+        "wiz.vulnerability"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "vulnerability"
+      ],
+      "raw_values": [
+        "vulnerability"
+      ]
+    },
+    {
+      "field": "concat_vuln_severity_values",
+      "raw_field": "concat_vuln_severity_values",
+      "operator": "like",
+      "values": [
+        "high",
+        "critical"
+      ],
+      "raw_values": [
+        "*High*",
+        "*Critical*"
+      ]
+    }
+  ],
+  "raw_query": "FROM logs-wiz.vulnerability-*\n\n| WHERE data_stream.dataset == \"wiz.vulnerability\" and event.category == \"vulnerability\" and\n        wiz.vulnerability.vulnerable_asset.name is not null and\n        wiz.vulnerability.vulnerable_asset.id is not null\n| stats Esql.count_distinct_vuln_id = COUNT_DISTINCT(wiz.vulnerability.id),\n        Esql.count_distinct_vuln_severity = COUNT_DISTINCT(wiz.vulnerability.cvss_severity),\n        Esql.count_has_exploit = COUNT(wiz.vulnerability.has_exploit),\n        Esql.vuln_id_values = VALUES(wiz.vulnerability.id),\n        Esql.vuln_severity_values = VALUES(wiz.vulnerability.cvss_severity) by wiz.vulnerability.vulnerable_asset.name, wiz.vulnerability.vulnerable_asset.id\n| eval concat_vuln_severity_values = MV_CONCAT(Esql.vuln_severity_values, \",\")\n| where Esql.count_distinct_vuln_id >= 10 or\n        (Esql.count_has_exploit >= 1 and Esql.count_distinct_vuln_id >= 3) or\n        (concat_vuln_severity_values like \"*High*\" and Esql.count_distinct_vuln_id >= 3) or\n        (concat_vuln_severity_values like \"*Critical*\" and Esql.count_distinct_vuln_id >= 3)\n| Keep wiz.vulnerability.vulnerable_asset.name, wiz.vulnerability.vulnerable_asset.id, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/multiple_vulnerabilities_wiz_by_container.toml",
+  "metadata": {
+    "risk_score": 99,
+    "tags": [
+      "Use Case: Vulnerability",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide",
+      "Data Source: Wiz"
+    ]
+  }
+}

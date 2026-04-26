@@ -1,0 +1,40 @@
+{
+  "id": "3632d90e-f8a6-5bfd-b482-2ae919b36ada",
+  "catalog": "sigma",
+  "name": "image_load_side_load_ccleaner_reactivator",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "ccleanerreactivator.dll"
+      ],
+      "raw_values": [
+        "*\\\\CCleanerReactivator.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ccleanerreactivator.exe"
+      ],
+      "raw_values": [
+        "*\\\\CCleanerReactivator.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\CCleanerReactivator.dll\" and (not ((process.executable like~ (\"C:\\\\Program Files\\\\CCleaner\\\\*\", \"C:\\\\Program Files (x86)\\\\CCleaner\\\\*\")) and process.executable:\"*\\\\CCleanerReactivator.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_ccleaner_reactivator.eql",
+  "metadata": {}
+}

@@ -1,0 +1,52 @@
+{
+  "id": "000a9c96-8eaa-5c2b-9099-6e802f62b3b9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regsvr32_flags_anomaly",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-i:",
+        "–i:",
+        "—i:",
+        "―i:"
+      ],
+      "raw_values": [
+        "* -i:*",
+        "* /i:*",
+        "* –i:*",
+        "* —i:*",
+        "* ―i:*",
+        "* -n *",
+        "* /n *",
+        "* –n *",
+        "* —n *",
+        "* ―n *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\regsvr32.exe\" and process.command_line like~ (\"* -i:*\", \"* /i:*\", \"* –i:*\", \"* —i:*\", \"* ―i:*\")) and (not process.command_line like~ (\"* -n *\", \"* /n *\", \"* –n *\", \"* —n *\", \"* ―n *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regsvr32_flags_anomaly.eql",
+  "metadata": {}
+}

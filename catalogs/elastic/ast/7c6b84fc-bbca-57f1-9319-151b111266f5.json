@@ -1,0 +1,122 @@
+{
+  "id": "7c6b84fc-bbca-57f1-9319-151b111266f5",
+  "catalog": "elastic",
+  "name": "Microsoft Exchange Server UM Writing Suspicious Files",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "umworkerprocess.exe",
+        "umservice.exe"
+      ],
+      "raw_values": [
+        "UMWorkerProcess.exe",
+        "umservice.exe"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "php",
+        "jsp",
+        "aspx",
+        "asmx",
+        "asax",
+        "cfm",
+        "shtml"
+      ],
+      "raw_values": [
+        "php",
+        "jsp",
+        "js",
+        "aspx",
+        "asmx",
+        "asax",
+        "cfm",
+        "shtml"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "errorfe.aspx",
+        "expiredpassword.aspx",
+        "frowny.aspx",
+        "getidtoken.htm",
+        "logoff.aspx",
+        "logon.aspx",
+        "outlookcn.aspx",
+        "redirsuiteserviceproxy.aspx",
+        "signout.aspx",
+        "timeoutlogoff.aspx"
+      ],
+      "raw_values": [
+        "errorFE.aspx",
+        "expiredpassword.aspx",
+        "frowny.aspx",
+        "GetIdToken.htm",
+        "logoff.aspx",
+        "logon.aspx",
+        "OutlookCN.aspx",
+        "RedirSuiteServiceProxy.aspx",
+        "signout.aspx",
+        "TimeoutLogoff.aspx"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and event.type == \"creation\" and\n  process.name : (\"UMWorkerProcess.exe\", \"umservice.exe\") and\n  file.extension : (\"php\", \"jsp\", \"js\", \"aspx\", \"asmx\", \"asax\", \"cfm\", \"shtml\") and\n  (\n    file.path : \"?:\\\\inetpub\\\\wwwroot\\\\aspnet_client\\\\*\" or\n\n    (file.path : \"?:\\\\*\\\\Microsoft\\\\Exchange Server*\\\\FrontEnd\\\\HttpProxy\\\\owa\\\\auth\\\\*\" and\n       not (file.path : \"?:\\\\*\\\\Microsoft\\\\Exchange Server*\\\\FrontEnd\\\\HttpProxy\\\\owa\\\\auth\\\\version\\\\*\" or\n            file.name : (\"errorFE.aspx\", \"expiredpassword.aspx\", \"frowny.aspx\", \"GetIdToken.htm\", \"logoff.aspx\",\n                        \"logon.aspx\", \"OutlookCN.aspx\", \"RedirSuiteServiceProxy.aspx\", \"signout.aspx\"))) or\n\n    (file.path : \"?:\\\\*\\\\Microsoft\\\\Exchange Server*\\\\FrontEnd\\\\HttpProxy\\\\ecp\\\\auth\\\\*\" and\n       not file.name : \"TimeoutLogoff.aspx\")\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/initial_access_suspicious_ms_exchange_files.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Endgame",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

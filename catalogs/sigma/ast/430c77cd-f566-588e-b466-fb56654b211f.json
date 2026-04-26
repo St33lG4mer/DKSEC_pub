@@ -1,0 +1,40 @@
+{
+  "id": "430c77cd-f566-588e-b466-fb56654b211f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wusa_cab_files_extraction_from_susp_paths",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wusa.exe"
+      ],
+      "raw_values": [
+        "*\\\\wusa.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "extract:"
+      ],
+      "raw_values": [
+        "*/extract:*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\wusa.exe\" and process.command_line:\"*/extract:*\") and (process.command_line like~ (\"*:\\\\PerfLogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\Appdata\\\\Local\\\\Temp\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wusa_cab_files_extraction_from_susp_paths.eql",
+  "metadata": {}
+}

@@ -1,0 +1,134 @@
+{
+  "id": "4564c9f5-7d83-579d-a32c-80acf93ddbe8",
+  "catalog": "elastic",
+  "name": "Potential Credential Access via Windows Utilities",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "procdump",
+        "writeminidump.exe",
+        "rundll32.exe",
+        "rdrleakdiag.exe",
+        "sqldumper.exe",
+        "tttracer.exe",
+        "ntdsutil.exe",
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "procdump",
+        "WriteMiniDump.exe",
+        "RUNDLL32.EXE",
+        "RdrLeakDiag.exe",
+        "SqlDumper.exe",
+        "TTTracer.exe",
+        "ntdsutil.exe",
+        "diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "procdump.exe",
+        "processdump.exe",
+        "writeminidump.exe",
+        "rundll32.exe",
+        "rdrleakdiag.exe",
+        "sqldumper.exe",
+        "tttracer.exe",
+        "ntdsutil.exe",
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "procdump.exe",
+        "ProcessDump.exe",
+        "WriteMiniDump.exe",
+        "RUNDLL32.exe",
+        "RdrLeakDiag.exe",
+        "SqlDumper.exe",
+        "TTTracer.exe",
+        "ntdsutil.exe",
+        "diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-ma",
+        "minidump",
+        "comsvcs*#*24",
+        "fullmemdmp",
+        "0x01100",
+        "-dumpfull",
+        "-attach",
+        "cr*fu"
+      ],
+      "raw_values": [
+        "-ma",
+        "*MiniDump*",
+        "*comsvcs*#*24*",
+        "/fullmemdmp",
+        "0x01100*",
+        "-dumpFull",
+        "-attach",
+        "cr*fu*",
+        "/s"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n(\n  (\n    (?process.pe.original_file_name : \"procdump\" or process.name : \"procdump.exe\") and process.args : \"-ma\"\n  ) or\n  (\n    process.name : \"ProcessDump.exe\" and not process.parent.executable regex~ \"\"\"C:\\\\Program Files( \\(x86\\))?\\\\Cisco Systems\\\\.*\"\"\"\n  ) or\n  (\n    (?process.pe.original_file_name : \"WriteMiniDump.exe\" or process.name : \"WriteMiniDump.exe\") and\n      not process.parent.executable regex~ \"\"\"C:\\\\Program Files( \\(x86\\))?\\\\Steam\\\\.*\"\"\"\n  ) or\n  (\n    (?process.pe.original_file_name : \"RUNDLL32.EXE\" or process.name : \"RUNDLL32.exe\") and\n      (process.args : \"*MiniDump*\" or process.command_line : \"*comsvcs*#*24*\")\n  ) or\n  (\n    (?process.pe.original_file_name : \"RdrLeakDiag.exe\" or process.name : \"RdrLeakDiag.exe\") and\n      process.args : \"/fullmemdmp\"\n  ) or\n  (\n    (?process.pe.original_file_name : \"SqlDumper.exe\" or process.name : \"SqlDumper.exe\") and\n      process.args : \"0x01100*\") or\n  (\n    (?process.pe.original_file_name : \"TTTracer.exe\" or process.name : \"TTTracer.exe\") and\n      process.args : \"-dumpFull\" and process.args : \"-attach\") or\n  (\n    (?process.pe.original_file_name : \"ntdsutil.exe\" or process.name : \"ntdsutil.exe\") and\n      process.args : \"cr*fu*\") or\n  (\n    (?process.pe.original_file_name : \"diskshadow.exe\" or process.name : \"diskshadow.exe\") and process.args : \"/s\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_cmdline_dump_tool.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Sysmon"
+    ]
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "id": "87f1772c-ead5-59d0-91cf-679dea5e33de",
+  "catalog": "elastic",
+  "name": "Sublime Plugin or Application Script Modification",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".py",
+        "sublime.py"
+      ],
+      "raw_values": [
+        "/Users/*/Library/Application Support/Sublime Text*/Packages/*.py",
+        "/Applications/Sublime Text.app/Contents/MacOS/sublime.py"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "git",
+        "xpcproxy",
+        "desktopserviceshelper"
+      ],
+      "raw_values": [
+        "/Applications/Sublime Text*.app/Contents/*",
+        "/usr/local/Cellar/git/*/bin/git",
+        "/Library/Developer/CommandLineTools/usr/bin/git",
+        "/usr/libexec/xpcproxy",
+        "/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/Resources/DesktopServicesHelper"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modification"
+      ],
+      "raw_values": [
+        "modification"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.action == \"modification\" and file.extension == \"py\" and\n  file.path like\n    (\n      \"/Users/*/Library/Application Support/Sublime Text*/Packages/*.py\",\n      \"/Applications/Sublime Text.app/Contents/MacOS/sublime.py\"\n    ) and\n  not process.executable like\n    (\n      \"/Applications/Sublime Text*.app/Contents/*\",\n      \"/usr/local/Cellar/git/*/bin/git\",\n      \"/Library/Developer/CommandLineTools/usr/bin/git\",\n      \"/usr/libexec/xpcproxy\",\n      \"/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/Resources/DesktopServicesHelper\"\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_modification_sublime_app_plugin_or_script.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

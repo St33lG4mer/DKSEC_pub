@@ -1,0 +1,104 @@
+{
+  "id": "526dc13b-b7a9-5dac-8d57-e973c4958623",
+  "catalog": "sigma",
+  "name": "file_event_win_office_uncommon_file_startup",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".docb",
+        ".docm",
+        ".docx",
+        ".dotm",
+        ".mdb",
+        ".mdw",
+        ".pdf",
+        ".wll",
+        ".wwl",
+        ".xll",
+        ".xls",
+        ".xlsm",
+        ".xlsx",
+        ".xlt",
+        ".xltm",
+        ".xlw"
+      ],
+      "raw_values": [
+        "*.docb",
+        "*.docm",
+        "*.docx",
+        "*.dotm",
+        "*.mdb",
+        "*.mdw",
+        "*.pdf",
+        "*.wll",
+        "*.wwl",
+        "*.xll",
+        "*.xls",
+        "*.xlsm",
+        "*.xlsx",
+        "*.xlt",
+        "*.xltm",
+        "*.xlw"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "winword.exe",
+        "excel.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Microsoft Office\\\\*",
+        "*\\\\winword.exe",
+        "*\\\\excel.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "startup",
+        "office",
+        "program files",
+        "xlstart"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Word\\\\STARTUP*",
+        "*\\\\Office*",
+        "*\\\\Program Files*",
+        "*\\\\STARTUP*",
+        "*\\\\Microsoft\\\\Excel\\\\XLSTART*",
+        "*\\\\XLSTART*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "officeclicktorun.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*",
+        "*\\\\OfficeClickToRun.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (((file.path:\"*\\\\Microsoft\\\\Word\\\\STARTUP*\" or (file.path:\"*\\\\Office*\" and file.path:\"*\\\\Program Files*\" and file.path:\"*\\\\STARTUP*\")) and (not (file.path like~ (\"*.docb\", \"*.docm\", \"*.docx\", \"*.dotm\", \"*.mdb\", \"*.mdw\", \"*.pdf\", \"*.wll\", \"*.wwl\")))) or ((file.path:\"*\\\\Microsoft\\\\Excel\\\\XLSTART*\" or (file.path:\"*\\\\Office*\" and file.path:\"*\\\\Program Files*\" and file.path:\"*\\\\XLSTART*\")) and (not (file.path like~ (\"*.xll\", \"*.xls\", \"*.xlsm\", \"*.xlsx\", \"*.xlt\", \"*.xltm\", \"*.xlw\"))))) and (not ((process.executable:\"*:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*\" and process.executable:\"*\\\\OfficeClickToRun.exe\") or ((process.executable like~ (\"*:\\\\Program Files\\\\Microsoft Office\\\\*\", \"*:\\\\Program Files (x86)\\\\Microsoft Office\\\\*\")) and (process.executable like~ (\"*\\\\winword.exe\", \"*\\\\excel.exe\")))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_uncommon_file_startup.eql",
+  "metadata": {}
+}

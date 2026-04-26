@@ -1,0 +1,28 @@
+{
+  "id": "ebe37c74-f649-5d9a-a9f1-630e7158c1b9",
+  "catalog": "elastic",
+  "name": "Deprecated - EggShell Backdoor Execution",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.category:process and event.type:(process_started or start) and process.name:espl and process.args:eyJkZWJ1ZyI6*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_pentest_eggshell_remote_admin_tool.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

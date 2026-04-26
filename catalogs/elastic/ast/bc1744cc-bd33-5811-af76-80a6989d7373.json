@@ -1,0 +1,77 @@
+{
+  "id": "bc1744cc-bd33-5811-af76-80a6989d7373",
+  "catalog": "elastic",
+  "name": "AWS RDS DB Instance or Cluster Password Modified",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "modifydbinstance",
+        "modifydbcluster"
+      ],
+      "raw_values": [
+        "ModifyDBInstance",
+        "ModifyDBCluster"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "rds.amazonaws.com"
+      ],
+      "raw_values": [
+        "rds.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n    and event.provider == \"rds.amazonaws.com\"\n    and event.action in (\"ModifyDBInstance\", \"ModifyDBCluster\")\n    and event.outcome == \"success\"\n    and stringContains(aws.cloudtrail.request_parameters, \"masterUserPassword=*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_rds_db_instance_password_modified.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS RDS",
+      "Resources: Investigation Guide",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Tactic: Defense Evasion"
+    ]
+  }
+}

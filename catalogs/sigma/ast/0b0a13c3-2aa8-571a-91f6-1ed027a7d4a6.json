@@ -1,0 +1,74 @@
+{
+  "id": "0b0a13c3-2aa8-571a-91f6-1ed027a7d4a6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mstsc_run_local_rdp_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".rdp"
+      ],
+      "raw_values": [
+        "*.rdp",
+        "*.rdp\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mstsc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mstsc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mstsc.exe"
+      ],
+      "raw_values": [
+        "mstsc.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wslhost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\lxss\\\\wslhost.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "wslg.rdp"
+      ],
+      "raw_values": [
+        "*C:\\\\ProgramData\\\\Microsoft\\\\WSL\\\\wslg.rdp*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\mstsc.exe\" or process.pe.original_file_name:\"mstsc.exe\") and (process.command_line like~ (\"*.rdp\", \"*.rdp\\\"\"))) and (not (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\lxss\\\\wslhost.exe\" and process.command_line:\"*C:\\\\ProgramData\\\\Microsoft\\\\WSL\\\\wslg.rdp*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mstsc_run_local_rdp_file.eql",
+  "metadata": {}
+}

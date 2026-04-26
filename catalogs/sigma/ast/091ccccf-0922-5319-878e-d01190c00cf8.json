@@ -1,0 +1,29 @@
+{
+  "id": "091ccccf-0922-5319-878e-d01190c00cf8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_get_clipboard",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "get-clipboard"
+      ],
+      "raw_values": [
+        "*Get-Clipboard*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*Get-Clipboard*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_get_clipboard.eql",
+  "metadata": {}
+}

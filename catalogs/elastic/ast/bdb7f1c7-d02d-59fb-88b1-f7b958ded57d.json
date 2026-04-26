@@ -1,0 +1,25 @@
+{
+  "id": "bdb7f1c7-d02d-59fb-88b1-f7b958ded57d",
+  "catalog": "elastic",
+  "name": "Administrator Privileges Assigned to an Okta Group",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:group.privilege.grant\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/persistence_administrator_privileges_assigned_to_okta_group.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

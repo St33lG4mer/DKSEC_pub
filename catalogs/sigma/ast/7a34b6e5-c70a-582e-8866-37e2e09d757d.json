@@ -1,0 +1,29 @@
+{
+  "id": "7a34b6e5-c70a-582e-8866-37e2e09d757d",
+  "catalog": "sigma",
+  "name": "registry_set_lsa_disablerestrictedadmin",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "system\\\\currentcontrolset\\\\control\\\\lsa\\\\disablerestrictedadmin"
+      ],
+      "raw_values": [
+        "*System\\\\CurrentControlSet\\\\Control\\\\Lsa\\\\DisableRestrictedAdmin"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*System\\\\CurrentControlSet\\\\Control\\\\Lsa\\\\DisableRestrictedAdmin\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_lsa_disablerestrictedadmin.eql",
+  "metadata": {}
+}

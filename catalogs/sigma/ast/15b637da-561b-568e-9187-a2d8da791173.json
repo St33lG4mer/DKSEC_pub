@@ -1,0 +1,29 @@
+{
+  "id": "15b637da-561b-568e-9187-a2d8da791173",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_lsa_extension",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\control\\\\lsaextensionconfig\\\\lsasrv\\\\extensions"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\LsaExtensionConfig\\\\LsaSrv\\\\Extensions*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\LsaExtensionConfig\\\\LsaSrv\\\\Extensions*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_lsa_extension.eql",
+  "metadata": {}
+}

@@ -1,0 +1,87 @@
+{
+  "id": "af676ea2-39a9-515c-9e27-71bef584be57",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_ntfs_short_name_path_use_cli",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "post-install.bat",
+        "scalar.exe"
+      ],
+      "raw_values": [
+        "*~1\\\\*",
+        "*~2\\\\*",
+        "*C:\\\\Program Files\\\\Git\\\\post-install.bat*",
+        "*C:\\\\Program Files\\\\Git\\\\cmd\\\\scalar.exe*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "dism.exe",
+        "cleanmgr.exe",
+        "winget.exe",
+        "aurora-agent-64.exe",
+        "aurora-agent.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\Dism.exe",
+        "C:\\\\Windows\\\\System32\\\\cleanmgr.exe",
+        "*\\\\winget.exe",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\WinGet\\\\*",
+        "*\\\\aurora-agent-64.exe",
+        "*\\\\aurora-agent.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "csc.exe",
+        "dopus.exe",
+        "thor64.exe",
+        "webexhost.exe",
+        "veeam.backup.shell.exe",
+        "everything.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\v*",
+        "*\\\\csc.exe",
+        "C:\\\\Program Files\\\\GPSoftware\\\\Directory Opus\\\\dopus.exe",
+        "*\\\\thor\\\\thor64.exe",
+        "*\\\\WebEx\\\\webexhost.exe",
+        "*\\\\veeam.backup.shell.exe",
+        "*\\\\Everything\\\\Everything.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "wbxreport.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\appdata\\\\local\\\\webex\\\\webex64\\\\meetings\\\\wbxreport.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*~1\\\\*\", \"*~2\\\\*\")) and (not ((process.parent.executable like~ (\"C:\\\\Windows\\\\System32\\\\Dism.exe\", \"C:\\\\Windows\\\\System32\\\\cleanmgr.exe\")) or (process.parent.executable like~ (\"*\\\\winget.exe\", \"*\\\\AppData\\\\Local\\\\Temp\\\\WinGet\\\\*\")) or (process.parent.executable:\"C:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\v*\" and process.parent.executable:\"*\\\\csc.exe\") or ((process.executable:\"*\\\\AppData\\\\*\" and process.executable:\"*\\\\Temp\\\\*\") or process.command_line:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\"))) and (not (process.parent.executable:\"C:\\\\Program Files\\\\GPSoftware\\\\Directory Opus\\\\dopus.exe\" or (process.parent.executable like~ (\"*\\\\aurora-agent-64.exe\", \"*\\\\aurora-agent.exe\")) or process.parent.executable:\"*\\\\thor\\\\thor64.exe\" or (process.command_line like~ (\"*C:\\\\Program Files\\\\Git\\\\post-install.bat*\", \"*C:\\\\Program Files\\\\Git\\\\cmd\\\\scalar.exe*\")) or (process.parent.executable:\"*\\\\WebEx\\\\webexhost.exe\" or process.command_line:\"*\\\\appdata\\\\local\\\\webex\\\\webex64\\\\meetings\\\\wbxreport.exe*\") or process.parent.executable:\"*\\\\veeam.backup.shell.exe\" or process.parent.executable:\"*\\\\Everything\\\\Everything.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_ntfs_short_name_path_use_cli.eql",
+  "metadata": {}
+}

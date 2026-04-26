@@ -1,0 +1,44 @@
+{
+  "id": "3f5bb080-a470-5305-b8c9-4299d22b3946",
+  "catalog": "sigma",
+  "name": "create_remote_thread_win_malware_bumblebee",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wabmig.exe",
+        "wab.exe",
+        "imagingdevices.exe"
+      ],
+      "raw_values": [
+        "*\\\\wabmig.exe",
+        "*\\\\wab.exe",
+        "*\\\\ImagingDevices.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\wabmig.exe\", \"*\\\\wab.exe\", \"*\\\\ImagingDevices.exe\")) and winlog.event_data.TargetImage:\"*\\\\rundll32.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Malware/Bumblebee/create_remote_thread_win_malware_bumblebee.eql",
+  "metadata": {}
+}

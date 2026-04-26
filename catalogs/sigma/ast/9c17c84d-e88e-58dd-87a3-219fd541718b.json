@@ -1,0 +1,82 @@
+{
+  "id": "9c17c84d-e88e-58dd-87a3-219fd541718b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sysinternals_psloglist",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "psloglist.exe",
+        "psloglist64.exe"
+      ],
+      "raw_values": [
+        "*\\\\psloglist.exe",
+        "*\\\\psloglist64.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "security",
+        "application",
+        "system"
+      ],
+      "raw_values": [
+        "* security*",
+        "* application*",
+        "* system*",
+        "* -d*",
+        "* /d*",
+        "* –d*",
+        "* —d*",
+        "* ―d*",
+        "* -x*",
+        "* /x*",
+        "* –x*",
+        "* —x*",
+        "* ―x*",
+        "* -s*",
+        "* /s*",
+        "* –s*",
+        "* —s*",
+        "* ―s*",
+        "* -c*",
+        "* /c*",
+        "* –c*",
+        "* —c*",
+        "* ―c*",
+        "* -g*",
+        "* /g*",
+        "* –g*",
+        "* —g*",
+        "* ―g*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "psloglist.exe"
+      ],
+      "raw_values": [
+        "psloglist.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"psloglist.exe\" or (process.executable like~ (\"*\\\\psloglist.exe\", \"*\\\\psloglist64.exe\"))) and (process.command_line like~ (\"* security*\", \"* application*\", \"* system*\")) and (process.command_line like~ (\"* -d*\", \"* /d*\", \"* –d*\", \"* —d*\", \"* ―d*\") or process.command_line like~ (\"* -x*\", \"* /x*\", \"* –x*\", \"* —x*\", \"* ―x*\") or process.command_line like~ (\"* -s*\", \"* /s*\", \"* –s*\", \"* —s*\", \"* ―s*\") or process.command_line like~ (\"* -c*\", \"* /c*\", \"* –c*\", \"* —c*\", \"* ―c*\") or process.command_line like~ (\"* -g*\", \"* /g*\", \"* –g*\", \"* —g*\", \"* ―g*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sysinternals_psloglist.eql",
+  "metadata": {}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "ee6b1d03-5604-5414-bf21-16dc7adc09b9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sysinternals_psexesvc_as_system",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "psexesvc.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\PSEXESVC.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"C:\\\\Windows\\\\PSEXESVC.exe\" and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sysinternals_psexesvc_as_system.eql",
+  "metadata": {}
+}

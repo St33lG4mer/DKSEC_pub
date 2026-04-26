@@ -1,0 +1,74 @@
+{
+  "id": "6e4fcd5a-624e-564c-a2db-f7f6d822e9f8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_webshell_tool_recon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "caddy.exe",
+        "httpd.exe",
+        "nginx.exe",
+        "php-cgi.exe",
+        "w3wp.exe",
+        "ws_tomcatservice.exe",
+        "java.exe",
+        "javaw.exe",
+        "-tomcat-",
+        "tomcat"
+      ],
+      "raw_values": [
+        "*\\\\caddy.exe",
+        "*\\\\httpd.exe",
+        "*\\\\nginx.exe",
+        "*\\\\php-cgi.exe",
+        "*\\\\w3wp.exe",
+        "*\\\\ws_tomcatservice.exe",
+        "*\\\\java.exe",
+        "*\\\\javaw.exe",
+        "*-tomcat-*",
+        "*\\\\tomcat*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "catalina_home",
+        "catalina.jar",
+        "perl --help",
+        "perl -h",
+        "python --help",
+        "python -h",
+        "python3 --help",
+        "python3 -h",
+        "wget --help"
+      ],
+      "raw_values": [
+        "*CATALINA_HOME*",
+        "*catalina.jar*",
+        "*perl --help*",
+        "*perl -h*",
+        "*python --help*",
+        "*python -h*",
+        "*python3 --help*",
+        "*python3 -h*",
+        "*wget --help*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\caddy.exe\", \"*\\\\httpd.exe\", \"*\\\\nginx.exe\", \"*\\\\php-cgi.exe\", \"*\\\\w3wp.exe\", \"*\\\\ws_tomcatservice.exe\")) or ((process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and (process.parent.executable like~ (\"*-tomcat-*\", \"*\\\\tomcat*\"))) or ((process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and (process.command_line like~ (\"*CATALINA_HOME*\", \"*catalina.jar*\")))) and (process.command_line like~ (\"*perl --help*\", \"*perl -h*\", \"*python --help*\", \"*python -h*\", \"*python3 --help*\", \"*python3 -h*\", \"*wget --help*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_webshell_tool_recon.eql",
+  "metadata": {}
+}

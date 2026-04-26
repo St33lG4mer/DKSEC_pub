@@ -1,0 +1,33 @@
+{
+  "id": "60c33a9d-d280-5716-83ea-001ff7d6b648",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_apt29_phishing_campaign_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-noni -ep bypass $",
+        "cyzfc.dat,",
+        "pointfunctioncall"
+      ],
+      "raw_values": [
+        "*-noni -ep bypass $*",
+        "*cyzfc.dat,*",
+        "*PointFunctionCall*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*-noni -ep bypass $*\" or (process.command_line:\"*cyzfc.dat,*\" and process.command_line:\"*PointFunctionCall*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2018/TA/APT29-CozyBear/proc_creation_win_apt_apt29_phishing_campaign_indicators.eql",
+  "metadata": {}
+}

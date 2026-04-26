@@ -1,0 +1,59 @@
+{
+  "id": "7cc9cb77-8818-5281-b882-16666bbb410e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_unregmp2",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-hidewmp",
+        "hidewmp",
+        "–hidewmp",
+        "—hidewmp",
+        "―hidewmp"
+      ],
+      "raw_values": [
+        "* -HideWMP*",
+        "* /HideWMP*",
+        "* –HideWMP*",
+        "* —HideWMP*",
+        "* ―HideWMP*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "unregmp2.exe"
+      ],
+      "raw_values": [
+        "*\\\\unregmp2.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "unregmp2.exe"
+      ],
+      "raw_values": [
+        "unregmp2.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\unregmp2.exe\" or process.pe.original_file_name:\"unregmp2.exe\") and process.command_line like~ (\"* -HideWMP*\", \"* /HideWMP*\", \"* –HideWMP*\", \"* —HideWMP*\", \"* ―HideWMP*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_unregmp2.eql",
+  "metadata": {}
+}

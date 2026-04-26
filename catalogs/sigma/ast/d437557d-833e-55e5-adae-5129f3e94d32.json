@@ -1,0 +1,42 @@
+{
+  "id": "d437557d-833e-55e5-adae-5129f3e94d32",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_sysinternals_sdelete",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "sdelete.exe",
+        "sdelete64.exe"
+      ],
+      "raw_values": [
+        "*\\\\sdelete.exe",
+        "*\\\\sdelete64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sdelete.exe"
+      ],
+      "raw_values": [
+        "sdelete.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"sdelete.exe\" and (not (process.executable like~ (\"*\\\\sdelete.exe\", \"*\\\\sdelete64.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_sysinternals_sdelete.eql",
+  "metadata": {}
+}

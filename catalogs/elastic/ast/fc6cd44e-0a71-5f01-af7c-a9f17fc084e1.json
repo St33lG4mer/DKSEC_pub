@@ -1,0 +1,90 @@
+{
+  "id": "fc6cd44e-0a71-5f01-af7c-a9f17fc084e1",
+  "catalog": "elastic",
+  "name": "MS Office Macro Security Registry Modifications",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "accessvbom",
+        "vbawarnings"
+      ],
+      "raw_values": [
+        "AccessVBOM",
+        "VbaWarnings"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000001"
+      ],
+      "raw_values": [
+        "0x00000001",
+        "1"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "variations",
+      "raw_field": "variations",
+      "operator": ":",
+      "values": [
+        "hkcu\\\\s-1-*\\\\software\\\\microsoft\\\\office\\\\*\\\\security\\\\accessvbom"
+      ],
+      "raw_values": [
+        "HKCU\\\\S-1-*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\\\\Security\\\\AccessVBOM"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n    registry.value : (\"AccessVBOM\", \"VbaWarnings\") and\n    registry.data.strings : (\"0x00000001\", \"1\")\n\n/*\n    Full registry key paths omitted due to data source variations:\n    \"HKCU\\\\S-1-*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\\\\Security\\\\AccessVBOM\"\n    \"HKCU\\\\S-1-*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\\\\Security\\\\VbaWarnings\"\n*/\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_ms_office_suspicious_regmod.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

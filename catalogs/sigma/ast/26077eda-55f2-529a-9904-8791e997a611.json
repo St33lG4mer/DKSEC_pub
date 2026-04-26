@@ -1,0 +1,29 @@
+{
+  "id": "26077eda-55f2-529a-9904-8791e997a611",
+  "catalog": "sigma",
+  "name": "net_connection_win_regsvr32_network_activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where network.direction:\"true\" and process.executable:\"*\\\\regsvr32.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_regsvr32_network_activity.eql",
+  "metadata": {}
+}

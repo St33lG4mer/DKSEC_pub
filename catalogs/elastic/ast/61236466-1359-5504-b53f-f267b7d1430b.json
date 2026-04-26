@@ -1,0 +1,26 @@
+{
+  "id": "61236466-1359-5504-b53f-f267b7d1430b",
+  "catalog": "elastic",
+  "name": "M365 Exchange Mailbox Audit Logging Bypass Added",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.action:Set-MailboxAuditBypassAssociation and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/defense_evasion_exchange_mailbox_audit_bypass_association.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Tactic: Initial Access",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

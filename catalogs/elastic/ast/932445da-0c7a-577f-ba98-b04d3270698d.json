@@ -1,0 +1,23 @@
+{
+  "id": "932445da-0c7a-577f-ba98-b04d3270698d",
+  "catalog": "elastic",
+  "name": "Behavior - Detected - Elastic Defend",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind : alert and event.code : behavior and (event.type : allowed or (event.type: denied and event.outcome: failure))\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/endpoint/elastic_endpoint_security_behavior_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

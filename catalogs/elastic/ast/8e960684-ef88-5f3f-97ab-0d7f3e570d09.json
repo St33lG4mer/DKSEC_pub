@@ -1,0 +1,28 @@
+{
+  "id": "8e960684-ef88-5f3f-97ab-0d7f3e570d09",
+  "catalog": "elastic",
+  "name": "Suspicious Powershell Script",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/execution_ml_windows_anomalous_script.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

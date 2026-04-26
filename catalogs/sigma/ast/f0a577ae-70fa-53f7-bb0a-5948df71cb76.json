@@ -1,0 +1,72 @@
+{
+  "id": "f0a577ae-70fa-53f7-bb0a-5948df71cb76",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2021_41379",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "Cmd.Exe",
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "elevation_service.exe"
+      ],
+      "raw_values": [
+        "*\\\\elevation_service.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"Cmd.Exe\", \"PowerShell.EXE\", \"pwsh.dll\"))) and (process.parent.executable:\"*\\\\elevation_service.exe\" and (winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-41379/proc_creation_win_exploit_cve_2021_41379.eql",
+  "metadata": {}
+}

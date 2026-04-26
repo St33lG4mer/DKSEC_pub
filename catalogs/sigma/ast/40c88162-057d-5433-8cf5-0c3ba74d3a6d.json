@@ -1,0 +1,34 @@
+{
+  "id": "40c88162-057d-5433-8cf5-0c3ba74d3a6d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_write_protect_for_storage_disabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "control",
+        "write protection",
+        "storage"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Control*",
+        "*Write Protection*",
+        "*0*",
+        "*storage*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\System\\\\CurrentControlSet\\\\Control*\" and process.command_line:\"*Write Protection*\" and process.command_line:\"*0*\" and process.command_line:\"*storage*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_write_protect_for_storage_disabled.eql",
+  "metadata": {}
+}

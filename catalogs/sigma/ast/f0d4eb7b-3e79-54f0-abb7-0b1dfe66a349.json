@@ -1,0 +1,32 @@
+{
+  "id": "f0d4eb7b-3e79-54f0-abb7-0b1dfe66a349",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_nolmhash",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "lsa",
+        "nolmhash"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Control\\\\Lsa*",
+        "*NoLMHash*",
+        "* 0*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\System\\\\CurrentControlSet\\\\Control\\\\Lsa*\" and process.command_line:\"*NoLMHash*\" and process.command_line:\"* 0*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_nolmhash.eql",
+  "metadata": {}
+}

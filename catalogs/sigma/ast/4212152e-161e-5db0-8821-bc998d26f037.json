@@ -1,0 +1,30 @@
+{
+  "id": "4212152e-161e-5db0-8821-bc998d26f037",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_new_network_provider",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "networkprovider"
+      ],
+      "raw_values": [
+        "*\\\\System\\\\CurrentControlSet\\\\Services\\\\*",
+        "*\\\\NetworkProvider*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\System\\\\CurrentControlSet\\\\Services\\\\*\" and process.command_line:\"*\\\\NetworkProvider*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_new_network_provider.eql",
+  "metadata": {}
+}

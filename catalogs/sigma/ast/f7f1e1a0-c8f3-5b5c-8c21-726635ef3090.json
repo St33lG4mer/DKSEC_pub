@@ -1,0 +1,40 @@
+{
+  "id": "f7f1e1a0-c8f3-5b5c-8c21-726635ef3090",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lodctr_performance_counter_tampering",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "lodctr.exe"
+      ],
+      "raw_values": [
+        "*\\\\lodctr.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "lodctr.exe"
+      ],
+      "raw_values": [
+        "LODCTR.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\lodctr.exe\" and process.pe.original_file_name:\"LODCTR.EXE\") and process.command_line like~ (\"* -r*\", \"* /r*\", \"* –r*\", \"* —r*\", \"* ―r*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lodctr_performance_counter_tampering.eql",
+  "metadata": {}
+}

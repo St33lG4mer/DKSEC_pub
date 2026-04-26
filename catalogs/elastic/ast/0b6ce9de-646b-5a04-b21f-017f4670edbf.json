@@ -1,0 +1,38 @@
+{
+  "id": "0b6ce9de-646b-5a04-b21f-017f4670edbf",
+  "catalog": "elastic",
+  "name": "Deprecated - M365 Exchange DLP Policy Deleted",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "remove-dlppolicy"
+      ],
+      "raw_values": [
+        "Remove-DlpPolicy"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:\"Remove-DlpPolicy\" and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/defense_evasion_exchange_dlp_policy_removed.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Use Case: Configuration Audit",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

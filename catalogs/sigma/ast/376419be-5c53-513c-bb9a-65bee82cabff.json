@@ -1,0 +1,32 @@
+{
+  "id": "376419be-5c53-513c-bb9a-65bee82cabff",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_type_arbitrary_file_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "type"
+      ],
+      "raw_values": [
+        "*type *",
+        "* > \\\\\\\\*",
+        "*type \\\\\\\\*",
+        "* > *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*type *\" and process.command_line:\"* > \\\\\\\\*\") or (process.command_line:\"*type \\\\\\\\*\" and process.command_line:\"* > *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_type_arbitrary_file_download.eql",
+  "metadata": {}
+}

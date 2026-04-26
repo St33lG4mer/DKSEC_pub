@@ -1,0 +1,65 @@
+{
+  "id": "058712d3-4ce2-5740-9597-7e96a5bad5c7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regasm_regsvcs_uncommon_extension_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "regsvcs.exe",
+        "regasm.exe"
+      ],
+      "raw_values": [
+        "*\\\\Regsvcs.exe",
+        "*\\\\Regasm.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "regsvcs.exe",
+        "regasm.exe"
+      ],
+      "raw_values": [
+        "RegSvcs.exe",
+        "RegAsm.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".dat",
+        ".gif",
+        ".jpeg",
+        ".jpg",
+        ".png",
+        ".txt"
+      ],
+      "raw_values": [
+        "*.dat*",
+        "*.gif*",
+        "*.jpeg*",
+        "*.jpg*",
+        "*.png*",
+        "*.txt*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\Regsvcs.exe\", \"*\\\\Regasm.exe\")) or (process.pe.original_file_name like~ (\"RegSvcs.exe\", \"RegAsm.exe\"))) and (process.command_line like~ (\"*.dat*\", \"*.gif*\", \"*.jpeg*\", \"*.jpg*\", \"*.png*\", \"*.txt*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regasm_regsvcs_uncommon_extension_execution.eql",
+  "metadata": {}
+}

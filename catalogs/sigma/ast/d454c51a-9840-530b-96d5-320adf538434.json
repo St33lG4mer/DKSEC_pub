@@ -1,0 +1,87 @@
+{
+  "id": "d454c51a-9840-530b-96d5-320adf538434",
+  "catalog": "sigma",
+  "name": "win_system_cobaltstrike_service_installs",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": "like~",
+      "values": [
+        "suvyichozxctt2jqzwn0ie5ldc5xzwjjbgllbnqplkrvd25sb2fku3ryaw5nkcdodhrwoi8vmti3ljaumc4xo",
+        "lfwcaotmv3lu9iamvjdcbozxquv2viy2xpzw50ks5eb3dubg9hzfn0cmluzygnahr0cdovlzeyny4wljaumt",
+        "jrvggke5ldy1pymply3qgtmv0lldlymnsawvudckurg93bmxvywrtdhjpbmcoj2h0dha6ly8xmjcumc4wlje6"
+      ],
+      "raw_values": [
+        "*SUVYIChOZXctT2JqZWN0IE5ldC5XZWJjbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwOi8vMTI3LjAuMC4xO*",
+        "*lFWCAoTmV3LU9iamVjdCBOZXQuV2ViY2xpZW50KS5Eb3dubG9hZFN0cmluZygnaHR0cDovLzEyNy4wLjAuMT*",
+        "*JRVggKE5ldy1PYmplY3QgTmV0LldlYmNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xMjcuMC4wLjE6*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    },
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": ":",
+      "values": [
+        "admin$",
+        ".exe",
+        "%comspec%",
+        "start",
+        "powershell",
+        "powershell -nop -w hidden -encodedcommand"
+      ],
+      "raw_values": [
+        "*ADMIN$*",
+        "*.exe*",
+        "*%COMSPEC%*",
+        "*start*",
+        "*powershell*",
+        "*powershell -nop -w hidden -encodedcommand*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and ((winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\") and ((winlog.event_data.ImagePath:\"*ADMIN$*\" and winlog.event_data.ImagePath:\"*.exe*\") or (winlog.event_data.ImagePath:\"*%COMSPEC%*\" and winlog.event_data.ImagePath:\"*start*\" and winlog.event_data.ImagePath:\"*powershell*\") or winlog.event_data.ImagePath:\"*powershell -nop -w hidden -encodedcommand*\" or winlog.event_data.ImagePath like~ (\"*SUVYIChOZXctT2JqZWN0IE5ldC5XZWJjbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwOi8vMTI3LjAuMC4xO*\", \"*lFWCAoTmV3LU9iamVjdCBOZXQuV2ViY2xpZW50KS5Eb3dubG9hZFN0cmluZygnaHR0cDovLzEyNy4wLjAuMT*\", \"*JRVggKE5ldy1PYmplY3QgTmV0LldlYmNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xMjcuMC4wLjE6*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_cobaltstrike_service_installs.eql",
+  "metadata": {}
+}

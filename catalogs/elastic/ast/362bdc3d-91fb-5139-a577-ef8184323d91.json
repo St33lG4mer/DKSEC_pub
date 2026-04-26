@@ -1,0 +1,40 @@
+{
+  "id": "362bdc3d-91fb-5139-a577-ef8184323d91",
+  "catalog": "elastic",
+  "name": "Azure Storage Account Deletion by Unusual User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.storage/storageaccounts/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.STORAGE/STORAGEACCOUNTS/DELETE"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: azure.activitylogs and\n    azure.activitylogs.operation_name: \"MICROSOFT.STORAGE/STORAGEACCOUNTS/DELETE\" and\n    azure.activitylogs.identity.claims_initiated_by_user.name: *\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/impact_azure_storage_account_deletion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Storage",
+      "Data Source: Azure",
+      "Data Source: Azure Activity Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

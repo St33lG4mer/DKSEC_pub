@@ -1,0 +1,29 @@
+{
+  "id": "446a4b24-f83e-5625-85bf-b059bf19bd95",
+  "catalog": "sigma",
+  "name": "registry_set_mal_blue_mockingbird",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\currentcontrolset\\\\services\\\\wercplsupport\\\\parameters\\\\servicedll"
+      ],
+      "raw_values": [
+        "*\\\\CurrentControlSet\\\\Services\\\\wercplsupport\\\\Parameters\\\\ServiceDll"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\CurrentControlSet\\\\Services\\\\wercplsupport\\\\Parameters\\\\ServiceDll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Malware/Blue-Mockingbird/registry_set_mal_blue_mockingbird.eql",
+  "metadata": {}
+}

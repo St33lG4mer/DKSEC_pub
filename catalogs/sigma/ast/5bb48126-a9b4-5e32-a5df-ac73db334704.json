@@ -1,0 +1,40 @@
+{
+  "id": "5bb48126-a9b4-5e32-a5df-ac73db334704",
+  "catalog": "sigma",
+  "name": "image_load_malware_coldsteel_persistence_service_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "newdev.dll"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Roaming\\\\newdev.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\svchost.exe\" and file.path:\"*\\\\AppData\\\\Roaming\\\\newdev.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/COLDSTEEL/image_load_malware_coldsteel_persistence_service_dll.eql",
+  "metadata": {}
+}

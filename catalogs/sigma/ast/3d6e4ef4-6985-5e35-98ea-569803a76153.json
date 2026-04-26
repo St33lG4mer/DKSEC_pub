@@ -1,0 +1,63 @@
+{
+  "id": "3d6e4ef4-6985-5e35-98ea-569803a76153",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_winnti_mal_hk_jan20",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "temp",
+        "hpqhvind.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\Temp*",
+        "*\\\\hpqhvind.exe*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "drm",
+        "wmplayer.exe",
+        "clr.exe",
+        "searchfilterhost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\DRM*",
+        "*\\\\wmplayer.exe",
+        "C:\\\\ProgramData\\\\DRM\\\\CLR\\\\CLR.exe",
+        "*\\\\SearchFilterHost.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "drm",
+        "test.exe",
+        "windows"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\DRM*",
+        "*\\\\Test.exe",
+        "C:\\\\ProgramData\\\\DRM\\\\Windows*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*C:\\\\Windows\\\\Temp*\", \"*\\\\hpqhvind.exe*\")) and process.executable:\"C:\\\\ProgramData\\\\DRM*\") or (process.parent.executable:\"C:\\\\ProgramData\\\\DRM*\" and process.executable:\"*\\\\wmplayer.exe\") or (process.parent.executable:\"*\\\\Test.exe\" and process.executable:\"*\\\\wmplayer.exe\") or process.executable:\"C:\\\\ProgramData\\\\DRM\\\\CLR\\\\CLR.exe\" or (process.parent.executable:\"C:\\\\ProgramData\\\\DRM\\\\Windows*\" and process.executable:\"*\\\\SearchFilterHost.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/TA/Winnti/proc_creation_win_apt_winnti_mal_hk_jan20.eql",
+  "metadata": {}
+}

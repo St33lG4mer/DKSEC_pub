@@ -1,0 +1,31 @@
+{
+  "id": "fb7da849-abe7-55da-8638-97c9b3f09670",
+  "catalog": "sigma",
+  "name": "image_load_side_load_dbgmodel",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "dbgmodel.dll",
+        "microsoft.windbg_"
+      ],
+      "raw_values": [
+        "*\\\\dbgmodel.dll",
+        "C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WinDbg_*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\dbgmodel.dll\" and (not (file.path like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\"))) and (not (file.path:\"C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WinDbg_*\" or (file.path like~ (\"C:\\\\Program Files (x86)\\\\Windows Kits\\\\*\", \"C:\\\\Program Files\\\\Windows Kits\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_dbgmodel.eql",
+  "metadata": {}
+}

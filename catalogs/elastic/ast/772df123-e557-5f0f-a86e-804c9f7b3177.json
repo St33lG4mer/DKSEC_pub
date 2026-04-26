@@ -1,0 +1,73 @@
+{
+  "id": "772df123-e557-5f0f-a86e-804c9f7b3177",
+  "catalog": "elastic",
+  "name": "Kubernetes Suspicious Self-Subject Review via Unusual User Agent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "selfsubjectaccessreviews",
+        "selfsubjectrulesreviews"
+      ],
+      "raw_values": [
+        "selfsubjectaccessreviews",
+        "selfsubjectrulesreviews"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "create"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset : \"kubernetes.audit_logs\" and\nkubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.verb:\"create\" and\nkubernetes.audit.objectRef.resource:(\"selfsubjectaccessreviews\" or \"selfsubjectrulesreviews\") and (\n  kubernetes.audit.user.username:(system\\:serviceaccount\\:* or system\\:node\\:*) or\n  kubernetes.audit.impersonatedUser.username:(system\\:serviceaccount\\:* or system\\:node\\:*)\n) and user_agent.original:(* and not (*kubernetes/$Format))\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/discovery_suspicious_self_subject_review.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

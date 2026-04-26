@@ -1,0 +1,40 @@
+{
+  "id": "d30c9e83-8f8b-51e1-a841-9493169ea939",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_jusched",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": "like~",
+      "values": [
+        "java update scheduler"
+      ],
+      "raw_values": [
+        "Java Update Scheduler"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "jusched.exe"
+      ],
+      "raw_values": [
+        "*\\\\jusched.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.description like~ (\"Java Update Scheduler\", \"Java(TM) Update Scheduler\")) and (not process.executable:\"*\\\\jusched.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_jusched.eql",
+  "metadata": {}
+}

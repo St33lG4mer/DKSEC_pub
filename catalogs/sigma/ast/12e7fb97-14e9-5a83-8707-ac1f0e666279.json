@@ -1,0 +1,58 @@
+{
+  "id": "12e7fb97-14e9-5a83-8707-ac1f0e666279",
+  "catalog": "sigma",
+  "name": "file_event_win_apt_unknown_exploitation_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "mpyutd.msi",
+        "runschedulertaskonce.ps1",
+        "1.msi",
+        "update.dat",
+        "ta.exe",
+        "sentinelagentcore.dll",
+        "sentinelui.exe",
+        "spsrv.exe",
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\mpyutd.msi*",
+        "*C:\\\\perflogs\\\\RunSchedulerTaskOnce.ps1*",
+        "*C:\\\\ProgramData\\\\1.msi*",
+        "*C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\mpyutd.msi*",
+        "*C:\\\\ProgramData\\\\update.dat*",
+        "*C:\\\\Users\\\\oldadmin\\\\Documents\\\\MilsoftConnect\\\\Files\\\\ta.exe*",
+        "*C:\\\\Windows\\\\Help\\\\Help\\\\SentinelAgentCore.dll*",
+        "*C:\\\\Windows\\\\Help\\\\Help\\\\SentinelUI.exe*",
+        "*C:\\\\Windows\\\\spsrv.exe*",
+        "*C:\\\\Windows\\\\Temp\\\\svchost.exe*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "lb3.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\Temp\\\\ScreenConnect\\\\*",
+        "*\\\\LB3.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*C:\\\\Windows\\\\Temp\\\\ScreenConnect\\\\*\" and file.path:\"*\\\\LB3.exe*\") or (file.path like~ (\"*C:\\\\mpyutd.msi*\", \"*C:\\\\perflogs\\\\RunSchedulerTaskOnce.ps1*\", \"*C:\\\\ProgramData\\\\1.msi*\", \"*C:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\mpyutd.msi*\", \"*C:\\\\ProgramData\\\\update.dat*\", \"*C:\\\\Users\\\\oldadmin\\\\Documents\\\\MilsoftConnect\\\\Files\\\\ta.exe*\", \"*C:\\\\Windows\\\\Help\\\\Help\\\\SentinelAgentCore.dll*\", \"*C:\\\\Windows\\\\Help\\\\Help\\\\SentinelUI.exe*\", \"*C:\\\\Windows\\\\spsrv.exe*\", \"*C:\\\\Windows\\\\Temp\\\\svchost.exe*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/TA/SlashAndGrab-Exploitation-In-Wild/file_event_win_apt_unknown_exploitation_indicators.eql",
+  "metadata": {}
+}

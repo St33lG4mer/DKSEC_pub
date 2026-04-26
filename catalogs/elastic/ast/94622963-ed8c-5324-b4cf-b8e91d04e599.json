@@ -1,0 +1,29 @@
+{
+  "id": "94622963-ed8c-5324-b4cf-b8e91d04e599",
+  "catalog": "elastic",
+  "name": "AWS IAM Deactivation of MFA Device",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: iam.amazonaws.com \n    and event.action: DeactivateMFADevice \n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_iam_deactivate_mfa_device.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS CloudTrail",
+      "Data Source: AWS IAM",
+      "Resources: Investigation Guide",
+      "Tactic: Impact",
+      "Tactic: Persistence"
+    ]
+  }
+}

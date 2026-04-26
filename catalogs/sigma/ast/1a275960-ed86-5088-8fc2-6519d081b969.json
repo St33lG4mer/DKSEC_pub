@@ -1,0 +1,31 @@
+{
+  "id": "1a275960-ed86-5088-8fc2-6519d081b969",
+  "catalog": "sigma",
+  "name": "registry_set_change_sysmon_driver_altitude",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\services\\\\",
+        "\\\\instances\\\\sysmon instance\\\\altitude"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\*",
+        "*\\\\Instances\\\\Sysmon Instance\\\\Altitude"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Services\\\\*\" and registry.path:\"*\\\\Instances\\\\Sysmon Instance\\\\Altitude\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_change_sysmon_driver_altitude.eql",
+  "metadata": {}
+}

@@ -1,0 +1,27 @@
+{
+  "id": "e1cb483c-74e2-5184-9883-95e483daa2a4",
+  "catalog": "elastic",
+  "name": "AWS GuardDuty Detector Deletion",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n  and event.provider: guardduty.amazonaws.com \n  and event.action: DeleteDetector \n  and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_guardduty_detector_deletion.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS GuardDuty",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

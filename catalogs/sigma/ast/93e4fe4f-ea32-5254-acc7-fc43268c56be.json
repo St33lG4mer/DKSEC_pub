@@ -1,0 +1,40 @@
+{
+  "id": "93e4fe4f-ea32-5254-acc7-fc43268c56be",
+  "catalog": "sigma",
+  "name": "image_load_office_word_wll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".wll"
+      ],
+      "raw_values": [
+        "*.wll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\winword.exe\" and file.path:\"*.wll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/image_load/image_load_office_word_wll_load.eql",
+  "metadata": {}
+}

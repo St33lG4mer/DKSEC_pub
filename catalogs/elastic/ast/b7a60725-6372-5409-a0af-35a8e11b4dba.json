@@ -1,0 +1,40 @@
+{
+  "id": "b7a60725-6372-5409-a0af-35a8e11b4dba",
+  "catalog": "elastic",
+  "name": "Azure Blob Storage Permissions Modified",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.storage/storageaccounts/blobservices/containers/blobs/manageownership/action",
+        "microsoft.storage/storageaccounts/blobservices/containers/blobs/modifypermissions/action"
+      ],
+      "raw_values": [
+        "MICROSOFT.STORAGE/STORAGEACCOUNTS/BLOBSERVICES/CONTAINERS/BLOBS/MANAGEOWNERSHIP/ACTION",
+        "MICROSOFT.STORAGE/STORAGEACCOUNTS/BLOBSERVICES/CONTAINERS/BLOBS/MODIFYPERMISSIONS/ACTION"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:(\n     \"MICROSOFT.STORAGE/STORAGEACCOUNTS/BLOBSERVICES/CONTAINERS/BLOBS/MANAGEOWNERSHIP/ACTION\" or\n     \"MICROSOFT.STORAGE/STORAGEACCOUNTS/BLOBSERVICES/CONTAINERS/BLOBS/MODIFYPERMISSIONS/ACTION\") and\n  event.outcome:(Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/defense_evasion_storage_blob_permissions_modified.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

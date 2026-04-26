@@ -1,0 +1,29 @@
+{
+  "id": "a113332d-879f-50e6-9cec-fcdb1a861ade",
+  "catalog": "sigma",
+  "name": "file_event_win_tsclient_filewrite_startup",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mstsc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mstsc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\mstsc.exe\" and file.path:\"*\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_tsclient_filewrite_startup.eql",
+  "metadata": {}
+}

@@ -1,0 +1,51 @@
+{
+  "id": "caad833a-db42-53cc-97ef-4ae8a701c0a0",
+  "catalog": "elastic",
+  "name": "Azure Compute Snapshot Deletions by User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.compute/snapshots/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.COMPUTE/SNAPSHOTS/DELETE"
+      ]
+    },
+    {
+      "field": "azure.activitylogs.properties.status_code",
+      "raw_field": "azure.activitylogs.properties.status_code",
+      "operator": ":",
+      "values": [
+        "accepted"
+      ],
+      "raw_values": [
+        "Accepted"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: azure.activitylogs and\n    azure.activitylogs.operation_name: \"MICROSOFT.COMPUTE/SNAPSHOTS/DELETE\" and\n    azure.activitylogs.properties.status_code: \"Accepted\" and\n    azure.activitylogs.identity.claims_initiated_by_user.name: *\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/impact_azure_compute_vm_snapshot_deletions.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Storage",
+      "Data Source: Azure",
+      "Data Source: Azure Activity Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

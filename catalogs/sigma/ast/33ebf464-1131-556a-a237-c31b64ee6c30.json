@@ -1,0 +1,41 @@
+{
+  "id": "33ebf464-1131-556a-a237-c31b64ee6c30",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_printbrm",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "printbrm.exe"
+      ],
+      "raw_values": [
+        "*\\\\PrintBrm.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".zip"
+      ],
+      "raw_values": [
+        "* -f*",
+        "*.zip*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\PrintBrm.exe\" and (process.command_line:\"* -f*\" and process.command_line:\"*.zip*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_printbrm.eql",
+  "metadata": {}
+}

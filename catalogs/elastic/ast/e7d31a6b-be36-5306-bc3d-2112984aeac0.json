@@ -1,0 +1,105 @@
+{
+  "id": "e7d31a6b-be36-5306-bc3d-2112984aeac0",
+  "catalog": "elastic",
+  "name": "Service Command Lateral Movement",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "binpath=",
+        "create",
+        "config",
+        "failure",
+        "start"
+      ],
+      "raw_values": [
+        "binPath=*",
+        "binpath=*",
+        "create",
+        "config",
+        "failure",
+        "start",
+        "\\\\\\\\*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "sc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "sc.exe"
+      ]
+    },
+    {
+      "field": "destination.ip",
+      "raw_field": "destination.ip",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "127.0.0.1"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan = 1m\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n     (process.name : \"sc.exe\" or process.pe.original_file_name : \"sc.exe\") and\n      process.args : \"\\\\\\\\*\" and process.args : (\"binPath=*\", \"binpath=*\") and\n      process.args : (\"create\", \"config\", \"failure\", \"start\")]\n  [network where host.os.type == \"windows\" and process.name : \"sc.exe\" and destination.ip != \"127.0.0.1\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/lateral_movement_cmd_service.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

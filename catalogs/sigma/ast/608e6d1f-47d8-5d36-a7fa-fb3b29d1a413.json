@@ -1,0 +1,61 @@
+{
+  "id": "608e6d1f-47d8-5d36-a7fa-fb3b29d1a413",
+  "catalog": "sigma",
+  "name": "win_taskscheduler_execution_from_susp_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.path",
+      "raw_field": "winlog.event_data.Path",
+      "operator": "like~",
+      "values": [
+        "c:\\\\windows\\\\temp\\\\",
+        "\\\\appdata\\\\local\\\\temp\\\\",
+        "\\\\desktop\\\\",
+        "\\\\downloads\\\\",
+        "\\\\users\\\\public\\\\",
+        "c:\\\\temp\\\\"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*C:\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-taskscheduler/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-TaskScheduler/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "129"
+      ],
+      "raw_values": [
+        "129"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-TaskScheduler/Operational\" and (event.code:\"129\" and (winlog.event_data.Path like~ (\"*C:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*C:\\\\Temp\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/taskscheduler/win_taskscheduler_execution_from_susp_locations.eql",
+  "metadata": {}
+}

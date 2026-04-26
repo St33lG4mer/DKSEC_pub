@@ -1,0 +1,153 @@
+{
+  "id": "0a2167e8-6d6c-5270-b18e-2b5778dd3dec",
+  "catalog": "elastic",
+  "name": "Machine Learning Detected a Suspicious Windows Event with a High Malicious Probability Score",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "nessus_*.txt",
+        "nessus_*.tmp",
+        "playwright",
+        ".ps1",
+        "--type=renderer"
+      ],
+      "raw_values": [
+        "*C:\\\\WINDOWS\\\\temp\\\\nessus_*.txt*",
+        "*C:\\\\WINDOWS\\\\temp\\\\nessus_*.tmp*",
+        "*playwright*",
+        "*\\\\Zabbix_Scripts\\\\*.ps1*",
+        "*--type=renderer*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "perplexity.exe",
+        "vmtoolsd.exe",
+        "code.exe",
+        "explorer.exe",
+        "git.exe",
+        "msmpeng.exe",
+        "mpcmdrun.exe",
+        "svchost.exe",
+        "msedgewebview2.exe",
+        "opera.exe",
+        "slack.exe",
+        "pycharm64.exe",
+        "rider64.exe",
+        "logioptionsmgr.exe",
+        "node.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "powershell.exe",
+        "Perplexity.exe",
+        "vmtoolsd.exe",
+        "Code.exe",
+        "explorer.exe",
+        "git.exe",
+        "MsMpEng.exe",
+        "MpCmdRun.exe",
+        "svchost.exe",
+        "msedgewebview2.exe",
+        "opera.exe",
+        "C:\\\\Windows\\\\System32\\\\svchost.exe",
+        "slack.exe",
+        "pycharm64.exe",
+        "rider64.exe",
+        "LogiOptionsMgr.exe",
+        "node.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "ucpdmgr.exe",
+        "sdbinst.exe",
+        "gpupdate.exe",
+        "rundll32.exe",
+        "taskhostw.exe",
+        "taskeng.exe",
+        "rdpclip.exe",
+        "firefox.exe",
+        "w3wp.exe",
+        ".exe",
+        "msedgewebview2.exe",
+        "opera.exe",
+        "mpcmdrun.exe",
+        "slack.exe",
+        "reg.exe",
+        "logiluupdater.exe",
+        "chrome.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "UCPDMgr.exe",
+        "sdbinst.exe",
+        "gpupdate.exe",
+        "rundll32.exe",
+        "taskhostw.exe",
+        "taskeng.exe",
+        "rdpclip.exe",
+        "firefox.exe",
+        "w3wp.exe",
+        "C:\\\\Program Files\\\\*.exe",
+        "msedgewebview2.exe",
+        "opera.exe",
+        "MpCmdRun.exe",
+        "slack.exe",
+        "reg.exe",
+        "LogiLuUpdater.exe",
+        "chrome.exe",
+        "powershell.exe"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "in",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    }
+  ],
+  "raw_query": "process where ((problemchild.prediction == 1 and problemchild.prediction_probability > 0.98) or\nblocklist_label == 1) and not process.args : (\"*C:\\\\WINDOWS\\\\temp\\\\nessus_*.txt*\", \"*C:\\\\WINDOWS\\\\temp\\\\nessus_*.tmp*\") and\nprocess.parent.executable != null and not user.id in (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\") and\nnot process.parent.name : (\"cmd.exe\", \"powershell.exe\", \"Perplexity.exe\", \"vmtoolsd.exe\", \"Code.exe\", \"explorer.exe\", \"git.exe\") and\nnot (process.name : \"msedgewebview2.exe\" and process.parent.name : \"msedgewebview2.exe\") and\nnot (process.name : \"opera.exe\" and process.parent.name : \"opera.exe\") and\nnot (process.parent.executable : \"C:\\\\Windows\\\\System32\\\\svchost.exe\" and\n     process.name : (\"UCPDMgr.exe\", \"sdbinst.exe\", \"gpupdate.exe\", \"rundll32.exe\", \"taskhostw.exe\", \"taskeng.exe\", \"rdpclip.exe\", \"firefox.exe\", \"w3wp.exe\")) and\nnot process.executable : (\"C:\\\\Program Files\\\\*.exe\", \"C:\\\\Program Files (x86)\\\\*.exe\") and\nnot (process.name : \"MpCmdRun.exe\" and process.parent.name : (\"MsMpEng.exe\", \"MpCmdRun.exe\", \"svchost.exe\")) and\nnot (process.name : \"slack.exe\" and process.parent.name : \"slack.exe\") and\nnot (process.name : \"reg.exe\" and process.parent.name : \"pycharm64.exe\") and\nnot (process.name : \"reg.exe\" and process.parent.name : \"rider64.exe\") and\nnot (process.name : \"LogiLuUpdater.exe\" and process.parent.name : \"LogiOptionsMgr.exe\") and\nnot (process.name : \"chrome.exe\" and process.parent.name : \"node.exe\" and process.command_line  : \"*playwright*\") and\nnot (process.name : \"powershell.exe\" and process.command_line : \"*\\\\Zabbix_Scripts\\\\*.ps1*\") and\nnot (process.parent.name : \"opera.exe\" and process.command_line: \"*--type=renderer*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/problemchild/defense_evasion_ml_suspicious_windows_event_high_probability.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "OS: Windows",
+      "Data Source: Elastic Endgame",
+      "Use Case: Living off the Land Attack Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

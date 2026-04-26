@@ -1,0 +1,103 @@
+{
+  "id": "e8b64ef8-704e-5b3b-900d-2dd3c83bb9f4",
+  "catalog": "elastic",
+  "name": "Azure Key Vault Unusual Secret Key Usage",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "vaultget",
+        "keyget",
+        "keylist",
+        "keylistversions",
+        "keygetdeleted",
+        "keylistdeleted",
+        "secretget",
+        "secretlist",
+        "secretlistversions",
+        "secretgetdeleted",
+        "secretlistdeleted",
+        "certificateget",
+        "certificatelist",
+        "certificatelistversions",
+        "certificategetdeleted",
+        "certificatelistdeleted",
+        "certificatepolicyget",
+        "certificatecontactsget",
+        "certificateissuerget",
+        "certificateissuerslist"
+      ],
+      "raw_values": [
+        "VaultGet",
+        "KeyGet",
+        "KeyList",
+        "KeyListVersions",
+        "KeyGetDeleted",
+        "KeyListDeleted",
+        "SecretGet",
+        "SecretList",
+        "SecretListVersions",
+        "SecretGetDeleted",
+        "SecretListDeleted",
+        "CertificateGet",
+        "CertificateList",
+        "CertificateListVersions",
+        "CertificateGetDeleted",
+        "CertificateListDeleted",
+        "CertificatePolicyGet",
+        "CertificateContactsGet",
+        "CertificateIssuerGet",
+        "CertificateIssuersList"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.platformlogs"
+      ],
+      "raw_values": [
+        "azure.platformlogs"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset : \"azure.platformlogs\" and\nevent.outcome: \"success\" and\nevent.action : (\n    \"VaultGet\" or\n    \"KeyGet\" or\n    \"KeyList\" or\n    \"KeyListVersions\" or\n    \"KeyGetDeleted\" or\n    \"KeyListDeleted\" or\n    \"SecretGet\" or\n    \"SecretList\" or\n    \"SecretListVersions\" or\n    \"SecretGetDeleted\" or\n    \"SecretListDeleted\" or\n    \"CertificateGet\" or\n    \"CertificateList\" or\n    \"CertificateListVersions\" or\n    \"CertificateGetDeleted\" or\n    \"CertificateListDeleted\" or\n    \"CertificatePolicyGet\" or\n    \"CertificateContactsGet\" or\n    \"CertificateIssuerGet\" or\n    \"CertificateIssuersList\"\n) and azure.platformlogs.identity.claim.upn: * and azure.platformlogs.properties.id: *\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/credential_access_key_vault_retrieval_from_rare_identity.toml",
+  "metadata": {
+    "risk_score": 43,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Storage",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Azure Platform Logs",
+      "Data Source: Azure Key Vault",
+      "Use Case: Threat Detection",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

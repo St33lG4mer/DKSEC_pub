@@ -1,0 +1,33 @@
+{
+  "id": "0868d715-4b52-50da-8422-d1b067eb90fd",
+  "catalog": "sigma",
+  "name": "proc_creation_win_browsers_chromium_headless_debugging",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--remote-debugging-",
+        "--user-data-dir",
+        "--headless"
+      ],
+      "raw_values": [
+        "*--remote-debugging-*",
+        "*--user-data-dir*",
+        "*--headless*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*--remote-debugging-*\" and process.command_line:\"*--user-data-dir*\" and process.command_line:\"*--headless*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_browsers_chromium_headless_debugging.eql",
+  "metadata": {}
+}

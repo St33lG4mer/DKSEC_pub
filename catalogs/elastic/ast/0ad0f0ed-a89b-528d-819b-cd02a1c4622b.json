@@ -1,0 +1,129 @@
+{
+  "id": "0ad0f0ed-a89b-528d-819b-cd02a1c4622b",
+  "catalog": "elastic",
+  "name": "Suspicious Browser Child Process",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like~",
+      "values": [
+        "google chrome",
+        "google chrome helper",
+        "firefox",
+        "opera",
+        "safari",
+        "com.apple.webkit.webcontent",
+        "microsoft edge"
+      ],
+      "raw_values": [
+        "Google Chrome",
+        "Google Chrome Helper*",
+        "firefox",
+        "Opera",
+        "Safari",
+        "com.apple.WebKit.WebContent",
+        "Microsoft Edge"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "bash",
+        "dash",
+        "ksh",
+        "tcsh",
+        "zsh",
+        "curl",
+        "wget",
+        "python",
+        "perl",
+        "php",
+        "osascript",
+        "pwsh"
+      ],
+      "raw_values": [
+        "sh",
+        "bash",
+        "dash",
+        "ksh",
+        "tcsh",
+        "zsh",
+        "curl",
+        "wget",
+        "python*",
+        "perl*",
+        "php*",
+        "osascript",
+        "pwsh"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "curl",
+        "nscurl",
+        "wget",
+        "whoami",
+        "pwd"
+      ],
+      "raw_values": [
+        "*curl*",
+        "*nscurl*",
+        "*wget*",
+        "*whoami*",
+        "*pwd*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n  process.parent.name like~ (\"Google Chrome\", \"Google Chrome Helper*\", \"firefox\", \"Opera\", \"Safari\", \"com.apple.WebKit.WebContent\", \"Microsoft Edge\") and\n  ((process.name like~ (\"sh\", \"bash\", \"dash\", \"ksh\", \"tcsh\", \"zsh\") and process.command_line : (\"*curl*\", \"*nscurl*\", \"*wget*\", \"*whoami*\", \"*pwd*\")) or\n  process.name like~ (\"curl\", \"wget\", \"python*\", \"perl*\", \"php*\", \"osascript\", \"pwsh\")) and\n  process.command_line != null\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/execution_initial_access_suspicious_browser_childproc.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

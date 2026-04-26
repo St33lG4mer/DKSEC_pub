@@ -1,0 +1,29 @@
+{
+  "id": "7a4c8e3f-132c-56a7-9f2a-22babef35159",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_wmiexec_default_powershell",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-nop -nol -sta -noni -w hidden -exec bypass -enc"
+      ],
+      "raw_values": [
+        "*-NoP -NoL -sta -NonI -W Hidden -Exec Bypass -Enc*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*-NoP -NoL -sta -NonI -W Hidden -Exec Bypass -Enc*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_wmiexec_default_powershell.eql",
+  "metadata": {}
+}

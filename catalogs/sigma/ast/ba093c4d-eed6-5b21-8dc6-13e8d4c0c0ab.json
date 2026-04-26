@@ -1,0 +1,64 @@
+{
+  "id": "ba093c4d-eed6-5b21-8dc6-13e8d4c0c0ab",
+  "catalog": "sigma",
+  "name": "proc_creation_win_odbcconf_response_file_susp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "odbcconf.exe"
+      ],
+      "raw_values": [
+        "*\\\\odbcconf.exe",
+        "C:\\\\Windows\\\\System32\\\\odbcconf.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "odbcconf.exe"
+      ],
+      "raw_values": [
+        "odbcconf.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".rsp"
+      ],
+      "raw_values": [
+        "*.rsp*",
+        "*.exe /E /F \\"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "runonce.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\runonce.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\odbcconf.exe\" or process.pe.original_file_name:\"odbcconf.exe\") and process.command_line like~ (\"* -f *\", \"* /f *\", \"* –f *\", \"* —f *\", \"* ―f *\")) and (not (process.command_line:\"*.rsp*\" or (process.parent.executable:\"C:\\\\Windows\\\\System32\\\\runonce.exe\" and process.executable:\"C:\\\\Windows\\\\System32\\\\odbcconf.exe\" and process.command_line:\"*.exe /E /F \\\"C:\\\\WINDOWS\\\\system32\\\\odbcconf.tmp\\\"*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_odbcconf_response_file_susp.eql",
+  "metadata": {}
+}

@@ -1,0 +1,82 @@
+{
+  "id": "e5004b61-e1a5-50f7-8374-fab3f657b222",
+  "catalog": "elastic",
+  "name": "DNS Global Query Block List Modified or Disabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000000",
+        "wpad"
+      ],
+      "raw_values": [
+        "0",
+        "0x00000000",
+        "wpad"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "enableglobalqueryblocklist",
+        "globalqueryblocklist"
+      ],
+      "raw_values": [
+        "EnableGlobalQueryBlockList",
+        "GlobalQueryBlockList"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and registry.data.strings != null and\n(\n  (registry.value : \"EnableGlobalQueryBlockList\" and registry.data.strings : (\"0\", \"0x00000000\")) or\n  (registry.value : \"GlobalQueryBlockList\" and not registry.data.strings : \"wpad\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_reg_disable_enableglobalqueryblocklist.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

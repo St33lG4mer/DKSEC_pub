@@ -1,0 +1,65 @@
+{
+  "id": "5ff38b6f-8ed4-55f4-bba7-27dbb9ba8f9a",
+  "catalog": "sigma",
+  "name": "file_event_win_exchange_webshell_drop_suspicious",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".aspx",
+        ".asp",
+        ".ashx",
+        ".ps1",
+        ".bat",
+        ".exe",
+        ".dll",
+        ".vbs"
+      ],
+      "raw_values": [
+        "*.aspx",
+        "*.asp",
+        "*.ashx",
+        "*.ps1",
+        "*.bat",
+        "*.exe",
+        "*.dll",
+        "*.vbs"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "w3wp.exe"
+      ],
+      "raw_values": [
+        "*\\\\w3wp.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "winlog.event_data.CommandLine",
+      "operator": ":",
+      "values": [
+        "msexchange"
+      ],
+      "raw_values": [
+        "*MSExchange*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\w3wp.exe\" and winlog.event_data.CommandLine:\"*MSExchange*\") and (file.path like~ (\"*.aspx\", \"*.asp\", \"*.ashx\", \"*.ps1\", \"*.bat\", \"*.exe\", \"*.dll\", \"*.vbs\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_exchange_webshell_drop_suspicious.eql",
+  "metadata": {}
+}

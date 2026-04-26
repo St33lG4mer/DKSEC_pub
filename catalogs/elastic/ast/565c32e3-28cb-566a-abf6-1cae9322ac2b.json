@@ -1,0 +1,26 @@
+{
+  "id": "565c32e3-28cb-566a-abf6-1cae9322ac2b",
+  "catalog": "elastic",
+  "name": "Potential Data Exfiltration Activity to an Unusual ISO Code",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/ded/exfiltration_ml_high_bytes_destination_geo_country_iso_code.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Data Exfiltration Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Exfiltration",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

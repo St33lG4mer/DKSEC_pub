@@ -1,0 +1,51 @@
+{
+  "id": "9759c5c1-ee9c-5a55-821c-231157b211da",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sndvol_susp_child_processes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sndvol.exe"
+      ],
+      "raw_values": [
+        "*\\\\SndVol.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shell32.dll,control_rundll"
+      ],
+      "raw_values": [
+        "* shell32.dll,Control_RunDLL *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\SndVol.exe\" and (not (process.executable:\"*\\\\rundll32.exe\" and process.command_line:\"* shell32.dll,Control_RunDLL *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sndvol_susp_child_processes.eql",
+  "metadata": {}
+}

@@ -1,0 +1,35 @@
+{
+  "id": "386b3ebe-a053-588a-b482-a3466e6c90b7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_network_scan_loop",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "for",
+        "foreach",
+        "nslookup",
+        "ping"
+      ],
+      "raw_values": [
+        "*for *",
+        "*foreach *",
+        "*nslookup*",
+        "*ping*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*for *\", \"*foreach *\")) and (process.command_line like~ (\"*nslookup*\", \"*ping*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_network_scan_loop.eql",
+  "metadata": {}
+}

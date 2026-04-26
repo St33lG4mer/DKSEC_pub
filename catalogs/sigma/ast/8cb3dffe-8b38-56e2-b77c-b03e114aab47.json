@@ -1,0 +1,32 @@
+{
+  "id": "8cb3dffe-8b38-56e2-b77c-b03e114aab47",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_ntdllpipe_redirect",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "ntdll.dll"
+      ],
+      "raw_values": [
+        "*type %windir%\\\\system32\\\\ntdll.dll*",
+        "*type %systemroot%\\\\system32\\\\ntdll.dll*",
+        "*type c:\\\\windows\\\\system32\\\\ntdll.dll*",
+        "*\\\\ntdll.dll > \\\\\\\\.\\\\pipe\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*type %windir%\\\\system32\\\\ntdll.dll*\", \"*type %systemroot%\\\\system32\\\\ntdll.dll*\", \"*type c:\\\\windows\\\\system32\\\\ntdll.dll*\", \"*\\\\ntdll.dll > \\\\\\\\.\\\\pipe\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_ntdllpipe_redirect.eql",
+  "metadata": {}
+}

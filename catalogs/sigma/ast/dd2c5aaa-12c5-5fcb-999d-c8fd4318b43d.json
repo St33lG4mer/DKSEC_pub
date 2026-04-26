@@ -1,0 +1,56 @@
+{
+  "id": "dd2c5aaa-12c5-5fcb-999d-c8fd4318b43d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2021_40444",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "winword.exe",
+        "powerpnt.exe",
+        "excel.exe"
+      ],
+      "raw_values": [
+        "*\\\\winword.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\excel.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "control.exe input.dll"
+      ],
+      "raw_values": [
+        "*\\\\control.exe input.dll",
+        "*\\\\control.exe\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "control.exe"
+      ],
+      "raw_values": [
+        "*\\\\control.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\control.exe\" and (process.parent.executable like~ (\"*\\\\winword.exe\", \"*\\\\powerpnt.exe\", \"*\\\\excel.exe\"))) and (not (process.command_line like~ (\"*\\\\control.exe input.dll\", \"*\\\\control.exe\\\" input.dll\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-40444/proc_creation_win_exploit_cve_2021_40444.eql",
+  "metadata": {}
+}

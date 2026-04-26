@@ -1,0 +1,53 @@
+{
+  "id": "3ec56def-14c0-5863-a49e-e35a7e1a9184",
+  "catalog": "sigma",
+  "name": "win_system_susp_critical_hive_location_access_bits_cleared",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.hivename",
+      "raw_field": "winlog.event_data.HiveName",
+      "operator": "like~",
+      "values": [
+        "\\\\temp\\\\sam",
+        "\\\\temp\\\\security"
+      ],
+      "raw_values": [
+        "*\\\\Temp\\\\SAM*",
+        "*\\\\Temp\\\\SECURITY*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-kernel-general"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Kernel-General"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (event.code:\"16\" and winlog.provider_name:\"Microsoft-Windows-Kernel-General\" and (winlog.event_data.HiveName like~ (\"*\\\\Temp\\\\SAM*\", \"*\\\\Temp\\\\SECURITY*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/microsoft_windows_kernel_general/win_system_susp_critical_hive_location_access_bits_cleared.eql",
+  "metadata": {}
+}

@@ -1,0 +1,31 @@
+{
+  "id": "53bd6d5d-8658-538c-803b-e23546daff6d",
+  "catalog": "sigma",
+  "name": "dns_query_win_apt_dprk_malicious_domains",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        "connection.lockscreen.kro.kr",
+        "updating.dothome.co.kr"
+      ],
+      "raw_values": [
+        "connection.lockscreen.kro.kr",
+        "updating.dothome.co.kr"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name like~ (\"connection.lockscreen.kro.kr\", \"updating.dothome.co.kr\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/TA/DPRK/dns_query_win_apt_dprk_malicious_domains.eql",
+  "metadata": {}
+}

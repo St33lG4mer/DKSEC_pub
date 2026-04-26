@@ -1,0 +1,137 @@
+{
+  "id": "5c0d0eb8-13ff-5d05-99f8-34b82eb9e0d7",
+  "catalog": "elastic",
+  "name": "File Execution Permission Modification Detected via Defend for Containers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "in",
+      "values": [
+        "file",
+        "process"
+      ],
+      "raw_values": [
+        "file",
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "change",
+        "creation",
+        "start"
+      ],
+      "raw_values": [
+        "change",
+        "creation",
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "chmod",
+        "which",
+        "man",
+        "4755",
+        "755",
+        "0755",
+        "777",
+        "0777",
+        "444",
+        "a+x",
+        "700",
+        "0700"
+      ],
+      "raw_values": [
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "4755",
+        "755",
+        "0755",
+        "777",
+        "0777",
+        "444",
+        "+x",
+        "a+x",
+        "700",
+        "0700"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "chmod"
+      ],
+      "raw_values": [
+        "chmod"
+      ]
+    }
+  ],
+  "raw_query": "any where event.category in (\"file\", \"process\") and event.type in (\"change\", \"creation\", \"start\") and (\n  process.name == \"chmod\" or\n  (\n    /* account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\"\n    ) and\n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\"\n    )\n  )\n) and process.args in (\"4755\", \"755\", \"0755\", \"777\", \"0777\", \"444\", \"+x\", \"a+x\", \"700\", \"0700\") and\ncontainer.id like \"?*\" and not process.args == \"-x\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/execution_suspicious_file_made_executable_via_chmod_inside_a_container.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

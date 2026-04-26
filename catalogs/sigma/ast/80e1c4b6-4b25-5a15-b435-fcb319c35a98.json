@@ -1,0 +1,17 @@
+{
+  "id": "80e1c4b6-4b25-5a15-b435-fcb319c35a98",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_run_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where (process.executable like~ (\"*:\\\\RECYCLER\\\\*\", \"*:\\\\SystemVolumeInformation\\\\*\")) or (process.executable like~ (\"C:\\\\Windows\\\\Tasks\\\\*\", \"C:\\\\Windows\\\\debug\\\\*\", \"C:\\\\Windows\\\\fonts\\\\*\", \"C:\\\\Windows\\\\help\\\\*\", \"C:\\\\Windows\\\\drivers\\\\*\", \"C:\\\\Windows\\\\addins\\\\*\", \"C:\\\\Windows\\\\cursors\\\\*\", \"C:\\\\Windows\\\\system32\\\\tasks\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_run_locations.eql",
+  "metadata": {}
+}

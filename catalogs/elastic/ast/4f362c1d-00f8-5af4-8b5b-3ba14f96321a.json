@@ -1,0 +1,27 @@
+{
+  "id": "4f362c1d-00f8-5af4-8b5b-3ba14f96321a",
+  "catalog": "elastic",
+  "name": "Okta User Assigned Administrator Role",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system\n    and event.action: (user.account.privilege.grant or group.privilege.grant)\n    and okta.debug_context.debug_data.flattened.privilegeGranted: *administrator*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/persistence_administrator_role_assigned_to_okta_user.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Identity",
+      "Data Source: Okta",
+      "Data Source: Okta System Logs",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

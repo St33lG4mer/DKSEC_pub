@@ -1,0 +1,63 @@
+{
+  "id": "c2152b65-b9b2-5e7a-ab0b-88603962b471",
+  "catalog": "elastic",
+  "name": "Potential WPAD Spoofing via DNS Record Creation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "5137"
+      ],
+      "raw_values": [
+        "5137"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectdn",
+      "raw_field": "winlog.event_data.ObjectDN",
+      "operator": ":",
+      "values": [
+        "dc=wpad,"
+      ],
+      "raw_values": [
+        "DC=wpad,*"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and event.code == \"5137\" and winlog.event_data.ObjectDN : \"DC=wpad,*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_adidns_wpad_record.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Active Directory",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

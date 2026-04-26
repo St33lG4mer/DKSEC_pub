@@ -1,0 +1,40 @@
+{
+  "id": "df2943a6-0841-5a69-828d-0e31a5a027d1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2015_1641",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\WINWORD.EXE"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microscmgmt.exe"
+      ],
+      "raw_values": [
+        "*\\\\MicroScMgmt.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\WINWORD.EXE\" and process.executable:\"*\\\\MicroScMgmt.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2015/Exploits/CVE-2015-1641/proc_creation_win_exploit_cve_2015_1641.eql",
+  "metadata": {}
+}

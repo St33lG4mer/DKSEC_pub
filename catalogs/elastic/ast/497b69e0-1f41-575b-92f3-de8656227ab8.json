@@ -1,0 +1,211 @@
+{
+  "id": "497b69e0-1f41-575b-92f3-de8656227ab8",
+  "catalog": "elastic",
+  "name": "Security File Access via Common Utilities",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "login.defs",
+        "credentials",
+        "config",
+        "credentials.json",
+        "config_default",
+        "accesstokens.json",
+        "azureprofile.json"
+      ],
+      "raw_values": [
+        "/etc/security/*",
+        "/etc/pam.d/*",
+        "/etc/login.defs",
+        "/lib/security/*",
+        "/lib64/security/*",
+        "/usr/lib/security/*",
+        "/usr/lib64/security/*",
+        "/usr/lib/x86_64-linux-gnu/security/*",
+        "/home/*/.aws/credentials",
+        "/home/*/.aws/config",
+        "/home/*/.config/gcloud/*credentials.json",
+        "/home/*/.config/gcloud/configurations/config_default",
+        "/home/*/.azure/accessTokens.json",
+        "/home/*/.azure/azureProfile.json"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "cat",
+        "less",
+        "more",
+        "strings",
+        "find",
+        "xargs"
+      ],
+      "raw_values": [
+        "cat",
+        "less",
+        "more",
+        "strings",
+        "find",
+        "xargs"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "wazuh-modulesd",
+        "lynis"
+      ],
+      "raw_values": [
+        "wazuh-modulesd",
+        "lynis"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "in",
+      "values": [
+        "login.defs",
+        "credentials"
+      ],
+      "raw_values": [
+        "cat /etc/login.defs",
+        "cat /home/asterisk/.aws/credentials"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "in",
+      "values": [
+        "lynis audit system --cronjob",
+        "cat {} ;"
+      ],
+      "raw_values": [
+        "/bin/sh /usr/sbin/lynis audit system --cronjob",
+        "/usr/bin/find -L /etc/security/limits.conf /etc/security/limits.d -type f -exec /usr/bin/cat {} ;",
+        "/usr/bin/find /etc/security/limits.conf /etc/security/limits.d -type f -exec /usr/bin/cat {} ;"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/opt/imperva/ragent/bin/get_sys_resources.sh",
+        "/usr/sbin/lynis",
+        "./terra_linux.sh"
+      ],
+      "raw_values": [
+        "/opt/imperva/ragent/bin/get_sys_resources.sh",
+        "/usr/sbin/lynis",
+        "./terra_linux.sh"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "coreutils"
+      ],
+      "raw_values": [
+        "/usr/bin/coreutils"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "pwsh",
+        "auto_audit_gral.sh"
+      ],
+      "raw_values": [
+        "pwsh",
+        "/usr/sap/audit_scripts/auto_audit_gral.sh"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "evaluate-stig"
+      ],
+      "raw_values": [
+        "*Evaluate-STIG*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\nprocess.name in (\"cat\", \"less\", \"more\", \"strings\", \"find\", \"xargs\") and\nprocess.parent.executable != null and \nprocess.args like (\n  \"/etc/security/*\", \"/etc/pam.d/*\", \"/etc/login.defs\", \"/lib/security/*\", \"/lib64/security/*\",\n  \"/usr/lib/security/*\", \"/usr/lib64/security/*\", \"/usr/lib/x86_64-linux-gnu/security/*\",\n  \"/home/*/.aws/credentials\", \"/home/*/.aws/config\", \"/home/*/.config/gcloud/*credentials.json\",\n  \"/home/*/.config/gcloud/configurations/config_default\", \"/home/*/.azure/accessTokens.json\",\n  \"/home/*/.azure/azureProfile.json\"\n) and not (\n  process.parent.name in (\"wazuh-modulesd\", \"lynis\") or\n  process.command_line in (\"cat /etc/login.defs\" , \"cat /home/asterisk/.aws/credentials\") or\n  ?process.parent.command_line in (\n    \"/bin/sh /usr/sbin/lynis audit system --cronjob\",\n    \"/usr/bin/find -L /etc/security/limits.conf /etc/security/limits.d -type f -exec /usr/bin/cat {} ;\",\n    \"/usr/bin/find /etc/security/limits.conf /etc/security/limits.d -type f -exec /usr/bin/cat {} ;\"\n  ) or\n  ?process.parent.args in (\"/opt/imperva/ragent/bin/get_sys_resources.sh\", \"/usr/sbin/lynis\", \"./terra_linux.sh\") or\n  process.args == \"/usr/bin/coreutils\" or\n  (process.parent.name == \"pwsh\" and process.parent.command_line like \"*Evaluate-STIG*\") or\n  ?process.parent.executable == \"/usr/sap/audit_scripts/auto_audit_gral.sh\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_security_file_access_via_common_utility.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

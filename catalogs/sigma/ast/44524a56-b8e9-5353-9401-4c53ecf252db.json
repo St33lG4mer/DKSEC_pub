@@ -1,0 +1,102 @@
+{
+  "id": "44524a56-b8e9-5353-9401-4c53ecf252db",
+  "catalog": "sigma",
+  "name": "registry_set_taskcache_entry",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "microsoft\\\\windows\\\\updateorchestrator",
+        "microsoft\\\\windows\\\\softwareprotectionplatform\\\\svcrestarttask\\\\index",
+        "microsoft\\\\windows\\\\flighting\\\\onesettings\\\\refreshcache\\\\index",
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tasks\\\\{b66b135d-da06-4fc4-95f8-7458e1d10129}",
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tree\\\\microsoft\\\\windows\\\\.net framework\\\\.net framework ngen"
+      ],
+      "raw_values": [
+        "*Microsoft\\\\Windows\\\\UpdateOrchestrator*",
+        "*Microsoft\\\\Windows\\\\SoftwareProtectionPlatform\\\\SvcRestartTask\\\\Index*",
+        "*Microsoft\\\\Windows\\\\Flighting\\\\OneSettings\\\\RefreshCache\\\\Index*",
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tasks\\\\{B66B135D-DA06-4FC4-95F8-7458E1D10129}*",
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\Microsoft\\\\Windows\\\\.NET Framework\\\\.NET Framework NGEN*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "integrator.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\Integration\\\\Integrator.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\",
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tree\\\\microsoft\\\\windows\\\\pla\\\\server manager performance monitor\\\\"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\*",
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\Microsoft\\\\Windows\\\\PLA\\\\Server Manager Performance Monitor\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mousocoreworker.exe",
+        "services.exe",
+        "tiworker.exe",
+        "svchost.exe",
+        "framework",
+        "ngen.exe",
+        "msiexec.exe",
+        "explorer.exe",
+        "system",
+        "runtimebroker.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\System32\\\\MoUsoCoreWorker.exe",
+        "*C:\\\\Windows\\\\System32\\\\services.exe",
+        "C:\\\\Windows\\\\*",
+        "*\\\\TiWorker.exe",
+        "C:\\\\WINDOWS\\\\system32\\\\svchost.exe",
+        "C:\\\\Windows\\\\Microsoft.NET\\\\Framework*",
+        "*\\\\ngen.exe",
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\explorer.exe",
+        "System",
+        "C:\\\\Windows\\\\System32\\\\RuntimeBroker.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\*\" and (not (winlog.event_data.Details:\"(Empty)\" or (?winlog.event_data.Details == null) or (registry.path like~ (\"*Microsoft\\\\Windows\\\\UpdateOrchestrator*\", \"*Microsoft\\\\Windows\\\\SoftwareProtectionPlatform\\\\SvcRestartTask\\\\Index*\", \"*Microsoft\\\\Windows\\\\Flighting\\\\OneSettings\\\\RefreshCache\\\\Index*\")) or process.executable:\"*C:\\\\Windows\\\\System32\\\\MoUsoCoreWorker.exe\" or process.executable:\"*C:\\\\Windows\\\\System32\\\\services.exe\" or (process.executable:\"C:\\\\Windows\\\\*\" and process.executable:\"*\\\\TiWorker.exe\") or process.executable:\"C:\\\\WINDOWS\\\\system32\\\\svchost.exe\" or (process.executable:\"C:\\\\Windows\\\\Microsoft.NET\\\\Framework*\" and process.executable:\"*\\\\ngen.exe\" and (registry.path like~ (\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tasks\\\\{B66B135D-DA06-4FC4-95F8-7458E1D10129}*\", \"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\Microsoft\\\\Windows\\\\.NET Framework\\\\.NET Framework NGEN*\"))) or (process.executable like~ (\"C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\Integration\\\\Integrator.exe\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\root\\\\Integration\\\\Integrator.exe\", \"C:\\\\Program Files\\\\Common Files\\\\microsoft shared\\\\ClickToRun\\\\OfficeC2RClient.exe\", \"C:\\\\Program Files (x86)\\\\Common Files\\\\microsoft shared\\\\ClickToRun\\\\OfficeC2RClient.exe\")) or process.executable:\"C:\\\\Windows\\\\System32\\\\msiexec.exe\" or (process.executable:\"C:\\\\Windows\\\\explorer.exe\" and registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\Microsoft\\\\Windows\\\\PLA\\\\Server Manager Performance Monitor\\\\*\") or process.executable:\"System\" or process.executable:\"C:\\\\Windows\\\\System32\\\\RuntimeBroker.exe\")) and (not ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Dropbox\\\\Update\\\\DropboxUpdate.exe\", \"C:\\\\Program Files\\\\Dropbox\\\\Update\\\\DropboxUpdate.exe\")) or (process.executable like~ (\"*C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeUpdate\\\\MicrosoftEdgeUpdate.exe\", \"*C:\\\\Program Files\\\\Microsoft\\\\EdgeUpdate\\\\MicrosoftEdgeUpdate.exe\")) or (process.executable like~ (\"*C:\\\\Program Files (x86)\\\\Microsoft OneDrive\\\\OneDrive.exe\", \"*C:\\\\Program Files\\\\Microsoft OneDrive\\\\OneDrive.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_taskcache_entry.eql",
+  "metadata": {}
+}

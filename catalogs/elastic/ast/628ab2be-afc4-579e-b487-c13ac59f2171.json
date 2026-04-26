@@ -1,0 +1,103 @@
+{
+  "id": "628ab2be-afc4-579e-b487-c13ac59f2171",
+  "catalog": "elastic",
+  "name": "Disabling Lsa Protection via Registry Modification",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000001",
+        "0x00000002"
+      ],
+      "raw_values": [
+        "1",
+        "0x00000001",
+        "2",
+        "0x00000002"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "runasppl"
+      ],
+      "raw_values": [
+        "RunAsPPL"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\*controlset*\\\\control\\\\lsa\\\\runasppl"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\*ControlSet*\\\\Control\\\\Lsa\\\\RunAsPPL"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "securityhealthservice.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\SecurityHealthService.exe"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.data.strings != null and process.name != null and\n  registry.value : \"RunAsPPL\" and\n  registry.path : \"*\\\\SYSTEM\\\\*ControlSet*\\\\Control\\\\Lsa\\\\RunAsPPL\" and\n  not registry.data.strings : (\"1\", \"0x00000001\", \"2\", \"0x00000002\") and\n  not process.executable : \"?:\\\\Windows\\\\System32\\\\SecurityHealthService.exe\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_lsass_ppl_disabled_registry.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

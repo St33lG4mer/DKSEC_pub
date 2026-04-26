@@ -1,0 +1,40 @@
+{
+  "id": "37b6a63b-e496-5022-88c4-f31179399c51",
+  "catalog": "sigma",
+  "name": "proc_creation_win_iexpress_susp_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "iexpress.exe"
+      ],
+      "raw_values": [
+        "*\\\\iexpress.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "iexpress.exe"
+      ],
+      "raw_values": [
+        "IEXPRESS.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\iexpress.exe\" or process.pe.original_file_name:\"IEXPRESS.exe\") and process.command_line like~ (\"* -n *\", \"* /n *\", \"* –n *\", \"* —n *\", \"* ―n *\") and (process.command_line like~ (\"*:\\\\ProgramData\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Windows\\\\System32\\\\Tasks\\\\*\", \"*:\\\\Windows\\\\Tasks\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_iexpress_susp_execution.eql",
+  "metadata": {}
+}

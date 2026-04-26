@@ -1,0 +1,31 @@
+{
+  "id": "48f9c036-b18b-5ebe-85d0-ac3fee2832fd",
+  "catalog": "sigma",
+  "name": "registry_set_hvci_disallowed_images",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\control\\\\ci\\\\",
+        "\\\\hvcidisallowedimages"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\CI\\\\*",
+        "*\\\\HVCIDisallowedImages*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Control\\\\CI\\\\*\" and registry.path:\"*\\\\HVCIDisallowedImages*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_hvci_disallowed_images.eql",
+  "metadata": {}
+}

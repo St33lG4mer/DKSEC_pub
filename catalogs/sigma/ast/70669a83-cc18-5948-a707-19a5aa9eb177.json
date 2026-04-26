@@ -1,0 +1,43 @@
+{
+  "id": "70669a83-cc18-5948-a707-19a5aa9eb177",
+  "catalog": "sigma",
+  "name": "proc_creation_win_eventvwr_susp_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mmc.exe",
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\mmc.exe",
+        "*:\\\\Windows\\\\System32\\\\WerFault.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\WerFault.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "eventvwr.exe"
+      ],
+      "raw_values": [
+        "*\\\\eventvwr.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\eventvwr.exe\" and (not (process.executable like~ (\"*:\\\\Windows\\\\System32\\\\mmc.exe\", \"*:\\\\Windows\\\\System32\\\\WerFault.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\WerFault.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_eventvwr_susp_child_process.eql",
+  "metadata": {}
+}

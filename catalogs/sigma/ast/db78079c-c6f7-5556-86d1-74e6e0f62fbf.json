@@ -1,0 +1,42 @@
+{
+  "id": "db78079c-c6f7-5556-86d1-74e6e0f62fbf",
+  "catalog": "sigma",
+  "name": "file_event_win_sysinternals_livekd_driver_susp_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "livekd.exe",
+        "livek64.exe"
+      ],
+      "raw_values": [
+        "*\\\\livekd.exe",
+        "*\\\\livek64.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "livekdd.sys"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\drivers\\\\LiveKdD.SYS"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\System32\\\\drivers\\\\LiveKdD.SYS\" and (not (process.executable like~ (\"*\\\\livekd.exe\", \"*\\\\livek64.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_sysinternals_livekd_driver_susp_creation.eql",
+  "metadata": {}
+}

@@ -1,0 +1,79 @@
+{
+  "id": "5b8ab52d-05a6-5a0c-8ca2-8b933e9d1d9d",
+  "catalog": "elastic",
+  "name": "Azure Service Principal Sign-In Followed by Arc Cluster Credential Access",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "Success",
+        "success"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "azure.signinlogs",
+        "azure.activitylogs"
+      ],
+      "raw_values": [
+        "azure.signinlogs",
+        "azure.activitylogs"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.category",
+      "raw_field": "azure.signinlogs.category",
+      "operator": "==",
+      "values": [
+        "serviceprincipalsigninlogs"
+      ],
+      "raw_values": [
+        "ServicePrincipalSignInLogs"
+      ]
+    },
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.kubernetes/connectedclusters/listclusterusercredential/action"
+      ],
+      "raw_values": [
+        "MICROSOFT.KUBERNETES/CONNECTEDCLUSTERS/LISTCLUSTERUSERCREDENTIAL/ACTION"
+      ]
+    }
+  ],
+  "raw_query": "sequence with maxspan=30m\n[authentication where data_stream.dataset == \"azure.signinlogs\"\n    and azure.signinlogs.category == \"ServicePrincipalSignInLogs\"\n    and azure.signinlogs.properties.status.error_code == 0\n] by azure.signinlogs.properties.app_id\n[any where data_stream.dataset == \"azure.activitylogs\"\n    and azure.activitylogs.operation_name : \"MICROSOFT.KUBERNETES/CONNECTEDCLUSTERS/LISTCLUSTERUSERCREDENTIAL/ACTION\"\n    and event.outcome : (\"Success\", \"success\")\n] by azure.activitylogs.identity.claims.appid\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/credential_access_azure_service_principal_signin_then_arc_credential_listing.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Azure Arc",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Sign-In Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

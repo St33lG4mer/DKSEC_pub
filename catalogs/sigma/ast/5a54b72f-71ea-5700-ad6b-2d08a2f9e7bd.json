@@ -1,0 +1,42 @@
+{
+  "id": "5a54b72f-71ea-5700-ad6b-2d08a2f9e7bd",
+  "catalog": "sigma",
+  "name": "file_access_win_teams_sensitive_files",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "cookies",
+        "leveldb"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Teams\\\\Cookies*",
+        "*\\\\Microsoft\\\\Teams\\\\Local Storage\\\\leveldb*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "teams.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\Microsoft\\\\Teams\\\\Cookies*\", \"*\\\\Microsoft\\\\Teams\\\\Local Storage\\\\leveldb*\")) and (not process.executable:\"*\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_access/file_access_win_teams_sensitive_files.eql",
+  "metadata": {}
+}

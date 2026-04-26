@@ -1,0 +1,42 @@
+{
+  "id": "cf89918c-9d9a-574c-a1dd-7d5b2ded84cf",
+  "catalog": "sigma",
+  "name": "proc_creation_win_taskmgr_localsystem",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "taskmgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\taskmgr.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) and process.executable:\"*\\\\taskmgr.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_taskmgr_localsystem.eql",
+  "metadata": {}
+}

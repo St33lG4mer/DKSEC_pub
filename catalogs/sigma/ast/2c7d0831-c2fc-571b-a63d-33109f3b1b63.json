@@ -1,0 +1,57 @@
+{
+  "id": "2c7d0831-c2fc-571b-a63d-33109f3b1b63",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uac_bypass_cmstp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-au",
+        "-ni"
+      ],
+      "raw_values": [
+        "*/s*",
+        "*-s*",
+        "*/au*",
+        "*-au*",
+        "*/ni*",
+        "*-ni*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmstp.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmstp.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmstp.exe"
+      ],
+      "raw_values": [
+        "CMSTP.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cmstp.exe\" or process.pe.original_file_name:\"CMSTP.EXE\") and (process.command_line like~ (\"*/s*\", \"*-s*\", \"*/au*\", \"*-au*\", \"*/ni*\", \"*-ni*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_cmstp.eql",
+  "metadata": {}
+}

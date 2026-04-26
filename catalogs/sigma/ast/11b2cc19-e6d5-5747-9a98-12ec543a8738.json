@@ -1,0 +1,51 @@
+{
+  "id": "11b2cc19-e6d5-5747-9a98-12ec543a8738",
+  "catalog": "sigma",
+  "name": "registry_set_sentinelone_shell_context_tampering",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "c:\\\\program files\\\\sentinelone\\\\sentinel agent"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\SentinelOne\\\\Sentinel Agent*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\shell\\\\sentinelonescan\\\\command\\\\"
+      ],
+      "raw_values": [
+        "*\\\\shell\\\\SentinelOneScan\\\\command\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "\\\\sentinelscanfromcontextmenu.exe"
+      ],
+      "raw_values": [
+        "*\\\\SentinelScanFromContextMenu.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\shell\\\\SentinelOneScan\\\\command\\\\*\" and (not (((winlog.event_data.Details like~ (\"C:\\\\Program Files\\\\SentinelOne\\\\Sentinel Agent*\", \"C:\\\\Program Files (x86)\\\\SentinelOne\\\\Sentinel Agent*\")) and winlog.event_data.Details:\"*\\\\SentinelScanFromContextMenu.exe*\") or (process.executable like~ (\"*C:\\\\Program Files\\\\SentinelOne\\\\\", \"*C:\\\\Program Files (x86)\\\\SentinelOne\\\\\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_sentinelone_shell_context_tampering.eql",
+  "metadata": {}
+}

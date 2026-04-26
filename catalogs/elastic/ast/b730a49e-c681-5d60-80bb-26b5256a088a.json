@@ -1,0 +1,54 @@
+{
+  "id": "b730a49e-c681-5d60-80bb-26b5256a088a",
+  "catalog": "elastic",
+  "name": "Untrusted Driver Loaded",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "driver"
+  ],
+  "conditions": [
+    {
+      "field": "dll.code_signature.status",
+      "raw_field": "dll.code_signature.status",
+      "operator": ":",
+      "values": [
+        "errorexpired",
+        "errorrevoked",
+        "errorcode_endpoint:"
+      ],
+      "raw_values": [
+        "errorExpired",
+        "errorRevoked",
+        "errorCode_endpoint:*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    }
+  ],
+  "raw_query": "driver where host.os.type == \"windows\" and process.pid == 4 and\n  (dll.code_signature.trusted == false or dll.code_signature.exists == false) and\n  not dll.code_signature.status : (\"errorExpired\", \"errorRevoked\", \"errorCode_endpoint:*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_untrusted_driver_loaded.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

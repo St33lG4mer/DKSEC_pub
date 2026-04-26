@@ -1,0 +1,123 @@
+{
+  "id": "32f37e1a-7470-52bd-964e-5a9908649f48",
+  "catalog": "elastic",
+  "name": "Enumeration of Users or Groups via Built-in Commands",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "users",
+        "groups"
+      ],
+      "raw_values": [
+        "/Active Directory/*",
+        "/Users*",
+        "/Groups*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "ldapsearch",
+        "dsmemberutil"
+      ],
+      "raw_values": [
+        "ldapsearch",
+        "dsmemberutil"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "read",
+        "-read",
+        "list",
+        "-list",
+        "search",
+        "-search"
+      ],
+      "raw_values": [
+        "read",
+        "-read",
+        "list",
+        "-list",
+        "ls",
+        "search",
+        "-search"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "dscl"
+      ],
+      "raw_values": [
+        "dscl"
+      ]
+    },
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": "like",
+      "values": [
+        "/volumes/"
+      ],
+      "raw_values": [
+        "/Volumes/*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n  (\n    process.name in (\"ldapsearch\", \"dsmemberutil\") or\n    (process.name == \"dscl\" and\n      process.args in (\"read\", \"-read\", \"list\", \"-list\", \"ls\", \"search\", \"-search\") and\n      process.args like (\"/Active Directory/*\", \"/Users*\", \"/Groups*\"))\n\t) and\n  ((process.Ext.effective_parent.executable like \"/Volumes/*\" or process.parent.executable like \"/Volumes/*\") or\n   (process.Ext.effective_parent.name : \".*\" or process.parent.name : \".*\") or\n   (process.parent.code_signature.trusted == false or process.parent.code_signature.exists == false))\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/discovery_users_domain_built_in_commands.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

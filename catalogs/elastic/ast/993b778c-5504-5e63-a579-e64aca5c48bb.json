@@ -1,0 +1,51 @@
+{
+  "id": "993b778c-5504-5e63-a579-e64aca5c48bb",
+  "catalog": "elastic",
+  "name": "Unusual High Word Policy Blocks Detected",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "gen_ai.policy.action",
+      "raw_field": "gen_ai.policy.action",
+      "operator": "==",
+      "values": [
+        "blocked"
+      ],
+      "raw_values": [
+        "BLOCKED"
+      ]
+    },
+    {
+      "field": "gen_ai.policy.name",
+      "raw_field": "gen_ai.policy.name",
+      "operator": "==",
+      "values": [
+        "word_policy"
+      ],
+      "raw_values": [
+        "word_policy"
+      ]
+    }
+  ],
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Expand multivalued policy names\n| mv_expand gen_ai.policy.name\n| mv_expand gen_ai.policy.action\n\n// Filter for blocked profanity-related policy violations\n| where\n  gen_ai.policy.action == \"BLOCKED\"\n  and gen_ai.compliance.violation_detected == \"true\"\n  and gen_ai.policy.name == \"word_policy\"\n\n// keep relevant user field\n| keep user.id\n\n// count blocked profanity attempts per user\n| stats\n    Esql.ml_policy_blocked_profanity_count = count()\n  by user.id\n\n// Filter for excessive policy violations\n| where Esql.ml_policy_blocked_profanity_count > 5\n\n// sort by violation volume\n| sort Esql.ml_policy_blocked_profanity_count desc\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws_bedrock/aws_bedrock_multiple_word_policy_blocks_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: LLM",
+      "Data Source: AWS Bedrock",
+      "Data Source: AWS S3",
+      "Use Case: Policy Violation",
+      "Mitre Atlas: T0051",
+      "Mitre Atlas: T0054",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

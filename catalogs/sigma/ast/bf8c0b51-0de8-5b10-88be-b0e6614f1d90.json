@@ -1,0 +1,72 @@
+{
+  "id": "bf8c0b51-0de8-5b10-88be-b0e6614f1d90",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_powersploit_empire_default_schtasks",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "sc onlogon",
+        "sc onidle",
+        "sc hourly"
+      ],
+      "raw_values": [
+        "*/SC ONLOGON*",
+        "*/SC DAILY /ST*",
+        "*/SC ONIDLE*",
+        "*/SC HOURLY*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create",
+        "powershell.exe -noni"
+      ],
+      "raw_values": [
+        "*/Create*",
+        "*powershell.exe -NonI*",
+        "*/TN Updater /TR*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and process.executable:\"*\\\\schtasks.exe\" and (process.command_line:\"*/Create*\" and process.command_line:\"*powershell.exe -NonI*\" and process.command_line:\"*/TN Updater /TR*\") and (process.command_line like~ (\"*/SC ONLOGON*\", \"*/SC DAILY /ST*\", \"*/SC ONIDLE*\", \"*/SC HOURLY*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_powersploit_empire_default_schtasks.eql",
+  "metadata": {}
+}

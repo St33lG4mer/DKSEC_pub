@@ -1,0 +1,74 @@
+{
+  "id": "ffcf7705-58fa-5c3a-822d-c89c86640bd6",
+  "catalog": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_classes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\folder\\\\shellex\\\\extshellfolderviews",
+        "\\\\folder\\\\shellex\\\\dragdrophandlers",
+        "\\\\folder\\\\shellex\\\\columnhandlers",
+        "\\\\filter"
+      ],
+      "raw_values": [
+        "*\\\\Folder\\\\ShellEx\\\\ExtShellFolderViews*",
+        "*\\\\Folder\\\\ShellEx\\\\DragDropHandlers*",
+        "*\\\\Folder\\\\Shellex\\\\ColumnHandlers*",
+        "*\\\\Filter*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\classes",
+        "\\\\lnkfile\\\\shellex\\\\contextmenuhandlers\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Classes*",
+        "*\\\\lnkfile\\\\shellex\\\\ContextMenuHandlers\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "drvinst.exe",
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\drvinst.exe",
+        "C:\\\\Windows\\\\System32\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)",
+        "{807583e5-5146-11d5-a672-00b0d022e945}"
+      ],
+      "raw_values": [
+        "(Empty)",
+        "{807583E5-5146-11D5-A672-00B0D022E945}"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\Software\\\\Classes*\" and (registry.path like~ (\"*\\\\Folder\\\\ShellEx\\\\ExtShellFolderViews*\", \"*\\\\Folder\\\\ShellEx\\\\DragDropHandlers*\", \"*\\\\Folder\\\\Shellex\\\\ColumnHandlers*\", \"*\\\\Filter*\", \"*\\\\Exefile\\\\Shell\\\\Open\\\\Command\\\\(Default)*\", \"*\\\\Directory\\\\Shellex\\\\DragDropHandlers*\", \"*\\\\Directory\\\\Shellex\\\\CopyHookHandlers*\", \"*\\\\CLSID\\\\{AC757296-3522-4E11-9862-C17BE5A1767E}\\\\Instance*\", \"*\\\\CLSID\\\\{ABE3B9A4-257D-4B97-BD1A-294AF496222E}\\\\Instance*\", \"*\\\\CLSID\\\\{7ED96837-96F0-4812-B211-F13C24117ED3}\\\\Instance*\", \"*\\\\CLSID\\\\{083863F1-70DE-11d0-BD40-00A0C911CE86}\\\\Instance*\", \"*\\\\Classes\\\\AllFileSystemObjects\\\\ShellEx\\\\DragDropHandlers*\", \"*\\\\.exe*\", \"*\\\\.cmd*\", \"*\\\\ShellEx\\\\PropertySheetHandlers*\", \"*\\\\ShellEx\\\\ContextMenuHandlers*\"))) and (not (process.executable:\"C:\\\\Windows\\\\System32\\\\drvinst.exe\" or winlog.event_data.Details:\"(Empty)\" or (?winlog.event_data.Details == null) or (process.executable:\"C:\\\\Windows\\\\System32\\\\svchost.exe\" and registry.path:\"*\\\\lnkfile\\\\shellex\\\\ContextMenuHandlers\\\\*\"))) and (not winlog.event_data.Details:\"{807583E5-5146-11D5-A672-00B0D022E945}\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_classes.eql",
+  "metadata": {}
+}

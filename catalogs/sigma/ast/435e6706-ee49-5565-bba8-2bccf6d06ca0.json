@@ -1,0 +1,73 @@
+{
+  "id": "435e6706-ee49-5565-bba8-2bccf6d06ca0",
+  "catalog": "sigma",
+  "name": "win_security_susp_lsass_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4656"
+      ],
+      "raw_values": [
+        "4656"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x705"
+      ],
+      "raw_values": [
+        "0x705"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "sam_domain"
+      ],
+      "raw_values": [
+        "SAM_DOMAIN"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4656\" and process.executable:\"*\\\\lsass.exe\" and winlog.event_data.AccessMask:\"0x705\" and winlog.event_data.ObjectType:\"SAM_DOMAIN\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_lsass_dump.eql",
+  "metadata": {}
+}

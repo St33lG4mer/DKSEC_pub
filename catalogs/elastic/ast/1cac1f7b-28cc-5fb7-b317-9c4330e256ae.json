@@ -1,0 +1,191 @@
+{
+  "id": "1cac1f7b-28cc-5fb7-b317-9c4330e256ae",
+  "catalog": "elastic",
+  "name": "At Job Created or Modified",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmis."
+      ],
+      "raw_values": [
+        "/nix/store/*",
+        "/var/lib/dpkg/*",
+        "/tmp/vmis.*",
+        "/snap/*",
+        "/dev/fd/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "rename",
+        "creation"
+      ],
+      "raw_values": [
+        "rename",
+        "creation"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "dpkg",
+        "dockerd",
+        "microdnf",
+        "rpm",
+        "snapd",
+        "yum",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "pacman",
+        "dpkg-divert",
+        "apk",
+        "apt",
+        "puppet",
+        "chef-client",
+        "autossl_check",
+        "exe",
+        "pamac-daemon"
+      ],
+      "raw_values": [
+        "/bin/dpkg",
+        "/usr/bin/dpkg",
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/sbin/dockerd",
+        "/bin/microdnf",
+        "/usr/bin/microdnf",
+        "/bin/rpm",
+        "/usr/bin/rpm",
+        "/bin/snapd",
+        "/usr/bin/snapd",
+        "/bin/yum",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "/usr/bin/dnf",
+        "/bin/podman",
+        "/usr/bin/podman",
+        "/bin/dnf-automatic",
+        "/usr/bin/dnf-automatic",
+        "/bin/pacman",
+        "/usr/bin/pacman",
+        "/usr/bin/dpkg-divert",
+        "/bin/dpkg-divert",
+        "/sbin/apk",
+        "/usr/sbin/apk",
+        "/usr/local/sbin/apk",
+        "/usr/bin/apt",
+        "/usr/sbin/pacman",
+        "/usr/bin/puppet",
+        "/bin/puppet",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/bin/chef-client",
+        "/bin/chef-client",
+        "/bin/autossl_check",
+        "/usr/bin/autossl_check",
+        "/proc/self/exe",
+        "/dev/fd/*",
+        "/usr/bin/pamac-daemon",
+        "/bin/pamac-daemon",
+        "/usr/local/bin/dockerd",
+        "./usr/bin/podman"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ],
+      "raw_values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "file.ext.original.extension",
+      "raw_field": "file.Ext.original.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sed",
+        "perl"
+      ],
+      "raw_values": [
+        "sed",
+        "perl"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "sed",
+        "e2scrub_all.tmp"
+      ],
+      "raw_values": [
+        "sed*",
+        "e2scrub_all.tmp*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"rename\", \"creation\") and\nfile.path like (\"/var/spool/cron/atjobs/*\", \"/var/spool/atjobs/*\") and\nnot (\n  process.executable in (\n    \"/bin/dpkg\", \"/usr/bin/dpkg\", \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/sbin/dockerd\", \"/bin/microdnf\",\n    \"/usr/bin/microdnf\", \"/bin/rpm\", \"/usr/bin/rpm\", \"/bin/snapd\", \"/usr/bin/snapd\", \"/bin/yum\", \"/usr/bin/yum\",\n    \"/bin/dnf\", \"/usr/bin/dnf\", \"/bin/podman\", \"/usr/bin/podman\", \"/bin/dnf-automatic\", \"/usr/bin/dnf-automatic\",\n    \"/bin/pacman\", \"/usr/bin/pacman\", \"/usr/bin/dpkg-divert\", \"/bin/dpkg-divert\", \"/sbin/apk\", \"/usr/sbin/apk\",\n    \"/usr/local/sbin/apk\", \"/usr/bin/apt\", \"/usr/sbin/pacman\", \"/bin/podman\", \"/usr/bin/podman\", \"/usr/bin/puppet\",\n    \"/bin/puppet\", \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/bin/chef-client\", \"/bin/chef-client\",\n    \"/bin/autossl_check\", \"/usr/bin/autossl_check\", \"/proc/self/exe\", \"/dev/fd/*\",  \"/usr/bin/pamac-daemon\",\n    \"/bin/pamac-daemon\", \"/usr/local/bin/dockerd\", \"./usr/bin/podman\"\n  ) or\n  file.extension in (\"swp\", \"swpx\", \"swx\", \"dpkg-remove\") or\n  file.Ext.original.extension == \"dpkg-new\" or\n  process.executable : (\"/nix/store/*\", \"/var/lib/dpkg/*\", \"/tmp/vmis.*\", \"/snap/*\", \"/dev/fd/*\") or\n  process.executable == null or\n  (process.name == \"sed\" and file.name : \"sed*\") or\n  (process.name == \"perl\" and file.name : \"e2scrub_all.tmp*\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_at_job_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

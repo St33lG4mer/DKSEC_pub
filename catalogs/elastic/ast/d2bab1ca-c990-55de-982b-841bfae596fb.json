@@ -1,0 +1,127 @@
+{
+  "id": "d2bab1ca-c990-55de-982b-841bfae596fb",
+  "catalog": "elastic",
+  "name": "Interactive Privilege Boundary Enumeration Detected via Defend for Containers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "whoami",
+        "capsh",
+        "getcap",
+        "lsns"
+      ],
+      "raw_values": [
+        "id",
+        "whoami",
+        "capsh",
+        "getcap",
+        "lsns"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "whoami",
+        "capsh",
+        "getcap",
+        "lsns",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "id",
+        "/bin/id",
+        "/usr/bin/id",
+        "/usr/local/bin/id",
+        "whoami",
+        "/bin/whoami",
+        "/usr/bin/whoami",
+        "/usr/local/bin/whoami",
+        "capsh",
+        "/bin/capsh",
+        "/usr/bin/capsh",
+        "/usr/local/bin/capsh",
+        "getcap",
+        "/bin/getcap",
+        "/usr/bin/getcap",
+        "/usr/local/bin/getcap",
+        "lsns",
+        "/bin/lsns",
+        "/usr/bin/lsns",
+        "/usr/local/bin/lsns",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.interactive == true and (\n  (process.name in (\"id\", \"whoami\", \"capsh\", \"getcap\", \"lsns\")) or\n  (process.args in (\n     \"id\", \"/bin/id\", \"/usr/bin/id\", \"/usr/local/bin/id\",\n     \"whoami\", \"/bin/whoami\", \"/usr/bin/whoami\", \"/usr/local/bin/whoami\",\n     \"capsh\", \"/bin/capsh\", \"/usr/bin/capsh\", \"/usr/local/bin/capsh\",\n     \"getcap\", \"/bin/getcap\", \"/usr/bin/getcap\", \"/usr/local/bin/getcap\",\n     \"lsns\", \"/bin/lsns\", \"/usr/bin/lsns\", \"/usr/local/bin/lsns\"\n   ) and\n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )\n) and container.id like \"?*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/discovery_privilege_boundary_enumeration_from_interactive_process.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

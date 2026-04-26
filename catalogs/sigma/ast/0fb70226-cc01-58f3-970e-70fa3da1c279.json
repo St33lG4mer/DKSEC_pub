@@ -1,0 +1,59 @@
+{
+  "id": "0fb70226-cc01-58f3-970e-70fa3da1c279",
+  "catalog": "sigma",
+  "name": "registry_set_clickonce_trust_prompt",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\internet",
+        "\\\\localintranet",
+        "\\\\mycomputer",
+        "\\\\trustedsites",
+        "\\\\untrustedsites"
+      ],
+      "raw_values": [
+        "*\\\\Internet",
+        "*\\\\LocalIntranet",
+        "*\\\\MyComputer",
+        "*\\\\TrustedSites",
+        "*\\\\UntrustedSites"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\.netframework\\\\security\\\\trustmanager\\\\promptinglevel\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\MICROSOFT\\\\.NETFramework\\\\Security\\\\TrustManager\\\\PromptingLevel\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "enabled"
+      ],
+      "raw_values": [
+        "Enabled"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\MICROSOFT\\\\.NETFramework\\\\Security\\\\TrustManager\\\\PromptingLevel\\\\*\" and (registry.path like~ (\"*\\\\Internet\", \"*\\\\LocalIntranet\", \"*\\\\MyComputer\", \"*\\\\TrustedSites\", \"*\\\\UntrustedSites\")) and winlog.event_data.Details:\"Enabled\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_clickonce_trust_prompt.eql",
+  "metadata": {}
+}

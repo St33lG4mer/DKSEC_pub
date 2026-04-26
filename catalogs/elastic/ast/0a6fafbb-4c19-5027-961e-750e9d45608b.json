@@ -1,0 +1,31 @@
+{
+  "id": "0a6fafbb-4c19-5027-961e-750e9d45608b",
+  "catalog": "elastic",
+  "name": "Accepted Default Telnet Port Connection",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [],
+  "raw_query": "(data_stream.dataset:(fortinet_fortigate.log or network_traffic.flow\n        or sonicwall_firewall.log or suricata.eve or panw.panos)\n    or event.category:(network or network_traffic))\n    and event.type:(connection and not end) and not event.action:(\n        flow_dropped or flow_denied or denied or deny or\n        flow_terminated or timeout or Reject or network_flow)\n    and destination.port:23\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/network/command_and_control_accepted_default_telnet_port_connection.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Tactic: Lateral Movement",
+      "Tactic: Initial Access",
+      "Data Source: PAN-OS",
+      "Data Source: Fortinet",
+      "Data Source: SonicWall",
+      "Data Source: Suricata",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

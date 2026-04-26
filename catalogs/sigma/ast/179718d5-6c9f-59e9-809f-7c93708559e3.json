@@ -1,0 +1,40 @@
+{
+  "id": "179718d5-6c9f-59e9-809f-7c93708559e3",
+  "catalog": "sigma",
+  "name": "registry_set_enable_windows_recall",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\policies\\\\microsoft\\\\windows\\\\windowsai\\\\disableaidataanalysis"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\WindowsAI\\\\DisableAIDataAnalysis"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\WindowsAI\\\\DisableAIDataAnalysis\" and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_enable_windows_recall.eql",
+  "metadata": {}
+}

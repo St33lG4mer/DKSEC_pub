@@ -1,0 +1,29 @@
+{
+  "id": "086c14ab-f0c7-52bd-b2e6-cff169e461c9",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_vscode_tunnel_connection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        ".tunnels.api.visualstudio.com"
+      ],
+      "raw_values": [
+        "*.tunnels.api.visualstudio.com"
+      ]
+    }
+  ],
+  "raw_query": "any where network.direction:\"true\" and destination.domain:\"*.tunnels.api.visualstudio.com\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_vscode_tunnel_connection.eql",
+  "metadata": {}
+}

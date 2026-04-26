@@ -1,0 +1,29 @@
+{
+  "id": "e2c34b6f-6409-50b0-8188-814e8000e23c",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_coldsteel_renamed_cmd",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\users\\\\public\\\\Documents\\\\dllhost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\users\\\\public\\\\Documents\\\\dllhost.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/COLDSTEEL/file_event_win_malware_coldsteel_renamed_cmd.eql",
+  "metadata": {}
+}

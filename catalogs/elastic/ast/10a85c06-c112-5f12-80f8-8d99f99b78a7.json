@@ -1,0 +1,49 @@
+{
+  "id": "10a85c06-c112-5f12-80f8-8d99f99b78a7",
+  "catalog": "elastic",
+  "name": "Azure Diagnostic Settings Alert Suppression Rule Created or Modified",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.security/alertssuppressionrules/write"
+      ],
+      "raw_values": [
+        "MICROSOFT.SECURITY/ALERTSSUPPRESSIONRULES/WRITE"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.SECURITY/ALERTSSUPPRESSIONRULES/WRITE\" and\nevent.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/defense_evasion_security_alert_suppression_rule_created.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Configuration Audit",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

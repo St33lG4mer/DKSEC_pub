@@ -1,0 +1,29 @@
+{
+  "id": "6725fc68-437e-54ed-b1f8-d9c0652464dc",
+  "catalog": "sigma",
+  "name": "registry_event_runkey_winekey",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\backup mgr"
+      ],
+      "raw_values": [
+        "*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\Backup Mgr"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\Backup Mgr\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_runkey_winekey.eql",
+  "metadata": {}
+}

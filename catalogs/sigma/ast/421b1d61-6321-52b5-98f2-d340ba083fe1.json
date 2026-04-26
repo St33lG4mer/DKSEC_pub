@@ -1,0 +1,113 @@
+{
+  "id": "421b1d61-6321-52b5-98f2-d340ba083fe1",
+  "catalog": "sigma",
+  "name": "win_security_susp_scheduled_task_update",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.taskcontentnew",
+      "raw_field": "winlog.event_data.TaskContentNew",
+      "operator": "like~",
+      "values": [
+        "\\\\appdata\\\\local\\\\temp\\\\",
+        "\\\\appdata\\\\roaming\\\\",
+        "\\\\users\\\\public\\\\",
+        "\\\\windows\\\\temp\\\\",
+        "c:\\\\temp\\\\",
+        "\\\\desktop\\\\",
+        "\\\\downloads\\\\",
+        "\\\\temporary internet",
+        "c:\\\\programdata\\\\",
+        "c:\\\\perflogs\\\\",
+        "regsvr32",
+        "rundll32",
+        "cmd.exe</command>",
+        "cmd</command>",
+        "<arguments>/c",
+        "<arguments>/k",
+        "<arguments>/r",
+        "powershell",
+        "pwsh",
+        "mshta",
+        "wscript",
+        "cscript",
+        "certutil",
+        "bitsadmin",
+        "bash.exe",
+        "bash",
+        "scrcons",
+        "wmic",
+        "wmic.exe",
+        "forfiles",
+        "scriptrunner",
+        "hh.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\WINDOWS\\\\Temp\\\\*",
+        "*C:\\\\Temp\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*\\\\Temporary Internet*",
+        "*C:\\\\ProgramData\\\\*",
+        "*C:\\\\Perflogs\\\\*",
+        "*regsvr32*",
+        "*rundll32*",
+        "*cmd.exe</Command>*",
+        "*cmd</Command>*",
+        "*<Arguments>/c *",
+        "*<Arguments>/k *",
+        "*<Arguments>/r *",
+        "*powershell*",
+        "*pwsh*",
+        "*mshta*",
+        "*wscript*",
+        "*cscript*",
+        "*certutil*",
+        "*bitsadmin*",
+        "*bash.exe*",
+        "*bash *",
+        "*scrcons*",
+        "*wmic *",
+        "*wmic.exe*",
+        "*forfiles*",
+        "*scriptrunner*",
+        "*hh.exe*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4702"
+      ],
+      "raw_values": [
+        "4702"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4702\" and (winlog.event_data.TaskContentNew like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\WINDOWS\\\\Temp\\\\*\", \"*C:\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Temporary Internet*\", \"*C:\\\\ProgramData\\\\*\", \"*C:\\\\Perflogs\\\\*\")) and (winlog.event_data.TaskContentNew like~ (\"*regsvr32*\", \"*rundll32*\", \"*cmd.exe</Command>*\", \"*cmd</Command>*\", \"*<Arguments>/c *\", \"*<Arguments>/k *\", \"*<Arguments>/r *\", \"*powershell*\", \"*pwsh*\", \"*mshta*\", \"*wscript*\", \"*cscript*\", \"*certutil*\", \"*bitsadmin*\", \"*bash.exe*\", \"*bash *\", \"*scrcons*\", \"*wmic *\", \"*wmic.exe*\", \"*forfiles*\", \"*scriptrunner*\", \"*hh.exe*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_scheduled_task_update.eql",
+  "metadata": {}
+}

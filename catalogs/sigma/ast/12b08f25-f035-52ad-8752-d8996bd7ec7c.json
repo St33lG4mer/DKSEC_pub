@@ -1,0 +1,44 @@
+{
+  "id": "12b08f25-f035-52ad-8752-d8996bd7ec7c",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_teamviewer_remote_session",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "tvprint.db",
+        "tvnetwork.log"
+      ],
+      "raw_values": [
+        "*\\\\TeamViewer\\\\RemotePrinting\\\\tvprint.db",
+        "*\\\\TeamViewer\\\\TVNetwork.log"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "teamviewer",
+        "_logfile.log"
+      ],
+      "raw_values": [
+        "*\\\\TeamViewer*",
+        "*_Logfile.log*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\TeamViewer\\\\RemotePrinting\\\\tvprint.db\", \"*\\\\TeamViewer\\\\TVNetwork.log\")) or (file.path:\"*\\\\TeamViewer*\" and file.path:\"*_Logfile.log*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_teamviewer_remote_session.eql",
+  "metadata": {}
+}

@@ -1,0 +1,40 @@
+{
+  "id": "8e70be50-5bb4-5a2c-934c-63372d850dcd",
+  "catalog": "sigma",
+  "name": "proc_creation_win_installutil_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "installutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\InstallUtil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "installutil.exe"
+      ],
+      "raw_values": [
+        "InstallUtil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\InstallUtil.exe\" or process.pe.original_file_name:\"InstallUtil.exe\") and (process.command_line like~ (\"*ftp://*\", \"*http://*\", \"*https://*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_installutil_download.eql",
+  "metadata": {}
+}

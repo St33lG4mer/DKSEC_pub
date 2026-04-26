@@ -1,0 +1,94 @@
+{
+  "id": "69c0a615-5880-5d96-bae7-cc0a0cfab75c",
+  "catalog": "elastic",
+  "name": "AWS SSM Inventory Reconnaissance by Rare User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "getinventory",
+        "getinventoryschema",
+        "listinventoryentries",
+        "describeinstancepatches",
+        "listcommands",
+        "createassociation"
+      ],
+      "raw_values": [
+        "GetInventory",
+        "GetInventorySchema",
+        "ListInventoryEntries",
+        "DescribeInstancePatches",
+        "ListCommands",
+        "CreateAssociation"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ssm.amazonaws.com"
+      ],
+      "raw_values": [
+        "ssm.amazonaws.com"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": ":",
+      "values": [
+        "awsservice"
+      ],
+      "raw_values": [
+        "AWSService"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ssm.amazonaws.com\"\n    and (\n        event.action: (\"GetInventory\" or \"GetInventorySchema\" or \"ListInventoryEntries\" or \"DescribeInstancePatches\" or \"ListCommands\")\n        or (event.action: \"CreateAssociation\"\n            and aws.cloudtrail.request_parameters: *AWS-GatherSoftwareInventory*)\n    )\n    and not aws.cloudtrail.user_identity.type : \"AWSService\" \n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/discovery_ssm_inventory_reconnaissance.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS SSM",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

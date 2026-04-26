@@ -1,0 +1,40 @@
+{
+  "id": "e3f4f3f3-2f19-5cbf-b57a-1cf89b96e163",
+  "catalog": "sigma",
+  "name": "registry_set_devdrv_disallow_antivirus_filter",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\filtermanager\\\\fltmgrdevdriveallowantivirusfilter"
+      ],
+      "raw_values": [
+        "*\\\\FilterManager\\\\FltmgrDevDriveAllowAntivirusFilter"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\FilterManager\\\\FltmgrDevDriveAllowAntivirusFilter\" and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_devdrv_disallow_antivirus_filter.eql",
+  "metadata": {}
+}

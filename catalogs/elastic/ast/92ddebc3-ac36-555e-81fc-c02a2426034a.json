@@ -1,0 +1,50 @@
+{
+  "id": "92ddebc3-ac36-555e-81fc-c02a2426034a",
+  "catalog": "elastic",
+  "name": "Gatekeeper Override and Execution",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "configuration"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "gatekeeper_override"
+      ],
+      "raw_values": [
+        "gatekeeper_override"
+      ]
+    }
+  ],
+  "raw_query": "configuration where host.os.type == \"macos\" and event.action == \"gatekeeper_override\" and\n  file.path like (\"/Volumes/*\", \"/Users/*/Applications/*\", \"/Applications/*\",\n                  \"/tmp/*\", \"/private/tmp/*\", \"/var/tmp/*\", \"/private/var/tmp/*\", \"/Users/Shared/*\",\n                  \"/Users/*/Downloads/*\", \"/Users/*/Desktop/*\", \"/Users/*/Documents/*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/defense_evasion_gatekeeper_override_and_execution.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

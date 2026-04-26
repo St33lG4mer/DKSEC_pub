@@ -1,0 +1,33 @@
+{
+  "id": "48166b3f-a9de-5e14-89c7-126f8fb587c0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_ping_del_combined_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "nul",
+        "ping",
+        "del"
+      ],
+      "raw_values": [
+        "*Nul*",
+        "*ping*",
+        "*del *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"* -n *\", \"* /n *\", \"* –n *\", \"* —n *\", \"* ―n *\") and process.command_line:\"*Nul*\" and (process.command_line like~ (\"* -f *\", \"* /f *\", \"* –f *\", \"* —f *\", \"* ―f *\") or process.command_line like~ (\"* -q *\", \"* /q *\", \"* –q *\", \"* —q *\", \"* ―q *\")) and (process.command_line:\"*ping*\" and process.command_line:\"*del *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_ping_del_combined_execution.eql",
+  "metadata": {}
+}

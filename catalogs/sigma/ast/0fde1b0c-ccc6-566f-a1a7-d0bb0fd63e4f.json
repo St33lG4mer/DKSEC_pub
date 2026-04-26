@@ -1,0 +1,40 @@
+{
+  "id": "0fde1b0c-ccc6-566f-a1a7-d0bb0fd63e4f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2017_0261",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\WINWORD.EXE"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "fltldr.exe"
+      ],
+      "raw_values": [
+        "*\\\\FLTLDR.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\WINWORD.EXE\" and process.executable:\"*\\\\FLTLDR.exe*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/Exploits/CVE-2017-0261/proc_creation_win_exploit_cve_2017_0261.eql",
+  "metadata": {}
+}

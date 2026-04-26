@@ -1,0 +1,28 @@
+{
+  "id": "3ef632f1-a20c-5534-8460-36dc09a6e915",
+  "catalog": "elastic",
+  "name": "First Time AWS CloudFormation Stack Creation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:aws.cloudtrail and event.provider:cloudformation.amazonaws.com and\n    event.action: (CreateStack or CreateStackInstances) \n    and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/execution_new_terms_cloudformation_createstack.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: CloudFormation",
+      "Use Case: Asset Visibility",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

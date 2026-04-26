@@ -1,0 +1,40 @@
+{
+  "id": "3e893847-8fd4-5b9d-808a-ec2399e21a37",
+  "catalog": "sigma",
+  "name": "proc_creation_win_systeminfo_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "systeminfo.exe"
+      ],
+      "raw_values": [
+        "*\\\\systeminfo.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sysinfo.exe"
+      ],
+      "raw_values": [
+        "sysinfo.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\systeminfo.exe\" or process.pe.original_file_name:\"sysinfo.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_systeminfo_execution.eql",
+  "metadata": {}
+}

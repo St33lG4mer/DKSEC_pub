@@ -1,0 +1,44 @@
+{
+  "id": "d516b9fb-a06d-5aef-a18c-5f31e301ba19",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_msdeploy",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "verb:sync",
+        "-source:runcommand",
+        "-dest:runcommand"
+      ],
+      "raw_values": [
+        "*verb:sync*",
+        "*-source:RunCommand*",
+        "*-dest:runCommand*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdeploy.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdeploy.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*verb:sync*\" and process.command_line:\"*-source:RunCommand*\" and process.command_line:\"*-dest:runCommand*\") and process.executable:\"*\\\\msdeploy.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_msdeploy.eql",
+  "metadata": {}
+}

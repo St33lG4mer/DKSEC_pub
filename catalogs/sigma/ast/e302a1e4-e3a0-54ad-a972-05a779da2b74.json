@@ -1,0 +1,58 @@
+{
+  "id": "e302a1e4-e3a0-54ad-a972-05a779da2b74",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_sharpwsus_wsuspendu_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-payloadargs",
+        "-payloadfile",
+        "approve",
+        "create",
+        "check",
+        "delete",
+        "payload:",
+        "payload=",
+        "updateid:",
+        "updateid="
+      ],
+      "raw_values": [
+        "* -PayloadArgs *",
+        "* -PayloadFile *",
+        "* approve *",
+        "* create *",
+        "* check *",
+        "* delete *",
+        "* /payload:*",
+        "* /payload=*",
+        "* /updateid:*",
+        "* /updateid=*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-inject"
+      ],
+      "raw_values": [
+        "* -Inject *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"* -Inject *\" and (process.command_line like~ (\"* -PayloadArgs *\", \"* -PayloadFile *\"))) or ((process.command_line like~ (\"* approve *\", \"* create *\", \"* check *\", \"* delete *\")) and (process.command_line like~ (\"* /payload:*\", \"* /payload=*\", \"* /updateid:*\", \"* /updateid=*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_sharpwsus_wsuspendu_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "89bfff9a-e393-5b2d-823e-d1648d13e739",
+  "catalog": "sigma",
+  "name": "win_security_add_remove_computer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4741",
+        "4743"
+      ],
+      "raw_values": [
+        "4741",
+        "4743"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code like~ (\"4741\", \"4743\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_add_remove_computer.eql",
+  "metadata": {}
+}

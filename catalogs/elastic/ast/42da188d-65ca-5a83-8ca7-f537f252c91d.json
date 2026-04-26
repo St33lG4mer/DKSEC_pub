@@ -1,0 +1,132 @@
+{
+  "id": "42da188d-65ca-5a83-8ca7-f537f252c91d",
+  "catalog": "elastic",
+  "name": "Dylib Injection via Process Environment Variables",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.env_vars",
+      "raw_field": "process.env_vars",
+      "operator": ":",
+      "values": [
+        "dyld_insert_libraries=",
+        "ld_preload=",
+        "ld_preload=<null>"
+      ],
+      "raw_values": [
+        "DYLD_INSERT_LIBRARIES=?*",
+        "LD_PRELOAD=?*",
+        "DYLD_INSERT_LIBRARIES=",
+        "LD_PRELOAD=",
+        "LD_PRELOAD=<null>"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "xcrun"
+      ],
+      "raw_values": [
+        "/usr/bin/xcrun",
+        "/Applications/Xcode*.app/*",
+        "/Library/Developer/*"
+      ]
+    },
+    {
+      "field": "dll.name",
+      "raw_field": "dll.name",
+      "operator": ":",
+      "values": [
+        ".aot",
+        ".so"
+      ],
+      "raw_values": [
+        "*.aot",
+        "*.so"
+      ]
+    },
+    {
+      "field": "dll.path",
+      "raw_field": "dll.path",
+      "operator": ":",
+      "values": [
+        "/system/",
+        "/usr/lib/",
+        "/opt/homebrew/",
+        "/private/var/folders/",
+        "/library/apple/",
+        "/library/developer/",
+        "/users/*/library/developer/xcode/",
+        "/users/*/library/developer/coresimulator/"
+      ],
+      "raw_values": [
+        "/System/*",
+        "/usr/lib/*",
+        "/opt/homebrew/*",
+        "/private/var/folders/*",
+        "/Library/Apple/*",
+        "/Library/Developer/*",
+        "/Users/*/Library/Developer/Xcode/*",
+        "/Users/*/Library/Developer/CoreSimulator/*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "load"
+      ],
+      "raw_values": [
+        "exec",
+        "load"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=15s\n  [process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and\n    process.env_vars like (\"DYLD_INSERT_LIBRARIES=?*\", \"LD_PRELOAD=?*\") and\n    not process.env_vars like (\"DYLD_INSERT_LIBRARIES=\", \"LD_PRELOAD=\", \"LD_PRELOAD=<null>\") and\n    not process.executable like (\"/Users/*/Library/Developer/Xcode/*\", \"/Users/*/Library/Developer/CoreSimulator/*\") and\n    not process.parent.executable like (\"/usr/bin/xcrun\", \"/Applications/Xcode*.app/*\", \"/Library/Developer/*\")]\n  [library where host.os.type == \"macos\" and event.action == \"load\" and\n    not dll.name like (\"*.aot\", \"*.so\") and\n    not dll.code_signature.trusted == true and\n    not dll.path like (\"/System/*\", \"/usr/lib/*\", \"/opt/homebrew/*\", \"/private/var/folders/*\",\n                       \"/Library/Apple/*\", \"/Library/Developer/*\",\n                       \"/Users/*/Library/Developer/Xcode/*\", \"/Users/*/Library/Developer/CoreSimulator/*\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/defense_evasion_dylib_injection_via_env_vars.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

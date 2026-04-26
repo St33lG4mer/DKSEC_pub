@@ -1,0 +1,94 @@
+{
+  "id": "ce38beb9-1784-5dc2-b4f4-4b5042c4b223",
+  "catalog": "elastic",
+  "name": "M365 OneDrive/SharePoint Excessive File Downloads",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "not",
+      "raw_field": "not",
+      "operator": "in",
+      "values": [
+        "08e18876-6177-487e-b8b5-cf950c1e598c",
+        "fb8d773d-7ef8-4ec0-a117-179f88add510",
+        "d3590ed6-52b3-4102-aeff-aad2292ab01c",
+        "7ab7862c-4c57-491e-8a45-d52a7e023983"
+      ],
+      "raw_values": [
+        "08e18876-6177-487e-b8b5-cf950c1e598c",
+        "fb8d773d-7ef8-4ec0-a117-179f88add510",
+        "d3590ed6-52b3-4102-aeff-aad2292ab01c",
+        "7ab7862c-4c57-491e-8a45-d52a7e023983"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "onedrive"
+      ],
+      "raw_values": [
+        "OneDrive"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "filedownloaded"
+      ],
+      "raw_values": [
+        "FileDownloaded"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "from logs-o365.audit-* metadata _id, _version, _index\n| where\n    data_stream.dataset == \"o365.audit\" and\n    event.provider == \"OneDrive\" and\n    event.action == \"FileDownloaded\" and\n    event.outcome == \"success\"\n    and (user.id is not null and o365.audit.ApplicationId is not null)\n    and o365.audit.ApplicationId not in (\n        \"08e18876-6177-487e-b8b5-cf950c1e598c\", // SharePoint Online Web Client Extensibility\n        \"fb8d773d-7ef8-4ec0-a117-179f88add510\", // Enterprise Copilot Platform\n        \"d3590ed6-52b3-4102-aeff-aad2292ab01c\", // Microsoft Office\n        \"7ab7862c-4c57-491e-8a45-d52a7e023983\" // App Service\n    )\n| eval session.id = coalesce(o365.audit.AppAccessContext.AADSessionId, session.id, null)\n| where session.id is not null\n| eval Esql.time_window_date_trunc = date_trunc(3 minutes, @timestamp)\n| stats\n    Esql.file_directory_values = values(file.directory),\n    Esql.file_extension_values = values(file.extension),\n    Esql.application_name_values = values(application.name),\n    Esql.file_name_count_distinct = count_distinct(file.name),\n    Esql.total_file_size_mb = round((mv_sum(values(file.size))) / 1048576.0, 2),\n    Esql.o365_audit_Site_values = values(o365.audit.Site),\n    Esql.o365_audit_SiteUrl_values = values(o365.audit.SiteUrl),\n    Esql.user_domain_values = values(user.domain),\n    Esql.token_id_values = values(token.id),\n    Esql.event_code_values = values(event.code),\n    Esql.event_provider_values = values(event.provider),\n    Esql.auth_type_values = values(o365.audit.AuthenticationType),\n    Esql.is_managed_device_values = values(o365.audit.IsManagedDevice),\n    Esql.platform_values = values(o365.audit.Platform),\n    Esql.user_agent_values = values(user_agent.name),\n    Esql.source_asn_org_values = values(source.as.organization.name),\n    Esql.geo_country_values = values(source.geo.country_name),\n    Esql.event_count = count(*)\n    by\n    Esql.time_window_date_trunc,\n    user.id,\n    session.id,\n    source.ip,\n    o365.audit.ApplicationId\n| where Esql.file_name_count_distinct >= 25\n| keep\n    Esql.*,\n    user.id,\n    source.ip,\n    o365.audit.ApplicationId,\n    session.id\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/collection_onedrive_excessive_file_downloads.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: SaaS",
+      "Domain: Storage",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Data Source: SharePoint",
+      "Data Source: OneDrive",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Tactic: Exfiltration",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

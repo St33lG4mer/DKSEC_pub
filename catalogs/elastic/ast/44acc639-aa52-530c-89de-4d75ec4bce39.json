@@ -1,0 +1,53 @@
+{
+  "id": "44acc639-aa52-530c-89de-4d75ec4bce39",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation via PKEXEC",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "gconv_path"
+      ],
+      "raw_values": [
+        "/*GCONV_PATH*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and file.path : \"/*GCONV_PATH*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_pkexec_envar_hijack.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Endgame",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

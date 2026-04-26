@@ -1,0 +1,29 @@
+{
+  "id": "9ad1ba8d-46b1-58de-9d81-7ac40e2005aa",
+  "catalog": "sigma",
+  "name": "net_connection_win_dllhost_non_local_ip",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\dllhost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\dllhost.exe\" and network.direction:\"true\") and (not ((cidrMatch(destination.ip, \"::1/128\") or cidrMatch(destination.ip, \"10.0.0.0/8\") or cidrMatch(destination.ip, \"127.0.0.0/8\") or cidrMatch(destination.ip, \"172.16.0.0/12\") or cidrMatch(destination.ip, \"192.168.0.0/16\") or cidrMatch(destination.ip, \"169.254.0.0/16\") or cidrMatch(destination.ip, \"fc00::/7\") or cidrMatch(destination.ip, \"fe80::/10\")) or (cidrMatch(destination.ip, \"20.184.0.0/13\") or cidrMatch(destination.ip, \"20.192.0.0/10\") or cidrMatch(destination.ip, \"23.72.0.0/13\") or cidrMatch(destination.ip, \"51.10.0.0/15\") or cidrMatch(destination.ip, \"51.103.0.0/16\") or cidrMatch(destination.ip, \"51.104.0.0/15\") or cidrMatch(destination.ip, \"52.224.0.0/11\") or cidrMatch(destination.ip, \"150.171.0.0/19\") or cidrMatch(destination.ip, \"204.79.197.0/24\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/network_connection/net_connection_win_dllhost_non_local_ip.eql",
+  "metadata": {}
+}

@@ -1,0 +1,51 @@
+{
+  "id": "849b8adc-80ef-5e49-ba79-5787ae1e504e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_vaultcmd_list_creds",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vaultcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\VaultCmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "vaultcmd.exe"
+      ],
+      "raw_values": [
+        "VAULTCMD.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "listcreds:"
+      ],
+      "raw_values": [
+        "*/listcreds:*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\VaultCmd.exe\" or process.pe.original_file_name:\"VAULTCMD.EXE\") and process.command_line:\"*/listcreds:*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_vaultcmd_list_creds.eql",
+  "metadata": {}
+}

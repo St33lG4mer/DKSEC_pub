@@ -1,0 +1,40 @@
+{
+  "id": "df4d3d48-ca94-5aa0-9ce4-2ed7000cd12b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_pressanykey",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "microsoft.nodejstools.pressanykey.exe"
+      ],
+      "raw_values": [
+        "Microsoft.NodejsTools.PressAnyKey.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microsoft.nodejstools.pressanykey.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft.NodejsTools.PressAnyKey.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"Microsoft.NodejsTools.PressAnyKey.exe\" and (not process.executable:\"*\\\\Microsoft.NodejsTools.PressAnyKey.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_pressanykey.eql",
+  "metadata": {}
+}

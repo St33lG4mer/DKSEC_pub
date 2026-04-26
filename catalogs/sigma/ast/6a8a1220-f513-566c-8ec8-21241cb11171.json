@@ -1,0 +1,40 @@
+{
+  "id": "6a8a1220-f513-566c-8ec8-21241cb11171",
+  "catalog": "sigma",
+  "name": "win_defender_history_delete",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows defender/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Defender/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "1013"
+      ],
+      "raw_values": [
+        "1013"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Defender/Operational\" and event.code:\"1013\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/windefend/win_defender_history_delete.eql",
+  "metadata": {}
+}

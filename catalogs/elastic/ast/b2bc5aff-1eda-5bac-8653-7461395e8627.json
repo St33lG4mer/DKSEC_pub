@@ -1,0 +1,29 @@
+{
+  "id": "b2bc5aff-1eda-5bac-8653-7461395e8627",
+  "catalog": "elastic",
+  "name": "Potential Spike in Web Server Error Logs",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "from logs-nginx.error-*, logs-apache_tomcat.error-*, logs-apache.error-*, logs-iis.error-*\n| keep\n    @timestamp,\n    event.type,\n    data_stream.dataset,\n    source.ip,\n    agent.id,\n    host.name,\n    data_stream.namespace\n\n| where source.ip is not null\n| stats\n    Esql.event_count = count(),\n    Esql.host_name_values = values(host.name),\n    Esql.agent_id_values = values(agent.id),\n    Esql.data_stream_dataset_values = values(data_stream.dataset),\n    Esql.data_stream_namespace_values = values(data_stream.namespace)\n    by source.ip, agent.id\n| where\n    Esql.event_count > 50\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/reconnaissance_web_server_unusual_spike_in_error_logs.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Web",
+      "Use Case: Threat Detection",
+      "Tactic: Reconnaissance",
+      "Data Source: Nginx",
+      "Data Source: Apache",
+      "Data Source: Apache Tomcat",
+      "Data Source: IIS",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "4ad034d3-4197-5eb0-9dd2-3d2073d49b58",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolscript_register_app",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "cscript.exe",
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".vbs -register"
+      ],
+      "raw_values": [
+        "*.vbs -register *"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\cscript.exe\", \"*\\\\wscript.exe\")) or (process.pe.original_file_name like~ (\"cscript.exe\", \"wscript.exe\"))) and process.command_line:\"*.vbs -register *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolscript_register_app.eql",
+  "metadata": {}
+}

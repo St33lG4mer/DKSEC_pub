@@ -1,0 +1,44 @@
+{
+  "id": "e1f51890-219d-564d-ac61-6ed6e0c4ea04",
+  "catalog": "elastic",
+  "name": "Unusual Preload Environment Variable Process Execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "infraonwindowsagent",
+        "capa",
+        "cmk-update-agent"
+      ],
+      "raw_values": [
+        "/opt/infraonagent/infraonwindowsagent",
+        "/worker/Capa/capa",
+        "cmk-update-agent"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:exec and process.env_vars:* and\nnot (\n  process.parent.executable:(/snap/* or \"/opt/infraonagent/infraonwindowsagent\" or \"/worker/Capa/capa\") or\n  process.parent.name:\"cmk-update-agent\"\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_unusual_preload_env_vars.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

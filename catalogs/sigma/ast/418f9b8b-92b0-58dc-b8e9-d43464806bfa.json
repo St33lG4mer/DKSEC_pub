@@ -1,0 +1,52 @@
+{
+  "id": "418f9b8b-92b0-58dc-b8e9-d43464806bfa",
+  "catalog": "sigma",
+  "name": "proc_creation_win_runonce_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "alternateshellstartup"
+      ],
+      "raw_values": [
+        "*/AlternateShellStartup*",
+        "*/r"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "runonce.exe"
+      ],
+      "raw_values": [
+        "*\\\\runonce.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "run once wrapper"
+      ],
+      "raw_values": [
+        "Run Once Wrapper"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\runonce.exe\" or process.pe.description:\"Run Once Wrapper\") and (process.command_line like~ (\"*/AlternateShellStartup*\", \"*/r\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_runonce_execution.eql",
+  "metadata": {}
+}

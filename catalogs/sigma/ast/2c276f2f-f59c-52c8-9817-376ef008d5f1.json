@@ -1,0 +1,72 @@
+{
+  "id": "2c276f2f-f59c-52c8-9817-376ef008d5f1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_findstr_security_keyword_lookup",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "find.exe",
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "*\\\\find.exe",
+        "*\\\\findstr.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "find.exe",
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "FIND.EXE",
+        "FINDSTR.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "avira",
+        "cylance",
+        "kaspersky",
+        "sentinel",
+        "virus"
+      ],
+      "raw_values": [
+        "* avira",
+        "* avira\\",
+        ", ",
+        "",
+        "* cylance",
+        "* cylance\\",
+        "* kaspersky",
+        "* kaspersky\\",
+        "* mc",
+        "* mc\\",
+        "* sentinel",
+        "* sentinel\\",
+        "* virus",
+        "* virus\\"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\find.exe\", \"*\\\\findstr.exe\")) or (process.pe.original_file_name like~ (\"FIND.EXE\", \"FINDSTR.EXE\"))) and (process.command_line like~ (\"* avira\", \"* avira\\\"\", \"* cb\", \"* cb\\\"\", \"* cylance\", \"* cylance\\\"\", \"* defender\", \"* defender\\\"\", \"* kaspersky\", \"* kaspersky\\\"\", \"* kes\", \"* kes\\\"\", \"* mc\", \"* mc\\\"\", \"* sec\", \"* sec\\\"\", \"* sentinel\", \"* sentinel\\\"\", \"* symantec\", \"* symantec\\\"\", \"* virus\", \"* virus\\\"\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_findstr_security_keyword_lookup.eql",
+  "metadata": {}
+}

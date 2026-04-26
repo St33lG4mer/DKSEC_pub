@@ -1,0 +1,53 @@
+{
+  "id": "0c48accc-c99c-528e-8764-b799b6fdec77",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_recon_unquoted_service_search",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "service get",
+        "name,displayname,pathname,startmode"
+      ],
+      "raw_values": [
+        "* service get *",
+        "*name,displayname,pathname,startmode*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"wmic.exe\" or process.executable:\"*\\\\WMIC.exe\") and (process.command_line:\"* service get *\" and process.command_line:\"*name,displayname,pathname,startmode*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_recon_unquoted_service_search.eql",
+  "metadata": {}
+}

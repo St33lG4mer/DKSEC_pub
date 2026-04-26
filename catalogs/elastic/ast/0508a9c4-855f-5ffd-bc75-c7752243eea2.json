@@ -1,0 +1,38 @@
+{
+  "id": "0508a9c4-855f-5ffd-bc75-c7752243eea2",
+  "catalog": "elastic",
+  "name": "M365 Exchange Malware Filter Policy Deleted",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "remove-malwarefilterpolicy"
+      ],
+      "raw_values": [
+        "Remove-MalwareFilterPolicy"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:\"Remove-MalwareFilterPolicy\" and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/defense_evasion_exchange_malware_filter_policy_deletion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Use Case: Configuration Audit",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

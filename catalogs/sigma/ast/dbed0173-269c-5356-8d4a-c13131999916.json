@@ -1,0 +1,94 @@
+{
+  "id": "dbed0173-269c-5356-8d4a-c13131999916",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msiexec_install_remote",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-package",
+        "package",
+        "–package",
+        "—package",
+        "―package",
+        "http"
+      ],
+      "raw_values": [
+        "*-i*",
+        "*/i*",
+        "*–i*",
+        "*—i*",
+        "*―i*",
+        "*-package*",
+        "*/package*",
+        "*–package*",
+        "*—package*",
+        "*―package*",
+        "*-a*",
+        "*/a*",
+        "*–a*",
+        "*—a*",
+        "*―a*",
+        "*-j*",
+        "*/j*",
+        "*–j*",
+        "*—j*",
+        "*―j*",
+        "*-q*",
+        "*/q*",
+        "*–q*",
+        "*—q*",
+        "*―q*",
+        "*http*",
+        "*\\\\\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "openoffice"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\OpenOffice*",
+        "*Installation Files\\\\openoffice*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\msiexec.exe\" or process.pe.original_file_name:\"msiexec.exe\") and (process.command_line like~ (\"*-i*\", \"*/i*\", \"*–i*\", \"*—i*\", \"*―i*\") or process.command_line like~ (\"*-package*\", \"*/package*\", \"*–package*\", \"*—package*\", \"*―package*\") or process.command_line like~ (\"*-a*\", \"*/a*\", \"*–a*\", \"*—a*\", \"*―a*\") or process.command_line like~ (\"*-j*\", \"*/j*\", \"*–j*\", \"*—j*\", \"*―j*\")) and process.command_line like~ (\"*-q*\", \"*/q*\", \"*–q*\", \"*—q*\", \"*―q*\") and (process.command_line like~ (\"*http*\", \"*\\\\\\\\*\"))) and (not (process.command_line:\"*\\\\AppData\\\\Local\\\\Temp\\\\OpenOffice*\" and process.command_line:\"*Installation Files\\\\openoffice*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msiexec_install_remote.eql",
+  "metadata": {}
+}

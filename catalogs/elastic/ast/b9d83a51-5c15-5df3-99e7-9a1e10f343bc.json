@@ -1,0 +1,90 @@
+{
+  "id": "b9d83a51-5c15-5df3-99e7-9a1e10f343bc",
+  "catalog": "elastic",
+  "name": "AWS SSM `SendCommand` Execution by Rare User",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "source.address",
+      "raw_field": "source.address",
+      "operator": ":",
+      "values": [
+        "ssm-guiconnect.amazonaws.com",
+        "ssm.amazonaws.com",
+        "inspector2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ssm-guiconnect.amazonaws.com",
+        "ssm.amazonaws.com",
+        "inspector2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ssm.amazonaws.com"
+      ],
+      "raw_values": [
+        "ssm.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "sendcommand"
+      ],
+      "raw_values": [
+        "SendCommand"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ssm.amazonaws.com\"\n    and event.action: \"SendCommand\"\n    and event.outcome: \"success\"\n    and not source.address: (\n      \"ssm-guiconnect.amazonaws.com\" or\n      \"ssm.amazonaws.com\" or\n      \"inspector2.amazonaws.com\"\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/execution_ssm_sendcommand_by_rare_user.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS SSM",
+      "Data Source: AWS Systems Manager",
+      "Use Case: Log Auditing",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "23368cc2-e4c8-59df-acb8-2a1386b9f894",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_browsercore",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "browsercore.exe"
+      ],
+      "raw_values": [
+        "BrowserCore.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "browsercore.exe"
+      ],
+      "raw_values": [
+        "*\\\\BrowserCore.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"BrowserCore.exe\" and (not process.executable:\"*\\\\BrowserCore.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_browsercore.eql",
+  "metadata": {}
+}

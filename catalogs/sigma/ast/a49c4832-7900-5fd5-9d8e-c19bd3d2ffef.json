@@ -1,0 +1,71 @@
+{
+  "id": "a49c4832-7900-5fd5-9d8e-c19bd3d2ffef",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msdt_susp_parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "schtasks.exe",
+        "wmic.exe",
+        "wscript.exe",
+        "wsl.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe",
+        "*\\\\wsl.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "msdt.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\schtasks.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\", \"*\\\\wsl.exe\")) and (process.executable:\"*\\\\msdt.exe\" or process.pe.original_file_name:\"msdt.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msdt_susp_parent.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "a0a2fa9a-98a5-5a2b-a8ba-16e4eb4ad309",
+  "catalog": "sigma",
+  "name": "file_event_win_remcom_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "remcomsvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\RemComSvc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\RemComSvc.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_remcom_service.eql",
+  "metadata": {}
+}

@@ -1,0 +1,49 @@
+{
+  "id": "a7a2a853-b556-502a-9ecd-1c844759cd72",
+  "catalog": "elastic",
+  "name": "New GitHub App Installed",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "configuration"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "integration_installation.create"
+      ],
+      "raw_values": [
+        "integration_installation.create"
+      ]
+    }
+  ],
+  "raw_query": "configuration where data_stream.dataset == \"github.audit\" and event.action == \"integration_installation.create\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/github/execution_new_github_app_installed.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Github",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

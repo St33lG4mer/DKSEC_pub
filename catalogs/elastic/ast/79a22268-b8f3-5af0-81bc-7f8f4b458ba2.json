@@ -1,0 +1,43 @@
+{
+  "id": "79a22268-b8f3-5af0-81bc-7f8f4b458ba2",
+  "catalog": "elastic",
+  "name": "Unknown Execution of Binary with RWX Memory Region",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "node",
+        "java",
+        "apache2"
+      ],
+      "raw_values": [
+        "/usr/share/kibana/node/bin/node",
+        "/usr/share/elasticsearch/jdk/bin/java",
+        "/usr/sbin/apache2"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and auditd.data.syscall:mprotect and auditd.data.a2:7 and not (\n  process.executable:(\n    \"/usr/share/kibana/node/bin/node\" or \"/usr/share/elasticsearch/jdk/bin/java\" or \"/usr/sbin/apache2\"\n  ) or\n  process.name:(httpd or java or node or dotnet or github-desktop or code or tenzir or brave or qemu-* or php* or deno)\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_unknown_rwx_mem_region_binary_executed.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

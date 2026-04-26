@@ -1,0 +1,66 @@
+{
+  "id": "9b1ecfed-c756-5b3d-a8eb-e9efabb19a5e",
+  "catalog": "elastic",
+  "name": "Potential Okta Brute Force (Multi-Source)",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "okta.outcome.reason",
+      "raw_field": "okta.outcome.reason",
+      "operator": "in",
+      "values": [
+        "invalid_credentials",
+        "locked_out"
+      ],
+      "raw_values": [
+        "INVALID_CREDENTIALS",
+        "LOCKED_OUT"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "user.authentication.",
+        "user.session.start"
+      ],
+      "raw_values": [
+        "user.authentication.*",
+        "user.session.start"
+      ]
+    }
+  ],
+  "raw_query": "FROM logs-okta.system-* METADATA _id, _version, _index\n| WHERE data_stream.dataset == \"okta.system\"\n    AND (event.action LIKE \"user.authentication.*\" OR event.action == \"user.session.start\")\n    AND okta.outcome.reason IN (\"INVALID_CREDENTIALS\", \"LOCKED_OUT\")\n    AND okta.actor.alternate_id IS NOT NULL\n\n// Create source mapping for analyst context\n| EVAL Esql.source_info = CONCAT(\n    \"{\\\"ip\\\":\\\"\", COALESCE(okta.client.ip::STRING, \"unknown\"),\n    \"\\\",\\\"country\\\":\\\"\", COALESCE(client.geo.country_name, \"unknown\"),\n    \"\\\",\\\"asn\\\":\\\"\", COALESCE(source.as.organization.name, \"unknown\"),\n    \"\\\",\\\"user_agent\\\":\\\"\", COALESCE(okta.client.user_agent.raw_user_agent, \"unknown\"), \"\\\"}\"\n  )\n\n| STATS\n    Esql.unique_source_ips = COUNT_DISTINCT(okta.client.ip),\n    Esql.total_attempts = COUNT(*),\n    Esql.unique_user_agents = COUNT_DISTINCT(okta.client.user_agent.raw_user_agent),\n    Esql.unique_dt_hashes = COUNT_DISTINCT(okta.debug_context.debug_data.dt_hash),\n    Esql.unique_asns = COUNT_DISTINCT(source.as.number),\n    Esql.unique_countries = COUNT_DISTINCT(client.geo.country_name),\n    Esql.first_seen = MIN(@timestamp),\n    Esql.last_seen = MAX(@timestamp),\n    Esql.source_ip_values = VALUES(okta.client.ip),\n    Esql.source_mapping = VALUES(Esql.source_info),\n    Esql.event_action_values = VALUES(event.action),\n    Esql.user_agent_values = VALUES(okta.client.user_agent.raw_user_agent),\n    Esql.device_values = VALUES(okta.client.device),\n    Esql.is_proxy_values = VALUES(okta.security_context.is_proxy),\n    Esql.geo_country_values = VALUES(client.geo.country_name),\n    Esql.geo_city_values = VALUES(client.geo.city_name),\n    Esql.source_asn_values = VALUES(source.as.number),\n    Esql.source_asn_org_values = VALUES(source.as.organization.name),\n    Esql.threat_suspected_values = VALUES(okta.debug_context.debug_data.threat_suspected),\n    Esql.risk_level_values = VALUES(okta.debug_context.debug_data.risk_level),\n    Esql.risk_reasons_values = VALUES(okta.debug_context.debug_data.risk_reasons)\n  BY okta.actor.alternate_id\n\n| EVAL\n    Esql.attempts_per_ip = Esql.total_attempts * 1.0 / Esql.unique_source_ips,\n    Esql.duration_seconds = DATE_DIFF(\"seconds\", Esql.first_seen, Esql.last_seen)\n\n| WHERE\n    Esql.unique_source_ips >= 5\n    AND Esql.total_attempts >= 10\n    AND (\n        Esql.unique_countries >= 2 OR\n        Esql.unique_asns >= 3 OR\n        Esql.unique_source_ips >= 8 OR\n        Esql.unique_user_agents >= 3\n    )\n\n| SORT Esql.unique_source_ips DESC\n| KEEP Esql.*, okta.actor.alternate_id\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/credential_access_okta_brute_force_multi_source.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Identity",
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Data Source: Okta",
+      "Data Source: Okta System Logs",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

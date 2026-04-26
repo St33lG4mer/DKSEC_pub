@@ -1,0 +1,44 @@
+{
+  "id": "9fec6e4c-9346-56e8-b2aa-5d2eca875cf4",
+  "catalog": "sigma",
+  "name": "file_event_win_sysinternals_procexp_driver_susp_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "procexp.exe",
+        "procexp64.exe"
+      ],
+      "raw_values": [
+        "*\\\\procexp.exe",
+        "*\\\\procexp64.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "procexp",
+        ".sys"
+      ],
+      "raw_values": [
+        "*\\\\PROCEXP*",
+        "*.sys"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\PROCEXP*\" and file.path:\"*.sys\") and (not (process.executable like~ (\"*\\\\procexp.exe\", \"*\\\\procexp64.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_sysinternals_procexp_driver_susp_creation.eql",
+  "metadata": {}
+}

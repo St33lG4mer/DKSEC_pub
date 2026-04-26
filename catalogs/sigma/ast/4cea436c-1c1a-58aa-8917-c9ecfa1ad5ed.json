@@ -1,0 +1,62 @@
+{
+  "id": "4cea436c-1c1a-58aa-8917-c9ecfa1ad5ed",
+  "catalog": "sigma",
+  "name": "win_security_apt_wocao",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4799"
+      ],
+      "raw_values": [
+        "4799"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetusername",
+      "raw_field": "winlog.event_data.TargetUserName",
+      "operator": ":",
+      "values": [
+        "administr"
+      ],
+      "raw_values": [
+        "Administr*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.callerprocessname",
+      "raw_field": "winlog.event_data.CallerProcessName",
+      "operator": ":",
+      "values": [
+        "\\\\checkadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\checkadmin.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4799\" and winlog.event_data.TargetUserName:\"Administr*\" and winlog.event_data.CallerProcessName:\"*\\\\checkadmin.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/TA/Operation-Wocao/win_security_apt_wocao.eql",
+  "metadata": {}
+}

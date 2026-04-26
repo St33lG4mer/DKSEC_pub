@@ -1,0 +1,107 @@
+{
+  "id": "9ce6fdeb-481f-5438-8324-4be77b2cb804",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_susp_execution_via_office_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "mspub.exe",
+        "visio.exe",
+        "msaccess.exe",
+        "eqnedt32.exe",
+        "onenote.exe",
+        "wordpad.exe",
+        "wordview.exe"
+      ],
+      "raw_values": [
+        "*\\\\WINWORD.EXE",
+        "*\\\\EXCEL.EXE",
+        "*\\\\POWERPNT.exe",
+        "*\\\\MSPUB.exe",
+        "*\\\\VISIO.exe",
+        "*\\\\MSACCESS.EXE",
+        "*\\\\EQNEDT32.EXE",
+        "*\\\\ONENOTE.EXE",
+        "*\\\\wordpad.exe",
+        "*\\\\wordview.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "regsvr32",
+        "rundll32",
+        "msiexec",
+        "mshta",
+        "verclsid",
+        "wscript",
+        "cscript"
+      ],
+      "raw_values": [
+        "*regsvr32*",
+        "*rundll32*",
+        "*msiexec*",
+        "*mshta*",
+        "*verclsid*",
+        "*wscript*",
+        "*cscript*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\wbem\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "process",
+        "create",
+        "call"
+      ],
+      "raw_values": [
+        "*process*",
+        "*create*",
+        "*call*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\WINWORD.EXE\", \"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.exe\", \"*\\\\MSPUB.exe\", \"*\\\\VISIO.exe\", \"*\\\\MSACCESS.EXE\", \"*\\\\EQNEDT32.EXE\", \"*\\\\ONENOTE.EXE\", \"*\\\\wordpad.exe\", \"*\\\\wordview.exe\")) and (process.executable:\"*\\\\wbem\\\\WMIC.exe\" or process.pe.original_file_name:\"wmic.exe\") and ((process.command_line:\"*process*\" and process.command_line:\"*create*\" and process.command_line:\"*call*\") and (process.command_line like~ (\"*regsvr32*\", \"*rundll32*\", \"*msiexec*\", \"*mshta*\", \"*verclsid*\", \"*wscript*\", \"*cscript*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_susp_execution_via_office_process.eql",
+  "metadata": {}
+}

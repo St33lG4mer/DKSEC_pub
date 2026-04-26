@@ -1,0 +1,82 @@
+{
+  "id": "5ac24861-2e55-5ef3-94d1-d2091a59be41",
+  "catalog": "elastic",
+  "name": "Disabling User Account Control via Registry Modification",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "enablelua",
+        "consentpromptbehavioradmin",
+        "promptonsecuredesktop"
+      ],
+      "raw_values": [
+        "EnableLUA",
+        "ConsentPromptBehaviorAdmin",
+        "PromptOnSecureDesktop"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000000"
+      ],
+      "raw_values": [
+        "0",
+        "0x00000000"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.value : (\"EnableLUA\", \"ConsentPromptBehaviorAdmin\", \"PromptOnSecureDesktop\") and\n  registry.data.strings : (\"0\", \"0x00000000\")\n\n  /*\n    Full registry key path omitted due to data source variations:\n    HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\EnableLUA\n    HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\ConsentPromptBehaviorAdmin\n    HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\System\\\\PromptOnSecureDesktop\n  */\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_disable_uac_registry.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

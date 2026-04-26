@@ -1,0 +1,73 @@
+{
+  "id": "6333f6a1-61ba-5f7f-aef9-7da870dd16e0",
+  "catalog": "elastic",
+  "name": "AWS S3 Object Versioning Suspended",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "putbucketversioning"
+      ],
+      "raw_values": [
+        "PutBucketVersioning"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n   and event.provider == \"s3.amazonaws.com\"\n   and event.action == \"PutBucketVersioning\"\n   and event.outcome == \"success\"\n   and stringContains(aws.cloudtrail.request_parameters, \"Status=Suspended\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_s3_object_versioning_disabled.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS S3",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

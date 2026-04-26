@@ -1,0 +1,60 @@
+{
+  "id": "718a6c15-e391-50e2-9b6d-684dccb7400f",
+  "catalog": "sigma",
+  "name": "create_stream_hash_susp_ip_domains",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".ps1:zone",
+        ".bat:zone",
+        ".exe:zone",
+        ".vbe:zone",
+        ".vbs:zone",
+        ".dll:zone",
+        ".one:zone",
+        ".cmd:zone",
+        ".hta:zone",
+        ".xll:zone",
+        ".lnk:zone"
+      ],
+      "raw_values": [
+        "*.ps1:Zone*",
+        "*.bat:Zone*",
+        "*.exe:Zone*",
+        "*.vbe:Zone*",
+        "*.vbs:Zone*",
+        "*.dll:Zone*",
+        "*.one:Zone*",
+        "*.cmd:Zone*",
+        "*.hta:Zone*",
+        "*.xll:Zone*",
+        "*.lnk:Zone*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.contents",
+      "raw_field": "winlog.event_data.Contents",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['http[s]', <specialchars.wildcard_single: 2>, '://[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['http[s]', <SpecialChars.WILDCARD_SINGLE: 2>, '://[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.Contents:\"SigmaRegularExpression(regexp=SigmaString(['http[s]', <SpecialChars.WILDCARD_SINGLE: 2>, '://[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}']), flags=set())\" and (file.path like~ (\"*.ps1:Zone*\", \"*.bat:Zone*\", \"*.exe:Zone*\", \"*.vbe:Zone*\", \"*.vbs:Zone*\", \"*.dll:Zone*\", \"*.one:Zone*\", \"*.cmd:Zone*\", \"*.hta:Zone*\", \"*.xll:Zone*\", \"*.lnk:Zone*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/create_stream_hash/create_stream_hash_susp_ip_domains.eql",
+  "metadata": {}
+}

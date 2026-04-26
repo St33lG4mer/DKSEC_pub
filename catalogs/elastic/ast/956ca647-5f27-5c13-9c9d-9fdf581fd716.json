@@ -1,0 +1,26 @@
+{
+  "id": "956ca647-5f27-5c13-9c9d-9fdf581fd716",
+  "catalog": "elastic",
+  "name": "Unusual Spike in Concurrent Active Sessions by a User",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/pad/privileged_access_ml_okta_high_sum_concurrent_sessions_by_user.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Privileged Access Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

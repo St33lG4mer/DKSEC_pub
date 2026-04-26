@@ -1,0 +1,40 @@
+{
+  "id": "232cccfd-9381-537b-893a-07aefc78470d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ldifde_export",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ldifde.exe"
+      ],
+      "raw_values": [
+        "*\\\\ldifde.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ldifde.exe"
+      ],
+      "raw_values": [
+        "ldifde.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\ldifde.exe\" or process.pe.original_file_name:\"ldifde.exe\") and process.command_line:\"*-f*\") and (not process.command_line:\"* -i*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ldifde_export.eql",
+  "metadata": {}
+}

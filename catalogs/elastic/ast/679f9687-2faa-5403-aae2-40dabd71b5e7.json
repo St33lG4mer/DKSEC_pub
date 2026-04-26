@@ -1,0 +1,203 @@
+{
+  "id": "679f9687-2faa-5403-aae2-40dabd71b5e7",
+  "catalog": "elastic",
+  "name": "Unix Socket Connection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--unix-socket",
+        "--abstract-unix-socket"
+      ],
+      "raw_values": [
+        "/usr/local/*",
+        "/run/*",
+        "/var/run/*",
+        "UNIX-CLIENT:/usr/local/*",
+        "UNIX-CLIENT:/run/*",
+        "UNIX-CLIENT:/var/run/*",
+        "--unix-socket",
+        "--abstract-unix-socket"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "ncat",
+        "netcat",
+        "nc.openbsd"
+      ],
+      "raw_values": [
+        "nc",
+        "ncat",
+        "netcat",
+        "nc.openbsd"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bundle",
+        "ruby",
+        "haproxystatus.sh"
+      ],
+      "raw_values": [
+        "bundle",
+        "ruby",
+        "haproxystatus.sh"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/usr/libexec/netdata/plugins.d/cgroup-name.sh",
+        "/healthcheck"
+      ],
+      "raw_values": [
+        "/usr/libexec/netdata/plugins.d/cgroup-name.sh",
+        "/healthcheck"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "libvirt-sock"
+      ],
+      "raw_values": [
+        "-U",
+        "-",
+        "/var/run/libvirt/libvirt-sock"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "socat",
+        "curl"
+      ],
+      "raw_values": [
+        "socat",
+        "curl"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "==",
+      "values": [
+        "docker-entrypoint autoheal"
+      ],
+      "raw_values": [
+        "sh /docker-entrypoint autoheal"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like",
+      "values": [
+        "runtime.autoheal"
+      ],
+      "raw_values": [
+        "*runtime.autoheal*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "letsencrypt_service"
+      ],
+      "raw_values": [
+        "/app/letsencrypt_service"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "==",
+      "values": [
+        "/app"
+      ],
+      "raw_values": [
+        "/app"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\n event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\n (\n  (process.name in (\"nc\", \"ncat\", \"netcat\", \"nc.openbsd\") and\n   process.args == \"-U\" and process.args : (\"/usr/local/*\", \"/run/*\", \"/var/run/*\")) or\n  (process.name == \"socat\" and\n   process.args == \"-\" and process.args : (\"UNIX-CLIENT:/usr/local/*\", \"UNIX-CLIENT:/run/*\", \"UNIX-CLIENT:/var/run/*\")) or\n  (process.name == \"curl\" and process.args : (\"--unix-socket\", \"--abstract-unix-socket\"))\n) and\nnot (\n  process.args == \"/var/run/libvirt/libvirt-sock\" or\n  process.parent.name in (\"bundle\", \"ruby\", \"haproxystatus.sh\") or\n  process.parent.command_line == \"sh /docker-entrypoint autoheal\" or\n  process.command_line like \"*runtime.autoheal*\" or\n  process.parent.executable == \"/app/letsencrypt_service\" or\n  process.parent.args in (\"/usr/libexec/netdata/plugins.d/cgroup-name.sh\", \"/healthcheck\") or\n  ?process.working_directory == \"/app\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_unix_socket_communication.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

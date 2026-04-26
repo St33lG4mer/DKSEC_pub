@@ -1,0 +1,17 @@
+{
+  "id": "3ffbacec-d217-5e69-a16c-c9820143afc9",
+  "catalog": "sigma",
+  "name": "file_event_win_gotoopener_artefact",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [],
+  "raw_query": "any where file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\LogMeInInc\\\\GoToAssist Remote Support Expert\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_gotoopener_artefact.eql",
+  "metadata": {}
+}

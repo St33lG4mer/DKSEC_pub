@@ -1,0 +1,41 @@
+{
+  "id": "d57ed689-e84b-5ecc-ae44-af82d4325496",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2021_40444_office_directory_traversal",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "msaccess.exe",
+        "mspub.exe",
+        "eqnedt32.exe",
+        "visio.exe"
+      ],
+      "raw_values": [
+        "*\\\\winword.exe",
+        "*\\\\excel.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\msaccess.exe",
+        "*\\\\mspub.exe",
+        "*\\\\eqnedt32.exe",
+        "*\\\\visio.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\winword.exe\", \"*\\\\excel.exe\", \"*\\\\powerpnt.exe\", \"*\\\\msaccess.exe\", \"*\\\\mspub.exe\", \"*\\\\eqnedt32.exe\", \"*\\\\visio.exe\")) and (process.command_line like~ (\"*../../../..*\", \"*..\\\\..\\\\..\\\\..*\", \"*..//..//..//..*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-40444/proc_creation_win_exploit_cve_2021_40444_office_directory_traversal.eql",
+  "metadata": {}
+}

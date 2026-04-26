@@ -1,0 +1,42 @@
+{
+  "id": "a4e0444e-0081-5d46-8c9c-5ad22a5d7431",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_nircmd",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "nircmd.exe",
+        "nircmdc.exe"
+      ],
+      "raw_values": [
+        "*\\\\nircmd.exe",
+        "*\\\\nircmdc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "nircmd.exe"
+      ],
+      "raw_values": [
+        "NirCmd.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"NirCmd.exe\" and (not (process.executable like~ (\"*\\\\nircmd.exe\", \"*\\\\nircmdc.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_nircmd.eql",
+  "metadata": {}
+}

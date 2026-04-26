@@ -1,0 +1,87 @@
+{
+  "id": "22427ca1-5b07-5e44-843a-c69b18eac021",
+  "catalog": "elastic",
+  "name": "Stolen Credentials Used to Login to Okta Account After MFA Reset",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "okta.event_type",
+      "raw_field": "okta.event_type",
+      "operator": ":",
+      "values": [
+        "user.session.start",
+        "user.authentication"
+      ],
+      "raw_values": [
+        "user.session.start",
+        "user.authentication*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "signal.rule.threat.tactic.name",
+      "raw_field": "signal.rule.threat.tactic.name",
+      "operator": "==",
+      "values": [
+        "credential access"
+      ],
+      "raw_values": [
+        "Credential Access"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "okta.event_type",
+      "raw_field": "okta.event_type",
+      "operator": "==",
+      "values": [
+        "user.mfa.factor.update"
+      ],
+      "raw_values": [
+        "user.mfa.factor.update"
+      ]
+    }
+  ],
+  "raw_query": "sequence by user.name with maxspan=12h\n    [any where host.os.type == \"windows\" and signal.rule.threat.tactic.name == \"Credential Access\"]\n    [any where data_stream.dataset == \"okta.system\" and okta.event_type == \"user.mfa.factor.update\"]\n    [any where data_stream.dataset == \"okta.system\" and okta.event_type: (\"user.session.start\", \"user.authentication*\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/persistence_stolen_credentials_used_to_login_to_okta_account_after_mfa_reset.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Tactic: Persistence",
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Data Source: Elastic Defend",
+      "Rule Type: Higher-Order Rule",
+      "Domain: Endpoint",
+      "Domain: Cloud",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

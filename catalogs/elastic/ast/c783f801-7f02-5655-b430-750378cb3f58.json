@@ -1,0 +1,74 @@
+{
+  "id": "c783f801-7f02-5655-b430-750378cb3f58",
+  "catalog": "elastic",
+  "name": "AWS S3 Object Encryption Using External KMS Key",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "copyobject"
+      ],
+      "raw_values": [
+        "CopyObject"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "from logs-aws.cloudtrail-* metadata _id, _version, _index\n\n// any successful S3 copy event\n| where\n  data_stream.dataset == \"aws.cloudtrail\"\n  and event.provider == \"s3.amazonaws.com\"\n  and event.action == \"CopyObject\"\n  and event.outcome == \"success\"\n\n// dissect request parameters to extract KMS key info and target object info\n| dissect aws.cloudtrail.request_parameters\n    \"{%{?bucketName}=%{Esql.aws_cloudtrail_request_parameters_target_bucket_name},%{?x-amz-server-side-encryption-aws-kms-key-id}=%{?arn}:%{?aws}:%{?kms}:%{?region}:%{Esql.aws_cloudtrail_request_parameters_kms_key_account_id}:%{?key}/%{Esql.aws_cloudtrail_request_parameters_kms_key_id},%{?Host}=%{?tls.client.server.name},%{?x-amz-server-side-encryption}=%{?server_side_encryption},%{?x-amz-copy-source}=%{?bucket.object.name},%{?key}=%{Esql.aws_cloudtrail_request_parameters_target_object_key}}\"\n\n// detect cross-account key usage\n| where cloud.account.id != Esql.aws_cloudtrail_request_parameters_kms_key_account_id\n\n// keep ECS and dissected fields\n| keep\n  @timestamp,\n  data_stream.namespace,\n  user.name,\n  user_agent.original,\n  source.ip,\n  aws.cloudtrail.user_identity.arn,\n  aws.cloudtrail.user_identity.type,\n  aws.cloudtrail.user_identity.access_key_id,\n  aws.cloudtrail.resources.arn,\n  aws.cloudtrail.resources.type,\n  event.action,\n  event.outcome,\n  cloud.account.id,\n  cloud.region,\n  aws.cloudtrail.request_parameters,\n  aws.cloudtrail.response_elements,\n  Esql.aws_cloudtrail_request_parameters_target_bucket_name,\n  Esql.aws_cloudtrail_request_parameters_target_object_key,\n  Esql.aws_cloudtrail_request_parameters_kms_key_account_id,\n  Esql.aws_cloudtrail_request_parameters_kms_key_id,\n  _id,\n  _version,\n  _index\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_s3_object_encryption_with_external_key.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS S3",
+      "Data Source: AWS KMS",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "29958bb1-6e63-5cbb-b62e-94cb8e167296",
+  "catalog": "sigma",
+  "name": "file_event_win_powershell_module_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (file.path like~ (\"*\\\\WindowsPowerShell\\\\Modules\\\\*\", \"*\\\\PowerShell\\\\7\\\\Modules\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_powershell_module_creation.eql",
+  "metadata": {}
+}

@@ -1,0 +1,40 @@
+{
+  "id": "83ae9df4-48a5-5306-b415-70e45fd086ee",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_scrobj_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "inprocserver32\\\\(default)"
+      ],
+      "raw_values": [
+        "*InprocServer32\\\\(Default)"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\scrobj.dll"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\system32\\\\scrobj.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*InprocServer32\\\\(Default)\" and winlog.event_data.Details:\"C:\\\\WINDOWS\\\\system32\\\\scrobj.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_scrobj_dll.eql",
+  "metadata": {}
+}

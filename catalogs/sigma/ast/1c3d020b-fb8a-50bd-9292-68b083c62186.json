@@ -1,0 +1,40 @@
+{
+  "id": "1c3d020b-fb8a-50bd-9292-68b083c62186",
+  "catalog": "sigma",
+  "name": "registry_set_bypass_uac_using_delegateexecute",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\open\\\\command\\\\delegateexecute"
+      ],
+      "raw_values": [
+        "*\\\\open\\\\command\\\\DelegateExecute"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\open\\\\command\\\\DelegateExecute\" and winlog.event_data.Details:\"(Empty)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_bypass_uac_using_delegateexecute.eql",
+  "metadata": {}
+}

@@ -1,0 +1,47 @@
+{
+  "id": "b1859088-5ca4-57d0-9214-9ffc731ad8d6",
+  "catalog": "sigma",
+  "name": "file_event_win_office_onenote_files_in_susp_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".one",
+        ".onepkg"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*.one",
+        "*.onepkg"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "onenote.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Microsoft Office\\\\*",
+        "*\\\\ONENOTE.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where ((file.path like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\", \"*:\\\\Temp\\\\*\")) and (file.path like~ (\"*.one\", \"*.onepkg\"))) and (not (process.executable:\"*:\\\\Program Files\\\\Microsoft Office\\\\*\" and process.executable:\"*\\\\ONENOTE.EXE\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_onenote_files_in_susp_locations.eql",
+  "metadata": {}
+}

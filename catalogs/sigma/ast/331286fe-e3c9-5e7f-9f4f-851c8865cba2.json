@@ -1,0 +1,51 @@
+{
+  "id": "331286fe-e3c9-5e7f-9f4f-851c8865cba2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_scriptrunner",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "scriptrunner.exe"
+      ],
+      "raw_values": [
+        "*\\\\ScriptRunner.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "scriptrunner.exe"
+      ],
+      "raw_values": [
+        "ScriptRunner.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-appvscript"
+      ],
+      "raw_values": [
+        "* -appvscript *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\ScriptRunner.exe\" or process.pe.original_file_name:\"ScriptRunner.exe\") and process.command_line:\"* -appvscript *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_scriptrunner.eql",
+  "metadata": {}
+}

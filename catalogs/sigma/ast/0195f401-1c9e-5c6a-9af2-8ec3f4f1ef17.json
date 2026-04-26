@@ -1,0 +1,33 @@
+{
+  "id": "0195f401-1c9e-5c6a-9af2-8ec3f4f1ef17",
+  "catalog": "sigma",
+  "name": "posh_pm_susp_zip_compress",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "powershell"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": ":",
+      "values": [
+        "compress-archive -path*-destinationpath $env:temp",
+        "compress-archive -path*-destinationpath*\\\\appdata\\\\local\\\\temp\\\\",
+        "compress-archive -path*-destinationpath*:\\\\windows\\\\temp\\\\"
+      ],
+      "raw_values": [
+        "*Compress-Archive -Path*-DestinationPath $env:TEMP*",
+        "*Compress-Archive -Path*-DestinationPath*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*Compress-Archive -Path*-DestinationPath*:\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.ContextInfo:\"*Compress-Archive -Path*-DestinationPath $env:TEMP*\" and winlog.event_data.ContextInfo:\"*Compress-Archive -Path*-DestinationPath*\\\\AppData\\\\Local\\\\Temp\\\\*\" and winlog.event_data.ContextInfo:\"*Compress-Archive -Path*-DestinationPath*:\\\\Windows\\\\Temp\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/powershell/powershell_module/posh_pm_susp_zip_compress.eql",
+  "metadata": {}
+}

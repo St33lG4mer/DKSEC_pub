@@ -1,0 +1,40 @@
+{
+  "id": "bdc9b8ae-f105-5307-812f-4f913526bf66",
+  "catalog": "sigma",
+  "name": "win_terminalservices_rdp_ngrok",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-terminalservices-localsessionmanager/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational"
+      ]
+    },
+    {
+      "field": "winlog.event_data.address",
+      "raw_field": "winlog.event_data.Address",
+      "operator": ":",
+      "values": [
+        "16777216"
+      ],
+      "raw_values": [
+        "*16777216*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-TerminalServices-LocalSessionManager/Operational\" and (event.code:\"21\" and winlog.event_data.Address:\"*16777216*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/terminalservices/win_terminalservices_rdp_ngrok.eql",
+  "metadata": {}
+}

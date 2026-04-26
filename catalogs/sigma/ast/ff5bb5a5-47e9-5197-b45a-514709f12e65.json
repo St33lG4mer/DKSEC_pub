@@ -1,0 +1,68 @@
+{
+  "id": "ff5bb5a5-47e9-5197-b45a-514709f12e65",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_sharp_impersonation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "technique:createprocessasuserw",
+        "technique:impersonateloggedonuser"
+      ],
+      "raw_values": [
+        "* technique:CreateProcessAsUserW*",
+        "* technique:ImpersonateLoggedOnuser*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sharpimpersonation.exe"
+      ],
+      "raw_values": [
+        "*\\\\SharpImpersonation.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sharpimpersonation.exe"
+      ],
+      "raw_values": [
+        "SharpImpersonation.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "user:",
+        "binary:",
+        "shellcode:"
+      ],
+      "raw_values": [
+        "* user:*",
+        "* binary:*",
+        "* shellcode:*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\SharpImpersonation.exe\" or process.pe.original_file_name:\"SharpImpersonation.exe\") or ((process.command_line:\"* user:*\" and process.command_line:\"* binary:*\") or (process.command_line:\"* user:*\" and process.command_line:\"* shellcode:*\") or (process.command_line like~ (\"* technique:CreateProcessAsUserW*\", \"* technique:ImpersonateLoggedOnuser*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_sharp_impersonation.eql",
+  "metadata": {}
+}

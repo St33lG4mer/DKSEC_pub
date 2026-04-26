@@ -1,0 +1,40 @@
+{
+  "id": "67f021a1-4d46-53bd-8ffd-83659505eddd",
+  "catalog": "sigma",
+  "name": "file_delete_win_unusual_deletion_by_dns_exe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dns.exe"
+      ],
+      "raw_values": [
+        "*\\\\dns.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "dns.log"
+      ],
+      "raw_values": [
+        "*\\\\dns.log"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\dns.exe\" and (not file.path:\"*\\\\dns.log\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_delete/file_delete_win_unusual_deletion_by_dns_exe.eql",
+  "metadata": {}
+}

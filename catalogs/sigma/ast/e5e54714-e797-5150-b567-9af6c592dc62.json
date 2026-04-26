@@ -1,0 +1,42 @@
+{
+  "id": "e5e54714-e797-5150-b567-9af6c592dc62",
+  "catalog": "sigma",
+  "name": "registry_event_esentutl_volume_shadow_copy_service_keys",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "system\\\\currentcontrolset\\\\services\\\\vss",
+        "system\\\\currentcontrolset\\\\services\\\\vss\\\\start"
+      ],
+      "raw_values": [
+        "*System\\\\CurrentControlSet\\\\Services\\\\VSS*",
+        "*System\\\\CurrentControlSet\\\\Services\\\\VSS\\\\Start*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "esentutl.exe"
+      ],
+      "raw_values": [
+        "*esentutl.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*System\\\\CurrentControlSet\\\\Services\\\\VSS*\" and process.executable:\"*esentutl.exe\") and (not registry.path:\"*System\\\\CurrentControlSet\\\\Services\\\\VSS\\\\Start*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_esentutl_volume_shadow_copy_service_keys.eql",
+  "metadata": {}
+}

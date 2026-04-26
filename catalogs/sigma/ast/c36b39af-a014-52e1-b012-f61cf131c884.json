@@ -1,0 +1,29 @@
+{
+  "id": "c36b39af-a014-52e1-b012-f61cf131c884",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hostname_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "hostname.exe"
+      ],
+      "raw_values": [
+        "*\\\\HOSTNAME.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\HOSTNAME.EXE\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hostname_execution.eql",
+  "metadata": {}
+}

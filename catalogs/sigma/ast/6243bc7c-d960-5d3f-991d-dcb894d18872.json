@@ -1,0 +1,45 @@
+{
+  "id": "6243bc7c-d960-5d3f-991d-dcb894d18872",
+  "catalog": "sigma",
+  "name": "image_load_side_load_wazuh",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "libwazuhshared.dll",
+        "libwinpthread-1.dll"
+      ],
+      "raw_values": [
+        "*\\\\libwazuhshared.dll",
+        "*\\\\libwinpthread-1.dll",
+        "C:\\\\Program Files\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\ProgramData\\\\*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "libwinpthread-1.dll"
+      ],
+      "raw_values": [
+        "*\\\\mingw64\\\\bin\\\\libwinpthread-1.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\libwazuhshared.dll\", \"*\\\\libwinpthread-1.dll\")) and (not (file.path like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\"))) and (not ((file.path like~ (\"*\\\\AppData\\\\Local\\\\*\", \"*\\\\ProgramData\\\\*\")) and file.path:\"*\\\\mingw64\\\\bin\\\\libwinpthread-1.dll\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_wazuh.eql",
+  "metadata": {}
+}

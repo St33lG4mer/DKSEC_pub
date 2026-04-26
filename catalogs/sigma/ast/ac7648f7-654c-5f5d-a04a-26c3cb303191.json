@@ -1,0 +1,63 @@
+{
+  "id": "ac7648f7-654c-5f5d-a04a-26c3cb303191",
+  "catalog": "sigma",
+  "name": "proc_creation_win_schtasks_schedule_type_system",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "onlogon",
+        "onstart",
+        "once",
+        "onidle",
+        "nt aut",
+        "system",
+        "highest"
+      ],
+      "raw_values": [
+        "* ONLOGON *",
+        "* ONSTART *",
+        "* ONCE *",
+        "* ONIDLE *",
+        "*NT AUT*",
+        "* SYSTEM*",
+        "*HIGHEST*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe\" or process.pe.original_file_name:\"schtasks.exe\") and (process.command_line like~ (\"* ONLOGON *\", \"* ONSTART *\", \"* ONCE *\", \"* ONIDLE *\")) and (process.command_line like~ (\"*NT AUT*\", \"* SYSTEM*\", \"*HIGHEST*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_schtasks_schedule_type_system.eql",
+  "metadata": {}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "e7c547ce-10f1-53c9-ac57-c523205f2a0a",
+  "catalog": "sigma",
+  "name": "registry_set_lsass_usermode_dumping",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\windows error reporting\\\\localdumps\\\\dumptype",
+        "\\\\software\\\\microsoft\\\\windows\\\\windows error reporting\\\\localdumps\\\\lsass.exe\\\\dumptype"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\LocalDumps\\\\DumpType*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\LocalDumps\\\\lsass.exe\\\\DumpType*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000002)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000002)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\LocalDumps\\\\DumpType*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\LocalDumps\\\\lsass.exe\\\\DumpType*\")) and winlog.event_data.Details:\"DWORD (0x00000002)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_lsass_usermode_dumping.eql",
+  "metadata": {}
+}

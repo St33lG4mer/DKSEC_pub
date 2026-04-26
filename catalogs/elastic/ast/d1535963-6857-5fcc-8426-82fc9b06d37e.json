@@ -1,0 +1,40 @@
+{
+  "id": "d1535963-6857-5fcc-8426-82fc9b06d37e",
+  "catalog": "elastic",
+  "name": "Azure Storage Account Deletions by User",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.storage/storageaccounts/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.STORAGE/STORAGEACCOUNTS/DELETE"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: azure.activitylogs and\n    azure.activitylogs.operation_name: \"MICROSOFT.STORAGE/STORAGEACCOUNTS/DELETE\" and\n    azure.activitylogs.identity.claims_initiated_by_user.name: *\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/impact_azure_storage_account_deletion_multiple.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Storage",
+      "Data Source: Azure",
+      "Data Source: Azure Activity Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

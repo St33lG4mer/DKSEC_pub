@@ -1,0 +1,40 @@
+{
+  "id": "ba87c682-2dc3-5f68-a145-b1ecc9087e01",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dirlister_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dirlister.exe"
+      ],
+      "raw_values": [
+        "DirLister.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dirlister.exe"
+      ],
+      "raw_values": [
+        "*\\\\DirLister.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"DirLister.exe\" or process.executable:\"*\\\\DirLister.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dirlister_execution.eql",
+  "metadata": {}
+}

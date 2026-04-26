@@ -1,0 +1,101 @@
+{
+  "id": "5abbbf19-0914-5a7d-a1ab-da1d65a6558e",
+  "catalog": "elastic",
+  "name": "Suspicious CertUtil Commands",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "decode",
+        "encode",
+        "urlcache",
+        "verifyctl",
+        "encodehex",
+        "decodehex",
+        "exportpfx"
+      ],
+      "raw_values": [
+        "?decode",
+        "?encode",
+        "?urlcache",
+        "?verifyctl",
+        "?encodehex",
+        "?decodehex",
+        "?exportPFX"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (process.name : \"certutil.exe\" or ?process.pe.original_file_name == \"CertUtil.exe\") and\n  process.args : (\"?decode\", \"?encode\", \"?urlcache\", \"?verifyctl\", \"?encodehex\", \"?decodehex\", \"?exportPFX\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_suspicious_certutil_commands.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

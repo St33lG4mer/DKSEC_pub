@@ -1,0 +1,117 @@
+{
+  "id": "f613ad69-f6d3-53dd-804d-68facf126269",
+  "catalog": "elastic",
+  "name": "M365 Azure Monitor Alert Email with Financial or Billing Theme",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "in",
+      "values": [
+        "success",
+        "unknown"
+      ],
+      "raw_values": [
+        "success",
+        "unknown"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "microsoft_exchange_online_message_trace.log"
+      ],
+      "raw_values": [
+        "microsoft_exchange_online_message_trace.log"
+      ]
+    },
+    {
+      "field": "email.from.address",
+      "raw_field": "email.from.address",
+      "operator": "==",
+      "values": [
+        "azure-noreply@microsoft.com"
+      ],
+      "raw_values": [
+        "azure-noreply@microsoft.com"
+      ]
+    },
+    {
+      "field": "email.subject",
+      "raw_field": "email.subject",
+      "operator": "like",
+      "values": [
+        "azure monitor alert",
+        "inv-",
+        "invoice",
+        "payment",
+        "order-",
+        "purchase",
+        "funds",
+        "receipt",
+        "billing",
+        "transaction",
+        "refund",
+        "charge",
+        "subscription",
+        "renewal",
+        "overdue",
+        "past due",
+        "amount due",
+        "wire transfer",
+        "bank account",
+        "credit card",
+        "financial",
+        "remittance"
+      ],
+      "raw_values": [
+        "*Azure Monitor alert*",
+        "*INV-*",
+        "*invoice*",
+        "*payment*",
+        "*order-*",
+        "*purchase*",
+        "*funds*",
+        "*receipt*",
+        "*billing*",
+        "*transaction*",
+        "*refund*",
+        "*charge*",
+        "*subscription*",
+        "*renewal*",
+        "*overdue*",
+        "*past due*",
+        "*amount due*",
+        "*wire transfer*",
+        "*bank account*",
+        "*credit card*",
+        "*financial*",
+        "*remittance*"
+      ]
+    }
+  ],
+  "raw_query": "from logs-microsoft_exchange_online_message_trace.* metadata _id, _version, _index\n\n// Filter for Azure Monitor notification emails with financial/billing themed subjects\n| where data_stream.dataset == \"microsoft_exchange_online_message_trace.log\"\n    and email.from.address == \"azure-noreply@microsoft.com\"\n    and event.outcome in (\"success\", \"unknown\")\n    and email.subject like \"*Azure Monitor alert*\"\n    and (\n        email.subject like \"*INV-*\"\n        or email.subject like \"*invoice*\"\n        or email.subject like \"*payment*\"\n        or email.subject like \"*order-*\"\n        or email.subject like \"*purchase*\"\n        or email.subject like \"*funds*\"\n        or email.subject like \"*receipt*\"\n        or email.subject like \"*billing*\"\n        or email.subject like \"*transaction*\"\n        or email.subject like \"*refund*\"\n        or email.subject like \"*charge*\"\n        or email.subject like \"*subscription*\"\n        or email.subject like \"*renewal*\"\n        or email.subject like \"*overdue*\"\n        or email.subject like \"*past due*\"\n        or email.subject like \"*amount due*\"\n        or email.subject like \"*wire transfer*\"\n        or email.subject like \"*bank account*\"\n        or email.subject like \"*credit card*\"\n        or email.subject like \"*financial*\"\n        or email.subject like \"*remittance*\"\n    )\n\n| keep *\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/microsoft_exchange_online_message_trace/initial_access_azure_monitor_callback_phishing_email.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Email",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft Exchange Online Message Trace",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "id": "2f7951be-ef86-52ea-a052-b4d1ac419800",
+  "catalog": "elastic",
+  "name": "Remote GitHub Actions Runner Registration",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "runner.listener",
+        "runner.listener.exe"
+      ],
+      "raw_values": [
+        "Runner.Listener",
+        "Runner.Listener.exe"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "configure",
+        "--url",
+        "--token"
+      ],
+      "raw_values": [
+        "configure",
+        "--url",
+        "--token"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\n process.name in (\"Runner.Listener\", \"Runner.Listener.exe\") and\n process.args == \"configure\" and process.args == \"--url\" and process.args == \"--token\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_register_github_actions_runner.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: Windows",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Initial Access",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

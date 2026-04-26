@@ -1,0 +1,40 @@
+{
+  "id": "37c358c4-1708-5c81-bdcd-e7c6c53c765e",
+  "catalog": "elastic",
+  "name": "M365 Exchange Malware Filter Rule Modified",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "remove-malwarefilterrule",
+        "disable-malwarefilterrule"
+      ],
+      "raw_values": [
+        "Remove-MalwareFilterRule",
+        "Disable-MalwareFilterRule"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:(\"Remove-MalwareFilterRule\" or \"Disable-MalwareFilterRule\") and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/defense_evasion_exchange_malware_filter_rule_mod.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Use Case: Configuration Audit",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

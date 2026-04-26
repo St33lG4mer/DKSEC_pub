@@ -1,0 +1,83 @@
+{
+  "id": "29e39d9a-c5d0-564a-a091-ab355f48c1f6",
+  "catalog": "sigma",
+  "name": "win_security_aadhealth_svc_agent_regkey_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4656",
+        "4663"
+      ],
+      "raw_values": [
+        "4656",
+        "4663"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "microsoft.identity.health.adfs.diagnosticsagent.exe",
+        "microsoft.identity.health.adfs.insightsservice.exe",
+        "microsoft.identity.health.adfs.monitoringagent.startup.exe",
+        "microsoft.identity.health.adfs.pshsurrogate.exe",
+        "microsoft.identity.health.common.clients.resourcemonitor.exe"
+      ],
+      "raw_values": [
+        "*Microsoft.Identity.Health.Adfs.DiagnosticsAgent.exe*",
+        "*Microsoft.Identity.Health.Adfs.InsightsService.exe*",
+        "*Microsoft.Identity.Health.Adfs.MonitoringAgent.Startup.exe*",
+        "*Microsoft.Identity.Health.Adfs.PshSurrogate.exe*",
+        "*Microsoft.Identity.Health.Common.Clients.ResourceMonitor.exe*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "key"
+      ],
+      "raw_values": [
+        "Key"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\registry\\\\machine\\\\software\\\\microsoft\\\\adhealthagent"
+      ],
+      "raw_values": [
+        "\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\ADHealthAgent"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (((event.code like~ (\"4656\", \"4663\")) and winlog.event_data.ObjectType:\"Key\" and winlog.event_data.ObjectName:\"\\\\REGISTRY\\\\MACHINE\\\\SOFTWARE\\\\Microsoft\\\\ADHealthAgent\") and (not (process.executable like~ (\"*Microsoft.Identity.Health.Adfs.DiagnosticsAgent.exe*\", \"*Microsoft.Identity.Health.Adfs.InsightsService.exe*\", \"*Microsoft.Identity.Health.Adfs.MonitoringAgent.Startup.exe*\", \"*Microsoft.Identity.Health.Adfs.PshSurrogate.exe*\", \"*Microsoft.Identity.Health.Common.Clients.ResourceMonitor.exe*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_aadhealth_svc_agent_regkey_access.eql",
+  "metadata": {}
+}

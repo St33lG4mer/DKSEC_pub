@@ -1,0 +1,42 @@
+{
+  "id": "8069dd6a-f75a-5e78-b1b8-40606ed77fad",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_rurat",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rutserv.exe",
+        "rfusclient.exe"
+      ],
+      "raw_values": [
+        "*\\\\rutserv.exe",
+        "*\\\\rfusclient.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "remote utilities"
+      ],
+      "raw_values": [
+        "Remote Utilities"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.product:\"Remote Utilities\" and (not (process.executable like~ (\"*\\\\rutserv.exe\", \"*\\\\rfusclient.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_rurat.eql",
+  "metadata": {}
+}

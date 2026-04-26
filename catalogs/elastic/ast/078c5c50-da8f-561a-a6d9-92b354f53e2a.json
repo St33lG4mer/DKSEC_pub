@@ -1,0 +1,96 @@
+{
+  "id": "078c5c50-da8f-561a-a6d9-92b354f53e2a",
+  "catalog": "elastic",
+  "name": "Unusual Login via System User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "ssh_login",
+        "user_login"
+      ],
+      "raw_values": [
+        "ssh_login",
+        "user_login"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": ":",
+      "values": [
+        "deamon",
+        "bin",
+        "sys",
+        "games",
+        "man",
+        "mail",
+        "news",
+        "uucp",
+        "proxy",
+        "www-data",
+        "backup",
+        "list",
+        "irc",
+        "gnats",
+        "nobody",
+        "systemd-timesync",
+        "systemd-network",
+        "systemd-resolve",
+        "messagebus",
+        "avahi",
+        "sshd",
+        "dnsmasq"
+      ],
+      "raw_values": [
+        "deamon",
+        "bin",
+        "sys",
+        "games",
+        "man",
+        "lp",
+        "mail",
+        "news",
+        "uucp",
+        "proxy",
+        "www-data",
+        "backup",
+        "list",
+        "irc",
+        "gnats",
+        "nobody",
+        "systemd-timesync",
+        "systemd-network",
+        "systemd-resolve",
+        "messagebus",
+        "avahi",
+        "sshd",
+        "dnsmasq"
+      ]
+    }
+  ],
+  "raw_query": "event.category:authentication and host.os.type:linux and event.action:(\"ssh_login\" or \"user_login\") and\nuser.name:(\n  \"deamon\" or \"bin\" or \"sys\" or \"games\" or \"man\" or \"lp\" or \"mail\" or \"news\" or \"uucp\" or \"proxy\" or \"www-data\" or \"backup\" or\n  \"list\" or \"irc\" or \"gnats\" or \"nobody\" or \"systemd-timesync\" or \"systemd-network\" or \"systemd-resolve\" or \"messagebus\" or\n  \"avahi\" or \"sshd\" or \"dnsmasq\"\n) and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_ssh_via_backdoored_system_user.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion",
+      "Data Source: System",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "id": "80c3b969-157b-5c0c-bc48-c9798d04c1b9",
+  "catalog": "elastic",
+  "name": "Potential Reverse Shell Activity via Terminal",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "tcp",
+        "udp",
+        "127."
+      ],
+      "raw_values": [
+        "*/dev/tcp/*",
+        "*/dev/udp/*",
+        "*zsh/net/tcp*",
+        "*zsh/net/udp*",
+        "*/dev/tcp/sirh_db/*",
+        "*/dev/tcp/remoteiot.com/*",
+        "*dev/tcp/elk.stag.one/*",
+        "*dev/tcp/kafka/*",
+        "*/dev/tcp/$0/$1*",
+        "*/dev/tcp/127.*",
+        "*/dev/udp/127.*",
+        "*/dev/tcp/localhost/*",
+        "*/dev/tcp/itom-vault/*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh",
+        "dash",
+        "zmodload"
+      ],
+      "raw_values": [
+        "sh",
+        "bash",
+        "zsh",
+        "dash",
+        "zmodload"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "timeout"
+      ],
+      "raw_values": [
+        "timeout"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "overlay"
+      ],
+      "raw_values": [
+        "/var/lib/docker/overlay*"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type in (\"start\", \"process_started\") and\n  process.name in (\"sh\", \"bash\", \"zsh\", \"dash\", \"zmodload\") and\n  process.args : (\"*/dev/tcp/*\", \"*/dev/udp/*\", \"*zsh/net/tcp*\", \"*zsh/net/udp*\") and\n\n  /* noisy FPs */\n  not (process.parent.name : \"timeout\" and process.executable : \"/var/lib/docker/overlay*\") and\n  not process.command_line : (\n    \"*/dev/tcp/sirh_db/*\", \"*/dev/tcp/remoteiot.com/*\", \"*dev/tcp/elk.stag.one/*\", \"*dev/tcp/kafka/*\",\n    \"*/dev/tcp/$0/$1*\", \"*/dev/tcp/127.*\", \"*/dev/udp/127.*\", \"*/dev/tcp/localhost/*\", \"*/dev/tcp/itom-vault/*\") and\n  not process.parent.command_line : \"runc init\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_revershell_via_shell_cmd.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

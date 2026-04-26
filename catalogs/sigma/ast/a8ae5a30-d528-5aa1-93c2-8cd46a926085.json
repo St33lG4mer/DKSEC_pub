@@ -1,0 +1,55 @@
+{
+  "id": "a8ae5a30-d528-5aa1-93c2-8cd46a926085",
+  "catalog": "sigma",
+  "name": "proc_creation_win_fsutil_usage",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "deletejournal",
+        "createjournal",
+        "setzerodata"
+      ],
+      "raw_values": [
+        "*deletejournal*",
+        "*createjournal*",
+        "*setZeroData*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "fsutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\fsutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "fsutil.exe"
+      ],
+      "raw_values": [
+        "fsutil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\fsutil.exe\" or process.pe.original_file_name:\"fsutil.exe\") and (process.command_line like~ (\"*deletejournal*\", \"*createjournal*\", \"*setZeroData*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_fsutil_usage.eql",
+  "metadata": {}
+}

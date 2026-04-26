@@ -1,0 +1,40 @@
+{
+  "id": "0780e09d-d96f-59af-92cd-008a6ac9348d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ping_hex_ip",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ping.exe"
+      ],
+      "raw_values": [
+        "*\\\\ping.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['0x[a-fa-f0-9]{8}']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['0x[a-fA-F0-9]{8}']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\ping.exe\" and process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['0x[a-fA-F0-9]{8}']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ping_hex_ip.eql",
+  "metadata": {}
+}

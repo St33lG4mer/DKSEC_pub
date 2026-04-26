@@ -1,0 +1,31 @@
+{
+  "id": "6e658d3b-57e4-55fe-a6fa-804261edcc17",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_mega_nz",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        "mega.co.nz",
+        "mega.nz"
+      ],
+      "raw_values": [
+        "*mega.co.nz",
+        "*mega.nz"
+      ]
+    }
+  ],
+  "raw_query": "any where network.direction:\"true\" and (destination.domain like~ (\"*mega.co.nz\", \"*mega.nz\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_mega_nz.eql",
+  "metadata": {}
+}

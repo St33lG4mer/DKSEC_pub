@@ -1,0 +1,33 @@
+{
+  "id": "405e7f0c-7d67-5250-b5a3-1ef8d3231e06",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_outlook_homepage",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\office\\\\",
+        "\\\\outlook\\\\webview\\\\",
+        "\\\\url"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Outlook\\\\WebView\\\\*",
+        "*\\\\URL"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\Software\\\\Microsoft\\\\Office\\\\*\" and registry.path:\"*\\\\Outlook\\\\WebView\\\\*\") and registry.path:\"*\\\\URL\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_outlook_homepage.eql",
+  "metadata": {}
+}

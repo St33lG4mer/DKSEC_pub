@@ -1,0 +1,29 @@
+{
+  "id": "f89b6f37-a42a-5e57-a0e9-ca2d1e8f2164",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cloudflared_portable_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cloudflared.exe"
+      ],
+      "raw_values": [
+        "*\\\\cloudflared.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\cloudflared.exe\" and (not (process.executable like~ (\"*:\\\\Program Files (x86)\\\\cloudflared\\\\*\", \"*:\\\\Program Files\\\\cloudflared\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cloudflared_portable_execution.eql",
+  "metadata": {}
+}

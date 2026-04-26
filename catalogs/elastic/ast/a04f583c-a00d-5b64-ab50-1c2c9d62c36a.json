@@ -1,0 +1,72 @@
+{
+  "id": "a04f583c-a00d-5b64-ab50-1c2c9d62c36a",
+  "catalog": "elastic",
+  "name": "User Added to the Admin Group",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "configuration"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "od_group_add"
+      ],
+      "raw_values": [
+        "od_group_add"
+      ]
+    },
+    {
+      "field": "group.name",
+      "raw_field": "group.name",
+      "operator": ":",
+      "values": [
+        "admin"
+      ],
+      "raw_values": [
+        "admin"
+      ]
+    }
+  ],
+  "raw_query": "configuration where host.os.type == \"macos\" and event.type == \"change\" and\n  event.action == \"od_group_add\" and group.name:\"admin\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/privilege_escalation_user_added_to_admin_group.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Jamf Protect",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

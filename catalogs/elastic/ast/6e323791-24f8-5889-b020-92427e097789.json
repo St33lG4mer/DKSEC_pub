@@ -1,0 +1,52 @@
+{
+  "id": "6e323791-24f8-5889-b020-92427e097789",
+  "catalog": "elastic",
+  "name": "Okta Multiple OS Names Detected for a Single DT Hash",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "user.authentication.verify",
+        "user.authentication.auth_via_mfa"
+      ],
+      "raw_values": [
+        "user.authentication.verify",
+        "user.authentication.auth_via_mfa"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"okta.system\"\n    and not okta.debug_context.debug_data.dt_hash: \"-\"\n    and user_agent.os.name: *\n    and event.action: (\n        \"user.authentication.verify\" or\n        \"user.authentication.auth_via_mfa\"\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/credential_access_multiple_user_agent_os_authentication.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Identity",
+      "Data Source: Okta",
+      "Data Source: Okta System Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

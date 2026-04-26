@@ -1,0 +1,68 @@
+{
+  "id": "7fabaae7-188d-5c06-85bc-c2c059b9d3df",
+  "catalog": "sigma",
+  "name": "win_security_invoke_obfuscation_via_compress_services_security",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": "like~",
+      "values": [
+        "system.io.compression.deflatestream",
+        "system.io.streamreader"
+      ],
+      "raw_values": [
+        "*system.io.compression.deflatestream*",
+        "*system.io.streamreader*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "new-object",
+        "text.encoding]::ascii",
+        "readtoend"
+      ],
+      "raw_values": [
+        "*new-object*",
+        "*text.encoding]::ascii*",
+        "*readtoend*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (winlog.event_data.ServiceFileName:\"*new-object*\" and winlog.event_data.ServiceFileName:\"*text.encoding]::ascii*\" and winlog.event_data.ServiceFileName:\"*readtoend*\") and (winlog.event_data.ServiceFileName like~ (\"*system.io.compression.deflatestream*\", \"*system.io.streamreader*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_compress_services_security.eql",
+  "metadata": {}
+}

@@ -1,0 +1,32 @@
+{
+  "id": "baffb500-0d54-50e7-97ed-53611d5685a6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_ie_security_zone_protocol_defaults_downgrade",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "protocoldefaults",
+        "http"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\ZoneMap\\\\ProtocolDefaults*",
+        "*http*",
+        "* 0*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Internet Settings\\\\ZoneMap\\\\ProtocolDefaults*\" and process.command_line:\"*http*\" and process.command_line:\"* 0*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_ie_security_zone_protocol_defaults_downgrade.eql",
+  "metadata": {}
+}

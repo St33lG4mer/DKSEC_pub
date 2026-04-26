@@ -1,0 +1,44 @@
+{
+  "id": "98f17e24-6c4c-51bc-b270-d292803703ec",
+  "catalog": "sigma",
+  "name": "registry_set_terminal_server_suspicious",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\fdenytsconnections",
+        "\\\\fsinglesessionperuser",
+        "\\\\userauthentication"
+      ],
+      "raw_values": [
+        "*\\\\fDenyTSConnections",
+        "*\\\\fSingleSessionPerUser",
+        "*\\\\UserAuthentication"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\fDenyTSConnections\", \"*\\\\fSingleSessionPerUser\", \"*\\\\UserAuthentication\")) and winlog.event_data.Details:\"DWORD (0x00000000)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_terminal_server_suspicious.eql",
+  "metadata": {}
+}

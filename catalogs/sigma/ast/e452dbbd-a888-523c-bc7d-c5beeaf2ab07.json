@@ -1,0 +1,42 @@
+{
+  "id": "e452dbbd-a888-523c-bc7d-c5beeaf2ab07",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_dropbox_api",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        "api.dropboxapi.com",
+        "content.dropboxapi.com"
+      ],
+      "raw_values": [
+        "*api.dropboxapi.com",
+        "*content.dropboxapi.com"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dropbox"
+      ],
+      "raw_values": [
+        "*\\\\Dropbox*"
+      ]
+    }
+  ],
+  "raw_query": "any where (network.direction:\"true\" and (destination.domain like~ (\"*api.dropboxapi.com\", \"*content.dropboxapi.com\"))) and (not process.executable:\"*\\\\Dropbox*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_dropbox_api.eql",
+  "metadata": {}
+}

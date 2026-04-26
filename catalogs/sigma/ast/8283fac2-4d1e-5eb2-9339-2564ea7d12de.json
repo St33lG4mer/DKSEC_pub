@@ -1,0 +1,55 @@
+{
+  "id": "8283fac2-4d1e-5eb2-9339-2564ea7d12de",
+  "catalog": "sigma",
+  "name": "proc_creation_win_whoami_execution_from_high_priv_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori",
+        "trustedinstaller"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*",
+        "*TrustedInstaller*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "whoami.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\whoami.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"whoami.exe\" or process.executable:\"*\\\\whoami.exe\") and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\", \"*TrustedInstaller*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_whoami_execution_from_high_priv_process.eql",
+  "metadata": {}
+}

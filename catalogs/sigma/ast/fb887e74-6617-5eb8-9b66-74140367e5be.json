@@ -1,0 +1,57 @@
+{
+  "id": "fb887e74-6617-5eb8-9b66-74140367e5be",
+  "catalog": "sigma",
+  "name": "proc_creation_win_createdump_lolbin_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--full",
+        "--name",
+        ".dmp"
+      ],
+      "raw_values": [
+        "* -u *",
+        "* --full *",
+        "* -f *",
+        "* --name *",
+        "*.dmp *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "createdump.exe"
+      ],
+      "raw_values": [
+        "*\\\\createdump.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "fx_ver_internalname_str"
+      ],
+      "raw_values": [
+        "FX_VER_INTERNALNAME_STR"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\createdump.exe\" or process.pe.original_file_name:\"FX_VER_INTERNALNAME_STR\") and (process.command_line like~ (\"* -u *\", \"* --full *\", \"* -f *\", \"* --name *\", \"*.dmp *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_createdump_lolbin_execution.eql",
+  "metadata": {}
+}

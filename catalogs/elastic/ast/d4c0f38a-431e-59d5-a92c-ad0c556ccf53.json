@@ -1,0 +1,38 @@
+{
+  "id": "d4c0f38a-431e-59d5-a92c-ad0c556ccf53",
+  "catalog": "elastic",
+  "name": "Azure Event Hub Deleted",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.eventhub/namespaces/eventhubs/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.EVENTHUB/NAMESPACES/EVENTHUBS/DELETE"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.EVENTHUB/NAMESPACES/EVENTHUBS/DELETE\" and event.outcome:(Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/defense_evasion_event_hub_deletion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Log Auditing",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

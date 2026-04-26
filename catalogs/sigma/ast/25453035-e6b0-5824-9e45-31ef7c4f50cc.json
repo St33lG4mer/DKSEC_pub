@@ -1,0 +1,29 @@
+{
+  "id": "25453035-e6b0-5824-9e45-31ef7c4f50cc",
+  "catalog": "sigma",
+  "name": "registry_event_apt_leviathan",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\ntkd"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\ntkd*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\ntkd*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/TA/Leviathan/registry_event_apt_leviathan.eql",
+  "metadata": {}
+}

@@ -1,0 +1,57 @@
+{
+  "id": "0ba30a3b-6f57-5759-adfa-afcf7cb3c24d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wscript_cscript_dropper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wscript.exe",
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".js",
+        ".jse",
+        ".vba",
+        ".vbe",
+        ".vbs",
+        ".wsf"
+      ],
+      "raw_values": [
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Tmp\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*.js*",
+        "*.jse*",
+        "*.vba*",
+        "*.vbe*",
+        "*.vbs*",
+        "*.wsf*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\wscript.exe\", \"*\\\\cscript.exe\")) and (process.command_line like~ (\"*:\\\\Temp\\\\*\", \"*:\\\\Tmp\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\")) and (process.command_line like~ (\"*.js*\", \"*.jse*\", \"*.vba*\", \"*.vbe*\", \"*.vbs*\", \"*.wsf*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wscript_cscript_dropper.eql",
+  "metadata": {}
+}

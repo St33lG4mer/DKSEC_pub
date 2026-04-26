@@ -1,0 +1,84 @@
+{
+  "id": "f97941f1-ace4-5726-b3b1-617938981b24",
+  "catalog": "elastic",
+  "name": "Potential NetNTLMv1 Downgrade Attack",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": "in",
+      "values": [
+        "0x00000002",
+        "0x00000001",
+        "0x00000000"
+      ],
+      "raw_values": [
+        "2",
+        "1",
+        "0",
+        "0x00000002",
+        "0x00000001",
+        "0x00000000"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": "==",
+      "values": [
+        "lmcompatibilitylevel"
+      ],
+      "raw_values": [
+        "LmCompatibilityLevel"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.action != \"deletion\" and\n registry.value == \"LmCompatibilityLevel\" and registry.data.strings in (\"2\", \"1\", \"0\", \"0x00000002\", \"0x00000001\", \"0x00000000\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_ntlm_downgrade.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Sysmon",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

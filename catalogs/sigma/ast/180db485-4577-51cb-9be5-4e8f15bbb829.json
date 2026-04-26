@@ -1,0 +1,40 @@
+{
+  "id": "180db485-4577-51cb-9be5-4e8f15bbb829",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_runscripthelper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "runscripthelper.exe"
+      ],
+      "raw_values": [
+        "*\\\\Runscripthelper.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "surfacecheck"
+      ],
+      "raw_values": [
+        "*surfacecheck*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\Runscripthelper.exe\" and process.command_line:\"*surfacecheck*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_runscripthelper.eql",
+  "metadata": {}
+}

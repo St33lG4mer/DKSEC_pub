@@ -1,0 +1,17 @@
+{
+  "id": "2c737eb1-f2f6-518c-ba4f-89d2403f5f31",
+  "catalog": "sigma",
+  "name": "pipe_created_hktl_coercedpotato",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [],
+  "raw_query": "any where file.name:\"*\\\\coerced\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_hktl_coercedpotato.eql",
+  "metadata": {}
+}

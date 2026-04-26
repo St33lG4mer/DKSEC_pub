@@ -1,0 +1,249 @@
+{
+  "id": "9e0dd836-a856-5611-93db-e6912c836ecf",
+  "catalog": "elastic",
+  "name": "Unusual Command Execution from Web Server Parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "apache",
+        "nginx",
+        "apache2",
+        "httpd",
+        "lighttpd",
+        "caddy",
+        "mongrel_rails",
+        "gunicorn",
+        "uwsgi",
+        "openresty",
+        "cherokee",
+        "h2o",
+        "resin",
+        "puma",
+        "unicorn",
+        "traefik",
+        "tornado",
+        "hypercorn",
+        "daphne",
+        "twistd",
+        "yaws",
+        "webfsd",
+        "httpd.worker",
+        "flask",
+        "rails",
+        "mongrel",
+        "php-cgi",
+        "php-fcgi",
+        "php-cgi.cagefs",
+        "catalina.sh",
+        "hiawatha",
+        "lswsctrl"
+      ],
+      "raw_values": [
+        "apache",
+        "nginx",
+        "apache2",
+        "httpd",
+        "lighttpd",
+        "caddy",
+        "mongrel_rails",
+        "gunicorn",
+        "uwsgi",
+        "openresty",
+        "cherokee",
+        "h2o",
+        "resin",
+        "puma",
+        "unicorn",
+        "traefik",
+        "tornado",
+        "hypercorn",
+        "daphne",
+        "twistd",
+        "yaws",
+        "webfsd",
+        "httpd.worker",
+        "flask",
+        "rails",
+        "mongrel",
+        "php-cgi",
+        "php-fcgi",
+        "php-cgi.cagefs",
+        "catalina.sh",
+        "hiawatha",
+        "lswsctrl"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "in",
+      "values": [
+        "apache",
+        "www-data",
+        "httpd",
+        "nginx",
+        "lighttpd",
+        "tomcat",
+        "tomcat8",
+        "tomcat9"
+      ],
+      "raw_values": [
+        "apache",
+        "www-data",
+        "httpd",
+        "nginx",
+        "lighttpd",
+        "tomcat",
+        "tomcat8",
+        "tomcat9"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "in",
+      "values": [
+        "498"
+      ],
+      "raw_values": [
+        "33",
+        "498",
+        "48"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like",
+      "values": [
+        "php-fpm"
+      ],
+      "raw_values": [
+        "php-fpm*",
+        "/vscode/vscode-server/*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "java",
+        "xfce4-terminal"
+      ],
+      "raw_values": [
+        "java",
+        "/usr/bin/xfce4-terminal"
+      ]
+    },
+    {
+      "field": "process.parent.working_directory",
+      "raw_field": "process.parent.working_directory",
+      "operator": "like",
+      "values": [
+        "/u0?/",
+        "/var/www/"
+      ],
+      "raw_values": [
+        "/u0?/*",
+        "/var/www/*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "like",
+      "values": [
+        "/home/",
+        "/vscode/vscode-server/"
+      ],
+      "raw_values": [
+        "/home/*",
+        "/vscode/vscode-server/*"
+      ]
+    }
+  ],
+  "raw_query": "from logs-endpoint.events.process-* metadata _id, _index, _version\n| mv_expand event.action\n| where\n    host.os.type == \"linux\" and\n    event.type == \"start\" and\n    event.action == \"exec\" and (\n      (\n        process.parent.name in (\n            \"apache\", \"nginx\", \"apache2\", \"httpd\", \"lighttpd\", \"caddy\", \"mongrel_rails\", \"gunicorn\",\n            \"uwsgi\", \"openresty\", \"cherokee\", \"h2o\", \"resin\", \"puma\", \"unicorn\", \"traefik\", \"tornado\", \"hypercorn\",\n            \"daphne\", \"twistd\", \"yaws\", \"webfsd\", \"httpd.worker\", \"flask\", \"rails\", \"mongrel\", \"php-cgi\",\n            \"php-fcgi\", \"php-cgi.cagefs\", \"catalina.sh\", \"hiawatha\", \"lswsctrl\"\n        ) or\n        process.parent.name like \"php-fpm*\" or\n        user.name in (\"apache\", \"www-data\", \"httpd\", \"nginx\", \"lighttpd\", \"tomcat\", \"tomcat8\", \"tomcat9\") or\n        user.id in (\"33\", \"498\", \"48\") or\n        (process.parent.name == \"java\" and process.parent.working_directory like \"/u0?/*\") or\n        process.parent.working_directory like \"/var/www/*\"\n      )\n    ) and\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") and\n    process.command_line like \"* -c *\" and not (\n        process.working_directory like \"/home/*\" or\n        process.working_directory == \"/\" or\n        process.working_directory like \"/vscode/vscode-server/*\" or\n        process.parent.executable like \"/vscode/vscode-server/*\" or\n        process.parent.executable == \"/usr/bin/xfce4-terminal\"\n    )\n\n| keep\n    @timestamp,\n    _id,\n    _index,\n    _version,\n    host.os.type,\n    event.type,\n    event.action,\n    process.parent.name,\n    user.name,\n    user.id,\n    process.working_directory,\n    process.parent.working_directory,\n    process.name,\n    process.executable,\n    process.command_line,\n    process.parent.executable,\n    agent.id,\n    host.name,\n    data_stream.dataset,\n    data_stream.namespace\n\n| stats\n    Esql.event_count = count(),\n    Esql.agent_id_count_distinct = count_distinct(agent.id),\n    Esql.host_name_values = values(host.name),\n    Esql.agent_id_values = values(agent.id),\n    Esql.data_stream_dataset_values = values(data_stream.dataset),\n    Esql.data_stream_namespace_values = values(data_stream.namespace)\n\n  by process.command_line, process.working_directory, process.parent.executable\n\n| where\n    Esql.agent_id_count_distinct == 1 and\n    Esql.event_count < 5\n| sort Esql.event_count asc\n\n// Extract unique values to ECS fields for alerts exclusion\n| eval agent.id = mv_min(Esql.agent_id_values),\n       host.name = mv_min(Esql.host_name_values)\n\n| keep agent.id, host.name, process.command_line, process.working_directory, process.parent.executable, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_web_server_sus_command_execution.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Execution",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

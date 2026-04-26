@@ -1,0 +1,96 @@
+{
+  "id": "da8c6e84-0579-535d-82ce-b3998d33215f",
+  "catalog": "elastic",
+  "name": "M365 Exchange MFA Notification Email Deleted or Moved",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "web"
+  ],
+  "conditions": [
+    {
+      "field": "o365.audit.affecteditems.subject",
+      "raw_field": "o365.audit.AffectedItems.Subject",
+      "operator": "like~",
+      "values": [
+        "sign-in",
+        "sign in",
+        "log-in",
+        "log in",
+        "logon"
+      ],
+      "raw_values": [
+        "*sign-in*",
+        "*sign in*",
+        "*log-in*",
+        "*log in*",
+        "*logon*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "softdelete",
+        "harddelete",
+        "movetodeleteditems"
+      ],
+      "raw_values": [
+        "SoftDelete",
+        "HardDelete",
+        "MoveToDeletedItems"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "exchange"
+      ],
+      "raw_values": [
+        "Exchange"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "web where data_stream.dataset == \"o365.audit\" and\n    event.provider == \"Exchange\" and\n    event.action in (\"SoftDelete\", \"HardDelete\", \"MoveToDeletedItems\") and\n    event.outcome == \"success\" and\n    (\n        o365.audit.AffectedItems.Subject like~ (\n            /* new + (mfa|multi-|factor|method|device|security) */\n            \"*new mfa*\", \"*new multi*\", \"*new factor*\", \"*new method*\", \"*new device*\", \"*new security*\",\n            /* 2fa and 2-step */\n            \"*2fa*\", \"*2-step*\",\n            /* mfa + action verbs */\n            \"*mfa enroll*\", \"*mfa register*\", \"*mfa added*\", \"*mfa change*\",\n            \"*mfa verify*\", \"*mfa update*\", \"*mfa activate*\", \"*mfa configure*\", \"*mfa setup*\",\n            /* factor + action verbs */\n            \"*factor enroll*\", \"*factor register*\", \"*factor added*\", \"*factor change*\",\n            \"*factor verify*\", \"*factor update*\", \"*factor activate*\", \"*factor configure*\", \"*factor setup*\",\n            /* method + action verbs */\n            \"*method enroll*\", \"*method register*\", \"*method added*\", \"*method change*\",\n            \"*method verify*\", \"*method update*\", \"*method activate*\", \"*method configure*\", \"*method setup*\",\n            /* device + action verbs */\n            \"*device enroll*\", \"*device register*\", \"*device added*\", \"*device change*\",\n            \"*device verify*\", \"*device update*\", \"*device activate*\", \"*device configure*\", \"*device setup*\",\n            /* security + action verbs */\n            \"*security enroll*\", \"*security register*\", \"*security added*\", \"*security change*\",\n            \"*security verify*\", \"*security update*\", \"*security activate*\", \"*security configure*\", \"*security setup*\",\n            /* Additional security notifications */\n            \"*authenticator*\", \"*verification code*\", \"*security info*\", \"*security alert*\"\n        ) and not\n        o365.audit.AffectedItems.Subject like~ (\"*sign-in*\", \"*sign in*\", \"*log-in*\", \"*log in*\", \"*logon*\")\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/defense_evasion_mfa_notification_email_deleted.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: SaaS",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

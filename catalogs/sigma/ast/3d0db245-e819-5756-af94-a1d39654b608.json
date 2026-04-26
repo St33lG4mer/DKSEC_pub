@@ -1,0 +1,29 @@
+{
+  "id": "3d0db245-e819-5756-af94-a1d39654b608",
+  "catalog": "sigma",
+  "name": "file_event_win_cve_2021_44077_poc_default_files",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\ManageEngine\\\\SupportCenterPlus\\\\bin\\\\msiexec.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\ManageEngine\\\\SupportCenterPlus\\\\bin\\\\msiexec.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-44077/file_event_win_cve_2021_44077_poc_default_files.eql",
+  "metadata": {}
+}

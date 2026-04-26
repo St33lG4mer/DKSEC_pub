@@ -1,0 +1,44 @@
+{
+  "id": "3989ff67-c509-52f2-b10f-f9f579cfeb58",
+  "catalog": "sigma",
+  "name": "proc_creation_win_instalutil_no_log_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "installutil.exe",
+        "framework"
+      ],
+      "raw_values": [
+        "*\\\\InstallUtil.exe",
+        "*Microsoft.NET\\\\Framework*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "logfile=",
+        "logtoconsole=false"
+      ],
+      "raw_values": [
+        "*/logfile= *",
+        "*/LogToConsole=false*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\InstallUtil.exe\" and process.executable:\"*Microsoft.NET\\\\Framework*\" and (process.command_line:\"*/logfile= *\" and process.command_line:\"*/LogToConsole=false*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_instalutil_no_log_execution.eql",
+  "metadata": {}
+}

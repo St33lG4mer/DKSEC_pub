@@ -1,0 +1,74 @@
+{
+  "id": "6931071b-d703-5282-9d88-b2b7b65ffb84",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_notion_api_susp_communication",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "chrome.exe",
+        "firefox.exe",
+        "msedge.exe",
+        "msedgewebview2.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+        "C:\\\\Program Files\\\\Mozilla Firefox\\\\firefox.exe",
+        "*\\\\msedge.exe",
+        "*\\\\msedgewebview2.exe"
+      ]
+    },
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        "api.notion.com"
+      ],
+      "raw_values": [
+        "*api.notion.com*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "notion.exe",
+        "brave.exe",
+        "maxthon.exe",
+        "microsoftedge.exe",
+        "opera.exe",
+        "safari.exe",
+        "seamonkey.exe",
+        "vivaldi.exe",
+        "whale.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Programs\\\\Notion\\\\Notion.exe",
+        "*\\\\brave.exe",
+        "*\\\\maxthon.exe",
+        "C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\*",
+        "*\\\\WindowsApps\\\\MicrosoftEdge.exe",
+        "*\\\\opera.exe",
+        "*\\\\safari.exe",
+        "*\\\\seamonkey.exe",
+        "*\\\\vivaldi.exe",
+        "*\\\\whale.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where destination.domain:\"*api.notion.com*\" and (not (process.executable:\"*\\\\AppData\\\\Local\\\\Programs\\\\Notion\\\\Notion.exe\" or process.executable:\"*\\\\brave.exe\" or (process.executable like~ (\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\", \"C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\")) or (process.executable like~ (\"C:\\\\Program Files\\\\Mozilla Firefox\\\\firefox.exe\", \"C:\\\\Program Files (x86)\\\\Mozilla Firefox\\\\firefox.exe\")) or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Internet Explorer\\\\iexplore.exe\", \"C:\\\\Program Files\\\\Internet Explorer\\\\iexplore.exe\")) or process.executable:\"*\\\\maxthon.exe\" or (process.executable:\"C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\*\" or process.executable:\"*\\\\WindowsApps\\\\MicrosoftEdge.exe\" or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\", \"C:\\\\Program Files\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\"))) or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeCore\\\\*\", \"C:\\\\Program Files\\\\Microsoft\\\\EdgeCore\\\\*\")) and (process.executable like~ (\"*\\\\msedge.exe\", \"*\\\\msedgewebview2.exe\"))) or process.executable:\"*\\\\opera.exe\" or process.executable:\"*\\\\safari.exe\" or process.executable:\"*\\\\seamonkey.exe\" or process.executable:\"*\\\\vivaldi.exe\" or process.executable:\"*\\\\whale.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_notion_api_susp_communication.eql",
+  "metadata": {}
+}

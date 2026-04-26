@@ -1,0 +1,51 @@
+{
+  "id": "c2670db4-816d-590f-a0c0-2f41523aa4dc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_werfault_reflect_debugger_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*\\\\WerFault.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "WerFault.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-pr"
+      ],
+      "raw_values": [
+        "* -pr *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\WerFault.exe\" or process.pe.original_file_name:\"WerFault.exe\") and process.command_line:\"* -pr *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_werfault_reflect_debugger_exec.eql",
+  "metadata": {}
+}

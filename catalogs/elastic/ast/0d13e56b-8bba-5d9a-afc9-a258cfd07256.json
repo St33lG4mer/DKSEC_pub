@@ -1,0 +1,141 @@
+{
+  "id": "0d13e56b-8bba-5d9a-afc9-a258cfd07256",
+  "catalog": "elastic",
+  "name": "AWS Discovery API Calls via CLI from a Single Resource",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "in",
+      "values": [
+        "iam.amazonaws.com",
+        "ec2.amazonaws.com",
+        "s3.amazonaws.com",
+        "rds.amazonaws.com",
+        "lambda.amazonaws.com",
+        "dynamodb.amazonaws.com",
+        "kms.amazonaws.com",
+        "cloudfront.amazonaws.com",
+        "elasticloadbalancing.amazonaws.com",
+        "cloudtrail.amazonaws.com",
+        "sts.amazonaws.com",
+        "ses.amazonaws.com",
+        "organizations.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com",
+        "ec2.amazonaws.com",
+        "s3.amazonaws.com",
+        "rds.amazonaws.com",
+        "lambda.amazonaws.com",
+        "dynamodb.amazonaws.com",
+        "kms.amazonaws.com",
+        "cloudfront.amazonaws.com",
+        "elasticloadbalancing.amazonaws.com",
+        "cloudtrail.amazonaws.com",
+        "sts.amazonaws.com",
+        "ses.amazonaws.com",
+        "organizations.amazonaws.com"
+      ]
+    },
+    {
+      "field": "true",
+      "raw_field": "true",
+      "operator": "in",
+      "values": [
+        "describe"
+      ],
+      "raw_values": [
+        "Describe"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": "!=",
+      "values": [
+        "awsservice"
+      ],
+      "raw_values": [
+        "AWSService"
+      ]
+    },
+    {
+      "field": "user_agent.name",
+      "raw_field": "user_agent.name",
+      "operator": "==",
+      "values": [
+        "aws-cli"
+      ],
+      "raw_values": [
+        "aws-cli"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "describecapacityreservations"
+      ],
+      "raw_values": [
+        "DescribeCapacityReservations"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "!=",
+      "values": [
+        "awsserviceroleforconfig"
+      ],
+      "raw_values": [
+        "AWSServiceRoleForConfig"
+      ]
+    }
+  ],
+  "raw_query": "from logs-aws.cloudtrail-* metadata _id, _version, _index\n// create time window buckets of 10 seconds\n| eval Esql.time_window_date_trunc = date_trunc(10 seconds, @timestamp)\n\n| where\n    data_stream.dataset == \"aws.cloudtrail\"\n    \n    // exclude service account and console behavior\n    and source.ip IS NOT NULL\n    and aws.cloudtrail.session_credential_from_console IS NULL\n    and event.provider in (\n      \"iam.amazonaws.com\",\n      \"ec2.amazonaws.com\",\n      \"s3.amazonaws.com\",\n      \"rds.amazonaws.com\",\n      \"lambda.amazonaws.com\",\n      \"dynamodb.amazonaws.com\",\n      \"kms.amazonaws.com\",\n      \"cloudfront.amazonaws.com\",\n      \"elasticloadbalancing.amazonaws.com\", \n      \"cloudtrail.amazonaws.com\",\n      \"sts.amazonaws.com\",\n      \"ses.amazonaws.com\",\n      \"organizations.amazonaws.com\"\n    )\n    // ignore AWS service actions\n    and aws.cloudtrail.user_identity.type != \"AWSService\"\n    // filter for aws-cli specifically\n    and user_agent.name == \"aws-cli\"\n    // exclude DescribeCapacityReservations events related to AWS Config\n    and event.action != \"DescribeCapacityReservations\"\n    and user.name != \"AWSServiceRoleForConfig\"\n\n// filter for Describe, Get, List, and Generate API calls\n| where true in (\n    starts_with(event.action, \"Describe\"),\n    starts_with(event.action, \"Get\"),\n    starts_with(event.action, \"List\"),\n    starts_with(event.action, \"Generate\")\n)\n\n// keep relevant fields (preserving ECS fields and computed time window)\n| keep \n    @timestamp, \n    Esql.time_window_date_trunc, \n    event.action, \n    aws.cloudtrail.user_identity.arn, \n    aws.cloudtrail.user_identity.type, \n    aws.cloudtrail.user_identity.access_key_id, \n    source.ip, \n    cloud.account.id, \n    event.provider, \n    user_agent.name, \n    source.as.organization.name, \n    cloud.region,\n    data_stream.namespace\n\n// count the number of unique API calls per time window and actor\n| stats\n    Esql.event_action_count_distinct = count_distinct(event.action),\n    Esql.event_action_values = VALUES(event.action),\n    Esql.event_timestamp_values = VALUES(@timestamp),\n    Esql.aws_cloudtrail_user_identity_type_values = VALUES(aws.cloudtrail.user_identity.type),\n    Esql.aws_cloudtrail_user_identity_access_key_id_values = VALUES(aws.cloudtrail.user_identity.access_key_id),\n    Esql.source_ip_values = VALUES(source.ip),\n    Esql.cloud_account_id_values = VALUES(cloud.account.id),\n    Esql.event_provider_values = VALUES(event.provider),\n    Esql.user_agent_name_values = VALUES(user_agent.name),\n    Esql.source_as_organization_name_values = VALUES(source.as.organization.name),\n    Esql.cloud_region_values = VALUES(cloud.region),\n    Esql.data_stream_namespace_values = VALUES(data_stream.namespace)\n  by Esql.time_window_date_trunc, aws.cloudtrail.user_identity.arn\n\n// filter for more than 5 unique API calls per 10s window\n| where Esql.event_action_count_distinct > 5\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/discovery_multiple_discovery_api_calls_via_cli.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: AWS EC2",
+      "Data Source: AWS IAM",
+      "Data Source: AWS S3",
+      "Data Source: AWS Cloudtrail",
+      "Data Source: AWS RDS",
+      "Data Source: AWS Lambda",
+      "Data Source: AWS STS",
+      "Data Source: AWS KMS",
+      "Data Source: AWS SES",
+      "Data Source: AWS Cloudfront",
+      "Data Source: AWS DynamoDB",
+      "Data Source: AWS Elastic Load Balancing",
+      "Data Source: AWS Organizations",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

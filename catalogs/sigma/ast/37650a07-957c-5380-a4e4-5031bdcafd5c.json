@@ -1,0 +1,31 @@
+{
+  "id": "37650a07-957c-5380-a4e4-5031bdcafd5c",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_snake_installers_ioc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "jpsetup.exe",
+        "jpinst.exe"
+      ],
+      "raw_values": [
+        "*\\\\jpsetup.exe",
+        "*\\\\jpinst.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*\\\\jpsetup.exe\", \"*\\\\jpinst.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/SNAKE/file_event_win_malware_snake_installers_ioc.eql",
+  "metadata": {}
+}

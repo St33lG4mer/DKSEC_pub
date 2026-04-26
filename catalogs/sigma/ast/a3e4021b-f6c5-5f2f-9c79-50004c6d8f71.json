@@ -1,0 +1,29 @@
+{
+  "id": "a3e4021b-f6c5-5f2f-9c79-50004c6d8f71",
+  "catalog": "sigma",
+  "name": "file_event_win_wmi_persistence_script_event_consumer_write",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "scrcons.exe"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\system32\\\\wbem\\\\scrcons.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"C:\\\\WINDOWS\\\\system32\\\\wbem\\\\scrcons.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_wmi_persistence_script_event_consumer_write.eql",
+  "metadata": {}
+}

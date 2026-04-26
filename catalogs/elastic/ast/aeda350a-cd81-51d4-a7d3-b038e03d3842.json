@@ -1,0 +1,229 @@
+{
+  "id": "aeda350a-cd81-51d4-a7d3-b038e03d3842",
+  "catalog": "elastic",
+  "name": "Suspicious Network Tool Launch Detected via Defend for Containers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-*z",
+        "localhost",
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "-*z*",
+        "localhost",
+        "127.0.0.1"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "nc.traditional",
+        "ncat",
+        "netcat",
+        "nmap",
+        "tcpdump",
+        "tshark",
+        "ngrep",
+        "telnet",
+        "mitmproxy",
+        "socat",
+        "zmap",
+        "masscan",
+        "zgrab",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "nc.traditional",
+        "nc",
+        "ncat",
+        "netcat",
+        "nmap",
+        "tcpdump",
+        "tshark",
+        "ngrep",
+        "telnet",
+        "mitmproxy",
+        "socat",
+        "zmap",
+        "masscan",
+        "zgrab",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "nc.traditional",
+        "ncat",
+        "netcat",
+        "nmap",
+        "tcpdump",
+        "tshark",
+        "ngrep",
+        "telnet",
+        "mitmproxy",
+        "socat",
+        "zmap",
+        "masscan",
+        "zgrab",
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "nc.traditional",
+        "/bin/nc.traditional",
+        "/usr/bin/nc.traditional",
+        "/usr/local/bin/nc.traditional",
+        "nc",
+        "/bin/nc",
+        "/usr/bin/nc",
+        "/usr/local/bin/nc",
+        "ncat",
+        "/bin/ncat",
+        "/usr/bin/ncat",
+        "/usr/local/bin/ncat",
+        "netcat",
+        "/bin/netcat",
+        "/usr/bin/netcat",
+        "/usr/local/bin/netcat",
+        "nmap",
+        "/bin/nmap",
+        "/usr/bin/nmap",
+        "/usr/local/bin/nmap",
+        "tcpdump",
+        "/bin/tcpdump",
+        "/usr/bin/tcpdump",
+        "/usr/local/bin/tcpdump",
+        "tshark",
+        "/bin/tshark",
+        "/usr/bin/tshark",
+        "/usr/local/bin/tshark",
+        "ngrep",
+        "/bin/ngrep",
+        "/usr/bin/ngrep",
+        "/usr/local/bin/ngrep",
+        "telnet",
+        "/bin/telnet",
+        "/usr/bin/telnet",
+        "/usr/local/bin/telnet",
+        "mitmproxy",
+        "/bin/mitmproxy",
+        "/usr/bin/mitmproxy",
+        "/usr/local/bin/mitmproxy",
+        "socat",
+        "/bin/socat",
+        "/usr/bin/socat",
+        "/usr/local/bin/socat",
+        "zmap",
+        "/bin/zmap",
+        "/usr/bin/zmap",
+        "/usr/local/bin/zmap",
+        "masscan",
+        "/bin/masscan",
+        "/usr/bin/masscan",
+        "/usr/local/bin/masscan",
+        "zgrab",
+        "/bin/zgrab",
+        "/usr/bin/zgrab",
+        "/usr/local/bin/zgrab",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  process.name in (\n    \"nc.traditional\", \"nc\", \"ncat\", \"netcat\", \"nmap\", \"tcpdump\", \"tshark\", \"ngrep\", \"telnet\",  \"mitmproxy\", \"socat\",\n    \"zmap\", \"masscan\", \"zgrab\"\n  ) or\n  (\n    /* Account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\n      \"nc.traditional\", \"/bin/nc.traditional\", \"/usr/bin/nc.traditional\", \"/usr/local/bin/nc.traditional\",\n      \"nc\", \"/bin/nc\", \"/usr/bin/nc\", \"/usr/local/bin/nc\",\n      \"ncat\", \"/bin/ncat\", \"/usr/bin/ncat\", \"/usr/local/bin/ncat\",\n      \"netcat\", \"/bin/netcat\", \"/usr/bin/netcat\", \"/usr/local/bin/netcat\",\n      \"nmap\", \"/bin/nmap\", \"/usr/bin/nmap\", \"/usr/local/bin/nmap\",\n      \"tcpdump\", \"/bin/tcpdump\", \"/usr/bin/tcpdump\", \"/usr/local/bin/tcpdump\",\n      \"tshark\", \"/bin/tshark\", \"/usr/bin/tshark\", \"/usr/local/bin/tshark\",\n      \"ngrep\", \"/bin/ngrep\", \"/usr/bin/ngrep\", \"/usr/local/bin/ngrep\",\n      \"telnet\", \"/bin/telnet\", \"/usr/bin/telnet\", \"/usr/local/bin/telnet\",\n      \"mitmproxy\", \"/bin/mitmproxy\", \"/usr/bin/mitmproxy\", \"/usr/local/bin/mitmproxy\",\n      \"socat\", \"/bin/socat\", \"/usr/bin/socat\", \"/usr/local/bin/socat\",\n      \"zmap\", \"/bin/zmap\", \"/usr/bin/zmap\", \"/usr/local/bin/zmap\",\n      \"masscan\", \"/bin/masscan\", \"/usr/bin/masscan\", \"/usr/local/bin/masscan\",\n      \"zgrab\", \"/bin/zgrab\", \"/usr/bin/zgrab\", \"/usr/local/bin/zgrab\"\n    ) and \n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )\n) and process.interactive == true and container.id like \"*\" and\nnot (\n  process.name in (\"nc.traditional\", \"nc\", \"ncat\", \"netcat\") and\n  process.args like (\"-*z*\", \"localhost\", \"127.0.0.1\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/discovery_suspicious_network_tool_launched_inside_a_container.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Command and Control",
+      "Tactic: Reconnaissance",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

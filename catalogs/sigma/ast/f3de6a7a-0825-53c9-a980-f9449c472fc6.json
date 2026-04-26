@@ -1,0 +1,114 @@
+{
+  "id": "f3de6a7a-0825-53c9-a980-f9449c472fc6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_eventlog_clear",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "clear-log",
+        "set-log",
+        "lfn:",
+        "clear-eventlog",
+        "remove-eventlog",
+        "limit-eventlog",
+        "clear-winevent"
+      ],
+      "raw_values": [
+        "*clear-log *",
+        "* cl *",
+        "*set-log *",
+        "* sl *",
+        "*lfn:*",
+        "*Clear-EventLog *",
+        "*Remove-EventLog *",
+        "*Limit-EventLog *",
+        "*Clear-WinEvent *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.exe",
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wmic.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wevtutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\wevtutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wevtutil.exe"
+      ],
+      "raw_values": [
+        "wevtutil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "eventing.reader.eventlogsession",
+        "clearlog",
+        "diagnostics.eventlog",
+        "clear",
+        "cleareventlog"
+      ],
+      "raw_values": [
+        "*Eventing.Reader.EventLogSession*",
+        "*ClearLog*",
+        "*Diagnostics.EventLog*",
+        "*Clear*",
+        "*ClearEventLog*",
+        "* sl *"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\wevtutil.exe\" or process.pe.original_file_name:\"wevtutil.exe\") and (process.command_line like~ (\"*clear-log *\", \"* cl *\", \"*set-log *\", \"* sl *\", \"*lfn:*\"))) or ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\pwsh.exe\")) and ((process.command_line like~ (\"*Clear-EventLog *\", \"*Remove-EventLog *\", \"*Limit-EventLog *\", \"*Clear-WinEvent *\")) or (process.command_line:\"*Eventing.Reader.EventLogSession*\" and process.command_line:\"*ClearLog*\") or (process.command_line:\"*Diagnostics.EventLog*\" and process.command_line:\"*Clear*\"))) or (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\pwsh.exe\", \"*\\\\wmic.exe\")) and process.command_line:\"*ClearEventLog*\") and (not ((process.parent.executable like~ (\"C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\", \"C:\\\\Windows\\\\System32\\\\msiexec.exe\")) and process.command_line:\"* sl *\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_eventlog_clear.eql",
+  "metadata": {}
+}

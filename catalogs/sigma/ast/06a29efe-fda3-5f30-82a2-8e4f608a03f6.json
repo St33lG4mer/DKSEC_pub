@@ -1,0 +1,53 @@
+{
+  "id": "06a29efe-fda3-5f30-82a2-8e4f608a03f6",
+  "catalog": "sigma",
+  "name": "image_load_dll_rstrtmgr_suspicious_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "temporary internet"
+      ],
+      "raw_values": [
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*\\\\Temporary Internet*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "rstrtmgr.dll"
+      ],
+      "raw_values": [
+        "*\\\\RstrtMgr.dll"
+      ]
+    },
+    {
+      "field": "file.pe.original_file_name",
+      "raw_field": "file.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rstrtmgr.dll"
+      ],
+      "raw_values": [
+        "RstrtMgr.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\RstrtMgr.dll\" or file.pe.original_file_name:\"RstrtMgr.dll\") and ((process.executable like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*\\\\Temporary Internet*\")) or ((process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\Favorites\\\\*\") or (process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\Favourites\\\\*\") or (process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\Contacts\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_dll_rstrtmgr_suspicious_load.eql",
+  "metadata": {}
+}

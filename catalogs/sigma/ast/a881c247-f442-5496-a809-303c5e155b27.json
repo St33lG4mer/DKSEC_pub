@@ -1,0 +1,29 @@
+{
+  "id": "a881c247-f442-5496-a809-303c5e155b27",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_lockergoga_ransomware",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-i sm-tgytutrc -s"
+      ],
+      "raw_values": [
+        "*-i SM-tgytutrc -s*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*-i SM-tgytutrc -s*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/Malware/LockerGoga/proc_creation_win_malware_lockergoga_ransomware.eql",
+  "metadata": {}
+}

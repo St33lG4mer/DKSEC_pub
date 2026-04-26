@@ -1,0 +1,98 @@
+{
+  "id": "e2d39d70-7061-5b82-ab4f-d460c54a84a7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pdqdeploy_runner_susp_children",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bash.exe",
+        "certutil.exe",
+        "cmd.exe",
+        "csc.exe",
+        "cscript.exe",
+        "dllhost.exe",
+        "mshta.exe",
+        "msiexec.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "scriptrunner.exe",
+        "wmic.exe",
+        "wscript.exe",
+        "wsl.exe",
+        "temp"
+      ],
+      "raw_values": [
+        "*\\\\bash.exe",
+        "*\\\\certutil.exe",
+        "*\\\\cmd.exe",
+        "*\\\\csc.exe",
+        "*\\\\cscript.exe",
+        "*\\\\dllhost.exe",
+        "*\\\\mshta.exe",
+        "*\\\\msiexec.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\scriptrunner.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe",
+        "*\\\\wsl.exe",
+        "*:\\\\ProgramData\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\TEMP\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-decode",
+        "-enc",
+        "-encodedcommand",
+        "-w hidden",
+        "downloadstring",
+        "frombase64string",
+        "http",
+        "iex",
+        "invoke-"
+      ],
+      "raw_values": [
+        "* -decode *",
+        "* -enc *",
+        "* -encodedcommand *",
+        "* -w hidden*",
+        "*DownloadString*",
+        "*FromBase64String*",
+        "*http*",
+        "*iex *",
+        "*Invoke-*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "pdqdeployrunner-"
+      ],
+      "raw_values": [
+        "*\\\\PDQDeployRunner-*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\PDQDeployRunner-*\" and ((process.executable like~ (\"*\\\\bash.exe\", \"*\\\\certutil.exe\", \"*\\\\cmd.exe\", \"*\\\\csc.exe\", \"*\\\\cscript.exe\", \"*\\\\dllhost.exe\", \"*\\\\mshta.exe\", \"*\\\\msiexec.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\scriptrunner.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\", \"*\\\\wsl.exe\")) or (process.executable like~ (\"*:\\\\ProgramData\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\TEMP\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp*\")) or (process.command_line like~ (\"* -decode *\", \"* -enc *\", \"* -encodedcommand *\", \"* -w hidden*\", \"*DownloadString*\", \"*FromBase64String*\", \"*http*\", \"*iex *\", \"*Invoke-*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pdqdeploy_runner_susp_children.eql",
+  "metadata": {}
+}

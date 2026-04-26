@@ -1,0 +1,51 @@
+{
+  "id": "3b55d4c3-0847-5331-9642-fd75a06daed1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_findstr_subfolder_search",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "findstr"
+      ],
+      "raw_values": [
+        "*findstr*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "*findstr.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "findstr.exe"
+      ],
+      "raw_values": [
+        "FINDSTR.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*findstr*\" or process.executable:\"*findstr.exe\" or process.pe.original_file_name:\"FINDSTR.EXE\") and (process.command_line like~ (\"* -s *\", \"* /s *\", \"* –s *\", \"* —s *\", \"* ―s *\") and process.command_line like~ (\"* -i *\", \"* /i *\", \"* –i *\", \"* —i *\", \"* ―i *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_findstr_subfolder_search.eql",
+  "metadata": {}
+}

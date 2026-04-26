@@ -1,0 +1,86 @@
+{
+  "id": "8009d46d-f98a-541f-922b-1ebf48d89bdb",
+  "catalog": "elastic",
+  "name": "Microsoft Build Engine Started by a Script Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "mshta.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe"
+      ]
+    },
+    {
+      "field": "process.name.caseless",
+      "raw_field": "process.name.caseless",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "msbuild.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "MSBuild.exe"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:windows and event.category:process and event.type:start and (\n  process.name.caseless:\"msbuild.exe\" or process.pe.original_file_name:\"MSBuild.exe\") and\n  process.parent.name:(\"cmd.exe\" or \"powershell.exe\" or \"pwsh.exe\" or \"powershell_ise.exe\" or \"cscript.exe\" or\n    \"wscript.exe\" or \"mshta.exe\") and \n not process.executable : (\n  \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" or \n  \"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\2019\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" or \n  \"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\2022\\\\BuildTools\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" or \n  \"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\2019\\\\BuildTools\\\\MSBuild\\\\Current\\\\Bin\\\\amd64\\\\MSBuild.exe\" or \n  \"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\2019\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\amd64\\\\MSBuild.exe\" or \n  \"C:\\\\Program Files (x86)\\\\MSBuild\\\\14.0\\\\Bin\\\\amd64\\\\MSBuild.exe\" or \n  \"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\2019\\\\BuildTools\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" or \n  \"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\2019\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe\" or \n  \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Professional\\\\MSBuild\\\\Current\\\\Bin\\\\amd64\\\\MSBuild.exe\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_execution_msbuild_started_by_script.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

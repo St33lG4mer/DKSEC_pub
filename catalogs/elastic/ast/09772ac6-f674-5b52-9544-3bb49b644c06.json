@@ -1,0 +1,57 @@
+{
+  "id": "09772ac6-f674-5b52-9544-3bb49b644c06",
+  "catalog": "elastic",
+  "name": "Entra ID OAuth Device Code Grant by Unusual User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.signinlogs.properties.app_id",
+      "raw_field": "azure.signinlogs.properties.app_id",
+      "operator": ":",
+      "values": [
+        "29d9ed98-a469-4536-ade2-f981bc1d605e",
+        "d5a56ea4-7369-46b8-a538-c370805301bf",
+        "80faf920-1908-4b52-b5ef-a8e7bedfc67a",
+        "97877f11-0fc6-4aee-b1ff-febb0519dd00",
+        "245e1dee-74ef-4257-a8c8-8208296e1dfd",
+        "9ba1a5c7-f17a-4de9-a1f1-6178c8d51223",
+        "74bcdadc-2fdc-4bb3-8459-76d06952a0e9",
+        "4813382a-8fa7-425e-ab75-3b753aab3abb",
+        "a850aaae-d5a5-4e82-877c-ce54ff916282"
+      ],
+      "raw_values": [
+        "29d9ed98-a469-4536-ade2-f981bc1d605e",
+        "d5a56ea4-7369-46b8-a538-c370805301bf",
+        "80faf920-1908-4b52-b5ef-a8e7bedfc67a",
+        "97877f11-0fc6-4aee-b1ff-febb0519dd00",
+        "245e1dee-74ef-4257-a8c8-8208296e1dfd",
+        "9ba1a5c7-f17a-4de9-a1f1-6178c8d51223",
+        "74bcdadc-2fdc-4bb3-8459-76d06952a0e9",
+        "4813382a-8fa7-425e-ab75-3b753aab3abb",
+        "a850aaae-d5a5-4e82-877c-ce54ff916282"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:(azure.activitylogs or azure.signinlogs)\n    and (\n            azure.signinlogs.properties.authentication_protocol:deviceCode or\n            azure.signinlogs.properties.original_transfer_method:deviceCodeFlow or\n            azure.activitylogs.properties.authentication_protocol:deviceCode\n        )\n    and event.outcome:success\n    and azure.signinlogs.properties.user_type:*\n    and not azure.signinlogs.properties.app_id:(\n        \"29d9ed98-a469-4536-ade2-f981bc1d605e\" or\n        \"d5a56ea4-7369-46b8-a538-c370805301bf\" or\n        \"80faf920-1908-4b52-b5ef-a8e7bedfc67a\" or\n        \"97877f11-0fc6-4aee-b1ff-febb0519dd00\" or\n        \"245e1dee-74ef-4257-a8c8-8208296e1dfd\" or\n        \"9ba1a5c7-f17a-4de9-a1f1-6178c8d51223\" or\n        \"74bcdadc-2fdc-4bb3-8459-76d06952a0e9\" or\n        \"4813382a-8fa7-425e-ab75-3b753aab3abb\" or\n        \"a850aaae-d5a5-4e82-877c-ce54ff916282\"\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_first_time_seen_device_code_auth.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Sign-In Logs",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

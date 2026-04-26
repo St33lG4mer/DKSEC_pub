@@ -1,0 +1,31 @@
+{
+  "id": "f0c3c80a-83ec-5985-8e52-d455225aa1e9",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_default_gpo_dir_write",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".dll",
+        ".exe"
+      ],
+      "raw_values": [
+        "*.dll",
+        "*.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Policies\\\\{31B2F340-016D-11D2-945F-00C04FB984F9}\\\\*\" and (file.path like~ (\"*.dll\", \"*.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_default_gpo_dir_write.eql",
+  "metadata": {}
+}

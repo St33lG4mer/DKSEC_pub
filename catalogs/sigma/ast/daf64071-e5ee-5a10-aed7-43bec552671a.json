@@ -1,0 +1,56 @@
+{
+  "id": "daf64071-e5ee-5a10-aed7-43bec552671a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2020_10189",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "bitsadmin.exe",
+        "systeminfo.exe",
+        "net.exe",
+        "net1.exe",
+        "reg.exe",
+        "query.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\bitsadmin.exe",
+        "*\\\\systeminfo.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\reg.exe",
+        "*\\\\query.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "java.exe"
+      ],
+      "raw_values": [
+        "*DesktopCentral_Server\\\\jre\\\\bin\\\\java.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*DesktopCentral_Server\\\\jre\\\\bin\\\\java.exe\" and (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\bitsadmin.exe\", \"*\\\\systeminfo.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\reg.exe\", \"*\\\\query.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Exploits/CVE-2020-10189/proc_creation_win_exploit_cve_2020_10189.eql",
+  "metadata": {}
+}

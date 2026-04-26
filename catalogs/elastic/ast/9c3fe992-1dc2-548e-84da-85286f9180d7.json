@@ -1,0 +1,268 @@
+{
+  "id": "9c3fe992-1dc2-548e-84da-85286f9180d7",
+  "catalog": "elastic",
+  "name": "Dynamic Linker Creation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "ld.so.preload",
+        "ld.so.conf"
+      ],
+      "raw_values": [
+        "/etc/ld.so.preload",
+        "/etc/ld.so.conf.d/*",
+        "/etc/ld.so.conf"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "platform-python"
+      ],
+      "raw_values": [
+        "/nix/store/*",
+        "/var/lib/dpkg/*",
+        "/snap/*",
+        "/dev/fd/*",
+        "/usr/lib/virtualbox/*",
+        "/opt/dynatrace/oneagent/*",
+        "/usr/libexec/platform-python*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "dpkg",
+        "dockerd",
+        "microdnf",
+        "rpm",
+        "snapd",
+        "yum",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "pacman",
+        "dpkg-divert",
+        "apk",
+        "apt",
+        "puppet",
+        "chef-client",
+        "autossl_check",
+        "exe",
+        "pamac-daemon",
+        "platform-python",
+        "snap-update-ns",
+        "vmware-config-tools.pl",
+        "nvidia-cdi-hook",
+        "dracut-install",
+        "envbuilder",
+        "buildah",
+        "pamac",
+        "crio",
+        "yum-cron",
+        "java",
+        "executor",
+        "ssm-agent-worker",
+        "packagekitd",
+        "dockerd-entrypoint.sh",
+        "docker-init",
+        "boottimechecker"
+      ],
+      "raw_values": [
+        "/bin/dpkg",
+        "/usr/bin/dpkg",
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/sbin/dockerd",
+        "/bin/microdnf",
+        "/usr/bin/microdnf",
+        "/bin/rpm",
+        "/usr/bin/rpm",
+        "/bin/snapd",
+        "/usr/bin/snapd",
+        "/bin/yum",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "/usr/bin/dnf",
+        "/bin/podman",
+        "/usr/bin/podman",
+        "/bin/dnf-automatic",
+        "/usr/bin/dnf-automatic",
+        "/bin/pacman",
+        "/usr/bin/pacman",
+        "/usr/bin/dpkg-divert",
+        "/bin/dpkg-divert",
+        "/sbin/apk",
+        "/usr/sbin/apk",
+        "/usr/local/sbin/apk",
+        "/usr/bin/apt",
+        "/usr/sbin/pacman",
+        "/usr/bin/puppet",
+        "/bin/puppet",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/bin/chef-client",
+        "/bin/chef-client",
+        "/bin/autossl_check",
+        "/usr/bin/autossl_check",
+        "/proc/self/exe",
+        "/usr/bin/pamac-daemon",
+        "/bin/pamac-daemon",
+        "/usr/lib/snapd/snapd",
+        "/usr/local/bin/dockerd",
+        "/usr/libexec/platform-python",
+        "/usr/lib/snapd/snap-update-ns",
+        "/usr/bin/vmware-config-tools.pl",
+        "./usr/bin/podman",
+        "/bin/nvidia-cdi-hook",
+        "/usr/lib/dracut/dracut-install",
+        "./usr/bin/nvidia-cdi-hook",
+        "/.envbuilder/bin/envbuilder",
+        "/usr/bin/buildah",
+        "/usr/sbin/dnf",
+        "/usr/bin/pamac",
+        "/sbin/pacman",
+        "/usr/bin/crio",
+        "/usr/sbin/yum-cron",
+        "java",
+        "executor",
+        "ssm-agent-worker",
+        "packagekitd",
+        "crio",
+        "dockerd-entrypoint.sh",
+        "docker-init",
+        "BootTimeChecker"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ],
+      "raw_values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "file.ext.original.extension",
+      "raw_field": "file.Ext.original.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sed",
+        "perl",
+        "init",
+        "sshd"
+      ],
+      "raw_values": [
+        "sed",
+        "perl",
+        "init",
+        "sshd"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "sed",
+        "e2scrub_all.tmp"
+      ],
+      "raw_values": [
+        "sed*",
+        "e2scrub_all.tmp*"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "==",
+      "values": [
+        "ld.wsl.conf"
+      ],
+      "raw_values": [
+        "ld.wsl.conf"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.action == \"creation\" and\nfile.path like (\"/etc/ld.so.preload\", \"/etc/ld.so.conf.d/*\", \"/etc/ld.so.conf\") and\nnot (\n  process.executable in (\n    \"/bin/dpkg\", \"/usr/bin/dpkg\", \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/sbin/dockerd\", \"/bin/microdnf\",\n    \"/usr/bin/microdnf\", \"/bin/rpm\", \"/usr/bin/rpm\", \"/bin/snapd\", \"/usr/bin/snapd\", \"/bin/yum\", \"/usr/bin/yum\",\n    \"/bin/dnf\", \"/usr/bin/dnf\", \"/bin/podman\", \"/usr/bin/podman\", \"/bin/dnf-automatic\", \"/usr/bin/dnf-automatic\",\n    \"/bin/pacman\", \"/usr/bin/pacman\", \"/usr/bin/dpkg-divert\", \"/bin/dpkg-divert\", \"/sbin/apk\", \"/usr/sbin/apk\",\n    \"/usr/local/sbin/apk\", \"/usr/bin/apt\", \"/usr/sbin/pacman\", \"/bin/podman\", \"/usr/bin/podman\", \"/usr/bin/puppet\",\n    \"/bin/puppet\", \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/bin/chef-client\", \"/bin/chef-client\",\n    \"/bin/autossl_check\", \"/usr/bin/autossl_check\", \"/proc/self/exe\",  \"/usr/bin/pamac-daemon\",\n    \"/bin/pamac-daemon\", \"/usr/lib/snapd/snapd\", \"/usr/local/bin/dockerd\", \"/usr/libexec/platform-python\",\n    \"/usr/lib/snapd/snap-update-ns\", \"/usr/bin/vmware-config-tools.pl\", \"./usr/bin/podman\", \"/bin/nvidia-cdi-hook\",\n    \"/usr/lib/dracut/dracut-install\", \"./usr/bin/nvidia-cdi-hook\", \"/.envbuilder/bin/envbuilder\", \"/usr/bin/buildah\",\n    \"/usr/sbin/dnf\", \"/usr/bin/pamac\", \"/sbin/pacman\", \"/usr/bin/crio\", \"/usr/sbin/yum-cron\"\n  ) or\n  file.extension in (\"swp\", \"swpx\", \"swx\", \"dpkg-remove\") or\n  file.Ext.original.extension == \"dpkg-new\" or\n  process.executable : (\n    \"/nix/store/*\", \"/var/lib/dpkg/*\", \"/snap/*\", \"/dev/fd/*\", \"/usr/lib/virtualbox/*\", \"/opt/dynatrace/oneagent/*\",\n    \"/usr/libexec/platform-python*\"\n  ) or\n  process.executable == null or\n  process.name in (\n    \"java\", \"executor\", \"ssm-agent-worker\", \"packagekitd\", \"crio\", \"dockerd-entrypoint.sh\",\n    \"docker-init\", \"BootTimeChecker\", \"dockerd (deleted)\", \"dockerd\"\n  ) or\n  (process.name == \"sed\" and file.name : \"sed*\") or\n  (process.name == \"perl\" and file.name : \"e2scrub_all.tmp*\") or\n  (process.name == \"init\" and file.name == \"ld.wsl.conf\") or\n  (process.name == \"sshd\" and file.extension == \"dpkg-new\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_dynamic_linker_file_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

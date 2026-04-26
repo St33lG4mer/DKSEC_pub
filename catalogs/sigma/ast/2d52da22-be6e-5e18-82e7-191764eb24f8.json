@@ -1,0 +1,68 @@
+{
+  "id": "2d52da22-be6e-5e18-82e7-191764eb24f8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_servu_susp_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "sh.exe",
+        "bash.exe",
+        "schtasks.exe",
+        "regsvr32.exe",
+        "wmic.exe",
+        "mshta.exe",
+        "rundll32.exe",
+        "msiexec.exe",
+        "forfiles.exe",
+        "scriptrunner.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe",
+        "*\\\\sh.exe",
+        "*\\\\bash.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\wmic.exe",
+        "*\\\\mshta.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\msiexec.exe",
+        "*\\\\forfiles.exe",
+        "*\\\\scriptrunner.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "serv-u.exe"
+      ],
+      "raw_values": [
+        "*\\\\Serv-U.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\Serv-U.exe\" and (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\", \"*\\\\cscript.exe\", \"*\\\\sh.exe\", \"*\\\\bash.exe\", \"*\\\\schtasks.exe\", \"*\\\\regsvr32.exe\", \"*\\\\wmic.exe\", \"*\\\\mshta.exe\", \"*\\\\rundll32.exe\", \"*\\\\msiexec.exe\", \"*\\\\forfiles.exe\", \"*\\\\scriptrunner.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_servu_susp_child_process.eql",
+  "metadata": {}
+}

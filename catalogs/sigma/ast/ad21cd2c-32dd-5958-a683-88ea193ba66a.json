@@ -1,0 +1,51 @@
+{
+  "id": "ad21cd2c-32dd-5958-a683-88ea193ba66a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_dllregisterserver",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dllregisterserver"
+      ],
+      "raw_values": [
+        "*DllRegisterServer*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and process.command_line:\"*DllRegisterServer*\") and (not (process.command_line like~ (\"*:\\\\Program Files (x86)*\", \"*:\\\\Program Files\\\\*\", \"*:\\\\Windows\\\\System32\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_rundll32_dllregisterserver.eql",
+  "metadata": {}
+}

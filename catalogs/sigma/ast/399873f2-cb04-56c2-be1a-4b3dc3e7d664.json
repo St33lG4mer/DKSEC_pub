@@ -1,0 +1,29 @@
+{
+  "id": "399873f2-cb04-56c2-be1a-4b3dc3e7d664",
+  "catalog": "sigma",
+  "name": "dns_query_win_anonymfiles_com",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        ".anonfiles.com"
+      ],
+      "raw_values": [
+        "*.anonfiles.com*"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name:\"*.anonfiles.com*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_anonymfiles_com.eql",
+  "metadata": {}
+}

@@ -1,0 +1,44 @@
+{
+  "id": "36cf55f9-f732-5b7c-a957-b4847ea71bb3",
+  "catalog": "sigma",
+  "name": "win_usb_device_plugged",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "2003",
+        "2100",
+        "2102"
+      ],
+      "raw_values": [
+        "2003",
+        "2100",
+        "2102"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-driverframeworks-usermode/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-DriverFrameworks-UserMode/Operational"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-DriverFrameworks-UserMode/Operational\" and (event.code like~ (\"2003\", \"2100\", \"2102\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/driverframeworks/win_usb_device_plugged.eql",
+  "metadata": {}
+}

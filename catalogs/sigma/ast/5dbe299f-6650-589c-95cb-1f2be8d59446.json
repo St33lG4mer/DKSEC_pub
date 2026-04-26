@@ -1,0 +1,42 @@
+{
+  "id": "5dbe299f-6650-589c-95cb-1f2be8d59446",
+  "catalog": "sigma",
+  "name": "registry_set_malware_small_sieve_evasion_typo",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\",
+        "microsift"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*",
+        "*Microsift*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        ".exe platypus"
+      ],
+      "raw_values": [
+        "*.exe Platypus*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*\" and (registry.path:\"*Microsift*\" or winlog.event_data.Details:\"*.exe Platypus*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Small-Sieve/registry_set_malware_small_sieve_evasion_typo.eql",
+  "metadata": {}
+}

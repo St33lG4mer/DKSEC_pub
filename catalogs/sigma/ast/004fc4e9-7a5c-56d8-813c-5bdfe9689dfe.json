@@ -1,0 +1,42 @@
+{
+  "id": "004fc4e9-7a5c-56d8-813c-5bdfe9689dfe",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_sys",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".sys,",
+        ".sys"
+      ],
+      "raw_values": [
+        "*.sys,*",
+        "*.sys *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*rundll32.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*rundll32.exe*\" and (process.command_line like~ (\"*.sys,*\", \"*.sys *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_sys.eql",
+  "metadata": {}
+}

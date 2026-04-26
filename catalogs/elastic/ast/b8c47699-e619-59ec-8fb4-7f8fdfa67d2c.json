@@ -1,0 +1,69 @@
+{
+  "id": "b8c47699-e619-59ec-8fb4-7f8fdfa67d2c",
+  "catalog": "elastic",
+  "name": "Alternate Data Stream Creation/Execution at Volume Root Directory",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "in",
+      "values": [
+        "file",
+        "process"
+      ],
+      "raw_values": [
+        "file",
+        "process"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation",
+        "start"
+      ],
+      "raw_values": [
+        "creation",
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and event.category in (\"file\", \"process\") and\n  (\n    (event.type == \"creation\" and file.path regex~ \"\"\"[A-Z]:\\\\:.+\"\"\") or\n    (event.type == \"start\" and process.executable regex~ \"\"\"[A-Z]:\\\\:.+\"\"\")\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_root_dir_ads_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

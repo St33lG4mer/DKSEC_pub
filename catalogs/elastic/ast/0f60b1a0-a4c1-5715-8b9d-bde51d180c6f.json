@@ -1,0 +1,73 @@
+{
+  "id": "0f60b1a0-a4c1-5715-8b9d-bde51d180c6f",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation via CVE-2023-4911",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.env_vars",
+      "raw_field": "process.env_vars",
+      "operator": ":",
+      "values": [
+        "glibc_tunables=glibc.*=glibc.*="
+      ],
+      "raw_values": [
+        "*GLIBC_TUNABLES=glibc.*=glibc.*=*"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.parent.entity_id, process.executable with maxspan=5s\n [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n  process.env_vars : \"*GLIBC_TUNABLES=glibc.*=glibc.*=*\"] with runs=5\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_looney_tunables_cve_2023_4911.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

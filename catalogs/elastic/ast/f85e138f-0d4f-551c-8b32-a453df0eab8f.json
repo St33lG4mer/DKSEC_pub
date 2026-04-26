@@ -1,0 +1,27 @@
+{
+  "id": "f85e138f-0d4f-551c-8b32-a453df0eab8f",
+  "catalog": "elastic",
+  "name": "Potential Invoke-Mimikatz PowerShell Script",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.category:process and host.os.type:windows and\npowershell.file.script_block_text:(\n  (DumpCreds and\n  DumpCerts) or\n  \"sekurlsa::logonpasswords\" or\n  (\"crypto::certificates\" and\n  \"CERT_SYSTEM_STORE_LOCAL_MACHINE\")\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_mimikatz_powershell_module.toml",
+  "metadata": {
+    "risk_score": 99,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

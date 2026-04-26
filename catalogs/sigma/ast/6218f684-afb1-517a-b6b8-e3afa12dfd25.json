@@ -1,0 +1,60 @@
+{
+  "id": "6218f684-afb1-517a-b6b8-e3afa12dfd25",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2023_21554_queuejumper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "schtasks.exe",
+        "wmic.exe",
+        "wscript.exe",
+        "wsl.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe",
+        "*\\\\wsl.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "mqsvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\System32\\\\mqsvc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\Windows\\\\System32\\\\mqsvc.exe\" and (process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\schtasks.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\", \"*\\\\wsl.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Exploits/CVE-2022-21554/proc_creation_win_exploit_cve_2023_21554_queuejumper.eql",
+  "metadata": {}
+}

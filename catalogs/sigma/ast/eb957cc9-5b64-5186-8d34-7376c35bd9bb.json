@@ -1,0 +1,54 @@
+{
+  "id": "eb957cc9-5b64-5186-8d34-7376c35bd9bb",
+  "catalog": "sigma",
+  "name": "image_load_office_powershell_dll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "excel.exe",
+        "mspub.exe",
+        "outlook.exe",
+        "onenote.exe",
+        "onenoteim.exe",
+        "powerpnt.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe",
+        "*\\\\mspub.exe",
+        "*\\\\outlook.exe",
+        "*\\\\onenote.exe",
+        "*\\\\onenoteim.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "system.management.automation.dll",
+        "system.management.automation.ni.dll"
+      ],
+      "raw_values": [
+        "*\\\\System.Management.Automation.Dll*",
+        "*\\\\System.Management.Automation.ni.Dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\excel.exe\", \"*\\\\mspub.exe\", \"*\\\\outlook.exe\", \"*\\\\onenote.exe\", \"*\\\\onenoteim.exe\", \"*\\\\powerpnt.exe\", \"*\\\\winword.exe\")) and (file.path like~ (\"*\\\\System.Management.Automation.Dll*\", \"*\\\\System.Management.Automation.ni.Dll*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_office_powershell_dll_load.eql",
+  "metadata": {}
+}

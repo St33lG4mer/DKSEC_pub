@@ -1,0 +1,26 @@
+{
+  "id": "37e1879c-67e0-59f6-bc23-d82b4aa12a13",
+  "catalog": "elastic",
+  "name": "Unusual Source IP for Windows Privileged Operations Detected",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/pad/privileged_access_ml_windows_rare_source_ip_by_user.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Privileged Access Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

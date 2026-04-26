@@ -1,0 +1,29 @@
+{
+  "id": "46a4bd5a-8f37-5560-aa76-3d5c7623f795",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_openwith",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "openwith.exe"
+      ],
+      "raw_values": [
+        "*\\\\OpenWith.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\OpenWith.exe\" and process.command_line:\"*/c*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_openwith.eql",
+  "metadata": {}
+}

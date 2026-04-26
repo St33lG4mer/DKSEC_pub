@@ -1,0 +1,17 @@
+{
+  "id": "62a76282-e21f-50e2-9646-4d97c3ce199f",
+  "catalog": "sigma",
+  "name": "file_event_win_pcre_net_temp_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [],
+  "raw_query": "any where file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\ba9ea7344a4a5f591d6e5dc32a13494b\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_pcre_net_temp_file.eql",
+  "metadata": {}
+}

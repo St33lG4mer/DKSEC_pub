@@ -1,0 +1,42 @@
+{
+  "id": "1d2da853-c9cf-5cb2-aa37-93a1f6b70e59",
+  "catalog": "sigma",
+  "name": "file_event_win_exploit_cve_2024_1708_screenconnect",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".ashx",
+        ".aspx"
+      ],
+      "raw_values": [
+        "*ScreenConnect\\\\App_Extensions\\\\*.ashx",
+        "*ScreenConnect\\\\App_Extensions\\\\*.aspx"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "screenconnect.service.exe"
+      ],
+      "raw_values": [
+        "*\\\\ScreenConnect.Service.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\ScreenConnect.Service.exe\" and (file.path like~ (\"*ScreenConnect\\\\App_Extensions\\\\*.ashx\", \"*ScreenConnect\\\\App_Extensions\\\\*.aspx\"))) and (not file.path:\"*ScreenConnect\\\\App_Extensions\\\\*\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Exploits/CVE-2024-1708/file_event_win_exploit_cve_2024_1708_screenconnect.eql",
+  "metadata": {}
+}

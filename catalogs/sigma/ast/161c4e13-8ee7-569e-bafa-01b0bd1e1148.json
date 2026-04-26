@@ -1,0 +1,31 @@
+{
+  "id": "161c4e13-8ee7-569e-bafa-01b0bd1e1148",
+  "catalog": "sigma",
+  "name": "file_event_win_ntds_exfil_tools",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "all.cab",
+        ".ntds.cleartext"
+      ],
+      "raw_values": [
+        "*\\\\All.cab",
+        "*.ntds.cleartext"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*\\\\All.cab\", \"*.ntds.cleartext\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_ntds_exfil_tools.eql",
+  "metadata": {}
+}

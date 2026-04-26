@@ -1,0 +1,40 @@
+{
+  "id": "630aa84b-33f1-5095-866b-d41b5b3f1197",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cipher_overwrite_deleted_data",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cipher.exe"
+      ],
+      "raw_values": [
+        "CIPHER.EXE"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cipher.exe"
+      ],
+      "raw_values": [
+        "*\\\\cipher.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"CIPHER.EXE\" or process.executable:\"*\\\\cipher.exe\") and process.command_line:\"* /w:*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cipher_overwrite_deleted_data.eql",
+  "metadata": {}
+}

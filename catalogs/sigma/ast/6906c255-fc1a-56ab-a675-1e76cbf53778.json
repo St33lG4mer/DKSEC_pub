@@ -1,0 +1,29 @@
+{
+  "id": "6906c255-fc1a-56ab-a675-1e76cbf53778",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_coldsteel_anonymous_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": ":",
+      "values": [
+        "anonymous"
+      ],
+      "raw_values": [
+        "*ANONYMOUS*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\Windows\\\\System32\\\\*\", \"*\\\\AppData\\\\*\")) and user.name:\"*ANONYMOUS*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/COLDSTEEL/proc_creation_win_malware_coldsteel_anonymous_process.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e61b0ac1-fe30-5b86-a1f2-1e19bb57bbdb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_typed_paths_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "typedpaths"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\TypedPaths*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\TypedPaths*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_typed_paths_persistence.eql",
+  "metadata": {}
+}

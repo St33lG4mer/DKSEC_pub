@@ -1,0 +1,87 @@
+{
+  "id": "863dc74b-d45e-5edb-b9cf-930f7c8b0f33",
+  "catalog": "elastic",
+  "name": "Kill Command Execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-hup",
+        "-sigusr1",
+        "-usr2",
+        "-winch",
+        "-usr1"
+      ],
+      "raw_values": [
+        "-HUP",
+        "-SIGUSR1",
+        "-USR2",
+        "-WINCH",
+        "-USR1"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "systemd",
+        "qualys-cloud-agent",
+        "xargs",
+        "sudo",
+        "safe_asterisk",
+        "dcservice",
+        "nessuscli",
+        "start_stop_bootstrap.sh",
+        "dcpatchscan"
+      ],
+      "raw_values": [
+        "/usr/lib/systemd/systemd",
+        "/usr/local/qualys/cloud-agent/bin/qualys-cloud-agent",
+        "/bin/xargs",
+        "/usr/bin/xargs",
+        "/usr/bin/sudo",
+        "/usr/sbin/safe_asterisk",
+        "/usr/local/manageengine/uems_agent/bin/dcservice",
+        "/lib/systemd/systemd",
+        "/opt/nessus_agent/sbin/nessuscli",
+        "/etc/rubrik/start_stop_bootstrap.sh",
+        "/usr/local/manageengine/uems_agent/bin/dcpatchscan"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and event.action:exec and\nprocess.name:(kill or pkill or killall) and not (\n  process.args:(\"-HUP\" or \"-SIGUSR1\" or \"-USR2\" or \"-WINCH\" or \"-USR1\") or\n  process.parent.command_line:\"runc init\" or\n  process.parent.executable:(\n    \"/usr/lib/systemd/systemd\" or \"/usr/local/qualys/cloud-agent/bin/qualys-cloud-agent\" or \"/bin/xargs\" or\n    \"/usr/bin/xargs\" or \"/usr/bin/sudo\" or \"/usr/sbin/safe_asterisk\" or \"/usr/local/manageengine/uems_agent/bin/dcservice\" or\n    \"/lib/systemd/systemd\" or \"/opt/nessus_agent/sbin/nessuscli\" or \"/etc/rubrik/start_stop_bootstrap.sh\" or\n    \"/usr/local/manageengine/uems_agent/bin/dcpatchscan\")\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_kill_command_executed.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

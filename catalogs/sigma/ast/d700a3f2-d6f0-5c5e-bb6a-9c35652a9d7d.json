@@ -1,0 +1,30 @@
+{
+  "id": "d700a3f2-d6f0-5c5e-bb6a-9c35652a9d7d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_esentutl_params",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "esentutl"
+      ],
+      "raw_values": [
+        "*esentutl*",
+        "* /p*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*esentutl*\" and process.command_line:\"* /p*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_esentutl_params.eql",
+  "metadata": {}
+}

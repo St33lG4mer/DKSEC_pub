@@ -1,0 +1,42 @@
+{
+  "id": "d80314d0-b7fb-5e72-bceb-361f6946e418",
+  "catalog": "sigma",
+  "name": "file_event_win_exploit_cve_2023_40477_winrar_rev_file_abuse",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "winrar.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe",
+        "*\\\\WinRAR.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".rev"
+      ],
+      "raw_values": [
+        "*.rev"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\explorer.exe\", \"*\\\\WinRAR.exe\")) and file.path:\"*.rev\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-40477/file_event_win_exploit_cve_2023_40477_winrar_rev_file_abuse.eql",
+  "metadata": {}
+}

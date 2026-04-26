@@ -1,0 +1,44 @@
+{
+  "id": "cae36d33-e874-52d0-a0a0-766459054d97",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_kapeka_backdoor_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "win32log.exe",
+        "crdss.exe"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\win32log.exe",
+        "*\\\\crdss.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".wll']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\[a-zA-Z]{5,6}\\\\.wll']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where ((file.path like~ (\"*:\\\\ProgramData\\\\*\", \"*\\\\AppData\\\\Local\\\\*\")) and file.path:\"SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\[a-zA-Z]{5,6}\\\\.wll']), flags=set())\") or (file.path like~ (\"*\\\\win32log.exe\", \"*\\\\crdss.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/kapeka/file_event_win_malware_kapeka_backdoor_indicators.eql",
+  "metadata": {}
+}

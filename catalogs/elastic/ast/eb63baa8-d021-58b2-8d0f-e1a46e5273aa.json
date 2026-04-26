@@ -1,0 +1,111 @@
+{
+  "id": "eb63baa8-d021-58b2-8d0f-e1a46e5273aa",
+  "catalog": "elastic",
+  "name": "Persistence via Update Orchestrator Service Hijack",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mousocoreworker.exe",
+        "usoclient.exe",
+        "musnotification.exe",
+        "musnotificationux.exe",
+        "musnotifyicon.exe",
+        "werfault.exe",
+        "wermgr.exe",
+        "usocoreworker.exe",
+        "officec2rclient.exe"
+      ],
+      "raw_values": [
+        "?:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\UUS\\\\Packages\\\\*\\\\amd64\\\\MoUsoCoreWorker.exe",
+        "?:\\\\Windows\\\\System32\\\\UsoClient.exe",
+        "?:\\\\Windows\\\\System32\\\\MusNotification.exe",
+        "?:\\\\Windows\\\\System32\\\\MusNotificationUx.exe",
+        "?:\\\\Windows\\\\System32\\\\MusNotifyIcon.exe",
+        "?:\\\\Windows\\\\System32\\\\WerFault.exe",
+        "?:\\\\Windows\\\\System32\\\\WerMgr.exe",
+        "?:\\\\Windows\\\\UUS\\\\amd64\\\\MoUsoCoreWorker.exe",
+        "?:\\\\Windows\\\\System32\\\\MoUsoCoreWorker.exe",
+        "?:\\\\Windows\\\\UUS\\\\amd64\\\\UsoCoreWorker.exe",
+        "?:\\\\Windows\\\\System32\\\\UsoCoreWorker.exe",
+        "?:\\\\Program Files\\\\Common Files\\\\microsoft shared\\\\ClickToRun\\\\OfficeC2RClient.exe",
+        "MoUsoCoreWorker.exe",
+        "OfficeC2RClient.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "usosvc"
+      ],
+      "raw_values": [
+        "UsoSvc"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.parent.executable : \"C:\\\\Windows\\\\System32\\\\svchost.exe\" and\n  process.parent.args : \"UsoSvc\" and\n  not process.executable :\n          (\"?:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\UUS\\\\Packages\\\\*\\\\amd64\\\\MoUsoCoreWorker.exe\",\n          \"?:\\\\Windows\\\\System32\\\\UsoClient.exe\",\n          \"?:\\\\Windows\\\\System32\\\\MusNotification.exe\",\n          \"?:\\\\Windows\\\\System32\\\\MusNotificationUx.exe\",\n          \"?:\\\\Windows\\\\System32\\\\MusNotifyIcon.exe\",\n          \"?:\\\\Windows\\\\System32\\\\WerFault.exe\",\n          \"?:\\\\Windows\\\\System32\\\\WerMgr.exe\",\n          \"?:\\\\Windows\\\\UUS\\\\amd64\\\\MoUsoCoreWorker.exe\",\n          \"?:\\\\Windows\\\\System32\\\\MoUsoCoreWorker.exe\",\n          \"?:\\\\Windows\\\\UUS\\\\amd64\\\\UsoCoreWorker.exe\",\n          \"?:\\\\Windows\\\\System32\\\\UsoCoreWorker.exe\",\n          \"?:\\\\Program Files\\\\Common Files\\\\microsoft shared\\\\ClickToRun\\\\OfficeC2RClient.exe\") and\n  not process.name : (\"MoUsoCoreWorker.exe\", \"OfficeC2RClient.exe\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_via_update_orchestrator_service_hijack.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Use Case: Vulnerability",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

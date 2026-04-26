@@ -1,0 +1,40 @@
+{
+  "id": "95fd0811-a74f-5651-b5cd-6bc6c68a9f42",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_app_cpmpat_layer_registerapprestart",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\layers\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Layers\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "registerapprestart"
+      ],
+      "raw_values": [
+        "*REGISTERAPPRESTART*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Layers\\\\*\" and winlog.event_data.Details:\"*REGISTERAPPRESTART*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_app_cpmpat_layer_registerapprestart.eql",
+  "metadata": {}
+}

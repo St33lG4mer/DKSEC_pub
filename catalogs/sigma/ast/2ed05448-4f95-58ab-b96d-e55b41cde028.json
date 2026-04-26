@@ -1,0 +1,29 @@
+{
+  "id": "2ed05448-4f95-58ab-b96d-e55b41cde028",
+  "catalog": "sigma",
+  "name": "image_load_side_load_libvlc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "libvlc.dll"
+      ],
+      "raw_values": [
+        "*\\\\libvlc.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\libvlc.dll\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\VideoLAN\\\\VLC\\\\*\", \"C:\\\\Program Files\\\\VideoLAN\\\\VLC\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_libvlc.eql",
+  "metadata": {}
+}

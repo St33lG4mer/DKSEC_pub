@@ -1,0 +1,73 @@
+{
+  "id": "1272155e-1ea8-58bf-8a46-0f83300eb827",
+  "catalog": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_wow6432node_classes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\folder\\\\shellex\\\\extshellfolderviews",
+        "\\\\folder\\\\shellex\\\\dragdrophandlers",
+        "\\\\folder\\\\shellex\\\\columnhandlers",
+        "\\\\directory\\\\shellex\\\\dragdrophandlers",
+        "\\\\directory\\\\shellex\\\\copyhookhandlers",
+        "\\\\clsid\\\\{ac757296-3522-4e11-9862-c17be5a1767e}\\\\instance",
+        "\\\\clsid\\\\{abe3b9a4-257d-4b97-bd1a-294af496222e}\\\\instance",
+        "\\\\clsid\\\\{7ed96837-96f0-4812-b211-f13c24117ed3}\\\\instance",
+        "\\\\clsid\\\\{083863f1-70de-11d0-bd40-00a0c911ce86}\\\\instance",
+        "\\\\allfilesystemobjects\\\\shellex\\\\dragdrophandlers",
+        "\\\\shellex\\\\propertysheethandlers",
+        "\\\\shellex\\\\contextmenuhandlers"
+      ],
+      "raw_values": [
+        "*\\\\Folder\\\\ShellEx\\\\ExtShellFolderViews*",
+        "*\\\\Folder\\\\ShellEx\\\\DragDropHandlers*",
+        "*\\\\Folder\\\\ShellEx\\\\ColumnHandlers*",
+        "*\\\\Directory\\\\Shellex\\\\DragDropHandlers*",
+        "*\\\\Directory\\\\Shellex\\\\CopyHookHandlers*",
+        "*\\\\CLSID\\\\{AC757296-3522-4E11-9862-C17BE5A1767E}\\\\Instance*",
+        "*\\\\CLSID\\\\{ABE3B9A4-257D-4B97-BD1A-294AF496222E}\\\\Instance*",
+        "*\\\\CLSID\\\\{7ED96837-96F0-4812-B211-F13C24117ED3}\\\\Instance*",
+        "*\\\\CLSID\\\\{083863F1-70DE-11d0-BD40-00A0C911CE86}\\\\Instance*",
+        "*\\\\AllFileSystemObjects\\\\ShellEx\\\\DragDropHandlers*",
+        "*\\\\ShellEx\\\\PropertySheetHandlers*",
+        "*\\\\ShellEx\\\\ContextMenuHandlers*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\wow6432node\\\\classes"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Wow6432Node\\\\Classes*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Wow6432Node\\\\Classes*\" and (registry.path like~ (\"*\\\\Folder\\\\ShellEx\\\\ExtShellFolderViews*\", \"*\\\\Folder\\\\ShellEx\\\\DragDropHandlers*\", \"*\\\\Folder\\\\ShellEx\\\\ColumnHandlers*\", \"*\\\\Directory\\\\Shellex\\\\DragDropHandlers*\", \"*\\\\Directory\\\\Shellex\\\\CopyHookHandlers*\", \"*\\\\CLSID\\\\{AC757296-3522-4E11-9862-C17BE5A1767E}\\\\Instance*\", \"*\\\\CLSID\\\\{ABE3B9A4-257D-4B97-BD1A-294AF496222E}\\\\Instance*\", \"*\\\\CLSID\\\\{7ED96837-96F0-4812-B211-F13C24117ED3}\\\\Instance*\", \"*\\\\CLSID\\\\{083863F1-70DE-11d0-BD40-00A0C911CE86}\\\\Instance*\", \"*\\\\AllFileSystemObjects\\\\ShellEx\\\\DragDropHandlers*\", \"*\\\\ShellEx\\\\PropertySheetHandlers*\", \"*\\\\ShellEx\\\\ContextMenuHandlers*\")) and (not winlog.event_data.Details:\"(Empty)\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_wow6432node_classes.eql",
+  "metadata": {}
+}

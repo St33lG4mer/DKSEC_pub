@@ -1,0 +1,114 @@
+{
+  "id": "fdbca278-77e9-538c-a817-5e7d1dd73448",
+  "catalog": "elastic",
+  "name": "System Log File Deletion",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "in",
+      "values": [
+        "utmp",
+        "wtmp",
+        "btmp",
+        "lastlog",
+        "faillog",
+        "syslog",
+        "messages",
+        "secure",
+        "auth.log",
+        "boot.log",
+        "kern.log",
+        "dmesg"
+      ],
+      "raw_values": [
+        "/var/run/utmp",
+        "/var/log/wtmp",
+        "/var/log/btmp",
+        "/var/log/lastlog",
+        "/var/log/faillog",
+        "/var/log/syslog",
+        "/var/log/messages",
+        "/var/log/secure",
+        "/var/log/auth.log",
+        "/var/log/boot.log",
+        "/var/log/kern.log",
+        "/var/log/dmesg"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "gzip",
+        "executor",
+        "dockerd",
+        "podman"
+      ],
+      "raw_values": [
+        "gzip",
+        "executor",
+        "dockerd",
+        "/usr/bin/podman",
+        "/dev/fd/3"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "==",
+      "values": [
+        "lastlog"
+      ],
+      "raw_values": [
+        "lastlog"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"deletion\" and file.path in (\n  \"/var/run/utmp\", \"/var/log/wtmp\", \"/var/log/btmp\", \"/var/log/lastlog\", \"/var/log/faillog\",\n  \"/var/log/syslog\", \"/var/log/messages\", \"/var/log/secure\", \"/var/log/auth.log\", \"/var/log/boot.log\",\n  \"/var/log/kern.log\", \"/var/log/dmesg\"\n) and not (\n  process.name in (\"gzip\", \"executor\", \"dockerd\") or\n  (process.executable in (\"/usr/bin/podman\", \"/dev/fd/3\") and file.name == \"lastlog\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_log_files_deleted.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

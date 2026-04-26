@@ -1,0 +1,64 @@
+{
+  "id": "a6620d2c-f60a-5405-bfa0-4acbc553d40c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_remote_access_tools_anydesk",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "anydesk.exe",
+        "anydeskmsi.exe"
+      ],
+      "raw_values": [
+        "*\\\\AnyDesk.exe",
+        "*\\\\AnyDeskMSI.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "anydesk"
+      ],
+      "raw_values": [
+        "AnyDesk"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "anydesk"
+      ],
+      "raw_values": [
+        "AnyDesk"
+      ]
+    },
+    {
+      "field": "process.pe.company",
+      "raw_field": "process.pe.company",
+      "operator": ":",
+      "values": [
+        "anydesk software gmbh"
+      ],
+      "raw_values": [
+        "AnyDesk Software GmbH"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\AnyDesk.exe\", \"*\\\\AnyDeskMSI.exe\")) or process.pe.description:\"AnyDesk\" or process.pe.product:\"AnyDesk\" or process.pe.company:\"AnyDesk Software GmbH\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_anydesk.eql",
+  "metadata": {}
+}

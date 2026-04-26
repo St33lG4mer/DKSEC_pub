@@ -1,0 +1,94 @@
+{
+  "id": "8f9dc39e-2961-5897-ab19-be0eaacca05c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_registry_modification_of_ms_setting_protocol_handler",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "new-itemproperty",
+        "set-itemproperty"
+      ],
+      "raw_values": [
+        "*New-ItemProperty*",
+        "*Set-ItemProperty*",
+        "*ni *",
+        "*sp *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "command"
+      ],
+      "raw_values": [
+        "*add*",
+        "*\\\\ms-settings\\\\shell\\\\open\\\\command*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and process.command_line:\"*add*\") or (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"powershell.exe\", \"pwsh.dll\"))) and (process.command_line like~ (\"*New-ItemProperty*\", \"*Set-ItemProperty*\", \"*ni *\", \"*sp *\")))) and process.command_line:\"*\\\\ms-settings\\\\shell\\\\open\\\\command*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_registry_modification_of_ms_setting_protocol_handler.eql",
+  "metadata": {}
+}

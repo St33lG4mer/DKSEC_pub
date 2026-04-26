@@ -1,0 +1,40 @@
+{
+  "id": "a6a3d48e-df15-5eab-9244-29d129d62abd",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_trufflesnout",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "trufflesnout.exe"
+      ],
+      "raw_values": [
+        "TruffleSnout.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "trufflesnout.exe"
+      ],
+      "raw_values": [
+        "*\\\\TruffleSnout.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"TruffleSnout.exe\" or process.executable:\"*\\\\TruffleSnout.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_trufflesnout.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "0b4d573f-dc72-5244-9a93-a1a96e0aa30b",
+  "catalog": "sigma",
+  "name": "file_event_win_sysinternals_psexec_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "psexesvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\PSEXESVC.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\PSEXESVC.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_sysinternals_psexec_service.eql",
+  "metadata": {}
+}

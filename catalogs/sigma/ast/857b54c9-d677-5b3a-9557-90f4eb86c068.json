@@ -1,0 +1,29 @@
+{
+  "id": "857b54c9-d677-5b3a-9557-90f4eb86c068",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_small_sieve_cli_arg",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".exe platypus"
+      ],
+      "raw_values": [
+        "*.exe Platypus"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*.exe Platypus\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Small-Sieve/proc_creation_win_malware_small_sieve_cli_arg.eql",
+  "metadata": {}
+}

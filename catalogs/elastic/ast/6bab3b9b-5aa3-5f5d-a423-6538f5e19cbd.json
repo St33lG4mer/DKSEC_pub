@@ -1,0 +1,104 @@
+{
+  "id": "6bab3b9b-5aa3-5f5d-a423-6538f5e19cbd",
+  "catalog": "elastic",
+  "name": "Suspicious Web Browser Sensitive File Access",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "cookies.sqlite",
+        "key?.db",
+        "logins.json",
+        "cookies",
+        "cookies.binarycookies",
+        "login data"
+      ],
+      "raw_values": [
+        "cookies.sqlite",
+        "key?.db",
+        "logins.json",
+        "Cookies",
+        "Cookies.binarycookies",
+        "Login Data"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "open"
+      ],
+      "raw_values": [
+        "open"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "osascript"
+      ],
+      "raw_values": [
+        "osascript"
+      ]
+    },
+    {
+      "field": "process.code_signature.signing_id",
+      "raw_field": "process.code_signature.signing_id",
+      "operator": "==",
+      "values": [
+        "org.mozilla.firefox"
+      ],
+      "raw_values": [
+        "org.mozilla.firefox"
+      ]
+    },
+    {
+      "field": "effective_process.executable",
+      "raw_field": "Effective_process.executable",
+      "operator": "like",
+      "values": [
+        "/library/elastic/endpoint/elastic-endpoint.app/contents/macos/elastic-endpoint"
+      ],
+      "raw_values": [
+        "/Library/Elastic/Endpoint/elastic-endpoint.app/Contents/MacOS/elastic-endpoint"
+      ]
+    }
+  ],
+  "raw_query": "file where event.action == \"open\" and host.os.type == \"macos\" and process.executable != null and\n file.name like~ (\"cookies.sqlite\",\n                  \"key?.db\",\n                  \"logins.json\",\n                  \"Cookies\",\n                  \"Cookies.binarycookies\",\n                  \"Login Data\") and\n ((process.code_signature.trusted == false or process.code_signature.exists == false) or process.name == \"osascript\") and\n not process.code_signature.signing_id == \"org.mozilla.firefox\" and\n not Effective_process.executable like \"/Library/Elastic/Endpoint/elastic-endpoint.app/Contents/MacOS/elastic-endpoint\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/credential_access_suspicious_web_browser_sensitive_file_access.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

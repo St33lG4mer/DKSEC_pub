@@ -1,0 +1,31 @@
+{
+  "id": "68be0dd9-0e76-58c8-ad5a-d1c715758306",
+  "catalog": "elastic",
+  "name": "Potential Network Scan Executed From Host",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and\nevent.action:(exec or exec_event or executed or process_started or start or ProcessRollup2) and\nprocess.name:(ping or nping or hping or hping2 or hping3 or nc or ncat or netcat or socat)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_ping_sweep_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

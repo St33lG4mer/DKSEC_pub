@@ -1,0 +1,29 @@
+{
+  "id": "176b740e-fecb-561a-a32d-dba866ee934e",
+  "catalog": "sigma",
+  "name": "file_executable_detected_win_susp_embeded_sed_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".sed"
+      ],
+      "raw_values": [
+        "*.sed"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*.sed\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_executable_detected/file_executable_detected_win_susp_embeded_sed_file.eql",
+  "metadata": {}
+}

@@ -1,0 +1,51 @@
+{
+  "id": "6da506a9-e295-54a3-908c-ea4522f6cbe2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_public_folder",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "public",
+        "-fi %public%",
+        "-file %public%"
+      ],
+      "raw_values": [
+        "*-f C:\\\\Users\\\\Public*",
+        "*-f \\",
+        ", ",
+        "C:\\\\Users\\\\Public*",
+        "*-fi %Public%*",
+        "*-fil C:\\\\Users\\\\Public*",
+        "*-fil \\",
+        "*-file %Public%*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.command_line like~ (\"*-f C:\\\\Users\\\\Public*\", \"*-f \\\"C:\\\\Users\\\\Public*\", \"*-f %Public%*\", \"*-fi C:\\\\Users\\\\Public*\", \"*-fi \\\"C:\\\\Users\\\\Public*\", \"*-fi %Public%*\", \"*-fil C:\\\\Users\\\\Public*\", \"*-fil \\\"C:\\\\Users\\\\Public*\", \"*-fil %Public%*\", \"*-file C:\\\\Users\\\\Public*\", \"*-file \\\"C:\\\\Users\\\\Public*\", \"*-file %Public%*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_public_folder.eql",
+  "metadata": {}
+}

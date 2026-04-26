@@ -1,0 +1,17 @@
+{
+  "id": "a9e22653-05a0-5a81-b0da-a9528cf748ee",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_empire_powershell_uac_bypass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.command_line like~ (\"* -NoP -NonI -w Hidden -c $x=$((gp HKCU:Software\\\\Microsoft\\\\Windows Update).Update)*\", \"* -NoP -NonI -c $x=$((gp HKCU:Software\\\\Microsoft\\\\Windows Update).Update);*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_empire_powershell_uac_bypass.eql",
+  "metadata": {}
+}

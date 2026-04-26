@@ -1,0 +1,29 @@
+{
+  "id": "d6094da0-bf02-5665-9ee7-86466d5e155d",
+  "catalog": "sigma",
+  "name": "registry_event_malware_qakbot_registry",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\firm\\\\soft\\\\name"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\firm\\\\soft\\\\Name"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\firm\\\\soft\\\\Name\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_malware_qakbot_registry.eql",
+  "metadata": {}
+}

@@ -1,0 +1,33 @@
+{
+  "id": "7ba7e6b2-f7c1-5f6c-915f-b4483ce4ce83",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_lazarus_binary_masquerading",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "msdtc.exe",
+        "gpsvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdtc.exe",
+        "*\\\\gpsvc.exe",
+        "C:\\\\Windows\\\\System32\\\\*",
+        "C:\\\\Windows\\\\SysWOW64\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\msdtc.exe\", \"*\\\\gpsvc.exe\")) and (not (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/TA/Lazarus/proc_creation_win_apt_lazarus_binary_masquerading.eql",
+  "metadata": {}
+}

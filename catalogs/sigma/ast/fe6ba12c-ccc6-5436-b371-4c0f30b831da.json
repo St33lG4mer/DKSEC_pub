@@ -1,0 +1,30 @@
+{
+  "id": "fe6ba12c-ccc6-5436-b371-4c0f30b831da",
+  "catalog": "sigma",
+  "name": "image_load_side_load_mfdetours",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mfdetours.dll"
+      ],
+      "raw_values": [
+        "*\\\\mfdetours.dll",
+        "*:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\bin\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\mfdetours.dll\" and (not file.path:\"*:\\\\Program Files (x86)\\\\Windows Kits\\\\10\\\\bin\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_mfdetours.eql",
+  "metadata": {}
+}

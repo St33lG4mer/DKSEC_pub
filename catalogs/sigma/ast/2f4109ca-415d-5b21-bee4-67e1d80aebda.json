@@ -1,0 +1,53 @@
+{
+  "id": "2f4109ca-415d-5b21-bee4-67e1d80aebda",
+  "catalog": "sigma",
+  "name": "proc_creation_win_curl_insecure_proxy_or_doh",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--doh-insecure",
+        "--proxy-insecure"
+      ],
+      "raw_values": [
+        "*--doh-insecure*",
+        "*--proxy-insecure*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "curl.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\curl.exe\" or process.pe.original_file_name:\"curl.exe\") and (process.command_line like~ (\"*--doh-insecure*\", \"*--proxy-insecure*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_curl_insecure_proxy_or_doh.eql",
+  "metadata": {}
+}

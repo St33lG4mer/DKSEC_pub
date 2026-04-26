@@ -1,0 +1,80 @@
+{
+  "id": "0a6a07b7-9ffd-5636-9703-36f8666f76e5",
+  "catalog": "sigma",
+  "name": "proc_access_win_lsass_whitelisted_process_names",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "trolleyexpress.exe",
+        "processdump.exe",
+        "dump64.exe"
+      ],
+      "raw_values": [
+        "*\\\\TrolleyExpress.exe",
+        "*\\\\ProcessDump.exe",
+        "*\\\\dump64.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": "like~",
+      "values": [
+        "0x14c2"
+      ],
+      "raw_values": [
+        "*10",
+        "*30",
+        "*50",
+        "*70",
+        "*90",
+        "*B0",
+        "*D0",
+        "*F0",
+        "*18",
+        "*38",
+        "*58",
+        "*78",
+        "*98",
+        "*B8",
+        "*D8",
+        "*F8",
+        "*1A",
+        "*3A",
+        "*5A",
+        "*7A",
+        "*9A",
+        "*BA",
+        "*DA",
+        "*FA",
+        "*0x14C2",
+        "*FF"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and (process.executable like~ (\"*\\\\TrolleyExpress.exe\", \"*\\\\ProcessDump.exe\", \"*\\\\dump64.exe\")) and (winlog.event_data.GrantedAccess like~ (\"*10\", \"*30\", \"*50\", \"*70\", \"*90\", \"*B0\", \"*D0\", \"*F0\", \"*18\", \"*38\", \"*58\", \"*78\", \"*98\", \"*B8\", \"*D8\", \"*F8\", \"*1A\", \"*3A\", \"*5A\", \"*7A\", \"*9A\", \"*BA\", \"*DA\", \"*FA\", \"*0x14C2\", \"*FF\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_access/proc_access_win_lsass_whitelisted_process_names.eql",
+  "metadata": {}
+}

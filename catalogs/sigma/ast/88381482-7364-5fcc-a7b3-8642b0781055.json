@@ -1,0 +1,54 @@
+{
+  "id": "88381482-7364-5fcc-a7b3-8642b0781055",
+  "catalog": "sigma",
+  "name": "proc_creation_win_gpg4win_encryption",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "gpg.exe",
+        "gpg2.exe"
+      ],
+      "raw_values": [
+        "*\\\\gpg.exe",
+        "*\\\\gpg2.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "gnupg’s openpgp tool"
+      ],
+      "raw_values": [
+        "GnuPG’s OpenPGP tool"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "passphrase"
+      ],
+      "raw_values": [
+        "* -c *",
+        "*passphrase*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\gpg.exe\", \"*\\\\gpg2.exe\")) or process.pe.description:\"GnuPG’s OpenPGP tool\") and (process.command_line:\"* -c *\" and process.command_line:\"*passphrase*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_gpg4win_encryption.eql",
+  "metadata": {}
+}

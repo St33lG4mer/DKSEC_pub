@@ -1,0 +1,48 @@
+{
+  "id": "e7dfdc26-4ccc-5d65-909b-3b20118f9d63",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_archiver_iso_phishing",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "winrar.exe",
+        "7zfm.exe",
+        "peazip.exe"
+      ],
+      "raw_values": [
+        "*\\\\Winrar.exe",
+        "*\\\\7zFM.exe",
+        "*\\\\peazip.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "isoburn.exe",
+        "poweriso.exe",
+        "imgburn.exe"
+      ],
+      "raw_values": [
+        "*\\\\isoburn.exe",
+        "*\\\\PowerISO.exe",
+        "*\\\\ImgBurn.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable like~ (\"*\\\\Winrar.exe\", \"*\\\\7zFM.exe\", \"*\\\\peazip.exe\")) and (process.executable like~ (\"*\\\\isoburn.exe\", \"*\\\\PowerISO.exe\", \"*\\\\ImgBurn.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_archiver_iso_phishing.eql",
+  "metadata": {}
+}

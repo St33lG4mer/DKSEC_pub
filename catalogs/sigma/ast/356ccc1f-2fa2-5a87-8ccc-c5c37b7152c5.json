@@ -1,0 +1,53 @@
+{
+  "id": "356ccc1f-2fa2-5a87-8ccc-c5c37b7152c5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_iis_connection_strings_decryption",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "aspnet_regiis.exe"
+      ],
+      "raw_values": [
+        "*\\\\aspnet_regiis.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "aspnet_regiis.exe"
+      ],
+      "raw_values": [
+        "aspnet_regiis.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "connectionstrings",
+        "-pdf"
+      ],
+      "raw_values": [
+        "*connectionStrings*",
+        "* -pdf*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\aspnet_regiis.exe\" or process.pe.original_file_name:\"aspnet_regiis.exe\") and (process.command_line:\"*connectionStrings*\" and process.command_line:\"* -pdf*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_iis_connection_strings_decryption.eql",
+  "metadata": {}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "142bf980-bc13-57f8-a5c1-5159c45ba16a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_disable_raccine",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "taskkill",
+        "raccinesettings.exe",
+        "reg.exe",
+        "delete",
+        "raccine tray",
+        "schtasks",
+        "raccine rules updater"
+      ],
+      "raw_values": [
+        "*taskkill *",
+        "*RaccineSettings.exe*",
+        "*reg.exe*",
+        "*delete*",
+        "*Raccine Tray*",
+        "*schtasks*",
+        "*/DELETE*",
+        "*Raccine Rules Updater*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*taskkill *\" and process.command_line:\"*RaccineSettings.exe*\") or (process.command_line:\"*reg.exe*\" and process.command_line:\"*delete*\" and process.command_line:\"*Raccine Tray*\") or (process.command_line:\"*schtasks*\" and process.command_line:\"*/DELETE*\" and process.command_line:\"*Raccine Rules Updater*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_disable_raccine.eql",
+  "metadata": {}
+}

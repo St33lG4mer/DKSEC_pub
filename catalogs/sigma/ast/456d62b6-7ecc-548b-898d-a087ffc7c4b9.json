@@ -1,0 +1,44 @@
+{
+  "id": "456d62b6-7ecc-548b-898d-a087ffc7c4b9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_stordiag_susp_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "schtasks.exe",
+        "systeminfo.exe",
+        "fltmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe",
+        "*\\\\systeminfo.exe",
+        "*\\\\fltmc.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "stordiag.exe"
+      ],
+      "raw_values": [
+        "*\\\\stordiag.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\stordiag.exe\" and (process.executable like~ (\"*\\\\schtasks.exe\", \"*\\\\systeminfo.exe\", \"*\\\\fltmc.exe\"))) and (not (process.parent.executable like~ (\"c:\\\\windows\\\\system32\\\\*\", \"c:\\\\windows\\\\syswow64\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_stordiag_susp_child_process.eql",
+  "metadata": {}
+}

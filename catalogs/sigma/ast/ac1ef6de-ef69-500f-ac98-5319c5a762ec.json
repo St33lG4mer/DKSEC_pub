@@ -1,0 +1,29 @@
+{
+  "id": "ac1ef6de-ef69-500f-ac98-5319c5a762ec",
+  "catalog": "sigma",
+  "name": "posh_pm_syncappvpublishingserver_exe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "powershell"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": ":",
+      "values": [
+        "syncappvpublishingserver.exe"
+      ],
+      "raw_values": [
+        "*SyncAppvPublishingServer.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.ContextInfo:\"*SyncAppvPublishingServer.exe*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/powershell/powershell_module/posh_pm_syncappvpublishingserver_exe.eql",
+  "metadata": {}
+}

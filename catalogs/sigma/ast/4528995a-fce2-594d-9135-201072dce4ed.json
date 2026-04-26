@@ -1,0 +1,29 @@
+{
+  "id": "4528995a-fce2-594d-9135-201072dce4ed",
+  "catalog": "sigma",
+  "name": "proc_creation_win_takeown_recursive_own",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "takeown.exe"
+      ],
+      "raw_values": [
+        "*\\\\takeown.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\takeown.exe\" and (process.command_line:\"*/f *\" and process.command_line:\"*/r*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_takeown_recursive_own.eql",
+  "metadata": {}
+}

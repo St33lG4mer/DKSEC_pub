@@ -1,0 +1,170 @@
+{
+  "id": "124aeebd-2b62-5199-a209-4e190eb4e185",
+  "catalog": "elastic",
+  "name": "MsiExec Service Child Process With Network Connection",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe",
+        "srtasks.exe",
+        "taskkill.exe",
+        ".exe",
+        "rundll32.exe",
+        "regsvr32.exe",
+        "powershell.exe",
+        "regasm.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "?:\\\\Windows\\\\sysWOW64\\\\msiexec.exe",
+        "?:\\\\Windows\\\\system32\\\\srtasks.exe",
+        "?:\\\\Windows\\\\syswow64\\\\srtasks.exe",
+        "?:\\\\Windows\\\\sys*\\\\taskkill.exe",
+        "?:\\\\Program Files\\\\*.exe",
+        "rundll32.exe",
+        "regsvr32.exe",
+        "powershell.exe",
+        "regasm.exe",
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": ":",
+      "values": [
+        "bruno software inc",
+        "proton ag",
+        "axis communications ab",
+        "citrix systems, inc.",
+        "nsus limited",
+        "action1 corporation",
+        "solarwinds worldwide, llc",
+        "microsoft corporation"
+      ],
+      "raw_values": [
+        "Bruno Software Inc",
+        "Proton AG",
+        "Axis Communications AB",
+        "Citrix Systems, Inc.",
+        "NSUS Limited",
+        "Action1 Corporation",
+        "Solarwinds Worldwide, LLC",
+        "Microsoft Corporation"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "core.bdec.microsoft.com",
+        "go.microsoft.com",
+        "ocsp.digicert.com",
+        "localhost",
+        "www.google-analytics.com",
+        "ocsp.verisign.com",
+        ".symcb.com"
+      ],
+      "raw_values": [
+        "core.bdec.microsoft.com",
+        "go.microsoft.com",
+        "ocsp.digicert.com",
+        "localhost",
+        "www.google-analytics.com",
+        "ocsp.verisign.com",
+        "*.symcb.com"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "in",
+      "values": [
+        "dxsetup.exe",
+        "mofcompiler.exe",
+        "shellapp.exe"
+      ],
+      "raw_values": [
+        "dxsetup.exe",
+        "MofCompiler.exe",
+        "ShellApp.exe"
+      ]
+    },
+    {
+      "field": "process.hash.sha256",
+      "raw_field": "process.hash.sha256",
+      "operator": "in",
+      "values": [
+        "cfaef8c711db04d6c4a4381c66ac21b9e234e57febedb77fedc9316898b214bc",
+        "2f26f37cce780ca76f0dbac0de233f4c8d84c31b3f37380b9d5faacc3ee2d03e",
+        "7d9c691bfbf3beb78919dfd940fa6d325c3437425d5b0371df39aef6accf858d"
+      ],
+      "raw_values": [
+        "cfaef8c711db04d6c4a4381c66ac21b9e234e57febedb77fedc9316898b214bc",
+        "2f26f37cce780ca76f0dbac0de233f4c8d84c31b3f37380b9d5faacc3ee2d03e",
+        "7d9c691bfbf3beb78919dfd940fa6d325c3437425d5b0371df39aef6accf858d"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "msiexec.exe"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=1m\n [process where host.os.type == \"windows\" and event.type : \"start\" and\n  process.parent.name : \"msiexec.exe\" and process.parent.args : \"/v\" and\n  not process.executable :\n        (\"?:\\\\Windows\\\\System32\\\\msiexec.exe\",\n         \"?:\\\\Windows\\\\sysWOW64\\\\msiexec.exe\",\n         \"?:\\\\Windows\\\\system32\\\\srtasks.exe\",\n         \"?:\\\\Windows\\\\syswow64\\\\srtasks.exe\",\n         \"?:\\\\Windows\\\\sys*\\\\taskkill.exe\",\n         \"?:\\\\Program Files\\\\*.exe\",\n         \"?:\\\\Program Files (x86)\\\\*.exe\",\n         \"?:\\\\Windows\\\\Installer\\\\MSI*.tmp\",\n         \"?:\\\\Windows\\\\Microsoft.NET\\\\Framework*\\\\RegSvcs.exe\",\n         \"C:\\\\Windows\\\\System32\\\\regsvr32.exe\",\n         \"C:\\\\Windows\\\\Sys?????\\\\certutil.exe\",\n         \"C:\\\\Windows\\\\System32\\\\WerFault.exe\",\n         \"C:\\\\Windows\\\\System32\\\\wevtutil.exe\",\n         \"C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\") and\n not (process.name : (\"rundll32.exe\", \"regsvr32.exe\", \"powershell.exe\", \"regasm.exe\", \"wscript.exe\") and process.args : (\"?:\\\\Program Files\\\\*\", \"?:\\\\Program Files (x86)\\\\*\")) and\n not (?process.code_signature.subject_name : (\"Bruno Software Inc\", \"Proton AG\", \"Axis Communications AB\", \"Citrix Systems, Inc.\", \"NSUS Limited\", \"Action1 Corporation\", \"Solarwinds Worldwide, LLC\") and\n      ?process.code_signature.trusted == true) and\n not (?process.pe.original_file_name in (\"dxsetup.exe\", \"MofCompiler.exe\", \"ShellApp.exe\") and\n      ?process.code_signature.subject_name : \"Microsoft Corporation\" and ?process.code_signature.trusted == true) and\n not ?process.hash.sha256 in (\"cfaef8c711db04d6c4a4381c66ac21b9e234e57febedb77fedc9316898b214bc\",\n                              \"2f26f37cce780ca76f0dbac0de233f4c8d84c31b3f37380b9d5faacc3ee2d03e\",\n                              \"7d9c691bfbf3beb78919dfd940fa6d325c3437425d5b0371df39aef6accf858d\")\n ]\n[network where host.os.type == \"windows\" and process.name != null and\n not dns.question.name : (\"core.bdec.microsoft.com\", \"go.microsoft.com\", \"ocsp.digicert.com\", \"localhost\", \"www.google-analytics.com\",\n                          \"ocsp.verisign.com\", \"*.symcb.com\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_msiexec_child_proc_netcon.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

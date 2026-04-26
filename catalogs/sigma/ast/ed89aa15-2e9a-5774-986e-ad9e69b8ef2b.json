@@ -1,0 +1,29 @@
+{
+  "id": "ed89aa15-2e9a-5774-986e-ad9e69b8ef2b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_whoami_as_param",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".exe whoami"
+      ],
+      "raw_values": [
+        "*.exe whoami*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*.exe whoami*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_whoami_as_param.eql",
+  "metadata": {}
+}

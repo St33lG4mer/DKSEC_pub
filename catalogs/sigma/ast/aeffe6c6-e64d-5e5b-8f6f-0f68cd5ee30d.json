@@ -1,0 +1,29 @@
+{
+  "id": "aeffe6c6-e64d-5e5b-8f6f-0f68cd5ee30d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_logon_script",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "userinitmprlogonscript"
+      ],
+      "raw_values": [
+        "*UserInitMprLogonScript*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*UserInitMprLogonScript*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_logon_script.eql",
+  "metadata": {}
+}

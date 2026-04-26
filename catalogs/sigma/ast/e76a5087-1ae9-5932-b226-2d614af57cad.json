@@ -1,0 +1,42 @@
+{
+  "id": "e76a5087-1ae9-5932-b226-2d614af57cad",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_susp_sqldumper_activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "0x0110",
+        "0x01100:40"
+      ],
+      "raw_values": [
+        "*0x0110*",
+        "*0x01100:40*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqldumper.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqldumper.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\sqldumper.exe\" and (process.command_line like~ (\"*0x0110*\", \"*0x01100:40*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_susp_sqldumper_activity.eql",
+  "metadata": {}
+}

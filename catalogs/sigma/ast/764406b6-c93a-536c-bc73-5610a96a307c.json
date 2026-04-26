@@ -1,0 +1,30 @@
+{
+  "id": "764406b6-c93a-536c-bc73-5610a96a307c",
+  "catalog": "sigma",
+  "name": "file_access_win_susp_dpapi_master_key_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "s-1-5-21-"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Protect\\\\S-1-5-18\\\\*",
+        "*\\\\Microsoft\\\\Protect\\\\S-1-5-21-*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\Microsoft\\\\Protect\\\\S-1-5-18\\\\*\", \"*\\\\Microsoft\\\\Protect\\\\S-1-5-21-*\")) and (not (process.executable like~ (\"C:\\\\Program Files\\\\*\", \"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Windows\\\\system32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_access/file_access_win_susp_dpapi_master_key_access.eql",
+  "metadata": {}
+}

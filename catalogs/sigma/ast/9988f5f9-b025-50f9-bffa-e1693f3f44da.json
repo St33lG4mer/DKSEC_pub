@@ -1,0 +1,43 @@
+{
+  "id": "9988f5f9-b025-50f9-bffa-e1693f3f44da",
+  "catalog": "sigma",
+  "name": "file_event_win_pfx_file_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "onedrive.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft OneDrive\\\\OneDrive.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".pfx",
+        "codesigning.pfx"
+      ],
+      "raw_values": [
+        "*.pfx",
+        "*\\\\OneDrive\\\\CodeSigning.pfx",
+        "C:\\\\Program Files\\\\CMake\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*.pfx\" and (not (((process.executable like~ (\"C:\\\\Program Files\\\\Microsoft OneDrive\\\\OneDrive.exe\", \"C:\\\\Program Files (x86)\\\\Microsoft OneDrive\\\\OneDrive.exe\")) and file.path:\"*\\\\OneDrive\\\\CodeSigning.pfx\") or (file.path like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\*\", \"C:\\\\Program Files\\\\Microsoft Visual Studio\\\\*\")) or file.path:\"C:\\\\Program Files\\\\CMake\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_event/file_event_win_pfx_file_creation.eql",
+  "metadata": {}
+}

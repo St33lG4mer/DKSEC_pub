@@ -1,0 +1,66 @@
+{
+  "id": "4b67cb1c-8d70-5de4-82d6-55778e7e7df4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_netsh_port_forwarding",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "interface",
+        "portproxy",
+        "add",
+        "v4tov4",
+        "connectp",
+        "listena"
+      ],
+      "raw_values": [
+        "*interface*",
+        "*portproxy*",
+        "*add*",
+        "*v4tov4*",
+        "*i *",
+        "*p *",
+        "*a *",
+        "*v *",
+        "*connectp*",
+        "*listena*",
+        "*c=*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\netsh.exe\" or process.pe.original_file_name:\"netsh.exe\") and ((process.command_line:\"*interface*\" and process.command_line:\"*portproxy*\" and process.command_line:\"*add*\" and process.command_line:\"*v4tov4*\") or (process.command_line:\"*i *\" and process.command_line:\"*p *\" and process.command_line:\"*a *\" and process.command_line:\"*v *\") or (process.command_line:\"*connectp*\" and process.command_line:\"*listena*\" and process.command_line:\"*c=*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_netsh_port_forwarding.eql",
+  "metadata": {}
+}

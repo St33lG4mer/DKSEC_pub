@@ -1,0 +1,130 @@
+{
+  "id": "80434909-f05f-5157-a5a7-b747b2a0545f",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_binary_dropper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "msiexec.exe",
+        "cleanmgr.exe",
+        "explorer.exe",
+        "dxgiadaptercache.exe",
+        "dism.exe",
+        "wuauclt.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "*:\\\\Windows\\\\system32\\\\cleanmgr.exe",
+        "*:\\\\Windows\\\\explorer.exe",
+        "*:\\\\WINDOWS\\\\system32\\\\dxgiadaptercache.exe",
+        "*:\\\\WINDOWS\\\\system32\\\\Dism.exe",
+        "*:\\\\Windows\\\\System32\\\\wuauclt.exe",
+        "*:\\\\Program Files\\\\*",
+        "*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\*",
+        "*:\\\\Program Files\\\\Windows Defender\\\\*",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "teams.exe",
+        "squirrel.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\*",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\stage\\\\Teams.exe",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\stage\\\\Squirrel.exe",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\SquirrelTemp\\\\tempb\\\\",
+        "*\\\\Python27\\\\Lib\\\\site-packages\\\\*",
+        "*\\\\Python27\\\\Scripts\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "svchost.exe",
+        "windowsupdatebox.exe",
+        "tiworker.exe",
+        "update.exe",
+        "mscorsvw.exe",
+        "code.exe",
+        "framework",
+        "python.exe",
+        "chromesetup.exe"
+      ],
+      "raw_values": [
+        "*.exe",
+        "*:\\\\WINDOWS\\\\system32\\\\svchost.exe",
+        "*:\\\\Windows\\\\system32\\\\svchost.exe",
+        "*:\\\\WINDOWS\\\\SoftwareDistribution\\\\Download\\\\*",
+        "*\\\\WindowsUpdateBox.Exe",
+        "*:\\\\Windows\\\\WinSxS\\\\*",
+        "*\\\\TiWorker.exe",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\Update.exe",
+        "*\\\\mscorsvw.exe",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\Microsoft VS Code\\\\Code.exe",
+        "*\\\\AppData\\\\Local\\\\GitHubDesktop\\\\Update.exe",
+        "*:\\\\WINDOWS\\\\TEMP\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\Microsoft.NET\\\\Framework*",
+        "*\\\\Python27\\\\python.exe*",
+        "*\\\\AppData\\\\Local\\\\SquirrelTemp\\\\Update.exe*",
+        "*\\\\ChromeSetup.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "windowsupdatebox.exe",
+        "nativeimages_",
+        "assembly",
+        "local",
+        "google"
+      ],
+      "raw_values": [
+        "*.exe",
+        "*:\\\\Windows\\\\SoftwareDistribution\\\\Download\\\\*",
+        "*:\\\\WUDownloadCache\\\\*",
+        "*\\\\WindowsUpdateBox.exe*",
+        "*:\\\\$WINDOWS.~BT\\\\Sources\\\\*",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\WindowsApps\\\\*",
+        "*:\\\\Windows\\\\assembly\\\\NativeImages_*",
+        "*\\\\.vscode\\\\extensions\\\\*",
+        "*\\\\AppData\\\\Local\\\\SquirrelTemp\\\\*",
+        "*:\\\\WINDOWS\\\\TEMP\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\assembly*",
+        "*\\\\AppData\\\\Local*",
+        "*\\\\Google*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*.exe\" and file.path:\"*.exe\") and (not ((process.executable like~ (\"*:\\\\Windows\\\\System32\\\\msiexec.exe\", \"*:\\\\Windows\\\\system32\\\\cleanmgr.exe\", \"*:\\\\Windows\\\\explorer.exe\", \"*:\\\\WINDOWS\\\\system32\\\\dxgiadaptercache.exe\", \"*:\\\\WINDOWS\\\\system32\\\\Dism.exe\", \"*:\\\\Windows\\\\System32\\\\wuauclt.exe\")) or (process.executable:\"*:\\\\WINDOWS\\\\system32\\\\svchost.exe\" and file.path:\"*:\\\\Windows\\\\SoftwareDistribution\\\\Download\\\\*\") or (process.executable:\"*:\\\\Windows\\\\system32\\\\svchost.exe\" and (file.path:\"*:\\\\WUDownloadCache\\\\*\" and file.path:\"*\\\\WindowsUpdateBox.exe*\")) or (process.executable:\"*:\\\\WINDOWS\\\\SoftwareDistribution\\\\Download\\\\*\" and process.executable:\"*\\\\WindowsUpdateBox.Exe\" and file.path:\"*:\\\\$WINDOWS.~BT\\\\Sources\\\\*\") or (process.executable:\"*:\\\\Windows\\\\WinSxS\\\\*\" and process.executable:\"*\\\\TiWorker.exe\") or ((process.executable like~ (\"*:\\\\Program Files\\\\*\", \"*:\\\\Program Files (x86)\\\\*\")) or (file.path like~ (\"*:\\\\Program Files\\\\*\", \"*:\\\\Program Files (x86)\\\\*\"))) or (process.executable like~ (\"*:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\*\", \"*:\\\\Program Files\\\\Windows Defender\\\\*\")) or file.path:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\WindowsApps\\\\*\" or (process.executable:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\Update.exe\" and (file.path like~ (\"*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\stage\\\\Teams.exe\", \"*\\\\AppData\\\\Local\\\\Microsoft\\\\Teams\\\\stage\\\\Squirrel.exe\", \"*\\\\AppData\\\\Local\\\\Microsoft\\\\SquirrelTemp\\\\tempb\\\\\"))) or ((process.executable like~ (\"*:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*\")) and process.executable:\"*\\\\mscorsvw.exe\" and file.path:\"*:\\\\Windows\\\\assembly\\\\NativeImages_*\") or (process.executable:\"*\\\\AppData\\\\Local\\\\*\" and process.executable:\"*\\\\Microsoft VS Code\\\\Code.exe\" and file.path:\"*\\\\.vscode\\\\extensions\\\\*\") or (process.executable:\"*\\\\AppData\\\\Local\\\\GitHubDesktop\\\\Update.exe\" and file.path:\"*\\\\AppData\\\\Local\\\\SquirrelTemp\\\\*\") or (process.executable:\"*:\\\\WINDOWS\\\\TEMP\\\\*\" or file.path:\"*:\\\\WINDOWS\\\\TEMP\\\\*\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" or file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\") or (process.executable:\"*:\\\\Windows\\\\Microsoft.NET\\\\Framework*\" and process.executable:\"*\\\\mscorsvw.exe\" and file.path:\"*:\\\\Windows\\\\assembly*\"))) and (not ((process.executable:\"*\\\\Python27\\\\python.exe*\" and (file.path like~ (\"*\\\\Python27\\\\Lib\\\\site-packages\\\\*\", \"*\\\\Python27\\\\Scripts\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\"))) or (process.executable:\"*\\\\AppData\\\\Local\\\\SquirrelTemp\\\\Update.exe*\" and file.path:\"*\\\\AppData\\\\Local*\") or (process.executable:\"*\\\\ChromeSetup.exe\" and file.path:\"*\\\\Google*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_event/file_event_win_susp_binary_dropper.eql",
+  "metadata": {}
+}

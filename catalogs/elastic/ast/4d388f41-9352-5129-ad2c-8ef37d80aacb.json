@@ -1,0 +1,96 @@
+{
+  "id": "4d388f41-9352-5129-ad2c-8ef37d80aacb",
+  "catalog": "elastic",
+  "name": "Modification of Boot Configuration",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bcdedit.exe"
+      ],
+      "raw_values": [
+        "bcdedit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "bcdedit.exe"
+      ],
+      "raw_values": [
+        "bcdedit.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "set",
+        "bootstatuspolicy",
+        "ignoreallfailures",
+        "recoveryenabled"
+      ],
+      "raw_values": [
+        "/set",
+        "bootstatuspolicy",
+        "ignoreallfailures",
+        "no",
+        "recoveryenabled"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (process.name : \"bcdedit.exe\" or ?process.pe.original_file_name == \"bcdedit.exe\") and\n    (\n      (process.args : \"/set\" and process.args : \"bootstatuspolicy\" and process.args : \"ignoreallfailures\") or\n      (process.args : \"no\" and process.args : \"recoveryenabled\")\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/impact_modification_of_boot_config.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

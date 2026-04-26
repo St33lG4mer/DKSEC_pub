@@ -1,0 +1,38 @@
+{
+  "id": "c774455f-b852-5316-a8f8-56972df22b7b",
+  "catalog": "elastic",
+  "name": "Entra ID Application Credential Modified",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "update application - certificates and secrets management"
+      ],
+      "raw_values": [
+        "Update application - Certificates and secrets management"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.auditlogs and azure.auditlogs.operation_name:\"Update application - Certificates and secrets management\" and event.outcome:(success or Success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/persistence_entra_id_application_credential_modification.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

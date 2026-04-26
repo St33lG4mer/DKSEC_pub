@@ -1,0 +1,96 @@
+{
+  "id": "1a7de691-7013-5e4f-8604-4933bfca3522",
+  "catalog": "sigma",
+  "name": "registry_set_windows_defender_tamper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows defender\\\\",
+        "\\\\software\\\\policies\\\\microsoft\\\\windows defender security center\\\\",
+        "\\\\software\\\\policies\\\\microsoft\\\\windows defender\\\\",
+        "\\\\disableantispyware",
+        "\\\\disableantivirus",
+        "\\\\disablebehaviormonitoring",
+        "\\\\disableblockatfirstseen",
+        "\\\\disableenhancednotifications",
+        "\\\\disableintrusionpreventionsystem",
+        "\\\\disableioavprotection",
+        "\\\\disableonaccessprotection",
+        "\\\\disablerealtimemonitoring",
+        "\\\\disablescanonrealtimeenable",
+        "\\\\disablescriptscanning",
+        "\\\\disallowexploitprotectionoverride",
+        "\\\\features\\\\tamperprotection",
+        "\\\\mpengine\\\\mpenablepus",
+        "\\\\puaprotection",
+        "\\\\signature update\\\\forceupdatefrommu",
+        "\\\\spynet\\\\spynetreporting",
+        "\\\\spynet\\\\submitsamplesconsent",
+        "\\\\windows defender exploit guard\\\\controlled folder access\\\\enablecontrolledfolderaccess"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows Defender\\\\*",
+        "*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender Security Center\\\\*",
+        "*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\*",
+        "*\\\\DisableAntiSpyware",
+        "*\\\\DisableAntiVirus",
+        "*\\\\DisableBehaviorMonitoring",
+        "*\\\\DisableBlockAtFirstSeen",
+        "*\\\\DisableEnhancedNotifications",
+        "*\\\\DisableIntrusionPreventionSystem",
+        "*\\\\DisableIOAVProtection",
+        "*\\\\DisableOnAccessProtection",
+        "*\\\\DisableRealtimeMonitoring",
+        "*\\\\DisableScanOnRealtimeEnable",
+        "*\\\\DisableScriptScanning",
+        "*\\\\DisallowExploitProtectionOverride",
+        "*\\\\Features\\\\TamperProtection",
+        "*\\\\MpEngine\\\\MpEnablePus",
+        "*\\\\PUAProtection",
+        "*\\\\Signature Update\\\\ForceUpdateFromMU",
+        "*\\\\SpyNet\\\\SpynetReporting",
+        "*\\\\SpyNet\\\\SubmitSamplesConsent",
+        "*\\\\Windows Defender Exploit Guard\\\\Controlled Folder Access\\\\EnableControlledFolderAccess"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)",
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)",
+        "DWORD (0x00000000)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sepwscsvc64.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Symantec\\\\Symantec Endpoint Protection\\\\*",
+        "*\\\\sepWscSvc64.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows Defender\\\\*\", \"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender Security Center\\\\*\", \"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\*\")) and (((registry.path like~ (\"*\\\\DisableAntiSpyware\", \"*\\\\DisableAntiVirus\", \"*\\\\DisableBehaviorMonitoring\", \"*\\\\DisableBlockAtFirstSeen\", \"*\\\\DisableEnhancedNotifications\", \"*\\\\DisableIntrusionPreventionSystem\", \"*\\\\DisableIOAVProtection\", \"*\\\\DisableOnAccessProtection\", \"*\\\\DisableRealtimeMonitoring\", \"*\\\\DisableScanOnRealtimeEnable\", \"*\\\\DisableScriptScanning\")) and winlog.event_data.Details:\"DWORD (0x00000001)\") or ((registry.path like~ (\"*\\\\DisallowExploitProtectionOverride\", \"*\\\\Features\\\\TamperProtection\", \"*\\\\MpEngine\\\\MpEnablePus\", \"*\\\\PUAProtection\", \"*\\\\Signature Update\\\\ForceUpdateFromMU\", \"*\\\\SpyNet\\\\SpynetReporting\", \"*\\\\SpyNet\\\\SubmitSamplesConsent\", \"*\\\\Windows Defender Exploit Guard\\\\Controlled Folder Access\\\\EnableControlledFolderAccess\")) and winlog.event_data.Details:\"DWORD (0x00000000)\")) and (not (process.executable:\"C:\\\\Program Files\\\\Symantec\\\\Symantec Endpoint Protection\\\\*\" and process.executable:\"*\\\\sepWscSvc64.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_windows_defender_tamper.eql",
+  "metadata": {}
+}

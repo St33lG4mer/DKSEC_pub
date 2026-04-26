@@ -1,0 +1,30 @@
+{
+  "id": "c2b3c010-0441-5004-8d34-00d492297fe3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msiexec_web_install",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "msiexec"
+      ],
+      "raw_values": [
+        "* msiexec*",
+        "*://*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"* msiexec*\" and process.command_line:\"*://*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msiexec_web_install.eql",
+  "metadata": {}
+}

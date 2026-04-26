@@ -1,0 +1,40 @@
+{
+  "id": "a8899883-cf51-50bf-ad33-2ed584aedb0f",
+  "catalog": "sigma",
+  "name": "registry_set_office_outlook_enable_macro_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\outlook\\\\security\\\\level"
+      ],
+      "raw_values": [
+        "*\\\\Outlook\\\\Security\\\\Level"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "0x00000001"
+      ],
+      "raw_values": [
+        "*0x00000001*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Outlook\\\\Security\\\\Level\" and winlog.event_data.Details:\"*0x00000001*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_office_outlook_enable_macro_execution.eql",
+  "metadata": {}
+}

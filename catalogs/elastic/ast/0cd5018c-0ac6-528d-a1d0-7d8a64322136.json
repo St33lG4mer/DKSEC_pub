@@ -1,0 +1,28 @@
+{
+  "id": "0cd5018c-0ac6-528d-a1d0-7d8a64322136",
+  "catalog": "elastic",
+  "name": "AWS IAM Group Creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail and \n    event.provider: iam.amazonaws.com and \n    event.action: CreateGroup and \n    event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_iam_group_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS IAM",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "51c71408-fedf-5076-8ac8-0460d21f2d92",
+  "catalog": "elastic",
+  "name": "Forwarded Google Workspace Security Alert",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: google_workspace.alert\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/google_workspace_alert_center_promotion.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Log Auditing",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

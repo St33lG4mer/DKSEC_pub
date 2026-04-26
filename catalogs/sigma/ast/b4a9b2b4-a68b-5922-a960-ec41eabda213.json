@@ -1,0 +1,81 @@
+{
+  "id": "b4a9b2b4-a68b-5922-a960-ec41eabda213",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_susp_process_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "rundll32",
+        "bitsadmin",
+        "regsvr32",
+        "powershell",
+        "pwsh",
+        "certutil",
+        "cscript",
+        "wscript",
+        "mshta",
+        "%temp%",
+        "%tmp%",
+        "%programdata%",
+        "%appdata%",
+        "%comspec%",
+        "%localappdata%"
+      ],
+      "raw_values": [
+        "*rundll32*",
+        "*bitsadmin*",
+        "*regsvr32*",
+        "*cmd.exe /c *",
+        "*cmd.exe /k *",
+        "*cmd.exe /r *",
+        "*cmd /c *",
+        "*cmd /k *",
+        "*cmd /r *",
+        "*powershell*",
+        "*pwsh*",
+        "*certutil*",
+        "*cscript*",
+        "*wscript*",
+        "*mshta*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*%temp%*",
+        "*%tmp%*",
+        "*%ProgramData%*",
+        "*%appdata%*",
+        "*%comspec%*",
+        "*%localappdata%*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "process",
+        "call",
+        "create"
+      ],
+      "raw_values": [
+        "*process *",
+        "*call *",
+        "*create *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*process *\" and process.command_line:\"*call *\" and process.command_line:\"*create *\") and (process.command_line like~ (\"*rundll32*\", \"*bitsadmin*\", \"*regsvr32*\", \"*cmd.exe /c *\", \"*cmd.exe /k *\", \"*cmd.exe /r *\", \"*cmd /c *\", \"*cmd /k *\", \"*cmd /r *\", \"*powershell*\", \"*pwsh*\", \"*certutil*\", \"*cscript*\", \"*wscript*\", \"*mshta*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\*\", \"*%temp%*\", \"*%tmp%*\", \"*%ProgramData%*\", \"*%appdata%*\", \"*%comspec%*\", \"*%localappdata%*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_susp_process_creation.eql",
+  "metadata": {}
+}

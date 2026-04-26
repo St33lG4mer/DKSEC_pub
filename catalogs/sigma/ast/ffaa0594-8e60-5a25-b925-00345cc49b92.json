@@ -1,0 +1,42 @@
+{
+  "id": "ffaa0594-8e60-5a25-b925-00345cc49b92",
+  "catalog": "sigma",
+  "name": "net_dns_mal_cobaltstrike",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": "like~",
+      "values": [
+        "aaa.stage.",
+        "post.1"
+      ],
+      "raw_values": [
+        "aaa.stage.*",
+        "post.1*"
+      ]
+    },
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        ".stage.123456."
+      ],
+      "raw_values": [
+        "*.stage.123456.*"
+      ]
+    }
+  ],
+  "raw_query": "any where (query like~ (\"aaa.stage.*\", \"post.1*\")) or query:\"*.stage.123456.*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/network/dns/net_dns_mal_cobaltstrike.eql",
+  "metadata": {}
+}

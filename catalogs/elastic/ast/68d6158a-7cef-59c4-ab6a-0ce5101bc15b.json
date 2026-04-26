@@ -1,0 +1,48 @@
+{
+  "id": "68d6158a-7cef-59c4-ab6a-0ce5101bc15b",
+  "catalog": "elastic",
+  "name": "Lateral Movement Alerts from a Newly Observed Source Address",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kibana.alert.rule.threat.tactic.name",
+      "raw_field": "kibana.alert.rule.threat.tactic.name",
+      "operator": ":",
+      "values": [
+        "lateral movement"
+      ],
+      "raw_values": [
+        "Lateral Movement"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.tags",
+      "raw_field": "kibana.alert.rule.tags",
+      "operator": ":",
+      "values": [
+        "rule type: higher-order rule"
+      ],
+      "raw_values": [
+        "Rule Type: Higher-Order Rule"
+      ]
+    }
+  ],
+  "raw_query": "FROM .alerts-security.* METADATA _index\n\n// Lateral Movement related rules with fields of interest\n| where kibana.alert.rule.threat.tactic.name is not null and\n        source.ip IS NOT NULL and destination.ip is not null and\n        host.id is not null and KQL(\"\"\"kibana.alert.rule.threat.tactic.name : \"Lateral Movement\" and not kibana.alert.rule.tags : \"Rule Type: Higher-Order Rule\" \"\"\")\n\n// aggregate stats by source.ip\n| stats  Esql.first_time_seen = MIN(@timestamp),\n         Esql.alerts_count = count(*),\n         Esql.unique_rules_count = COUNT_DISTINCT(kibana.alert.rule.name),\n         Esql.unique_count_host_id = COUNT_DISTINCT(host.id),\n         Esql.rule_name_values = VALUES(kibana.alert.rule.name),\n         Esql.user_name_values = VALUES(user.name),\n         Esql.host_id_values = VALUES(host.id),\n         Esql.host_ip_values = VALUES(host.ip),\n         Esql.tactic_name_values = VALUES(kibana.alert.rule.threat.tactic.name) by source.ip\n\n// values we will need for next filter\n| eval isLocal = locate(MV_CONCAT(to_string(Esql.host_ip_values), \",\"), to_string(source.ip)),\n       Esql.date_diff = DATE_DIFF(\"minute\", Esql.first_time_seen, now())\n\n// at least 2 unique rules from same source.ip and that was first seen in last 5 days\n| where Esql.unique_rules_count >= 2 and\n        // matches are within 10m of the rule execution time to avoid alert duplicates\n        Esql.date_diff <= 10 and\n        // make sure source.ip is not equal to host.ip\n        not isLocal > 0 and\n        // reduce noise from SCCM, Nessus and alike\n        Esql.unique_count_host_id <= 3 and Esql.alerts_count <= 20\n| eval host.id = MV_FIRST(Esql.host_id_values), user.name = MV_FIRST(Esql.user_name_values)\n| KEEP Esql.*, source.ip, host.id, user.name\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/lateral_movement_multi_alerts_new_srcip.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Rule Type: Higher-Order Rule",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

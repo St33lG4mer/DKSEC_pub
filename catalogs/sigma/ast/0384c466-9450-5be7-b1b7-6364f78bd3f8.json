@@ -1,0 +1,54 @@
+{
+  "id": "0384c466-9450-5be7-b1b7-6364f78bd3f8",
+  "catalog": "sigma",
+  "name": "file_delete_win_delete_prefetch",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".pf"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\Prefetch\\\\*",
+        "*.pf"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\windows\\\\system32\\\\svchost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*:\\\\Windows\\\\Prefetch\\\\*\" and file.path:\"*.pf\") and (not (process.executable:\"*:\\\\windows\\\\system32\\\\svchost.exe\" and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_delete/file_delete_win_delete_prefetch.eql",
+  "metadata": {}
+}

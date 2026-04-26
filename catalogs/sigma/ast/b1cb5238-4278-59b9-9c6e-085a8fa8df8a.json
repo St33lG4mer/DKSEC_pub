@@ -1,0 +1,56 @@
+{
+  "id": "b1cb5238-4278-59b9-9c6e-085a8fa8df8a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_iex_patterns",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "| iex;",
+        "| iex",
+        "| iex}",
+        "| iex ;",
+        "| iex -error",
+        "| iex (new",
+        "::frombase64string",
+        ".getstring([system.convert]::"
+      ],
+      "raw_values": [
+        "* | iex;*",
+        "* | iex *",
+        "* | iex}*",
+        "* | IEX ;*",
+        "* | IEX -Error*",
+        "* | IEX (new*",
+        "*::FromBase64String*",
+        "*.GetString([System.Convert]::*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and (process.command_line like~ (\"* | iex;*\", \"* | iex *\", \"* | iex}*\", \"* | IEX ;*\", \"* | IEX -Error*\", \"* | IEX (new*\", \"*);IEX *\"))) and (process.command_line like~ (\"*::FromBase64String*\", \"*.GetString([System.Convert]::*\"))) or (process.command_line like~ (\"*)|iex;$*\", \"*);iex($*\", \"*);iex $*\", \"* | IEX | *\", \"* | iex\\\\\\\"*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_iex_patterns.eql",
+  "metadata": {}
+}

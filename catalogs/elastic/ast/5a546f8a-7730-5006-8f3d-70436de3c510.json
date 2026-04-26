@@ -1,0 +1,141 @@
+{
+  "id": "5a546f8a-7730-5006-8f3d-70436de3c510",
+  "catalog": "elastic",
+  "name": "Tampering of Shell Command-Line History",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "echo",
+        ".bash_history",
+        ".zsh_history",
+        "null",
+        "histfilesize=0",
+        "-sf",
+        "truncate",
+        "-s0",
+        "history",
+        "export",
+        "unset",
+        "histfile",
+        "set"
+      ],
+      "raw_values": [
+        "rm",
+        "echo",
+        ".bash_history",
+        "/root/.bash_history",
+        "/home/*/.bash_history",
+        "/Users/.bash_history",
+        "/Users/*/.bash_history",
+        ".zsh_history",
+        "/root/.zsh_history",
+        "/home/*/.zsh_history",
+        "/Users/.zsh_history",
+        "/Users/*/.zsh_history",
+        "HISTFILE=/dev/null",
+        "HISTFILESIZE=0",
+        "ln",
+        "-sf",
+        "/dev/null",
+        "truncate",
+        "-s0",
+        "history",
+        "-c",
+        "export",
+        "unset",
+        "HISTFILE",
+        "set",
+        "+o"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "timeout",
+        "kubectl",
+        "psql",
+        "bazel",
+        "git",
+        "grep"
+      ],
+      "raw_values": [
+        "/usr/bin/timeout",
+        "/usr/bin/kubectl",
+        "/usr/bin/psql",
+        "/usr/lib/postgresql/*/bin/psql",
+        "/usr/bin/bazel",
+        "/usr/bin/git",
+        "/usr/bin/jq",
+        "/bin/grep"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "==",
+      "values": [
+        "stat -c %s history"
+      ],
+      "raw_values": [
+        "stat -c %s history"
+      ]
+    }
+  ],
+  "raw_query": "process where event.action in (\"exec\", \"exec_event\", \"executed\", \"process_started\") and event.type == \"start\" and\n(\n  (\n    (process.args : (\"rm\", \"echo\") or\n    (process.args : \"ln\" and process.args : \"-sf\" and process.args : \"/dev/null\") or\n    (process.args : \"truncate\" and process.args : \"-s0\")\n  )\n    and process.args : (\n      \".bash_history\", \"/root/.bash_history\", \"/home/*/.bash_history\",\"/Users/.bash_history\", \"/Users/*/.bash_history\",\n      \".zsh_history\", \"/root/.zsh_history\", \"/home/*/.zsh_history\", \"/Users/.zsh_history\", \"/Users/*/.zsh_history\"\n    )\n  ) or\n  (process.args : \"history\" and process.args : \"-c\") or\n  (process.args : \"export\" and process.args : (\"HISTFILE=/dev/null\", \"HISTFILESIZE=0\")) or\n  (process.args : \"unset\" and process.args : \"HISTFILE\") or\n  (process.args : \"set\" and process.args : \"history\" and process.args : \"+o\")\n) and not (\n  process.executable like (\n    \"/usr/bin/timeout\", \"/usr/bin/kubectl\", \"/usr/bin/psql\", \"/usr/lib/postgresql/*/bin/psql\", \"/usr/bin/bazel\", \"/usr/bin/git\",  \"/usr/bin/jq\", \"/bin/grep\"\n  ) or\n  process.command_line == \"stat -c %s history\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/defense_evasion_deletion_of_bash_command_line_history.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

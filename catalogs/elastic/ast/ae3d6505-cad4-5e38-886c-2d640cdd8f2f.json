@@ -1,0 +1,94 @@
+{
+  "id": "ae3d6505-cad4-5e38-886c-2d640cdd8f2f",
+  "catalog": "elastic",
+  "name": "Full Disk Access Permission Check",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "osascript",
+        "perl",
+        "node",
+        "ruby",
+        "bash",
+        "terminal"
+      ],
+      "raw_values": [
+        "osascript",
+        "perl",
+        "node",
+        "ruby",
+        "bash",
+        "sh",
+        "Terminal"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "open"
+      ],
+      "raw_values": [
+        "open"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "==",
+      "values": [
+        "com.apple.timemachine.plist"
+      ],
+      "raw_values": [
+        "/Library/Preferences/com.apple.TimeMachine.plist"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.action == \"open\" and\n  file.path == \"/Library/Preferences/com.apple.TimeMachine.plist\" and\n  (process.name in (\"osascript\", \"perl\", \"node\", \"ruby\", \"bash\", \"sh\", \"Terminal\") or\n   process.name like \"python*\" or\n   process.code_signature.trusted == false or\n   process.code_signature.exists == false)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/discovery_full_disk_access_check.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

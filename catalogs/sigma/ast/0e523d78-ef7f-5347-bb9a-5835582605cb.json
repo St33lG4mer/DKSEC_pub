@@ -1,0 +1,82 @@
+{
+  "id": "0e523d78-ef7f-5347-bb9a-5835582605cb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_certify",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".exe cas",
+        ".exe find",
+        ".exe pkiobjects",
+        ".exe request",
+        ".exe download",
+        "vulnerable",
+        "template:",
+        "altname:",
+        "domain:",
+        "path:",
+        "ca:"
+      ],
+      "raw_values": [
+        "*.exe cas *",
+        "*.exe find *",
+        "*.exe pkiobjects *",
+        "*.exe request *",
+        "*.exe download *",
+        "* /vulnerable*",
+        "* /template:*",
+        "* /altname:*",
+        "* /domain:*",
+        "* /path:*",
+        "* /ca:*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certify.exe"
+      ],
+      "raw_values": [
+        "*\\\\Certify.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certify.exe"
+      ],
+      "raw_values": [
+        "Certify.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "certify"
+      ],
+      "raw_values": [
+        "*Certify*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\Certify.exe\" or process.pe.original_file_name:\"Certify.exe\" or process.pe.description:\"*Certify*\") or ((process.command_line like~ (\"*.exe cas *\", \"*.exe find *\", \"*.exe pkiobjects *\", \"*.exe request *\", \"*.exe download *\")) and (process.command_line like~ (\"* /vulnerable*\", \"* /template:*\", \"* /altname:*\", \"* /domain:*\", \"* /path:*\", \"* /ca:*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_certify.eql",
+  "metadata": {}
+}

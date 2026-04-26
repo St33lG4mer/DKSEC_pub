@@ -1,0 +1,29 @@
+{
+  "id": "6e83d228-6dfb-5580-9028-17537a4f0645",
+  "catalog": "elastic",
+  "name": "Deprecated - Sudo Heap-Based Buffer Overflow Attempt",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.category:process and event.type:start and\n  process.name:(sudo or sudoedit) and\n  process.args:(*\\\\ and (\"-i\" or \"-s\"))\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/privilege_escalation_sudo_buffer_overflow.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

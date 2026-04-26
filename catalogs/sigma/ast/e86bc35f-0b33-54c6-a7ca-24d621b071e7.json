@@ -1,0 +1,40 @@
+{
+  "id": "e86bc35f-0b33-54c6-a7ca-24d621b071e7",
+  "catalog": "sigma",
+  "name": "win_dns_server_failed_dns_zone_transfer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "dns server"
+      ],
+      "raw_values": [
+        "DNS Server"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "6004"
+      ],
+      "raw_values": [
+        "6004"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"DNS Server\" and event.code:\"6004\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/dns_server/win_dns_server_failed_dns_zone_transfer.eql",
+  "metadata": {}
+}

@@ -1,0 +1,103 @@
+{
+  "id": "fda47ec6-db9d-58a3-a709-e23a66d34680",
+  "catalog": "elastic",
+  "name": "Persistence via a Hidden Plist Filename",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".*.plist"
+      ],
+      "raw_values": [
+        "/System/Library/LaunchAgents/.*.plist",
+        "/Library/LaunchAgents/.*.plist",
+        "/Users/*/Library/LaunchAgents/.*.plist",
+        "/System/Library/LaunchDaemons/.*.plist",
+        "/Library/LaunchDaemons/.*.plist"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "sed",
+        "bash"
+      ],
+      "raw_values": [
+        "/usr/bin/sed",
+        "/bin/bash"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like",
+      "values": [
+        ".chef-com*.plist",
+        ".!*!*.plist"
+      ],
+      "raw_values": [
+        ".chef-com*.plist",
+        ".!*!*.plist"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like",
+      "values": [
+        "ruby"
+      ],
+      "raw_values": [
+        "/opt/chef/embedded/bin/ruby"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.type != \"deletion\" and\n  file.path like~ (\n    \"/System/Library/LaunchAgents/.*.plist\",\n    \"/Library/LaunchAgents/.*.plist\",\n    \"/Users/*/Library/LaunchAgents/.*.plist\",\n    \"/System/Library/LaunchDaemons/.*.plist\",\n    \"/Library/LaunchDaemons/.*.plist\"\n  ) and\n  not (file.name like \".chef-com*.plist\" and process.executable like \"/opt/chef/embedded/bin/ruby\") and\n  not (process.executable in (\"/usr/bin/sed\", \"/bin/bash\") and file.name like \".!*!*.plist\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_hidden_plist_filename.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

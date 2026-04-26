@@ -1,0 +1,132 @@
+{
+  "id": "7d8d58f6-c899-5dc7-b606-c6074605f37f",
+  "catalog": "elastic",
+  "name": "Account Password Reset Remotely",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetusername",
+      "raw_field": "winlog.event_data.TargetUserName",
+      "operator": ":",
+      "values": [
+        "svc",
+        "pim_",
+        "_*_",
+        "-*-",
+        "admin",
+        "super",
+        "dc0",
+        "service",
+        "dmz",
+        "adm"
+      ],
+      "raw_values": [
+        "svc*",
+        "PIM_*",
+        "_*_",
+        "*-*-*",
+        "*$",
+        "*Admin*",
+        "*super*",
+        "*SVC*",
+        "*DC0*",
+        "*service*",
+        "*DMZ*",
+        "*ADM*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetsid",
+      "raw_field": "winlog.event_data.TargetSid",
+      "operator": ":",
+      "values": [
+        "s-1-5-21-*-500",
+        "s-1-12-1-*-500"
+      ],
+      "raw_values": [
+        "S-1-5-21-*-500",
+        "S-1-12-1-*-500"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "logged-in",
+        "reset-password"
+      ],
+      "raw_values": [
+        "logged-in",
+        "reset-password"
+      ]
+    },
+    {
+      "field": "winlog.logon.type",
+      "raw_field": "winlog.logon.type",
+      "operator": ":",
+      "values": [
+        "network"
+      ],
+      "raw_values": [
+        "Network"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "127.0.0.1",
+        "::1"
+      ],
+      "raw_values": [
+        "127.0.0.1",
+        "::1"
+      ]
+    }
+  ],
+  "raw_query": "sequence by winlog.computer_name with maxspan=1m\n  [authentication where host.os.type == \"windows\" and event.action == \"logged-in\" and\n    /* event 4624 need to be logged */\n    winlog.logon.type : \"Network\" and event.outcome == \"success\" and source.ip != null and\n    source.ip != \"127.0.0.1\" and source.ip != \"::1\" and\n    not winlog.event_data.TargetUserName : (\"svc*\", \"PIM_*\", \"_*_\", \"*-*-*\", \"*$\")] by winlog.event_data.TargetLogonId\n   /* event 4724 need to be logged */\n  [iam where host.os.type == \"windows\" and event.action == \"reset-password\" and\n   (\n    /*\n       This rule is very noisy if not scoped to privileged accounts, duplicate the\n       rule and add your own naming convention and accounts of interest here.\n     */\n    winlog.event_data.TargetUserName: (\"*Admin*\", \"*super*\", \"*SVC*\", \"*DC0*\", \"*service*\", \"*DMZ*\", \"*ADM*\") or\n    winlog.event_data.TargetSid : (\"S-1-5-21-*-500\", \"S-1-12-1-*-500\")\n    )\n  ] by winlog.event_data.SubjectLogonId\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_remote_password_reset.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Impact",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

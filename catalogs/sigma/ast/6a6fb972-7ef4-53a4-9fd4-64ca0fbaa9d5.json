@@ -1,0 +1,46 @@
+{
+  "id": "6a6fb972-7ef4-53a4-9fd4-64ca0fbaa9d5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_java_remote_debugging",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "jre1.",
+        "jdk1.",
+        "address=127.0.0.1",
+        "address=localhost"
+      ],
+      "raw_values": [
+        "*jre1.*",
+        "*jdk1.*",
+        "*address=127.0.0.1*",
+        "*address=localhost*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "transport=dt_socket,address="
+      ],
+      "raw_values": [
+        "*transport=dt_socket,address=*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*transport=dt_socket,address=*\" and (process.command_line like~ (\"*jre1.*\", \"*jdk1.*\"))) and (not (process.command_line like~ (\"*address=127.0.0.1*\", \"*address=localhost*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_java_remote_debugging.eql",
+  "metadata": {}
+}

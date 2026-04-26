@@ -1,0 +1,25 @@
+{
+  "id": "f507d70f-8968-5775-93f3-7ad92e593434",
+  "catalog": "elastic",
+  "name": "M365 OneDrive Malware File Upload",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:OneDrive and event.code:SharePointFileOperation and event.action:FileMalwareDetected\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/lateral_movement_onedrive_malware_uploaded.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "edb8be94-d21d-544a-b4cc-675127a4b091",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sigverif_uncommon_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\WerFault.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\WerFault.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sigverif.exe"
+      ],
+      "raw_values": [
+        "*\\\\sigverif.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\sigverif.exe\" and (not (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\WerFault.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\WerFault.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sigverif_uncommon_child_process.eql",
+  "metadata": {}
+}

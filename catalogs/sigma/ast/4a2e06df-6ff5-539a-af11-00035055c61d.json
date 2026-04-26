@@ -1,0 +1,84 @@
+{
+  "id": "4a2e06df-6ff5-539a-af11-00035055c61d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_addinutil_suspicious_cmdline",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-addinroot:",
+        "-pipelineroot:",
+        "-addinroot:.",
+        "-pipelineroot:."
+      ],
+      "raw_values": [
+        "*-AddInRoot:*",
+        "*-PipelineRoot:*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*",
+        "*-AddInRoot:.*",
+        "*-AddInRoot:\\",
+        "*",
+        "*-PipelineRoot:.*",
+        "*-PipelineRoot:\\"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "like~",
+      "values": [
+        "\\\\appdata\\\\local\\\\temp\\\\",
+        "\\\\desktop\\\\",
+        "\\\\downloads\\\\",
+        "\\\\users\\\\public\\\\",
+        "\\\\windows\\\\temp\\\\"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "addinutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\addinutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "addinutil.exe"
+      ],
+      "raw_values": [
+        "AddInUtil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\addinutil.exe\" or process.pe.original_file_name:\"AddInUtil.exe\") and (((process.command_line like~ (\"*-AddInRoot:*\", \"*-PipelineRoot:*\")) and (process.command_line like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\"))) or ((process.command_line like~ (\"*-AddInRoot:.*\", \"*-AddInRoot:\\\".\\\"*\", \"*-PipelineRoot:.*\", \"*-PipelineRoot:\\\".\\\"*\")) and (process.working_directory like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_addinutil_suspicious_cmdline.eql",
+  "metadata": {}
+}

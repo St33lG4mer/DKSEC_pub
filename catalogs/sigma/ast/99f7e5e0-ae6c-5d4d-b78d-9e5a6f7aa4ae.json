@@ -1,0 +1,31 @@
+{
+  "id": "99f7e5e0-ae6c-5d4d-b78d-9e5a6f7aa4ae",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_ms_appinstaller_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "source=",
+        "http"
+      ],
+      "raw_values": [
+        "*ms-appinstaller://?source=*",
+        "*http*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*ms-appinstaller://?source=*\" and process.command_line:\"*http*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_ms_appinstaller_download.eql",
+  "metadata": {}
+}

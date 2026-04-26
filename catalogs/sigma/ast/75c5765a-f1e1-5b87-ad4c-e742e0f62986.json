@@ -1,0 +1,53 @@
+{
+  "id": "75c5765a-f1e1-5b87-ad4c-e742e0f62986",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_koadic",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "chcp"
+      ],
+      "raw_values": [
+        "*/q*",
+        "*/c*",
+        "*chcp*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and (process.command_line:\"*/q*\" and process.command_line:\"*/c*\" and process.command_line:\"*chcp*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_koadic.eql",
+  "metadata": {}
+}

@@ -1,0 +1,65 @@
+{
+  "id": "aa1b04a0-5998-537f-8941-d9acd26ccab3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_impacket_lateral_movement",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "wmiprvse.exe",
+        "mmc.exe",
+        "explorer.exe",
+        "services.exe"
+      ],
+      "raw_values": [
+        "*\\\\wmiprvse.exe",
+        "*\\\\mmc.exe",
+        "*\\\\explorer.exe",
+        "*\\\\services.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "svchost.exe -k netsvcs",
+        "taskeng.exe"
+      ],
+      "raw_values": [
+        "*svchost.exe -k netsvcs*",
+        "*taskeng.exe*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*cmd.exe*",
+        "*/Q*",
+        "*/c*",
+        "*\\\\\\\\127.0.0.1\\\\*",
+        "*&1*",
+        "*/C*",
+        "*Windows\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\wmiprvse.exe\", \"*\\\\mmc.exe\", \"*\\\\explorer.exe\", \"*\\\\services.exe\")) and (process.command_line:\"*cmd.exe*\" and process.command_line:\"*/Q*\" and process.command_line:\"*/c*\" and process.command_line:\"*\\\\\\\\127.0.0.1\\\\*\" and process.command_line:\"*&1*\")) or ((process.parent.command_line like~ (\"*svchost.exe -k netsvcs*\", \"*taskeng.exe*\")) and (process.command_line:\"*cmd.exe*\" and process.command_line:\"*/C*\" and process.command_line:\"*Windows\\\\Temp\\\\*\" and process.command_line:\"*&1*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_impacket_lateral_movement.eql",
+  "metadata": {}
+}

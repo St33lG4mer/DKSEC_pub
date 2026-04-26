@@ -1,0 +1,35 @@
+{
+  "id": "661a60b7-b656-5174-8f14-4319e5a0ddec",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_appx_debugger",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "classes\\\\activatableclasses\\\\package\\\\microsoft.",
+        "\\\\debugpath",
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\packagedappxdebug\\\\microsoft.",
+        "\\\\(default)"
+      ],
+      "raw_values": [
+        "*Classes\\\\ActivatableClasses\\\\Package\\\\Microsoft.*",
+        "*\\\\DebugPath",
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\PackagedAppXDebug\\\\Microsoft.*",
+        "*\\\\(Default)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*Classes\\\\ActivatableClasses\\\\Package\\\\Microsoft.*\" and registry.path:\"*\\\\DebugPath\") or (registry.path:\"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\PackagedAppXDebug\\\\Microsoft.*\" and registry.path:\"*\\\\(Default)\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_appx_debugger.eql",
+  "metadata": {}
+}

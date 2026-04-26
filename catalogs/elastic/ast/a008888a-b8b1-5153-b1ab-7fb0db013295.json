@@ -1,0 +1,28 @@
+{
+  "id": "a008888a-b8b1-5153-b1ab-7fb0db013295",
+  "catalog": "elastic",
+  "name": "AWS RDS Snapshot Export",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: rds.amazonaws.com \n    and event.action: StartExportTask \n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/exfiltration_rds_snapshot_export.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Use Case: Asset Visibility",
+      "Tactic: Collection",
+      "Tactic: Exfiltration",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

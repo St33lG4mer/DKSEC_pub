@@ -1,0 +1,95 @@
+{
+  "id": "6e899b9d-414b-502e-8710-bbee44b91745",
+  "catalog": "elastic",
+  "name": "Proxy Execution via Windows OpenSSH",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "ssh.exe",
+        "sftp.exe"
+      ],
+      "raw_values": [
+        "ssh.exe",
+        "sftp.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "command=*powershell",
+        "schtasks",
+        "command=*@echo off",
+        "command=*http",
+        "command=*mshta",
+        "command=*msiexec",
+        "command=*cmd.exe"
+      ],
+      "raw_values": [
+        "*Command=*powershell*",
+        "*schtasks*",
+        "*Command=*@echo off*",
+        "*Command=*http*",
+        "*Command=*mshta*",
+        "*Command=*msiexec*",
+        "*Command=*cmd /c*",
+        "*Command=*cmd.exe*",
+        "*Command=\\",
+        ", "
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and process.name : (\"ssh.exe\", \"sftp.exe\") and\n process.command_line : (\"*Command=*powershell*\", \"*schtasks*\", \"*Command=*@echo off*\", \"*Command=*http*\", \"*Command=*mshta*\",  \"*Command=*msiexec*\",\n                          \"*Command=*cmd /c*\", \"*Command=*cmd.exe*\", \"*Command=\\\"cmd /c*\", \"*LocalCommand=scp*&&*\", \"*LocalCommand=?scp*&&*\", \"*Command=*script*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_indirect_exec_openssh.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

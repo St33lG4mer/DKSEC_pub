@@ -1,0 +1,122 @@
+{
+  "id": "debdd0dd-bb78-5a71-8213-935dc1cf0b8b",
+  "catalog": "elastic",
+  "name": "SIP Provider Modification",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "dll",
+        "$dll"
+      ],
+      "raw_values": [
+        "Dll",
+        "$Dll"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\cryptography\\\\oid\\\\encodingtype 0\\\\cryptsipdllputsigneddatamsg\\\\{*}\\\\dll",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\cryptography\\\\oid\\\\encodingtype 0\\\\cryptsipdllputsigneddatamsg\\\\{*}\\\\dll",
+        "\\\\software\\\\microsoft\\\\cryptography\\\\providers\\\\trust\\\\finalpolicy\\\\{*}\\\\$dll",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\cryptography\\\\providers\\\\trust\\\\finalpolicy\\\\{*}\\\\$dll"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType 0\\\\CryptSIPDllPutSignedDataMsg\\\\{*}\\\\Dll",
+        "*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType 0\\\\CryptSIPDllPutSignedDataMsg\\\\{*}\\\\Dll",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\Providers\\\\Trust\\\\FinalPolicy\\\\{*}\\\\$Dll",
+        "*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\Providers\\\\Trust\\\\FinalPolicy\\\\{*}\\\\$Dll"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        ".dll",
+        "mso.dll"
+      ],
+      "raw_values": [
+        "*.dll",
+        "mso.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "msiexec.exe",
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "msiexec.exe",
+        "regsvr32.exe"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": "==",
+      "values": [
+        "wintrust.dll"
+      ],
+      "raw_values": [
+        "WINTRUST.DLL"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and registry.value : (\"Dll\", \"$Dll\") and\n  registry.path: (\n    \"*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType 0\\\\CryptSIPDllPutSignedDataMsg\\\\{*}\\\\Dll\",\n    \"*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType 0\\\\CryptSIPDllPutSignedDataMsg\\\\{*}\\\\Dll\",\n    \"*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\Providers\\\\Trust\\\\FinalPolicy\\\\{*}\\\\$Dll\",\n    \"*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\Providers\\\\Trust\\\\FinalPolicy\\\\{*}\\\\$Dll\"\n    ) and\n  registry.data.strings:\"*.dll\" and\n  not (process.name : \"msiexec.exe\" and registry.data.strings : \"mso.dll\") and\n  not (process.name : \"regsvr32.exe\" and registry.data.strings == \"WINTRUST.DLL\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_sip_provider_mod.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

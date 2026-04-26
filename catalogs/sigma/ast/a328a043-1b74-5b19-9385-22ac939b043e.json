@@ -1,0 +1,29 @@
+{
+  "id": "a328a043-1b74-5b19-9385-22ac939b043e",
+  "catalog": "sigma",
+  "name": "file_event_win_office_publisher_files_in_susp_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".pub"
+      ],
+      "raw_values": [
+        "*.pub"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\", \"*C:\\\\Temp\\\\*\")) and file.path:\"*.pub\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_publisher_files_in_susp_locations.eql",
+  "metadata": {}
+}

@@ -1,0 +1,74 @@
+{
+  "id": "a1f2f284-3a69-59b2-8a38-97edafdd7576",
+  "catalog": "elastic",
+  "name": "Google Workspace Custom Gmail Route Created or Modified",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "create_gmail_setting",
+        "change_gmail_setting"
+      ],
+      "raw_values": [
+        "CREATE_GMAIL_SETTING",
+        "CHANGE_GMAIL_SETTING"
+      ]
+    },
+    {
+      "field": "google_workspace.admin.setting.name",
+      "raw_field": "google_workspace.admin.setting.name",
+      "operator": ":",
+      "values": [
+        "email_route",
+        "message_security_rule"
+      ],
+      "raw_values": [
+        "EMAIL_ROUTE",
+        "MESSAGE_SECURITY_RULE"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "google_workspace.admin"
+      ],
+      "raw_values": [
+        "google_workspace.admin"
+      ]
+    },
+    {
+      "field": "google_workspace.event.type",
+      "raw_field": "google_workspace.event.type",
+      "operator": ":",
+      "values": [
+        "email_settings"
+      ],
+      "raw_values": [
+        "EMAIL_SETTINGS"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"google_workspace.admin\" and event.action:(\"CREATE_GMAIL_SETTING\" or \"CHANGE_GMAIL_SETTING\")\n  and google_workspace.event.type:\"EMAIL_SETTINGS\" and google_workspace.admin.setting.name:(\"EMAIL_ROUTE\" or \"MESSAGE_SECURITY_RULE\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/collection_google_workspace_custom_gmail_route_created_or_modified.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

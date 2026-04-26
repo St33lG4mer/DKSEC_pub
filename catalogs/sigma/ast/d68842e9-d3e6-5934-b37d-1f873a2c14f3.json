@@ -1,0 +1,42 @@
+{
+  "id": "d68842e9-d3e6-5934-b37d-1f873a2c14f3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_darkside_ransomware",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "=[char][byte]('0x'+",
+        "-work worker0 -path"
+      ],
+      "raw_values": [
+        "*=[char][byte]('0x'+*",
+        "* -work worker0 -path *"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "processid:{3e5fc7f9-9a51-4367-9063-a120244fbec7}"
+      ],
+      "raw_values": [
+        "*DllHost.exe /Processid:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*=[char][byte]('0x'+*\", \"* -work worker0 -path *\")) or (process.parent.command_line:\"*DllHost.exe /Processid:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/DarkSide/proc_creation_win_malware_darkside_ransomware.eql",
+  "metadata": {}
+}

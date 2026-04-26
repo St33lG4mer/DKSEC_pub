@@ -1,0 +1,29 @@
+{
+  "id": "12854203-3f94-510a-9c3c-bc0f7e5f966e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_no_image_name",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe"
+      ],
+      "raw_values": [
+        "*\\\\.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_no_image_name.eql",
+  "metadata": {}
+}

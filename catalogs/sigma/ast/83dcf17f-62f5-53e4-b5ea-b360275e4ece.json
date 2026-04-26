@@ -1,0 +1,38 @@
+{
+  "id": "83dcf17f-62f5-53e4-b5ea-b360275e4ece",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_empire_powershell_launch",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-nop -sta -noni -w hidden -enc",
+        "-nop -sta -w 1 -enc",
+        "-nop -noni -w hidden -enc",
+        "-enc  sqb",
+        "-nop -exec bypass -encodedcommand"
+      ],
+      "raw_values": [
+        "* -NoP -sta -NonI -W Hidden -Enc *",
+        "* -noP -sta -w 1 -enc *",
+        "* -NoP -NonI -W Hidden -enc *",
+        "* -noP -sta -w 1 -enc*",
+        "* -enc  SQB*",
+        "* -nop -exec bypass -EncodedCommand *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"* -NoP -sta -NonI -W Hidden -Enc *\", \"* -noP -sta -w 1 -enc *\", \"* -NoP -NonI -W Hidden -enc *\", \"* -noP -sta -w 1 -enc*\", \"* -enc  SQB*\", \"* -nop -exec bypass -EncodedCommand *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_empire_powershell_launch.eql",
+  "metadata": {}
+}

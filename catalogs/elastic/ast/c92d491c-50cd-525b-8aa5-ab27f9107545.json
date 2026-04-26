@@ -1,0 +1,97 @@
+{
+  "id": "c92d491c-50cd-525b-8aa5-ab27f9107545",
+  "catalog": "elastic",
+  "name": "Entra ID MFA TOTP Brute Force Attempted",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "azure.signinlogs"
+      ],
+      "raw_values": [
+        "azure.signinlogs"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.operation_name",
+      "raw_field": "azure.signinlogs.operation_name",
+      "operator": "==",
+      "values": [
+        "sign-in activity"
+      ],
+      "raw_values": [
+        "Sign-in activity"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.user_type",
+      "raw_field": "azure.signinlogs.properties.user_type",
+      "operator": "==",
+      "values": [
+        "member"
+      ],
+      "raw_values": [
+        "Member"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.mfa_detail.auth_method",
+      "raw_field": "azure.signinlogs.properties.mfa_detail.auth_method",
+      "operator": "==",
+      "values": [
+        "oath verification code"
+      ],
+      "raw_values": [
+        "OATH verification code"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.result_signature",
+      "raw_field": "azure.signinlogs.result_signature",
+      "operator": "==",
+      "values": [
+        "failure"
+      ],
+      "raw_values": [
+        "FAILURE"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.result_description",
+      "raw_field": "azure.signinlogs.result_description",
+      "operator": "==",
+      "values": [
+        "authentication failed during strong authentication request."
+      ],
+      "raw_values": [
+        "Authentication failed during strong authentication request."
+      ]
+    }
+  ],
+  "raw_query": "from logs-azure.signinlogs-* metadata _id, _version, _index\n\n| where\n    // filter for Entra Sign-in Logs\n    data_stream.dataset == \"azure.signinlogs\"\n    and azure.signinlogs.operation_name == \"Sign-in activity\"\n    and azure.signinlogs.properties.user_type == \"Member\"\n\n    // filter for MFA attempts with OATH conditional access attempts or TOTP\n    and azure.signinlogs.properties.mfa_detail.auth_method == \"OATH verification code\"\n\n    // filter on failures only from brute-force attempts\n    and (\n            (\n                azure.signinlogs.result_signature == \"FAILURE\" and\n                azure.signinlogs.result_description == \"Authentication failed during strong authentication request.\"\n            ) or azure.signinlogs.properties.status.error_code == 500121\n        )\n\n| stats\n    Esql.event_count = count(*),\n    Esql.azure_signinlogs_properties_session_id_count_distinct = count_distinct(azure.signinlogs.properties.session_id),\n    Esql.source_address_values = values(source.address),\n    Esql.azure_tenant_id_valuues = values(azure.tenant_id),\n    Esql_priv.azure_identity_values = values(azure.signinlogs.identity),\n    Esql_priv.azure_signinlogs_properties_user_principal_name_values = values(azure.signinlogs.properties.user_principal_name),\n    Esql.azure_signinlogs_properties_app_id_values = values(azure.signinlogs.properties.app_id),\n    Esql.azure_signinlogs_properties_app_display_name_values = values(azure.signinlogs.properties.app_display_name),\n    Esql.azure_signinlogs_properties_authentication_requirement_values = values(azure.signinlogs.properties.authentication_requirement),\n    Esql.azure_signinlogs_properties_authentication_protocol_values = values(azure.signinlogs.properties.authentication_protocol),\n    Esql.azure_signinlogs_properties_client_app_used_values = values(azure.signinlogs.properties.client_app_used),\n    Esql.azure_signinlogs_properties_client_credential_type_values = values(azure.signinlogs.properties.client_credential_type),\n    Esql.azure_signinlogs_properties_conditional_access_status_values = values(azure.signinlogs.properties.conditional_access_status),\n    Esql.azure_signinlogs_properties_correlation_id_values = values(azure.signinlogs.properties.correlation_id),\n    Esql.azure_signinlogs_properties_is_interactive_values = values(azure.signinlogs.properties.is_interactive),\n    Esql.azure_signinlogs_properties_mfa_detail_auth_method_values = values(azure.signinlogs.properties.mfa_detail.auth_method),\n    Esql.azure_signinlogs_properties_resource_display_name_values = values(azure.signinlogs.properties.resource_display_name),\n    Esql.azure_signinlogs_properties_resource_id_values = values(azure.signinlogs.properties.resource_id),\n    Esql.azure_signinlogs_properties_risk_state_values = values(azure.signinlogs.properties.risk_state),\n    Esql.azure_signinlogs_properties_risk_detail_values = values(azure.signinlogs.properties.risk_detail),\n    Esql.azure_signinlogs_properties_status_error_code_values = values(azure.signinlogs.properties.status.error_code),\n    Esql.azure_signinlogs_properties_original_request_id_values = values(azure.signinlogs.properties.original_request_id),\n    Esql.user_id_values = values(user.id)\n    by user.id\n\n| where Esql.event_count >= 20 and Esql.azure_signinlogs_properties_session_id_count_distinct >= 10\n\n| keep\n    Esql.event_count,\n    Esql.azure_signinlogs_properties_session_id_count_distinct,\n    Esql.source_address_values,\n    Esql.azure_tenant_id_valuues,\n    Esql_priv.azure_identity_values,\n    Esql_priv.azure_signinlogs_properties_user_principal_name_values,\n    Esql.azure_signinlogs_properties_app_id_values,\n    Esql.azure_signinlogs_properties_app_display_name_values,\n    Esql.azure_signinlogs_properties_authentication_requirement_values,\n    Esql.azure_signinlogs_properties_authentication_protocol_values,\n    Esql.azure_signinlogs_properties_client_app_used_values,\n    Esql.azure_signinlogs_properties_client_credential_type_values,\n    Esql.azure_signinlogs_properties_conditional_access_status_values,\n    Esql.azure_signinlogs_properties_correlation_id_values,\n    Esql.azure_signinlogs_properties_is_interactive_values,\n    Esql.azure_signinlogs_properties_mfa_detail_auth_method_values,\n    Esql.azure_signinlogs_properties_resource_display_name_values,\n    Esql.azure_signinlogs_properties_resource_id_values,\n    Esql.azure_signinlogs_properties_risk_state_values,\n    Esql.azure_signinlogs_properties_risk_detail_values,\n    Esql.azure_signinlogs_properties_status_error_code_values,\n    Esql.azure_signinlogs_properties_original_request_id_values,\n    Esql.user_id_values\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/credential_access_entra_id_totp_brute_force_attempts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Entra ID",
+      "Data Source: Entra ID Sign-in logs",
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "b3ab934d-cd83-54c8-8465-899a30f0e282",
+  "catalog": "sigma",
+  "name": "registry_delete_removal_amsi_registry_key",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "{2781761e-28e0-4109-99fe-b9d127c57afe}",
+        "{a7c452ef-8e9f-42eb-9f2b-245613ca0dc9}"
+      ],
+      "raw_values": [
+        "*{2781761E-28E0-4109-99FE-B9D127C57AFE}",
+        "*{A7C452EF-8E9F-42EB-9F2B-245613CA0DC9}"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*\\\\MsMpEng.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*{2781761E-28E0-4109-99FE-B9D127C57AFE}\", \"*{A7C452EF-8E9F-42EB-9F2B-245613CA0DC9}\")) and (not ((process.executable like~ (\"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\", \"C:\\\\Program Files\\\\Windows Defender\\\\*\", \"C:\\\\Program Files (x86)\\\\Windows Defender\\\\*\")) and process.executable:\"*\\\\MsMpEng.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_delete/registry_delete_removal_amsi_registry_key.eql",
+  "metadata": {}
+}

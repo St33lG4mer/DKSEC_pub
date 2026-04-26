@@ -1,0 +1,31 @@
+{
+  "id": "24097563-df78-5667-9eb1-e2adf55bad62",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_export_certificate",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "export-pfxcertificate",
+        "export-certificate"
+      ],
+      "raw_values": [
+        "*Export-PfxCertificate *",
+        "*Export-Certificate *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*Export-PfxCertificate *\", \"*Export-Certificate *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_export_certificate.eql",
+  "metadata": {}
+}

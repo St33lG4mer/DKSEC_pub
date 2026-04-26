@@ -1,0 +1,218 @@
+{
+  "id": "4b6dd46c-ab51-5d54-beb1-53c786aa1596",
+  "catalog": "elastic",
+  "name": "Systemd-udevd Rule File Creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dockerd",
+        "python",
+        "perl"
+      ],
+      "raw_values": [
+        "/nix/store/*",
+        "/var/lib/dpkg/*",
+        "/snap/*",
+        "/dev/fd/*",
+        "/usr/lib/*",
+        "/usr/libexec/*",
+        "/var/lib/docker/overlay2/*/dockerd",
+        "/var/lib/containers/storage/overlay*/dockerd",
+        "python*",
+        "perl*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "dpkg",
+        "dockerd",
+        "microdnf",
+        "rpm",
+        "snapd",
+        "yum",
+        "dnf",
+        "podman",
+        "dnf-automatic",
+        "pacman",
+        "dpkg-divert",
+        "apk",
+        "apt",
+        "puppet",
+        "chef-client",
+        "autossl_check",
+        "exe",
+        "pamac-daemon",
+        "generate",
+        "netplan",
+        "systemd",
+        "containerd",
+        "sshd",
+        "executor",
+        "defender",
+        "dnf5",
+        "apt-get",
+        "vmware-config-tools.pl",
+        "systemd-hwdb",
+        "ssm-agent-worker",
+        "crio",
+        "cloud-init",
+        "convert2rhel"
+      ],
+      "raw_values": [
+        "/bin/dpkg",
+        "/usr/bin/dpkg",
+        "/bin/dockerd",
+        "/usr/bin/dockerd",
+        "/usr/sbin/dockerd",
+        "/bin/microdnf",
+        "/usr/bin/microdnf",
+        "/bin/rpm",
+        "/usr/bin/rpm",
+        "/bin/snapd",
+        "/usr/bin/snapd",
+        "/bin/yum",
+        "/usr/bin/yum",
+        "/bin/dnf",
+        "/usr/bin/dnf",
+        "/bin/podman",
+        "/usr/bin/podman",
+        "/bin/dnf-automatic",
+        "/usr/bin/dnf-automatic",
+        "/bin/pacman",
+        "/usr/bin/pacman",
+        "/usr/bin/dpkg-divert",
+        "/bin/dpkg-divert",
+        "/sbin/apk",
+        "/usr/sbin/apk",
+        "/usr/local/sbin/apk",
+        "/usr/bin/apt",
+        "/usr/sbin/pacman",
+        "/usr/bin/puppet",
+        "/bin/puppet",
+        "/opt/puppetlabs/puppet/bin/puppet",
+        "/usr/bin/chef-client",
+        "/bin/chef-client",
+        "/bin/autossl_check",
+        "/usr/bin/autossl_check",
+        "/proc/self/exe",
+        "/usr/bin/pamac-daemon",
+        "./usr/bin/podman",
+        "/bin/pamac-daemon",
+        "/usr/lib/snapd/snapd",
+        "/usr/local/bin/dockerd",
+        "/usr/libexec/netplan/generate",
+        "/lib/systemd/system-generators/netplan",
+        "/lib/systemd/systemd",
+        "/usr/bin/containerd",
+        "/usr/sbin/sshd",
+        "/kaniko/executor",
+        "/usr/local/bin/defender",
+        "/usr/bin/dnf5",
+        "/opt/kaniko/executor",
+        "/lib/netplan/generate",
+        "systemd",
+        "netplan",
+        "apt-get",
+        "vmware-config-tools.pl",
+        "systemd-hwdb",
+        "ssm-agent-worker",
+        "crio",
+        "cloud-init",
+        "convert2rhel"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "==",
+      "values": [
+        "rules"
+      ],
+      "raw_values": [
+        "rules"
+      ]
+    },
+    {
+      "field": "file.ext.original.extension",
+      "raw_field": "file.Ext.original.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "sed"
+      ],
+      "raw_values": [
+        "sed"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "sed"
+      ],
+      "raw_values": [
+        "sed*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.action == \"creation\" and\nprocess.executable != null and file.extension == \"rules\" and\nfile.path like (\n  \"/lib/udev/*\", \"/etc/udev/rules.d/*\", \"/usr/lib/udev/rules.d/*\", \"/run/udev/rules.d/*\", \"/usr/local/lib/udev/rules.d/*\"\n) and not (\n  process.executable in (\n    \"/bin/dpkg\", \"/usr/bin/dpkg\", \"/bin/dockerd\", \"/usr/bin/dockerd\", \"/usr/sbin/dockerd\", \"/bin/microdnf\",\n    \"/usr/bin/microdnf\", \"/bin/rpm\", \"/usr/bin/rpm\", \"/bin/snapd\", \"/usr/bin/snapd\", \"/bin/yum\", \"/usr/bin/yum\",\n    \"/bin/dnf\", \"/usr/bin/dnf\", \"/bin/podman\", \"/usr/bin/podman\", \"/bin/dnf-automatic\", \"/usr/bin/dnf-automatic\",\n    \"/bin/pacman\", \"/usr/bin/pacman\", \"/usr/bin/dpkg-divert\", \"/bin/dpkg-divert\", \"/sbin/apk\", \"/usr/sbin/apk\",\n    \"/usr/local/sbin/apk\", \"/usr/bin/apt\", \"/usr/sbin/pacman\", \"/bin/podman\", \"/usr/bin/podman\", \"/usr/bin/puppet\",\n    \"/bin/puppet\", \"/opt/puppetlabs/puppet/bin/puppet\", \"/usr/bin/chef-client\", \"/bin/chef-client\",\n    \"/bin/autossl_check\", \"/usr/bin/autossl_check\", \"/proc/self/exe\",  \"/usr/bin/pamac-daemon\", \"./usr/bin/podman\",\n    \"/bin/pamac-daemon\", \"/usr/lib/snapd/snapd\", \"/usr/local/bin/dockerd\", \"/usr/libexec/netplan/generate\",\n    \"/lib/systemd/system-generators/netplan\", \"/lib/systemd/systemd\", \"/usr/bin/containerd\", \"/usr/sbin/sshd\",\n    \"/kaniko/executor\", \"/usr/local/bin/defender\", \"/usr/bin/dnf5\", \"/opt/kaniko/executor\", \"/lib/netplan/generate\"\n  ) or\n  file.Ext.original.extension == \"dpkg-new\" or\n  process.executable like (\n    \"/nix/store/*\", \"/var/lib/dpkg/*\", \"/snap/*\", \"/dev/fd/*\", \"/usr/lib/*\", \"/usr/libexec/*\",\n     \"/var/lib/docker/overlay2/*/dockerd\", \"/var/lib/containers/storage/overlay*/dockerd\"\n  ) or\n  process.name in (\n    \"systemd\", \"netplan\", \"apt-get\", \"vmware-config-tools.pl\", \"systemd-hwdb\", \"ssm-agent-worker\", \"crio\", \"cloud-init\", \"convert2rhel\" \n  ) or\n  process.name like (\"python*\", \"perl*\") or\n  (process.name == \"sed\" and file.name : \"sed*\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_udev_rule_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

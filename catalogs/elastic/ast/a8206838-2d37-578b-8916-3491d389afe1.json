@@ -1,0 +1,113 @@
+{
+  "id": "a8206838-2d37-578b-8916-3491d389afe1",
+  "catalog": "elastic",
+  "name": "Manual Mount Discovery via /etc/exports or /etc/fstab",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "exports",
+        "fstab"
+      ],
+      "raw_values": [
+        "/etc/exports",
+        "/etc/fstab"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "cat",
+        "grep",
+        "tail",
+        "less",
+        "more",
+        "egrep",
+        "fgrep",
+        "awk"
+      ],
+      "raw_values": [
+        "cat",
+        "grep",
+        "tail",
+        "less",
+        "more",
+        "egrep",
+        "fgrep",
+        "awk"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name in (\"cat\", \"grep\", \"tail\", \"less\", \"more\", \"egrep\", \"fgrep\", \"awk\") and\nprocess.command_line like (\"/etc/exports\", \"/etc/fstab\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_manual_mount_discovery_via_exports_or_fstab.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "3c664a35-4e86-528a-bc0c-40312c7e3124",
+  "catalog": "sigma",
+  "name": "win_security_device_installation_blocked",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "6423"
+      ],
+      "raw_values": [
+        "6423"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and event.code:\"6423\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_device_installation_blocked.eql",
+  "metadata": {}
+}

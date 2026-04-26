@@ -1,0 +1,180 @@
+{
+  "id": "4eadaac2-2f8c-5dca-b0b8-08c928aa2df5",
+  "catalog": "elastic",
+  "name": "Potential Kubectl Masquerading via Unexpected Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "kubectl"
+      ],
+      "raw_values": [
+        "/tmp/*",
+        "/private/tmp/*",
+        "/var/tmp/*",
+        "/private/var/tmp/*",
+        "/dev/shm/*",
+        "/root/*",
+        "/var/www/*",
+        "/home/*",
+        "/Users/*",
+        "./kubectl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "get po",
+        "get deploy",
+        "get node",
+        "get svc",
+        "get service",
+        "get secret",
+        "get clusterrole",
+        "get ingress",
+        "get configmap",
+        "describe po",
+        "describe deploy",
+        "describe node",
+        "describe svc",
+        "describe service",
+        "describe secret",
+        "describe configmap",
+        "describe clusterrole",
+        "describe ingress",
+        "exec -it",
+        "exec --stdin",
+        "exec --tty",
+        "port-forward",
+        "proxy --port",
+        "run --image=",
+        "expose",
+        "auth can-i",
+        "--kubeconfig",
+        "--as",
+        "--as=",
+        "--as-group",
+        "--as-uid"
+      ],
+      "raw_values": [
+        "*get po*",
+        "*get deploy*",
+        "*get node*",
+        "*get svc*",
+        "*get service*",
+        "*get secret*",
+        "*get clusterrole*",
+        "*get ingress*",
+        "*get configmap*",
+        "*describe po*",
+        "*describe deploy*",
+        "*describe node*",
+        "*describe svc*",
+        "*describe service*",
+        "*describe secret*",
+        "*describe configmap*",
+        "*describe clusterrole*",
+        "*describe ingress*",
+        "*exec -it*",
+        "*exec --stdin*",
+        "*exec --tty*",
+        "*port-forward* ",
+        "*proxy --port*",
+        "*run --image=*",
+        "*expose*",
+        "*auth can-i*",
+        "*--kubeconfig*",
+        "*--as *",
+        "*--as=*",
+        "*--as-group*",
+        "*--as-uid*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "linux",
+        "macos"
+      ],
+      "raw_values": [
+        "linux",
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        ".flatpak-wrapped"
+      ],
+      "raw_values": [
+        ".flatpak-wrapped"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type in (\"linux\", \"macos\") and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"executed\", \"process_started\") and\n(\n  process.executable like~ (\n    \"/tmp/*\", \"/private/tmp/*\", \"/var/tmp/*\", \"/private/var/tmp/*\", \"/dev/shm/*\", \"/root/*\", \"/var/www/*\", \"/home/*\", \"/Users/*\", \"./kubectl\"\n  ) or\n  process.name like \".*\"\n) and\nprocess.args like~ (\n\n  // get and describe commands\n  \"*get po*\", \"*get deploy*\", \"*get node*\", \"*get svc*\", \"*get service*\", \"*get secret*\", \"*get clusterrole*\", \"*get ingress*\",\n  \"*get configmap*\", \"*describe po*\", \"*describe deploy*\", \"*describe node*\", \"*describe svc*\", \"*describe service*\",\n  \"*describe secret*\", \"*describe configmap*\", \"*describe clusterrole*\", \"*describe ingress*\",\n  \n  // exec commands\n  \"*exec -it*\", \"*exec --stdin*\", \"*exec --tty*\",\n  \n  // networking commands\n  \"*port-forward* \", \"*proxy --port*\", \"*run --image=*\", \"*expose*\",\n\n  // authentication/impersonation commands\n  \"*auth can-i*\", \"*--kubeconfig*\", \"*--as *\", \"*--as=*\", \"*--as-group*\", \"*--as-uid*\"\n) and not (\n  process.executable like \"/tmp/newroot/*\" or\n  process.name == \".flatpak-wrapped\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/defense_evasion_potential_kubectl_masquerading.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Container",
+      "Domain: Kubernetes",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Defend for Containers",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

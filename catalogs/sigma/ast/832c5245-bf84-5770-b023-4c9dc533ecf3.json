@@ -1,0 +1,40 @@
+{
+  "id": "832c5245-bf84-5770-b023-4c9dc533ecf3",
+  "catalog": "sigma",
+  "name": "registry_set_enabling_turnoffcheck",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\policies\\\\microsoft\\\\windows\\\\scripteddiagnostics\\\\turnoffcheck"
+      ],
+      "raw_values": [
+        "*\\\\Policies\\\\Microsoft\\\\Windows\\\\ScriptedDiagnostics\\\\TurnOffCheck"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Policies\\\\Microsoft\\\\Windows\\\\ScriptedDiagnostics\\\\TurnOffCheck\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_enabling_turnoffcheck.eql",
+  "metadata": {}
+}

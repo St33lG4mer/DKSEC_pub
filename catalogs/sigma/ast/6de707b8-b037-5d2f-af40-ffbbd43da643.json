@@ -1,0 +1,62 @@
+{
+  "id": "6de707b8-b037-5d2f-af40-ffbbd43da643",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_elavated_msi_spawned_shell",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "Cmd.Exe",
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "msi",
+        "tmp"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\Installer\\\\*",
+        "*msi*",
+        "*tmp"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"Cmd.Exe\", \"PowerShell.EXE\", \"pwsh.dll\"))) and ((process.parent.executable:\"*\\\\Windows\\\\Installer\\\\*\" and process.parent.executable:\"*msi*\") and process.parent.executable:\"*tmp\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_elavated_msi_spawned_shell.eql",
+  "metadata": {}
+}

@@ -1,0 +1,37 @@
+{
+  "id": "65b29069-7f98-5c09-978b-c66e88840512",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_audio_capture",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "windowsaudiodevice-powershell-cmdlet",
+        "toggle-audiodevice",
+        "get-audiodevice",
+        "set-audiodevice",
+        "write-audiodevice"
+      ],
+      "raw_values": [
+        "*WindowsAudioDevice-Powershell-Cmdlet*",
+        "*Toggle-AudioDevice*",
+        "*Get-AudioDevice *",
+        "*Set-AudioDevice *",
+        "*Write-AudioDevice *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*WindowsAudioDevice-Powershell-Cmdlet*\", \"*Toggle-AudioDevice*\", \"*Get-AudioDevice *\", \"*Set-AudioDevice *\", \"*Write-AudioDevice *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_audio_capture.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "4f7bdbda-41f4-595c-80b6-dd7c88b32a8e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wpbbin_potential_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wpbbin.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\wpbbin.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"C:\\\\Windows\\\\System32\\\\wpbbin.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wpbbin_potential_persistence.eql",
+  "metadata": {}
+}

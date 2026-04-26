@@ -1,0 +1,31 @@
+{
+  "id": "7312e5eb-9f9b-58d3-a7d1-0e6ba635170b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_ta17_293a_ps",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ps.exe -accepteula",
+        "c netstat"
+      ],
+      "raw_values": [
+        "*ps.exe -accepteula*",
+        "*-s cmd /c netstat*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*ps.exe -accepteula*\" and process.command_line:\"*-s cmd /c netstat*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/TA/Dragonfly/proc_creation_win_apt_ta17_293a_ps.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "7eedb17c-4112-5b00-9eb6-bf0938213d82",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_snake_installer_cli_args",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "s[a-fa-f0-9]{16}']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\s[a-fA-F0-9]{64}\\\\s[a-fA-F0-9]{16}']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['\\\\s[a-fA-F0-9]{64}\\\\s[a-fA-F0-9]{16}']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/SNAKE/proc_creation_win_malware_snake_installer_cli_args.eql",
+  "metadata": {}
+}

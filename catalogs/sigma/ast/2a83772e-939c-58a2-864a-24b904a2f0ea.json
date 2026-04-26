@@ -1,0 +1,81 @@
+{
+  "id": "2a83772e-939c-58a2-864a-24b904a2f0ea",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_invoke_webrequest_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "powershell_ise.EXE",
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "curl",
+        "invoke-webrequest",
+        "iwr",
+        "wget",
+        "-ur",
+        "%appdata%",
+        "%public%",
+        "%temp%",
+        "%tmp%"
+      ],
+      "raw_values": [
+        "*curl *",
+        "*Invoke-WebRequest*",
+        "*iwr *",
+        "*wget *",
+        "* -ur*",
+        "* -o*",
+        "*\\\\AppData\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*%AppData%*",
+        "*%Public%*",
+        "*%Temp%*",
+        "*%tmp%*",
+        "*:\\\\Windows\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"powershell_ise.EXE\", \"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"*curl *\", \"*Invoke-WebRequest*\", \"*iwr *\", \"*wget *\")) and (process.command_line like~ (\"* -ur*\", \"* -o*\")) and (process.command_line like~ (\"*\\\\AppData\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*%AppData%*\", \"*%Public%*\", \"*%Temp%*\", \"*%tmp%*\", \"*:\\\\Windows\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_invoke_webrequest_download.eql",
+  "metadata": {}
+}

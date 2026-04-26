@@ -1,0 +1,27 @@
+{
+  "id": "1c97dd13-f9cd-5614-b9a0-16740b1600b3",
+  "catalog": "elastic",
+  "name": "AWS Configuration Recorder Stopped",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: config.amazonaws.com \n    and event.action: StopConfigurationRecorder \n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_configuration_recorder_stopped.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Config",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

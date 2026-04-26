@@ -1,0 +1,17 @@
+{
+  "id": "b6ab0bad-50e4-5b50-94ea-928b35f23228",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_commandline_path_traversal_evasion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where ((process.executable:\"*\\\\Windows\\\\*\" and (process.command_line like~ (\"*\\\\..\\\\Windows\\\\*\", \"*\\\\..\\\\System32\\\\*\", \"*\\\\..\\\\..\\\\*\"))) or process.command_line:\"*.exe\\\\..\\\\*\") and (not (process.command_line like~ (\"*\\\\Google\\\\Drive\\\\googledrivesync.exe\\\\..\\\\*\", \"*\\\\Citrix\\\\Virtual Smart Card\\\\Citrix.Authentication.VirtualSmartcard.Launcher.exe\\\\..\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_commandline_path_traversal_evasion.eql",
+  "metadata": {}
+}

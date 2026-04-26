@@ -1,0 +1,66 @@
+{
+  "id": "9da89a23-bd9e-5301-8990-208a820cdca9",
+  "catalog": "elastic",
+  "name": "PowerShell Invoke-NinjaCopy script",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "stealthreadfile",
+        "stealthreadfileaddr",
+        "stealthclosefiledelegate",
+        "stealthopenfile",
+        "stealthclosefile",
+        "invoke-ninjacopy",
+        "sentinelbreakpoints",
+        "set-psbreakpoint",
+        "powersploitindicators"
+      ],
+      "raw_values": [
+        "StealthReadFile",
+        "StealthReadFileAddr",
+        "StealthCloseFileDelegate",
+        "StealthOpenFile",
+        "StealthCloseFile",
+        "Invoke-NinjaCopy",
+        "sentinelbreakpoints",
+        "Set-PSBreakpoint",
+        "PowerSploitIndicators"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n    \"StealthReadFile\" or\n    \"StealthReadFileAddr\" or\n    \"StealthCloseFileDelegate\" or\n    \"StealthOpenFile\" or\n    \"StealthCloseFile\" or\n    \"StealthReadFile\" or\n    \"Invoke-NinjaCopy\"\n   )\n  and not user.id : \"S-1-5-18\"\n  and not powershell.file.script_block_text : (\n    \"sentinelbreakpoints\" and \"Set-PSBreakpoint\" and \"PowerSploitIndicators\"\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_posh_invoke_ninjacopy.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: PowerShell Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

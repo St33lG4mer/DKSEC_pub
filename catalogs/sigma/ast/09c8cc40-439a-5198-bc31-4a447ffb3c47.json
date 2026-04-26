@@ -1,0 +1,42 @@
+{
+  "id": "09c8cc40-439a-5198-bc31-4a447ffb3c47",
+  "catalog": "sigma",
+  "name": "registry_set_malware_snake_encrypted_key",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        ".assocfile.wav",
+        ".wav."
+      ],
+      "raw_values": [
+        "*.AssocFile.WAV",
+        "*.wav.*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\classes\\\\.wav\\\\openwithprogids\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Classes\\\\.wav\\\\OpenWithProgIds\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Classes\\\\.wav\\\\OpenWithProgIds\\\\*\" and (not (registry.path like~ (\"*.AssocFile.WAV\", \"*.wav.*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/SNAKE/registry_set_malware_snake_encrypted_key.eql",
+  "metadata": {}
+}

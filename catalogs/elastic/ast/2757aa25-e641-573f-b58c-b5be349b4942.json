@@ -1,0 +1,98 @@
+{
+  "id": "2757aa25-e641-573f-b58c-b5be349b4942",
+  "catalog": "elastic",
+  "name": "Suspicious SeIncreaseBasePriorityPrivilege Use",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.subjectusersid",
+      "raw_field": "winlog.event_data.SubjectUserSid",
+      "operator": ":",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4674"
+      ],
+      "raw_values": [
+        "4674"
+      ]
+    },
+    {
+      "field": "winlog.event_data.privilegelist",
+      "raw_field": "winlog.event_data.PrivilegeList",
+      "operator": ":",
+      "values": [
+        "seincreasebasepriorityprivilege"
+      ],
+      "raw_values": [
+        "SeIncreaseBasePriorityPrivilege"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "512"
+      ],
+      "raw_values": [
+        "512"
+      ]
+    }
+  ],
+  "raw_query": "event.category:iam and host.os.type:\"windows\" and event.code:\"4674\" and\nwinlog.event_data.PrivilegeList:\"SeIncreaseBasePriorityPrivilege\" and event.outcome:\"success\" and\nwinlog.event_data.AccessMask:\"512\" and not winlog.event_data.SubjectUserSid:(\"S-1-5-18\" or \"S-1-5-19\" or \"S-1-5-20\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_thread_cpu_priority_hijack.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

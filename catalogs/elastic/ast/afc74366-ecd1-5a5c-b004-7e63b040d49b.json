@@ -1,0 +1,40 @@
+{
+  "id": "afc74366-ecd1-5a5c-b004-7e63b040d49b",
+  "catalog": "elastic",
+  "name": "Entra ID High Risk User Sign-in Heuristic",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.signinlogs.properties.risk_state",
+      "raw_field": "azure.signinlogs.properties.risk_state",
+      "operator": ":",
+      "values": [
+        "confirmedcompromised",
+        "atrisk"
+      ],
+      "raw_values": [
+        "confirmedCompromised",
+        "atRisk"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.signinlogs and\n  azure.signinlogs.properties.risk_state:(\"confirmedCompromised\" or \"atRisk\") and event.outcome:(success or Success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_risky_user_or_compromised_sign_in.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Initial Access"
+    ]
+  }
+}

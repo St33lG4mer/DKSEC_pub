@@ -1,0 +1,53 @@
+{
+  "id": "9227eba7-aa55-5893-804e-df77f2458418",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_purplesharp_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "xyz123456.exe",
+        "purplesharp"
+      ],
+      "raw_values": [
+        "*xyz123456.exe*",
+        "*PurpleSharp*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "purplesharp"
+      ],
+      "raw_values": [
+        "*\\\\purplesharp*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "purplesharp.exe"
+      ],
+      "raw_values": [
+        "PurpleSharp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\purplesharp*\" or process.pe.original_file_name:\"PurpleSharp.exe\") or (process.command_line like~ (\"*xyz123456.exe*\", \"*PurpleSharp*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_purplesharp_indicators.eql",
+  "metadata": {}
+}

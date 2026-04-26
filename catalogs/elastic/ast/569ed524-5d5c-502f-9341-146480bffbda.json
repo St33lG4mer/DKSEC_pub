@@ -1,0 +1,50 @@
+{
+  "id": "569ed524-5d5c-502f-9341-146480bffbda",
+  "catalog": "elastic",
+  "name": "Potential PowerShell Obfuscation via Character Array Reconstruction",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "4104"
+      ],
+      "raw_values": [
+        "4104"
+      ]
+    },
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "char"
+      ],
+      "raw_values": [
+        "char"
+      ]
+    }
+  ],
+  "raw_query": "from logs-windows.powershell_operational* metadata _id, _version, _index\n| where event.code == \"4104\"\n\n// Filter for scripts that contain the \"char\" keyword using MATCH, boosts the query performance\n| where powershell.file.script_block_text : \"char\"\n\n// replace the patterns we are looking for with the 🔥 emoji to enable counting them\n// The emoji is used because it's unlikely to appear in scripts and has a consistent character length of 1\n| eval Esql.script_block_tmp = replace(\n    powershell.file.script_block_text,\n    \"\"\"(char\\[\\]\\]\\(\\d+,\\d+[^)]+|(\\s?\\(\\[char\\]\\d+\\s?\\)\\+){2,})\"\"\",\n    \"🔥\"\n)\n\n// count how many patterns were detected by calculating the number of 🔥 characters inserted\n| eval Esql.script_block_pattern_count = length(Esql.script_block_tmp) - length(replace(Esql.script_block_tmp, \"🔥\", \"\"))\n\n// keep the fields relevant to the query, although this is not needed as the alert is populated using _id\n| keep\n    Esql.script_block_pattern_count,\n    Esql.script_block_tmp,\n    powershell.file.*,\n    file.path,\n    powershell.sequence,\n    powershell.total,\n    _id,\n    _version,\n    _index,\n    host.name,\n    host.id,\n    agent.id,\n    user.id\n\n// Filter for scripts that match the pattern at least once\n| where Esql.script_block_pattern_count >= 1\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_posh_obfuscation_char_arrays.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: PowerShell Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

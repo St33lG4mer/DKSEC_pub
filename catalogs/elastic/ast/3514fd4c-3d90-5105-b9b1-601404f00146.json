@@ -1,0 +1,25 @@
+{
+  "id": "3514fd4c-3d90-5105-b9b1-601404f00146",
+  "catalog": "elastic",
+  "name": "Attempt to Deactivate an Okta Policy",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:policy.lifecycle.deactivate\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/defense_evasion_okta_attempt_to_deactivate_okta_policy.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

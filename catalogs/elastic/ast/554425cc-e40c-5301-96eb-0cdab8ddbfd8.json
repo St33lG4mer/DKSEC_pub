@@ -1,0 +1,99 @@
+{
+  "id": "554425cc-e40c-5301-96eb-0cdab8ddbfd8",
+  "catalog": "elastic",
+  "name": "Service DACL Modification via sc.exe",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ";iu",
+        ";su",
+        ";ba",
+        ";sy",
+        ";wd",
+        "sdset"
+      ],
+      "raw_values": [
+        "*;IU*",
+        "*;SU*",
+        "*;BA*",
+        "*;SY*",
+        "*;WD*",
+        "sdset",
+        "*D;*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "sc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "sc.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (process.name : \"sc.exe\" or ?process.pe.original_file_name : \"sc.exe\") and\n  process.args : \"sdset\" and process.args : \"*D;*\" and\n  process.args : (\"*;IU*\", \"*;SU*\", \"*;BA*\", \"*;SY*\", \"*;WD*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_sc_sdset.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

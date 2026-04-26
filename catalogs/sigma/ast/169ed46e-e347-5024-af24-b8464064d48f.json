@@ -1,0 +1,40 @@
+{
+  "id": "169ed46e-e347-5024-af24-b8464064d48f",
+  "catalog": "sigma",
+  "name": "file_event_win_dcom_iertutil_dll_hijack",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "iertutil.dll"
+      ],
+      "raw_values": [
+        "*\\\\Internet Explorer\\\\iertutil.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"System\" and file.path:\"*\\\\Internet Explorer\\\\iertutil.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_dcom_iertutil_dll_hijack.eql",
+  "metadata": {}
+}

@@ -1,0 +1,212 @@
+{
+  "id": "38f60b52-af5e-56e9-a507-a8419bfc73e7",
+  "catalog": "elastic",
+  "name": "Kubeconfig File Discovery",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        ".sh"
+      ],
+      "raw_values": [
+        "/tmp/*",
+        "/var/tmp/*",
+        "/dev/shm/*",
+        "/root/*",
+        "/home/*",
+        ".*",
+        "*.sh"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/etc/kubernetes",
+        "/root/.kube",
+        "/home/*/.kube"
+      ],
+      "raw_values": [
+        "/etc/kubernetes",
+        "/root/.kube",
+        "/home/*/.kube"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "admin.conf",
+        "super-admin.conf",
+        "kubelet.conf",
+        "controller-manager.conf",
+        "scheduler.conf",
+        "config",
+        "kubeconfig"
+      ],
+      "raw_values": [
+        "/etc/kubernetes/admin.conf",
+        "/etc/kubernetes/super-admin.conf",
+        "/etc/kubernetes/kubelet.conf",
+        "/etc/kubernetes/controller-manager.conf",
+        "/etc/kubernetes/scheduler.conf",
+        "/home/*/.kube/config",
+        "/root/.kube/config",
+        "/var/lib/*/kubeconfig"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "kubeconfig",
+        "admin.conf",
+        "super-admin.conf",
+        "kubelet.conf",
+        "controller-manager.conf",
+        "scheduler.conf"
+      ],
+      "raw_values": [
+        "kubeconfig",
+        "admin.conf",
+        "super-admin.conf",
+        "kubelet.conf",
+        "controller-manager.conf",
+        "scheduler.conf"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "stat",
+        "md5sum",
+        "dirname",
+        "file",
+        "readlink",
+        "helm"
+      ],
+      "raw_values": [
+        "stat",
+        "md5sum",
+        "dirname",
+        "/usr/bin/file",
+        "/usr/bin/readlink",
+        "/bin/readlink",
+        "/bin/file",
+        "/tmp/newroot/bin/readlink",
+        "/tmp/newroot/bin/file",
+        "/usr/local/bin/helm"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "fish"
+      ],
+      "raw_values": [
+        "fish"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  process.parent.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\") or\n  (\n    process.parent.executable like (\"/tmp/*\", \"/var/tmp/*\", \"/dev/shm/*\", \"/root/*\", \"/home/*\") or\n    process.parent.name like (\".*\", \"*.sh\")\n  )\n) and\n(\n  (\n    process.working_directory like (\"/etc/kubernetes\", \"/root/.kube\", \"/home/*/.kube\") and\n    process.args in (\"kubeconfig\", \"admin.conf\", \"super-admin.conf\", \"kubelet.conf\", \"controller-manager.conf\", \"scheduler.conf\")\n  ) or\n  process.args like (\n    \"/etc/kubernetes/admin.conf\",\n    \"/etc/kubernetes/super-admin.conf\",\n    \"/etc/kubernetes/kubelet.conf\",\n    \"/etc/kubernetes/controller-manager.conf\",\n    \"/etc/kubernetes/scheduler.conf\",\n    \"/home/*/.kube/config\",\n    \"/root/.kube/config\",\n    \"/var/lib/*/kubeconfig\"\n  )\n) and not (\n  process.name in (\"stat\", \"md5sum\", \"dirname\") or\n  (process.name like \"python*\" and process.args == \"/usr/bin/yq\" and process.parent.name == \"fish\") or\n  process.executable in (\n    \"/usr/bin/file\", \"/usr/bin/readlink\", \"/bin/readlink\", \"/bin/file\", \"/tmp/newroot/bin/readlink\",\n    \"/tmp/newroot/bin/file\", \"/usr/local/bin/helm\"\n  )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_kubeconfig_file_discovery.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Container",
+      "Domain: Kubernetes",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Defend for Containers",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

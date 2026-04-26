@@ -1,0 +1,89 @@
+{
+  "id": "40890718-e31d-54a5-8171-cb95da93066c",
+  "catalog": "elastic",
+  "name": "Unusual Kubernetes Sensitive Workload Modification",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "daemonsets",
+        "deployments",
+        "cronjobs"
+      ],
+      "raw_values": [
+        "daemonsets",
+        "deployments",
+        "cronjobs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create",
+        "patch"
+      ],
+      "raw_values": [
+        "create",
+        "patch"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.user.groups",
+      "raw_field": "kubernetes.audit.user.groups",
+      "operator": ":",
+      "values": [
+        "system:masters"
+      ],
+      "raw_values": [
+        "system:masters"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"kubernetes.audit_logs\" and user_agent.original:* and\nkubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.objectRef.resource:(\"daemonsets\" or \"deployments\" or \"cronjobs\") and\nkubernetes.audit.verb:(\"create\" or \"patch\") and\nnot kubernetes.audit.user.groups:\"system:masters\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/privilege_escalation_sensitive_workload_modification_by_user_agent.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "8fcd7fbc-0924-525f-ac3a-e2caa8956664",
+  "catalog": "sigma",
+  "name": "registry_set_fax_dll_persistance",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\fax\\\\device providers\\\\",
+        "\\\\imagename"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\Fax\\\\Device Providers\\\\*",
+        "*\\\\ImageName*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "%systemroot%\\\\system32\\\\fxst30.dll"
+      ],
+      "raw_values": [
+        "%systemroot%\\\\system32\\\\fxst30.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\Software\\\\Microsoft\\\\Fax\\\\Device Providers\\\\*\" and registry.path:\"*\\\\ImageName*\") and (not winlog.event_data.Details:\"%systemroot%\\\\system32\\\\fxst30.dll\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_fax_dll_persistance.eql",
+  "metadata": {}
+}

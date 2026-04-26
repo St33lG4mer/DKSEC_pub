@@ -1,0 +1,59 @@
+{
+  "id": "3b763e3a-5fa7-5a3b-a9b6-d18db2b010c9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msdt_susp_cab_options",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-cab",
+        "cab",
+        "–cab",
+        "—cab",
+        "―cab"
+      ],
+      "raw_values": [
+        "* -cab *",
+        "* /cab *",
+        "* –cab *",
+        "* —cab *",
+        "* ―cab *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "msdt.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\msdt.exe\" or process.pe.original_file_name:\"msdt.exe\") and process.command_line like~ (\"* -cab *\", \"* /cab *\", \"* –cab *\", \"* —cab *\", \"* ―cab *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msdt_susp_cab_options.eql",
+  "metadata": {}
+}

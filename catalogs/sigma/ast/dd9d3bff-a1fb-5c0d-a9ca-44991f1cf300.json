@@ -1,0 +1,31 @@
+{
+  "id": "dd9d3bff-a1fb-5c0d-a9ca-44991f1cf300",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_localtonet_tunnel",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        ".localto.net",
+        ".localtonet.com"
+      ],
+      "raw_values": [
+        "*.localto.net",
+        "*.localtonet.com"
+      ]
+    }
+  ],
+  "raw_query": "any where (destination.domain like~ (\"*.localto.net\", \"*.localtonet.com\")) and network.direction:\"true\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_localtonet_tunnel.eql",
+  "metadata": {}
+}

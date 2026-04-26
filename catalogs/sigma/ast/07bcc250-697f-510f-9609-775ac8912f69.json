@@ -1,0 +1,40 @@
+{
+  "id": "07bcc250-697f-510f-9609-775ac8912f69",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_remote",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "remote.exe"
+      ],
+      "raw_values": [
+        "*\\\\remote.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "remote.exe"
+      ],
+      "raw_values": [
+        "remote.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\remote.exe\" or process.pe.original_file_name:\"remote.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_remote.eql",
+  "metadata": {}
+}

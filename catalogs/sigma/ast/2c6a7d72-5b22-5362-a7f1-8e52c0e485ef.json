@@ -1,0 +1,76 @@
+{
+  "id": "2c6a7d72-5b22-5362-a7f1-8e52c0e485ef",
+  "catalog": "sigma",
+  "name": "win_security_cobaltstrike_service_installs",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": "like~",
+      "values": [
+        "suvyichozxctt2jqzwn0ie5ldc5xzwjjbgllbnqplkrvd25sb2fku3ryaw5nkcdodhrwoi8vmti3ljaumc4xo",
+        "lfwcaotmv3lu9iamvjdcbozxquv2viy2xpzw50ks5eb3dubg9hzfn0cmluzygnahr0cdovlzeyny4wljaumt",
+        "jrvggke5ldy1pymply3qgtmv0lldlymnsawvudckurg93bmxvywrtdhjpbmcoj2h0dha6ly8xmjcumc4wlje6"
+      ],
+      "raw_values": [
+        "*SUVYIChOZXctT2JqZWN0IE5ldC5XZWJjbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwOi8vMTI3LjAuMC4xO*",
+        "*lFWCAoTmV3LU9iamVjdCBOZXQuV2ViY2xpZW50KS5Eb3dubG9hZFN0cmluZygnaHR0cDovLzEyNy4wLjAuMT*",
+        "*JRVggKE5ldy1PYmplY3QgTmV0LldlYmNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xMjcuMC4wLjE6*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "admin$",
+        ".exe",
+        "%comspec%",
+        "start",
+        "powershell",
+        "powershell -nop -w hidden -encodedcommand"
+      ],
+      "raw_values": [
+        "*ADMIN$*",
+        "*.exe*",
+        "*%COMSPEC%*",
+        "*start*",
+        "*powershell*",
+        "*powershell -nop -w hidden -encodedcommand*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and ((winlog.event_data.ServiceFileName:\"*ADMIN$*\" and winlog.event_data.ServiceFileName:\"*.exe*\") or (winlog.event_data.ServiceFileName:\"*%COMSPEC%*\" and winlog.event_data.ServiceFileName:\"*start*\" and winlog.event_data.ServiceFileName:\"*powershell*\") or winlog.event_data.ServiceFileName:\"*powershell -nop -w hidden -encodedcommand*\" or winlog.event_data.ServiceFileName like~ (\"*SUVYIChOZXctT2JqZWN0IE5ldC5XZWJjbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwOi8vMTI3LjAuMC4xO*\", \"*lFWCAoTmV3LU9iamVjdCBOZXQuV2ViY2xpZW50KS5Eb3dubG9hZFN0cmluZygnaHR0cDovLzEyNy4wLjAuMT*\", \"*JRVggKE5ldy1PYmplY3QgTmV0LldlYmNsaWVudCkuRG93bmxvYWRTdHJpbmcoJ2h0dHA6Ly8xMjcuMC4wLjE6*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_cobaltstrike_service_installs.eql",
+  "metadata": {}
+}

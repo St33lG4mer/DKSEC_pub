@@ -1,0 +1,72 @@
+{
+  "id": "1be6f7f6-6521-5445-9d7c-048573dfbc6f",
+  "catalog": "sigma",
+  "name": "win_system_susp_eventlog_cleared",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": "like~",
+      "values": [
+        "microsoft-windows-powershell/operational",
+        "microsoft-windows-sysmon/operational",
+        "powershellcore/operational",
+        "security",
+        "system",
+        "windows powershell"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-PowerShell/Operational",
+        "Microsoft-Windows-Sysmon/Operational",
+        "PowerShellCore/Operational",
+        "Security",
+        "System",
+        "Windows PowerShell"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "104"
+      ],
+      "raw_values": [
+        "104"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-eventlog"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Eventlog"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (event.code:\"104\" and winlog.provider_name:\"Microsoft-Windows-Eventlog\" and (winlog.channel like~ (\"Microsoft-Windows-PowerShell/Operational\", \"Microsoft-Windows-Sysmon/Operational\", \"PowerShellCore/Operational\", \"Security\", \"System\", \"Windows PowerShell\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/microsoft_windows_eventlog/win_system_susp_eventlog_cleared.eql",
+  "metadata": {}
+}

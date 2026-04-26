@@ -1,0 +1,68 @@
+{
+  "id": "114aa564-f29b-5a94-8c9e-95b166d08f40",
+  "catalog": "sigma",
+  "name": "create_stream_hash_winget_susp_package_source",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.contents",
+      "raw_field": "winlog.event_data.Contents",
+      "operator": "like~",
+      "values": [
+        "://1",
+        "://2",
+        "://3",
+        "://4",
+        "://5",
+        "://6",
+        "://7",
+        "://8",
+        "://9"
+      ],
+      "raw_values": [
+        "*://1*",
+        "*://2*",
+        "*://3*",
+        "*://4*",
+        "*://5*",
+        "*://6*",
+        "*://7*",
+        "*://8*",
+        "*://9*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.contents",
+      "raw_field": "winlog.event_data.Contents",
+      "operator": ":",
+      "values": [
+        "[zonetransfer]  zoneid=3"
+      ],
+      "raw_values": [
+        "[ZoneTransfer]  ZoneId=3*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ":zone.identifier"
+      ],
+      "raw_values": [
+        "*:Zone.Identifier",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\WinGet\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.Contents:\"[ZoneTransfer]  ZoneId=3*\" and (winlog.event_data.Contents like~ (\"*://1*\", \"*://2*\", \"*://3*\", \"*://4*\", \"*://5*\", \"*://6*\", \"*://7*\", \"*://8*\", \"*://9*\")) and file.path:\"*:Zone.Identifier\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\WinGet\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/create_stream_hash/create_stream_hash_winget_susp_package_source.eql",
+  "metadata": {}
+}

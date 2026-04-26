@@ -1,0 +1,142 @@
+{
+  "id": "019062d6-5aaf-5034-ad2d-770e2095cd50",
+  "catalog": "elastic",
+  "name": "Potential Masquerading as Communication Apps",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": ":",
+      "values": [
+        "slack technologies, inc.",
+        "slack technologies, llc",
+        "cisco webex llc",
+        "cisco systems, inc.",
+        "whatsapp llc",
+        "whatsapp, inc",
+        "24803d75-212c-471a-bc57-9ef86ab91435",
+        "zoom video communications, inc.",
+        "zoom communications, inc.",
+        "microsoft corporation",
+        "discord inc.",
+        "rocket.chat technologies corp.",
+        "mattermost, inc.",
+        "mozilla corporation"
+      ],
+      "raw_values": [
+        "Slack Technologies, Inc.",
+        "Slack Technologies, LLC",
+        "Cisco WebEx LLC",
+        "Cisco Systems, Inc.",
+        "WhatsApp LLC",
+        "WhatsApp, Inc",
+        "24803D75-212C-471A-BC57-9EF86AB91435",
+        "Zoom Video Communications, Inc.",
+        "Zoom Communications, Inc.",
+        "Microsoft Corporation",
+        "Discord Inc.",
+        "Rocket.Chat Technologies Corp.",
+        "Mattermost, Inc.",
+        "Mozilla Corporation"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.code_signature.status",
+      "raw_field": "process.code_signature.status",
+      "operator": "like",
+      "values": [
+        "errorcode_endpoint"
+      ],
+      "raw_values": [
+        "errorCode_endpoint*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "slack.exe",
+        "webexhost.exe",
+        "teams.exe",
+        "discord.exe",
+        "rocket.chat.exe",
+        "mattermost.exe",
+        "whatsapp.exe",
+        "zoom.exe",
+        "outlook.exe",
+        "thunderbird.exe"
+      ],
+      "raw_values": [
+        "slack.exe",
+        "WebexHost.exe",
+        "Teams.exe",
+        "Discord.exe",
+        "Rocket.Chat.exe",
+        "Mattermost.exe",
+        "WhatsApp.exe",
+        "Zoom.exe",
+        "outlook.exe",
+        "thunderbird.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "!=",
+      "values": [
+        "teams.exe",
+        "rocket.chat.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files (x86)\\\\Teams Installer\\\\Teams.exe",
+        "C:\\\\Program Files\\\\rocketchat\\\\Rocket.Chat.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and\n  event.type == \"start\" and \n  not process.code_signature.status like \"errorCode_endpoint*\" and process.hash.sha256 != null and \n  (\n    /* Slack */\n    (process.name : \"slack.exe\" and not\n      (process.code_signature.subject_name : (\n        \"Slack Technologies, Inc.\",\n        \"Slack Technologies, LLC\"\n       ) and process.code_signature.trusted == true)\n    ) or\n\n    /* WebEx */\n    (process.name : \"WebexHost.exe\" and not\n      (process.code_signature.subject_name : (\"Cisco WebEx LLC\", \"Cisco Systems, Inc.\") and process.code_signature.trusted == true)\n    ) or\n\n    /* Teams */\n    (process.name : \"Teams.exe\" and not\n      (process.code_signature.subject_name : \"Microsoft Corporation\" and process.code_signature.trusted == true) and \n      process.executable != \"C:\\\\Program Files (x86)\\\\Teams Installer\\\\Teams.exe\"\n    ) or\n\n    /* Discord */\n    (process.name : \"Discord.exe\" and not\n      (process.code_signature.subject_name : \"Discord Inc.\" and process.code_signature.trusted == true)\n    ) or\n\n    /* RocketChat */\n    (process.name : \"Rocket.Chat.exe\" and not\n      (process.code_signature.subject_name : \"Rocket.Chat Technologies Corp.\" and process.code_signature.trusted == true) and \n      process.executable != \"C:\\\\Program Files\\\\rocketchat\\\\Rocket.Chat.exe\"\n    ) or\n\n    /* Mattermost */\n    (process.name : \"Mattermost.exe\" and not\n      (process.code_signature.subject_name : \"Mattermost, Inc.\" and process.code_signature.trusted == true)\n    ) or\n\n    /* WhatsApp */\n    (process.name : \"WhatsApp.exe\" and not\n      (process.code_signature.subject_name : (\n        \"WhatsApp LLC\",\n        \"WhatsApp, Inc\",\n        \"24803D75-212C-471A-BC57-9EF86AB91435\"\n       ) and process.code_signature.trusted == true)\n    ) or\n\n    /* Zoom */\n    (process.name : \"Zoom.exe\" and not\n      (process.code_signature.subject_name : (\n        \"Zoom Video Communications, Inc.\",\n        \"Zoom Communications, Inc.\"\n       ) and process.code_signature.trusted == true)\n    ) or\n\n    /* Outlook */\n    (process.name : \"outlook.exe\" and not\n      (process.code_signature.subject_name : \"Microsoft Corporation\" and process.code_signature.trusted == true)\n    ) or\n\n    /* Thunderbird */\n    (process.name : \"thunderbird.exe\" and not\n      (process.code_signature.subject_name : \"Mozilla Corporation\" and process.code_signature.trusted == true)\n    )\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_masquerading_communication_apps.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame"
+    ]
+  }
+}

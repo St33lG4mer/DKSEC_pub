@@ -1,0 +1,60 @@
+{
+  "id": "7c6b24b5-bfb8-524f-922b-65b71405854b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2021_26084_atlassian_confluence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "certutil",
+        "cscript",
+        "curl",
+        "ipconfig",
+        "powershell",
+        "pwsh",
+        "regsvr32",
+        "rundll32",
+        "whoami",
+        "wscript"
+      ],
+      "raw_values": [
+        "*certutil*",
+        "*cmd /c*",
+        "*cmd /k*",
+        "*cscript*",
+        "*curl*",
+        "*ipconfig*",
+        "*powershell*",
+        "*pwsh*",
+        "*regsvr32*",
+        "*rundll32*",
+        "*whoami*",
+        "*wscript*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "java.exe"
+      ],
+      "raw_values": [
+        "*\\\\Atlassian\\\\Confluence\\\\jre\\\\bin\\\\java.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\Atlassian\\\\Confluence\\\\jre\\\\bin\\\\java.exe\" and (process.command_line like~ (\"*certutil*\", \"*cmd /c*\", \"*cmd /k*\", \"*cscript*\", \"*curl*\", \"*ipconfig*\", \"*powershell*\", \"*pwsh*\", \"*regsvr32*\", \"*rundll32*\", \"*whoami*\", \"*wscript*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-26084/proc_creation_win_exploit_cve_2021_26084_atlassian_confluence.eql",
+  "metadata": {}
+}

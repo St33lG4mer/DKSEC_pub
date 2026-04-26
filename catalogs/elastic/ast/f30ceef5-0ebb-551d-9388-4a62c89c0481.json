@@ -1,0 +1,52 @@
+{
+  "id": "f30ceef5-0ebb-551d-9388-4a62c89c0481",
+  "catalog": "elastic",
+  "name": "Potential Masquerading as Svchost",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "FROM logs-endpoint.events.process-*, logs-windows.sysmon_operational-*, logs-system.security-*, logs-windows.*, winlogbeat-* metadata _id, _version, _index\n| where event.category == \"process\" and event.type == \"start\" and\n  match(process.name, \"svchost.exe\", { \"fuzziness\": 1, \"max_expansions\": 10 }) and\n  not to_lower(process.executable) in (\"c:\\\\windows\\\\syswow64\\\\svchost.exe\", \"c:\\\\windows\\\\system32\\\\svchost.exe\") and\n  not to_lower(process.executable) like \"\"\"\\\\device\\\\harddiskvolume*\\\\windows\\\\system32\\\\svchost.exe\"\"\" and\n  not to_lower(process.executable) like \"\"\"\\\\device\\\\harddiskvolume*\\\\windows\\\\syswow64\\\\svchost.exe\"\"\" \n| keep data_stream.dataset, host.name, host.id, user.id, user.name, process.executable, process.parent.executable, process.command_line, _id, _version, _index\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_masquerading_as_svchost.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Sysmon"
+    ]
+  }
+}

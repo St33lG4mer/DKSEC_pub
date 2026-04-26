@@ -1,0 +1,86 @@
+{
+  "id": "d056125f-4100-5d3c-a506-bbd6b9be630d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_appx_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "powershell_ise.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\powershell_ise.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-",
+        "base64"
+      ],
+      "raw_values": [
+        "*cmd /c*",
+        "*Invoke-*",
+        "*Base64*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "microsoft.windowsterminal",
+        "windowsterminal.exe",
+        "microsoft.sysinternalssuite"
+      ],
+      "raw_values": [
+        "*C:\\\\Program Files\\\\WindowsApps\\\\*",
+        "*:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal*",
+        "*\\\\WindowsTerminal.exe",
+        "C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.SysinternalsSuite*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*C:\\\\Program Files\\\\WindowsApps\\\\*\" and ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\wscript.exe\")) or (process.command_line like~ (\"*cmd /c*\", \"*Invoke-*\", \"*Base64*\"))) and (not ((process.parent.executable:\"*:\\\\Program Files\\\\WindowsApps\\\\Microsoft.WindowsTerminal*\" and process.parent.executable:\"*\\\\WindowsTerminal.exe\" and (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\cmd.exe\", \"*\\\\pwsh.exe\"))) or (process.parent.executable:\"C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.SysinternalsSuite*\" and process.executable:\"*\\\\cmd.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_appx_execution.eql",
+  "metadata": {}
+}

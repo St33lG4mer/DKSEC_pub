@@ -1,0 +1,40 @@
+{
+  "id": "e7386ae8-89cf-5d3c-b982-512c812ee567",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_whoami",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "whoami.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\whoami.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"whoami.exe\" and (not process.executable:\"*\\\\whoami.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_whoami.eql",
+  "metadata": {}
+}

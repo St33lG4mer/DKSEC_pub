@@ -1,0 +1,53 @@
+{
+  "id": "c35cc95b-2b02-58ab-84a3-1c34444eb3da",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rpcping_credential_capture",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rpcping.exe"
+      ],
+      "raw_values": [
+        "*\\\\RpcPing.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\rpcping.exe"
+      ],
+      "raw_values": [
+        "\\\\RpcPing.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ntlm",
+        "ncacn_np"
+      ],
+      "raw_values": [
+        "*NTLM*",
+        "*ncacn_np*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\RpcPing.exe\" or process.pe.original_file_name:\"\\\\RpcPing.exe\") and process.command_line like~ (\"*-s*\", \"*/s*\", \"*–s*\", \"*—s*\", \"*―s*\")) and ((process.command_line like~ (\"*-u*\", \"*/u*\", \"*–u*\", \"*—u*\", \"*―u*\") and process.command_line:\"*NTLM*\") or (process.command_line like~ (\"*-t*\", \"*/t*\", \"*–t*\", \"*—t*\", \"*―t*\") and process.command_line:\"*ncacn_np*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rpcping_credential_capture.eql",
+  "metadata": {}
+}

@@ -1,0 +1,90 @@
+{
+  "id": "ff1bfb10-5f6f-53aa-afdc-ad1115255ed1",
+  "catalog": "elastic",
+  "name": "Azure Storage Account Keys Accessed by Privileged User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.identity.authorization.evidence.role",
+      "raw_field": "azure.activitylogs.identity.authorization.evidence.role",
+      "operator": ":",
+      "values": [
+        "owner",
+        "contributor",
+        "storage account contributor",
+        "user access administrator"
+      ],
+      "raw_values": [
+        "Owner",
+        "Contributor",
+        "Storage Account Contributor",
+        "User Access Administrator"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.activitylogs"
+      ],
+      "raw_values": [
+        "azure.activitylogs"
+      ]
+    },
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.storage/storageaccounts/listkeys/action"
+      ],
+      "raw_values": [
+        "MICROSOFT.STORAGE/STORAGEACCOUNTS/LISTKEYS/ACTION"
+      ]
+    },
+    {
+      "field": "azure.activitylogs.identity.authorization.evidence.principal_type",
+      "raw_field": "azure.activitylogs.identity.authorization.evidence.principal_type",
+      "operator": ":",
+      "values": [
+        "user"
+      ],
+      "raw_values": [
+        "User"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"azure.activitylogs\" and\nazure.activitylogs.operation_name: \"MICROSOFT.STORAGE/STORAGEACCOUNTS/LISTKEYS/ACTION\" and\nazure.activitylogs.identity.authorization.evidence.principal_type: \"User\" and\nazure.activitylogs.identity.authorization.evidence.role: (\n    \"Owner\" or\n    \"Contributor\" or\n    \"Storage Account Contributor\" or\n    \"User Access Administrator\"\n) and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/credential_access_azure_storage_account_keys_accessed.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Use Case: Threat Detection",
+      "Data Source: Azure",
+      "Data Source: Azure Activity Logs",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

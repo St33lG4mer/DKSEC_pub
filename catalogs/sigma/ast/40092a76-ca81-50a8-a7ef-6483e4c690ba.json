@@ -1,0 +1,35 @@
+{
+  "id": "40092a76-ca81-50a8-a7ef-6483e4c690ba",
+  "catalog": "sigma",
+  "name": "file_event_win_mal_adwind",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "java",
+        ".exe",
+        "retrive",
+        ".vbs"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Roaming\\\\Oracle\\\\bin\\\\java*",
+        "*.exe*",
+        "*\\\\Retrive*",
+        "*.vbs*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\AppData\\\\Roaming\\\\Oracle\\\\bin\\\\java*\" and file.path:\"*.exe*\") or (file.path:\"*\\\\Retrive*\" and file.path:\"*.vbs*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_mal_adwind.eql",
+  "metadata": {}
+}

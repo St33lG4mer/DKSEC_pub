@@ -1,0 +1,25 @@
+{
+  "id": "d3e834ce-a0f7-5f83-bab0-98ee2be9b9e0",
+  "catalog": "elastic",
+  "name": "Cobalt Strike Command and Control Beacon",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [],
+  "raw_query": "((event.category: (network OR network_traffic) AND type: (tls OR http))\n    OR data_stream.dataset: (network_traffic.tls OR network_traffic.http)\n) AND destination.domain:/[a-z]{3}.stage.[0-9]{8}\\..*/\n",
+  "language": "lucene",
+  "translated_query": null,
+  "source_path": "rules/network/command_and_control_cobalt_strike_beacon.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Domain: Endpoint",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

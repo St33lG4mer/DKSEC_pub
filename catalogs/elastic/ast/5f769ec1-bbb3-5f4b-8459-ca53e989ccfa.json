@@ -1,0 +1,42 @@
+{
+  "id": "5f769ec1-bbb3-5f4b-8459-ca53e989ccfa",
+  "catalog": "elastic",
+  "name": "High Number of Process Terminations",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "pkill"
+      ],
+      "raw_values": [
+        "pkill"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and (\n  (process.name:\"pkill\" and process.args:\"-f\") or\n  (process.name:kill and process.args:\"-9\") or\n  (process.name:killall)\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/impact_process_kill_threshold.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Auditd Manager",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

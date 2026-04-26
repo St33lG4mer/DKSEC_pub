@@ -1,0 +1,75 @@
+{
+  "id": "38fab961-cafc-5ed1-a649-221be7bf1d51",
+  "catalog": "elastic",
+  "name": "A scheduled task was created",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "iam"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": ":",
+      "values": [
+        "\\\\createexplorershellunelevatedtask",
+        "\\\\hewlett-packard\\\\hpdevicecheck",
+        "\\\\hewlett-packard\\\\hp support assistant\\\\warrantychecker",
+        "\\\\hewlett-packard\\\\hp support assistant\\\\warrantychecker_backup",
+        "\\\\hewlett-packard\\\\hp web products detection",
+        "\\\\microsoft\\\\visualstudio\\\\updates\\\\backgrounddownload",
+        "\\\\onedrive standalone update task-s-1-5-21",
+        "\\\\onedrive standalone update task-s-1-12-1-"
+      ],
+      "raw_values": [
+        "\\\\CreateExplorerShellUnelevatedTask",
+        "\\\\Hewlett-Packard\\\\HPDeviceCheck",
+        "\\\\Hewlett-Packard\\\\HP Support Assistant\\\\WarrantyChecker",
+        "\\\\Hewlett-Packard\\\\HP Support Assistant\\\\WarrantyChecker_backup",
+        "\\\\Hewlett-Packard\\\\HP Web Products Detection",
+        "\\\\Microsoft\\\\VisualStudio\\\\Updates\\\\BackgroundDownload",
+        "\\\\OneDrive Standalone Update Task-S-1-5-21*",
+        "\\\\OneDrive Standalone Update Task-S-1-12-1-*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "scheduled-task-created"
+      ],
+      "raw_values": [
+        "scheduled-task-created"
+      ]
+    }
+  ],
+  "raw_query": "iam where host.os.type == \"windows\" and event.action == \"scheduled-task-created\" and\n\n /* excluding tasks created by the computer account */\n not user.name : \"*$\" and\n\n /* TaskContent is not parsed, exclude by full taskname noisy ones */\n not winlog.event_data.TaskName : (\n              \"\\\\CreateExplorerShellUnelevatedTask\",\n              \"\\\\Hewlett-Packard\\\\HPDeviceCheck\",\n              \"\\\\Hewlett-Packard\\\\HP Support Assistant\\\\WarrantyChecker\",\n              \"\\\\Hewlett-Packard\\\\HP Support Assistant\\\\WarrantyChecker_backup\",\n              \"\\\\Hewlett-Packard\\\\HP Web Products Detection\",\n              \"\\\\Microsoft\\\\VisualStudio\\\\Updates\\\\BackgroundDownload\",\n              \"\\\\OneDrive Standalone Update Task-S-1-5-21*\",\n              \"\\\\OneDrive Standalone Update Task-S-1-12-1-*\"\n )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_scheduled_task_creation_winlog.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "a6087a1b-aef4-53bf-bad3-1e9434dc57c4",
+  "catalog": "sigma",
+  "name": "registry_set_uac_bypass_eventvwr",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\mscfile\\\\shell\\\\open\\\\command"
+      ],
+      "raw_values": [
+        "*\\\\mscfile\\\\shell\\\\open\\\\command"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\mscfile\\\\shell\\\\open\\\\command\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_uac_bypass_eventvwr.eql",
+  "metadata": {}
+}

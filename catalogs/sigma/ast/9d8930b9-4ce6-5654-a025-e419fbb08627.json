@@ -1,0 +1,59 @@
+{
+  "id": "9d8930b9-4ce6-5654-a025-e419fbb08627",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sc_change_sevice_image_path_by_non_admin",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "medium",
+        "s-1-16-8192"
+      ],
+      "raw_values": [
+        "Medium",
+        "S-1-16-8192"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "*\\\\sc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "config",
+        "binpath",
+        "failure",
+        "command"
+      ],
+      "raw_values": [
+        "*config*",
+        "*binPath*",
+        "*failure*",
+        "*command*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\sc.exe\" and (winlog.event_data.IntegrityLevel like~ (\"Medium\", \"S-1-16-8192\"))) and ((process.command_line:\"*config*\" and process.command_line:\"*binPath*\") or (process.command_line:\"*failure*\" and process.command_line:\"*command*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sc_change_sevice_image_path_by_non_admin.eql",
+  "metadata": {}
+}

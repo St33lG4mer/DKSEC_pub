@@ -1,0 +1,29 @@
+{
+  "id": "159f6653-9d92-55df-8eb3-8d4db2229847",
+  "catalog": "sigma",
+  "name": "registry_set_new_application_appcompat",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\appcompatflags\\\\compatibility assistant\\\\store\\\\"
+      ],
+      "raw_values": [
+        "*\\\\AppCompatFlags\\\\Compatibility Assistant\\\\Store\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\AppCompatFlags\\\\Compatibility Assistant\\\\Store\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_new_application_appcompat.eql",
+  "metadata": {}
+}

@@ -1,0 +1,48 @@
+{
+  "id": "1374ef7b-fa39-59e4-a333-55d68ec2ea86",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_covenant",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-command",
+        "-encodedcommand"
+      ],
+      "raw_values": [
+        "*-Command*",
+        "*-EncodedCommand*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-sta",
+        "-nop",
+        "-window",
+        "hidden"
+      ],
+      "raw_values": [
+        "*-Sta*",
+        "*-Nop*",
+        "*-Window*",
+        "*Hidden*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.command_line:\"*-Sta*\" and process.command_line:\"*-Nop*\" and process.command_line:\"*-Window*\" and process.command_line:\"*Hidden*\") and (process.command_line like~ (\"*-Command*\", \"*-EncodedCommand*\"))) or (process.command_line like~ (\"*sv o (New-Object IO.MemorySteam);sv d *\", \"*mshta file.hta*\", \"*GruntHTTP*\", \"*-EncodedCommand cwB2ACAAbwAgA*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_covenant.eql",
+  "metadata": {}
+}

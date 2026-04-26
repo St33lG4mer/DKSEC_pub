@@ -1,0 +1,29 @@
+{
+  "id": "8045bbe1-faca-5b3a-8c0c-943fe42817b4",
+  "catalog": "sigma",
+  "name": "net_dns_susp_telegram_api",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": ":",
+      "values": [
+        "api.telegram.org"
+      ],
+      "raw_values": [
+        "api.telegram.org"
+      ]
+    }
+  ],
+  "raw_query": "any where query:\"api.telegram.org\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/network/dns/net_dns_susp_telegram_api.eql",
+  "metadata": {}
+}

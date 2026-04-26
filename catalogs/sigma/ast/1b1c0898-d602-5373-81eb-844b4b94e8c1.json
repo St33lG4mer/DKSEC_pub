@@ -1,0 +1,29 @@
+{
+  "id": "1b1c0898-d602-5373-81eb-844b4b94e8c1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_execution_path_webserver",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "services.exe"
+      ],
+      "raw_values": [
+        "*\\\\services.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\wwwroot\\\\*\", \"*\\\\wmpub\\\\*\", \"*\\\\htdocs\\\\*\")) and (not ((process.executable like~ (\"*bin\\\\*\", \"*\\\\Tools\\\\*\", \"*\\\\SMSComponent\\\\*\")) and process.parent.executable:\"*\\\\services.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_execution_path_webserver.eql",
+  "metadata": {}
+}

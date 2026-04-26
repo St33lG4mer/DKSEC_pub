@@ -1,0 +1,51 @@
+{
+  "id": "06f9fabd-b0a4-509a-bd06-8be3d4e72a54",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uac_bypass_wsreset",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wsreset.exe"
+      ],
+      "raw_values": [
+        "*\\\\wsreset.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\conhost.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "CONHOST.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\wsreset.exe\" and (not (process.executable:\"*\\\\conhost.exe\" or process.pe.original_file_name:\"CONHOST.EXE\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_wsreset.eql",
+  "metadata": {}
+}

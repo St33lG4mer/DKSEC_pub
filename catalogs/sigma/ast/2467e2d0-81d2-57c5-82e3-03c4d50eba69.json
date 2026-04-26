@@ -1,0 +1,113 @@
+{
+  "id": "2467e2d0-81d2-57c5-82e3-03c4d50eba69",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_base64_wmi_classes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "vwbpag4amwayaf8auwboageazabvahcaywbvahaaeq",
+        "caaqbuadmamgbfafmaaabhagqabwb3agmabwbwahka",
+        "xagkabgazadiaxwbtaggayqbkag8adwbjag8acab5a",
+        "v2lumzjfu2hhzg93y29we",
+        "dpbjmyx1noywrvd2nvch",
+        "xaw4zml9tagfkb3djb3b5",
+        "vwbpag4amwayaf8auwbjaggazqbkahuabablagqasgbvagia",
+        "caaqbuadmamgbfafmaywboaguazab1agwazqbkaeoabwbia",
+        "xagkabgazadiaxwbtagmaaablagqadqbsaguazabkag8ayg",
+        "v2lumzjfu2nozwr1bgvksm9i",
+        "dpbjmyx1njagvkdwxlzepvy",
+        "xaw4zml9ty2hlzhvszwrkb2",
+        "vwbpag4amwayaf8auabyag8aywblahmacw",
+        "caaqbuadmamgbfafaacgbvagmazqbzahma",
+        "xagkabgazadiaxwbqahiabwbjaguacwbza",
+        "v2lumzjfuhjvy2vzc",
+        "dpbjmyx1byb2nlc3",
+        "xaw4zml9qcm9jzxnz",
+        "vwbpag4amwayaf8avqbzaguacgbbagmaywbvahuabgb0a",
+        "caaqbuadmamgbfafuacwblahiaqqbjagmabwb1ag4ada",
+        "xagkabgazadiaxwbvahmazqbyaeeaywbjag8adqbuahqa",
+        "v2lumzjfvxnlckfjy291bn",
+        "dpbjmyx1vzzxjby2nvdw50",
+        "xaw4zml9vc2vyqwnjb3vud",
+        "vwbpag4amwayaf8atabvagcazwblagqatwbuafuacwblahia",
+        "caaqbuadmamgbfaewabwbnagcazqbkae8abgbvahmazqbya",
+        "xagkabgazadiaxwbmag8azwbnaguazabpag4avqbzaguacg",
+        "v2lumzjftg9nz2vkt25vc2vy",
+        "dpbjmyx0xvz2dlze9uvxnlc",
+        "xaw4zml9mb2dnzwrpblvzzx"
+      ],
+      "raw_values": [
+        "*VwBpAG4AMwAyAF8AUwBoAGEAZABvAHcAYwBvAHAAeQ*",
+        "*cAaQBuADMAMgBfAFMAaABhAGQAbwB3AGMAbwBwAHkA*",
+        "*XAGkAbgAzADIAXwBTAGgAYQBkAG8AdwBjAG8AcAB5A*",
+        "*V2luMzJfU2hhZG93Y29we*",
+        "*dpbjMyX1NoYWRvd2NvcH*",
+        "*XaW4zMl9TaGFkb3djb3B5*",
+        "*VwBpAG4AMwAyAF8AUwBjAGgAZQBkAHUAbABlAGQASgBvAGIA*",
+        "*cAaQBuADMAMgBfAFMAYwBoAGUAZAB1AGwAZQBkAEoAbwBiA*",
+        "*XAGkAbgAzADIAXwBTAGMAaABlAGQAdQBsAGUAZABKAG8AYg*",
+        "*V2luMzJfU2NoZWR1bGVkSm9i*",
+        "*dpbjMyX1NjaGVkdWxlZEpvY*",
+        "*XaW4zMl9TY2hlZHVsZWRKb2*",
+        "*VwBpAG4AMwAyAF8AUAByAG8AYwBlAHMAcw*",
+        "*cAaQBuADMAMgBfAFAAcgBvAGMAZQBzAHMA*",
+        "*XAGkAbgAzADIAXwBQAHIAbwBjAGUAcwBzA*",
+        "*V2luMzJfUHJvY2Vzc*",
+        "*dpbjMyX1Byb2Nlc3*",
+        "*XaW4zMl9Qcm9jZXNz*",
+        "*VwBpAG4AMwAyAF8AVQBzAGUAcgBBAGMAYwBvAHUAbgB0A*",
+        "*cAaQBuADMAMgBfAFUAcwBlAHIAQQBjAGMAbwB1AG4AdA*",
+        "*XAGkAbgAzADIAXwBVAHMAZQByAEEAYwBjAG8AdQBuAHQA*",
+        "*V2luMzJfVXNlckFjY291bn*",
+        "*dpbjMyX1VzZXJBY2NvdW50*",
+        "*XaW4zMl9Vc2VyQWNjb3Vud*",
+        "*VwBpAG4AMwAyAF8ATABvAGcAZwBlAGQATwBuAFUAcwBlAHIA*",
+        "*cAaQBuADMAMgBfAEwAbwBnAGcAZQBkAE8AbgBVAHMAZQByA*",
+        "*XAGkAbgAzADIAXwBMAG8AZwBnAGUAZABPAG4AVQBzAGUAcg*",
+        "*V2luMzJfTG9nZ2VkT25Vc2Vy*",
+        "*dpbjMyX0xvZ2dlZE9uVXNlc*",
+        "*XaW4zMl9Mb2dnZWRPblVzZX*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and ((process.command_line like~ (\"*VwBpAG4AMwAyAF8AUwBoAGEAZABvAHcAYwBvAHAAeQ*\", \"*cAaQBuADMAMgBfAFMAaABhAGQAbwB3AGMAbwBwAHkA*\", \"*XAGkAbgAzADIAXwBTAGgAYQBkAG8AdwBjAG8AcAB5A*\", \"*V2luMzJfU2hhZG93Y29we*\", \"*dpbjMyX1NoYWRvd2NvcH*\", \"*XaW4zMl9TaGFkb3djb3B5*\")) or (process.command_line like~ (\"*VwBpAG4AMwAyAF8AUwBjAGgAZQBkAHUAbABlAGQASgBvAGIA*\", \"*cAaQBuADMAMgBfAFMAYwBoAGUAZAB1AGwAZQBkAEoAbwBiA*\", \"*XAGkAbgAzADIAXwBTAGMAaABlAGQAdQBsAGUAZABKAG8AYg*\", \"*V2luMzJfU2NoZWR1bGVkSm9i*\", \"*dpbjMyX1NjaGVkdWxlZEpvY*\", \"*XaW4zMl9TY2hlZHVsZWRKb2*\")) or (process.command_line like~ (\"*VwBpAG4AMwAyAF8AUAByAG8AYwBlAHMAcw*\", \"*cAaQBuADMAMgBfAFAAcgBvAGMAZQBzAHMA*\", \"*XAGkAbgAzADIAXwBQAHIAbwBjAGUAcwBzA*\", \"*V2luMzJfUHJvY2Vzc*\", \"*dpbjMyX1Byb2Nlc3*\", \"*XaW4zMl9Qcm9jZXNz*\")) or (process.command_line like~ (\"*VwBpAG4AMwAyAF8AVQBzAGUAcgBBAGMAYwBvAHUAbgB0A*\", \"*cAaQBuADMAMgBfAFUAcwBlAHIAQQBjAGMAbwB1AG4AdA*\", \"*XAGkAbgAzADIAXwBVAHMAZQByAEEAYwBjAG8AdQBuAHQA*\", \"*V2luMzJfVXNlckFjY291bn*\", \"*dpbjMyX1VzZXJBY2NvdW50*\", \"*XaW4zMl9Vc2VyQWNjb3Vud*\")) or (process.command_line like~ (\"*VwBpAG4AMwAyAF8ATABvAGcAZwBlAGQATwBuAFUAcwBlAHIA*\", \"*cAaQBuADMAMgBfAEwAbwBnAGcAZQBkAE8AbgBVAHMAZQByA*\", \"*XAGkAbgAzADIAXwBMAG8AZwBnAGUAZABPAG4AVQBzAGUAcg*\", \"*V2luMzJfTG9nZ2VkT25Vc2Vy*\", \"*dpbjMyX0xvZ2dlZE9uVXNlc*\", \"*XaW4zMl9Mb2dnZWRPblVzZX*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_base64_wmi_classes.eql",
+  "metadata": {}
+}

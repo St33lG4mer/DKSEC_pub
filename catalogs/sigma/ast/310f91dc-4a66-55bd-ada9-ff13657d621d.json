@@ -1,0 +1,29 @@
+{
+  "id": "310f91dc-4a66-55bd-ada9-ff13657d621d",
+  "catalog": "sigma",
+  "name": "net_connection_win_addinutil_initiated",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "addinutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\addinutil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where network.direction:\"true\" and process.executable:\"*\\\\addinutil.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_addinutil_initiated.eql",
+  "metadata": {}
+}

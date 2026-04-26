@@ -1,0 +1,42 @@
+{
+  "id": "f4d72dec-7568-57fd-bc06-7810ccfbd668",
+  "catalog": "sigma",
+  "name": "proc_creation_win_chcp_codepage_switch",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "936",
+        "1258"
+      ],
+      "raw_values": [
+        "* 936",
+        "* 1258"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "chcp.com"
+      ],
+      "raw_values": [
+        "*\\\\chcp.com"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\chcp.com\" and (process.command_line like~ (\"* 936\", \"* 1258\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_chcp_codepage_switch.eql",
+  "metadata": {}
+}

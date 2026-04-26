@@ -1,0 +1,29 @@
+{
+  "id": "dbfa057e-2ceb-5cff-95c5-e4334e0a96a4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_office_outlook_susp_child_processes_remote",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\outlook.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\outlook.exe\" and process.executable:\"\\\\\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_office_outlook_susp_child_processes_remote.eql",
+  "metadata": {}
+}

@@ -1,0 +1,127 @@
+{
+  "id": "a4575f32-33da-5c93-9d51-3be78580ad26",
+  "catalog": "elastic",
+  "name": "Suspicious Execution from VS Code Extension",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "node.exe",
+        "code.exe"
+      ],
+      "raw_values": [
+        "node.exe",
+        "Code.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "vscode*extensions",
+        "extensionhost",
+        "ms-python.vscode-"
+      ],
+      "raw_values": [
+        "*vscode*extensions*",
+        "*extensionHost*",
+        "*ms-python.vscode-*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "rundll32.exe",
+        "msiexec.exe",
+        "curl.exe",
+        "bitsadmin.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "node.exe",
+        "python.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "rundll32.exe",
+        "msiexec.exe",
+        "curl.exe",
+        "bitsadmin.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "node.exe",
+        "python.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "npm.cmd config get prefix",
+        "code -v",
+        "chcp"
+      ],
+      "raw_values": [
+        "npm.cmd config get prefix",
+        "code -v",
+        "chcp"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.action == \"start\" and\n  process.parent.name : (\"node.exe\", \"Code.exe\") and\n  process.parent.command_line != null and\n  process.parent.command_line : (\"*vscode*extensions*\", \"*extensionHost*\") and\n  (\n    process.name : (\n      \"cmd.exe\", \"powershell.exe\", \"pwsh.exe\", \"rundll32.exe\", \"msiexec.exe\",\n      \"curl.exe\", \"bitsadmin.exe\", \"wscript.exe\", \"cscript.exe\", \"mshta.exe\",\n      \"node.exe\"\n    ) or\n\t\n\t// recently dropped PE\n    process.Ext.relative_file_creation_time <= 500\n  ) and \n  not (process.name : \"cmd.exe\" and process.args : (\"npm.cmd config get prefix\", \"code -v\", \"chcp\")) and \n  not (process.name : \"python.exe\" and process.parent.command_line : \"*ms-python.vscode-*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/initial_access_suspicious_execution_from_vscode_extension.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

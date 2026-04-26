@@ -1,0 +1,40 @@
+{
+  "id": "62177765-b307-5147-ab7b-850b6ff3b95e",
+  "catalog": "sigma",
+  "name": "image_load_side_load_office_dlls",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "office"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft Office\\\\OFFICE*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "outllib.dll"
+      ],
+      "raw_values": [
+        "*\\\\outllib.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\outllib.dll\" and (not (file.path like~ (\"C:\\\\Program Files\\\\Microsoft Office\\\\OFFICE*\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\OFFICE*\", \"C:\\\\Program Files\\\\Microsoft Office\\\\Root\\\\OFFICE*\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\Root\\\\OFFICE*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_office_dlls.eql",
+  "metadata": {}
+}

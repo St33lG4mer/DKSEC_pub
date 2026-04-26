@@ -1,0 +1,33 @@
+{
+  "id": "cdf95742-4a18-58d8-b48b-da3827f72f23",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mshta_inline_vbscript",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "wscript.",
+        ".shell",
+        ".run"
+      ],
+      "raw_values": [
+        "*Wscript.*",
+        "*.Shell*",
+        "*.Run*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*Wscript.*\" and process.command_line:\"*.Shell*\" and process.command_line:\"*.Run*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mshta_inline_vbscript.eql",
+  "metadata": {}
+}

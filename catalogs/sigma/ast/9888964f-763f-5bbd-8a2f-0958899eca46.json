@@ -1,0 +1,63 @@
+{
+  "id": "9888964f-763f-5bbd-8a2f-0958899eca46",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_remote_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-node:",
+        "node:",
+        "–node:",
+        "—node:",
+        "―node:",
+        "localhost",
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "*-node:*",
+        "*/node:*",
+        "*–node:*",
+        "*—node:*",
+        "*―node:*",
+        "*localhost*",
+        "*127.0.0.1*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\WMIC.exe\" or process.pe.original_file_name:\"wmic.exe\") and process.command_line like~ (\"*-node:*\", \"*/node:*\", \"*–node:*\", \"*—node:*\", \"*―node:*\")) and (not (process.command_line like~ (\"*localhost*\", \"*127.0.0.1*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_remote_execution.eql",
+  "metadata": {}
+}

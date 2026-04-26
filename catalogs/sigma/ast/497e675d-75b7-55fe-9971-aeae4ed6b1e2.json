@@ -1,0 +1,51 @@
+{
+  "id": "497e675d-75b7-55fe-9971-aeae4ed6b1e2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_configsecuritypolicy_download_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "configsecuritypolicy.exe"
+      ],
+      "raw_values": [
+        "*ConfigSecurityPolicy.exe*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "configsecuritypolicy.exe"
+      ],
+      "raw_values": [
+        "*\\\\ConfigSecurityPolicy.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "configsecuritypolicy.exe"
+      ],
+      "raw_values": [
+        "ConfigSecurityPolicy.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*ConfigSecurityPolicy.exe*\" or process.executable:\"*\\\\ConfigSecurityPolicy.exe\" or process.pe.original_file_name:\"ConfigSecurityPolicy.exe\") and (process.command_line like~ (\"*ftp://*\", \"*http://*\", \"*https://*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_configsecuritypolicy_download_file.eql",
+  "metadata": {}
+}

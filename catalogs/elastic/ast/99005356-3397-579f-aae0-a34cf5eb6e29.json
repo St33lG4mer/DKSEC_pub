@@ -1,0 +1,151 @@
+{
+  "id": "99005356-3397-579f-aae0-a34cf5eb6e29",
+  "catalog": "elastic",
+  "name": "Suspicious Windows Powershell Arguments",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "windows.sysmon_operational",
+        "windows.sysmon"
+      ],
+      "raw_values": [
+        "windows.sysmon_operational",
+        "windows.sysmon"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "explorer.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\*.exe",
+        "explorer.exe",
+        "cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "^*^*^*^*^*^*^*^*^",
+        "`*`*`*`",
+        "+*+*+*+*+*+",
+        "-encodedcommandparamvariation",
+        "-useencodedarguments",
+        "-commandparamvariation",
+        "-encodedcommand",
+        "invoke-webrequest",
+        "webclient",
+        "reflection.assembly",
+        "use-icinga -minimal",
+        "& {$j = sajb {add-type -assemblyname",
+        "&{'",
+        "-outfile",
+        "start",
+        "-bxor",
+        "$*$*;set-alias"
+      ],
+      "raw_values": [
+        "*^*^*^*^*^*^*^*^*^*",
+        "*`*`*`*`*",
+        "*+*+*+*+*+*+*",
+        "-EncodedCommandParamVariation",
+        "-UseEncodedArguments",
+        "-CommandParamVariation",
+        "*-encodedCommand*",
+        "*Invoke-webrequest*",
+        "*WebClient*",
+        "*Reflection.Assembly*",
+        "*Use-Icinga -Minimal*",
+        "*& {$j = sajb {Add-Type -AssemblyName*",
+        "-c",
+        "&{'*",
+        "-Outfile",
+        "Start*",
+        "-bxor",
+        "0x*",
+        "$*$*;set-alias"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "powershell.exe"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "==",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n process.name : \"powershell.exe\" and\n\n  not (\n    ?user.id == \"S-1-5-18\" and\n    /* Don't apply the user.id exclusion to Sysmon for compatibility */\n    not data_stream.dataset : (\"windows.sysmon_operational\", \"windows.sysmon\")\n  ) and\n\n  not process.parent.executable : (\n        \"?:\\\\Program Files\\\\*.exe\",\n        \"?:\\\\Program Files (x86)\\\\*.exe\"\n  ) and\n\n  (\n    process.command_line : (\n          \"*^*^*^*^*^*^*^*^*^*\",\n          \"*`*`*`*`*\",\n          \"*+*+*+*+*+*+*\",\n          \"*[char[]](*)*-join*\",\n          \"*Base64String*\",\n          \"*[*Convert]*\",\n          \"*.Compression.*\",\n          \"*-join($*\",\n          \"*.replace*\",\n          \"*MemoryStream*\",\n          \"*WriteAllBytes*\",\n          \"* -enc *\",\n          \"* -ec *\",\n          \"* /e *\",\n          \"* /enc *\",\n          \"* /ec *\",\n          \"*WebClient*\",\n          \"*DownloadFile*\",\n          \"*DownloadString*\",\n          \"* iex*\",\n          \"* iwr*\",\n          \"* aQB3AHIAIABpA*\",\n          \"*Reflection.Assembly*\",\n          \"*Assembly.GetType*\",\n          \"*$env:temp\\\\*start*\",\n          \"*powercat*\",\n          \"*nslookup -q=txt*\",\n          \"*$host.UI.PromptForCredential*\",\n          \"*Net.Sockets.TCPClient*\",\n          \"*curl *;Start*\",\n          \"powershell.exe \\\"<#*\",\n          \"*ssh -p *\",\n          \"*http*|iex*\",\n          \"*@SSL\\\\DavWWWRoot\\\\*.ps1*\",\n          \"*.lnk*.Seek(0x*\",\n          \"*[string]::join(*\",\n          \"*[Array]::Reverse($*\",\n          \"* hidden $(gc *\",\n          \"*=wscri& set*\",\n          \"*http'+'s://*\",\n          \"*.content|i''Ex*\",\n          \"*//:sptth*\",\n          \"*//:ptth*\",\n          \"*h''t''t''p*\",\n          \"*'tp'':''/'*\",\n          \"*$env:T\\\"E\\\"MP*\",\n          \"*;cmd /c $?\",\n          \"*s''t''a''r*\",\n          \"*$*=Get-Content*AppData*.SubString(*$*\",\n          \"*=cat *AppData*.substring(*);*$*\",\n          \"*-join'';*|powershell*\",\n          \"*.Content;sleep *|powershell*\",\n          \"*h\\''t\\''tp:\\''*\",\n          \"*-e aQB3AHIAIABp*\",\n          \"*iwr *https*).Content*\",\n          \"*$env:computername*http*\",\n          \"*;InVoKe-ExpRESsIoN $COntent.CONTENt;*\",\n          \"*WebClient*example.com*\",\n          \"*=iwr $*;iex $*\",\n          \"*ServerXmlHttp*IEX*\",\n          \"*XmlDocument*IEX*\"\n    ) or\n\n    (process.args : \"-c\" and process.args : \"&{'*\") or\n\n    (process.args : \"-Outfile\" and process.args : \"Start*\") or\n\n    (process.args : \"-bxor\" and process.args : \"0x*\") or\n\n    process.args : \"$*$*;set-alias\" or\n\n    process.args == \"-e\" or\n\n    // ATHPowerShellCommandLineParameter\n    process.args : (\"-EncodedCommandParamVariation\", \"-UseEncodedArguments\", \"-CommandParamVariation\") or\n\n    (\n      process.parent.name : (\"explorer.exe\", \"cmd.exe\") and\n      process.command_line : (\"*-encodedCommand*\", \"*Invoke-webrequest*\", \"*WebClient*\", \"*Reflection.Assembly*\"))\n    ) and\n    not process.command_line : (\n      \"*Use-Icinga -Minimal*\",\n      \"*& {$j = sajb {Add-Type -AssemblyName*\"\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_windows_powershell_susp_args.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Crowdstrike",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

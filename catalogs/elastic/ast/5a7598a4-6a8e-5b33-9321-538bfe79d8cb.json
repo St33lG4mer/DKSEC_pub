@@ -1,0 +1,230 @@
+{
+  "id": "5a7598a4-6a8e-5b33-9321-538bfe79d8cb",
+  "catalog": "elastic",
+  "name": "Sensitive File Compression Detected via Defend for Containers",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        ".bash_history",
+        "hosts",
+        "group",
+        "passwd",
+        "shadow",
+        "gshadow",
+        "application_default_credentials.json",
+        "type: service_account",
+        "client_email",
+        "private_key_id",
+        "private_key",
+        "google_application_credentials",
+        "azure_client_id",
+        "azure_tenant_id",
+        "azure_client_secret",
+        "azure_federated_token_file",
+        "identity_endpoint",
+        "identity_header",
+        "msi_endpoint",
+        "msi_secret"
+      ],
+      "raw_values": [
+        "*/root/.ssh/*",
+        "*/home/*/.ssh/*",
+        "*/root/.bash_history*",
+        "*/etc/hosts*",
+        "*/root/.aws/*",
+        "*/home/*/.aws/*",
+        "*/root/.docker/*",
+        "*/home/*/.docker/*",
+        "*/etc/group*",
+        "*/etc/passwd*",
+        "*/etc/shadow*",
+        "*/etc/gshadow*",
+        "*/.azure/*",
+        "*/var/run/secrets/azure/*",
+        "*/.config/gcloud/*",
+        "*application_default_credentials.json*",
+        "*type: service_account*",
+        "*client_email*",
+        "*private_key_id*",
+        "*private_key*",
+        "*/var/run/secrets/google/*",
+        "*GOOGLE_APPLICATION_CREDENTIALS*",
+        "*AZURE_CLIENT_ID*",
+        "*AZURE_TENANT_ID*",
+        "*AZURE_CLIENT_SECRET*",
+        "*AZURE_FEDERATED_TOKEN_FILE*",
+        "*IDENTITY_ENDPOINT*",
+        "*IDENTITY_HEADER*",
+        "*MSI_ENDPOINT*",
+        "*MSI_SECRET*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "zip",
+        "tar",
+        "gzip",
+        "hdiutil",
+        "rar",
+        "7zip",
+        "p7zip",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "zip",
+        "tar",
+        "gzip",
+        "hdiutil",
+        "7z",
+        "rar",
+        "7zip",
+        "p7zip",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "zip",
+        "tar",
+        "gzip",
+        "hdiutil",
+        "rar",
+        "7zip",
+        "p7zip",
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "zip",
+        "/bin/zip",
+        "/usr/bin/zip",
+        "/usr/local/bin/zip",
+        "tar",
+        "/bin/tar",
+        "/usr/bin/tar",
+        "/usr/local/bin/tar",
+        "gzip",
+        "/bin/gzip",
+        "/usr/bin/gzip",
+        "/usr/local/bin/gzip",
+        "hdiutil",
+        "/bin/hdiutil",
+        "/usr/bin/hdiutil",
+        "/usr/local/bin/hdiutil",
+        "7z",
+        "/bin/7z",
+        "/usr/bin/7z",
+        "/usr/local/bin/7z",
+        "rar",
+        "/bin/rar",
+        "/usr/bin/rar",
+        "/usr/local/bin/rar",
+        "7zip",
+        "/bin/7zip",
+        "/usr/bin/7zip",
+        "/usr/local/bin/7zip",
+        "p7zip",
+        "/bin/p7zip",
+        "/usr/bin/p7zip",
+        "/usr/local/bin/p7zip",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  process.name in (\"zip\", \"tar\", \"gzip\", \"hdiutil\", \"7z\", \"rar\", \"7zip\", \"p7zip\") or\n  (\n    /* account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\n      \"zip\", \"/bin/zip\", \"/usr/bin/zip\", \"/usr/local/bin/zip\",\n      \"tar\", \"/bin/tar\", \"/usr/bin/tar\", \"/usr/local/bin/tar\",\n      \"gzip\", \"/bin/gzip\", \"/usr/bin/gzip\", \"/usr/local/bin/gzip\",\n      \"hdiutil\", \"/bin/hdiutil\", \"/usr/bin/hdiutil\", \"/usr/local/bin/hdiutil\",\n      \"7z\", \"/bin/7z\", \"/usr/bin/7z\", \"/usr/local/bin/7z\",\n      \"rar\", \"/bin/rar\", \"/usr/bin/rar\", \"/usr/local/bin/rar\",\n      \"7zip\", \"/bin/7zip\", \"/usr/bin/7zip\", \"/usr/local/bin/7zip\",\n      \"p7zip\", \"/bin/p7zip\", \"/usr/bin/p7zip\", \"/usr/local/bin/p7zip\"\n    ) and \n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )\n) and\nprocess.args like~ (\n  \"*/root/.ssh/*\", \"*/home/*/.ssh/*\", \"*/root/.bash_history*\", \"*/etc/hosts*\", \"*/root/.aws/*\", \"*/home/*/.aws/*\",\n  \"*/root/.docker/*\", \"*/home/*/.docker/*\", \"*/etc/group*\", \"*/etc/passwd*\", \"*/etc/shadow*\", \"*/etc/gshadow*\",\n  \"*/.azure/*\", \"*/var/run/secrets/azure/*\", \"*/.config/gcloud/*\", \"*application_default_credentials.json*\",\n  \"*type: service_account*\", \"*client_email*\", \"*private_key_id*\", \"*private_key*\", \"*/var/run/secrets/google/*\",\n  \"*GOOGLE_APPLICATION_CREDENTIALS*\", \"*AZURE_CLIENT_ID*\", \"*AZURE_TENANT_ID*\", \"*AZURE_CLIENT_SECRET*\",\n  \"*AZURE_FEDERATED_TOKEN_FILE*\", \"*IDENTITY_ENDPOINT*\", \"*IDENTITY_HEADER*\", \"*MSI_ENDPOINT*\", \"*MSI_SECRET*\"\n) and process.interactive == true and container.id like \"*\" \n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/credential_access_collection_sensitive_files_compression_inside_a_container.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

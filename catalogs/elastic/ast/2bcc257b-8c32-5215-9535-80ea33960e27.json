@@ -1,0 +1,106 @@
+{
+  "id": "2bcc257b-8c32-5215-9535-80ea33960e27",
+  "catalog": "elastic",
+  "name": "FortiGate SSL VPN Login Followed by SIEM Alert by User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "in",
+      "values": [
+        "0101039426",
+        "0101039427"
+      ],
+      "raw_values": [
+        "0101039426",
+        "0101039427"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "fortinet_fortigate.log"
+      ],
+      "raw_values": [
+        "fortinet_fortigate.log"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "login"
+      ],
+      "raw_values": [
+        "login"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "!=",
+      "values": [
+        "root"
+      ],
+      "raw_values": [
+        "root"
+      ]
+    },
+    {
+      "field": "event.kind",
+      "raw_field": "event.kind",
+      "operator": "==",
+      "values": [
+        "signal"
+      ],
+      "raw_values": [
+        "signal"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "!=",
+      "values": [
+        "fortinet_fortigate.log"
+      ],
+      "raw_values": [
+        "fortinet_fortigate.log"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.rule_id",
+      "raw_field": "kibana.alert.rule.rule_id",
+      "operator": "!=",
+      "values": [
+        "a7f2c1b4-5d8e-4f3a-9b0c-2e1d4a6b8f3e"
+      ],
+      "raw_values": [
+        "a7f2c1b4-5d8e-4f3a-9b0c-2e1d4a6b8f3e"
+      ]
+    }
+  ],
+  "raw_query": "sequence by user.name with maxspan=10m\n [authentication where data_stream.dataset == \"fortinet_fortigate.log\" and event.action == \"login\" and event.code in (\"0101039426\", \"0101039427\") and\n  user.name != \"root\"]\n [any where event.kind == \"signal\" and kibana.alert.rule.name != null and data_stream.dataset != \"fortinet_fortigate.log\" and\n  kibana.alert.risk_score > 21 and kibana.alert.rule.rule_id != \"a7f2c1b4-5d8e-4f3a-9b0c-2e1d4a6b8f3e\" and user.name != null]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/initial_access_fortigate_ssl_vpn_login_followed_by_siem_alert.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Rule Type: Higher-Order Rule",
+      "Tactic: Initial Access",
+      "Data Source: Fortinet",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

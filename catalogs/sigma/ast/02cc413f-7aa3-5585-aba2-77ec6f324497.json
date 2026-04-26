@@ -1,0 +1,204 @@
+{
+  "id": "02cc413f-7aa3-5585-aba2-77ec6f324497",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_mint_sandstorm_manage_engine_susp_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "manageengine",
+        "servicedesk"
+      ],
+      "raw_values": [
+        "*manageengine*",
+        "*ServiceDesk*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\powershell_ise.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "echo",
+        "-dumpmode",
+        "-ssh",
+        ".dmp",
+        "add-mppreference",
+        "adscredentials",
+        "bitsadmin",
+        "certutil",
+        "csvhost.exe",
+        "downloadfile",
+        "downloadstring",
+        "dsquery",
+        "ekern.exe",
+        "frombase64string",
+        "iex",
+        "iex(",
+        "invoke-expression",
+        "invoke-webrequest",
+        "localgroup administrators",
+        "o365accountconfiguration",
+        "samaccountname=",
+        "set-mppreference",
+        "svhost.exe",
+        "system.io.compression",
+        "system.io.memorystream",
+        "usoprivate",
+        "usoshared",
+        "whoami",
+        "procdump",
+        "tasklist",
+        "findstr",
+        "e:jscript",
+        "e:vbscript"
+      ],
+      "raw_values": [
+        "* echo *",
+        "*-dumpmode*",
+        "*-ssh*",
+        "*.dmp*",
+        "*add-MpPreference*",
+        "*adscredentials*",
+        "*bitsadmin*",
+        "*certutil*",
+        "*csvhost.exe*",
+        "*DownloadFile*",
+        "*DownloadString*",
+        "*dsquery*",
+        "*ekern.exe*",
+        "*FromBase64String*",
+        "*iex *",
+        "*iex(*",
+        "*Invoke-Expression*",
+        "*Invoke-WebRequest*",
+        "*localgroup administrators*",
+        "*o365accountconfiguration*",
+        "*samaccountname=*",
+        "*set-MpPreference*",
+        "*svhost.exe*",
+        "*System.IO.Compression*",
+        "*System.IO.MemoryStream*",
+        "*usoprivate*",
+        "*usoshared*",
+        "*whoami*",
+        "*procdump*",
+        "*tasklist*",
+        "*findstr*",
+        "*E:jscript*",
+        "*e:vbscript*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "java"
+      ],
+      "raw_values": [
+        "*\\\\java*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "=]{15,}']), flags=set())",
+        "s+user']), flags=set())",
+        "s+group']), flags=set())",
+        "ssession']), flags=set())",
+        "lsass",
+        "http",
+        "localgroup administrators",
+        "add",
+        "net",
+        "user",
+        "reg add",
+        "disableantispyware",
+        "windows defender",
+        "disablerestrictedadmin",
+        "lsa",
+        "wmic",
+        "process call create",
+        "delete",
+        "shadowcopy",
+        "vssadmin",
+        "shadows",
+        "wbadmin",
+        "catalog",
+        "download.microsoft.com",
+        "manageengine.com",
+        "msiexec"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['[-/–][Ee^]{1,2}[ncodema^]', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\s[A-Za-z0-9+/=]{15,}']), flags=set())",
+        "SigmaRegularExpression(regexp=SigmaString(['net\\\\s+user']), flags=set())",
+        "SigmaRegularExpression(regexp=SigmaString(['net\\\\s+group']), flags=set())",
+        "SigmaRegularExpression(regexp=SigmaString(['query\\\\ssession']), flags=set())",
+        "*lsass*",
+        "*http*",
+        "*localgroup Administrators*",
+        "*/add*",
+        "*net*",
+        "*user*",
+        "*reg add*",
+        "*DisableAntiSpyware*",
+        "*\\\\Microsoft\\\\Windows Defender*",
+        "*DisableRestrictedAdmin*",
+        "*CurrentControlSet\\\\Control\\\\Lsa*",
+        "*wmic*",
+        "*process call create*",
+        "*delete*",
+        "*shadowcopy*",
+        "*vssadmin*",
+        "*shadows*",
+        "*wbadmin*",
+        "*catalog*",
+        "*download.microsoft.com*",
+        "*manageengine.com*",
+        "*msiexec*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wget.exe",
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\wget.exe",
+        "*\\\\curl.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*manageengine*\", \"*ServiceDesk*\")) and process.parent.executable:\"*\\\\java*\") and (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\powershell_ise.exe\")) and ((process.command_line like~ (\"* echo *\", \"*-dumpmode*\", \"*-ssh*\", \"*.dmp*\", \"*add-MpPreference*\", \"*adscredentials*\", \"*bitsadmin*\", \"*certutil*\", \"*csvhost.exe*\", \"*DownloadFile*\", \"*DownloadString*\", \"*dsquery*\", \"*ekern.exe*\", \"*FromBase64String*\", \"*iex *\", \"*iex(*\", \"*Invoke-Expression*\", \"*Invoke-WebRequest*\", \"*localgroup administrators*\", \"*o365accountconfiguration*\", \"*samaccountname=*\", \"*set-MpPreference*\", \"*svhost.exe*\", \"*System.IO.Compression*\", \"*System.IO.MemoryStream*\", \"*usoprivate*\", \"*usoshared*\", \"*whoami*\")) or process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['[-/–][Ee^]{1,2}[ncodema^]', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\s[A-Za-z0-9+/=]{15,}']), flags=set())\" or process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['net\\\\s+user']), flags=set())\" or process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['net\\\\s+group']), flags=set())\" or process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['query\\\\ssession']), flags=set())\")) or (process.command_line:\"*lsass*\" and (process.command_line like~ (\"*procdump*\", \"*tasklist*\", \"*findstr*\"))) or ((process.executable:\"*\\\\wget.exe\" and process.command_line:\"*http*\") or (process.executable:\"*\\\\curl.exe\" and process.command_line:\"*http*\") or (process.command_line like~ (\"*E:jscript*\", \"*e:vbscript*\")) or (process.command_line:\"*localgroup Administrators*\" and process.command_line:\"*/add*\") or (process.command_line:\"*net*\" and (process.command_line:\"*user*\" and process.command_line:\"*/add*\")) or ((process.command_line:\"*reg add*\" and process.command_line:\"*DisableAntiSpyware*\" and process.command_line:\"*\\\\Microsoft\\\\Windows Defender*\") or (process.command_line:\"*reg add*\" and process.command_line:\"*DisableRestrictedAdmin*\" and process.command_line:\"*CurrentControlSet\\\\Control\\\\Lsa*\")) or (process.command_line:\"*wmic*\" and process.command_line:\"*process call create*\") or (process.command_line:\"*wmic*\" and process.command_line:\"*delete*\" and process.command_line:\"*shadowcopy*\") or (process.command_line:\"*vssadmin*\" and process.command_line:\"*delete*\" and process.command_line:\"*shadows*\") or (process.command_line:\"*wbadmin*\" and process.command_line:\"*delete*\" and process.command_line:\"*catalog*\"))) and (not (process.command_line:\"*download.microsoft.com*\" and process.command_line:\"*manageengine.com*\" and process.command_line:\"*msiexec*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Mint-Sandstorm/proc_creation_win_apt_mint_sandstorm_manage_engine_susp_child_process.eql",
+  "metadata": {}
+}

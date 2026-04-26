@@ -1,0 +1,72 @@
+{
+  "id": "f8620368-544e-51af-b89f-6f9037c630de",
+  "catalog": "elastic",
+  "name": "AWS EFS File System Deleted",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "elasticfilesystem.amazonaws.com"
+      ],
+      "raw_values": [
+        "elasticfilesystem.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "deletefilesystem"
+      ],
+      "raw_values": [
+        "DeleteFileSystem"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" \n    and event.provider: \"elasticfilesystem.amazonaws.com\" \n    and event.action: \"DeleteFileSystem\" \n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_efs_filesystem_deleted.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS EFS",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

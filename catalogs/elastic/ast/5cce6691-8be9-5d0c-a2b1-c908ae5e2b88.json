@@ -1,0 +1,161 @@
+{
+  "id": "5cce6691-8be9-5d0c-a2b1-c908ae5e2b88",
+  "catalog": "elastic",
+  "name": "Network Connection via Recently Compiled Executable",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "gcc",
+        "g++",
+        "c++",
+        "c99",
+        "c89",
+        "cc1",
+        "cc1plus",
+        "clang",
+        "clang++",
+        "musl-gcc",
+        "musl-clang",
+        "-linux-gnu-gcc",
+        "-linux-gnu-g++",
+        "-pc-linux-gnu-gcc",
+        "tcc",
+        "zig",
+        "ccache",
+        "distcc",
+        "ld.",
+        "lld",
+        "ld.lld",
+        "mold",
+        "collect2",
+        "-linux-gnu-ld",
+        "-pc-linux-gnu-ld"
+      ],
+      "raw_values": [
+        "gcc*",
+        "g++*",
+        "c++",
+        "cc",
+        "c99",
+        "c89",
+        "cc1*",
+        "cc1plus*",
+        "clang*",
+        "clang++*",
+        "musl-gcc",
+        "musl-clang",
+        "*-linux-gnu-gcc*",
+        "*-linux-gnu-g++*",
+        "*-pc-linux-gnu-gcc*",
+        "tcc",
+        "zig",
+        "ccache",
+        "distcc",
+        "ld",
+        "ld.*",
+        "lld",
+        "ld.lld",
+        "mold",
+        "collect2",
+        "*-linux-gnu-ld*",
+        "*-pc-linux-gnu-ld*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "simplex",
+        "conftest",
+        "ssh",
+        "python",
+        "ispnull",
+        "pvtui",
+        "npreal2d",
+        "ruby",
+        "source",
+        "git-remote-http",
+        "sshd-session",
+        "gendb",
+        "sqlplus"
+      ],
+      "raw_values": [
+        "simpleX",
+        "conftest",
+        "ssh",
+        "python",
+        "ispnull",
+        "pvtui",
+        "npreal2d",
+        "ruby",
+        "source",
+        "git-remote-http",
+        "sshd-session",
+        "gendb",
+        "sqlplus"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "creation",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "exec",
+        "creation",
+        "connection_attempted"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=1m\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.name like~ (\n     \"gcc*\", \"g++*\", \"c++\", \"cc\", \"c99\", \"c89\", \"cc1*\", \"cc1plus*\", \"clang*\", \"clang++*\",\n     \"musl-gcc\", \"musl-clang\", \"*-linux-gnu-gcc*\", \"*-linux-gnu-g++*\", \"*-pc-linux-gnu-gcc*\",\n     \"tcc\", \"zig\", \"ccache\", \"distcc\"\n   )] by process.args\n  [file where host.os.type == \"linux\" and event.action == \"creation\" and process.name like~ (\n    \"ld\", \"ld.*\", \"lld\", \"ld.lld\", \"mold\", \"collect2\", \"*-linux-gnu-ld*\", \"*-pc-linux-gnu-ld*\"\n   )] by file.name\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\"] by process.name\n  [network where host.os.type == \"linux\" and event.action == \"connection_attempted\" and destination.ip != null and not (\n     cidrmatch(destination.ip, \"127.0.0.0/8\", \"169.254.0.0/16\", \"224.0.0.0/4\", \"::1\") or\n     process.name in (\n       \"simpleX\", \"conftest\", \"ssh\", \"python\", \"ispnull\", \"pvtui\", \"npreal2d\", \"ruby\", \"source\", \"ssh\", \"git-remote-http\",\n       \"sshd-session\", \"gendb\", \"sqlplus\"\n     )\n   )] by process.name\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_network_event_post_compilation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

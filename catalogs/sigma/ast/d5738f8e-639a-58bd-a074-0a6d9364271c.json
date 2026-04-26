@@ -1,0 +1,34 @@
+{
+  "id": "d5738f8e-639a-58bd-a074-0a6d9364271c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_evilnum_jul20",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "regsvr32",
+        ".ocx"
+      ],
+      "raw_values": [
+        "*regsvr32*",
+        "*/s*",
+        "*/i*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*.ocx*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*regsvr32*\" and process.command_line:\"*/s*\" and process.command_line:\"*/i*\" and process.command_line:\"*\\\\AppData\\\\Roaming\\\\*\" and process.command_line:\"*.ocx*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/TA/Evilnum/proc_creation_win_apt_evilnum_jul20.eql",
+  "metadata": {}
+}

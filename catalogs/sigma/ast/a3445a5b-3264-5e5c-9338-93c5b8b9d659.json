@@ -1,0 +1,78 @@
+{
+  "id": "a3445a5b-3264-5e5c-9338-93c5b8b9d659",
+  "catalog": "sigma",
+  "name": "proc_creation_win_nltest_recon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "user",
+        "all_trusts",
+        "dclist:",
+        "dnsgetdc:",
+        "domain_trusts",
+        "dsgetdc:",
+        "parentdomain",
+        "trusted_domains"
+      ],
+      "raw_values": [
+        "*/user*",
+        "*all_trusts*",
+        "*dclist:*",
+        "*dnsgetdc:*",
+        "*domain_trusts*",
+        "*dsgetdc:*",
+        "*parentdomain*",
+        "*trusted_domains*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "nltest.exe"
+      ],
+      "raw_values": [
+        "*\\\\nltest.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "nltestrk.exe"
+      ],
+      "raw_values": [
+        "nltestrk.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "server",
+        "query"
+      ],
+      "raw_values": [
+        "*server*",
+        "*query*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\nltest.exe\" or process.pe.original_file_name:\"nltestrk.exe\") and ((process.command_line:\"*server*\" and process.command_line:\"*query*\") or (process.command_line like~ (\"*/user*\", \"*all_trusts*\", \"*dclist:*\", \"*dnsgetdc:*\", \"*domain_trusts*\", \"*dsgetdc:*\", \"*parentdomain*\", \"*trusted_domains*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_nltest_recon.eql",
+  "metadata": {}
+}

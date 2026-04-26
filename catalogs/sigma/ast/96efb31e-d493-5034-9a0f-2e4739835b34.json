@@ -1,0 +1,40 @@
+{
+  "id": "96efb31e-d493-5034-9a0f-2e4739835b34",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_vmnat",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "vmnat.exe"
+      ],
+      "raw_values": [
+        "vmnat.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmnat.exe"
+      ],
+      "raw_values": [
+        "*vmnat.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.original_file_name:\"vmnat.exe\" and (not process.executable:\"*vmnat.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_vmnat.eql",
+  "metadata": {}
+}

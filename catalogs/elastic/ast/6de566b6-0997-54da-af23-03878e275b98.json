@@ -1,0 +1,95 @@
+{
+  "id": "6de566b6-0997-54da-af23-03878e275b98",
+  "catalog": "elastic",
+  "name": "File Creation and Execution Detected via Defend for Containers",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "apt",
+        "apt-get",
+        "dnf",
+        "microdnf",
+        "yum",
+        "zypper",
+        "tdnf",
+        "apk",
+        "pacman",
+        "rpm",
+        "dpkg"
+      ],
+      "raw_values": [
+        "apt",
+        "apt-get",
+        "dnf",
+        "microdnf",
+        "yum",
+        "zypper",
+        "tdnf",
+        "apk",
+        "pacman",
+        "rpm",
+        "dpkg"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation",
+        "start"
+      ],
+      "raw_values": [
+        "creation",
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "sequence by container.id, user.id with maxspan=3s\n  [file where host.os.type == \"linux\" and event.type == \"creation\" and process.interactive == true and container.id like \"?*\" and\n   file.path like (\"/tmp/*\", \"/var/tmp/*\", \"/dev/shm/*\", \"/root/*\", \"/home/*\") and\n   not process.name in (\"apt\", \"apt-get\", \"dnf\", \"microdnf\", \"yum\", \"zypper\", \"tdnf\", \"apk\", \"pacman\", \"rpm\", \"dpkg\")] by file.path\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.interactive == true and container.id like \"?*\"] by process.executable\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/execution_interactive_file_creation_followed_by_execution.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Command and Control",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

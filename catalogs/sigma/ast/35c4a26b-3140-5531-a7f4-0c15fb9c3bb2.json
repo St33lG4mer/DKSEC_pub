@@ -1,0 +1,44 @@
+{
+  "id": "35c4a26b-3140-5531-a7f4-0c15fb9c3bb2",
+  "catalog": "sigma",
+  "name": "file_event_win_sysinternals_procmon_driver_susp_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "procmon.exe",
+        "procmon64.exe"
+      ],
+      "raw_values": [
+        "*\\\\procmon.exe",
+        "*\\\\procmon64.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "procmon",
+        ".sys"
+      ],
+      "raw_values": [
+        "*\\\\procmon*",
+        "*.sys"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\procmon*\" and file.path:\"*.sys\") and (not (process.executable like~ (\"*\\\\procmon.exe\", \"*\\\\procmon64.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_sysinternals_procmon_driver_susp_creation.eql",
+  "metadata": {}
+}

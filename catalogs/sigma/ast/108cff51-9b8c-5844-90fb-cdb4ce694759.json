@@ -1,0 +1,32 @@
+{
+  "id": "108cff51-9b8c-5844-90fb-cdb4ce694759",
+  "catalog": "sigma",
+  "name": "file_event_win_iso_file_mount",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".iso"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*.zip\\\\*",
+        "*.iso",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\INetCache\\\\Content.Outlook\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and file.path:\"*.zip\\\\*\") and file.path:\"*.iso\") or (file.path:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\INetCache\\\\Content.Outlook\\\\*\" and file.path:\"*.iso\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_iso_file_mount.eql",
+  "metadata": {}
+}

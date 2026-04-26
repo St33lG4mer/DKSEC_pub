@@ -1,0 +1,235 @@
+{
+  "id": "65cd7f29-7f04-50ed-8684-a70e799d5cbc",
+  "catalog": "elastic",
+  "name": "Timestomping using Touch Command",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "--date=",
+        "--reference=",
+        "--time=",
+        "--checkpoint=",
+        "dracut",
+        "portage",
+        "stamp",
+        ".jar",
+        "dracut-functions.sh"
+      ],
+      "raw_values": [
+        "-t*",
+        "-d*",
+        "-a*",
+        "-m*",
+        "-r*",
+        "--date=*",
+        "--reference=*",
+        "--time=*",
+        "--checkpoint=*",
+        "/root/.config/envman/*",
+        "/var/tmp/dracut*",
+        "/var/tmp/portage*",
+        "/snap/*",
+        "/var/tmp/pmlogger_*/stamp",
+        "/opt/ubki/*.jar",
+        "/usr/lib/go-*/bin/go",
+        "/usr/lib/dracut/dracut-functions.sh",
+        "/tmp/KSInstallAction.*/m/.patch/*"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/home/*/scripts/auto_download_process.py",
+        "/home/*/scripts/perl_python_eagu1p.py",
+        "/var/lib/dpkg/info/",
+        "bazel-out/k8-dbg/bin/dependencies/thirdparty/libjansson_foreign_cc/build_script.sh",
+        "/usr/lib/portage/python*/ebuild.sh",
+        "/var/tmp/rpm-tmp.",
+        "/usr/lib/pcp/bin/pmlogger_janitor",
+        "/usr/libexec/pcp/bin/pmlogger_janitor",
+        "/usr/libexec/pcp/bin/pmlogger_daily",
+        "/usr/lib/pcp/bin/pmlogger_daily",
+        "/opt/oracle.exawatcher/getexawatcherresults.sh"
+      ],
+      "raw_values": [
+        "/home/*/scripts/auto_download_process.py",
+        "/home/*/scripts/perl_python_eagu1p.py",
+        "/var/lib/dpkg/info/*",
+        "bazel-out/k8-dbg/bin/dependencies/thirdparty/libjansson_foreign_cc/build_script.sh",
+        "/usr/lib/portage/python*/ebuild.sh",
+        "/var/tmp/rpm-tmp.*",
+        "/usr/lib/pcp/bin/pmlogger_janitor",
+        "/usr/libexec/pcp/bin/pmlogger_janitor",
+        "/usr/libexec/pcp/bin/pmlogger_daily",
+        "/usr/lib/pcp/bin/pmlogger_daily",
+        "/opt/oracle.ExaWatcher/GetExaWatcherResults.sh"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "manage_omnimesh_logs",
+        "packageutils.sh",
+        "dracut",
+        "aliasesdb",
+        "pwsh-preview",
+        "amd64_microcode",
+        "start-mailserver.sh",
+        "ssm-agent-worker",
+        "restartsrv_bind",
+        "xargs",
+        "find",
+        "sudo",
+        "make",
+        "pmlogger_check",
+        "pmlogger_daily",
+        "pmlogger_janitor",
+        "autoupdate",
+        "pmlogctl",
+        "spyglass",
+        "desktop-launch",
+        "pmiectl",
+        "systemd"
+      ],
+      "raw_values": [
+        "/usr/local/bin/manage_omnimesh_logs",
+        "/pro/bin/sys/install/packageUtils.sh",
+        "/bin/dracut",
+        "/usr/libexec/postfix/aliasesdb",
+        "pwsh-preview",
+        "/usr/bin/dracut",
+        "/usr/share/initramfs-tools/hooks/amd64_microcode",
+        "/usr/local/bin/start-mailserver.sh",
+        "/usr/bin/ssm-agent-worker",
+        "/bin/ssm-agent-worker",
+        "/usr/local/cpanel/scripts/restartsrv_bind",
+        "xargs",
+        "find",
+        "sudo",
+        "make",
+        "pmlogger_check",
+        "pmlogger_daily",
+        "pmlogger_janitor",
+        "autoupdate",
+        "pmlogctl",
+        "spyglass",
+        "desktop-launch",
+        "pmiectl",
+        "systemd"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "coreutils",
+        "--no-create",
+        "lumud.conf",
+        "vuso",
+        "diff",
+        "aliases.db",
+        "cursor",
+        "au_status",
+        "main.cf"
+      ],
+      "raw_values": [
+        "/usr/bin/coreutils",
+        "--no-create",
+        "/etc/opt/lumu/lumud.conf",
+        "/opt/vuso*",
+        "/opt/diff",
+        "/etc/aliases.db",
+        "/opt/cursor/cursor",
+        "/bin/touch -a /tmp/au_status",
+        "touch -d 2 seconds ago /etc/postfix/main.cf"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "in",
+      "values": [
+        "/opt/libexec",
+        "/opt/local/src/connectxx/build/src/mdp"
+      ],
+      "raw_values": [
+        "/opt/libexec",
+        "/opt/local/src/connectxx/build/src/mdp"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "touch"
+      ],
+      "raw_values": [
+        "touch"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "==",
+      "values": [
+        "runc init"
+      ],
+      "raw_values": [
+        "runc init"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type == \"start\" and event.action == \"exec\" and process.name == \"touch\" and\nprocess.parent.executable != null and process.args like (\n  \"-t*\", \"-d*\", \"-a*\", \"-m*\", \"-r*\", \"--date=*\", \"--reference=*\", \"--time=*\"\n) and not (\n  process.parent.executable in (\n    \"/usr/local/bin/manage_omnimesh_logs\", \"/pro/bin/sys/install/packageUtils.sh\", \"/bin/dracut\",\n    \"/usr/libexec/postfix/aliasesdb\", \"pwsh-preview\", \"/usr/bin/dracut\", \"/usr/share/initramfs-tools/hooks/amd64_microcode\",\n    \"/usr/local/bin/start-mailserver.sh\", \"/usr/bin/ssm-agent-worker\", \"/bin/ssm-agent-worker\", \"/usr/local/cpanel/scripts/restartsrv_bind\"\n  ) or\n  process.parent.executable like (\"/opt/sw/tomcat/rc_scripts/*\", \"/tmp/newroot/var/lib/docker/overlay2/*\", \"/snap/*\", \"/opt/zeek/*\") or\n  process.parent.name in (\n    \"xargs\", \"find\", \"sudo\", \"make\", \"pmlogger_check\", \"pmlogger_daily\", \"pmlogger_janitor\", \"autoupdate\", \"pmlogctl\",\n    \"spyglass\", \"desktop-launch\", \"pmiectl\", \"systemd\"\n  ) or\n  process.parent.args like (\n    \"/home/*/scripts/auto_download_process.py\", \"/home/*/scripts/perl_python_eagu1p.py\", \"/var/lib/dpkg/info/*\",\n    \"bazel-out/k8-dbg/bin/dependencies/thirdparty/libjansson_foreign_cc/build_script.sh\", \"/usr/lib/portage/python*/ebuild.sh\",\n    \"/var/tmp/rpm-tmp.*\", \"/usr/lib/pcp/bin/pmlogger_janitor\", \"/usr/libexec/pcp/bin/pmlogger_janitor\",\n    \"/usr/libexec/pcp/bin/pmlogger_daily\", \"/usr/lib/pcp/bin/pmlogger_daily\", \"/opt/oracle.ExaWatcher/GetExaWatcherResults.sh\"\n  ) or\n  process.args in (\n    \"/usr/bin/coreutils\", \"--no-create\", \"/etc/opt/lumu/lumud.conf\", \"/opt/vuso*\", \"/opt/diff\", \"/etc/aliases.db\", \"/opt/cursor/cursor\"\n  ) or\n  process.args like (\n    \"--checkpoint=*\", \"/root/.config/envman/*\", \"/var/tmp/dracut*\", \"/var/tmp/portage*\", \"/snap/*\", \"/var/tmp/pmlogger_*/stamp\", \"/opt/ubki/*.jar\",\n    \"/usr/lib/go-*/bin/go\", \"/usr/lib/dracut/dracut-functions.sh\", \"/tmp/KSInstallAction.*/m/.patch/*\"\n  ) or\n  process.command_line in (\"/bin/touch -a /tmp/au_status\", \"touch -d 2 seconds ago /etc/postfix/main.cf\") or\n  process.parent.command_line == \"runc init\" or\n  process.working_directory in (\"/opt/libexec\", \"/opt/local/src/connectxx/build/src/mdp\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/defense_evasion_timestomp_touch.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "c198e0ac-be45-51d0-814d-0e10d61daf65",
+  "catalog": "elastic",
+  "name": "Statistical Model Detected C2 Beaconing Activity with High Confidence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "beacon_stats.beaconing_score: 3\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/beaconing/command_and_control_beaconing_high_confidence.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Network",
+      "Use Case: C2 Beaconing Detection",
+      "Tactic: Command and Control",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

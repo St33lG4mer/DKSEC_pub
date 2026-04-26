@@ -1,0 +1,73 @@
+{
+  "id": "f66835a9-0806-510f-b7ab-e8af15ef100e",
+  "catalog": "elastic",
+  "name": "Potential LSASS Clone Creation via PssCaptureSnapShot",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4688"
+      ],
+      "raw_values": [
+        "4688"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "lsass.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "lsass.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\lsass.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.code:\"4688\" and\n  process.executable : \"?:\\\\Windows\\\\System32\\\\lsass.exe\" and\n  process.parent.executable : \"?:\\\\Windows\\\\System32\\\\lsass.exe\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_via_snapshot_lsass_clone_creation.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Sysmon",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "3cff04e7-ad63-5029-bb7c-cb8a1ef04504",
+  "catalog": "elastic",
+  "name": "Spike in User Account Management Events",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/pad/privileged_access_ml_windows_high_count_user_account_management_events.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Privileged Access Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

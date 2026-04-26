@@ -1,0 +1,56 @@
+{
+  "id": "feff0f9f-2082-5eb4-85d2-13e0fcc38ab4",
+  "catalog": "elastic",
+  "name": "PowerShell Suspicious Payload Encoded and Compressed",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "system.io.compression.deflatestream",
+        "system.io.compression.gzipstream",
+        "io.compression.deflatestream",
+        "io.compression.gzipstream"
+      ],
+      "raw_values": [
+        "System.IO.Compression.DeflateStream",
+        "System.IO.Compression.GzipStream",
+        "IO.Compression.DeflateStream",
+        "IO.Compression.GzipStream"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_entropy_bits >= 4.5 and\n  powershell.file.script_block_text : (\n    (\n      \"System.IO.Compression.DeflateStream\" or\n      \"System.IO.Compression.GzipStream\" or\n      \"IO.Compression.DeflateStream\" or\n      \"IO.Compression.GzipStream\"\n    ) and\n    FromBase64String\n  ) and\n  not user.id : \"S-1-5-18\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_posh_compressed.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "id": "9ce1cb32-eea6-5720-b2f7-fff47ddbd4a7",
+  "catalog": "elastic",
+  "name": "Kubernetes Anonymous Request Authorized by Unusual User Agent",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kubernetes.audit.user.username",
+      "raw_field": "kubernetes.audit.user.username",
+      "operator": ":",
+      "values": [
+        "system:anonymous",
+        "system:unauthenticated"
+      ],
+      "raw_values": [
+        "system:anonymous",
+        "system:unauthenticated"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"kubernetes.audit_logs\" and\nkubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.user.username:(\"system:anonymous\" or \"system:unauthenticated\" or not *) and\nuser_agent.original:(* and not (*kubernetes/$Format)) and\nnot kubernetes.audit.requestURI:(/healthz* or /livez* or /readyz* or /version or /.well-known/oauth-authorization-server)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/initial_access_anonymous_request_authorized.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "07d83bf0-aaed-56c6-9607-39067b040c3d",
+  "catalog": "elastic",
+  "name": "PowerShell Suspicious Script with Audio Capture Capabilities",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "get-microphoneaudio",
+        "get-audiodevice",
+        "recording",
+        "set-audiodevice",
+        "sentinelbreakpoints",
+        "set-psbreakpoint",
+        "powersploitindicators"
+      ],
+      "raw_values": [
+        "Get-MicrophoneAudio",
+        "Get-AudioDevice",
+        "Recording",
+        "Set-AudioDevice",
+        "sentinelbreakpoints",
+        "Set-PSBreakpoint",
+        "PowerSploitIndicators"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n    \"Get-MicrophoneAudio\" or\n    (\"Get-AudioDevice\" and \"Recording\" and \"Set-AudioDevice\") or\n    \"WindowsAudioDevice-Powershell-Cmdlet\" or\n    (\n      \"winmm.dll\" and\n      (\n        \"waveInGetNumDevs\" or \"waveInOpen\" or \"waveInStart\" or\n        \"mciSendString\" or \"mciSendStringA\" or \"mciSendStringW\"\n      )\n    )\n  ) and\n  not powershell.file.script_block_text : (\n    \"sentinelbreakpoints\" and \"Set-PSBreakpoint\" and \"PowerSploitIndicators\"\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/collection_posh_audio_capture.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

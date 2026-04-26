@@ -1,0 +1,227 @@
+{
+  "id": "617e8b0f-2238-5e79-91f8-d501570300b3",
+  "catalog": "elastic",
+  "name": "Suspicious Network Connection via systemd",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "import*pty*spawn",
+        "import*subprocess*call",
+        "exec",
+        "system",
+        "-rsocket",
+        "tcpsocket.new",
+        "tcpsocket.open",
+        "io.popen",
+        "os.execute",
+        "socket",
+        "socket.tcp",
+        "fsockopen",
+        "spawn*sh",
+        "connect"
+      ],
+      "raw_values": [
+        "*import*pty*spawn*",
+        "*import*subprocess*call*",
+        "*exec*",
+        "*system*",
+        "-e",
+        "-rsocket",
+        "*TCPSocket.new*",
+        "*TCPSocket.open*",
+        "*io.popen*",
+        "*os.execute*",
+        "-c",
+        "*socket*",
+        "*socket.tcp*",
+        "-r",
+        "*fsockopen*",
+        "*/bin/*sh*",
+        "*spawn*sh*",
+        "*connect*",
+        "*/inet/tcp/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk",
+        "perl",
+        "ruby",
+        "python",
+        "lua",
+        "php"
+      ],
+      "raw_values": [
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk",
+        "/usr/local/cpanel/*/bin/perl",
+        "/opt/puppetlabs/puppet/bin/ruby",
+        "/opt/unified-monitoring-agent/embedded/bin/ruby",
+        "python*",
+        "perl*",
+        "ruby*",
+        "lua*",
+        "php*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "openssl",
+        "ncat",
+        "netcat",
+        "nc.openbsd",
+        "nc.traditional",
+        "socat",
+        "busybox",
+        "mkfifo",
+        "nohup",
+        "setsid",
+        "xterm",
+        "telnet",
+        "rvim",
+        "vim",
+        "vimdiff",
+        "rview",
+        "view"
+      ],
+      "raw_values": [
+        "openssl",
+        "nc",
+        "ncat",
+        "netcat",
+        "nc.openbsd",
+        "nc.traditional",
+        "socat",
+        "busybox",
+        "mkfifo",
+        "nohup",
+        "setsid",
+        "xterm",
+        "telnet",
+        "rvim",
+        "vim",
+        "vimdiff",
+        "rview",
+        "view"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "pg_ctlcluster",
+        "pveproxy",
+        "pveum",
+        "pveupdate",
+        "pveum realm sync planet",
+        "pveproxy start"
+      ],
+      "raw_values": [
+        "/usr/bin/pg_ctlcluster",
+        "/usr/bin/pveproxy",
+        "/usr/sbin/pveum",
+        "/usr/bin/pveupdate",
+        "/usr/bin/perl /usr/sbin/pveum realm sync planet",
+        "/usr/bin/perl -T /usr/bin/pveproxy start",
+        "/usr/bin/perl /usr/bin/pveupdate"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "exec",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "systemd"
+      ],
+      "raw_values": [
+        "systemd"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "node",
+        "curl"
+      ],
+      "raw_values": [
+        "node",
+        "/tmp/newroot/bin/curl"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=5s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.parent.name == \"systemd\" and (\n     process.name in (\n       \"openssl\", \"nc\", \"ncat\", \"netcat\", \"nc.openbsd\", \"nc.traditional\", \"socat\", \"busybox\", \"mkfifo\",\n       \"nohup\", \"setsid\", \"xterm\", \"telnet\"\n     ) or\n    (process.name : \"python*\" and process.args : \"-c\" and process.args : (\n     \"*import*pty*spawn*\", \"*import*subprocess*call*\"\n    )) or\n    (process.name : \"perl*\" and process.args : \"-e\" and process.args : \"*socket*\" and process.args : (\n     \"*exec*\", \"*system*\"\n    )) or\n    (process.name : \"ruby*\" and process.args : (\"-e\", \"-rsocket\") and process.args : (\n     \"*TCPSocket.new*\", \"*TCPSocket.open*\"\n     )) or\n    (process.name : \"lua*\" and process.args : \"-e\" and process.args : \"*socket.tcp*\" and process.args : (\n     \"*io.popen*\", \"*os.execute*\"\n    )) or\n    (process.name : \"php*\" and process.args : \"-r\" and process.args : \"*fsockopen*\" and process.args : \"*/bin/*sh*\") or \n    (process.name == \"node\" and process.args == \"-e\" and process.args : \"*spawn*sh*\" and process.args : \"*connect*\") or\n    (process.name : (\"awk\", \"gawk\", \"mawk\", \"nawk\") and process.args : \"*/inet/tcp/*\") or\n    (process.name in (\"rvim\", \"vim\", \"vimdiff\", \"rview\", \"view\") and process.args == \"-c\" and process.args : \"*socket*\")\n  ) and\n   not (\n     process.args in (\"/usr/bin/pg_ctlcluster\", \"/usr/bin/pveproxy\", \"/usr/sbin/pveum\", \"/usr/bin/pveupdate\") or\n     process.executable like (\n       \"/usr/local/cpanel/*/bin/perl\", \"/opt/puppetlabs/puppet/bin/ruby\", \"/opt/unified-monitoring-agent/embedded/bin/ruby\"\n     ) or\n     process.command_line in (\n       \"/usr/bin/perl /usr/sbin/pveum realm sync planet\",\n       \"/usr/bin/perl -T /usr/bin/pveproxy start\", \"/usr/bin/perl /usr/bin/pveupdate\"\n     )\n   )\n  ] by process.entity_id\n  [network where host.os.type == \"linux\" and event.action == \"connection_attempted\" and event.type == \"start\" and\n   not process.executable == \"/tmp/newroot/bin/curl\"] by process.parent.entity_id\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_systemd_netcon.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Command and Control",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

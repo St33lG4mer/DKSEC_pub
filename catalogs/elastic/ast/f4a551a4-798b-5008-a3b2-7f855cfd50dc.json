@@ -1,0 +1,40 @@
+{
+  "id": "f4a551a4-798b-5008-a3b2-7f855cfd50dc",
+  "catalog": "elastic",
+  "name": "Suspicious Portable Executable Encoded in Powershell Script",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n    TVqQAAMAAAAEAAAA\n  ) and not user.id : \"S-1-5-18\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_posh_portable_executable.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

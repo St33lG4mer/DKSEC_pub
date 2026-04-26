@@ -1,0 +1,129 @@
+{
+  "id": "c6ef0544-49de-59e6-b4a5-9e2af5f45300",
+  "catalog": "elastic",
+  "name": "System Binary Moved or Copied",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.ext.original.path",
+      "raw_field": "file.Ext.original.path",
+      "operator": ":",
+      "values": [
+        "/bin/",
+        "/usr/bin/",
+        "/usr/local/bin/",
+        "/sbin/",
+        "/usr/sbin/",
+        "/usr/local/sbin/",
+        "/bin/*.tmp",
+        "/usr/bin/*.tmp",
+        "/usr/local/bin/*.tmp",
+        "/sbin/*.tmp",
+        "/usr/sbin/*.tmp",
+        "/usr/local/sbin/*.tmp"
+      ],
+      "raw_values": [
+        "/bin/*",
+        "/usr/bin/*",
+        "/usr/local/bin/*",
+        "/sbin/*",
+        "/usr/sbin/*",
+        "/usr/local/sbin/*",
+        "/bin/*.tmp",
+        "/usr/bin/*.tmp",
+        "/usr/local/bin/*.tmp",
+        "/sbin/*.tmp",
+        "/usr/sbin/*.tmp",
+        "/usr/local/sbin/*.tmp"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmis."
+      ],
+      "raw_values": [
+        "/nix/store/*",
+        "/var/lib/dpkg/*",
+        "/tmp/vmis.*",
+        "/snap/*",
+        "/dev/fd/*",
+        "/tmp/newroot/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "rename",
+        "creation"
+      ],
+      "raw_values": [
+        "rename",
+        "creation"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "in",
+      "values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ],
+      "raw_values": [
+        "swp",
+        "swpx",
+        "swx",
+        "dpkg-remove"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "file.ext.original.extension",
+      "raw_field": "file.Ext.original.extension",
+      "operator": "==",
+      "values": [
+        "dpkg-new"
+      ],
+      "raw_values": [
+        "dpkg-new"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.action in (\"rename\", \"creation\") and process.name in (\"cp\", \"mv\") and\nfile.Ext.original.path : (\n  \"/bin/*\", \"/usr/bin/*\", \"/usr/local/bin/*\", \"/sbin/*\", \"/usr/sbin/*\", \"/usr/local/sbin/*\"\n) and not (\n  file.Ext.original.path : (\n    \"/bin/*.tmp\", \"/usr/bin/*.tmp\", \"/usr/local/bin/*.tmp\", \"/sbin/*.tmp\", \"/usr/sbin/*.tmp\", \"/usr/local/sbin/*.tmp\"\n  ) or\n  file.extension in (\"swp\", \"swpx\", \"swx\", \"dpkg-remove\") or\n  file.Ext.original.extension == \"dpkg-new\" or\n  process.executable : (\"/nix/store/*\", \"/var/lib/dpkg/*\", \"/tmp/vmis.*\", \"/snap/*\", \"/dev/fd/*\", \"/tmp/newroot/*\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_binary_copied_to_suspicious_directory.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

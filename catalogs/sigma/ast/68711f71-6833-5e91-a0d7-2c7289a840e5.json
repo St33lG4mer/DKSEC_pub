@@ -1,0 +1,75 @@
+{
+  "id": "68711f71-6833-5e91-a0d7-2c7289a840e5",
+  "catalog": "sigma",
+  "name": "win_security_metasploit_or_impacket_smb_psexec_service_install",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['^%systemroot%\\\\\\\\[a-za-z]{8}\\\\.exe$']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['^%systemroot%\\\\\\\\[a-zA-Z]{8}\\\\.exe$']), flags=set())"
+      ]
+    },
+    {
+      "field": "service.name",
+      "raw_field": "service.name",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['(^[a-za-z]{4}$)|(^[a-za-z]{8}$)|(^[a-za-z]{16}$)']), flags=set())",
+        "psexesvc"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['(^[a-zA-Z]{4}$)|(^[a-zA-Z]{8}$)|(^[a-zA-Z]{16}$)']), flags=set())",
+        "PSEXESVC"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicetype",
+      "raw_field": "winlog.event_data.ServiceType",
+      "operator": ":",
+      "values": [
+        "0x10"
+      ],
+      "raw_values": [
+        "0x10"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4697\" and winlog.event_data.ServiceFileName:\"SigmaRegularExpression(regexp=SigmaString(['^%systemroot%\\\\\\\\[a-zA-Z]{8}\\\\.exe$']), flags=set())\" and service.name:\"SigmaRegularExpression(regexp=SigmaString(['(^[a-zA-Z]{4}$)|(^[a-zA-Z]{8}$)|(^[a-zA-Z]{16}$)']), flags=set())\" and winlog.event_data.ServiceStartType:\"3\" and winlog.event_data.ServiceType:\"0x10\") and (not service.name:\"PSEXESVC\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_metasploit_or_impacket_smb_psexec_service_install.eql",
+  "metadata": {}
+}

@@ -1,0 +1,117 @@
+{
+  "id": "4efa2252-5d0a-5398-b7bd-bae6b28d9f10",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_qakbot_rundll32_exports",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "curl.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\curl.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "aslr",
+        "bind",
+        "drawthemeicon",
+        "gg10",
+        "gl70",
+        "jhbvygftr",
+        "kjhbhkjvydrt",
+        "ls88",
+        "motd",
+        "n115",
+        "next",
+        "nikn",
+        "print",
+        "qqqb",
+        "qqqq",
+        "rs32",
+        "test",
+        "time",
+        "updt",
+        "vips",
+        "wind",
+        "ww50",
+        "x555",
+        "xl55",
+        "xlautoopen",
+        "xs88"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*aslr",
+        "*bind",
+        "*DrawThemeIcon",
+        "*GG10",
+        "*GL70",
+        "*jhbvygftr",
+        "*kjhbhkjvydrt",
+        "*LS88",
+        "*Motd",
+        "*N115",
+        "*next",
+        "*Nikn",
+        "*print",
+        "*qqqb",
+        "*qqqq",
+        "*RS32",
+        "*Test",
+        "*Time",
+        "*Updt",
+        "*vips",
+        "*Wind",
+        "*WW50",
+        "*X555",
+        "*XL55",
+        "*xlAutoOpen",
+        "*XS88"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\curl.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\")) and process.executable:\"*\\\\rundll32.exe\" and (process.command_line like~ (\"*:\\\\ProgramData\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\"))) and (process.command_line like~ (\"*aslr\", \"*bind\", \"*DrawThemeIcon\", \"*GG10\", \"*GL70\", \"*jhbvygftr\", \"*kjhbhkjvydrt\", \"*LS88\", \"*Motd\", \"*N115\", \"*next\", \"*Nikn\", \"*print\", \"*qqqb\", \"*qqqq\", \"*RS32\", \"*Test\", \"*Time\", \"*Updt\", \"*vips\", \"*Wind\", \"*WW50\", \"*X555\", \"*XL55\", \"*xlAutoOpen\", \"*XS88\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/Qakbot/proc_creation_win_malware_qakbot_rundll32_exports.eql",
+  "metadata": {}
+}

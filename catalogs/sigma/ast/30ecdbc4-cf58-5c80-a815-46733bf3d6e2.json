@@ -1,0 +1,42 @@
+{
+  "id": "30ecdbc4-cf58-5c80-a815-46733bf3d6e2",
+  "catalog": "sigma",
+  "name": "file_delete_win_sysinternals_sdelete_file_deletion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".aaa",
+        ".zzz"
+      ],
+      "raw_values": [
+        "*.AAA",
+        "*.ZZZ"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "dictionary.alcatel-lucent.aaa"
+      ],
+      "raw_values": [
+        "*\\\\Wireshark\\\\radius\\\\dictionary.alcatel-lucent.aaa"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*.AAA\", \"*.ZZZ\")) and (not file.path:\"*\\\\Wireshark\\\\radius\\\\dictionary.alcatel-lucent.aaa\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_delete/file_delete_win_sysinternals_sdelete_file_deletion.eql",
+  "metadata": {}
+}

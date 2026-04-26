@@ -1,0 +1,53 @@
+{
+  "id": "27c26ec8-a5df-5a33-948a-c4ab34f16851",
+  "catalog": "sigma",
+  "name": "proc_creation_win_netsh_helper_dll_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "netsh.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "netsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\netsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "helper"
+      ],
+      "raw_values": [
+        "*add*",
+        "*helper*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"netsh.exe\" or process.executable:\"*\\\\netsh.exe\") and (process.command_line:\"*add*\" and process.command_line:\"*helper*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_netsh_helper_dll_persistence.eql",
+  "metadata": {}
+}

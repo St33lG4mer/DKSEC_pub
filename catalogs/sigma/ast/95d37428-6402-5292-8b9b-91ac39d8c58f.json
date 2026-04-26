@@ -1,0 +1,29 @@
+{
+  "id": "95d37428-6402-5292-8b9b-91ac39d8c58f",
+  "catalog": "sigma",
+  "name": "pipe_created_sysinternals_psexec_default_pipe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "psexesvc"
+      ],
+      "raw_values": [
+        "\\\\PSEXESVC"
+      ]
+    }
+  ],
+  "raw_query": "any where file.name:\"\\\\PSEXESVC\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/pipe_created/pipe_created_sysinternals_psexec_default_pipe.eql",
+  "metadata": {}
+}

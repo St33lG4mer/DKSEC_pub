@@ -1,0 +1,101 @@
+{
+  "id": "6f3564c0-caaf-5ecb-82f9-69a036bd4ec5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_taskkill_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-im",
+        "–im",
+        "—im",
+        "―im",
+        "-pid",
+        "pid",
+        "–pid",
+        "—pid",
+        "―pid"
+      ],
+      "raw_values": [
+        "* -f *",
+        "* /f *",
+        "* –f *",
+        "* —f *",
+        "* ―f *",
+        "* -f",
+        "* /f",
+        "* –f",
+        "* —f",
+        "* ―f",
+        "* -im *",
+        "* /im *",
+        "* –im *",
+        "* —im *",
+        "* ―im *",
+        "* -pid *",
+        "* /pid *",
+        "* –pid *",
+        "* —pid *",
+        "* ―pid *"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "temp"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\Temp*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "taskkill.exe"
+      ],
+      "raw_values": [
+        "*\\\\taskkill.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "taskkill.exe"
+      ],
+      "raw_values": [
+        "taskkill.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        ".tmp"
+      ],
+      "raw_values": [
+        "*.tmp"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\taskkill.exe\" or process.pe.original_file_name:\"taskkill.exe\") and (process.command_line like~ (\"* -f *\", \"* /f *\", \"* –f *\", \"* —f *\", \"* ―f *\") or process.command_line like~ (\"* -f\", \"* /f\", \"* –f\", \"* —f\", \"* ―f\")) and (process.command_line like~ (\"* -im *\", \"* /im *\", \"* –im *\", \"* —im *\", \"* ―im *\") or process.command_line like~ (\"* -pid *\", \"* /pid *\", \"* –pid *\", \"* —pid *\", \"* ―pid *\"))) and (not ((process.parent.executable like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*:\\\\Windows\\\\Temp*\")) and process.parent.executable:\"*.tmp\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_taskkill_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,34 @@
+{
+  "id": "46e319bd-6030-5980-a787-ad9ecd74632b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_winzip_password_compression",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "winzip.exe",
+        "winzip64.exe",
+        "-min"
+      ],
+      "raw_values": [
+        "*winzip.exe*",
+        "*winzip64.exe*",
+        "* -min *",
+        "* -a *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*winzip.exe*\", \"*winzip64.exe*\")) and process.command_line:\"*-s\\\"*\" and (process.command_line like~ (\"* -min *\", \"* -a *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_winzip_password_compression.eql",
+  "metadata": {}
+}

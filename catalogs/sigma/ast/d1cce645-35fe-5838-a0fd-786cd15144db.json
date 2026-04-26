@@ -1,0 +1,29 @@
+{
+  "id": "d1cce645-35fe-5838-a0fd-786cd15144db",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmstp_execution_by_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmstp.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmstp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\cmstp.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmstp_execution_by_creation.eql",
+  "metadata": {}
+}

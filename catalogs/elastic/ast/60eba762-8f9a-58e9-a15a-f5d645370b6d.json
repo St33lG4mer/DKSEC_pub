@@ -1,0 +1,89 @@
+{
+  "id": "60eba762-8f9a-58e9-a15a-f5d645370b6d",
+  "catalog": "elastic",
+  "name": "Enumerating Domain Trusts via DSQUERY.EXE",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "dsquery.exe"
+      ],
+      "raw_values": [
+        "dsquery.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dsquery.exe"
+      ],
+      "raw_values": [
+        "dsquery.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "objectclass=trusteddomain"
+      ],
+      "raw_values": [
+        "*objectClass=trustedDomain*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n    (process.name : \"dsquery.exe\" or ?process.pe.original_file_name: \"dsquery.exe\") and \n    process.args : \"*objectClass=trustedDomain*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/discovery_enumerating_domain_trusts_via_dsquery.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

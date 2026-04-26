@@ -1,0 +1,29 @@
+{
+  "id": "8640bd78-8006-5dcf-9e09-59f12dfa5f16",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ntdsutil_usage",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ntdsutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\ntdsutil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\ntdsutil.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ntdsutil_usage.eql",
+  "metadata": {}
+}

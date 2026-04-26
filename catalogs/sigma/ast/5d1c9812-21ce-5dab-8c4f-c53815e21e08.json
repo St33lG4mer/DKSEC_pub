@@ -1,0 +1,45 @@
+{
+  "id": "5d1c9812-21ce-5dab-8c4f-c53815e21e08",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_kamikakabot_lnk_lure_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".lnk ~",
+        "word",
+        ".doc"
+      ],
+      "raw_values": [
+        "*/c *",
+        "*.lnk ~*",
+        "*Start Menu\\\\Programs\\\\Word*",
+        "*.doc"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\cmd.exe\" and (process.command_line:\"*/c *\" and process.command_line:\"*.lnk ~*\" and process.command_line:\"*Start Menu\\\\Programs\\\\Word*\") and process.command_line:\"*.doc\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/KamiKakaBot/proc_creation_win_malware_kamikakabot_lnk_lure_execution.eql",
+  "metadata": {}
+}

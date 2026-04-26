@@ -1,0 +1,51 @@
+{
+  "id": "0bf156b7-f799-54cb-9f2d-eb064f22530b",
+  "catalog": "elastic",
+  "name": "Entra ID Protection Alerts for User Detected",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.module",
+      "raw_field": "event.module",
+      "operator": "==",
+      "values": [
+        "azure"
+      ],
+      "raw_values": [
+        "azure"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "azure.identity_protection"
+      ],
+      "raw_values": [
+        "azure.identity_protection"
+      ]
+    }
+  ],
+  "raw_query": "sequence by azure.identityprotection.properties.user_principal_name with maxspan=10m\n[any where event.module == \"azure\" and data_stream.dataset == \"azure.identity_protection\"] with runs=2\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_protection_alerts_for_user.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Protection Logs",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Initial Access"
+    ]
+  }
+}

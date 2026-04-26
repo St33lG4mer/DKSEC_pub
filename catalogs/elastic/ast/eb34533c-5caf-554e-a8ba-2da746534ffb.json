@@ -1,0 +1,114 @@
+{
+  "id": "eb34533c-5caf-554e-a8ba-2da746534ffb",
+  "catalog": "elastic",
+  "name": "Scheduled Task Execution at Scale via GPO",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": ":",
+      "values": [
+        "gpcmachineextensionnames",
+        "gpcuserextensionnames"
+      ],
+      "raw_values": [
+        "gPCMachineExtensionNames",
+        "gPCUserExtensionNames"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "in",
+      "values": [
+        "5136",
+        "5145"
+      ],
+      "raw_values": [
+        "5136",
+        "5145"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributevalue",
+      "raw_field": "winlog.event_data.AttributeValue",
+      "operator": ":",
+      "values": [
+        "cab54552-deea-4691-817e-ed4a4d1afc72",
+        "aadced64-746c-4633-a97c-d61349046527"
+      ],
+      "raw_values": [
+        "*CAB54552-DEEA-4691-817E-ED4A4D1AFC72*",
+        "*AADCED64-746C-4633-A97C-D61349046527*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.sharename",
+      "raw_field": "winlog.event_data.ShareName",
+      "operator": ":",
+      "values": [
+        "\\\\\\\\*\\\\sysvol"
+      ],
+      "raw_values": [
+        "\\\\\\\\*\\\\SYSVOL"
+      ]
+    },
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": ":",
+      "values": [
+        "scheduledtasks.xml"
+      ],
+      "raw_values": [
+        "*ScheduledTasks.xml"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": ":",
+      "values": [
+        "%%4417"
+      ],
+      "raw_values": [
+        "*%%4417*"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and event.code in (\"5136\", \"5145\") and\n(\n  (\n    winlog.event_data.AttributeLDAPDisplayName : (\n      \"gPCMachineExtensionNames\",\n      \"gPCUserExtensionNames\"\n    ) and\n    winlog.event_data.AttributeValue : \"*CAB54552-DEEA-4691-817E-ED4A4D1AFC72*\" and\n    winlog.event_data.AttributeValue : \"*AADCED64-746C-4633-A97C-D61349046527*\"\n  ) or\n  (\n    winlog.event_data.ShareName : \"\\\\\\\\*\\\\SYSVOL\" and\n    winlog.event_data.RelativeTargetName : \"*ScheduledTasks.xml\" and\n    winlog.event_data.AccessList:\"*%%4417*\"\n  )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_group_policy_scheduled_task.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Tactic: Lateral Movement",
+      "Data Source: Active Directory",
+      "Resources: Investigation Guide",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "8aa14317-ba08-5c52-9f8c-8f13d6f80a9f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_addinutil_uncommon_dir_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "addinutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\addinutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "addinutil.exe"
+      ],
+      "raw_values": [
+        "AddInUtil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\addinutil.exe\" or process.pe.original_file_name:\"AddInUtil.exe\") and (not (process.executable like~ (\"*:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*\", \"*:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*\", \"*:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_addinutil_uncommon_dir_exec.eql",
+  "metadata": {}
+}

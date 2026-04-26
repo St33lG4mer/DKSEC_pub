@@ -1,0 +1,53 @@
+{
+  "id": "dd454c8f-3cbe-501e-b22a-9e3b3867acc8",
+  "catalog": "sigma",
+  "name": "win_system_lsasrv_ntlmv1",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "6038",
+        "6039"
+      ],
+      "raw_values": [
+        "6038",
+        "6039"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "lsasrv"
+      ],
+      "raw_values": [
+        "LsaSrv"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"LsaSrv\" and (event.code like~ (\"6038\", \"6039\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/lsasrv/win_system_lsasrv_ntlmv1.eql",
+  "metadata": {}
+}

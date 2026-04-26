@@ -1,0 +1,29 @@
+{
+  "id": "d1864f95-8ef2-5298-a939-f2b11cbc762f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_tscon_rdp_redirect",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "dest:rdp-tcp#"
+      ],
+      "raw_values": [
+        "* /dest:rdp-tcp#*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"* /dest:rdp-tcp#*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_tscon_rdp_redirect.eql",
+  "metadata": {}
+}

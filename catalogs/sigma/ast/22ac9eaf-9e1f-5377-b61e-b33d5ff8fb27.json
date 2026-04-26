@@ -1,0 +1,61 @@
+{
+  "id": "22ac9eaf-9e1f-5377-b61e-b33d5ff8fb27",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_startup_folder_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".cmd",
+        ".dll",
+        ".hta",
+        ".jar",
+        ".js",
+        ".jse",
+        ".msi",
+        ".ps1",
+        ".psd1",
+        ".psm1",
+        ".scr",
+        ".url",
+        ".vba",
+        ".vbe",
+        ".vbs",
+        ".wsf"
+      ],
+      "raw_values": [
+        "*.bat",
+        "*.cmd",
+        "*.dll",
+        "*.hta",
+        "*.jar",
+        "*.js",
+        "*.jse",
+        "*.msi",
+        "*.ps1",
+        "*.psd1",
+        "*.psm1",
+        "*.scr",
+        "*.url",
+        "*.vba",
+        "*.vbe",
+        "*.vbs",
+        "*.wsf"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*\" and (file.path like~ (\"*.bat\", \"*.cmd\", \"*.dll\", \"*.hta\", \"*.jar\", \"*.js\", \"*.jse\", \"*.msi\", \"*.ps1\", \"*.psd1\", \"*.psm1\", \"*.scr\", \"*.url\", \"*.vba\", \"*.vbe\", \"*.vbs\", \"*.wsf\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_startup_folder_persistence.eql",
+  "metadata": {}
+}

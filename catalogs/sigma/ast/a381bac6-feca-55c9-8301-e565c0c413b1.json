@@ -1,0 +1,31 @@
+{
+  "id": "a381bac6-feca-55c9-8301-e565c0c413b1",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_mycomputer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\explorer\\\\mycomputer",
+        "(default)"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\MyComputer*",
+        "*(Default)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\MyComputer*\" and registry.path:\"*(Default)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_mycomputer.eql",
+  "metadata": {}
+}

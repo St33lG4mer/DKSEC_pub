@@ -1,0 +1,100 @@
+{
+  "id": "527d4a78-3028-52d7-862f-f5fe7daef209",
+  "catalog": "elastic",
+  "name": "Suspicious Mining Process Creation Event",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "moneroocean_miner.service",
+        "c3pool_miner.service",
+        "pnsd.service",
+        "apache4.service",
+        "pastebin.service",
+        "xvf.service",
+        "aliyun.service"
+      ],
+      "raw_values": [
+        "moneroocean_miner.service",
+        "c3pool_miner.service",
+        "pnsd.service",
+        "apache4.service",
+        "pastebin.service",
+        "xvf.service",
+        "aliyun.service"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "creation",
+        "file_create_event"
+      ],
+      "raw_values": [
+        "creation",
+        "file_create_event"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like",
+      "values": [
+        "aliyun-service"
+      ],
+      "raw_values": [
+        "/usr/local/share/aliyun-assist/*/aliyun-service"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"creation\" and event.action in (\"creation\", \"file_create_event\") and (\n  (\n    file.name like~ (\n      \"moneroocean_miner.service\", \"c3pool_miner.service\", \"pnsd.service\", \"apache4.service\", \"pastebin.service\", \"xvf.service\"\n    )\n  ) or\n  (\n    process.executable like \"/usr/local/share/aliyun-assist/*/aliyun-service\" and file.name like~ \"aliyun.service\"\n  )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_suspicious_mining_process_creation_events.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

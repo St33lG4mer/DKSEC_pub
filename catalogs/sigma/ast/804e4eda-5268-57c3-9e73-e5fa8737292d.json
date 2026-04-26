@@ -1,0 +1,31 @@
+{
+  "id": "804e4eda-5268-57c3-9e73-e5fa8737292d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_susp_grpconv",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "grpconv.exe -o",
+        "grpconv -o"
+      ],
+      "raw_values": [
+        "*grpconv.exe -o*",
+        "*grpconv -o*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*grpconv.exe -o*\", \"*grpconv -o*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_susp_grpconv.eql",
+  "metadata": {}
+}

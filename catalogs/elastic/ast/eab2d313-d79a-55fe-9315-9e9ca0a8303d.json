@@ -1,0 +1,59 @@
+{
+  "id": "eab2d313-d79a-55fe-9315-9e9ca0a8303d",
+  "catalog": "elastic",
+  "name": "Kubernetes Potential Endpoint Permission Enumeration Attempt Detected",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": "in",
+      "values": [
+        "get",
+        "list",
+        "watch",
+        "create",
+        "update",
+        "patch"
+      ],
+      "raw_values": [
+        "get",
+        "list",
+        "watch",
+        "create",
+        "update",
+        "patch"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.stage",
+      "raw_field": "kubernetes.audit.stage",
+      "operator": "==",
+      "values": [
+        "responsecomplete"
+      ],
+      "raw_values": [
+        "ResponseComplete"
+      ]
+    }
+  ],
+  "raw_query": "from logs-kubernetes.audit_logs-* metadata _id, _index, _version\n| where kubernetes.audit.stage == \"ResponseComplete\" and kubernetes.audit.verb in (\"get\", \"list\", \"watch\", \"create\", \"update\", \"patch\")\n| stats\n  Esql.document_count = count(),\n  Esql.kubernetes_audit_annotations_authorization_k8s_io_decision_count_distinct = count_distinct(`kubernetes.audit.annotations.authorization_k8s_io/decision`),\n  Esql.kubernetes_audit_verb_count_distinct = count_distinct(kubernetes.audit.verb),\n  Esql.kubernetes_audit_requestURI_count_distinct = count_distinct(kubernetes.audit.requestURI),\n  Esql.kubernetes_audit_objectRef_resource_count_distinct = count_distinct(kubernetes.audit.objectRef.resource),\n  \n  Esql.kubernetes_audit_responseStatus_message_values = values(kubernetes.audit.responseStatus.message),\n  Esql.kubernetes_audit_verb_values = values(kubernetes.audit.verb),\n  Esql.kubernetes_audit_responseStatus_code_values = values(kubernetes.audit.responseStatus.code),\n  Esql.kubernetes_audit_objectRef_resource_values = values(kubernetes.audit.objectRef.resource),\n  Esql.kubernetes_audit_objectRef_namespace_values = values(kubernetes.audit.objectRef.namespace),\n  Esql.kubernetes_audit_user_username_values = values(kubernetes.audit.user.username),\n  Esql.kubernetes_audit_user_groups_values = values(kubernetes.audit.user.groups),\n  Esql.kubernetes_audit_requestURI_values = values(kubernetes.audit.requestURI),\n  Esql.user_agent_original_values = values(user_agent.original),\n  Esql.data_stream_namespace_values = values(data_stream.namespace)\n  \n  by kubernetes.audit.user.username, kubernetes.audit.sourceIPs\n| where\n  Esql.kubernetes_audit_annotations_authorization_k8s_io_decision_count_distinct == 2 and\n  Esql.kubernetes_audit_requestURI_count_distinct > 5 and\n  Esql.kubernetes_audit_objectRef_resource_count_distinct > 3 and\n  Esql.document_count < 75\n| keep Esql.*, kubernetes.audit.user.username, kubernetes.audit.sourceIPs\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/discovery_endpoint_permission_enumeration_by_user_and_srcip.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

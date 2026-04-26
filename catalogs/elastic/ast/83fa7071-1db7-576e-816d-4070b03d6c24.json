@@ -1,0 +1,26 @@
+{
+  "id": "83fa7071-1db7-576e-816d-4070b03d6c24",
+  "catalog": "elastic",
+  "name": "CyberArk Privileged Access Security Error",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:cyberarkpas.audit and event.type:error\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/cyberarkpas/privilege_escalation_cyberarkpas_error_audit_event_promotion.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Data Source: CyberArk PAS",
+      "Use Case: Log Auditing",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

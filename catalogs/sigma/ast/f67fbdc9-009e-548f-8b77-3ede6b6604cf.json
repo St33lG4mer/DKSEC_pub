@@ -1,0 +1,53 @@
+{
+  "id": "f67fbdc9-009e-548f-8b77-3ede6b6604cf",
+  "catalog": "sigma",
+  "name": "win_system_exploit_cve_2021_42287",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "16990",
+        "16991"
+      ],
+      "raw_values": [
+        "16990",
+        "16991"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-directory-services-sam"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Directory-Services-SAM"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Microsoft-Windows-Directory-Services-SAM\" and (event.code like~ (\"16990\", \"16991\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-42287/win_system_exploit_cve_2021_42287.eql",
+  "metadata": {}
+}

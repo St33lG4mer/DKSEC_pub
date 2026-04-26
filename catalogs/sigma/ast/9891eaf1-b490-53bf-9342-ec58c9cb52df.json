@@ -1,0 +1,44 @@
+{
+  "id": "9891eaf1-b490-53bf-9342-ec58c9cb52df",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cloudflared_tunnel_cleanup",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-config",
+        "-connector-id"
+      ],
+      "raw_values": [
+        "*-config *",
+        "*-connector-id *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "tunnel",
+        "cleanup"
+      ],
+      "raw_values": [
+        "* tunnel *",
+        "*cleanup *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"* tunnel *\" and process.command_line:\"*cleanup *\") and (process.command_line like~ (\"*-config *\", \"*-connector-id *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cloudflared_tunnel_cleanup.eql",
+  "metadata": {}
+}

@@ -1,0 +1,45 @@
+{
+  "id": "936dfbaf-4284-58d4-a442-f262e84c5758",
+  "catalog": "sigma",
+  "name": "file_delete_win_delete_tomcat_logs",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "catalina.",
+        "_access_log.",
+        "localhost."
+      ],
+      "raw_values": [
+        "*catalina.*",
+        "*_access_log.*",
+        "*localhost.*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "tomcat"
+      ],
+      "raw_values": [
+        "*\\\\Tomcat*",
+        "*\\\\logs\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\Tomcat*\" and file.path:\"*\\\\logs\\\\*\") and (file.path like~ (\"*catalina.*\", \"*_access_log.*\", \"*localhost.*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_delete/file_delete_win_delete_tomcat_logs.eql",
+  "metadata": {}
+}

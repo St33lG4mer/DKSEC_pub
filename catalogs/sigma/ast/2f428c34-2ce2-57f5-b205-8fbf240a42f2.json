@@ -1,0 +1,70 @@
+{
+  "id": "2f428c34-2ce2-57f5-b205-8fbf240a42f2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_recon_volume",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "volumename",
+        "logicaldisk"
+      ],
+      "raw_values": [
+        "* volumename*",
+        "* logicaldisk*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "path",
+        "win32_logicaldisk",
+        "volume",
+        "list"
+      ],
+      "raw_values": [
+        "*path*",
+        "*win32_logicaldisk*",
+        "* volume*",
+        "* list *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\WMIC.exe\" or process.pe.original_file_name:\"wmic.exe\") and ((process.command_line like~ (\"* volumename*\", \"* logicaldisk*\")) or (process.command_line:\"*path*\" and process.command_line:\"*win32_logicaldisk*\") or (process.command_line:\"* volume*\" and process.command_line:\"* list *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_recon_volume.eql",
+  "metadata": {}
+}

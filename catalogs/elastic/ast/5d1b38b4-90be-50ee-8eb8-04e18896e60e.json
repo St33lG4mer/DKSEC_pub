@@ -1,0 +1,163 @@
+{
+  "id": "5d1b38b4-90be-50ee-8eb8-04e18896e60e",
+  "catalog": "elastic",
+  "name": "Suspicious HTML File Creation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "htm",
+        "html"
+      ],
+      "raw_values": [
+        "htm",
+        "html"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "temp?_",
+        "rar$"
+      ],
+      "raw_values": [
+        "?:\\\\Users\\\\*\\\\Downloads\\\\*",
+        "?:\\\\Users\\\\*\\\\Content.Outlook\\\\*",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Temp?_*",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\7z*",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        ".htm",
+        "temp?_*.htm",
+        "7z*.htm",
+        "rar$*.htm"
+      ],
+      "raw_values": [
+        "?:\\\\Users\\\\*\\\\Downloads\\\\*.htm*",
+        "?:\\\\Users\\\\*\\\\Content.Outlook\\\\*.htm*",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Temp?_*.htm*",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\7z*.htm*",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*.htm*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "creation",
+        "rename"
+      ],
+      "raw_values": [
+        "creation",
+        "rename"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "chrome.exe",
+        "msedge.exe",
+        "brave.exe",
+        "whale.exe",
+        "browser.exe",
+        "dragon.exe",
+        "vivaldi.exe",
+        "opera.exe",
+        "firefox.exe",
+        "waterfox.exe"
+      ],
+      "raw_values": [
+        "chrome.exe",
+        "msedge.exe",
+        "brave.exe",
+        "whale.exe",
+        "browser.exe",
+        "dragon.exe",
+        "vivaldi.exe",
+        "opera.exe",
+        "firefox.exe",
+        "waterfox.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "--single-argument",
+        "-url"
+      ],
+      "raw_values": [
+        "--single-argument",
+        "-url"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "iexplore.exe"
+      ],
+      "raw_values": [
+        "iexplore.exe"
+      ]
+    }
+  ],
+  "raw_query": "sequence by user.id with maxspan=2m\n\n [file where host.os.type == \"windows\" and event.action in (\"creation\", \"rename\") and\n\n  /* Check for HTML files with high entropy and size */\n  file.extension : (\"htm\", \"html\") and ((file.Ext.entropy >= 5 and file.size >= 150000) or file.size >= 1000000) and\n\n  /* Check for file paths in common download and temporary directories */\n  file.path : (\n    \"?:\\\\Users\\\\*\\\\Downloads\\\\*\",\n    \"?:\\\\Users\\\\*\\\\Content.Outlook\\\\*\",\n    \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Temp?_*\",\n    \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\7z*\",\n    \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*\")]\n [process where host.os.type == \"windows\" and event.action == \"start\" and\n  (\n   /* Check for browser processes opening HTML files with single argument */\n   (process.name in (\"chrome.exe\", \"msedge.exe\", \"brave.exe\", \"whale.exe\", \"browser.exe\", \"dragon.exe\", \"vivaldi.exe\", \"opera.exe\")\n    and process.args == \"--single-argument\") or\n\n   /* Optionally, check for browser processes opening HTML files with two arguments */\n   (process.name == \"iexplore.exe\" and process.args_count == 2) or\n\n   /* Optionally, check for browser processes opening HTML files with URL argument */\n   (process.name in (\"firefox.exe\", \"waterfox.exe\") and process.args == \"-url\")\n  )\n  /* Check for file paths in common download and temporary directories targeted in the process arguments */\n  and process.args : (\"?:\\\\Users\\\\*\\\\Downloads\\\\*.htm*\",\n                      \"?:\\\\Users\\\\*\\\\Content.Outlook\\\\*.htm*\",\n                      \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Temp?_*.htm*\",\n                      \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\7z*.htm*\",\n                      \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*.htm*\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/initial_access_evasion_suspicious_htm_file_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "id": "781f1c99-ecee-535f-b840-35e12a92ca6a",
+  "catalog": "elastic",
+  "name": "File Creation by Cups or Foomatic-rip Child",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "gs_"
+      ],
+      "raw_values": [
+        "/tmp/gs_*",
+        "/var/spool/cups/tmp/gs_*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "foomatic-rip"
+      ],
+      "raw_values": [
+        "foomatic-rip"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "pdftops"
+      ],
+      "raw_values": [
+        "gs",
+        "pdftops"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=10s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"start\") and\n   process.parent.name == \"foomatic-rip\" and\n   process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\")] by process.entity_id\n  [file where host.os.type == \"linux\" and event.type != \"deletion\" and\n   not (\n     (process.name == \"gs\" and file.path like (\"/tmp/gs_*\", \"/var/spool/cups/tmp/gs_*\")) or\n     (process.name == \"pdftops\" and file.path like \"/tmp/0*\")\n   )] by process.parent.entity_id\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_cupsd_foomatic_rip_file_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Use Case: Vulnerability",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

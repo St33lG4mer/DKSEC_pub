@@ -1,0 +1,81 @@
+{
+  "id": "432dd4cc-69d2-5472-bada-0185abf16828",
+  "catalog": "sigma",
+  "name": "registry_set_disable_winevt_logging",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\microsoft-windows-fileinfominifilter",
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\microsoft-windows-asn1\\\\",
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\microsoft-windows-kernel-appcompat\\\\",
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\microsoft-windows-runtime\\\\error\\\\",
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\microsoft-windows-capi2/operational\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-FileInfoMinifilter*",
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-ASN1\\\\*",
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-Kernel-AppCompat\\\\*",
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-Runtime\\\\Error\\\\*",
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-CAPI2/Operational\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\",
+        "\\\\enabled",
+        "\\\\microsoft\\\\windows\\\\currentversion\\\\winevt\\\\channels\\\\microsoft-windows-compat-appraiser"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\*",
+        "*\\\\Enabled",
+        "*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-Compat-Appraiser*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wevtutil.exe",
+        "tiworker.exe",
+        "svchost.exe",
+        "trustedinstaller.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\wevtutil.exe",
+        "C:\\\\Windows\\\\winsxs\\\\*",
+        "*\\\\TiWorker.exe",
+        "C:\\\\Windows\\\\System32\\\\svchost.exe",
+        "C:\\\\Windows\\\\servicing\\\\TrustedInstaller.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\*\" and registry.path:\"*\\\\Enabled\" and winlog.event_data.Details:\"DWORD (0x00000000)\") and (not (process.executable:\"C:\\\\Windows\\\\system32\\\\wevtutil.exe\" or (process.executable:\"C:\\\\Windows\\\\winsxs\\\\*\" and process.executable:\"*\\\\TiWorker.exe\") or (process.executable:\"C:\\\\Windows\\\\System32\\\\svchost.exe\" and (registry.path like~ (\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-FileInfoMinifilter*\", \"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-ASN1\\\\*\", \"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-Kernel-AppCompat\\\\*\", \"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-Runtime\\\\Error\\\\*\", \"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-CAPI2/Operational\\\\*\"))) or (process.executable:\"C:\\\\Windows\\\\servicing\\\\TrustedInstaller.exe\" and registry.path:\"*\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\WINEVT\\\\Channels\\\\Microsoft-Windows-Compat-Appraiser*\"))) and (not (process.executable==\"\" or (?process.executable == null)))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_disable_winevt_logging.eql",
+  "metadata": {}
+}

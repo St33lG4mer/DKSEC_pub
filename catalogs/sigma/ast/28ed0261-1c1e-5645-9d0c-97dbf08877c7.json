@@ -1,0 +1,17 @@
+{
+  "id": "28ed0261-1c1e-5645-9d0c-97dbf08877c7",
+  "catalog": "sigma",
+  "name": "file_event_win_wmiexec_default_filename",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [],
+  "raw_query": "any where file.path like~ (\"SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\Windows\\\\\\\\__1\\\\d{9}\\\\.\\\\d{1,7}$']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['C:\\\\\\\\__1\\\\d{9}\\\\.\\\\d{1,7}$']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['D:\\\\\\\\__1\\\\d{9}\\\\.\\\\d{1,7}$']), flags=set())\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_wmiexec_default_filename.eql",
+  "metadata": {}
+}

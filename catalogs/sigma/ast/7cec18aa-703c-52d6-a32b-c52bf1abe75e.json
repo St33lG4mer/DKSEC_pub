@@ -1,0 +1,17 @@
+{
+  "id": "7cec18aa-703c-52d6-a32b-c52bf1abe75e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uac_bypass_trustedpath",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.executable like~ (\"*C:\\\\Windows \\\\System32\\\\*\", \"*C:\\\\Windows \\\\SysWOW64\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_trustedpath.eql",
+  "metadata": {}
+}

@@ -1,0 +1,61 @@
+{
+  "id": "0b34540c-1e98-57c1-a53d-846b0309dd42",
+  "catalog": "elastic",
+  "name": "Authorization Plugin Modification",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modification"
+      ],
+      "raw_values": [
+        "modification"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "shove"
+      ],
+      "raw_values": [
+        "shove"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.action == \"modification\" and\n  file.path like \"/Library/Security/SecurityAgentPlugins/*\" and\n  not file.path like (\"/Library/Security/SecurityAgentPlugins/KandjiPassport.bundle/*\", \"/Library/Security/SecurityAgentPlugins/TeamViewerAuthPlugin.bundle/*\") and\n  not process.name == \"shove\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_credential_access_authorization_plugin_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

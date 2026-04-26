@@ -1,0 +1,160 @@
+{
+  "id": "d1065e86-4f2d-50de-bd1a-ff06427e2fdc",
+  "catalog": "elastic",
+  "name": "Suspicious Utility Launched via ProxyChains",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "ssh",
+        "sshd",
+        "sshuttle",
+        "socat",
+        "iodine",
+        "iodined",
+        "dnscat",
+        "hans",
+        "hans-ubuntu",
+        "ptunnel-ng",
+        "ssf",
+        "3proxy",
+        "ngrok",
+        "gost",
+        "pivotnacci",
+        "chisel",
+        "nmap",
+        "ping",
+        "python",
+        "php",
+        "perl",
+        "ruby",
+        "lua",
+        "openssl",
+        "netcat",
+        "ncat",
+        "telnet",
+        "awk",
+        "java",
+        "ftp",
+        "curl",
+        "wget"
+      ],
+      "raw_values": [
+        "ssh",
+        "sshd",
+        "sshuttle",
+        "socat",
+        "iodine",
+        "iodined",
+        "dnscat",
+        "hans",
+        "hans-ubuntu",
+        "ptunnel-ng",
+        "ssf",
+        "3proxy",
+        "ngrok",
+        "gost",
+        "pivotnacci",
+        "chisel*",
+        "nmap",
+        "ping",
+        "python*",
+        "php*",
+        "perl",
+        "ruby",
+        "lua*",
+        "openssl",
+        "nc",
+        "netcat",
+        "ncat",
+        "telnet",
+        "awk",
+        "java",
+        "ftp",
+        "curl",
+        "wget"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "proxychains"
+      ],
+      "raw_values": [
+        "proxychains"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name == \"proxychains\" and process.args : (\n  \"ssh\", \"sshd\", \"sshuttle\", \"socat\", \"iodine\", \"iodined\", \"dnscat\", \"hans\", \"hans-ubuntu\", \"ptunnel-ng\",\n  \"ssf\", \"3proxy\", \"ngrok\", \"gost\", \"pivotnacci\", \"chisel*\", \"nmap\", \"ping\", \"python*\", \"php*\", \"perl\", \"ruby\",\n  \"lua*\", \"openssl\", \"nc\", \"netcat\", \"ncat\", \"telnet\", \"awk\", \"java\", \"telnet\", \"ftp\", \"curl\", \"wget\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/command_and_control_linux_suspicious_proxychains_activity.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

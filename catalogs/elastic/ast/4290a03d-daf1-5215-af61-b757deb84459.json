@@ -1,0 +1,234 @@
+{
+  "id": "4290a03d-daf1-5215-af61-b757deb84459",
+  "catalog": "elastic",
+  "name": "Cloud Credential Search Detected via Defend for Containers",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "aws_access_key_id",
+        "aws_secret_access_key",
+        "aws_session_token",
+        "accesskeyid",
+        "secretaccesskey",
+        "access_key",
+        "credentials",
+        "azure_client_id",
+        "azure_tenant_id",
+        "azure_client_secret",
+        "azure_federated_token_file",
+        "identity_endpoint",
+        "identity_header",
+        "msi_endpoint",
+        "msi_secret",
+        "application_default_credentials.json",
+        "type: service_account",
+        "client_email",
+        "private_key_id",
+        "private_key",
+        "google_application_credentials"
+      ],
+      "raw_values": [
+        "*aws_access_key_id*",
+        "*aws_secret_access_key*",
+        "*aws_session_token*",
+        "*accesskeyid*",
+        "*secretaccesskey*",
+        "*access_key*",
+        "*.aws/credentials*",
+        "*AZURE_CLIENT_ID*",
+        "*AZURE_TENANT_ID*",
+        "*AZURE_CLIENT_SECRET*",
+        "*AZURE_FEDERATED_TOKEN_FILE*",
+        "*IDENTITY_ENDPOINT*",
+        "*IDENTITY_HEADER*",
+        "*MSI_ENDPOINT*",
+        "*MSI_SECRET*",
+        "*/.azure/*",
+        "*/var/run/secrets/azure/*",
+        "*/.config/gcloud/*",
+        "*application_default_credentials.json*",
+        "*type: service_account*",
+        "*client_email*",
+        "*private_key_id*",
+        "*private_key*",
+        "*/var/run/secrets/google/*",
+        "*GOOGLE_APPLICATION_CREDENTIALS*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "grep",
+        "egrep",
+        "fgrep",
+        "find",
+        "locate",
+        "mlocate",
+        "cat",
+        "sed",
+        "awk",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "grep",
+        "egrep",
+        "fgrep",
+        "find",
+        "locate",
+        "mlocate",
+        "cat",
+        "sed",
+        "awk",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "grep",
+        "egrep",
+        "fgrep",
+        "find",
+        "locate",
+        "mlocate",
+        "cat",
+        "sed",
+        "awk",
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "grep",
+        "/bin/grep",
+        "/usr/bin/grep",
+        "/usr/local/bin/grep",
+        "egrep",
+        "/bin/egrep",
+        "/usr/bin/egrep",
+        "/usr/local/bin/egrep",
+        "fgrep",
+        "/bin/fgrep",
+        "/usr/bin/fgrep",
+        "/usr/local/bin/fgrep",
+        "find",
+        "/bin/find",
+        "/usr/bin/find",
+        "/usr/local/bin/find",
+        "locate",
+        "/bin/locate",
+        "/usr/bin/locate",
+        "/usr/local/bin/locate",
+        "mlocate",
+        "/bin/mlocate",
+        "/usr/bin/mlocate",
+        "/usr/local/bin/mlocate",
+        "cat",
+        "/bin/cat",
+        "/usr/bin/cat",
+        "/usr/local/bin/cat",
+        "sed",
+        "/bin/sed",
+        "/usr/bin/sed",
+        "/usr/local/bin/sed",
+        "awk",
+        "/bin/awk",
+        "/usr/bin/awk",
+        "/usr/local/bin/awk",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and (\n  process.name in (\"grep\", \"egrep\", \"fgrep\", \"find\", \"locate\", \"mlocate\", \"cat\", \"sed\", \"awk\") or\n  (\n    /* Account for tools that execute utilities as a subprocess, in this case the target utility name will appear as a process arg */\n    process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n    process.args in (\n      \"grep\", \"/bin/grep\", \"/usr/bin/grep\", \"/usr/local/bin/grep\",\n      \"egrep\", \"/bin/egrep\", \"/usr/bin/egrep\", \"/usr/local/bin/egrep\",\n      \"fgrep\", \"/bin/fgrep\", \"/usr/bin/fgrep\", \"/usr/local/bin/fgrep\",\n      \"find\", \"/bin/find\", \"/usr/bin/find\", \"/usr/local/bin/find\",\n      \"locate\", \"/bin/locate\", \"/usr/bin/locate\", \"/usr/local/bin/locate\",\n      \"mlocate\", \"/bin/mlocate\", \"/usr/bin/mlocate\", \"/usr/local/bin/mlocate\",\n      \"cat\", \"/bin/cat\", \"/usr/bin/cat\", \"/usr/local/bin/cat\",\n      \"sed\", \"/bin/sed\", \"/usr/bin/sed\", \"/usr/local/bin/sed\",\n      \"awk\", \"/bin/awk\", \"/usr/bin/awk\", \"/usr/local/bin/awk\"\n    ) and \n    /* default exclusion list to not FP on default multi-process commands */\n    not process.args in (\n      \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )\n)\nand\nprocess.args like~ (\n  /* AWS Credentials */\n  \"*aws_access_key_id*\", \"*aws_secret_access_key*\", \"*aws_session_token*\", \"*accesskeyid*\", \"*secretaccesskey*\",\n  \"*access_key*\", \"*.aws/credentials*\",\n\n  /* Azure Credentials */\n  \"*AZURE_CLIENT_ID*\", \"*AZURE_TENANT_ID*\", \"*AZURE_CLIENT_SECRET*\", \"*AZURE_FEDERATED_TOKEN_FILE*\",\n  \"*IDENTITY_ENDPOINT*\", \"*IDENTITY_HEADER*\", \"*MSI_ENDPOINT*\", \"*MSI_SECRET*\",\n  \"*/.azure/*\", \"*/var/run/secrets/azure/*\",\n\n  /* GCP Credentials */\n  \"*/.config/gcloud/*\", \"*application_default_credentials.json*\",\n  \"*type: service_account*\", \"*client_email*\", \"*private_key_id*\", \"*private_key*\",\n  \"*/var/run/secrets/google/*\", \"*GOOGLE_APPLICATION_CREDENTIALS*\"\n) and process.interactive == true and container.id like \"*\" \n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/credential_access_cloud_creds_search_inside_a_container.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

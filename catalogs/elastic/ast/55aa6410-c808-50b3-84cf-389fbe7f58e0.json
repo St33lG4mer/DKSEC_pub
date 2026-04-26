@@ -1,0 +1,27 @@
+{
+  "id": "55aa6410-c808-50b3-84cf-389fbe7f58e0",
+  "catalog": "elastic",
+  "name": "System Binary Symlink to Suspicious Location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "host.os.type:linux and event.category:process and event.type:start and event.action:exec and\nprocess.parent.executable:(* and not (/bin/make or /sbin/weak-modules or /usr/bin/make or /usr/sbin/weak-modules)) and\n(process.name:ln or process.name:busybox and process.args:ln or process.name:cp and process.args:--symbolic-link) and\nprocess.args:(\n  (\n    /bin/* or /lib/* or /lib64/* or /sbin/* or /usr/bin/* or /usr/lib/* or /usr/lib64/* or /usr/local/bin/* or\n    /usr/local/lib/* or /usr/local/lib64/* or /usr/local/sbin/* or /usr/sbin/*\n  ) and (\n    /*/.* or /dev/shm/* or /home/* or /root/* or /tmp/* or /var/tmp/*\n  ) and\n    not (\n      /usr/bin/coreutils or /tmp/mkinitcpio* or /var/tmp/dracut* or /var/tmp/mkinitramfs* or /var/tmp/pamac-build* or\n      /var/tmp/portage/* or usr/lib/python3/dist-packages/*\n    )\n) and not\nprocess.parent.args:(/usr/bin/qemu-aarch64-static or /usr/sbin/weak-modules or /usr/share/initramfs-tools/hooks/ntfs_3g or /var/tmp/rpm-tmp*)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_symlink_binary_to_writable_dir.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

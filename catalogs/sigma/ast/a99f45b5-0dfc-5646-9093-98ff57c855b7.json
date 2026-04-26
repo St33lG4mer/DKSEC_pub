@@ -1,0 +1,80 @@
+{
+  "id": "a99f45b5-0dfc-5646-9093-98ff57c855b7",
+  "catalog": "sigma",
+  "name": "image_load_side_load_antivirus",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "log.dll",
+        "ashldres.dll",
+        "lockdown.dll",
+        "vsodscpl.dll",
+        "eset"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Bitdefender Antivirus Free\\\\*",
+        "C:\\\\Program Files\\\\Dell\\\\SARemediation\\\\plugin\\\\log.dll",
+        "C:\\\\Program Files\\\\Dell\\\\SARemediation\\\\audit\\\\log.dll",
+        "C:\\\\Program Files\\\\AVAST Software\\\\Avast\\\\log.dll",
+        "C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\log.dll",
+        "C:\\\\Program Files\\\\F-Secure\\\\Anti-Virus\\\\*",
+        "*\\\\ashldres.dll",
+        "*\\\\lockdown.dll",
+        "*\\\\vsodscpl.dll",
+        "C:\\\\Program Files\\\\McAfee\\\\*",
+        "C:\\\\Program Files\\\\CyberArk\\\\Endpoint Privilege Manager\\\\Agent\\\\x32\\\\*",
+        "C:\\\\program Files\\\\AVAST Software\\\\Avast\\\\*",
+        "C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\*",
+        "C:\\\\program Files\\\\Trend Micro\\\\Titanium\\\\*",
+        "C:\\\\program Files\\\\ESET*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "log.dll",
+        "qrt.dll",
+        "vftrace.dll",
+        "wsc.dll",
+        "tmdbglog.dll",
+        "dlpprem32.dll"
+      ],
+      "raw_values": [
+        "*\\\\log.dll",
+        "C:\\\\Program Files\\\\Canon\\\\MyPrinter\\\\*",
+        "*\\\\qrt.dll",
+        "*\\\\vftrace.dll",
+        "*\\\\wsc.dll",
+        "*\\\\tmdbglog.dll",
+        "*\\\\DLPPREM32.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "telemetryutility.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Dell\\\\SARemediation\\\\audit\\\\TelemetryUtility.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\log.dll\" and (not ((file.path like~ (\"C:\\\\Program Files\\\\Bitdefender Antivirus Free\\\\*\", \"C:\\\\Program Files (x86)\\\\Bitdefender Antivirus Free\\\\*\")) or (process.executable:\"C:\\\\Program Files\\\\Dell\\\\SARemediation\\\\audit\\\\TelemetryUtility.exe\" and (file.path like~ (\"C:\\\\Program Files\\\\Dell\\\\SARemediation\\\\plugin\\\\log.dll\", \"C:\\\\Program Files\\\\Dell\\\\SARemediation\\\\audit\\\\log.dll\"))) or file.path:\"C:\\\\Program Files\\\\Canon\\\\MyPrinter\\\\*\" or (file.path like~ (\"C:\\\\Program Files\\\\AVAST Software\\\\Avast\\\\log.dll\", \"C:\\\\Program Files (x86)\\\\AVAST Software\\\\Avast\\\\log.dll\")) or (file.path like~ (\"C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\log.dll\", \"C:\\\\Program Files (x86)\\\\AVG\\\\Antivirus\\\\log.dll\"))))) or (file.path:\"*\\\\qrt.dll\" and (not (file.path like~ (\"C:\\\\Program Files\\\\F-Secure\\\\Anti-Virus\\\\*\", \"C:\\\\Program Files (x86)\\\\F-Secure\\\\Anti-Virus\\\\*\")))) or ((file.path like~ (\"*\\\\ashldres.dll\", \"*\\\\lockdown.dll\", \"*\\\\vsodscpl.dll\")) and (not (file.path like~ (\"C:\\\\Program Files\\\\McAfee\\\\*\", \"C:\\\\Program Files (x86)\\\\McAfee\\\\*\")))) or (file.path:\"*\\\\vftrace.dll\" and (not (file.path like~ (\"C:\\\\Program Files\\\\CyberArk\\\\Endpoint Privilege Manager\\\\Agent\\\\x32\\\\*\", \"C:\\\\Program Files (x86)\\\\CyberArk\\\\Endpoint Privilege Manager\\\\Agent\\\\x32\\\\*\")))) or (file.path:\"*\\\\wsc.dll\" and (not ((file.path like~ (\"C:\\\\program Files\\\\AVAST Software\\\\Avast\\\\*\", \"C:\\\\program Files (x86)\\\\AVAST Software\\\\Avast\\\\*\")) or (file.path like~ (\"C:\\\\Program Files\\\\AVG\\\\Antivirus\\\\*\", \"C:\\\\Program Files (x86)\\\\AVG\\\\Antivirus\\\\*\"))))) or (file.path:\"*\\\\tmdbglog.dll\" and (not (file.path like~ (\"C:\\\\program Files\\\\Trend Micro\\\\Titanium\\\\*\", \"C:\\\\program Files (x86)\\\\Trend Micro\\\\Titanium\\\\*\")))) or (file.path:\"*\\\\DLPPREM32.dll\" and (not (file.path like~ (\"C:\\\\program Files\\\\ESET*\", \"C:\\\\program Files (x86)\\\\ESET*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_antivirus.eql",
+  "metadata": {}
+}

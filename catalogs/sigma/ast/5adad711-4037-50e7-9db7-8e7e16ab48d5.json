@@ -1,0 +1,40 @@
+{
+  "id": "5adad711-4037-50e7-9db7-8e7e16ab48d5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_protocolhandler_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "protocolhandler.exe"
+      ],
+      "raw_values": [
+        "*\\\\protocolhandler.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "protocolhandler.exe"
+      ],
+      "raw_values": [
+        "ProtocolHandler.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\protocolhandler.exe\" or process.pe.original_file_name:\"ProtocolHandler.exe\") and (process.command_line like~ (\"*ftp://*\", \"*http://*\", \"*https://*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_protocolhandler_download.eql",
+  "metadata": {}
+}

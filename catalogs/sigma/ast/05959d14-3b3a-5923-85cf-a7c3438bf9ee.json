@@ -1,0 +1,29 @@
+{
+  "id": "05959d14-3b3a-5923-85cf-a7c3438bf9ee",
+  "catalog": "sigma",
+  "name": "proc_creation_win_remote_access_tools_simple_help",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "simpleservice.exe"
+      ],
+      "raw_values": [
+        "*\\\\SimpleService.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\JWrapper-Remote Access\\\\*\", \"*\\\\JWrapper-Remote Support\\\\*\")) and process.executable:\"*\\\\SimpleService.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_simple_help.eql",
+  "metadata": {}
+}

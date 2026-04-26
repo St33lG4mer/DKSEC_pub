@@ -1,0 +1,230 @@
+{
+  "id": "a8a8a4a0-21c6-5e65-a1d0-c4e0a3072118",
+  "catalog": "elastic",
+  "name": "GenAI Process Performing Encoding/Chunking Prior to Network Activity",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "compress-archive",
+        "[convert]::tobase64string",
+        "base64",
+        "gzip",
+        "zlib",
+        "tarfile",
+        "zipfile",
+        "buffer.from",
+        "mcp*start",
+        "mcp-server",
+        "npm exec*mcp"
+      ],
+      "raw_values": [
+        "*Compress-Archive*",
+        "*[Convert]::ToBase64String*",
+        "*base64*",
+        "*gzip*",
+        "*zlib*",
+        "*tarfile*",
+        "*zipfile*",
+        "*Buffer.from*",
+        "*mcp*start*",
+        "*mcp-server*",
+        "*npm exec*mcp*"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "ollama",
+        "mcp-server",
+        "@modelcontextprotocol",
+        "langchain",
+        "autogpt",
+        "babyagi",
+        "agentgpt",
+        "crewai",
+        "semantic-kernel",
+        "llama-index",
+        "haystack",
+        "openai",
+        "anthropic",
+        "cohere",
+        "mistral"
+      ],
+      "raw_values": [
+        "*ollama*",
+        "*mcp-server*",
+        "*@modelcontextprotocol*",
+        "*langchain*",
+        "*autogpt*",
+        "*babyagi*",
+        "*agentgpt*",
+        "*crewai*",
+        "*semantic-kernel*",
+        "*llama-index*",
+        "*haystack*",
+        "*openai*",
+        "*anthropic*",
+        "*cohere*",
+        "*mistral*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "base64",
+        "gzip",
+        "tar",
+        "zip",
+        "split",
+        "7za",
+        "7zr",
+        "powershell.exe",
+        "pwsh.exe",
+        "node.exe",
+        "node"
+      ],
+      "raw_values": [
+        "base64",
+        "gzip",
+        "tar",
+        "zip",
+        "split",
+        "7z",
+        "7za",
+        "7zr",
+        "powershell.exe",
+        "pwsh.exe",
+        "node.exe",
+        "node"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "ollama.exe",
+        "ollama",
+        "textgen.exe",
+        "textgen",
+        "text-generation-webui.exe",
+        "oobabooga.exe",
+        "lmstudio.exe",
+        "lmstudio",
+        "lm studio",
+        "claude.exe",
+        "claude",
+        "cursor.exe",
+        "cursor",
+        "cursor helper",
+        "node.exe",
+        "node",
+        "deno.exe",
+        "deno"
+      ],
+      "raw_values": [
+        "ollama.exe",
+        "ollama",
+        "Ollama",
+        "textgen.exe",
+        "textgen",
+        "text-generation-webui.exe",
+        "oobabooga.exe",
+        "lmstudio.exe",
+        "lmstudio",
+        "LM Studio",
+        "claude.exe",
+        "claude",
+        "Claude",
+        "cursor.exe",
+        "cursor",
+        "Cursor",
+        "Cursor Helper",
+        "node.exe",
+        "node",
+        "deno.exe",
+        "deno"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like~",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "connection_attempted"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=30s\n\n  // Encoding/compression followed by network activity\n  [process where event.type == \"start\"\n     and event.type == \"start\"\n\n     // Encoding/chunking tools\n     and (\n       // Native encoding tools\n       process.name in (\"base64\", \"gzip\", \"tar\", \"zip\", \"split\", \"7z\", \"7za\", \"7zr\") or\n       \n       // PowerShell encoding\n       (process.name in (\"powershell.exe\", \"pwsh.exe\") and\n        process.command_line like~ (\"*Compress-Archive*\", \"*[Convert]::ToBase64String*\")) or\n       \n       // Python encoding\n       (process.name like~ \"python*\" and\n        process.command_line like~ (\"*base64*\", \"*gzip*\", \"*zlib*\", \"*tarfile*\", \"*zipfile*\")) or\n       \n       // Node.js encoding\n       (process.name in (\"node.exe\", \"node\") and\n        process.command_line like~ (\"*Buffer.from*\", \"*zlib*\", \"*gzip*\") and\n        not process.command_line like~ (\"*mcp*start*\", \"*mcp-server*\", \"*npm exec*mcp*\"))\n     )\n\n     // GenAI parent process\n     and (\n       process.parent.name in (\n         \"ollama.exe\", \"ollama\", \"Ollama\",\n         \"textgen.exe\", \"textgen\", \"text-generation-webui.exe\", \"oobabooga.exe\",\n         \"lmstudio.exe\", \"lmstudio\", \"LM Studio\",\n         \"claude.exe\", \"claude\", \"Claude\",\n         \"cursor.exe\", \"cursor\", \"Cursor\", \"Cursor Helper\", \"Cursor Helper (Plugin)\",\n         \"copilot.exe\", \"copilot\", \"Copilot\",\n         \"codex.exe\", \"codex\",\n         \"Jan\", \"jan.exe\", \"jan\", \"Jan Helper\",\n         \"gpt4all.exe\", \"gpt4all\", \"GPT4All\",\n         \"gemini-cli.exe\", \"gemini-cli\",\n         \"genaiscript.exe\", \"genaiscript\",\n         \"grok.exe\", \"grok\",\n         \"qwen.exe\", \"qwen\",\n         \"koboldcpp.exe\", \"koboldcpp\", \"KoboldCpp\",\n         \"llama-server\", \"llama-cli\"\n       ) or\n       \n       // Node/Deno with GenAI frameworks\n       (process.parent.name in (\"node.exe\", \"node\", \"deno.exe\", \"deno\") and\n        process.parent.command_line like~ (\n          \"*ollama*\", \"*mcp-server*\", \"*@modelcontextprotocol*\", \"*langchain*\", \"*autogpt*\",\n          \"*babyagi*\", \"*agentgpt*\", \"*crewai*\", \"*semantic-kernel*\", \"*llama-index*\",\n          \"*haystack*\", \"*openai*\", \"*anthropic*\", \"*cohere*\", \"*mistral*\"\n        )) or\n       \n       // Python with GenAI frameworks\n       (process.parent.name like~ \"python*\" and\n        process.parent.command_line like~ (\n          \"*ollama*\", \"*mcp-server*\", \"*langchain*\", \"*autogpt*\", \"*babyagi*\",\n          \"*agentgpt*\", \"*crewai*\", \"*semantic-kernel*\", \"*llama-index*\", \"*haystack*\",\n          \"*openai*\", \"*anthropic*\", \"*cohere*\", \"*mistral*\"\n        ))\n     )\n  ] by process.entity_id\n\n  // Outbound network connection (non-local)\n  [network where event.type == \"start\"\n     and event.action == \"connection_attempted\"\n     and destination.ip != null\n     and not cidrmatch(destination.ip, \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\", \"192.0.0.0/24\", \"192.0.0.0/29\",\n                       \"192.0.0.8/32\", \"192.0.0.9/32\", \"192.0.0.10/32\", \"192.0.0.170/32\", \"192.0.0.171/32\", \"192.0.2.0/24\",\n                       \"192.31.196.0/24\", \"192.52.193.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\", \"224.0.0.0/4\", \"100.64.0.0/10\",\n                       \"192.175.48.0/24\",\"198.18.0.0/15\", \"198.51.100.0/24\", \"203.0.113.0/24\", \"240.0.0.0/4\", \"::1\", \"FE80::/10\",\n                       \"FF00::/8\")\n     \n  ] by process.entity_id\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/defense_evasion_genai_process_encoding_prior_to_network_activity.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Exfiltration",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide",
+      "Domain: LLM",
+      "Mitre Atlas: T0086"
+    ]
+  }
+}

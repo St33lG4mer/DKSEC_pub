@@ -1,0 +1,31 @@
+{
+  "id": "d5b5d00c-e902-56b9-b187-aa4a814608f5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_xwizard_runwizard_com_object_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "runwizard",
+        "}']), flags=set())"
+      ],
+      "raw_values": [
+        "RunWizard",
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\{[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\\\\}']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"RunWizard\" and process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['\\\\{[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\\\\}']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_xwizard_runwizard_com_object_exec.eql",
+  "metadata": {}
+}

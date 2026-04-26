@@ -1,0 +1,29 @@
+{
+  "id": "959dc2e5-b0fb-5ed1-8d27-d054e93f3095",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dfsvc_child_processes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dfsvc.exe"
+      ],
+      "raw_values": [
+        "*\\\\dfsvc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\dfsvc.exe\" and process.executable:\"*\\\\AppData\\\\Local\\\\Apps\\\\2.0\\\\\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_dfsvc_child_processes.eql",
+  "metadata": {}
+}

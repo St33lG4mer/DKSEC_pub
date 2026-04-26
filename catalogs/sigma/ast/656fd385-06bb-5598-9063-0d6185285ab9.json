@@ -1,0 +1,46 @@
+{
+  "id": "656fd385-06bb-5598-9063-0d6185285ab9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_pingback_backdoor",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "updata.exe"
+      ],
+      "raw_values": [
+        "*\\\\updata.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "config",
+        "msdtc",
+        "start",
+        "auto"
+      ],
+      "raw_values": [
+        "*config*",
+        "*msdtc*",
+        "*start*",
+        "*auto*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\updata.exe\" and (process.command_line:\"*config*\" and process.command_line:\"*msdtc*\" and process.command_line:\"*start*\" and process.command_line:\"*auto*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Pingback/proc_creation_win_malware_pingback_backdoor.eql",
+  "metadata": {}
+}

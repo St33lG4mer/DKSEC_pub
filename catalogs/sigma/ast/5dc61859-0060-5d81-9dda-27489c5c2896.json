@@ -1,0 +1,40 @@
+{
+  "id": "5dc61859-0060-5d81-9dda-27489c5c2896",
+  "catalog": "sigma",
+  "name": "proc_creation_win_tar_extraction",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tar.exe"
+      ],
+      "raw_values": [
+        "*\\\\tar.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bsdtar"
+      ],
+      "raw_values": [
+        "bsdtar"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\tar.exe\" or process.pe.original_file_name:\"bsdtar\") and process.command_line:\"*-x*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_tar_extraction.eql",
+  "metadata": {}
+}

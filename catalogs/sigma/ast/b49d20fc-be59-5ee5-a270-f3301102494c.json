@@ -1,0 +1,29 @@
+{
+  "id": "b49d20fc-be59-5ee5-a270-f3301102494c",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_hidden_dir_index_allocation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "::$index_allocation"
+      ],
+      "raw_values": [
+        "*::$index_allocation*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*::$index_allocation*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_hidden_dir_index_allocation.eql",
+  "metadata": {}
+}

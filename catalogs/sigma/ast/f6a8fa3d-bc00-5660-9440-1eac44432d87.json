@@ -1,0 +1,50 @@
+{
+  "id": "f6a8fa3d-bc00-5660-9440-1eac44432d87",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_add_user_remote_desktop_group",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "remote desktop users",
+        "utilisateurs du bureau à distance",
+        "usuarios de escritorio remoto"
+      ],
+      "raw_values": [
+        "*Remote Desktop Users*",
+        "*Utilisateurs du Bureau à distance*",
+        "*Usuarios de escritorio remoto*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "localgroup",
+        "add",
+        "add-localgroupmember",
+        "-group"
+      ],
+      "raw_values": [
+        "*localgroup *",
+        "* /add*",
+        "*Add-LocalGroupMember *",
+        "* -Group *"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.command_line:\"*localgroup *\" and process.command_line:\"* /add*\") or (process.command_line:\"*Add-LocalGroupMember *\" and process.command_line:\"* -Group *\")) and (process.command_line like~ (\"*Remote Desktop Users*\", \"*Utilisateurs du Bureau à distance*\", \"*Usuarios de escritorio remoto*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_add_user_remote_desktop_group.eql",
+  "metadata": {}
+}

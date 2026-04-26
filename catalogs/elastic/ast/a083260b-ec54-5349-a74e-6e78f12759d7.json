@@ -1,0 +1,26 @@
+{
+  "id": "a083260b-ec54-5349-a74e-6e78f12759d7",
+  "catalog": "elastic",
+  "name": "Attempt to Delete an Okta Network Zone",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:zone.delete\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/defense_evasion_attempt_to_delete_okta_network_zone.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Use Case: Network Security Monitoring",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "id": "51f4759b-dba6-57cd-8469-428e8dd1c80d",
+  "catalog": "sigma",
+  "name": "registry_set_treatas_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "integrator.exe",
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe",
+        "C:\\\\Windows\\\\system32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "treatas\\\\(default)"
+      ],
+      "raw_values": [
+        "*TreatAs\\\\(Default)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "officeclicktorun.exe",
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*",
+        "*\\\\OfficeClickToRun.exe",
+        "C:\\\\Windows\\\\system32\\\\svchost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*TreatAs\\\\(Default)\" and (not ((process.executable:\"C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*\" and process.executable:\"*\\\\OfficeClickToRun.exe\") or (process.executable like~ (\"C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\", \"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\")) or process.executable:\"C:\\\\Windows\\\\system32\\\\svchost.exe\" or (process.executable like~ (\"C:\\\\Windows\\\\system32\\\\msiexec.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_treatas_persistence.eql",
+  "metadata": {}
+}

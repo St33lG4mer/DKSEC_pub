@@ -1,0 +1,29 @@
+{
+  "id": "93ab3d71-c473-5c9d-976f-374b6db30757",
+  "catalog": "sigma",
+  "name": "pipe_created_pua_csexec_default_pipe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "csexecsvc"
+      ],
+      "raw_values": [
+        "*\\\\csexecsvc*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.name:\"*\\\\csexecsvc*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_pua_csexec_default_pipe.eql",
+  "metadata": {}
+}

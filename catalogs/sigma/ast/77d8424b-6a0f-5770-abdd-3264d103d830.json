@@ -1,0 +1,40 @@
+{
+  "id": "77d8424b-6a0f-5770-abdd-3264d103d830",
+  "catalog": "sigma",
+  "name": "registry_set_powershell_enablescripts_enabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\policies\\\\microsoft\\\\windows\\\\powershell\\\\enablescripts"
+      ],
+      "raw_values": [
+        "*\\\\Policies\\\\Microsoft\\\\Windows\\\\PowerShell\\\\EnableScripts"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Policies\\\\Microsoft\\\\Windows\\\\PowerShell\\\\EnableScripts\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_powershell_enablescripts_enabled.eql",
+  "metadata": {}
+}

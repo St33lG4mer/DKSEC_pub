@@ -1,0 +1,46 @@
+{
+  "id": "3545b541-81bc-551c-bc93-c5401ef5f2a0",
+  "catalog": "sigma",
+  "name": "win_defender_threat",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "1006",
+        "1015",
+        "1116",
+        "1117"
+      ],
+      "raw_values": [
+        "1006",
+        "1015",
+        "1116",
+        "1117"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows defender/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Defender/Operational"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Defender/Operational\" and (event.code like~ (\"1006\", \"1015\", \"1116\", \"1117\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/windefend/win_defender_threat.eql",
+  "metadata": {}
+}

@@ -1,0 +1,186 @@
+{
+  "id": "b422e886-17a8-53e2-95a0-4e4d8be163ba",
+  "catalog": "elastic",
+  "name": "Potential Reverse Shell via Suspicious Child Process",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "import*pty*spawn",
+        "import*subprocess*call",
+        "exec",
+        "system",
+        "-rsocket",
+        "tcpsocket.new",
+        "tcpsocket.open",
+        "io.popen",
+        "os.execute",
+        "socket",
+        "socket.tcp",
+        "fsockopen"
+      ],
+      "raw_values": [
+        "*import*pty*spawn*",
+        "*import*subprocess*call*",
+        "*exec*",
+        "*system*",
+        "-e",
+        "-rsocket",
+        "*TCPSocket.new*",
+        "*TCPSocket.open*",
+        "*io.popen*",
+        "*os.execute*",
+        "-c",
+        "*socket*",
+        "*socket.tcp*",
+        "-r",
+        "*fsockopen*",
+        "*/bin/*sh*",
+        "*/inet/tcp/*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk",
+        "ncat",
+        "netcat",
+        "python",
+        "php",
+        "perl",
+        "ruby",
+        "lua"
+      ],
+      "raw_values": [
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk",
+        "nc",
+        "ncat",
+        "netcat",
+        "python*",
+        "php*",
+        "perl",
+        "ruby",
+        "lua*",
+        "perl*",
+        "ruby*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "python",
+        "php",
+        "perl",
+        "ruby",
+        "lua",
+        "netcat",
+        "ncat",
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "python*",
+        "php*",
+        "perl",
+        "ruby",
+        "lua*",
+        "nc",
+        "netcat",
+        "ncat",
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "fork",
+        "connection_attempted",
+        "connection_accepted"
+      ],
+      "raw_values": [
+        "exec",
+        "fork",
+        "connection_attempted",
+        "connection_accepted"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=1s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"fork\") and (\n    (process.name : \"python*\" and process.args : \"-c\" and process.args : (\n     \"*import*pty*spawn*\", \"*import*subprocess*call*\"\n    )) or\n    (process.name : \"perl*\" and process.args : \"-e\" and process.args : \"*socket*\" and process.args : (\n     \"*exec*\", \"*system*\"\n    )) or\n    (process.name : \"ruby*\" and process.args : (\"-e\", \"-rsocket\") and process.args : (\n     \"*TCPSocket.new*\", \"*TCPSocket.open*\"\n     )) or\n    (process.name : \"lua*\" and process.args : \"-e\" and process.args : \"*socket.tcp*\" and process.args : (\n     \"*io.popen*\", \"*os.execute*\"\n    )) or\n    (process.name : \"php*\" and process.args : \"-r\" and process.args : \"*fsockopen*\" and process.args : \"*/bin/*sh*\") or\n    (process.name : (\"awk\", \"gawk\", \"mawk\", \"nawk\") and process.args : \"*/inet/tcp/*\") or\n    (process.name : (\"nc\", \"ncat\", \"netcat\") and process.args == \"-e\" and process.args_count >= 3 and\n     not process.args == \"-z\")\n  ) and process.parent.name : (\n    \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"python*\", \"php*\", \"perl\", \"ruby\", \"lua*\",\n    \"nc\", \"netcat\", \"ncat\", \"awk\", \"gawk\", \"mawk\", \"nawk\")]\n  [network where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"connection_attempted\", \"connection_accepted\") and\n    process.name : (\"python*\", \"php*\", \"perl\", \"ruby\", \"lua*\", \"nc\", \"netcat\", \"ncat\", \"awk\", \"gawk\", \"mawk\", \"nawk\") and\n    destination.ip != null and not cidrmatch(destination.ip, \"127.0.0.0/8\", \"169.254.0.0/16\", \"224.0.0.0/4\", \"::1\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_shell_via_lolbin_interpreter_linux.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

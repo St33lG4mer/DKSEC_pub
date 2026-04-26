@@ -1,0 +1,31 @@
+{
+  "id": "11089cd1-ad71-5e6f-965c-664f1e20fa2d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_volsnap_disable",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "diag",
+        "d disabled"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\VSS\\\\Diag*",
+        "*/d Disabled*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\Services\\\\VSS\\\\Diag*\" and process.command_line:\"*/d Disabled*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_volsnap_disable.eql",
+  "metadata": {}
+}

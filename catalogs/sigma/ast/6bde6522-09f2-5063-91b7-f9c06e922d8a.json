@@ -1,0 +1,95 @@
+{
+  "id": "6bde6522-09f2-5063-91b7-f9c06e922d8a",
+  "catalog": "sigma",
+  "name": "win_security_susp_failed_logon_reasons",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4625",
+        "4776"
+      ],
+      "raw_values": [
+        "4625",
+        "4776"
+      ]
+    },
+    {
+      "field": "winlog.event_data.status",
+      "raw_field": "winlog.event_data.Status",
+      "operator": "like~",
+      "values": [
+        "0xc0000072",
+        "0xc000006f",
+        "0xc0000070",
+        "0xc0000413",
+        "0xc000018c",
+        "0xc000015b"
+      ],
+      "raw_values": [
+        "0xC0000072",
+        "0xC000006F",
+        "0xC0000070",
+        "0xC0000413",
+        "0xC000018C",
+        "0xC000015B"
+      ]
+    },
+    {
+      "field": "winlog.event_data.substatus",
+      "raw_field": "winlog.event_data.SubStatus",
+      "operator": "like~",
+      "values": [
+        "0xc0000072",
+        "0xc000006f",
+        "0xc0000070",
+        "0xc0000413",
+        "0xc000018c",
+        "0xc000015b"
+      ],
+      "raw_values": [
+        "0xC0000072",
+        "0xC000006F",
+        "0xC0000070",
+        "0xC0000413",
+        "0xC000018C",
+        "0xC000015B"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-0-0"
+      ],
+      "raw_values": [
+        "S-1-0-0"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (((event.code like~ (\"4625\", \"4776\")) and ((winlog.event_data.Status like~ (\"0xC0000072\", \"0xC000006F\", \"0xC0000070\", \"0xC0000413\", \"0xC000018C\", \"0xC000015B\")) or (winlog.event_data.SubStatus like~ (\"0xC0000072\", \"0xC000006F\", \"0xC0000070\", \"0xC0000413\", \"0xC000018C\", \"0xC000015B\")))) and (not user.id:\"S-1-0-0\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_failed_logon_reasons.eql",
+  "metadata": {}
+}

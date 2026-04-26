@@ -1,0 +1,54 @@
+{
+  "id": "317398c3-7852-51ce-bc0d-e5a46a323c76",
+  "catalog": "elastic",
+  "name": "Potential Privileged Escalation via SamAccountName Spoofing",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "iam"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "renamed-user-account"
+      ],
+      "raw_values": [
+        "renamed-user-account"
+      ]
+    }
+  ],
+  "raw_query": "iam where host.os.type == \"windows\" and event.action == \"renamed-user-account\" and\n  /* machine account name renamed to user like account name */\n  winlog.event_data.OldTargetUserName : \"*$\" and not winlog.event_data.NewTargetUserName : \"*$\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_samaccountname_spoofing_attack.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Active Directory",
+      "Use Case: Vulnerability",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "c7508d71-2e45-5665-9e05-369c94214fbb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_csi_use_of_csharp_console",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "powershell_ise.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\powershell_ise.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csi.exe"
+      ],
+      "raw_values": [
+        "*\\\\csi.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "csi.exe"
+      ],
+      "raw_values": [
+        "csi.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\csi.exe\" and (process.parent.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\powershell_ise.exe\")) and process.pe.original_file_name:\"csi.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_csi_use_of_csharp_console.eql",
+  "metadata": {}
+}

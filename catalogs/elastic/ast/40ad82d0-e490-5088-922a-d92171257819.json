@@ -1,0 +1,113 @@
+{
+  "id": "40ad82d0-e490-5088-922a-d92171257819",
+  "catalog": "elastic",
+  "name": "SolarWinds Process Disabling Services via Registry",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "solarwinds.businesslayerhost*.exe",
+        "configurationwizard*.exe",
+        "netflowdatabasemaintenance*.exe",
+        "netflowservice*.exe",
+        "solarwinds.administration*.exe",
+        "solarwinds.collector.service*.exe",
+        "solarwindsdiagnostics*.exe"
+      ],
+      "raw_values": [
+        "SolarWinds.BusinessLayerHost*.exe",
+        "ConfigurationWizard*.exe",
+        "NetflowDatabaseMaintenance*.exe",
+        "NetFlowService*.exe",
+        "SolarWinds.Administration*.exe",
+        "SolarWinds.Collector.Service*.exe",
+        "SolarwindsDiagnostics*.exe"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000004"
+      ],
+      "raw_values": [
+        "4",
+        "0x00000004"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "Start"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\*controlset*\\\\services\\\\*\\\\start"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\*ControlSet*\\\\Services\\\\*\\\\Start"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and registry.value : \"Start\" and\n  process.name : (\n      \"SolarWinds.BusinessLayerHost*.exe\",\n      \"ConfigurationWizard*.exe\",\n      \"NetflowDatabaseMaintenance*.exe\",\n      \"NetFlowService*.exe\",\n      \"SolarWinds.Administration*.exe\",\n      \"SolarWinds.Collector.Service*.exe\",\n      \"SolarwindsDiagnostics*.exe\"\n  ) and\n  registry.path : \"*\\\\SYSTEM\\\\*ControlSet*\\\\Services\\\\*\\\\Start\" and\n  registry.data.strings : (\"4\", \"0x00000004\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_solarwinds_backdoor_service_disabled_via_registry.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Initial Access",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

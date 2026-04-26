@@ -1,0 +1,68 @@
+{
+  "id": "c2969019-f400-5cf9-8271-3c79c81043e6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_screensaver",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "desktop"
+      ],
+      "raw_values": [
+        "*HKEY_CURRENT_USER\\\\Control Panel\\\\Desktop*",
+        "*HKCU\\\\Control Panel\\\\Desktop*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "v screensaveactive",
+        "t reg_sz",
+        "d 1",
+        "v screensavetimeout",
+        "v screensaverissecure",
+        "d 0",
+        "v scrnsave.exe",
+        ".scr"
+      ],
+      "raw_values": [
+        "*/v ScreenSaveActive*",
+        "*/t REG_SZ*",
+        "*/d 1*",
+        "*/f*",
+        "*/v ScreenSaveTimeout*",
+        "*/d *",
+        "*/v ScreenSaverIsSecure*",
+        "*/d 0*",
+        "*/v SCRNSAVE.EXE*",
+        "*.scr*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\reg.exe\" and (process.command_line like~ (\"*HKEY_CURRENT_USER\\\\Control Panel\\\\Desktop*\", \"*HKCU\\\\Control Panel\\\\Desktop*\"))) and ((process.command_line:\"*/v ScreenSaveActive*\" and process.command_line:\"*/t REG_SZ*\" and process.command_line:\"*/d 1*\" and process.command_line:\"*/f*\") or (process.command_line:\"*/v ScreenSaveTimeout*\" and process.command_line:\"*/t REG_SZ*\" and process.command_line:\"*/d *\" and process.command_line:\"*/f*\") or (process.command_line:\"*/v ScreenSaverIsSecure*\" and process.command_line:\"*/t REG_SZ*\" and process.command_line:\"*/d 0*\" and process.command_line:\"*/f*\") or (process.command_line:\"*/v SCRNSAVE.EXE*\" and process.command_line:\"*/t REG_SZ*\" and process.command_line:\"*/d *\" and process.command_line:\"*.scr*\" and process.command_line:\"*/f*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_screensaver.eql",
+  "metadata": {}
+}

@@ -1,0 +1,53 @@
+{
+  "id": "5662048f-7b2c-552d-b229-d4f99ddf61e9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_gpg4win_portable_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "gpg.exe",
+        "gpg2.exe"
+      ],
+      "raw_values": [
+        "*\\\\gpg.exe",
+        "*\\\\gpg2.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "gpg.exe"
+      ],
+      "raw_values": [
+        "gpg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "gnupg’s openpgp tool"
+      ],
+      "raw_values": [
+        "GnuPG’s OpenPGP tool"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\gpg.exe\", \"*\\\\gpg2.exe\")) or process.pe.original_file_name:\"gpg.exe\" or process.pe.description:\"GnuPG’s OpenPGP tool\") and (not (process.executable like~ (\"*:\\\\Program Files (x86)\\\\GNU\\\\GnuPG\\\\bin\\\\*\", \"*:\\\\Program Files (x86)\\\\GnuPG VS-Desktop\\\\*\", \"*:\\\\Program Files (x86)\\\\GnuPG\\\\bin\\\\*\", \"*:\\\\Program Files (x86)\\\\Gpg4win\\\\bin\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_gpg4win_portable_execution.eql",
+  "metadata": {}
+}

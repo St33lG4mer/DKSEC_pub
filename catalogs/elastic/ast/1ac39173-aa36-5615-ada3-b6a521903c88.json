@@ -1,0 +1,26 @@
+{
+  "id": "1ac39173-aa36-5615-ada3-b6a521903c88",
+  "catalog": "elastic",
+  "name": "Spike in Number of Connections Made to a Destination IP",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/lmd/lateral_movement_ml_spike_in_connections_to_a_destination_ip.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Lateral Movement Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

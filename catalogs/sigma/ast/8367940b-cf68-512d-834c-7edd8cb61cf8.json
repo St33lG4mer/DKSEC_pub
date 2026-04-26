@@ -1,0 +1,29 @@
+{
+  "id": "8367940b-cf68-512d-834c-7edd8cb61cf8",
+  "catalog": "sigma",
+  "name": "dns_query_win_ufile_io_query",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "ufile.io"
+      ],
+      "raw_values": [
+        "*ufile.io*"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name:\"*ufile.io*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_ufile_io_query.eql",
+  "metadata": {}
+}

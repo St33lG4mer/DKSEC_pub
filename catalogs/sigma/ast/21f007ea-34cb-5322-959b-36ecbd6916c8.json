@@ -1,0 +1,57 @@
+{
+  "id": "21f007ea-34cb-5322-959b-36ecbd6916c8",
+  "catalog": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_system_scripts",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\startup",
+        "\\\\shutdown",
+        "\\\\logon",
+        "\\\\logoff"
+      ],
+      "raw_values": [
+        "*\\\\Startup*",
+        "*\\\\Shutdown*",
+        "*\\\\Logon*",
+        "*\\\\Logoff*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\policies\\\\microsoft\\\\windows\\\\system\\\\scripts"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Policies\\\\Microsoft\\\\Windows\\\\System\\\\Scripts*\" and (registry.path like~ (\"*\\\\Startup*\", \"*\\\\Shutdown*\", \"*\\\\Logon*\", \"*\\\\Logoff*\")) and (not winlog.event_data.Details:\"(Empty)\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_system_scripts.eql",
+  "metadata": {}
+}

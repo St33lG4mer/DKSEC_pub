@@ -1,0 +1,63 @@
+{
+  "id": "0dedb0a2-1f27-5c3a-a339-c4b23b208e49",
+  "catalog": "elastic",
+  "name": "Creation of a DNS-Named Record",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "5137"
+      ],
+      "raw_values": [
+        "5137"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectclass",
+      "raw_field": "winlog.event_data.ObjectClass",
+      "operator": "==",
+      "values": [
+        "dnsnode"
+      ],
+      "raw_values": [
+        "dnsNode"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and event.code == \"5137\" and winlog.event_data.ObjectClass == \"dnsNode\" and\n    not winlog.event_data.SubjectUserName : \"*$\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_dnsnode_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Active Directory",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "aed0fcc7-b75a-57d7-b1da-8c84a61426ef",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_create_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "new-service",
+        "-binarypathname"
+      ],
+      "raw_values": [
+        "*New-Service*",
+        "*-BinaryPathName*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*New-Service*\" and process.command_line:\"*-BinaryPathName*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_create_service.eql",
+  "metadata": {}
+}

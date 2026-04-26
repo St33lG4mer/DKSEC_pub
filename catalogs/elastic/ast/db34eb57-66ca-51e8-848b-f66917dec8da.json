@@ -1,0 +1,53 @@
+{
+  "id": "db34eb57-66ca-51e8-848b-f66917dec8da",
+  "catalog": "elastic",
+  "name": "Sensitive Privilege SeEnableDelegationPrivilege assigned to a User",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "winlog.event_data.privilegelist",
+      "raw_field": "winlog.event_data.PrivilegeList",
+      "operator": ":",
+      "values": [
+        "seenabledelegationprivilege"
+      ],
+      "raw_values": [
+        "SeEnableDelegationPrivilege"
+      ]
+    }
+  ],
+  "raw_query": "event.code:4704 and host.os.type:\"windows\" and winlog.event_data.PrivilegeList:\"SeEnableDelegationPrivilege\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_seenabledelegationprivilege_assigned_to_user.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Persistence",
+      "Data Source: Active Directory",
+      "Resources: Investigation Guide",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

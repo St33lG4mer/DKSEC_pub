@@ -1,0 +1,26 @@
+{
+  "id": "cc8f4ed8-644f-58e5-9272-2bd57eaf01e8",
+  "catalog": "elastic",
+  "name": "Unusual Host Name for Windows Privileged Operations Detected",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/pad/privileged_access_ml_windows_rare_device_by_user.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Privileged Access Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

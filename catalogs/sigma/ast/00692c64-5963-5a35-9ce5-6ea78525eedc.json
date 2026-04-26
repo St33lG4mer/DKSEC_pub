@@ -1,0 +1,80 @@
+{
+  "id": "00692c64-5963-5a35-9ce5-6ea78525eedc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2023_38831_winrar_child_proc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "powershell.exe",
+        "pwsh.dll",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe",
+        "cscript.exe",
+        "PowerShell.EXE",
+        "pwsh.dll",
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "winrar.exe"
+      ],
+      "raw_values": [
+        "*\\\\WinRAR.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rar$",
+        ".']), flags=set())"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*",
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\.[a-zA-Z0-9]{1,4} \\\\.']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\WinRAR.exe\" and process.command_line:\"*\\\\AppData\\\\Local\\\\Temp\\\\Rar$*\" and process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['\\\\.[a-zA-Z0-9]{1,4} \\\\.']), flags=set())\" and ((process.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\wscript.exe\")) or (process.pe.original_file_name like~ (\"Cmd.Exe\", \"cscript.exe\", \"PowerShell.EXE\", \"pwsh.dll\", \"wscript.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-38831/proc_creation_win_exploit_cve_2023_38831_winrar_child_proc.eql",
+  "metadata": {}
+}

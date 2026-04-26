@@ -1,0 +1,33 @@
+{
+  "id": "3738b6a7-4a18-5bbe-b1fb-b0a3e4bc4480",
+  "catalog": "sigma",
+  "name": "proc_creation_win_taskkill_sep",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "taskkill",
+        "ccsvchst.exe"
+      ],
+      "raw_values": [
+        "*taskkill*",
+        "* /F *",
+        "* /IM *",
+        "*ccSvcHst.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*taskkill*\" and process.command_line:\"* /F *\" and process.command_line:\"* /IM *\" and process.command_line:\"*ccSvcHst.exe*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_taskkill_sep.eql",
+  "metadata": {}
+}

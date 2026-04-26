@@ -1,0 +1,29 @@
+{
+  "id": "d0ebf9e0-9f03-5f24-87a1-692b7b82fae1",
+  "catalog": "sigma",
+  "name": "file_event_win_creation_unquoted_service_path",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "program.exe"
+      ],
+      "raw_values": [
+        "C:\\\\program.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\program.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_creation_unquoted_service_path.eql",
+  "metadata": {}
+}

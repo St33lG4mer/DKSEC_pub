@@ -1,0 +1,28 @@
+{
+  "id": "39da54cf-870a-57b8-8857-63a440b05cab",
+  "catalog": "elastic",
+  "name": "AWS Sign-In Root Password Recovery Requested",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:aws.cloudtrail and \nevent.provider:signin.amazonaws.com and \nevent.action:PasswordRecoveryRequested and \nevent.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/initial_access_password_recovery.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Sign-In",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

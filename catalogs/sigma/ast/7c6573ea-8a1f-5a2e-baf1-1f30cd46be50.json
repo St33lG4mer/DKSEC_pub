@@ -1,0 +1,32 @@
+{
+  "id": "7c6573ea-8a1f-5a2e-baf1-1f30cd46be50",
+  "catalog": "sigma",
+  "name": "file_event_win_lsass_shtinkering",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "lsass.exe.",
+        ".dmp"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\config\\\\systemprofile\\\\AppData\\\\Local\\\\CrashDumps\\\\*",
+        "*lsass.exe.*",
+        "*.dmp"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\System32\\\\config\\\\systemprofile\\\\AppData\\\\Local\\\\CrashDumps\\\\*\" and file.path:\"*lsass.exe.*\" and file.path:\"*.dmp\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_lsass_shtinkering.eql",
+  "metadata": {}
+}

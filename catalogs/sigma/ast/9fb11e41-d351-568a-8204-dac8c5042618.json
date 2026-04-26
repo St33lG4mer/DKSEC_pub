@@ -1,0 +1,29 @@
+{
+  "id": "9fb11e41-d351-568a-8204-dac8c5042618",
+  "catalog": "sigma",
+  "name": "registry_add_malware_netwire",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\netwire"
+      ],
+      "raw_values": [
+        "*\\\\software\\\\NetWire*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\software\\\\NetWire*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Netwire/registry_add_malware_netwire.eql",
+  "metadata": {}
+}

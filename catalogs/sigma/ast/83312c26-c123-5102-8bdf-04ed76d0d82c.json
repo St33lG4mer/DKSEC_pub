@@ -1,0 +1,41 @@
+{
+  "id": "83312c26-c123-5102-8bdf-04ed76d0d82c",
+  "catalog": "sigma",
+  "name": "image_load_side_load_vmware_xfer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vmwarexferlogs.exe"
+      ],
+      "raw_values": [
+        "*\\\\VMwareXferlogs.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "glib-2.0.dll"
+      ],
+      "raw_values": [
+        "*\\\\glib-2.0.dll",
+        "C:\\\\Program Files\\\\VMware\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\VMwareXferlogs.exe\" and file.path:\"*\\\\glib-2.0.dll\") and (not file.path:\"C:\\\\Program Files\\\\VMware\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_vmware_xfer.eql",
+  "metadata": {}
+}

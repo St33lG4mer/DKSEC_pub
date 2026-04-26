@@ -1,0 +1,88 @@
+{
+  "id": "59b399f7-90bb-5d9c-a519-81d16a33e032",
+  "catalog": "sigma",
+  "name": "proc_creation_win_net_groups_and_accounts_recon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "*\\\\net.exe",
+        "*\\\\net1.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "net.exe",
+        "net1.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "group",
+        "localgroup",
+        "domain admins",
+        "administrator",
+        "administrateur",
+        "enterprise admins",
+        "exchange trusted subsystem",
+        "remote desktop users",
+        "utilisateurs du bureau à distance",
+        "usuarios de escritorio remoto"
+      ],
+      "raw_values": [
+        "* group *",
+        "* localgroup *",
+        "*domain admins*",
+        "* administrator*",
+        "* administrateur*",
+        "*enterprise admins*",
+        "*Exchange Trusted Subsystem*",
+        "*Remote Desktop Users*",
+        "*Utilisateurs du Bureau à distance*",
+        "*Usuarios de escritorio remoto*",
+        "* /do*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "accounts"
+      ],
+      "raw_values": [
+        "* /add*",
+        "* accounts *",
+        "* /do*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) or (process.pe.original_file_name like~ (\"net.exe\", \"net1.exe\"))) and ((((process.command_line like~ (\"* group *\", \"* localgroup *\")) and (process.command_line like~ (\"*domain admins*\", \"* administrator*\", \"* administrateur*\", \"*enterprise admins*\", \"*Exchange Trusted Subsystem*\", \"*Remote Desktop Users*\", \"*Utilisateurs du Bureau à distance*\", \"*Usuarios de escritorio remoto*\", \"* /do*\"))) and (not process.command_line:\"* /add*\")) or (process.command_line:\"* accounts *\" and process.command_line:\"* /do*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_net_groups_and_accounts_recon.eql",
+  "metadata": {}
+}

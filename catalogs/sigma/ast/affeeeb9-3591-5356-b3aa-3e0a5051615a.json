@@ -1,0 +1,41 @@
+{
+  "id": "affeeeb9-3591-5356-b3aa-3e0a5051615a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_soaphound_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--buildcache",
+        "--bhdump",
+        "--certdump",
+        "--dnsdump",
+        "--cachefilename",
+        "--outputdirectory"
+      ],
+      "raw_values": [
+        "* --buildcache *",
+        "* --bhdump *",
+        "* --certdump *",
+        "* --dnsdump *",
+        "* -c *",
+        "* --cachefilename *",
+        "* -o *",
+        "* --outputdirectory*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"* --buildcache *\", \"* --bhdump *\", \"* --certdump *\", \"* --dnsdump *\")) and (process.command_line like~ (\"* -c *\", \"* --cachefilename *\", \"* -o *\", \"* --outputdirectory*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_soaphound_execution.eql",
+  "metadata": {}
+}

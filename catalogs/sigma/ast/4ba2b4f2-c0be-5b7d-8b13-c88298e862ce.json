@@ -1,0 +1,29 @@
+{
+  "id": "4ba2b4f2-c0be-5b7d-8b13-c88298e862ce",
+  "catalog": "sigma",
+  "name": "posh_pm_susp_get_nettcpconnection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "powershell"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": ":",
+      "values": [
+        "get-nettcpconnection"
+      ],
+      "raw_values": [
+        "*Get-NetTCPConnection*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.ContextInfo:\"*Get-NetTCPConnection*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/powershell/powershell_module/posh_pm_susp_get_nettcpconnection.eql",
+  "metadata": {}
+}

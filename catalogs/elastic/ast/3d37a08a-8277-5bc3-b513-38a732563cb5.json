@@ -1,0 +1,107 @@
+{
+  "id": "3d37a08a-8277-5bc3-b513-38a732563cb5",
+  "catalog": "elastic",
+  "name": "Potential Docker Escape via Nsenter",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "--target"
+      ],
+      "raw_values": [
+        "-t",
+        "--target"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "uid_change"
+      ],
+      "raw_values": [
+        "uid_change"
+      ]
+    },
+    {
+      "field": "process.entry_leader.entry_meta.type",
+      "raw_field": "process.entry_leader.entry_meta.type",
+      "operator": "==",
+      "values": [
+        "container"
+      ],
+      "raw_values": [
+        "container"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "nsenter"
+      ],
+      "raw_values": [
+        "nsenter"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "/opt/teleport/system/bin/teleport"
+      ],
+      "raw_values": [
+        "/opt/teleport/system/bin/teleport"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"change\" and event.action == \"uid_change\" and\nprocess.entry_leader.entry_meta.type == \"container\" and process.args == \"nsenter\" and\nprocess.args in (\"-t\", \"--target\") and process.args_count >= 4 and\nnot process.parent.args == \"/opt/teleport/system/bin/teleport\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_docker_escape_via_nsenter.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

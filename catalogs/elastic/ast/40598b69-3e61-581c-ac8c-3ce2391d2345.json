@@ -1,0 +1,38 @@
+{
+  "id": "40598b69-3e61-581c-ac8c-3ce2391d2345",
+  "catalog": "elastic",
+  "name": "Entra ID User Added as Registered Application Owner",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "add owner to application"
+      ],
+      "raw_values": [
+        "Add owner to application"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.auditlogs and azure.auditlogs.operation_name:\"Add owner to application\" and event.outcome:(Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/persistence_entra_id_user_added_as_owner_for_azure_application.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Configuration Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "6bd8ba46-f76b-5f91-b41b-a919854e6694",
+  "catalog": "elastic",
+  "name": "Zoom Meeting with no Passcode",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.type:creation and event.module:zoom and data_stream.dataset:zoom.webhook and\n  event.action:meeting.created and not zoom.meeting.password:*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/initial_access_zoom_meeting_with_no_passcode.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Zoom",
+      "Use Case: Configuration Audit",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

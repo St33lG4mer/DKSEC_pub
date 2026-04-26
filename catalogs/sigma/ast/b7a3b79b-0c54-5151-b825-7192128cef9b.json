@@ -1,0 +1,31 @@
+{
+  "id": "b7a3b79b-0c54-5151-b825-7192128cef9b",
+  "catalog": "sigma",
+  "name": "image_load_side_load_smadhook",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "smadhook32c.dll",
+        "smadhook64c.dll"
+      ],
+      "raw_values": [
+        "*\\\\SmadHook32c.dll",
+        "*\\\\SmadHook64c.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\SmadHook32c.dll\", \"*\\\\SmadHook64c.dll\")) and (not ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\SMADAV\\\\SmadavProtect32.exe\", \"C:\\\\Program Files (x86)\\\\SMADAV\\\\SmadavProtect64.exe\", \"C:\\\\Program Files\\\\SMADAV\\\\SmadavProtect32.exe\", \"C:\\\\Program Files\\\\SMADAV\\\\SmadavProtect64.exe\")) and (file.path like~ (\"C:\\\\Program Files (x86)\\\\SMADAV\\\\*\", \"C:\\\\Program Files\\\\SMADAV\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_smadhook.eql",
+  "metadata": {}
+}

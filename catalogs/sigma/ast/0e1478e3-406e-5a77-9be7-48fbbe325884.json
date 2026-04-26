@@ -1,0 +1,75 @@
+{
+  "id": "0e1478e3-406e-5a77-9be7-48fbbe325884",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_proc_wrong_parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "svchost.exe",
+        "taskhost.exe",
+        "lsm.exe",
+        "lsass.exe",
+        "services.exe",
+        "lsaiso.exe",
+        "csrss.exe",
+        "wininit.exe",
+        "winlogon.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe",
+        "*\\\\taskhost.exe",
+        "*\\\\lsm.exe",
+        "*\\\\lsass.exe",
+        "*\\\\services.exe",
+        "*\\\\lsaiso.exe",
+        "*\\\\csrss.exe",
+        "*\\\\wininit.exe",
+        "*\\\\winlogon.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "savservice.exe",
+        "ngen.exe"
+      ],
+      "raw_values": [
+        "*\\\\SavService.exe",
+        "*\\\\ngen.exe",
+        "*\\\\System32\\\\*",
+        "*\\\\SysWOW64\\\\*",
+        "*\\\\Windows Defender\\\\*",
+        "*\\\\Microsoft Security Client\\\\*",
+        "",
+        "-"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*\\\\MsMpEng.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\svchost.exe\", \"*\\\\taskhost.exe\", \"*\\\\lsm.exe\", \"*\\\\lsass.exe\", \"*\\\\services.exe\", \"*\\\\lsaiso.exe\", \"*\\\\csrss.exe\", \"*\\\\wininit.exe\", \"*\\\\winlogon.exe\")) and (not (((process.parent.executable like~ (\"*\\\\SavService.exe\", \"*\\\\ngen.exe\")) or (process.parent.executable like~ (\"*\\\\System32\\\\*\", \"*\\\\SysWOW64\\\\*\"))) or ((process.parent.executable like~ (\"*\\\\Windows Defender\\\\*\", \"*\\\\Microsoft Security Client\\\\*\")) and process.parent.executable:\"*\\\\MsMpEng.exe\") or ((?process.parent.executable == null) or (process.parent.executable like~ (\"\", \"-\")))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_proc_wrong_parent.eql",
+  "metadata": {}
+}

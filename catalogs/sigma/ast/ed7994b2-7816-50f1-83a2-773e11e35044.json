@@ -1,0 +1,54 @@
+{
+  "id": "ed7994b2-7816-50f1-83a2-773e11e35044",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_enable_susp_windows_optional_feature",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "telnetserver",
+        "internet-explorer-optional-amd64",
+        "tftp",
+        "smb1protocol",
+        "client-projfs",
+        "microsoft-windows-subsystem-linux"
+      ],
+      "raw_values": [
+        "*TelnetServer*",
+        "*Internet-Explorer-Optional-amd64*",
+        "*TFTP*",
+        "*SMB1Protocol*",
+        "*Client-ProjFS*",
+        "*Microsoft-Windows-Subsystem-Linux*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "enable-windowsoptionalfeature",
+        "-online",
+        "-featurename"
+      ],
+      "raw_values": [
+        "*Enable-WindowsOptionalFeature*",
+        "*-Online*",
+        "*-FeatureName*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*Enable-WindowsOptionalFeature*\" and process.command_line:\"*-Online*\" and process.command_line:\"*-FeatureName*\") and (process.command_line like~ (\"*TelnetServer*\", \"*Internet-Explorer-Optional-amd64*\", \"*TFTP*\", \"*SMB1Protocol*\", \"*Client-ProjFS*\", \"*Microsoft-Windows-Subsystem-Linux*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_enable_susp_windows_optional_feature.eql",
+  "metadata": {}
+}

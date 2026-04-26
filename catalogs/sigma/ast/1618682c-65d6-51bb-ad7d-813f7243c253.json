@@ -1,0 +1,59 @@
+{
+  "id": "1618682c-65d6-51bb-ad7d-813f7243c253",
+  "catalog": "sigma",
+  "name": "file_event_win_perflogs_susp_files",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".7z",
+        ".bat",
+        ".bin",
+        ".chm",
+        ".dll",
+        ".exe",
+        ".hta",
+        ".lnk",
+        ".ps1",
+        ".psm1",
+        ".py",
+        ".scr",
+        ".sys",
+        ".vbe",
+        ".vbs",
+        ".zip"
+      ],
+      "raw_values": [
+        "*.7z",
+        "*.bat",
+        "*.bin",
+        "*.chm",
+        "*.dll",
+        "*.exe",
+        "*.hta",
+        "*.lnk",
+        "*.ps1",
+        "*.psm1",
+        "*.py",
+        "*.scr",
+        "*.sys",
+        "*.vbe",
+        "*.vbs",
+        "*.zip"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\PerfLogs\\\\*\" and (file.path like~ (\"*.7z\", \"*.bat\", \"*.bin\", \"*.chm\", \"*.dll\", \"*.exe\", \"*.hta\", \"*.lnk\", \"*.ps1\", \"*.psm1\", \"*.py\", \"*.scr\", \"*.sys\", \"*.vbe\", \"*.vbs\", \"*.zip\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_perflogs_susp_files.eql",
+  "metadata": {}
+}

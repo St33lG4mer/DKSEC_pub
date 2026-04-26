@@ -1,0 +1,29 @@
+{
+  "id": "2f8239aa-cd2f-5347-b359-44b48f049ced",
+  "catalog": "sigma",
+  "name": "net_connection_win_domain_devtunnels",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        ".devtunnels.ms"
+      ],
+      "raw_values": [
+        "*.devtunnels.ms"
+      ]
+    }
+  ],
+  "raw_query": "any where network.direction:\"true\" and destination.domain:\"*.devtunnels.ms\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_domain_devtunnels.eql",
+  "metadata": {}
+}

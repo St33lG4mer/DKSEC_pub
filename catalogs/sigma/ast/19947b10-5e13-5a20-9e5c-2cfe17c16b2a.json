@@ -1,0 +1,42 @@
+{
+  "id": "19947b10-5e13-5a20-9e5c-2cfe17c16b2a",
+  "catalog": "sigma",
+  "name": "file_event_win_hktl_powerup_dllhijacking",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".bat"
+      ],
+      "raw_values": [
+        "*.bat"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and file.path:\"*.bat\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_hktl_powerup_dllhijacking.eql",
+  "metadata": {}
+}

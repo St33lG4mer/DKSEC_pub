@@ -1,0 +1,63 @@
+{
+  "id": "75a4b2b8-978c-517e-ac73-729caf4e2dc5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_path_traversal",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "java"
+      ],
+      "raw_values": [
+        "*/../../*",
+        "*\\\\Tasktop\\\\keycloak\\\\bin\\\\/../../jre\\\\bin\\\\java*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable:\"*\\\\cmd.exe\" or process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"cmd.exe\") and ((process.parent.command_line like~ (\"*/c*\", \"*/k*\", \"*/r*\")) or (process.command_line like~ (\"*/c*\", \"*/k*\", \"*/r*\"))) and (process.parent.command_line:\"/../../\" or process.command_line:\"*/../../*\")) and (not process.command_line:\"*\\\\Tasktop\\\\keycloak\\\\bin\\\\/../../jre\\\\bin\\\\java*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_path_traversal.eql",
+  "metadata": {}
+}

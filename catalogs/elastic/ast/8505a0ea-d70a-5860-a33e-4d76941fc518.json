@@ -1,0 +1,40 @@
+{
+  "id": "8505a0ea-d70a-5860-a33e-4d76941fc518",
+  "catalog": "elastic",
+  "name": "AWS Bedrock Detected Multiple Attempts to use Denied Models by a Single User",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "gen_ai.response.error_code",
+      "raw_field": "gen_ai.response.error_code",
+      "operator": "==",
+      "values": [
+        "accessdeniedexception"
+      ],
+      "raw_values": [
+        "AccessDeniedException"
+      ]
+    }
+  ],
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Filter for access denied errors from GenAI responses\n| where gen_ai.response.error_code == \"AccessDeniedException\"\n\n// keep ECS and response fields\n| keep\n  user.id,\n  gen_ai.request.model.id,\n  cloud.account.id,\n  gen_ai.response.error_code\n\n// count total denials per user/model/account\n| stats\n    Esql.ml_response_access_denied_count = count(*)\n  by\n    user.id,\n    gen_ai.request.model.id,\n    cloud.account.id\n\n// Filter for users with repeated denials\n| where Esql.ml_response_access_denied_count > 3\n\n// sort by volume of denials\n| sort Esql.ml_response_access_denied_count desc\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws_bedrock/aws_bedrock_multiple_attempts_to_use_denied_models_by_user.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: LLM",
+      "Data Source: AWS Bedrock",
+      "Data Source: AWS S3",
+      "Resources: Investigation Guide",
+      "Use Case: Policy Violation",
+      "Mitre Atlas: T0015",
+      "Mitre Atlas: T0034"
+    ]
+  }
+}

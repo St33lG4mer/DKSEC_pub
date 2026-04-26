@@ -1,0 +1,268 @@
+{
+  "id": "f0fec68f-8cb0-576d-a7e2-6cb9cdf4afeb",
+  "catalog": "elastic",
+  "name": "Unusual Instance Metadata Service (IMDS) API Request",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "curl",
+        "wget",
+        "python",
+        "perl",
+        "php",
+        "ruby",
+        "lua",
+        "telnet",
+        "pwsh",
+        "openssl",
+        "ncat",
+        "netcat",
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk",
+        "socat",
+        "node",
+        "bash",
+        "cron",
+        "rc.local",
+        "rumble-agent",
+        "inspectorssmplugin"
+      ],
+      "raw_values": [
+        "curl",
+        "wget",
+        "python*",
+        "perl*",
+        "php*",
+        "ruby*",
+        "lua*",
+        "telnet",
+        "pwsh",
+        "openssl",
+        "nc",
+        "ncat",
+        "netcat",
+        "awk",
+        "gawk",
+        "mawk",
+        "nawk",
+        "socat",
+        "node",
+        "bash",
+        "sh",
+        "./*",
+        "/tmp/*",
+        "/var/tmp/*",
+        "/var/www/*",
+        "/dev/shm/*",
+        "/etc/init.d/*",
+        "/etc/rc*.d/*",
+        "/etc/cron*",
+        "/etc/update-motd.d/*",
+        "/boot/*",
+        "/srv/*",
+        "/run/*",
+        "/etc/rc.local",
+        "/opt/rumble/bin/rumble-agent*",
+        "/opt/aws/inspector/bin/inspectorssmplugin",
+        "/snap/oracle-cloud-agent/*",
+        "/lusr/libexec/oracle-cloud-agent/*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "token",
+        "security-credentials",
+        "local-ipv4",
+        "local-hostname",
+        "public-ipv4",
+        "user-data",
+        "document",
+        "instance-id",
+        "public-keys",
+        "instance",
+        "vnics",
+        "x-aws-ec2-metadata-token-ttl-seconds"
+      ],
+      "raw_values": [
+        "*169.254.169.254/latest/api/token*",
+        "*169.254.169.254/latest/meta-data/iam/security-credentials*",
+        "*169.254.169.254/latest/meta-data/local-ipv4*",
+        "*169.254.169.254/latest/meta-data/local-hostname*",
+        "*169.254.169.254/latest/meta-data/public-ipv4*",
+        "*169.254.169.254/latest/user-data*",
+        "*169.254.169.254/latest/dynamic/instance-identity/document*",
+        "*169.254.169.254/latest/meta-data/instance-id*",
+        "*169.254.169.254/latest/meta-data/public-keys*",
+        "*computeMetadata/v1/instance/service-accounts/*/token*",
+        "*/metadata/identity/oauth2/token*",
+        "*169.254.169.254/opc/v*/instance*",
+        "*169.254.169.254/opc/v*/vnics*",
+        "*-X PUT*169.254.169.254/latest/api/token*",
+        "*X-aws-ec2-metadata-token-ttl-seconds*",
+        "*-H X-aws-ec2-metadata-token:*169.254.169.254/latest/*",
+        "*-A amazon-ec2-net-utils/*",
+        "*-H Metadata:true*169.254.169.254/metadata/*",
+        "*-H Authorization:*Oracle*169.254.169.254/opc/*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/opt/rapid7",
+        "/opt/nessus",
+        "/snap/amazon-ssm-agent",
+        "/var/snap/amazon-ssm-agent/",
+        "/var/log/amazon/ssm/",
+        "/srv/snp/docker/overlay2",
+        "/opt/nessus_agent/var/nessus/"
+      ],
+      "raw_values": [
+        "/opt/rapid7*",
+        "/opt/nessus*",
+        "/snap/amazon-ssm-agent*",
+        "/var/snap/amazon-ssm-agent/*",
+        "/var/log/amazon/ssm/*",
+        "/srv/snp/docker/overlay2*",
+        "/opt/nessus_agent/var/nessus/*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "setup-policy-routes",
+        "30-banner",
+        "dhclient-script",
+        "uwsgi",
+        "al-extras",
+        "cloud-init",
+        "waagent",
+        "google_osconfig_agent",
+        "docker",
+        "containerd-shim",
+        "runc"
+      ],
+      "raw_values": [
+        "/usr/bin/setup-policy-routes",
+        "/usr/share/ec2-instance-connect/*",
+        "/var/lib/amazon/ssm/*",
+        "/etc/update-motd.d/30-banner",
+        "/usr/sbin/dhclient-script",
+        "/usr/local/bin/uwsgi",
+        "/usr/lib/skylight/al-extras",
+        "/usr/bin/cloud-init",
+        "/usr/sbin/waagent",
+        "/usr/bin/google_osconfig_agent",
+        "/usr/bin/docker",
+        "/usr/bin/containerd-shim",
+        "/usr/bin/runc"
+      ]
+    },
+    {
+      "field": "process.entry_leader.executable",
+      "raw_field": "process.entry_leader.executable",
+      "operator": ":",
+      "values": [
+        "/usr/local/qualys/cloud-agent/bin/qualys-cloud-agent",
+        "/opt/elastic/agent/data/elastic-agent-*/elastic-agent",
+        "/opt/nessus_agent/sbin/nessus-service"
+      ],
+      "raw_values": [
+        "/usr/local/qualys/cloud-agent/bin/qualys-cloud-agent",
+        "/opt/Elastic/Agent/data/elastic-agent-*/elastic-agent",
+        "/opt/nessus_agent/sbin/nessus-service"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "exec",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "==",
+      "values": [
+        "curl"
+      ],
+      "raw_values": [
+        "/usr/bin/curl"
+      ]
+    },
+    {
+      "field": "destination.ip",
+      "raw_field": "destination.ip",
+      "operator": "==",
+      "values": [
+        "169.254.169.254"
+      ],
+      "raw_values": [
+        "169.254.169.254"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.parent.entity_id with maxspan=3s\n[\n    process\n    where host.os.type == \"linux\"\n        and event.type == \"start\"\n        and event.action == \"exec\"\n        and process.parent.executable != null\n\n        // common tooling / suspicious names (keep broad)\n        and (\n            process.name : (\n                \"curl\", \"wget\", \"python*\", \"perl*\", \"php*\", \"ruby*\", \"lua*\", \"telnet\", \"pwsh\",\n                \"openssl\", \"nc\", \"ncat\", \"netcat\", \"awk\", \"gawk\", \"mawk\", \"nawk\", \"socat\", \"node\",\n                \"bash\", \"sh\"\n            )\n            or\n            // suspicious execution locations (dropped binaries / temp execution)\n            process.executable : (\n                \"./*\", \"/tmp/*\", \"/var/tmp/*\", \"/var/www/*\", \"/dev/shm/*\", \"/etc/init.d/*\", \"/etc/rc*.d/*\",\n                \"/etc/cron*\", \"/etc/update-motd.d/*\", \"/boot/*\", \"/srv/*\", \"/run/*\", \"/etc/rc.local\"\n            )\n            or\n            // threat-relevant IMDS / metadata endpoints (inclusion list)\n            process.command_line : (\n                \"*169.254.169.254/latest/api/token*\",\n                \"*169.254.169.254/latest/meta-data/iam/security-credentials*\",\n                \"*169.254.169.254/latest/meta-data/local-ipv4*\",\n                \"*169.254.169.254/latest/meta-data/local-hostname*\",\n                \"*169.254.169.254/latest/meta-data/public-ipv4*\",\n                \"*169.254.169.254/latest/user-data*\",\n                \"*169.254.169.254/latest/dynamic/instance-identity/document*\",\n                \"*169.254.169.254/latest/meta-data/instance-id*\",\n                \"*169.254.169.254/latest/meta-data/public-keys*\",\n                \"*computeMetadata/v1/instance/service-accounts/*/token*\",\n                \"*/metadata/identity/oauth2/token*\",\n                \"*169.254.169.254/opc/v*/instance*\",\n                \"*169.254.169.254/opc/v*/vnics*\"\n            )\n        )\n\n        // global working-dir / executable / parent exclusions for known benign agents\n        and not process.working_directory : (\n            \"/opt/rapid7*\",\n            \"/opt/nessus*\",\n            \"/snap/amazon-ssm-agent*\",\n            \"/var/snap/amazon-ssm-agent/*\",\n            \"/var/log/amazon/ssm/*\",\n            \"/srv/snp/docker/overlay2*\",\n            \"/opt/nessus_agent/var/nessus/*\"\n        )\n\n        and not process.executable : (\n            \"/opt/rumble/bin/rumble-agent*\",\n            \"/opt/aws/inspector/bin/inspectorssmplugin\",\n            \"/snap/oracle-cloud-agent/*\",\n            \"/lusr/libexec/oracle-cloud-agent/*\"\n        )\n\n        and not process.parent.executable : (\n            \"/usr/bin/setup-policy-routes\",\n            \"/usr/share/ec2-instance-connect/*\",\n            \"/var/lib/amazon/ssm/*\",\n            \"/etc/update-motd.d/30-banner\",\n            \"/usr/sbin/dhclient-script\",\n            \"/usr/local/bin/uwsgi\",\n            \"/usr/lib/skylight/al-extras\",\n            \"/usr/bin/cloud-init\",\n            \"/usr/sbin/waagent\",\n            \"/usr/bin/google_osconfig_agent\",\n            \"/usr/bin/docker\",\n            \"/usr/bin/containerd-shim\",\n            \"/usr/bin/runc\"\n        )\n\n        and not process.entry_leader.executable : (\n            \"/usr/local/qualys/cloud-agent/bin/qualys-cloud-agent\",\n            \"/opt/Elastic/Agent/data/elastic-agent-*/elastic-agent\",\n            \"/opt/nessus_agent/sbin/nessus-service\"\n        )\n\n        // carve-out: safe /usr/bin/curl usage (suppress noisy, legitimate agent patterns)\n        and not (\n            process.executable == \"/usr/bin/curl\"\n            and (\n                // AWS IMDSv2 token PUT that includes ttl header\n                (process.command_line : \"*-X PUT*169.254.169.254/latest/api/token*\" and process.command_line : \"*X-aws-ec2-metadata-token-ttl-seconds*\")\n                or\n                // Any IMDSv2 GET that includes token header for any /latest/* path\n                process.command_line : \"*-H X-aws-ec2-metadata-token:*169.254.169.254/latest/*\"\n                or\n                // Common amazon tooling UA\n                process.command_line : \"*-A amazon-ec2-net-utils/*\"\n                or\n                // Azure metadata legitimate header\n                process.command_line : \"*-H Metadata:true*169.254.169.254/metadata/*\"\n                or\n                // Oracle IMDS legitimate header\n                process.command_line : \"*-H Authorization:*Oracle*169.254.169.254/opc/*\"\n            )\n        )\n]\n[\n    network where host.os.type == \"linux\"\n        and event.action == \"connection_attempted\"\n        and destination.ip == \"169.254.169.254\"\n]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_unusual_instance_metadata_service_api_request.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Cloud",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

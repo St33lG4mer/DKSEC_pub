@@ -1,0 +1,63 @@
+{
+  "id": "3ff3b7f9-b0c8-5bd0-82de-440006fe6c86",
+  "catalog": "sigma",
+  "name": "proc_creation_win_citrix_trolleyexpress_procdump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "trolleyexpress 7",
+        "trolleyexpress 8",
+        "trolleyexpress 9",
+        "trolleyexpress.exe 7",
+        "trolleyexpress.exe 8",
+        "trolleyexpress.exe 9",
+        "trolleyexpress.exe -ma"
+      ],
+      "raw_values": [
+        "*\\\\TrolleyExpress 7*",
+        "*\\\\TrolleyExpress 8*",
+        "*\\\\TrolleyExpress 9*",
+        "*\\\\TrolleyExpress.exe 7*",
+        "*\\\\TrolleyExpress.exe 8*",
+        "*\\\\TrolleyExpress.exe 9*",
+        "*\\\\TrolleyExpress.exe -ma *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "trolleyexpress.exe"
+      ],
+      "raw_values": [
+        "*\\\\TrolleyExpress.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ctxinstall"
+      ],
+      "raw_values": [
+        "*CtxInstall*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*\\\\TrolleyExpress 7*\", \"*\\\\TrolleyExpress 8*\", \"*\\\\TrolleyExpress 9*\", \"*\\\\TrolleyExpress.exe 7*\", \"*\\\\TrolleyExpress.exe 8*\", \"*\\\\TrolleyExpress.exe 9*\", \"*\\\\TrolleyExpress.exe -ma *\")) or (process.executable:\"*\\\\TrolleyExpress.exe\" and (not (process.pe.original_file_name:\"*CtxInstall*\" or (?process.pe.original_file_name == null))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_citrix_trolleyexpress_procdump.eql",
+  "metadata": {}
+}

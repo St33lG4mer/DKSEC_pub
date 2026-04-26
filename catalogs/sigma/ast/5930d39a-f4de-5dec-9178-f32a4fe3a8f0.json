@@ -1,0 +1,56 @@
+{
+  "id": "5930d39a-f4de-5dec-9178-f32a4fe3a8f0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_dosfuscation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "^|^",
+        ",;,",
+        ";;;;",
+        ";; ;;",
+        "(,(,",
+        "%comspec:~",
+        "c^m^d",
+        "^c^m^d",
+        "c^md",
+        "cm^d",
+        "^cm^d",
+        "s^et",
+        "s^e^t",
+        "se^t"
+      ],
+      "raw_values": [
+        "*^^*",
+        "*^|^*",
+        "*,;,*",
+        "*;;;;*",
+        "*;; ;;*",
+        "*(,(,*",
+        "*%COMSPEC:~*",
+        "* c^m^d*",
+        "*^c^m^d*",
+        "* c^md*",
+        "* cm^d*",
+        "*^cm^d*",
+        "* s^et *",
+        "* s^e^t *",
+        "* se^t *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*^^*\", \"*^|^*\", \"*,;,*\", \"*;;;;*\", \"*;; ;;*\", \"*(,(,*\", \"*%COMSPEC:~*\", \"* c^m^d*\", \"*^c^m^d*\", \"* c^md*\", \"* cm^d*\", \"*^cm^d*\", \"* s^et *\", \"* s^e^t *\", \"* se^t *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_dosfuscation.eql",
+  "metadata": {}
+}

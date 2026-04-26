@@ -1,0 +1,111 @@
+{
+  "id": "0740a016-fe7f-5948-ab6a-7a311c76cddb",
+  "catalog": "elastic",
+  "name": "Modification of WDigest Security Provider",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000001"
+      ],
+      "raw_values": [
+        "1",
+        "0x00000001"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "creation",
+        "change"
+      ],
+      "raw_values": [
+        "creation",
+        "change"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "uselogoncredential"
+      ],
+      "raw_values": [
+        "UseLogonCredential"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\*controlset*\\\\control\\\\securityproviders\\\\wdigest\\\\uselogoncredential"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\*ControlSet*\\\\Control\\\\SecurityProviders\\\\WDigest\\\\UseLogonCredential"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type in (\"creation\", \"change\") and\n    registry.value : \"UseLogonCredential\" and\n    registry.path : \"*\\\\SYSTEM\\\\*ControlSet*\\\\Control\\\\SecurityProviders\\\\WDigest\\\\UseLogonCredential\" and\n    registry.data.strings : (\"1\", \"0x00000001\") and\n    not (process.executable : \"?:\\\\Windows\\\\System32\\\\svchost.exe\" and user.id : \"S-1-5-18\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_mod_wdigest_security_provider.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint"
+    ]
+  }
+}

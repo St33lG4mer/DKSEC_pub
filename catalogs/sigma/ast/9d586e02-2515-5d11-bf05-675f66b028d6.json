@@ -1,0 +1,50 @@
+{
+  "id": "9d586e02-2515-5d11-bf05-675f66b028d6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_download_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-restmethod",
+        "invoke-webrequest",
+        "irm",
+        "iwr"
+      ],
+      "raw_values": [
+        "*Invoke-RestMethod *",
+        "*Invoke-WebRequest *",
+        "*IRM *",
+        "*IWR *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http",
+        "outfile",
+        ".dll"
+      ],
+      "raw_values": [
+        "*http*",
+        "*OutFile*",
+        "*.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*Invoke-RestMethod *\", \"*Invoke-WebRequest *\", \"*IRM *\", \"*IWR *\")) and (process.command_line:\"*http*\" and process.command_line:\"*OutFile*\" and process.command_line:\"*.dll*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_download_dll.eql",
+  "metadata": {}
+}

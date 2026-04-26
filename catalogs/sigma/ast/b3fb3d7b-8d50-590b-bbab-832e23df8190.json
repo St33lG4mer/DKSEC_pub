@@ -1,0 +1,66 @@
+{
+  "id": "b3fb3d7b-8d50-590b-bbab-832e23df8190",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_service_manipulation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "stopservice",
+        "startservice"
+      ],
+      "raw_values": [
+        "*stopservice*",
+        "*startservice*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "service",
+        "call"
+      ],
+      "raw_values": [
+        "* service *",
+        "* call *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"wmic.exe\" or process.executable:\"*\\\\WMIC.exe\") and ((process.command_line:\"* service *\" and process.command_line:\"* call *\") and (process.command_line like~ (\"*stopservice*\", \"*startservice*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_service_manipulation.eql",
+  "metadata": {}
+}

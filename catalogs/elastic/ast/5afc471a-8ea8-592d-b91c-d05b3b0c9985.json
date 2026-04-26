@@ -1,0 +1,74 @@
+{
+  "id": "5afc471a-8ea8-592d-b91c-d05b3b0c9985",
+  "catalog": "elastic",
+  "name": "AWS EC2 Full Network Packet Capture Detected",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "createtrafficmirrorsession"
+      ],
+      "raw_values": [
+        "CreateTrafficMirrorSession"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" and \n    event.provider: \"ec2.amazonaws.com\" and\n    event.action: \"CreateTrafficMirrorSession\" and\n    event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/exfiltration_ec2_full_network_packet_capture_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS EC2",
+      "Use Case: Network Security Monitoring",
+      "Tactic: Exfiltration",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

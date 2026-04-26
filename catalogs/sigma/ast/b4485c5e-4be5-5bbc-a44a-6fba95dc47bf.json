@@ -1,0 +1,40 @@
+{
+  "id": "b4485c5e-4be5-5bbc-a44a-6fba95dc47bf",
+  "catalog": "sigma",
+  "name": "proc_creation_win_clip_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "clip.exe"
+      ],
+      "raw_values": [
+        "*\\\\clip.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "clip.exe"
+      ],
+      "raw_values": [
+        "clip.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\clip.exe\" or process.pe.original_file_name:\"clip.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_clip_execution.eql",
+  "metadata": {}
+}

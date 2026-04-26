@@ -1,0 +1,117 @@
+{
+  "id": "b90565c4-197e-5b7f-94fb-a2babde77327",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mshta_susp_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".7z",
+        ".avi",
+        ".bat",
+        ".bmp",
+        ".conf",
+        ".csv",
+        ".dll",
+        ".doc",
+        ".gif",
+        ".gz",
+        ".ini",
+        ".jpe",
+        ".jpg",
+        ".json",
+        ".lnk",
+        ".log",
+        ".mkv",
+        ".mp3",
+        ".mp4",
+        ".pdf",
+        ".png",
+        ".ppt",
+        ".rar",
+        ".rtf",
+        ".svg",
+        ".tar",
+        ".tmp",
+        ".txt",
+        ".xls",
+        ".xml",
+        ".yaml",
+        ".yml",
+        ".zip",
+        "vbscript"
+      ],
+      "raw_values": [
+        "*.7z*",
+        "*.avi*",
+        "*.bat*",
+        "*.bmp*",
+        "*.conf*",
+        "*.csv*",
+        "*.dll*",
+        "*.doc*",
+        "*.gif*",
+        "*.gz*",
+        "*.ini*",
+        "*.jpe*",
+        "*.jpg*",
+        "*.json*",
+        "*.lnk*",
+        "*.log*",
+        "*.mkv*",
+        "*.mp3*",
+        "*.mp4*",
+        "*.pdf*",
+        "*.png*",
+        "*.ppt*",
+        "*.rar*",
+        "*.rtf*",
+        "*.svg*",
+        "*.tar*",
+        "*.tmp*",
+        "*.txt*",
+        "*.xls*",
+        "*.xml*",
+        "*.yaml*",
+        "*.yml*",
+        "*.zip*",
+        "*vbscript*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "*\\\\mshta.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "mshta.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\mshta.exe\" or process.pe.original_file_name:\"mshta.exe\") and (process.command_line like~ (\"*.7z*\", \"*.avi*\", \"*.bat*\", \"*.bmp*\", \"*.conf*\", \"*.csv*\", \"*.dll*\", \"*.doc*\", \"*.gif*\", \"*.gz*\", \"*.ini*\", \"*.jpe*\", \"*.jpg*\", \"*.json*\", \"*.lnk*\", \"*.log*\", \"*.mkv*\", \"*.mp3*\", \"*.mp4*\", \"*.pdf*\", \"*.png*\", \"*.ppt*\", \"*.rar*\", \"*.rtf*\", \"*.svg*\", \"*.tar*\", \"*.tmp*\", \"*.txt*\", \"*.xls*\", \"*.xml*\", \"*.yaml*\", \"*.yml*\", \"*.zip*\", \"*vbscript*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mshta_susp_execution.eql",
+  "metadata": {}
+}

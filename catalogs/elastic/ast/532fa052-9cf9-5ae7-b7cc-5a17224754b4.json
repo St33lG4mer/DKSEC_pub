@@ -1,0 +1,111 @@
+{
+  "id": "532fa052-9cf9-5ae7-b7cc-5a17224754b4",
+  "catalog": "elastic",
+  "name": "M365 Identity User Account Lockouts",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "in",
+      "values": [
+        "azureactivedirectory",
+        "exchange"
+      ],
+      "raw_values": [
+        "AzureActiveDirectory",
+        "Exchange"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "userloginfailed",
+        "passwordlogoninitialauthusingpassword"
+      ],
+      "raw_values": [
+        "UserLoginFailed",
+        "PasswordLogonInitialAuthUsingPassword"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "authentication"
+      ],
+      "raw_values": [
+        "authentication"
+      ]
+    },
+    {
+      "field": "r",
+      "raw_field": "r",
+      "operator": "like",
+      "values": [
+        "(oauth.*||.*login.*)"
+      ],
+      "raw_values": [
+        "(oauth.*||.*login.*)"
+      ]
+    },
+    {
+      "field": "o365.audit.logonerror",
+      "raw_field": "o365.audit.LogonError",
+      "operator": "==",
+      "values": [
+        "idslocked"
+      ],
+      "raw_values": [
+        "IdsLocked"
+      ]
+    },
+    {
+      "field": ".organization.name",
+      "raw_field": ".organization.name",
+      "operator": "!=",
+      "values": [
+        "microsoft-corp-msn-as-block"
+      ],
+      "raw_values": [
+        "MICROSOFT-CORP-MSN-as-BLOCK"
+      ]
+    }
+  ],
+  "raw_query": "from logs-o365.audit-*\n| mv_expand event.category\n| eval\n    Esql.time_window_date_trunc = date_trunc(5 minutes, @timestamp)\n| where\n    data_stream.dataset == \"o365.audit\" and\n    event.category == \"authentication\" and\n    event.provider in (\"AzureActiveDirectory\", \"Exchange\") and\n    event.action in (\"UserLoginFailed\", \"PasswordLogonInitialAuthUsingPassword\") and\n    to_lower(o365.audit.ExtendedProperties.RequestType) rlike \"(oauth.*||.*login.*)\" and\n    o365.audit.LogonError == \"IdsLocked\" and\n    to_lower(o365.audit.UserId) != \"not available\" and\n    o365.audit.Target.Type in (\"0\", \"2\", \"6\", \"10\") and\n    source.`as`.organization.name != \"MICROSOFT-CORP-MSN-as-BLOCK\"\n| stats\n    Esql_priv.o365_audit_UserId_count_distinct = count_distinct(to_lower(o365.audit.UserId)),\n    Esql_priv.o365_audit_UserId_values = values(to_lower(o365.audit.UserId)),\n    Esql.source_ip_values = values(source.ip),\n    Esql.source_ip_count_distinct = count_distinct(source.ip),\n    Esql.source_as_organization_name_values = values(source.`as`.organization.name),\n    Esql.source_as_organization_name_count_distinct = count_distinct(source.`as`.organization.name),\n    Esql.source_geo_country_name_values = values(source.geo.country_name),\n    Esql.source_geo_country_name_count_distinct = count_distinct(source.geo.country_name),\n    Esql.o365_audit_ExtendedProperties_RequestType_values = values(to_lower(o365.audit.ExtendedProperties.RequestType)),\n    Esql.timestamp_first_seen = min(@timestamp),\n    Esql.timestamp_last_seen = max(@timestamp),\n    Esql.event_count = count(*)\n  by Esql.time_window_date_trunc\n| eval\n    Esql.event_duration_seconds = date_diff(\"seconds\", Esql.timestamp_first_seen, Esql.timestamp_last_seen)\n| keep\n    Esql.time_window_date_trunc,\n    Esql_priv.o365_audit_UserId_count_distinct,\n    Esql_priv.o365_audit_UserId_values,\n    Esql.source_ip_values,\n    Esql.source_ip_count_distinct,\n    Esql.source_as_organization_name_values,\n    Esql.source_as_organization_name_count_distinct,\n    Esql.source_geo_country_name_values,\n    Esql.source_geo_country_name_count_distinct,\n    Esql.o365_audit_ExtendedProperties_RequestType_values,\n    Esql.timestamp_first_seen,\n    Esql.timestamp_last_seen,\n    Esql.event_count,\n    Esql.event_duration_seconds\n| where\n    Esql_priv.o365_audit_UserId_count_distinct >= 10 and\n    Esql.event_count >= 10 and\n    Esql.event_duration_seconds <= 300\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/credential_access_identity_user_account_lockouts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: SaaS",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Use Case: Threat Detection",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

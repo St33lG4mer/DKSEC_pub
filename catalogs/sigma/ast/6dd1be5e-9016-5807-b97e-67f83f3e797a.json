@@ -1,0 +1,31 @@
+{
+  "id": "6dd1be5e-9016-5807-b97e-67f83f3e797a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_16bit_application",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "ntvdm.exe",
+        "csrstub.exe"
+      ],
+      "raw_values": [
+        "*\\\\ntvdm.exe",
+        "*\\\\csrstub.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable like~ (\"*\\\\ntvdm.exe\", \"*\\\\csrstub.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_16bit_application.eql",
+  "metadata": {}
+}

@@ -1,0 +1,67 @@
+{
+  "id": "d4cadd86-9d03-5d91-bd6e-c5b07d0ea637",
+  "catalog": "sigma",
+  "name": "win_security_transf_files_with_cred_data_via_network_shares",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": "like~",
+      "values": [
+        "\\\\mimidrv",
+        "\\\\lsass",
+        "\\\\windows\\\\minidump\\\\",
+        "\\\\hiberfil",
+        "\\\\sqldmpr",
+        "windows\\\\ntds\\\\ntds.dit",
+        "windows\\\\system32\\\\config\\\\sam",
+        "windows\\\\system32\\\\config\\\\security",
+        "windows\\\\system32\\\\config\\\\system"
+      ],
+      "raw_values": [
+        "*\\\\mimidrv*",
+        "*\\\\lsass*",
+        "*\\\\windows\\\\minidump\\\\*",
+        "*\\\\hiberfil*",
+        "*\\\\sqldmpr*",
+        "Windows\\\\NTDS\\\\ntds.dit",
+        "Windows\\\\System32\\\\config\\\\SAM",
+        "Windows\\\\System32\\\\config\\\\SECURITY",
+        "Windows\\\\System32\\\\config\\\\SYSTEM"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"5145\" and ((winlog.event_data.RelativeTargetName like~ (\"*\\\\mimidrv*\", \"*\\\\lsass*\", \"*\\\\windows\\\\minidump\\\\*\", \"*\\\\hiberfil*\", \"*\\\\sqldmpr*\")) or (winlog.event_data.RelativeTargetName like~ (\"Windows\\\\NTDS\\\\ntds.dit\", \"Windows\\\\System32\\\\config\\\\SAM\", \"Windows\\\\System32\\\\config\\\\SECURITY\", \"Windows\\\\System32\\\\config\\\\SYSTEM\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_transf_files_with_cred_data_via_network_shares.eql",
+  "metadata": {}
+}

@@ -1,0 +1,91 @@
+{
+  "id": "7230853d-e887-595c-a8e1-b3162017da40",
+  "catalog": "sigma",
+  "name": "proc_creation_win_conhost_uncommon_parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "lsass.exe",
+        "regsvr32.exe",
+        "rundll32.exe",
+        "services.exe",
+        "smss.exe",
+        "spoolsv.exe",
+        "svchost.exe",
+        "userinit.exe",
+        "wininit.exe",
+        "winlogon.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe",
+        "*\\\\lsass.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\rundll32.exe",
+        "*\\\\services.exe",
+        "*\\\\smss.exe",
+        "*\\\\spoolsv.exe",
+        "*\\\\svchost.exe",
+        "*\\\\userinit.exe",
+        "*\\\\wininit.exe",
+        "*\\\\winlogon.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        "-k apphost -s apphostsvc",
+        "-k imgsvc",
+        "-k localservice -p -s remoteregistry",
+        "-k localsystemnetworkrestricted -p -s ngcsvc",
+        "-k netsvcs -p -s ncasvc",
+        "-k netsvcs -p -s netsetupsvc",
+        "-k netsvcs -p -s wlidsvc",
+        "-k networkservice -p -s dosvc",
+        "-k wsappx -p -s appxsvc",
+        "-k wsappx -p -s clipsvc",
+        "-k wusvcs -p -s waasmedicsvc"
+      ],
+      "raw_values": [
+        "*-k apphost -s AppHostSvc*",
+        "*-k imgsvc*",
+        "*-k localService -p -s RemoteRegistry*",
+        "*-k LocalSystemNetworkRestricted -p -s NgcSvc*",
+        "*-k NetSvcs -p -s NcaSvc*",
+        "*-k netsvcs -p -s NetSetupSvc*",
+        "*-k netsvcs -p -s wlidsvc*",
+        "*-k NetworkService -p -s DoSvc*",
+        "*-k wsappx -p -s AppXSvc*",
+        "*-k wsappx -p -s ClipSVC*",
+        "*-k wusvcs -p -s WaaSMedicSvc*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\conhost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\conhost.exe\" and (process.parent.executable like~ (\"*\\\\explorer.exe\", \"*\\\\lsass.exe\", \"*\\\\regsvr32.exe\", \"*\\\\rundll32.exe\", \"*\\\\services.exe\", \"*\\\\smss.exe\", \"*\\\\spoolsv.exe\", \"*\\\\svchost.exe\", \"*\\\\userinit.exe\", \"*\\\\wininit.exe\", \"*\\\\winlogon.exe\"))) and (not (process.parent.command_line like~ (\"*-k apphost -s AppHostSvc*\", \"*-k imgsvc*\", \"*-k localService -p -s RemoteRegistry*\", \"*-k LocalSystemNetworkRestricted -p -s NgcSvc*\", \"*-k NetSvcs -p -s NcaSvc*\", \"*-k netsvcs -p -s NetSetupSvc*\", \"*-k netsvcs -p -s wlidsvc*\", \"*-k NetworkService -p -s DoSvc*\", \"*-k wsappx -p -s AppXSvc*\", \"*-k wsappx -p -s ClipSVC*\", \"*-k wusvcs -p -s WaaSMedicSvc*\"))) and (not (process.parent.command_line like~ (\"*C:\\\\Program Files (x86)\\\\Dropbox\\\\Client\\\\*\", \"*C:\\\\Program Files\\\\Dropbox\\\\Client\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_conhost_uncommon_parent.eql",
+  "metadata": {}
+}

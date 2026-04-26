@@ -1,0 +1,31 @@
+{
+  "id": "2076e6c1-6f1e-5adf-82c2-4e68a1a8e860",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_dinjector",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "am51",
+        "password"
+      ],
+      "raw_values": [
+        "* /am51*",
+        "* /password*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"* /am51*\" and process.command_line:\"* /password*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_dinjector.eql",
+  "metadata": {}
+}

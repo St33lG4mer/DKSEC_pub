@@ -1,0 +1,29 @@
+{
+  "id": "e4dea3b3-0363-500f-9d66-6e7b966fb7cb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_setup16_custom_lst_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "setup16.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\SysWOW64\\\\setup16.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"C:\\\\Windows\\\\SysWOW64\\\\setup16.exe\" and process.parent.command_line:\"* -m *\") and (not process.executable:\"C:\\\\~MSSETUP.T\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_setup16_custom_lst_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,71 @@
+{
+  "id": "1209db71-5c1c-5290-975f-07c74660b38e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_no_space_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "cwhoami",
+        "cpowershell",
+        "cschtasks",
+        "cbitsadmin",
+        "ccertutil",
+        "kwhoami",
+        "kpowershell",
+        "kschtasks",
+        "kbitsadmin",
+        "kcertutil",
+        "node_modules",
+        "c ."
+      ],
+      "raw_values": [
+        "*cmd.exe/c*",
+        "*\\\\cmd/c*",
+        "*\\",
+        ", ",
+        "cmd/k*",
+        "*cmd.exe/r*",
+        "*\\\\cmd/r*",
+        "*/cwhoami*",
+        "*/cpowershell*",
+        "*/cschtasks*",
+        "*/cbitsadmin*",
+        "*/ccertutil*",
+        "*/kwhoami*",
+        "*/kpowershell*",
+        "*/kschtasks*",
+        "*/kbitsadmin*",
+        "*/kcertutil*",
+        "*cmd.exe /c*",
+        "*cmd /c*",
+        "*cmd.exe /k*",
+        "*cmd /k*",
+        "*cmd.exe /r*",
+        "*cmd /r*",
+        "*cmd.exe /c *",
+        "*cmd /c *",
+        "*cmd.exe /k *",
+        "*cmd /k *",
+        "*cmd.exe /r *",
+        "*cmd /r *",
+        "*AppData\\\\Local\\\\Programs\\\\Microsoft VS Code\\\\resources\\\\app\\\\node_modules*",
+        "*cmd.exe/c .",
+        "cmd.exe /c"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.command_line like~ (\"*cmd.exe/c*\", \"*\\\\cmd/c*\", \"*\\\"cmd/c*\", \"*cmd.exe/k*\", \"*\\\\cmd/k*\", \"*\\\"cmd/k*\", \"*cmd.exe/r*\", \"*\\\\cmd/r*\", \"*\\\"cmd/r*\")) or (process.command_line like~ (\"*/cwhoami*\", \"*/cpowershell*\", \"*/cschtasks*\", \"*/cbitsadmin*\", \"*/ccertutil*\", \"*/kwhoami*\", \"*/kpowershell*\", \"*/kschtasks*\", \"*/kbitsadmin*\", \"*/kcertutil*\")) or (process.command_line like~ (\"*cmd.exe /c*\", \"*cmd /c*\", \"*cmd.exe /k*\", \"*cmd /k*\", \"*cmd.exe /r*\", \"*cmd /r*\"))) and (not ((process.command_line like~ (\"*cmd.exe /c *\", \"*cmd /c *\", \"*cmd.exe /k *\", \"*cmd /k *\", \"*cmd.exe /r *\", \"*cmd /r *\")) or (process.command_line like~ (\"*AppData\\\\Local\\\\Programs\\\\Microsoft VS Code\\\\resources\\\\app\\\\node_modules*\", \"*cmd.exe/c .\", \"cmd.exe /c\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_no_space_execution.eql",
+  "metadata": {}
+}

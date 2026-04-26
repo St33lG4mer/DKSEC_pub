@@ -1,0 +1,41 @@
+{
+  "id": "2c02384f-e6b7-5083-961c-01b035225d4d",
+  "catalog": "sigma",
+  "name": "image_load_uac_bypass_via_dism",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dism.exe"
+      ],
+      "raw_values": [
+        "*\\\\dism.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "dismcore.dll"
+      ],
+      "raw_values": [
+        "*\\\\dismcore.dll",
+        "C:\\\\Windows\\\\System32\\\\Dism\\\\dismcore.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\dism.exe\" and file.path:\"*\\\\dismcore.dll\") and (not file.path:\"C:\\\\Windows\\\\System32\\\\Dism\\\\dismcore.dll\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_uac_bypass_via_dism.eql",
+  "metadata": {}
+}

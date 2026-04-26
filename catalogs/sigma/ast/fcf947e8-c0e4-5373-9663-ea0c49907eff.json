@@ -1,0 +1,95 @@
+{
+  "id": "fcf947e8-c0e4-5373-9663-ea0c49907eff",
+  "catalog": "sigma",
+  "name": "registry_set_renamed_sysinternals_eula_accepted",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\psexec",
+        "\\\\procdump",
+        "\\\\handle",
+        "\\\\livekd",
+        "\\\\process explorer",
+        "\\\\psloglist",
+        "\\\\pspasswd",
+        "\\\\active directory explorer"
+      ],
+      "raw_values": [
+        "*\\\\PsExec*",
+        "*\\\\ProcDump*",
+        "*\\\\Handle*",
+        "*\\\\LiveKd*",
+        "*\\\\Process Explorer*",
+        "*\\\\PsLoglist*",
+        "*\\\\PsPasswd*",
+        "*\\\\Active Directory Explorer*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "psexec.exe",
+        "psexec64.exe",
+        "procdump.exe",
+        "procdump64.exe",
+        "handle.exe",
+        "handle64.exe",
+        "livekd.exe",
+        "livekd64.exe",
+        "procexp.exe",
+        "procexp64.exe",
+        "psloglist.exe",
+        "psloglist64.exe",
+        "pspasswd.exe",
+        "pspasswd64.exe",
+        "adexplorer.exe",
+        "adexplorer64.exe"
+      ],
+      "raw_values": [
+        "*\\\\PsExec.exe",
+        "*\\\\PsExec64.exe",
+        "*\\\\procdump.exe",
+        "*\\\\procdump64.exe",
+        "*\\\\handle.exe",
+        "*\\\\handle64.exe",
+        "*\\\\livekd.exe",
+        "*\\\\livekd64.exe",
+        "*\\\\procexp.exe",
+        "*\\\\procexp64.exe",
+        "*\\\\psloglist.exe",
+        "*\\\\psloglist64.exe",
+        "*\\\\pspasswd.exe",
+        "*\\\\pspasswd64.exe",
+        "*\\\\ADExplorer.exe",
+        "*\\\\ADExplorer64.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\eulaaccepted"
+      ],
+      "raw_values": [
+        "*\\\\EulaAccepted"
+      ]
+    }
+  ],
+  "raw_query": "any where ((registry.path like~ (\"*\\\\PsExec*\", \"*\\\\ProcDump*\", \"*\\\\Handle*\", \"*\\\\LiveKd*\", \"*\\\\Process Explorer*\", \"*\\\\PsLoglist*\", \"*\\\\PsPasswd*\", \"*\\\\Active Directory Explorer*\")) and registry.path:\"*\\\\EulaAccepted\") and (not (process.executable like~ (\"*\\\\PsExec.exe\", \"*\\\\PsExec64.exe\", \"*\\\\procdump.exe\", \"*\\\\procdump64.exe\", \"*\\\\handle.exe\", \"*\\\\handle64.exe\", \"*\\\\livekd.exe\", \"*\\\\livekd64.exe\", \"*\\\\procexp.exe\", \"*\\\\procexp64.exe\", \"*\\\\psloglist.exe\", \"*\\\\psloglist64.exe\", \"*\\\\pspasswd.exe\", \"*\\\\pspasswd64.exe\", \"*\\\\ADExplorer.exe\", \"*\\\\ADExplorer64.exe\"))) and ?process.executable != null",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_renamed_sysinternals_eula_accepted.eql",
+  "metadata": {}
+}

@@ -1,0 +1,33 @@
+{
+  "id": "b2a4aa4c-1f4f-5439-a5d7-7ef3b4fdba62",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_small_sieve_evasion_typo",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "microsift",
+        "microsoftwindowsoutlookdataplus.txt"
+      ],
+      "raw_values": [
+        "*:\\\\Users\\\\*",
+        "*\\\\AppData\\\\*",
+        "*Microsift*",
+        "*\\\\AppData\\\\Local\\\\MicrosoftWindowsOutlookDataPlus.txt"
+      ]
+    }
+  ],
+  "raw_query": "any where (((file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\*\") and (file.path like~ (\"*\\\\Roaming\\\\*\", \"*\\\\Local\\\\*\"))) and file.path:\"*Microsift*\") or file.path:\"*\\\\AppData\\\\Local\\\\MicrosoftWindowsOutlookDataPlus.txt\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Small-Sieve/file_event_win_malware_small_sieve_evasion_typo.eql",
+  "metadata": {}
+}

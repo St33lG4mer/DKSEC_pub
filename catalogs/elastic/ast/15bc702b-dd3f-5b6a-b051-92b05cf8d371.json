@@ -1,0 +1,83 @@
+{
+  "id": "15bc702b-dd3f-5b6a-b051-92b05cf8d371",
+  "catalog": "elastic",
+  "name": "Newly Observed ScreenConnect Host Server",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "screenconnect.clientservice.exe"
+      ],
+      "raw_values": [
+        "ScreenConnect.ClientService.exe"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": "==",
+      "values": [
+        "connectwise, llc"
+      ],
+      "raw_values": [
+        "ConnectWise, LLC"
+      ]
+    },
+    {
+      "field": "esql.screenconnect_server",
+      "raw_field": "Esql.screenconnect_server",
+      "operator": "like",
+      "values": [
+        ".screenconnect.com"
+      ],
+      "raw_values": [
+        "*.screenconnect.com"
+      ]
+    }
+  ],
+  "raw_query": "from logs-endpoint.events.process-*\n| where event.category == \"process\" and event.type == \"start\" and (process.name == \"ScreenConnect.ClientService.exe\" or process.code_signature.subject_name == \"ConnectWise, LLC\")\n| grok process.command_line \"\"\"e=Access&y=Guest&h=(?<Esql.screenconnect_server>[^&]+)&p\"\"\"\n| where Esql.screenconnect_server is not null and not Esql.screenconnect_server like \"*.screenconnect.com\"\n| stats Esql.count_distinct_host_id = count_distinct(host.id),\n        Esql.first_time_seen = min(@timestamp),\n        Esql.user_name_values = values(user.name),\n        Esql.command_line_values = values(process.command_line),\n        Esql.host_id_values = values(host.id),\n        Esql.host_name_values = values(host.name),\n        Esql.process_entity_id_values = values(process.entity_id) by Esql.screenconnect_server\n| eval Esql.recent = date_diff(\"minute\", Esql.first_time_seen, now())\n| where Esql.recent <= 6 and Esql.count_distinct_host_id == 1\n| eval host.id = mv_first(Esql.host_id_values),\n       host.name = mv_first(Esql.host_name_values),\n       process.command_line = mv_first(Esql.command_line_values),\n       process.entity_id = mv_first(Esql.process_entity_id_values)\n| keep host.id, host.name, process.command_line, process.entity_id, Esql.screenconnect_server, Esql.user_name_values, Esql.first_time_seen\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/windows/command_and_control_newly_observed_screenconnect_host_server.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

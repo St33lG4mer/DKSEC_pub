@@ -1,0 +1,77 @@
+{
+  "id": "8c51bd70-5763-5e20-8f67-a1081ac1301d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_dridex",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "*\\\\net.exe",
+        "*\\\\net1.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe",
+        "regsvr32.exe",
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\whoami.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".dll",
+        "all",
+        "view"
+      ],
+      "raw_values": [
+        "*C:\\\\Users\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*.dll*",
+        "* /all*",
+        "* view*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "excel.exe",
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\*",
+        "*\\\\excel.exe",
+        "*\\\\svchost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\svchost.exe\" and (process.command_line:\"*C:\\\\Users\\\\*\" and process.command_line:\"*\\\\Desktop\\\\*\")) and (not process.parent.executable:\"C:\\\\Windows\\\\System32\\\\*\")) or ((process.parent.executable:\"*\\\\excel.exe\" and process.executable:\"*\\\\regsvr32.exe\" and (process.command_line like~ (\"* -s *\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\"))) and (not process.command_line:\"*.dll*\")) or (process.parent.executable:\"*\\\\svchost.exe\" and ((process.executable:\"*\\\\whoami.exe\" and process.command_line:\"* /all*\") or ((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) and process.command_line:\"* view*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/Malware/Dridex/proc_creation_win_malware_dridex.eql",
+  "metadata": {}
+}

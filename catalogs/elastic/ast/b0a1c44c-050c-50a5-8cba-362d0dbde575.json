@@ -1,0 +1,68 @@
+{
+  "id": "b0a1c44c-050c-50a5-8cba-362d0dbde575",
+  "catalog": "elastic",
+  "name": "M365 Identity Login from Atypical Travel Location",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "o365.audit.userid",
+      "raw_field": "o365.audit.UserId",
+      "operator": ":",
+      "values": [
+        "not available"
+      ],
+      "raw_values": [
+        "Not Available"
+      ]
+    },
+    {
+      "field": "o365.audit.extendedproperties.requesttype",
+      "raw_field": "o365.audit.ExtendedProperties.RequestType",
+      "operator": ":",
+      "values": [
+        "consent:set",
+        "deviceauth:reprocesstls",
+        "kmsi:kmsi",
+        "login:reprocess",
+        "login:resume",
+        "messageprompt:messageprompt",
+        "saml2:processrequest",
+        "sas:endauth",
+        "sas:processauth"
+      ],
+      "raw_values": [
+        "Consent:Set",
+        "DeviceAuth:ReprocessTls",
+        "Kmsi:kmsi",
+        "Login:reprocess",
+        "Login:resume",
+        "MessagePrompt:MessagePrompt",
+        "Saml2:processrequest",
+        "SAS:EndAuth",
+        "SAS:ProcessAuth"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:o365.audit and\n    event.provider:AzureActiveDirectory and\n    event.action:UserLoggedIn and\n    event.outcome:success and\n    o365.audit.Target.Type:(0 or 10 or 2 or 3 or 5 or 6) and\n    o365.audit.UserId:(* and not \"Not Available\") and\n    source.geo.country_iso_code:* and\n    not o365.audit.ApplicationId:(\n        29d9ed98-a469-4536-ade2-f981bc1d605e or\n        38aa3b87-a06d-4817-b275-7a316988d93b or\n        a809996b-059e-42e2-9866-db24b99a9782\n    ) and not o365.audit.ExtendedProperties.RequestType:(\n        \"Consent:Set\" or\n        \"DeviceAuth:ReprocessTls\" or\n        \"Kmsi:kmsi\" or\n        \"Login:reprocess\" or\n        \"Login:resume\" or\n        \"MessagePrompt:MessagePrompt\" or\n        \"Saml2:processrequest\" or\n        \"SAS:EndAuth\" or\n        \"SAS:ProcessAuth\"\n    ) and\n    not user_agent.original:(*iPhone* or *iPad* or *Android* or *PKeyAuth*)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/initial_access_entra_id_portal_login_atypical_travel.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Use Case: Threat Detection",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "cdb81f82-1f76-57d4-b02d-0e7fa3a5c12c",
+  "catalog": "sigma",
+  "name": "win_defender_restored_quarantine_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows defender/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Defender/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "1009"
+      ],
+      "raw_values": [
+        "1009"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Defender/Operational\" and event.code:\"1009\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/windefend/win_defender_restored_quarantine_file.eql",
+  "metadata": {}
+}

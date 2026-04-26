@@ -1,0 +1,17 @@
+{
+  "id": "556b8d13-dad2-5332-966d-86bcc400713b",
+  "catalog": "sigma",
+  "name": "sysmon_wmi_event_subscription",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "wmi"
+  ],
+  "conditions": [],
+  "raw_query": "any where event.code like~ (\"19\", \"20\", \"21\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/wmi_event/sysmon_wmi_event_subscription.eql",
+  "metadata": {}
+}

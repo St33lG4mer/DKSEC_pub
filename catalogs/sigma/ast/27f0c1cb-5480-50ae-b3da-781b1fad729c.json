@@ -1,0 +1,29 @@
+{
+  "id": "27f0c1cb-5480-50ae-b3da-781b1fad729c",
+  "catalog": "sigma",
+  "name": "image_load_side_load_rcdll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "rcdll.dll"
+      ],
+      "raw_values": [
+        "*\\\\rcdll.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\rcdll.dll\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Visual Studio\\\\*\", \"C:\\\\Program Files (x86)\\\\Windows Kits\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_rcdll.eql",
+  "metadata": {}
+}

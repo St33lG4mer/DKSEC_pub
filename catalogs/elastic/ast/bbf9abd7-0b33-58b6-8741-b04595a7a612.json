@@ -1,0 +1,90 @@
+{
+  "id": "bbf9abd7-0b33-58b6-8741-b04595a7a612",
+  "catalog": "elastic",
+  "name": "AWS EC2 Instance Console Login via Assumed Role",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "consolelogin",
+        "getsignintoken"
+      ],
+      "raw_values": [
+        "ConsoleLogin",
+        "GetSigninToken"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "signin.amazonaws.com"
+      ],
+      "raw_values": [
+        "signin.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": "==",
+      "values": [
+        "assumedrole"
+      ],
+      "raw_values": [
+        "AssumedRole"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"\n   and event.provider == \"signin.amazonaws.com\"\n   and event.action in (\"ConsoleLogin\", \"GetSigninToken\")\n   and event.outcome == \"success\"\n   and aws.cloudtrail.user_identity.type == \"AssumedRole\"\n   and stringContains (user.id, \":i-\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/lateral_movement_ec2_instance_console_login.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS EC2",
+      "Data Source: AWS STS",
+      "Data Source: AWS Sign-In",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Lateral Movement",
+      "Tactic: Credential Access",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "62c813bc-fc60-58f3-87fb-242b2cd28858",
+  "catalog": "sigma",
+  "name": "file_event_win_remote_access_tools_screenconnect_artefact",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "screenconnect."
+      ],
+      "raw_values": [
+        "*\\\\Bin\\\\ScreenConnect.*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Bin\\\\ScreenConnect.*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_remote_access_tools_screenconnect_artefact.eql",
+  "metadata": {}
+}

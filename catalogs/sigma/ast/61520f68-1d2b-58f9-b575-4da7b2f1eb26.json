@@ -1,0 +1,30 @@
+{
+  "id": "61520f68-1d2b-58f9-b575-4da7b2f1eb26",
+  "catalog": "sigma",
+  "name": "image_load_side_load_classicexplorer32",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "classicexplorer32.dll"
+      ],
+      "raw_values": [
+        "*\\\\ClassicExplorer32.dll",
+        "C:\\\\Program Files\\\\Classic Shell\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\ClassicExplorer32.dll\" and (not file.path:\"C:\\\\Program Files\\\\Classic Shell\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_classicexplorer32.eql",
+  "metadata": {}
+}

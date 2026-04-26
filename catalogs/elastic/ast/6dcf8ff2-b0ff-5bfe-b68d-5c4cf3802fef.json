@@ -1,0 +1,100 @@
+{
+  "id": "6dcf8ff2-b0ff-5bfe-b68d-5c4cf3802fef",
+  "catalog": "elastic",
+  "name": "Telnet Authentication Bypass via User Environment Variable",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "process_started",
+        "executed"
+      ],
+      "raw_values": [
+        "process_started",
+        "executed"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "telnetd",
+        "xinetd"
+      ],
+      "raw_values": [
+        "telnetd",
+        "xinetd"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "login"
+      ],
+      "raw_values": [
+        "login"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-*f"
+      ],
+      "raw_values": [
+        "-*f*"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=1s\n [process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"process_started\", \"executed\") and process.name in (\"telnetd\", \"xinetd\")] by process.pid\n [process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"process_started\", \"executed\") and process.name == \"login\" and process.args : \"-*f*\"] by process.parent.pid\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/initial_access_telnet_auth_bypass_envar_auditd.toml",
+  "metadata": {
+    "risk_score": 99,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide",
+      "Use Case: Vulnerability",
+      "Data Source: Auditd Manager"
+    ]
+  }
+}

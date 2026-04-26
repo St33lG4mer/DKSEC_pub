@@ -1,0 +1,49 @@
+{
+  "id": "06389c39-ba3f-5aeb-9486-0b1e2f7eca69",
+  "catalog": "sigma",
+  "name": "file_event_win_exploit_cve_2023_36874_report_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "appcrash_",
+        "apphang_",
+        "critical_",
+        "kernel_",
+        "noncritical_"
+      ],
+      "raw_values": [
+        "*\\\\ReportArchive\\\\AppCrash_*",
+        "*\\\\ReportArchive\\\\AppHang_*",
+        "*\\\\ReportArchive\\\\Critical_*",
+        "*\\\\ReportArchive\\\\Kernel_*",
+        "*\\\\ReportArchive\\\\NonCritical_*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "report.wer"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\WER\\\\ReportArchive\\\\*",
+        "*\\\\Report.wer"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\WER\\\\ReportArchive\\\\*\" and file.path:\"*\\\\Report.wer\") and (not (file.path like~ (\"*\\\\ReportArchive\\\\AppCrash_*\", \"*\\\\ReportArchive\\\\AppHang_*\", \"*\\\\ReportArchive\\\\Critical_*\", \"*\\\\ReportArchive\\\\Kernel_*\", \"*\\\\ReportArchive\\\\NonCritical_*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-36874/file_event_win_exploit_cve_2023_36874_report_creation.eql",
+  "metadata": {}
+}

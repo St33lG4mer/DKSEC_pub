@@ -1,0 +1,40 @@
+{
+  "id": "30f52659-b6a7-5f73-bfd5-33a2c257ba02",
+  "catalog": "sigma",
+  "name": "win_defender_malware_and_pua_scan_disabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows defender/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Defender/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5010"
+      ],
+      "raw_values": [
+        "5010"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Defender/Operational\" and event.code:\"5010\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/windefend/win_defender_malware_and_pua_scan_disabled.eql",
+  "metadata": {}
+}

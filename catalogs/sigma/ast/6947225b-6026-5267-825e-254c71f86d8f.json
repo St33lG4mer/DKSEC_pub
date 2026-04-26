@@ -1,0 +1,44 @@
+{
+  "id": "6947225b-6026-5267-825e-254c71f86d8f",
+  "catalog": "sigma",
+  "name": "registry_set_exploit_cve_2023_23397_outlook_reminder_trigger",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\tasks\\\\",
+        "\\\\notes\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Tasks\\\\*",
+        "*\\\\Notes\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\office\\\\",
+        "\\\\outlook\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Outlook\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\" and registry.path:\"*\\\\Outlook\\\\*\") and (registry.path like~ (\"*\\\\Tasks\\\\*\", \"*\\\\Notes\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-23397/registry_set_exploit_cve_2023_23397_outlook_reminder_trigger.eql",
+  "metadata": {}
+}

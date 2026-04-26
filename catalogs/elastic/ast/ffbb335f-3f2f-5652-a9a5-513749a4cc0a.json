@@ -1,0 +1,61 @@
+{
+  "id": "ffbb335f-3f2f-5652-a9a5-513749a4cc0a",
+  "catalog": "elastic",
+  "name": "Unusual LD_PRELOAD/LD_LIBRARY_PATH Command Line Arguments",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "ds_agent",
+        "boottimechecker",
+        "gmake",
+        "runc",
+        "nbdb_unload"
+      ],
+      "raw_values": [
+        "/opt/ds_agent/ds_agent",
+        "/opt/McAfee/agent/scripts/ma",
+        "/usr/local/bin/AppProtection/BootTimeChecker",
+        "/usr/bin/gmake",
+        "./runc",
+        "/usr/openv/db/bin/nbdb_unload"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/opt/mcafee/agent/scripts/ma"
+      ],
+      "raw_values": [
+        "/opt/McAfee/agent/scripts/ma"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:linux and event.category:process and event.type:start and event.action:(exec or ProcessRollup2) and\nprocess.parent.name:(* and not (\n  awk or bwrap or cylancesvc or dbus-run-session or java or julia or make or matlab_helper or ninja or noproc_sandbox or\n  nxrunner or nxserver or perl or rear or sapcontrol or setsid or spoold or sshd or steam or su or sudo or titanagent or\n  vls_agent or zabbix_agentd\n)) and\nnot process.parent.executable:(\n  /tmp/CVU_19_resource*/exectask or /u01/app/oracle/*oracle/CVU_19_oracle*/exectask or \"/opt/ds_agent/ds_agent\" or\n  \"/opt/McAfee/agent/scripts/ma\" or \"/usr/local/bin/AppProtection/BootTimeChecker\" or \"/usr/bin/gmake\" or \"./runc\" or\n  \"/usr/openv/db/bin/nbdb_unload\"\n) and\nnot process.parent.args:\"/opt/McAfee/agent/scripts/ma\" and\nprocess.name:(bash or csh or dash or fish or ksh or sh or tcsh or zsh) and\nprocess.args:-c and process.command_line:(*LD_LIBRARY_PATH=* or *LD_PRELOAD=*)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_ld_preload_cmdline.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

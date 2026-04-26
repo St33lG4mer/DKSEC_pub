@@ -1,0 +1,29 @@
+{
+  "id": "d8d47cd1-82bf-5e41-a027-ad91a530a35e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_office_outlook_enable_unsafe_client_mail_rules",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "enableunsafeclientmailrules"
+      ],
+      "raw_values": [
+        "*\\\\Outlook\\\\Security\\\\EnableUnsafeClientMailRules*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\Outlook\\\\Security\\\\EnableUnsafeClientMailRules*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_office_outlook_enable_unsafe_client_mail_rules.eql",
+  "metadata": {}
+}

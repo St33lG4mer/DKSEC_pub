@@ -1,0 +1,60 @@
+{
+  "id": "90266be4-e666-50fa-a42e-06b9ad4f30b5",
+  "catalog": "elastic",
+  "name": "PowerShell PSReflect Script",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "new-inmemorymodule",
+        "add-win32type",
+        "reflection.typeattributes",
+        "reflection.emit.opcodes",
+        "reflection.emit.customattributebuilder",
+        "runtime.interopservices.dllimportattribute"
+      ],
+      "raw_values": [
+        "New-InMemoryModule",
+        "Add-Win32Type",
+        "Reflection.TypeAttributes",
+        "Reflection.Emit.OpCodes",
+        "Reflection.Emit.CustomAttributeBuilder",
+        "Runtime.InteropServices.DllImportAttribute"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text:(\n    \"New-InMemoryModule\" or\n    \"Add-Win32Type\" or\n    psenum or\n    DefineDynamicAssembly or\n    DefineDynamicModule or\n    \"Reflection.TypeAttributes\" or\n    \"Reflection.Emit.OpCodes\" or\n    \"Reflection.Emit.CustomAttributeBuilder\" or\n    \"Runtime.InteropServices.DllImportAttribute\"\n  ) and\n  not user.id : \"S-1-5-18\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_posh_psreflect.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

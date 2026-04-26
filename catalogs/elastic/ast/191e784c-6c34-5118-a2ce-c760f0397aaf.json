@@ -1,0 +1,87 @@
+{
+  "id": "191e784c-6c34-5118-a2ce-c760f0397aaf",
+  "catalog": "elastic",
+  "name": "Potential Account Takeover - Mixed Logon Types",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "in",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "authentication"
+      ],
+      "raw_values": [
+        "authentication"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "logged-in"
+      ],
+      "raw_values": [
+        "logged-in"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "winlog.event_id",
+      "operator": "==",
+      "values": [
+        "4624"
+      ],
+      "raw_values": [
+        "4624"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "from logs-system.security*, logs-windows.forwarded*, winlogbeat-* metadata _id, _version, _index\n| WHERE event.category == \"authentication\" and event.action == \"logged-in\" and winlog.event_id == \"4624\" and\n        event.outcome == \"success\" and not user.id in (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\") and\n        to_lower(user.name) != \"administrator\"\n| STATS logon_count = COUNT(*), host_names = VALUES(host.name) by user.name, user.id, winlog.logon.type\n| STATS\n    Esql.max_logon = MAX(logon_count),\n    Esql.min_logon = MIN(logon_count),\n    Esql.unique_host_count = COUNT_DISTINCT(host_names),\n    Esql.host_name_values = VALUES(host_names),\n    Esql.logon_type_values = VALUES(winlog.logon.type),\n    Esql.count_distinct_logon_types = COUNT_DISTINCT(winlog.logon.type) by user.name, user.id\n\n// high count of logons is often associated with service account tied to a specific service, if observed in use with a different logon type it's suspicious\n| WHERE Esql.count_distinct_logon_types >= 2 and Esql.max_logon >= 1000 and (Esql.min_logon >= 1 and Esql.min_logon <= 10) and Esql.unique_host_count >= 2\n| EVAL winlog.logon.type = MV_FIRST(Esql.logon_type_values), host.name = MV_FIRST(Esql.host_name_values)\n| KEEP user.name, user.id, host.name, winlog.logon.type, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_account_takeover_mixed_logon_types.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

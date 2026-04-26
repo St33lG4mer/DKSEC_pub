@@ -1,0 +1,64 @@
+{
+  "id": "037c8ba5-57ee-57ed-bff5-1dfae51453d4",
+  "catalog": "sigma",
+  "name": "win_system_apt_oilrig_mar18",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicename",
+      "raw_field": "winlog.event_data.ServiceName",
+      "operator": "like~",
+      "values": [
+        "sc scheduled scan",
+        "updatmachine"
+      ],
+      "raw_values": [
+        "SC Scheduled Scan",
+        "UpdatMachine"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\" and (winlog.event_data.ServiceName like~ (\"SC Scheduled Scan\", \"UpdatMachine\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2018/TA/OilRig/win_system_apt_oilrig_mar18.eql",
+  "metadata": {}
+}

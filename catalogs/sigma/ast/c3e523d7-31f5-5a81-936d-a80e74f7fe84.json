@@ -1,0 +1,66 @@
+{
+  "id": "c3e523d7-31f5-5a81-936d-a80e74f7fe84",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mpcmdrun_download_arbitrary_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mpcmdrun.exe"
+      ],
+      "raw_values": [
+        "MpCmdRun.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mpcmdrun.exe"
+      ],
+      "raw_values": [
+        "*\\\\MpCmdRun.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "mpcmdrun.exe",
+        "downloadfile",
+        "url"
+      ],
+      "raw_values": [
+        "*MpCmdRun.exe*",
+        "*DownloadFile*",
+        "*url*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "microsoft malware protection command line utility"
+      ],
+      "raw_values": [
+        "Microsoft Malware Protection Command Line Utility"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"MpCmdRun.exe\" or process.executable:\"*\\\\MpCmdRun.exe\" or process.command_line:\"*MpCmdRun.exe*\" or process.pe.description:\"Microsoft Malware Protection Command Line Utility\") and (process.command_line:\"*DownloadFile*\" and process.command_line:\"*url*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mpcmdrun_download_arbitrary_file.eql",
+  "metadata": {}
+}

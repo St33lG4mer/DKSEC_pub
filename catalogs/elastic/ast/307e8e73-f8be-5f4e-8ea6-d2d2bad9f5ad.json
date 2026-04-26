@@ -1,0 +1,27 @@
+{
+  "id": "307e8e73-f8be-5f4e-8ea6-d2d2bad9f5ad",
+  "catalog": "elastic",
+  "name": "Potential Network Sweep Detected",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [],
+  "raw_query": "event.action:(network_flow or flow_started) and destination.port:(21 or 22 or 23 or 25 or 139 or 445 or 3389 or 5985 or 5986) and\nsource.ip:(10.0.0.0/8 or 172.16.0.0/12 or 192.168.0.0/16)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/network/discovery_potential_network_sweep_detected.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Network",
+      "Tactic: Discovery",
+      "Tactic: Reconnaissance",
+      "Use Case: Network Security Monitoring",
+      "Data Source: PAN-OS",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

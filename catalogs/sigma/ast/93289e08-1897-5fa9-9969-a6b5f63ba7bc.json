@@ -1,0 +1,53 @@
+{
+  "id": "93289e08-1897-5fa9-9969-a6b5f63ba7bc",
+  "catalog": "sigma",
+  "name": "file_event_win_cscript_wscript_dropper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "wscript.exe",
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "programdata",
+        ".jse",
+        ".vbe",
+        ".js",
+        ".vba",
+        ".vbs"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "C:\\\\ProgramData*",
+        "*.jse",
+        "*.vbe",
+        "*.js",
+        "*.vba",
+        "*.vbs"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\wscript.exe\", \"*\\\\cscript.exe\")) and (file.path like~ (\"C:\\\\Users\\\\*\", \"C:\\\\ProgramData*\")) and (file.path like~ (\"*.jse\", \"*.vbe\", \"*.js\", \"*.vba\", \"*.vbs\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_cscript_wscript_dropper.eql",
+  "metadata": {}
+}

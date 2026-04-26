@@ -1,0 +1,51 @@
+{
+  "id": "5cc65b60-f309-5c79-ae73-a1aca79afe98",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2023_34362_moveit_transfer_exploitation_activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "w3wp.exe"
+      ],
+      "raw_values": [
+        "*\\\\w3wp.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "moveitdmz pool"
+      ],
+      "raw_values": [
+        "*moveitdmz pool*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csc.exe"
+      ],
+      "raw_values": [
+        "*\\\\csc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\w3wp.exe\" and process.parent.command_line:\"*moveitdmz pool*\" and process.executable:\"*\\\\csc.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-34362-MOVEit-Transfer-Exploit/proc_creation_win_exploit_cve_2023_34362_moveit_transfer_exploitation_activity.eql",
+  "metadata": {}
+}

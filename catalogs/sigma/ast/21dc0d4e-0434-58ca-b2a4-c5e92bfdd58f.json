@@ -1,0 +1,53 @@
+{
+  "id": "21dc0d4e-0434-58ca-b2a4-c5e92bfdd58f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_icacls_deny",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "icacls.exe"
+      ],
+      "raw_values": [
+        "iCACLS.EXE"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "icacls.exe"
+      ],
+      "raw_values": [
+        "*\\\\icacls.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "deny",
+        "s-1-1-0:"
+      ],
+      "raw_values": [
+        "*/deny*",
+        "*S-1-1-0:*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"iCACLS.EXE\" or process.executable:\"*\\\\icacls.exe\") and (process.command_line:\"*/deny*\" and process.command_line:\"*S-1-1-0:*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_icacls_deny.eql",
+  "metadata": {}
+}

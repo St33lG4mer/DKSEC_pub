@@ -1,0 +1,77 @@
+{
+  "id": "7bd85028-ff18-5382-aaaa-045a0e784ac9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_schtasks_one_time_only_midnight_task",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "wscript",
+        "vbscript",
+        "cscript",
+        "wmic",
+        "wmic.exe",
+        "regsvr32.exe",
+        "powershell"
+      ],
+      "raw_values": [
+        "*wscript*",
+        "*vbscript*",
+        "*cscript*",
+        "*wmic *",
+        "*wmic.exe*",
+        "*regsvr32.exe*",
+        "*powershell*",
+        "*\\\\AppData\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "once",
+        "00:00"
+      ],
+      "raw_values": [
+        "*once*",
+        "*00:00*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe*\" or process.pe.original_file_name:\"schtasks.exe\") and (process.command_line like~ (\"*wscript*\", \"*vbscript*\", \"*cscript*\", \"*wmic *\", \"*wmic.exe*\", \"*regsvr32.exe*\", \"*powershell*\", \"*\\\\AppData\\\\*\")) and (process.command_line:\"*once*\" and process.command_line:\"*00:00*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_schtasks_one_time_only_midnight_task.eql",
+  "metadata": {}
+}

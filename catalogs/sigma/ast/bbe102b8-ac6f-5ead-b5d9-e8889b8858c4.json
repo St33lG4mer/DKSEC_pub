@@ -1,0 +1,29 @@
+{
+  "id": "bbe102b8-ac6f-5ead-b5d9-e8889b8858c4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_defaultpack_uncommon_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "defaultpack.exe"
+      ],
+      "raw_values": [
+        "*\\\\DefaultPack.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\DefaultPack.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_defaultpack_uncommon_child_process.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "701e39f6-ca29-596b-a03a-be02b7c02b57",
+  "catalog": "elastic",
+  "name": "Microsoft Graph Request Email Access by Unusual User and Client",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:azure.graphactivitylogs\n    and azure.graphactivitylogs.properties.app_id:*\n    and azure.graphactivitylogs.result_signature:200\n    and azure.graphactivitylogs.properties.c_idtyp:user\n    and azure.graphactivitylogs.properties.client_auth_method:0\n    and http.request.method:(DELETE or GET or PATCH or POST or PUT)\n    and (\n        (\n            url.path:(/v1.0/me/*cc or /v1.0/users/*)\n            and (\n                url.path:((*inbox* or *mail* or *messages*) and not *mailboxSettings*)\n                or azure.graphactivitylogs.properties.requestUri:(*inbox* or *mail* or *messages*)\n            )\n        )\n        or azure.graphactivitylogs.properties.scopes:(Mail.Read or Mail.ReadWrite or Mail.Send)\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/collection_graph_email_access_by_unusual_public_client_via_graph.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Email",
+      "Data Source: Azure",
+      "Data Source: Microsoft Graph",
+      "Data Source: Microsoft Graph Activity Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "f7cae49c-e7ac-5c01-92a6-3ee259316ed2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_mavinject_process_injection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "injectrunning"
+      ],
+      "raw_values": [
+        "* /INJECTRUNNING *"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "appvclient.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\AppVClient.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"* /INJECTRUNNING *\" and (not process.parent.executable:\"C:\\\\Windows\\\\System32\\\\AppVClient.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_mavinject_process_injection.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "a16ce94c-5f65-5a7d-8a2d-0ad85ff95293",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_nircmd_as_system",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "runassystem"
+      ],
+      "raw_values": [
+        "* runassystem *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"* runassystem *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_nircmd_as_system.eql",
+  "metadata": {}
+}

@@ -1,0 +1,51 @@
+{
+  "id": "01541599-0d6b-5ce9-86ac-81c1e2babbfc",
+  "catalog": "sigma",
+  "name": "win_system_susp_dhcp_config",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "1033"
+      ],
+      "raw_values": [
+        "1033"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-dhcp-server"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-DHCP-Server"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (event.code:\"1033\" and winlog.provider_name:\"Microsoft-Windows-DHCP-Server\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/microsoft_windows_dhcp_server/win_system_susp_dhcp_config.eql",
+  "metadata": {}
+}

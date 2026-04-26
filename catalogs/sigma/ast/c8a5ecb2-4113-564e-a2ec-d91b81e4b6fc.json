@@ -1,0 +1,40 @@
+{
+  "id": "c8a5ecb2-4113-564e-a2ec-d91b81e4b6fc",
+  "catalog": "sigma",
+  "name": "proc_creation_win_nltest_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "nltest.exe"
+      ],
+      "raw_values": [
+        "*\\\\nltest.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "nltestrk.exe"
+      ],
+      "raw_values": [
+        "nltestrk.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\nltest.exe\" or process.pe.original_file_name:\"nltestrk.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_nltest_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,61 @@
+{
+  "id": "8d393a70-51e7-5a75-9add-a3be6eacc5a7",
+  "catalog": "elastic",
+  "name": "GitHub Actions Unusual Bot Push to Repository",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "github.audit"
+      ],
+      "raw_values": [
+        "github.audit"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "git.push"
+      ],
+      "raw_values": [
+        "git.push"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": ":",
+      "values": [
+        "github-actions[bot]"
+      ],
+      "raw_values": [
+        "github-actions[bot]"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"github.audit\" and\n    event.action: \"git.push\" and\n    user.name: \"github-actions[bot]\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/github/initial_access_github_actions_bot_first_push_to_repo.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Persistence",
+      "Data Source: Github",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

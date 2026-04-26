@@ -1,0 +1,181 @@
+{
+  "id": "885845c0-6afe-520e-8153-38a274b04c0d",
+  "catalog": "elastic",
+  "name": "Suspicious macOS MS Office Child Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "microsoft word",
+        "microsoft outlook",
+        "microsoft excel",
+        "microsoft powerpoint",
+        "microsoft onenote",
+        "todesk_service",
+        "pisupervisor",
+        "lan-cache",
+        "jumpcloud-agent",
+        "networksetup"
+      ],
+      "raw_values": [
+        "Microsoft Word",
+        "Microsoft Outlook",
+        "Microsoft Excel",
+        "Microsoft PowerPoint",
+        "Microsoft OneNote",
+        "/Applications/ToDesk.app/Contents/MacOS/ToDesk_Service",
+        "/usr/local/Privacy-i/PISupervisor",
+        "/Library/Addigy/lan-cache",
+        "/Library/Elastic/Agent/*",
+        "/opt/jc/bin/jumpcloud-agent",
+        "/usr/sbin/networksetup"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "curl",
+        "nscurl",
+        "bash",
+        "osascript",
+        "python",
+        "perl",
+        "mktemp",
+        "chmod",
+        "php",
+        "nohup",
+        "openssl",
+        "plutil",
+        "plistbuddy",
+        "xattr",
+        "sqlite3",
+        "funzip",
+        "popen"
+      ],
+      "raw_values": [
+        "curl",
+        "nscurl",
+        "bash",
+        "sh",
+        "osascript",
+        "python*",
+        "perl*",
+        "mktemp",
+        "chmod",
+        "php",
+        "nohup",
+        "openssl",
+        "plutil",
+        "PlistBuddy",
+        "xattr",
+        "sqlite3",
+        "funzip",
+        "popen"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "productversion",
+        "hw.model",
+        "ioreg",
+        "productname",
+        "productuservisibleversion",
+        "productbuildversion",
+        "microsoft error reporting",
+        "open -a safari",
+        "defaults read",
+        "sysctl hw.model",
+        "ioreg -d2 -c ioplatformexpertdevice",
+        "ps aux | grep 'todesk_desktop' | grep -v grep",
+        ".zoterointegrationpipe"
+      ],
+      "raw_values": [
+        "ProductVersion",
+        "hw.model",
+        "ioreg",
+        "ProductName",
+        "ProductUserVisibleVersion",
+        "ProductBuildVersion",
+        "/Library/Application Support/Microsoft/MERP*/Microsoft Error Reporting.app/Contents/MacOS/Microsoft Error Reporting",
+        "open -a Safari *",
+        "defaults read *",
+        "sysctl hw.model*",
+        "ioreg -d2 -c IOPlatformExpertDevice *",
+        "ps aux | grep 'ToDesk_Desktop' | grep -v grep",
+        "PIPE=\\",
+        "*$CFFIXED_USER_HOME/.zoteroIntegrationPipe*"
+      ]
+    },
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": ":",
+      "values": [
+        "/applications/todesk.app/contents/macos/todesk_service",
+        "/usr/local/privacy-i/pisupervisor",
+        "/library/addigy/auditor",
+        "/library/elastic/agent/",
+        "/opt/jc/bin/jumpcloud-agent",
+        "/usr/sbin/networksetup"
+      ],
+      "raw_values": [
+        "/Applications/ToDesk.app/Contents/MacOS/ToDesk_Service",
+        "/usr/local/Privacy-i/PISupervisor",
+        "/Library/Addigy/auditor",
+        "/Library/Elastic/Agent/*",
+        "/opt/jc/bin/jumpcloud-agent",
+        "/usr/sbin/networksetup"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    }
+  ],
+  "raw_query": "process where event.action == \"exec\" and host.os.type == \"macos\" and\n    process.parent.name: (\n      \"Microsoft Word\",\n      \"Microsoft Outlook\",\n      \"Microsoft Excel\",\n      \"Microsoft PowerPoint\",\n      \"Microsoft OneNote\"\n    ) and\n  process.name : (\n    \"curl\",\n    \"nscurl\",\n    \"bash\",\n    \"sh\",\n    \"osascript\",\n    \"python*\",\n    \"perl*\",\n    \"mktemp\",\n    \"chmod\",\n    \"php\",\n    \"nohup\",\n    \"openssl\",\n    \"plutil\",\n    \"PlistBuddy\",\n    \"xattr\",\n    \"mktemp\",\n    \"sqlite3\",\n    \"funzip\",\n    \"popen\"\n  ) and\n\n  // Filter FPs related to product version discovery and Office error reporting behavior\n  not process.args:\n    (\n      \"ProductVersion\",\n      \"hw.model\",\n      \"ioreg\",\n      \"ProductName\",\n      \"ProductUserVisibleVersion\",\n      \"ProductBuildVersion\",\n      \"/Library/Application Support/Microsoft/MERP*/Microsoft Error Reporting.app/Contents/MacOS/Microsoft Error Reporting\",\n      \"open -a Safari *\",\n      \"defaults read *\",\n      \"sysctl hw.model*\",\n      \"ioreg -d2 -c IOPlatformExpertDevice *\",\n      \"ps aux | grep 'ToDesk_Desktop' | grep -v grep\",\n      \"PIPE=\\\"$CFFIXED_USER_HOME/.zoteroIntegrationPipe*\"\n    ) and\n\n   not process.parent.executable :\n        (\n          \"/Applications/ToDesk.app/Contents/MacOS/ToDesk_Service\",\n          \"/usr/local/Privacy-i/PISupervisor\",\n          \"/Library/Addigy/lan-cache\",\n          \"/Library/Elastic/Agent/*\",\n          \"/opt/jc/bin/jumpcloud-agent\",\n          \"/usr/sbin/networksetup\"\n        ) and\n   not (process.name : \"sh\" and process.command_line : \"*$CFFIXED_USER_HOME/.zoteroIntegrationPipe*\") and\n\n   not process.Ext.effective_parent.executable : (\n        \"/Applications/ToDesk.app/Contents/MacOS/ToDesk_Service\",\n        \"/usr/local/Privacy-i/PISupervisor\",\n        \"/Library/Addigy/auditor\",\n        \"/Library/Elastic/Agent/*\",\n        \"/opt/jc/bin/jumpcloud-agent\",\n        \"/usr/sbin/networksetup\"\n      )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/initial_access_suspicious_mac_ms_office_child_process.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

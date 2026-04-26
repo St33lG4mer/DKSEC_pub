@@ -1,0 +1,82 @@
+{
+  "id": "de01b526-5308-5baf-87f5-376e71fd7f8a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_file_permission_modifications",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cacls.exe",
+        "icacls.exe",
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "*\\\\cacls.exe",
+        "*\\\\icacls.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "grant",
+        "setowner",
+        "inheritance:r",
+        "microsoft vs code"
+      ],
+      "raw_values": [
+        "*/grant*",
+        "*/setowner*",
+        "*/inheritance:r*",
+        "*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft VS Code*",
+        "*:\\\\Program Files\\\\Microsoft VS Code*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "attrib.exe",
+        "takeown.exe"
+      ],
+      "raw_values": [
+        "*\\\\attrib.exe",
+        "*\\\\takeown.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "reset",
+        "grant :r",
+        "s-1-5-19:f"
+      ],
+      "raw_values": [
+        "*-r*",
+        "*ICACLS C:\\\\ProgramData\\\\dynatrace\\\\gateway\\\\config\\\\connectivity.history /reset",
+        "*ICACLS C:\\\\ProgramData\\\\dynatrace\\\\gateway\\\\config\\\\config.properties /grant :r *",
+        "*S-1-5-19:F*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable like~ (\"*\\\\cacls.exe\", \"*\\\\icacls.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\")) and (process.command_line like~ (\"*/grant*\", \"*/setowner*\", \"*/inheritance:r*\"))) or (process.executable:\"*\\\\attrib.exe\" and process.command_line:\"*-r*\") or process.executable:\"*\\\\takeown.exe\") and (not (process.command_line:\"*ICACLS C:\\\\ProgramData\\\\dynatrace\\\\gateway\\\\config\\\\connectivity.history /reset\" or (process.command_line:\"*ICACLS C:\\\\ProgramData\\\\dynatrace\\\\gateway\\\\config\\\\config.properties /grant :r *\" and process.command_line:\"*S-1-5-19:F*\") or (process.command_line like~ (\"*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft VS Code*\", \"*:\\\\Program Files\\\\Microsoft VS Code*\")) or (process.command_line like~ (\"*:\\\\Program Files (x86)\\\\Avira*\", \"*:\\\\Program Files\\\\Avira*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_file_permission_modifications.eql",
+  "metadata": {}
+}

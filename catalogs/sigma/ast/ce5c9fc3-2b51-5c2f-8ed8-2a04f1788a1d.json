@@ -1,0 +1,31 @@
+{
+  "id": "ce5c9fc3-2b51-5c2f-8ed8-2a04f1788a1d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_pubprn",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "pubprn.vbs",
+        "script:"
+      ],
+      "raw_values": [
+        "*\\\\pubprn.vbs*",
+        "*script:*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\pubprn.vbs*\" and process.command_line:\"*script:*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_pubprn.eql",
+  "metadata": {}
+}

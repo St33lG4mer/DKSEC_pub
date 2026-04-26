@@ -1,0 +1,33 @@
+{
+  "id": "c5ed1b8d-b519-55ec-959e-2db43c1f3ae7",
+  "catalog": "sigma",
+  "name": "file_event_win_hktl_krbrelay_remote_ioc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "sam.tmp",
+        "sec.tmp",
+        "sys.tmp"
+      ],
+      "raw_values": [
+        "*:\\\\windows\\\\temp\\\\sam.tmp",
+        "*:\\\\windows\\\\temp\\\\sec.tmp",
+        "*:\\\\windows\\\\temp\\\\sys.tmp"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*:\\\\windows\\\\temp\\\\sam.tmp\", \"*:\\\\windows\\\\temp\\\\sec.tmp\", \"*:\\\\windows\\\\temp\\\\sys.tmp\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_hktl_krbrelay_remote_ioc.eql",
+  "metadata": {}
+}

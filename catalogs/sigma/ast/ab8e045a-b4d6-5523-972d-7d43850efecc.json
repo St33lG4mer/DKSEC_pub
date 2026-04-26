@@ -1,0 +1,42 @@
+{
+  "id": "ab8e045a-b4d6-5523-972d-7d43850efecc",
+  "catalog": "sigma",
+  "name": "image_load_side_load_windows_defender",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mpcmdrun.exe",
+        "nissrv.exe"
+      ],
+      "raw_values": [
+        "*\\\\MpCmdRun.exe",
+        "*\\\\NisSrv.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mpclient.dll"
+      ],
+      "raw_values": [
+        "*\\\\mpclient.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\mpclient.dll\" and (process.executable like~ (\"*\\\\MpCmdRun.exe\", \"*\\\\NisSrv.exe\"))) and (not (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Windows Defender\\\\*\", \"C:\\\\Program Files\\\\Microsoft Security Client\\\\*\", \"C:\\\\Program Files\\\\Windows Defender\\\\*\", \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\Platform\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_windows_defender.eql",
+  "metadata": {}
+}

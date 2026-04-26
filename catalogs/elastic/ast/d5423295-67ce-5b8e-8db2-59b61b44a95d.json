@@ -1,0 +1,26 @@
+{
+  "id": "d5423295-67ce-5b8e-8db2-59b61b44a95d",
+  "catalog": "elastic",
+  "name": "High Mean of RDP Session Duration",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/lmd/lateral_movement_ml_high_mean_rdp_session_duration.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Lateral Movement Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

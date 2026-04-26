@@ -1,0 +1,25 @@
+{
+  "id": "1d66a90f-e849-5cb0-8e84-2643f4d80ecd",
+  "catalog": "elastic",
+  "name": "M365 SharePoint Malware File Detected",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:SharePoint and event.code:SharePointFileOperation and event.action:FileMalwareDetected\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/lateral_movement_sharepoint_malware_uploaded.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

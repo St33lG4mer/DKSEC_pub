@@ -1,0 +1,29 @@
+{
+  "id": "27bf3f70-d43d-5bd0-8870-39e9fc2ae404",
+  "catalog": "sigma",
+  "name": "win_capi2_acquire_certificate_private_key",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-capi2/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CAPI2/Operational"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CAPI2/Operational\" and event.code:\"70\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/capi2/win_capi2_acquire_certificate_private_key.eql",
+  "metadata": {}
+}

@@ -1,0 +1,78 @@
+{
+  "id": "3a4d2c8a-b4c0-550e-b020-aec0ed06d8a0",
+  "catalog": "elastic",
+  "name": "Dumping Account Hashes via Built-In Commands",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "shadowhashdata",
+        "-dump"
+      ],
+      "raw_values": [
+        "ShadowHashData",
+        "-dump"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "defaults",
+        "mkpassdb"
+      ],
+      "raw_values": [
+        "defaults",
+        "mkpassdb"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.name in (\"defaults\", \"mkpassdb\") and process.args like~ (\"ShadowHashData\", \"-dump\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/credential_access_dumping_hashes_bi_cmds.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

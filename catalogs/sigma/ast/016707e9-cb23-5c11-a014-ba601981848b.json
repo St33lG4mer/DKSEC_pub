@@ -1,0 +1,66 @@
+{
+  "id": "016707e9-cb23-5c11-a014-ba601981848b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_set_service_disabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "disabled",
+        "manual"
+      ],
+      "raw_values": [
+        "*Disabled*",
+        "*Manual*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "set-service",
+        "-startuptype"
+      ],
+      "raw_values": [
+        "*Set-Service*",
+        "*-StartupType*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\powershell.exe\" or process.pe.original_file_name:\"PowerShell.EXE\") and ((process.command_line:\"*Set-Service*\" and process.command_line:\"*-StartupType*\") and (process.command_line like~ (\"*Disabled*\", \"*Manual*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_set_service_disabled.eql",
+  "metadata": {}
+}

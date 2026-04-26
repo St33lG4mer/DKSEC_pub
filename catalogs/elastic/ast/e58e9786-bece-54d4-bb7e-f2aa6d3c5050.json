@@ -1,0 +1,73 @@
+{
+  "id": "e58e9786-bece-54d4-bb7e-f2aa6d3c5050",
+  "catalog": "elastic",
+  "name": "AWS CloudTrail Log Deleted",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "cloudtrail.amazonaws.com"
+      ],
+      "raw_values": [
+        "cloudtrail.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "deletetrail"
+      ],
+      "raw_values": [
+        "DeleteTrail"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"cloudtrail.amazonaws.com\"\n    and event.action: \"DeleteTrail\"\n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_cloudtrail_logging_deleted.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Cloudtrail",
+      "Use Case: Log Auditing",
+      "Resources: Investigation Guide",
+      "Tactic: Defense Evasion"
+    ]
+  }
+}

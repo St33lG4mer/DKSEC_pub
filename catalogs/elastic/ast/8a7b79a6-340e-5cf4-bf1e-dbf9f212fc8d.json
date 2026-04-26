@@ -1,0 +1,38 @@
+{
+  "id": "8a7b79a6-340e-5cf4-bf1e-dbf9f212fc8d",
+  "catalog": "elastic",
+  "name": "Azure VNet Firewall Policy Deleted",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.network/firewallpolicies/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.NETWORK/FIREWALLPOLICIES/DELETE"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.NETWORK/FIREWALLPOLICIES/DELETE\" and event.outcome:(Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/defense_evasion_network_firewall_policy_deletion.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Network Security Monitoring",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

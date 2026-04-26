@@ -1,0 +1,72 @@
+{
+  "id": "4d4feb3d-b940-56d9-a5af-337af7f650c8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_curl_fileupload",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--form",
+        "--upload-file",
+        "--data",
+        "--data-",
+        "localhost",
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "* --form*",
+        "* --upload-file *",
+        "* --data *",
+        "* --data-*",
+        "*://localhost*",
+        "*://127.0.0.1*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "the curl executable"
+      ],
+      "raw_values": [
+        "The curl executable"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "s']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\s-[FTd]\\\\s']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\curl.exe\" or process.pe.product:\"The curl executable\") and ((process.command_line like~ (\"* --form*\", \"* --upload-file *\", \"* --data *\", \"* --data-*\")) or process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['\\\\s-[FTd]\\\\s']), flags=set())\")) and (not (process.command_line like~ (\"*://localhost*\", \"*://127.0.0.1*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_curl_fileupload.eql",
+  "metadata": {}
+}

@@ -1,0 +1,89 @@
+{
+  "id": "24ec1030-8b0a-5dbc-b73b-93a1e02668ea",
+  "catalog": "elastic",
+  "name": "Entra ID Service Principal Federated Credential Authentication by Unusual Client",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.signinlogs.properties.app_owner_tenant_id",
+      "raw_field": "azure.signinlogs.properties.app_owner_tenant_id",
+      "operator": ":",
+      "values": [
+        "f8cdef31-a31e-4b4a-93e4-5f571e91255a",
+        "72f988bf-86f1-41af-91ab-2d7cd011db47"
+      ],
+      "raw_values": [
+        "f8cdef31-a31e-4b4a-93e4-5f571e91255a",
+        "72f988bf-86f1-41af-91ab-2d7cd011db47"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.signinlogs"
+      ],
+      "raw_values": [
+        "azure.signinlogs"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.category",
+      "raw_field": "azure.signinlogs.category",
+      "operator": ":",
+      "values": [
+        "serviceprincipalsigninlogs"
+      ],
+      "raw_values": [
+        "ServicePrincipalSignInLogs"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.properties.client_credential_type",
+      "raw_field": "azure.signinlogs.properties.client_credential_type",
+      "operator": ":",
+      "values": [
+        "federatedidentitycredential"
+      ],
+      "raw_values": [
+        "federatedIdentityCredential"
+      ]
+    },
+    {
+      "field": "azure.signinlogs.result_signature",
+      "raw_field": "azure.signinlogs.result_signature",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "SUCCESS"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"azure.signinlogs\"\n    and azure.signinlogs.category: \"ServicePrincipalSignInLogs\"\n    and azure.signinlogs.properties.client_credential_type: \"federatedIdentityCredential\"\n    and azure.signinlogs.result_signature: \"SUCCESS\"\n    and azure.signinlogs.properties.app_id: *\n    and not azure.signinlogs.properties.app_owner_tenant_id: (\n        \"f8cdef31-a31e-4b4a-93e4-5f571e91255a\" or\n        \"72f988bf-86f1-41af-91ab-2d7cd011db47\"\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_federated_login_by_unusual_client.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Sign-In Logs",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Initial Access",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

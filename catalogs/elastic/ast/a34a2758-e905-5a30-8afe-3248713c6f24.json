@@ -1,0 +1,60 @@
+{
+  "id": "a34a2758-e905-5a30-8afe-3248713c6f24",
+  "catalog": "elastic",
+  "name": "Suspicious .NET Reflection via PowerShell",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "[system.reflection.assembly]::load",
+        "[reflection.assembly]::load",
+        "assembly.load(",
+        "frombase64string",
+        "gzipstream",
+        "deflatestream",
+        "io.compression",
+        "memorystream",
+        "downloaddata",
+        "webclient",
+        "readallbytes"
+      ],
+      "raw_values": [
+        "[System.Reflection.Assembly]::Load",
+        "[Reflection.Assembly]::Load",
+        "Assembly.Load(",
+        "FromBase64String",
+        "GzipStream",
+        "DeflateStream",
+        "IO.Compression",
+        "MemoryStream",
+        "DownloadData",
+        "WebClient",
+        "ReadAllBytes"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n(\n  powershell.file.script_block_text : (\n    \"[System.Reflection.Assembly]::Load\" or\n    \"[Reflection.Assembly]::Load\" or\n    \"Assembly.Load(\"\n  ) and\n  powershell.file.script_block_text : (\n      \"FromBase64String\" or \"GzipStream\" or \"DeflateStream\" or \"IO.Compression\" or\n      \"MemoryStream\" or \"DownloadData\" or \"WebClient\" or \"ReadAllBytes\"\n  )\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_posh_assembly_load.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

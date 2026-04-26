@@ -1,0 +1,55 @@
+{
+  "id": "a3bb2334-a69c-527a-ab3c-df6a57f21098",
+  "catalog": "sigma",
+  "name": "proc_creation_win_iexpress_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "iexpress.exe"
+      ],
+      "raw_values": [
+        "*\\\\iexpress.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "makecab.exe",
+        "iexpress.exe"
+      ],
+      "raw_values": [
+        "*\\\\makecab.exe",
+        "*\\\\iexpress.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "makecab.exe",
+        "iexpress.exe"
+      ],
+      "raw_values": [
+        "makecab.exe",
+        "IEXPRESS.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\iexpress.exe\" and (process.executable:\"*\\\\makecab.exe\" or process.pe.original_file_name:\"makecab.exe\")) or ((process.executable:\"*\\\\iexpress.exe\" or process.pe.original_file_name:\"IEXPRESS.exe\") and process.command_line:\"* /n *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_iexpress_execution.eql",
+  "metadata": {}
+}

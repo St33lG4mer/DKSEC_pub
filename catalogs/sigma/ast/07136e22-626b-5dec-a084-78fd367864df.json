@@ -1,0 +1,59 @@
+{
+  "id": "07136e22-626b-5dec-a084-78fd367864df",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_mustangpanda",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "create",
+        "%windir:~-3,1%%public:~-9,1%"
+      ],
+      "raw_values": [
+        "*Temp\\\\wtask.exe /create*",
+        "*%windir:~-3,1%%PUBLIC:~-9,1%*",
+        "*/tn \\",
+        ", "
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "e:vbscript",
+        ".txt"
+      ],
+      "raw_values": [
+        "*/E:vbscript*",
+        "*C:\\\\Users\\\\*",
+        "*.txt*",
+        "*/F*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winwsh.exe"
+      ],
+      "raw_values": [
+        "*Temp\\\\winwsh.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.command_line like~ (\"*Temp\\\\wtask.exe /create*\", \"*%windir:~-3,1%%PUBLIC:~-9,1%*\", \"*/tn \\\"Security Script *\", \"*%windir:~-1,1%*\")) or (process.command_line:\"*/E:vbscript*\" and process.command_line:\"*C:\\\\Users\\\\*\" and process.command_line:\"*.txt*\" and process.command_line:\"*/F*\")) or process.executable:\"*Temp\\\\winwsh.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/TA/MustangPanda/proc_creation_win_apt_mustangpanda.eql",
+  "metadata": {}
+}

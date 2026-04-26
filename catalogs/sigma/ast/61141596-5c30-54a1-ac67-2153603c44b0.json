@@ -1,0 +1,137 @@
+{
+  "id": "61141596-5c30-54a1-ac67-2153603c44b0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_webshell_hacking",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "caddy.exe",
+        "httpd.exe",
+        "nginx.exe",
+        "php-cgi.exe",
+        "w3wp.exe",
+        "ws_tomcatservice.exe",
+        "java.exe",
+        "javaw.exe",
+        "-tomcat-",
+        "tomcat"
+      ],
+      "raw_values": [
+        "*\\\\caddy.exe",
+        "*\\\\httpd.exe",
+        "*\\\\nginx.exe",
+        "*\\\\php-cgi.exe",
+        "*\\\\w3wp.exe",
+        "*\\\\ws_tomcatservice.exe",
+        "*\\\\java.exe",
+        "*\\\\javaw.exe",
+        "*-tomcat-*",
+        "*\\\\tomcat*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "catalina.jar",
+        "catalina_home",
+        "-decode",
+        "-nop",
+        "-w hidden",
+        "decode",
+        "ticket:",
+        "sekurlsa",
+        ".dmp full",
+        ".downloadfile(",
+        ".downloadstring(",
+        "frombase64string",
+        "process call create",
+        "reg save",
+        "priv"
+      ],
+      "raw_values": [
+        "*catalina.jar*",
+        "*CATALINA_HOME*",
+        "* -decode *",
+        "* -NoP *",
+        "* -W Hidden *",
+        "* /decode *",
+        "* /ticket:*",
+        "* sekurlsa*",
+        "*.dmp full*",
+        "*.downloadfile(*",
+        "*.downloadstring(*",
+        "*FromBase64String*",
+        "*process call create*",
+        "*reg save *",
+        "*whoami /priv*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "ntdsutil.exe",
+        "ldifde.exe",
+        "adfind.exe",
+        "procdump.exe",
+        "nanodump.exe",
+        "vssadmin.exe",
+        "fsutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\ntdsutil.exe",
+        "*\\\\ldifde.exe",
+        "*\\\\adfind.exe",
+        "*\\\\procdump.exe",
+        "*\\\\Nanodump.exe",
+        "*\\\\vssadmin.exe",
+        "*\\\\fsutil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rundll32",
+        "comsvcs",
+        "-hp",
+        "net",
+        "user",
+        "add",
+        "localgroup",
+        "administrators"
+      ],
+      "raw_values": [
+        "*rundll32*",
+        "*comsvcs*",
+        "* -hp*",
+        "* a *",
+        "* -m*",
+        "*net*",
+        "* user *",
+        "* /add*",
+        "* localgroup *",
+        "* administrators *",
+        "*/add*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\caddy.exe\", \"*\\\\httpd.exe\", \"*\\\\nginx.exe\", \"*\\\\php-cgi.exe\", \"*\\\\w3wp.exe\", \"*\\\\ws_tomcatservice.exe\")) or ((process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and (process.parent.executable like~ (\"*-tomcat-*\", \"*\\\\tomcat*\"))) or ((process.parent.executable like~ (\"*\\\\java.exe\", \"*\\\\javaw.exe\")) and (process.command_line like~ (\"*catalina.jar*\", \"*CATALINA_HOME*\")))) and ((process.command_line:\"*rundll32*\" and process.command_line:\"*comsvcs*\") or (process.command_line:\"* -hp*\" and process.command_line:\"* a *\" and process.command_line:\"* -m*\") or (process.command_line:\"*net*\" and process.command_line:\"* user *\" and process.command_line:\"* /add*\") or (process.command_line:\"*net*\" and process.command_line:\"* localgroup *\" and process.command_line:\"* administrators *\" and process.command_line:\"*/add*\") or (process.executable like~ (\"*\\\\ntdsutil.exe\", \"*\\\\ldifde.exe\", \"*\\\\adfind.exe\", \"*\\\\procdump.exe\", \"*\\\\Nanodump.exe\", \"*\\\\vssadmin.exe\", \"*\\\\fsutil.exe\")) or (process.command_line like~ (\"* -decode *\", \"* -NoP *\", \"* -W Hidden *\", \"* /decode *\", \"* /ticket:*\", \"* sekurlsa*\", \"*.dmp full*\", \"*.downloadfile(*\", \"*.downloadstring(*\", \"*FromBase64String*\", \"*process call create*\", \"*reg save *\", \"*whoami /priv*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_webshell_hacking.eql",
+  "metadata": {}
+}

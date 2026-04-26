@@ -1,0 +1,92 @@
+{
+  "id": "368479fe-4ae9-501f-bbb5-05b67c78eeb9",
+  "catalog": "sigma",
+  "name": "file_event_win_office_macro_files_downloaded",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "runtimebroker.exe",
+        "outlook.exe",
+        "thunderbird.exe",
+        "brave.exe",
+        "chrome.exe",
+        "firefox.exe",
+        "iexplore.exe",
+        "maxthon.exe",
+        "microsoftedge.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "opera.exe",
+        "safari.exe",
+        "seamonkey.exe",
+        "vivaldi.exe",
+        "whale.exe"
+      ],
+      "raw_values": [
+        "*\\\\RuntimeBroker.exe",
+        "*\\\\outlook.exe",
+        "*\\\\thunderbird.exe",
+        "*\\\\brave.exe",
+        "*\\\\chrome.exe",
+        "*\\\\firefox.exe",
+        "*\\\\iexplore.exe",
+        "*\\\\maxthon.exe",
+        "*\\\\MicrosoftEdge.exe",
+        "*\\\\msedge.exe",
+        "*\\\\msedgewebview2.exe",
+        "*\\\\opera.exe",
+        "*\\\\safari.exe",
+        "*\\\\seamonkey.exe",
+        "*\\\\vivaldi.exe",
+        "*\\\\whale.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".docm",
+        ".dotm",
+        ".xlsm",
+        ".xltm",
+        ".potm",
+        ".pptm",
+        ".docm:zone",
+        ".dotm:zone",
+        ".xlsm:zone",
+        ".xltm:zone",
+        ".potm:zone",
+        ".pptm:zone"
+      ],
+      "raw_values": [
+        "*.docm",
+        "*.dotm",
+        "*.xlsm",
+        "*.xltm",
+        "*.potm",
+        "*.pptm",
+        "*.docm:Zone*",
+        "*.dotm:Zone*",
+        "*.xlsm:Zone*",
+        "*.xltm:Zone*",
+        "*.potm:Zone*",
+        "*.pptm:Zone*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\RuntimeBroker.exe\", \"*\\\\outlook.exe\", \"*\\\\thunderbird.exe\", \"*\\\\brave.exe\", \"*\\\\chrome.exe\", \"*\\\\firefox.exe\", \"*\\\\iexplore.exe\", \"*\\\\maxthon.exe\", \"*\\\\MicrosoftEdge.exe\", \"*\\\\msedge.exe\", \"*\\\\msedgewebview2.exe\", \"*\\\\opera.exe\", \"*\\\\safari.exe\", \"*\\\\seamonkey.exe\", \"*\\\\vivaldi.exe\", \"*\\\\whale.exe\")) and ((file.path like~ (\"*.docm\", \"*.dotm\", \"*.xlsm\", \"*.xltm\", \"*.potm\", \"*.pptm\")) or (file.path like~ (\"*.docm:Zone*\", \"*.dotm:Zone*\", \"*.xlsm:Zone*\", \"*.xltm:Zone*\", \"*.potm:Zone*\", \"*.pptm:Zone*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_macro_files_downloaded.eql",
+  "metadata": {}
+}

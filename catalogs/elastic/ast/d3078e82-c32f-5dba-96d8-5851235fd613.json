@@ -1,0 +1,146 @@
+{
+  "id": "d3078e82-c32f-5dba-96d8-5851235fd613",
+  "catalog": "elastic",
+  "name": "Ingress Transfer via Windows BITS",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "exe",
+        "zip",
+        "rar",
+        "bat",
+        "dll",
+        "ps1",
+        "vbs",
+        "vbe",
+        "wsh",
+        "wsf",
+        "sct",
+        "jse",
+        "hta",
+        "pif",
+        "scr",
+        "cmd",
+        "cpl"
+      ],
+      "raw_values": [
+        "exe",
+        "zip",
+        "rar",
+        "bat",
+        "dll",
+        "ps1",
+        "vbs",
+        "vbe",
+        "wsh",
+        "wsf",
+        "sct",
+        "js",
+        "jse",
+        "hta",
+        "pif",
+        "scr",
+        "cmd",
+        "cpl"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "wct*.tmp",
+        "rdrservicesupdater*.exe",
+        "acroservicesupdater*.exe",
+        "update-*.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\*",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp*\\\\wct*.tmp",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Adobe\\\\ARM\\\\*\\\\RdrServicesUpdater*.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Adobe\\\\ARM\\\\*\\\\AcroServicesUpdater*.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Docker Desktop Installer\\\\update-*.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "rename"
+      ],
+      "raw_values": [
+        "rename"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "svchost.exe"
+      ]
+    },
+    {
+      "field": "file.ext.original.name",
+      "raw_field": "file.Ext.original.name",
+      "operator": ":",
+      "values": [
+        "bit*.tmp"
+      ],
+      "raw_values": [
+        "BIT*.tmp"
+      ]
+    },
+    {
+      "field": "file.ext.header_bytes",
+      "raw_field": "file.Ext.header_bytes",
+      "operator": ":",
+      "values": [
+        "4d5a"
+      ],
+      "raw_values": [
+        "4d5a*"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and event.action == \"rename\" and\n  process.name : \"svchost.exe\" and file.Ext.original.name : \"BIT*.tmp\" and \n  (file.extension : (\"exe\", \"zip\", \"rar\", \"bat\", \"dll\", \"ps1\", \"vbs\", \"vbe\", \"wsh\", \"wsf\", \"sct\", \"js\", \"jse\", \"hta\", \"pif\", \"scr\", \"cmd\", \"cpl\") or\n   file.Ext.header_bytes : \"4d5a*\") and \n \n  /* noisy paths, for hunting purposes you can use the same query without the following exclusions */\n  not file.path : (\"?:\\\\Program Files\\\\*\", \"?:\\\\Program Files (x86)\\\\*\", \"?:\\\\Windows\\\\*\", \"?:\\\\ProgramData\\\\*\\\\*\") and \n \n  /* lot of third party SW use BITS to download executables with a long file name */\n  not length(file.name) > 30 and\n  not file.path : (\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp*\\\\wct*.tmp\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Adobe\\\\ARM\\\\*\\\\RdrServicesUpdater*.exe\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Adobe\\\\ARM\\\\*\\\\AcroServicesUpdater*.exe\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Docker Desktop Installer\\\\update-*.exe\"\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/command_and_control_ingress_transfer_bits.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

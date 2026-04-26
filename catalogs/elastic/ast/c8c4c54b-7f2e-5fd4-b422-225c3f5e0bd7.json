@@ -1,0 +1,76 @@
+{
+  "id": "c8c4c54b-7f2e-5fd4-b422-225c3f5e0bd7",
+  "catalog": "elastic",
+  "name": "Potential Successful SSH Brute Force Attack",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "ssh_login",
+        "user_login"
+      ],
+      "raw_values": [
+        "ssh_login",
+        "user_login"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "failure",
+        "success"
+      ],
+      "raw_values": [
+        "failure",
+        "success"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "0.0.0.0"
+      ],
+      "raw_values": [
+        "0.0.0.0",
+        "::"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, source.ip, user.name with maxspan=15s\n  [authentication where host.os.type == \"linux\" and event.action  in (\"ssh_login\", \"user_login\") and\n   event.outcome == \"failure\" and source.ip != null and source.ip != \"0.0.0.0\" and source.ip != \"::\" ] with runs=25\n  [authentication where host.os.type == \"linux\" and event.action  in (\"ssh_login\", \"user_login\") and\n   event.outcome == \"success\" and source.ip != null and source.ip != \"0.0.0.0\" and source.ip != \"::\" ]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_potential_successful_linux_ssh_bruteforce.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

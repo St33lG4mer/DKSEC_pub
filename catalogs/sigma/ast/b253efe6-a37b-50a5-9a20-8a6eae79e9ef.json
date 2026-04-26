@@ -1,0 +1,42 @@
+{
+  "id": "b253efe6-a37b-50a5-9a20-8a6eae79e9ef",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_exchange_aspx_write",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".aspx",
+        ".asp"
+      ],
+      "raw_values": [
+        "*.aspx",
+        "*.asp"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msexchangemailboxreplication.exe"
+      ],
+      "raw_values": [
+        "*\\\\MSExchangeMailboxReplication.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\MSExchangeMailboxReplication.exe\" and (file.path like~ (\"*.aspx\", \"*.asp\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_exchange_aspx_write.eql",
+  "metadata": {}
+}

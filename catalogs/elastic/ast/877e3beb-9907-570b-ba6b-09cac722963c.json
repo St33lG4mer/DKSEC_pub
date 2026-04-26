@@ -1,0 +1,87 @@
+{
+  "id": "877e3beb-9907-570b-ba6b-09cac722963c",
+  "catalog": "elastic",
+  "name": "Execution from a Removable Media with Network Connection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.code_signature.status",
+      "raw_field": "process.code_signature.status",
+      "operator": ":",
+      "values": [
+        "errorexpired",
+        "errorcode_endpoint"
+      ],
+      "raw_values": [
+        "errorExpired",
+        "errorCode_endpoint*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "start",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "start",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "process.ext.device.bus_type",
+      "raw_field": "process.Ext.device.bus_type",
+      "operator": ":",
+      "values": [
+        "usb"
+      ],
+      "raw_values": [
+        "usb"
+      ]
+    },
+    {
+      "field": "process.ext.device.product_id",
+      "raw_field": "process.Ext.device.product_id",
+      "operator": ":",
+      "values": [
+        "usb"
+      ],
+      "raw_values": [
+        "USB *"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=5m\n [process where host.os.type == \"windows\" and event.action == \"start\" and\n\n  /* Direct Exec from USB */\n  (process.Ext.device.bus_type : \"usb\" or process.Ext.device.product_id : \"USB *\") and\n  (process.code_signature.trusted == false or process.code_signature.exists == false) and\n\n  not process.code_signature.status : (\"errorExpired\", \"errorCode_endpoint*\")]\n [network where host.os.type == \"windows\" and event.action == \"connection_attempted\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/initial_access_execution_from_removable_media.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "8d350207-0209-5702-bc70-00c0a1f01ed7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_mklink_shadow_copies_access_symlink",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "mklink",
+        "harddiskvolumeshadowcopy"
+      ],
+      "raw_values": [
+        "*mklink*",
+        "*HarddiskVolumeShadowCopy*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*mklink*\" and process.command_line:\"*HarddiskVolumeShadowCopy*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_mklink_shadow_copies_access_symlink.eql",
+  "metadata": {}
+}

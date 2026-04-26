@@ -1,0 +1,84 @@
+{
+  "id": "33960744-a61e-5f2d-b336-525e49b19101",
+  "catalog": "elastic",
+  "name": "AWS IAM Login Profile Added for Root",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "createloginprofile"
+      ],
+      "raw_values": [
+        "CreateLoginProfile"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": "==",
+      "values": [
+        "root"
+      ],
+      "raw_values": [
+        "Root"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "any where data_stream.dataset == \"aws.cloudtrail\"\n   and event.provider == \"iam.amazonaws.com\"\n   and event.action == \"CreateLoginProfile\"\n   and aws.cloudtrail.user_identity.type == \"Root\"\n   and event.outcome == \"success\"\n   and not stringContains(aws.cloudtrail.request_parameters, \"userName=\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_iam_create_login_profile_for_root.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS IAM",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

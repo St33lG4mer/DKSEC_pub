@@ -1,0 +1,72 @@
+{
+  "id": "7cbad679-cec2-5f6c-a169-51d90ff732d7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_lazarus_group_activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "~reg_sam.save",
+        "1q2w3e4r@#$@#$@#$",
+        "-hp1q2w3e4",
+        ".dat data03 10000 -p",
+        ".bin,",
+        ".tmp,",
+        ".dat,",
+        ".io,",
+        ".ini,",
+        ".db,"
+      ],
+      "raw_values": [
+        "*reg.exe save hklm\\\\sam %temp%\\\\~reg_sam.save*",
+        "*1q2w3e4r@#$@#$@#$*",
+        "* -hp1q2w3e4 *",
+        "*.dat data03 10000 -p *",
+        "*C:\\\\ProgramData\\\\*",
+        "*C:\\\\RECYCLER\\\\*",
+        "*.bin,*",
+        "*.tmp,*",
+        "*.dat,*",
+        "*.io,*",
+        "*.ini,*",
+        "*.db,*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "netstat -aon | find",
+        "esta",
+        ".dat",
+        "-p 0x",
+        "rundll32"
+      ],
+      "raw_values": [
+        "*netstat -aon | find *",
+        "*ESTA*",
+        "* > %temp%\\\\~*",
+        "*.255 10 C:\\\\ProgramData\\\\IBM\\\\*",
+        "*.DAT*",
+        "* /c *",
+        "* -p 0x*",
+        "*rundll32 *",
+        "*C:\\\\ProgramData\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*reg.exe save hklm\\\\sam %temp%\\\\~reg_sam.save*\", \"*1q2w3e4r@#$@#$@#$*\", \"* -hp1q2w3e4 *\", \"*.dat data03 10000 -p *\")) or (process.command_line:\"*netstat -aon | find *\" and process.command_line:\"*ESTA*\" and process.command_line:\"* > %temp%\\\\~*\") or (process.command_line:\"*.255 10 C:\\\\ProgramData\\\\IBM\\\\*\" and process.command_line:\"*.DAT*\") or ((process.command_line:\"* /c *\" and process.command_line:\"* -p 0x*\") and (process.command_line like~ (\"*C:\\\\ProgramData\\\\*\", \"*C:\\\\RECYCLER\\\\*\"))) or ((process.command_line:\"*rundll32 *\" and process.command_line:\"*C:\\\\ProgramData\\\\*\") and (process.command_line like~ (\"*.bin,*\", \"*.tmp,*\", \"*.dat,*\", \"*.io,*\", \"*.ini,*\", \"*.db,*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/TA/Lazarus/proc_creation_win_apt_lazarus_group_activity.eql",
+  "metadata": {}
+}

@@ -1,0 +1,61 @@
+{
+  "id": "293e4630-9818-5bc3-94f9-ad3c07dcafc2",
+  "catalog": "elastic",
+  "name": "Multiple Machine Learning Alerts by Influencer Field",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "influencers.influencer_field_values",
+      "raw_field": "influencers.influencer_field_values",
+      "operator": "in",
+      "values": [
+        "root",
+        "system"
+      ],
+      "raw_values": [
+        "root",
+        "SYSTEM"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.type",
+      "raw_field": "kibana.alert.rule.type",
+      "operator": "==",
+      "values": [
+        "machine_learning"
+      ],
+      "raw_values": [
+        "machine_learning"
+      ]
+    },
+    {
+      "field": "kibana.alert.rule.tags",
+      "raw_field": "kibana.alert.rule.tags",
+      "operator": ":",
+      "values": [
+        "rule type: higher-order rule"
+      ],
+      "raw_values": [
+        "Rule Type: Higher-Order Rule"
+      ]
+    }
+  ],
+  "raw_query": "from .alerts-security.*\n| where kibana.alert.rule.type == \"machine_learning\" and\n  not KQL(\"\"\"kibana.alert.rule.tags : \"Rule Type: Higher-Order Rule\" \"\"\")\n| stats Esql.count_distinct_job_id = COUNT_DISTINCT(job_id),\n        Esql.job_id_values = VALUES(job_id),\n        Esql.rule_name_values = VALUES(kibana.alert.rule.name),\n        Esql.influencer_field_values = VALUES(influencers.influencer_field_values),\n        Esql.influencer_field_name = VALUES(influencers.influencer_field_name) by influencers.influencer_field_values, process.name, host.name\n| where Esql.count_distinct_job_id >= 3 and not influencers.influencer_field_values in (\"root\", \"SYSTEM\")\n| KEEP influencers.influencer_field_values, process.name, host.name, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/multiple_machine_learning_jobs_by_entity.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide",
+      "Rule Type: Machine Learning"
+    ]
+  }
+}

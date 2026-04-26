@@ -1,0 +1,88 @@
+{
+  "id": "9137dd35-d6b5-53b3-b4a9-85ce77f864c0",
+  "catalog": "sigma",
+  "name": "win_security_iso_mount",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        "\\\\device\\\\cdrom0\\\\autorun.ico",
+        "\\\\device\\\\cdrom0\\\\setup.exe",
+        "\\\\device\\\\cdrom0\\\\setup64.exe"
+      ],
+      "raw_values": [
+        "\\\\Device\\\\CdRom0\\\\autorun.ico",
+        "\\\\Device\\\\CdRom0\\\\setup.exe",
+        "\\\\Device\\\\CdRom0\\\\setup64.exe"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4663"
+      ],
+      "raw_values": [
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectserver",
+      "raw_field": "winlog.event_data.ObjectServer",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "file"
+      ],
+      "raw_values": [
+        "File"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\device\\\\cdrom"
+      ],
+      "raw_values": [
+        "\\\\Device\\\\CdRom*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4663\" and winlog.event_data.ObjectServer:\"Security\" and winlog.event_data.ObjectType:\"File\" and winlog.event_data.ObjectName:\"\\\\Device\\\\CdRom*\") and (not (winlog.event_data.ObjectName like~ (\"\\\\Device\\\\CdRom0\\\\autorun.ico\", \"\\\\Device\\\\CdRom0\\\\setup.exe\", \"\\\\Device\\\\CdRom0\\\\setup64.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_iso_mount.eql",
+  "metadata": {}
+}

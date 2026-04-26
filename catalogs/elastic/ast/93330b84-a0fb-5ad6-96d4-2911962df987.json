@@ -1,0 +1,112 @@
+{
+  "id": "93330b84-a0fb-5ad6-96d4-2911962df987",
+  "catalog": "elastic",
+  "name": "Persistence via Suspicious Launch Agent or Launch Daemon",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "python",
+        "osascript",
+        "bash",
+        "zsh",
+        "curl",
+        "nscurl",
+        "wget",
+        "java"
+      ],
+      "raw_values": [
+        "python*",
+        "osascript",
+        "bash",
+        "zsh",
+        "sh",
+        "curl",
+        "nscurl",
+        "wget",
+        "java"
+      ]
+    },
+    {
+      "field": "process.code_signature.signing_id",
+      "raw_field": "process.code_signature.signing_id",
+      "operator": "in",
+      "values": [
+        "com.apple.vim",
+        "com.apple.cat",
+        "com.apple.cfprefsd",
+        "com.jetbrains.toolbox",
+        "com.apple.pico",
+        "com.apple.shove",
+        "com.sublimetext.4",
+        "com.apple.ditto"
+      ],
+      "raw_values": [
+        "com.apple.vim",
+        "com.apple.cat",
+        "com.apple.cfprefsd",
+        "com.jetbrains.toolbox",
+        "com.apple.pico",
+        "com.apple.shove",
+        "com.sublimetext.4",
+        "com.apple.ditto"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": "==",
+      "values": [
+        "plist"
+      ],
+      "raw_values": [
+        "plist"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.type != \"deletion\" and \n  file.extension == \"plist\" and\n  file.path like (\"/Library/LaunchAgents/*\", \"/Library/LaunchDaemons/*\", \n                  \"/Users/*/Library/LaunchAgents/*\", \"/System/Library/LaunchAgents/*\",\n                  \"/System/Library/LaunchDaemons/*\") and\n  (process.executable like (\"/private/tmp/*\", \"/private/var/root/Library/*\", \"/var/tmp/*\", \n                            \"/tmp/*\", \"/var/folders/*\", \"/Users/Shared/*\", \"/var/root/*\",\n                            \"/Library/WebServer/*\", \"/Library/Graphics/*\", \"/Library/Fonts/*\") or\n   process.name like~ (\"python*\", \"osascript\", \"bash\", \"zsh\", \"sh\", \"curl\", \"nscurl\", \"wget\", \"java\")) and\n  not process.executable like (\"/System/*\", \"/Library/PrivilegedHelperTools/*\") and\n  not (process.code_signature.signing_id in (\"com.apple.vim\", \"com.apple.cat\", \"com.apple.cfprefsd\",\n                                            \"com.jetbrains.toolbox\", \"com.apple.pico\", \"com.apple.shove\",\n                                            \"com.sublimetext.4\", \"com.apple.ditto\") and process.code_signature.trusted == true)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_suspicious_launch_agent_or_launch_daemon.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

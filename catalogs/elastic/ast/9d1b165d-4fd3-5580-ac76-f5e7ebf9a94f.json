@@ -1,0 +1,40 @@
+{
+  "id": "9d1b165d-4fd3-5580-ac76-f5e7ebf9a94f",
+  "catalog": "elastic",
+  "name": "AWS Bedrock Guardrails Detected Multiple Policy Violations Within a Single Blocked Request",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "gen_ai.policy.action",
+      "raw_field": "gen_ai.policy.action",
+      "operator": "==",
+      "values": [
+        "blocked"
+      ],
+      "raw_values": [
+        "BLOCKED"
+      ]
+    }
+  ],
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Expand multi-value policy action field\n| mv_expand gen_ai.policy.action\n\n// Filter for policy-blocked requests\n| where gen_ai.policy.action == \"BLOCKED\"\n\n// count number of policy matches per request (multi-valued)\n| eval Esql.ml_policy_violations_mv_count = mv_count(gen_ai.policy.name)\n\n// Filter for requests with more than one policy match\n| where Esql.ml_policy_violations_mv_count > 1\n\n// keep relevant fields\n| keep\n  gen_ai.policy.action,\n  Esql.ml_policy_violations_mv_count,\n  user.id,\n  gen_ai.request.model.id,\n  cloud.account.id\n\n// Aggregate requests with multiple violations\n| stats\n    Esql.ml_policy_violations_total_unique_requests_count = count(*)\n  by\n    Esql.ml_policy_violations_mv_count,\n    user.id,\n    gen_ai.request.model.id,\n    cloud.account.id\n\n// sort by number of unique requests\n| sort Esql.ml_policy_violations_total_unique_requests_count desc\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws_bedrock/aws_bedrock_guardrails_multiple_violations_in_single_request.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: LLM",
+      "Data Source: AWS Bedrock",
+      "Data Source: AWS S3",
+      "Resources: Investigation Guide",
+      "Use Case: Policy Violation",
+      "Mitre Atlas: T0051",
+      "Mitre Atlas: T0054"
+    ]
+  }
+}

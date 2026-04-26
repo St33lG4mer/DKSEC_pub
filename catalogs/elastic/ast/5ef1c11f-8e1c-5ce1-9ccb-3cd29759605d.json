@@ -1,0 +1,116 @@
+{
+  "id": "5ef1c11f-8e1c-5ce1-9ccb-3cd29759605d",
+  "catalog": "elastic",
+  "name": "Kubernetes Pod Created with a Sensitive hostPath Volume",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create",
+        "update",
+        "patch"
+      ],
+      "raw_values": [
+        "create",
+        "update",
+        "patch"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.requestobject.spec.volumes.hostpath.path",
+      "raw_field": "kubernetes.audit.requestObject.spec.volumes.hostPath.path",
+      "operator": ":",
+      "values": [
+        "/proc",
+        "/root",
+        "/var",
+        "/var/run",
+        "/var/run/docker.sock",
+        "/var/run/crio/crio.sock",
+        "/var/run/cri-dockerd.sock",
+        "/var/lib/kubelet",
+        "/var/lib/kubelet/pki",
+        "/var/lib/docker/overlay2",
+        "/etc",
+        "/etc/kubernetes",
+        "/etc/kubernetes/manifests",
+        "/etc/kubernetes/pki",
+        "/home/admin"
+      ],
+      "raw_values": [
+        "/",
+        "/proc",
+        "/root",
+        "/var",
+        "/var/run",
+        "/var/run/docker.sock",
+        "/var/run/crio/crio.sock",
+        "/var/run/cri-dockerd.sock",
+        "/var/lib/kubelet",
+        "/var/lib/kubelet/pki",
+        "/var/lib/docker/overlay2",
+        "/etc",
+        "/etc/kubernetes",
+        "/etc/kubernetes/manifests",
+        "/etc/kubernetes/pki",
+        "/home/admin"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "pods"
+      ],
+      "raw_values": [
+        "pods"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset : \"kubernetes.audit_logs\" and kubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.objectRef.resource:\"pods\" and kubernetes.audit.verb:(\"create\" or \"update\" or \"patch\") and\nkubernetes.audit.requestObject.spec.volumes.hostPath.path: (\n  \"/\" or \"/proc\" or \"/root\" or \"/var\" or \"/var/run\" or \"/var/run/docker.sock\" or \"/var/run/crio/crio.sock\" or\n  \"/var/run/cri-dockerd.sock\" or \"/var/lib/kubelet\" or \"/var/lib/kubelet/pki\" or \"/var/lib/docker/overlay2\" or\n  \"/etc\" or \"/etc/kubernetes\" or \"/etc/kubernetes/manifests\" or \"/etc/kubernetes/pki\" or \"/home/admin\"\n) and\nnot kubernetes.audit.requestObject.spec.containers.image: (\n  docker.elastic.co/beats/elastic-agent* or *elastic/elastic-agent* or docker.elastic.co/elastic-agent/elastic-agent* or\n  *elastic-agent\\:dev* or *cloudops-azure-devops-agent* or rancher/mirrored-longhornio-longhorn-instance-manager* or\n  quay.io/calico* or ghcr.io/aquasecurity* or rancher/system-agent* or rancher/mirrored-longhornio-csi-node-driver-registrar* or\n  rancher/mirrored-longhornio-livenessprobe* or quay.io/prometheus/node-exporter* or *eks/observability/cloudwatch-agent* or\n  amazon/aws-efs-csi-driver* or public.ecr.aws/eks-distro/kubernetes-csi* or quay.io/cilium/cilium* or openebs/node-disk-manager* or\n  openebs/cstor-csi-driver* or registry.k8s.io/sig-storage/csi-node-driver-registrar* or *.amazonaws.com/eks/csi-node-driver-registrar* or\n  *.amazonaws.com/eks/livenessprobe* or *.amazonaws.com/eks/aws-efs-csi-driver* or mcr.microsoft.com/oss/v2/kubernetes-csi* or\n  rancher/mirrored-cilium-cilium* or jenkins/inbound-agent* or gcr.io/datadoghq/agent* or rancher/mirrored-longhornio-longhorn-share-manager* or\n  */sysdig/*\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/privilege_escalation_pod_created_with_sensitive_hostpath_volume.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

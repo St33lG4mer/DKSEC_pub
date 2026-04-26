@@ -1,0 +1,51 @@
+{
+  "id": "889eac82-7060-598e-924f-560eb41b50da",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msiexec_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\msiexec.exe"
+      ],
+      "raw_values": [
+        "\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "*.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\msiexec.exe\" or process.pe.original_file_name:\"\\\\msiexec.exe\") and process.command_line like~ (\"* -z *\", \"* /z *\", \"* –z *\", \"* —z *\", \"* ―z *\") and process.command_line:\"*.dll*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msiexec_dll.eql",
+  "metadata": {}
+}

@@ -1,0 +1,40 @@
+{
+  "id": "10c0d752-b29a-55f8-aa7f-91ac2aab4f0a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_csc_compilation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csc.exe"
+      ],
+      "raw_values": [
+        "*\\\\csc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "fullpaths @"
+      ],
+      "raw_values": [
+        "*/noconfig /fullpaths @*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\csc.exe\" and process.command_line:\"*/noconfig /fullpaths @*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_csc_compilation.eql",
+  "metadata": {}
+}

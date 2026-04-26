@@ -1,0 +1,145 @@
+{
+  "id": "24292a22-f5fc-5c67-ac1a-ab527b7366cf",
+  "catalog": "elastic",
+  "name": "Potential Backdoor Execution Through PAM_EXEC",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "dash",
+        "bash",
+        "zsh",
+        "perl",
+        "python",
+        "php",
+        "ruby",
+        "lua"
+      ],
+      "raw_values": [
+        "sh",
+        "dash",
+        "bash",
+        "zsh",
+        "perl*",
+        "python*",
+        "php*",
+        "ruby*",
+        "lua*",
+        "/bin/sh",
+        "/bin/dash",
+        "/bin/bash",
+        "/bin/zsh",
+        "/bin/perl*",
+        "/bin/python*",
+        "/bin/php*",
+        "/bin/ruby*",
+        "/bin/lua*",
+        "/usr/bin/sh",
+        "/usr/bin/dash",
+        "/usr/bin/bash",
+        "/usr/bin/zsh",
+        "/usr/bin/perl*",
+        "/usr/bin/python*",
+        "/usr/bin/php*",
+        "/usr/bin/ruby*",
+        "/usr/bin/lua*",
+        "/usr/local/bin/sh",
+        "/usr/local/bin/dash",
+        "/usr/local/bin/bash",
+        "/usr/local/bin/zsh",
+        "/usr/local/bin/perl*",
+        "/usr/local/bin/python*",
+        "/usr/local/bin/php*",
+        "/usr/local/bin/ruby*",
+        "/usr/local/bin/lua*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "ssh",
+        "sshd"
+      ],
+      "raw_values": [
+        "ssh",
+        "sshd"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "ssh",
+        "sshd"
+      ],
+      "raw_values": [
+        "ssh",
+        "sshd"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change",
+        "start"
+      ],
+      "raw_values": [
+        "change",
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "session_id_change",
+        "exec"
+      ],
+      "raw_values": [
+        "session_id_change",
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=3s\n  [process where host.os.type == \"linux\" and event.type == \"change\" and event.action == \"session_id_change\" and process.name in (\"ssh\", \"sshd\")]\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.parent.name in (\"ssh\", \"sshd\") and\n   process.args_count == 2 and process.args like (\n     \"sh\", \"dash\", \"bash\", \"zsh\",\n     \"perl*\", \"python*\", \"php*\", \"ruby*\", \"lua*\",\n\n     \"/bin/sh\", \"/bin/dash\", \"/bin/bash\", \"/bin/zsh\",\n     \"/bin/perl*\", \"/bin/python*\", \"/bin/php*\", \"/bin/ruby*\", \"/bin/lua*\",\n\n     \"/usr/bin/sh\", \"/usr/bin/dash\", \"/usr/bin/bash\", \"/usr/bin/zsh\",\n     \"/usr/bin/perl*\", \"/usr/bin/python*\", \"/usr/bin/php*\", \"/usr/bin/ruby*\", \"/usr/bin/lua*\",\n\n     \"/usr/local/bin/sh\", \"/usr/local/bin/dash\", \"/usr/local/bin/bash\", \"/usr/local/bin/zsh\",\n     \"/usr/local/bin/perl*\", \"/usr/local/bin/python*\", \"/usr/local/bin/php*\", \"/usr/local/bin/ruby*\", \"/usr/local/bin/lua*\"\n   ) and (\n     process.name like \".*\" or\n     process.executable like (\n       \"/tmp/*\", \"/var/tmp/*\", \"/dev/shm/*\", \"./*\", \"/boot/*\", \"/sys/*\", \"/lost+found/*\", \"/media/*\", \"/proc/*\", \"/bin/*\", \"/usr/bin/*\",\n       \"/sbin/*\", \"/usr/sbin/*\", \"/lib/*\", \"/lib64/*\", \"/usr/lib/*\", \"/usr/lib64/*\", \"/opt/*\", \"/var/lib/*\", \"/run/*\", \"/var/backups/*\",\n       \"/var/log/*\", \"/var/mail/*\", \"/var/spool/*\"\n     )\n   )\n  ]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_pluggable_authentication_module_pam_exec_backdoor_exec.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

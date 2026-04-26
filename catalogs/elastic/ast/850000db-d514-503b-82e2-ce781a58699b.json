@@ -1,0 +1,91 @@
+{
+  "id": "850000db-d514-503b-82e2-ce781a58699b",
+  "catalog": "elastic",
+  "name": "Google Workspace Object Copied to External Drive with App Consent",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "google_workspace.drive.file.type",
+      "raw_field": "google_workspace.drive.file.type",
+      "operator": ":",
+      "values": [
+        "script",
+        "form",
+        "spreadsheet",
+        "document"
+      ],
+      "raw_values": [
+        "script",
+        "form",
+        "spreadsheet",
+        "document"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "google_workspace.drive",
+        "google_workspace.token"
+      ],
+      "raw_values": [
+        "google_workspace.drive",
+        "google_workspace.token"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "copy",
+        "authorize"
+      ],
+      "raw_values": [
+        "copy",
+        "authorize"
+      ]
+    },
+    {
+      "field": "google_workspace.drive.copy_type",
+      "raw_field": "google_workspace.drive.copy_type",
+      "operator": "==",
+      "values": [
+        "external"
+      ],
+      "raw_values": [
+        "external"
+      ]
+    },
+    {
+      "field": "google_workspace.token.client.id",
+      "raw_field": "google_workspace.token.client.id",
+      "operator": ":",
+      "values": [
+        "apps.googleusercontent.com"
+      ],
+      "raw_values": [
+        "*apps.googleusercontent.com"
+      ]
+    }
+  ],
+  "raw_query": "sequence by source.user.email with maxspan=3m\n[file where data_stream.dataset == \"google_workspace.drive\" and event.action == \"copy\" and\n\n    /* Should only match if the object lives in a Drive that is external to the user's GWS organization */\n    google_workspace.drive.owner_is_team_drive == \"false\" and google_workspace.drive.copy_type == \"external\" and\n\n    /* Google Script, Forms, Sheets and Document can have container-bound scripts */\n    google_workspace.drive.file.type: (\"script\", \"form\", \"spreadsheet\", \"document\")]\n\n[any where data_stream.dataset == \"google_workspace.token\" and event.action == \"authorize\" and\n\n    /* Ensures application ID references custom app in Google Workspace and not GCP */\n    google_workspace.token.client.id : \"*apps.googleusercontent.com\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/initial_access_object_copied_to_external_drive_with_app_consent.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

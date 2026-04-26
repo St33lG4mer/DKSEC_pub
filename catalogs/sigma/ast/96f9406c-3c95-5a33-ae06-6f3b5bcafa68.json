@@ -1,0 +1,42 @@
+{
+  "id": "96f9406c-3c95-5a33-ae06-6f3b5bcafa68",
+  "catalog": "sigma",
+  "name": "file_event_win_sysinternals_livekd_driver",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "livekd.exe",
+        "livek64.exe"
+      ],
+      "raw_values": [
+        "*\\\\livekd.exe",
+        "*\\\\livek64.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "livekdd.sys"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\drivers\\\\LiveKdD.SYS"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\System32\\\\drivers\\\\LiveKdD.SYS\" and (process.executable like~ (\"*\\\\livekd.exe\", \"*\\\\livek64.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_sysinternals_livekd_driver.eql",
+  "metadata": {}
+}

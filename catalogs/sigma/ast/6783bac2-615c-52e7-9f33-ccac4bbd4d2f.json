@@ -1,0 +1,46 @@
+{
+  "id": "6783bac2-615c-52e7-9f33-ccac4bbd4d2f",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_natural_language",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\stemmerdllpathoverride",
+        "\\\\wbdllpathoverride",
+        "\\\\stemmerclass",
+        "\\\\wbreakerclass"
+      ],
+      "raw_values": [
+        "*\\\\StemmerDLLPathOverride*",
+        "*\\\\WBDLLPathOverride*",
+        "*\\\\StemmerClass*",
+        "*\\\\WBreakerClass*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\currentcontrolset\\\\control\\\\contentindex\\\\language\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\ContentIndex\\\\Language\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\ContentIndex\\\\Language\\\\*\" and (registry.path like~ (\"*\\\\StemmerDLLPathOverride*\", \"*\\\\WBDLLPathOverride*\", \"*\\\\StemmerClass*\", \"*\\\\WBreakerClass*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_natural_language.eql",
+  "metadata": {}
+}

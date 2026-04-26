@@ -1,0 +1,53 @@
+{
+  "id": "9b2d114f-b384-5a49-8161-074dadb165d9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_setupapi_installhinfsection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "runonce.exe"
+      ],
+      "raw_values": [
+        "*\\\\runonce.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "setupapi.dll",
+        "installhinfsection"
+      ],
+      "raw_values": [
+        "*setupapi.dll*",
+        "*InstallHinfSection*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\runonce.exe\" and process.parent.executable:\"*\\\\rundll32.exe\" and (process.parent.command_line:\"*setupapi.dll*\" and process.parent.command_line:\"*InstallHinfSection*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_setupapi_installhinfsection.eql",
+  "metadata": {}
+}

@@ -1,0 +1,64 @@
+{
+  "id": "2372764d-1ddf-589b-8246-386b01324988",
+  "catalog": "elastic",
+  "name": "AWS S3 Bucket Enumeration or Brute Force",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.error_code",
+      "raw_field": "aws.cloudtrail.error_code",
+      "operator": ":",
+      "values": [
+        "accessdenied"
+      ],
+      "raw_values": [
+        "AccessDenied"
+      ]
+    }
+  ],
+  "raw_query": "  data_stream.dataset: \"aws.cloudtrail\" and \n  event.provider : \"s3.amazonaws.com\" and \n  aws.cloudtrail.error_code : \"AccessDenied\" and \n  tls.client.server_name : * \n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_aws_s3_bucket_enumeration_or_brute_force.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS S3",
+      "Resources: Investigation Guide",
+      "Use Case: Log Auditing",
+      "Tactic: Impact",
+      "Tactic: Discovery",
+      "Tactic: Collection"
+    ]
+  }
+}

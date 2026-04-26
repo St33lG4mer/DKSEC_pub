@@ -1,0 +1,81 @@
+{
+  "id": "576144ca-48d6-519d-9fd8-1faa0eb65ed7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_office_exec_from_trusted_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "explorer.exe",
+        "dopus.exe"
+      ],
+      "raw_values": [
+        "*\\\\explorer.exe",
+        "*\\\\dopus.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "excel.exe",
+        "powerpnt.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\EXCEL.EXE",
+        "*\\\\POWERPNT.EXE",
+        "*\\\\WINWORD.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "excel.exe",
+        "powerpnt.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "Excel.exe",
+        "POWERPNT.EXE",
+        "WinWord.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "templates",
+        ".dotx",
+        ".xltx",
+        ".potx"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Templates*",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Word\\\\Startup\\\\*",
+        "*\\\\Microsoft Office\\\\root\\\\Templates\\\\*",
+        "*\\\\Microsoft Office\\\\Templates\\\\*",
+        "*.dotx",
+        "*.xltx",
+        "*.potx"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\explorer.exe\", \"*\\\\dopus.exe\")) and ((process.executable like~ (\"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.EXE\", \"*\\\\WINWORD.exe\")) or (process.pe.original_file_name like~ (\"Excel.exe\", \"POWERPNT.EXE\", \"WinWord.exe\"))) and (process.command_line like~ (\"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Templates*\", \"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Word\\\\Startup\\\\*\", \"*\\\\Microsoft Office\\\\root\\\\Templates\\\\*\", \"*\\\\Microsoft Office\\\\Templates\\\\*\"))) and (not (process.command_line like~ (\"*.dotx\", \"*.xltx\", \"*.potx\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_office_exec_from_trusted_locations.eql",
+  "metadata": {}
+}

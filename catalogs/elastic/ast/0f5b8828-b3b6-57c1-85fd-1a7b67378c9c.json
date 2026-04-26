@@ -1,0 +1,87 @@
+{
+  "id": "0f5b8828-b3b6-57c1-85fd-1a7b67378c9c",
+  "catalog": "elastic",
+  "name": "AWS RDS DB Instance Made Public",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "createdbinstance",
+        "createdbcluster"
+      ],
+      "raw_values": [
+        "CreateDBInstance",
+        "CreateDBCluster"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "rds.amazonaws.com"
+      ],
+      "raw_values": [
+        "rds.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modifydbinstance"
+      ],
+      "raw_values": [
+        "ModifyDBInstance"
+      ]
+    }
+  ],
+  "raw_query": "any where data_stream.dataset == \"aws.cloudtrail\"\n    and event.provider == \"rds.amazonaws.com\"\n    and event.outcome == \"success\"\n    and (\n        (event.action == \"ModifyDBInstance\" and stringContains(aws.cloudtrail.request_parameters, \"publiclyAccessible=true\"))\n        or\n        (event.action in (\"CreateDBInstance\", \"CreateDBCluster\") and stringContains(aws.cloudtrail.request_parameters, \"publiclyAccessible=true\"))\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_rds_instance_made_public.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS RDS",
+      "Resources: Investigation Guide",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion"
+    ]
+  }
+}

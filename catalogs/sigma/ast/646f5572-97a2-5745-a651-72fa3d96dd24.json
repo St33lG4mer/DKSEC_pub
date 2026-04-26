@@ -1,0 +1,51 @@
+{
+  "id": "646f5572-97a2-5745-a651-72fa3d96dd24",
+  "catalog": "sigma",
+  "name": "win_security_invoke_obfuscation_via_use_clip_services_security",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "(clipboard|i"
+      ],
+      "raw_values": [
+        "*(Clipboard|i*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and winlog.event_data.ServiceFileName:\"*(Clipboard|i*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_invoke_obfuscation_via_use_clip_services_security.eql",
+  "metadata": {}
+}

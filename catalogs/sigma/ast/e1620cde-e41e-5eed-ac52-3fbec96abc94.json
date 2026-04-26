@@ -1,0 +1,17 @@
+{
+  "id": "e1620cde-e41e-5eed-ac52-3fbec96abc94",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_homoglyph_filename",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [],
+  "raw_query": "any where (file.path like~ (\"*А*\", \"*В*\", \"*Е*\", \"*К*\", \"*М*\", \"*Н*\", \"*О*\", \"*Р*\", \"*С*\", \"*Т*\", \"*Х*\", \"*Ѕ*\", \"*І*\", \"*Ј*\", \"*Ү*\", \"*Ӏ*\", \"*Ԍ*\", \"*Ԛ*\", \"*Ԝ*\", \"*Α*\", \"*Β*\", \"*Ε*\", \"*Ζ*\", \"*Η*\", \"*Ι*\", \"*Κ*\", \"*Μ*\", \"*Ν*\", \"*Ο*\", \"*Ρ*\", \"*Τ*\", \"*Υ*\", \"*Χ*\")) or (file.path like~ (\"*а*\", \"*е*\", \"*о*\", \"*р*\", \"*с*\", \"*х*\", \"*ѕ*\", \"*і*\", \"*ӏ*\", \"*ј*\", \"*һ*\", \"*ԁ*\", \"*ԛ*\", \"*ԝ*\", \"*ο*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_homoglyph_filename.eql",
+  "metadata": {}
+}

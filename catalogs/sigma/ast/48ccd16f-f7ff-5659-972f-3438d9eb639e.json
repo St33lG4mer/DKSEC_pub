@@ -1,0 +1,42 @@
+{
+  "id": "48ccd16f-f7ff-5659-972f-3438d9eb639e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sysinternals_livekd_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "livekd.exe",
+        "livekd64.exe"
+      ],
+      "raw_values": [
+        "*\\\\livekd.exe",
+        "*\\\\livekd64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "livekd.exe"
+      ],
+      "raw_values": [
+        "livekd.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\livekd.exe\", \"*\\\\livekd64.exe\")) or process.pe.original_file_name:\"livekd.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sysinternals_livekd_execution.eql",
+  "metadata": {}
+}

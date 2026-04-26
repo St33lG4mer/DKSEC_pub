@@ -1,0 +1,57 @@
+{
+  "id": "e4284560-5b0d-54e1-82d9-3443d2b3a9d2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uac_bypass_idiagnostic_profile",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\DllHost.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "processid:{12c21ea7-2eb8-4b55-9249-ac243da8c666}"
+      ],
+      "raw_values": [
+        "* /Processid:{12C21EA7-2EB8-4B55-9249-AC243DA8C666}*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\DllHost.exe\" and process.parent.command_line:\"* /Processid:{12C21EA7-2EB8-4B55-9249-AC243DA8C666}*\" and (winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_idiagnostic_profile.eql",
+  "metadata": {}
+}

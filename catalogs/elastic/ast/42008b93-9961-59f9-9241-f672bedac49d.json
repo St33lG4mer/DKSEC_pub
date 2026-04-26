@@ -1,0 +1,35 @@
+{
+  "id": "42008b93-9961-59f9-9241-f672bedac49d",
+  "catalog": "elastic",
+  "name": "Web Application Suspicious Activity: sqlmap User Agent",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": ":",
+      "values": [
+        "sqlmap/1.3.11#stable (http://sqlmap.org)"
+      ],
+      "raw_values": [
+        "sqlmap/1.3.11#stable (http://sqlmap.org)"
+      ]
+    }
+  ],
+  "raw_query": "user_agent.original:\"sqlmap/1.3.11#stable (http://sqlmap.org)\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/apm/apm_sqlmap_user_agent.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: APM",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

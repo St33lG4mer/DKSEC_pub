@@ -1,0 +1,29 @@
+{
+  "id": "cc286701-9209-5709-9f74-9dcbb8b0163a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_silenttrinity_stager",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "st2stager"
+      ],
+      "raw_values": [
+        "*st2stager*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.pe.description:\"*st2stager*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_silenttrinity_stager.eql",
+  "metadata": {}
+}

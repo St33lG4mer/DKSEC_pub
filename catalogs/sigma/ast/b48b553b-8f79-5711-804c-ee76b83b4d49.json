@@ -1,0 +1,84 @@
+{
+  "id": "b48b553b-8f79-5711-804c-ee76b83b4d49",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_pikabot_rundll32_uncommon_extension",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "cscript.exe",
+        "mshta.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "regsvr32.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe",
+        "*\\\\cscript.exe",
+        "*\\\\mshta.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".cpl",
+        ".cpl,",
+        ".dll",
+        ".dll,",
+        ".inf",
+        ".inf,"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Installer\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*.cpl *",
+        "*.cpl,*",
+        "*.dll *",
+        "*.dll,*",
+        "*.inf *",
+        "*.inf,*",
+        "*.cpl",
+        "*.cpl\\",
+        ", ",
+        "",
+        "*.inf",
+        "*.inf\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\cmd.exe\", \"*\\\\cscript.exe\", \"*\\\\mshta.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\regsvr32.exe\", \"*\\\\wscript.exe\")) and process.executable:\"*\\\\rundll32.exe\" and (process.command_line like~ (\"*:\\\\ProgramData\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Installer\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\"))) and (not ((process.command_line like~ (\"*.cpl *\", \"*.cpl,*\", \"*.dll *\", \"*.dll,*\", \"*.inf *\", \"*.inf,*\")) or (process.command_line like~ (\"*.cpl\", \"*.cpl\\\"\", \"*.dll\", \"*.dll\\\"\", \"*.inf\", \"*.inf\\\"\", \"*.cpl'\", \"*.dll'\", \"*.inf'\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/Pikabot/proc_creation_win_malware_pikabot_rundll32_uncommon_extension.eql",
+  "metadata": {}
+}

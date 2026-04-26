@@ -1,0 +1,72 @@
+{
+  "id": "0811cfbb-8dd6-509d-bb5b-a20454cf26f1",
+  "catalog": "elastic",
+  "name": "Process Started with Executable Stack",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "system.syslog"
+      ],
+      "raw_values": [
+        "system.syslog"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "kernel"
+      ],
+      "raw_values": [
+        "kernel"
+      ]
+    },
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": ":",
+      "values": [
+        "started with executable stack"
+      ],
+      "raw_values": [
+        "started with executable stack"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:\"linux\" and data_stream.dataset:\"system.syslog\" and process.name:\"kernel\" and\nmessage:\"started with executable stack\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_executable_stack_execution.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: System",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

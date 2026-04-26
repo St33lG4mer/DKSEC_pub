@@ -1,0 +1,84 @@
+{
+  "id": "c111bf18-1e12-5bc7-aaf7-fb7192eff42e",
+  "catalog": "elastic",
+  "name": "DNS-over-HTTPS Enabled via Registry",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000001",
+        "secure"
+      ],
+      "raw_values": [
+        "1",
+        "0x00000001",
+        "secure"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\policies\\\\microsoft\\\\edge\\\\builtindnsclientenabled",
+        "\\\\software\\\\google\\\\chrome\\\\dnsoverhttpsmode",
+        "\\\\software\\\\policies\\\\mozilla\\\\firefox\\\\dnsoverhttps"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Edge\\\\BuiltInDnsClientEnabled",
+        "*\\\\SOFTWARE\\\\Google\\\\Chrome\\\\DnsOverHttpsMode",
+        "*\\\\SOFTWARE\\\\Policies\\\\Mozilla\\\\Firefox\\\\DNSOverHTTPS"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  (registry.path : \"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Edge\\\\BuiltInDnsClientEnabled\" and\n  registry.data.strings : (\"1\", \"0x00000001\")) or\n  (registry.path : \"*\\\\SOFTWARE\\\\Google\\\\Chrome\\\\DnsOverHttpsMode\" and\n  registry.data.strings : \"secure\") or\n  (registry.path : \"*\\\\SOFTWARE\\\\Policies\\\\Mozilla\\\\Firefox\\\\DNSOverHTTPS\" and\n  registry.data.strings : (\"1\", \"0x00000001\"))\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_dns_over_https_enabled.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

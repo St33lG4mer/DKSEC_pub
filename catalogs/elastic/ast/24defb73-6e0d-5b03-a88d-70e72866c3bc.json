@@ -1,0 +1,26 @@
+{
+  "id": "24defb73-6e0d-5b03-a88d-70e72866c3bc",
+  "catalog": "elastic",
+  "name": "Google Workspace MFA Enforcement Disabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:google_workspace.admin and event.provider:admin\n  and event.category:iam and event.action:ENFORCE_STRONG_AUTHENTICATION\n  and google_workspace.admin.new_value:false\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/impact_google_workspace_mfa_enforcement_disabled.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Configuration Audit",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

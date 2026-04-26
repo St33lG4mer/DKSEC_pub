@@ -1,0 +1,29 @@
+{
+  "id": "b08eeea5-47e7-552d-b6fb-01913c2bb334",
+  "catalog": "sigma",
+  "name": "image_load_malware_csharp_streamer_dotnet_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".tmp']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\dat[0-9A-Z]{4}\\\\.tmp']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\dat[0-9A-Z]{4}\\\\.tmp']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/CSharp-Streamer/image_load_malware_csharp_streamer_dotnet_load.eql",
+  "metadata": {}
+}

@@ -1,0 +1,44 @@
+{
+  "id": "39ab4d41-5c27-5c33-ae7d-d7b0238e4367",
+  "catalog": "elastic",
+  "name": "RDP (Remote Desktop Protocol) from the Internet",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": ":",
+      "values": [
+        "::1",
+        "fe80::/10",
+        "ff00::/8"
+      ],
+      "raw_values": [
+        "::1",
+        "FE80::/10",
+        "FF00::/8"
+      ]
+    }
+  ],
+  "raw_query": "(data_stream.dataset: network_traffic.flow or (event.category: (network or network_traffic))) and\n  network.transport:tcp and (destination.port:3389 or data_stream.dataset:zeek.rdp) and\n  not source.ip:(\n    10.0.0.0/8 or\n    127.0.0.0/8 or\n    169.254.0.0/16 or\n    172.16.0.0/12 or\n    192.0.0.0/24 or\n    192.0.0.0/29 or\n    192.0.0.8/32 or\n    192.0.0.9/32 or\n    192.0.0.10/32 or\n    192.0.0.170/32 or\n    192.0.0.171/32 or\n    192.0.2.0/24 or\n    192.31.196.0/24 or\n    192.52.193.0/24 or\n    192.168.0.0/16 or\n    192.88.99.0/24 or\n    224.0.0.0/4 or\n    100.64.0.0/10 or\n    192.175.48.0/24 or\n    198.18.0.0/15 or\n    198.51.100.0/24 or\n    203.0.113.0/24 or\n    240.0.0.0/4 or\n    \"::1\" or\n    \"FE80::/10\" or\n    \"FF00::/8\"\n  ) and\n  destination.ip:(\n    10.0.0.0/8 or\n    172.16.0.0/12 or\n    192.168.0.0/16\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/network/command_and_control_rdp_remote_desktop_protocol_from_the_internet.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Tactic: Command and Control",
+      "Tactic: Lateral Movement",
+      "Tactic: Initial Access",
+      "Domain: Endpoint",
+      "Use Case: Threat Detection",
+      "Data Source: PAN-OS",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

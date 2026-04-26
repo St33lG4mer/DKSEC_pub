@@ -1,0 +1,40 @@
+{
+  "id": "76dfd06f-8227-5af5-9b94-e028c504e540",
+  "catalog": "sigma",
+  "name": "proc_creation_win_python_adidnsdump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "python.exe"
+      ],
+      "raw_values": [
+        "*\\\\python.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "adidnsdump"
+      ],
+      "raw_values": [
+        "*adidnsdump*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\python.exe\" and process.command_line:\"*adidnsdump*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_python_adidnsdump.eql",
+  "metadata": {}
+}

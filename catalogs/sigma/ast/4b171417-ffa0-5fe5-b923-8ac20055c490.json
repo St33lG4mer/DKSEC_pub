@@ -1,0 +1,32 @@
+{
+  "id": "4b171417-ffa0-5fe5-b923-8ac20055c490",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_right_to_left_override",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "u202e",
+        "[u+202e]"
+      ],
+      "raw_values": [
+        "*\\\\u202e*",
+        "*[U+202E]*",
+        "*‮*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*\\\\u202e*\", \"*[U+202E]*\", \"*‮*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_right_to_left_override.eql",
+  "metadata": {}
+}

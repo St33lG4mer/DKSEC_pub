@@ -1,0 +1,42 @@
+{
+  "id": "0bd721cb-ae4d-5a6e-828d-fefd428a90a8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_query_session_exfil",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "session >",
+        "process >"
+      ],
+      "raw_values": [
+        "*session >*",
+        "*process >*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "query.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\query.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*:\\\\Windows\\\\System32\\\\query.exe\" and (process.command_line like~ (\"*session >*\", \"*process >*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_query_session_exfil.eql",
+  "metadata": {}
+}

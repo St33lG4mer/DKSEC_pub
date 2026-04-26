@@ -1,0 +1,25 @@
+{
+  "id": "c4db5a86-102e-5d82-b84b-07603d758b24",
+  "catalog": "elastic",
+  "name": "Attempt to Modify an Okta Application",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:application.lifecycle.update\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/impact_okta_attempt_to_modify_okta_application.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

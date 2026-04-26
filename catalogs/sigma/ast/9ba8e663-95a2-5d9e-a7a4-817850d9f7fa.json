@@ -1,0 +1,60 @@
+{
+  "id": "9ba8e663-95a2-5d9e-a7a4-817850d9f7fa",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_oilrig_mar18",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sc scheduled scan",
+        "autoit3.exe",
+        "nslookup.exe",
+        "-q=txt"
+      ],
+      "raw_values": [
+        "*SC Scheduled Scan*",
+        "*\\\\microsoft\\\\Taskbar\\\\autoit3.exe*",
+        "*nslookup.exe*",
+        "*-q=TXT*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "service.exe"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\Temp\\\\DB\\\\*",
+        "*.exe",
+        "C:\\\\Windows\\\\system32\\\\Service.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "autoit3.exe"
+      ],
+      "raw_values": [
+        "*\\\\local\\\\microsoft\\\\Taskbar\\\\autoit3.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*SC Scheduled Scan*\" and process.command_line:\"*\\\\microsoft\\\\Taskbar\\\\autoit3.exe*\") or (process.executable:\"*\\\\Windows\\\\Temp\\\\DB\\\\*\" and process.executable:\"*.exe\") or (process.executable:\"C:\\\\Windows\\\\system32\\\\Service.exe\" and (process.command_line like~ (\"*i*\", \"*u*\"))) or (process.parent.executable:\"*\\\\local\\\\microsoft\\\\Taskbar\\\\autoit3.exe\" and (process.command_line:\"*nslookup.exe*\" and process.command_line:\"*-q=TXT*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2018/TA/OilRig/proc_creation_win_apt_oilrig_mar18.eql",
+  "metadata": {}
+}

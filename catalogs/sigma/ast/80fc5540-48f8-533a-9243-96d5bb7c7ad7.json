@@ -1,0 +1,59 @@
+{
+  "id": "80fc5540-48f8-533a-9243-96d5bb7c7ad7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uac_bypass_computerdefaults",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "system",
+        "s-1-16-16384",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "System",
+        "S-1-16-16384",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "system32",
+        "program files"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32*",
+        "*:\\\\Program Files*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "computerdefaults.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\ComputerDefaults.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((winlog.event_data.IntegrityLevel like~ (\"High\", \"System\", \"S-1-16-16384\", \"S-1-16-12288\")) and process.executable:\"C:\\\\Windows\\\\System32\\\\ComputerDefaults.exe\") and (not (process.parent.executable like~ (\"*:\\\\Windows\\\\System32*\", \"*:\\\\Program Files*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_computerdefaults.eql",
+  "metadata": {}
+}

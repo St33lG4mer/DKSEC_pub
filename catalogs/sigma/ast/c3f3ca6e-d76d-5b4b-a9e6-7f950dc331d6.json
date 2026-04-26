@@ -1,0 +1,37 @@
+{
+  "id": "c3f3ca6e-d76d-5b4b-a9e6-7f950dc331d6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_dtrack",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "s', <specialchars.wildcard_single: 2>]), flags=set())",
+        "all']), flags=set())",
+        "res.ip",
+        "interface ip show config",
+        "netsh.res"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['ping\\\\s+-n.{6,64}echo EEEE\\\\s', <SpecialChars.WILDCARD_SINGLE: 2>, '>\\\\s', <SpecialChars.WILDCARD_SINGLE: 2>]), flags=set())",
+        "SigmaRegularExpression(regexp=SigmaString(['ipconfig\\\\s+/all']), flags=set())",
+        "*\\\\temp\\\\res.ip*",
+        "*interface ip show config*",
+        "*\\\\temp\\\\netsh.res*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['ping\\\\s+-n.{6,64}echo EEEE\\\\s', <SpecialChars.WILDCARD_SINGLE: 2>, '>\\\\s', <SpecialChars.WILDCARD_SINGLE: 2>]), flags=set())\" or (process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['ipconfig\\\\s+/all']), flags=set())\" and process.command_line:\"*\\\\temp\\\\res.ip*\") or (process.command_line:\"*interface ip show config*\" and process.command_line:\"*\\\\temp\\\\netsh.res*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/Malware/Dtrack-RAT/proc_creation_win_malware_dtrack.eql",
+  "metadata": {}
+}

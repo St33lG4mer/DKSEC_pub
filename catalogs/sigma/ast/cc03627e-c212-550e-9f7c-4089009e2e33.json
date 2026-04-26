@@ -1,0 +1,40 @@
+{
+  "id": "cc03627e-c212-550e-9f7c-4089009e2e33",
+  "catalog": "sigma",
+  "name": "registry_set_winget_enable_local_manifest",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\appinstaller\\\\enablelocalmanifestfiles"
+      ],
+      "raw_values": [
+        "*\\\\AppInstaller\\\\EnableLocalManifestFiles"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\AppInstaller\\\\EnableLocalManifestFiles\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_winget_enable_local_manifest.eql",
+  "metadata": {}
+}

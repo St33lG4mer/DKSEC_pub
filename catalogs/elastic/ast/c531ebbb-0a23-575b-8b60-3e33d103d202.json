@@ -1,0 +1,96 @@
+{
+  "id": "c531ebbb-0a23-575b-8b60-3e33d103d202",
+  "catalog": "elastic",
+  "name": "Potential Data Exfiltration via Rclone",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "copy",
+        "sync",
+        "rclone.conf"
+      ],
+      "raw_values": [
+        "copy",
+        "sync",
+        "--config=?:\\\\Program Files\\\\rclone\\\\config\\\\rclone\\\\rclone.conf"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "program files",
+        "rclone.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files*",
+        "\\\\Device\\\\HarddiskVolume*\\\\Program Files*",
+        "rclone.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "rclone.exe"
+      ],
+      "raw_values": [
+        "rclone.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n (process.name : \"rclone.exe\" or ?process.pe.original_file_name == \"rclone.exe\") and process.args : (\"copy\", \"sync\") and\n  not process.args : (\"--config=?:\\\\Program Files\\\\rclone\\\\config\\\\rclone\\\\rclone.conf\", \"--config=?:\\\\Program Files (x86)\\\\rclone\\\\config\\\\rclone\\\\rclone.conf\") and \n  not process.executable : (\"?:\\\\Program Files*\", \"\\\\Device\\\\HarddiskVolume*\\\\Program Files*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/exfiltration_rclone_cloud_upload.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Exfiltration",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Crowdstrike",
+      "Data Source: Elastic Endgame",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

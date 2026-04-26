@@ -1,0 +1,77 @@
+{
+  "id": "39fb9268-eaaa-5aec-98e2-a698ac1a6938",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_abnormal_commandline_size",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "windows powershell"
+      ],
+      "raw_values": [
+        "Windows Powershell"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "powershell core 6"
+      ],
+      "raw_values": [
+        "PowerShell Core 6"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['.{1000,}']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['.{1000,}']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\")) or process.pe.description:\"Windows Powershell\" or process.pe.product:\"PowerShell Core 6\") and process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['.{1000,}']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_powershell_abnormal_commandline_size.eql",
+  "metadata": {}
+}

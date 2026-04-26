@@ -1,0 +1,53 @@
+{
+  "id": "46a032a3-e124-5750-8b56-eff2e547e358",
+  "catalog": "sigma",
+  "name": "win_security_new_or_renamed_user_account_with_dollar_sign",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4720",
+        "4781"
+      ],
+      "raw_values": [
+        "4720",
+        "4781"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetusername",
+      "raw_field": "winlog.event_data.TargetUserName",
+      "operator": ":",
+      "values": [
+        "homegroupuser$"
+      ],
+      "raw_values": [
+        "HomeGroupUser$"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (((event.code:\"4720\" and winlog.event_data.SamAccountName:\"*$*\") or (event.code:\"4781\" and winlog.event_data.NewTargetUserName:\"*$*\")) and (not (event.code:\"4720\" and winlog.event_data.TargetUserName:\"HomeGroupUser$\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_new_or_renamed_user_account_with_dollar_sign.eql",
+  "metadata": {}
+}

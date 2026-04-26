@@ -1,0 +1,92 @@
+{
+  "id": "374dd73b-9595-54fc-ac2a-9785d4dce495",
+  "catalog": "elastic",
+  "name": "Connection to Commonly Abused Free SSL Certificate Providers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "letsencrypt.org",
+        ".sslforfree.com",
+        ".zerossl.com",
+        ".freessl.org"
+      ],
+      "raw_values": [
+        "*letsencrypt.org",
+        "*.sslforfree.com",
+        "*.zerossl.com",
+        "*.freessl.org"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "explorer.exe",
+        "notepad.exe",
+        "svchost.exe",
+        "microsoftedge*.exe",
+        "msedge.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\*.exe",
+        "C:\\\\Windows\\\\System\\\\*.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\*.exe",
+        "C:\\\\Windows\\\\Microsoft.NET\\\\Framework*\\\\*.exe",
+        "C:\\\\Windows\\\\explorer.exe",
+        "C:\\\\Windows\\\\notepad.exe",
+        "svchost.exe",
+        "MicrosoftEdge*.exe",
+        "msedge.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "network.protocol",
+      "raw_field": "network.protocol",
+      "operator": "==",
+      "values": [
+        "dns"
+      ],
+      "raw_values": [
+        "dns"
+      ]
+    }
+  ],
+  "raw_query": "network where host.os.type == \"windows\" and network.protocol == \"dns\" and\n  /* Add new free SSL certificate provider domains here */\n  dns.question.name : (\"*letsencrypt.org\", \"*.sslforfree.com\", \"*.zerossl.com\", \"*.freessl.org\") and\n\n  /* Native Windows process paths that are unlikely to have network connections to domains secured using free SSL certificates */\n  process.executable : (\"C:\\\\Windows\\\\System32\\\\*.exe\",\n                        \"C:\\\\Windows\\\\System\\\\*.exe\",\n\t                  \"C:\\\\Windows\\\\SysWOW64\\\\*.exe\",\n\t\t          \"C:\\\\Windows\\\\Microsoft.NET\\\\Framework*\\\\*.exe\",\n\t\t          \"C:\\\\Windows\\\\explorer.exe\",\n\t\t          \"C:\\\\Windows\\\\notepad.exe\") and\n\n  /* Insert noisy false positives here */\n  not process.name : (\"svchost.exe\", \"MicrosoftEdge*.exe\", \"msedge.exe\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/command_and_control_encrypted_channel_freesslcert.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

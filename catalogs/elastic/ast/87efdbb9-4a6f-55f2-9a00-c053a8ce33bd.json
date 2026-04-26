@@ -1,0 +1,46 @@
+{
+  "id": "87efdbb9-4a6f-55f2-9a00-c053a8ce33bd",
+  "catalog": "elastic",
+  "name": "Suspicious System Commands Executed by Previously Unknown Executable",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sshd",
+        "runc",
+        "ruby",
+        "rabbitmqctl"
+      ],
+      "raw_values": [
+        "/usr/sbin/sshd",
+        "./runc",
+        "/opt/gitlab/embedded/bin/ruby",
+        "/usr/lib/rabbitmq/bin/rabbitmqctl"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:linux and event.category:process and event.action:(exec or exec_event or fork or fork_event) and\nprocess.executable:(* and (\n  /etc/crontab or /bin/* or /boot/* or /dev/shm/* or /etc/cron.*/* or /etc/init.d/* or /etc/rc*.d/* or /etc/update-motd.d/* or\n  /home/*/.* or /tmp/* or /usr/bin/* or /usr/lib/update-notifier/* or /usr/share/* or /var/tmp/* or /sbin/* or /usr/sbin/* or\n  /usr/local/sbin/* or /usr/local/bin/* or /var/lib/* or /var/run/* or /var/cache/* or /var/log/* or /dev/shm/* or /var/tmp/*\n) and not /tmp/go-build*) and\nprocess.args:(hostname or id or ifconfig or ls or netstat or ps or pwd or route or top or uptime or whoami) and\nnot (process.name:\n  (apt or dnf or docker or dockerd or dpkg or hostname or id or ls or netstat or ps or pwd or rpm or snap or\n  snapd or sudo or top or uptime or which or whoami or yum or sh or bash or ip or dash or find or podman or env or\n  busybox or aws or timeout or nmcli or dpkg-query or nsenter or pw-cli or node or npm or gnome-calculator or pidof or\n  steamerrorreporter or ssh or grep or xargs or apt-get or numactl or entrypoint or flatpak-spawn or logger or command or\n  login or sshpass or docker-compose or whereis or rbd or basename or ifconfig or tar or crictl or su) or\nprocess.parent.executable:(\n  /opt/cassandra/bin/cassandra or /opt/nessus/sbin/nessusd or /opt/nessus_agent/sbin/nessus-agent-module or /opt/puppetlabs/puppet/bin/puppet or\n  /opt/puppetlabs/puppet/bin/ruby or /usr/libexec/platform-python or /usr/local/cloudamize/bin/CCAgent or /usr/sbin/sshd or /bin/* or\n  /etc/network/* or /opt/Elastic/* or /opt/TrendMicro* or /opt/aws/* or /opt/eset/* or /opt/rapid7/* or /run/containerd/* or /run/k3s/* or\n  /snap/* or /tmp/dpkg-licenses* or /tmp/newroot/* or /usr/bin/* or /var/lib/amagent/* or /var/lib/docker/* or /vz/* or\n  \"/usr/sbin/sshd\" or \"./runc\" or \"/opt/gitlab/embedded/bin/ruby\" or /opt/saltstack/salt/bin/python* or \"/usr/lib/rabbitmq/bin/rabbitmqctl\"\n  ) or\n  process.executable:(/run/containerd/* or /srv/snp/docker/* or /tmp/.criu*)\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_suspicious_executable_running_system_commands.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

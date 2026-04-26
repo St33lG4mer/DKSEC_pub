@@ -1,0 +1,87 @@
+{
+  "id": "2cba6003-d0a5-5468-af0b-2152f741c2ba",
+  "catalog": "elastic",
+  "name": "High Number of Egress Network Connections from Unusual Executable",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like",
+      "values": [
+        ".mount",
+        "go-build"
+      ],
+      "raw_values": [
+        "/tmp/*",
+        "/var/tmp/*",
+        "/dev/shm/*",
+        "/var/log/*",
+        "/sys/*",
+        "/media/*",
+        "/proc/*",
+        "/var/backups/*",
+        "/var/mail/*",
+        "/var/spool/*",
+        "./*",
+        ".*",
+        "/tmp/newroot/*",
+        "/tmp/.mount*",
+        "/tmp/go-build*"
+      ]
+    }
+  ],
+  "raw_query": "from logs-endpoint.events.network-* metadata _id, _index, _version\n| mv_expand event.action \n| where\n    host.os.type == \"linux\" and\n    event.type == \"start\" and\n    event.action == \"connection_attempted\" and\n    (\n        process.executable like \"/tmp/*\" or\n        process.executable like \"/var/tmp/*\" or\n        process.executable like \"/dev/shm/*\" or\n        process.executable like \"/var/log/*\" or\n        process.executable like \"/sys/*\" or\n        process.executable like \"/media/*\" or\n        process.executable like \"/proc/*\" or\n        process.executable like \"/var/backups/*\" or\n        process.executable like \"/var/mail/*\" or\n        process.executable like \"/var/spool/*\" or\n        process.executable like \"./*\" or\n        process.name like \".*\"\n    ) and\n    not (\n        cidr_match(destination.ip,\n            \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\",\n            \"192.0.0.0/24\", \"192.0.0.29/32\", \"192.0.0.8/32\", \"192.0.0.9/32\",\n            \"192.0.0.10/32\", \"192.0.0.170/32\", \"192.0.0.171/32\", \"192.0.2.0/24\",\n            \"192.31.196.0/24\", \"192.52.193.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\",\n            \"224.0.0.0/4\", \"100.64.0.0/10\", \"192.175.48.0/24\", \"198.18.0.0/15\",\n            \"198.51.100.0/24\", \"203.0.113.0/24\", \"240.0.0.0/4\", \"::1\", \"FE80::/10\", \"FF00::/8\"\n        ) or\n        process.executable like \"/tmp/newroot/*\" or\n        process.executable like \"/tmp/.mount*\" or\n        process.executable like \"/tmp/go-build*\"\n    )\n| keep\n    @timestamp,\n    _id,\n    _index,\n    _version,\n    host.os.type,\n    event.type,\n    event.action,\n    process.name,\n    process.executable,\n    destination.ip,\n    agent.id,\n    host.name,\n    data_stream.dataset,\n    data_stream.namespace\n\n| stats\n    Esql.event_count = count(),\n    Esql.agent_id_count_distinct = count_distinct(agent.id),\n    Esql.host_name_values = values(host.name),\n    Esql.agent_id_values = values(agent.id),\n    Esql.data_stream_dataset_values = values(data_stream.dataset),\n    Esql.data_stream_namespace_values = values(data_stream.namespace)\n    by process.executable\n| where\n    Esql.agent_id_count_distinct == 1 and\n    Esql.event_count > 15\n\n// Extract unique values to ECS fields for alerts exclusion\n| eval agent.id = mv_min(Esql.agent_id_values),\n       host.name = mv_min(Esql.host_name_values)\n\n| sort Esql.event_count asc\n\n| keep agent.id, host.name, process.executable, Esql.*\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/linux/command_and_control_frequent_egress_netcon_from_sus_executable.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

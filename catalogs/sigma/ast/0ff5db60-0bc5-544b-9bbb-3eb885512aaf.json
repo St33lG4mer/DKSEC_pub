@@ -1,0 +1,45 @@
+{
+  "id": "0ff5db60-0bc5-544b-9bbb-3eb885512aaf",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_remote_desktop_tunneling",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-pw",
+        "-ssh"
+      ],
+      "raw_values": [
+        "* -L *",
+        "* -P *",
+        "* -R *",
+        "* -pw *",
+        "* -ssh *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ":3389"
+      ],
+      "raw_values": [
+        "*:3389*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*:3389*\" and (process.command_line like~ (\"* -L *\", \"* -P *\", \"* -R *\", \"* -pw *\", \"* -ssh *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_remote_desktop_tunneling.eql",
+  "metadata": {}
+}

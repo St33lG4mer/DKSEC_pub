@@ -1,0 +1,37 @@
+{
+  "id": "7caa0994-51f5-5d45-89c4-e7b3b5a17d94",
+  "catalog": "elastic",
+  "name": "Deprecated - M365 Security Compliance Email Reported by User as Malware or Phish",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "rule.name",
+      "raw_field": "rule.name",
+      "operator": ":",
+      "values": [
+        "email reported by user as malware or phish"
+      ],
+      "raw_values": [
+        "Email reported by user as malware or phish"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:SecurityComplianceCenter and event.action:AlertTriggered and rule.name:\"Email reported by user as malware or phish\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/initial_access_security_compliance_user_reported_phish_malware.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

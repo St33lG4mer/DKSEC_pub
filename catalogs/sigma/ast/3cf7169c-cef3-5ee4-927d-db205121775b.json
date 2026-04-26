@@ -1,0 +1,51 @@
+{
+  "id": "3cf7169c-cef3-5ee4-927d-db205121775b",
+  "catalog": "sigma",
+  "name": "proc_access_win_lsass_dump_comsvcs_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "comsvcs.dll"
+      ],
+      "raw_values": [
+        "*comsvcs.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and process.executable:\"*\\\\rundll32.exe\" and winlog.event_data.CallTrace:\"*comsvcs.dll*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_access/proc_access_win_lsass_dump_comsvcs_dll.eql",
+  "metadata": {}
+}

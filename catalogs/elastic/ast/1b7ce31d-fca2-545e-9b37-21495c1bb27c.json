@@ -1,0 +1,164 @@
+{
+  "id": "1b7ce31d-fca2-545e-9b37-21495c1bb27c",
+  "catalog": "elastic",
+  "name": "Kernel Seeking Activity",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "hexdump",
+        "xxd"
+      ],
+      "raw_values": [
+        "hexdump",
+        "xxd"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "vmlinuz-get-version",
+        "dracut"
+      ],
+      "raw_values": [
+        "/usr/lib/needrestart/vmlinuz-get-version",
+        "/bin/dracut",
+        "/sbin/dracut",
+        "/usr/sbin/dracut"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/usr/bin/dracut",
+        "/usr/lib/needrestart/vmlinuz-get-version",
+        "/sbin/dracut",
+        "/bin/dracut",
+        "/usr/sbin/dracut",
+        "/usr/bin/spectre-meltdown-checker",
+        "/usr/lib/module-init-tools/lsinitrd-quick"
+      ],
+      "raw_values": [
+        "/usr/bin/dracut",
+        "/usr/lib/needrestart/vmlinuz-get-version",
+        "/sbin/dracut",
+        "/bin/dracut",
+        "/usr/sbin/dracut",
+        "/usr/bin/spectre-meltdown-checker",
+        "/usr/lib/module-init-tools/lsinitrd-quick"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "like",
+      "values": [
+        "/boot/"
+      ],
+      "raw_values": [
+        "/boot/*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "seek"
+      ],
+      "raw_values": [
+        "/boot/*",
+        "-c*",
+        "seek*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "tail",
+        "cmp"
+      ],
+      "raw_values": [
+        "tail",
+        "cmp",
+        "dd"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "--bytes"
+      ],
+      "raw_values": [
+        "--bytes",
+        "-i",
+        "-s"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n(process.parent.args like \"/boot/*\" or process.args like \"/boot/*\") and (\n  (process.name == \"tail\" and (process.args like \"-c*\" or process.args == \"--bytes\")) or\n  (process.name == \"cmp\" and process.args == \"-i\") or\n  (process.name in (\"hexdump\", \"xxd\") and process.args == \"-s\") or\n  (process.name == \"dd\" and process.args like \"seek*\")\n) and process.parent.executable != null and\nnot (\n  process.parent.executable in (\n    \"/usr/lib/needrestart/vmlinuz-get-version\", \"/bin/dracut\", \"/sbin/dracut\", \"/usr/sbin/dracut\"\n  ) or\n  process.parent.args in (\n    \"/usr/bin/dracut\", \"/usr/lib/needrestart/vmlinuz-get-version\", \"/sbin/dracut\", \"/bin/dracut\",\n    \"/usr/sbin/dracut\", \"/usr/bin/spectre-meltdown-checker\", \"/usr/lib/module-init-tools/lsinitrd-quick\"\n  )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_kernel_seeking.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

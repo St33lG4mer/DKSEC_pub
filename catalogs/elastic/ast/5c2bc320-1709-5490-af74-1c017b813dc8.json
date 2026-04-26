@@ -1,0 +1,188 @@
+{
+  "id": "5c2bc320-1709-5490-af74-1c017b813dc8",
+  "catalog": "elastic",
+  "name": "M365 Identity OAuth Flow by First-Party Microsoft App from Multiple IPs",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "o365.audit.applicationid",
+      "raw_field": "o365.audit.ApplicationId",
+      "operator": "in",
+      "values": [
+        "aebc6443-996d-45c2-90f0-388ff96faa56",
+        "29d9ed98-a469-4536-ade2-f981bc1d605e",
+        "04b07795-8ddb-461a-bbee-02f9e1bf7b46",
+        "1950a258-227b-4e31-a9cf-717495945fc2",
+        "00b41c95-dab0-4487-9791-b9d2c32c80f2",
+        "1fec8e78-bce4-4aaf-ab1b-5451cc387264",
+        "26a7ee05-5602-4d76-a7ba-eae8b7b67941",
+        "27922004-5251-4030-b22d-91ecd9a37ea4",
+        "4813382a-8fa7-425e-ab75-3b753aab3abb",
+        "ab9b8c07-8f02-4f72-87fa-80105867a763",
+        "d3590ed6-52b3-4102-aeff-aad2292ab01c",
+        "872cd9fa-d31f-45e0-9eab-6e460a02d1f1",
+        "af124e86-4e96-495a-b70a-90f90ab96707",
+        "2d7f3606-b07d-41d1-b9d2-0d0c9296a6e8",
+        "844cca35-0656-46ce-b636-13f48b0eecbd",
+        "87749df4-7ccf-48f8-aa87-704bad0e0e16",
+        "cf36b471-5b44-428c-9ce7-313bf84528de",
+        "0ec893e0-5785-4de6-99da-4ed124e5296c",
+        "22098786-6e16-43cc-a27d-191a01a1e3b5",
+        "4e291c71-d680-4d0e-9640-0a3358e31177",
+        "57336123-6e14-4acc-8dcf-287b6088aa28",
+        "57fcbcfa-7cee-4eb1-8b25-12d2030b4ee0",
+        "66375f6b-983f-4c2c-9701-d680650f588f",
+        "9ba1a5c7-f17a-4de9-a1f1-6178c8d51223",
+        "a40d7d7d-59aa-447e-a655-679a4107e548",
+        "a569458c-7f2b-45cb-bab9-b7dee514d112",
+        "b26aadf8-566f-4478-926f-589f601d9c74",
+        "c0d2a505-13b8-4ae0-aa9e-cddd5eab0b12",
+        "d326c1ce-6cc6-4de2-bebc-4591e5e13ef0",
+        "e9c51622-460d-4d3d-952d-966a5b1da34c",
+        "eb539595-3fe1-474e-9c1d-feb3625d1be5",
+        "ecd6b820-32c2-49b6-98a6-444530e5a77a",
+        "f05ff7c9-f75a-4acd-a3b5-f4b6a870245d",
+        "f44b1140-bc5e-48c6-8dc0-5cf5a53c0e34",
+        "be1918be-3fe3-4be9-b32b-b542fc27f02e",
+        "cab96880-db5b-4e15-90a7-f3f1d62ffe39",
+        "d7b530a4-7680-4c23-a8bf-c52c121d2e87",
+        "dd47d17a-3194-4d86-bfd5-c6ae6f5651e3",
+        "e9b154d0-7658-433b-bb25-6b8e0a8a7c59"
+      ],
+      "raw_values": [
+        "aebc6443-996d-45c2-90f0-388ff96faa56",
+        "29d9ed98-a469-4536-ade2-f981bc1d605e",
+        "04b07795-8ddb-461a-bbee-02f9e1bf7b46",
+        "1950a258-227b-4e31-a9cf-717495945fc2",
+        "00b41c95-dab0-4487-9791-b9d2c32c80f2",
+        "1fec8e78-bce4-4aaf-ab1b-5451cc387264",
+        "26a7ee05-5602-4d76-a7ba-eae8b7b67941",
+        "27922004-5251-4030-b22d-91ecd9a37ea4",
+        "4813382a-8fa7-425e-ab75-3b753aab3abb",
+        "ab9b8c07-8f02-4f72-87fa-80105867a763",
+        "d3590ed6-52b3-4102-aeff-aad2292ab01c",
+        "872cd9fa-d31f-45e0-9eab-6e460a02d1f1",
+        "af124e86-4e96-495a-b70a-90f90ab96707",
+        "2d7f3606-b07d-41d1-b9d2-0d0c9296a6e8",
+        "844cca35-0656-46ce-b636-13f48b0eecbd",
+        "87749df4-7ccf-48f8-aa87-704bad0e0e16",
+        "cf36b471-5b44-428c-9ce7-313bf84528de",
+        "0ec893e0-5785-4de6-99da-4ed124e5296c",
+        "22098786-6e16-43cc-a27d-191a01a1e3b5",
+        "4e291c71-d680-4d0e-9640-0a3358e31177",
+        "57336123-6e14-4acc-8dcf-287b6088aa28",
+        "57fcbcfa-7cee-4eb1-8b25-12d2030b4ee0",
+        "66375f6b-983f-4c2c-9701-d680650f588f",
+        "9ba1a5c7-f17a-4de9-a1f1-6178c8d51223",
+        "a40d7d7d-59aa-447e-a655-679a4107e548",
+        "a569458c-7f2b-45cb-bab9-b7dee514d112",
+        "b26aadf8-566f-4478-926f-589f601d9c74",
+        "c0d2a505-13b8-4ae0-aa9e-cddd5eab0b12",
+        "d326c1ce-6cc6-4de2-bebc-4591e5e13ef0",
+        "e9c51622-460d-4d3d-952d-966a5b1da34c",
+        "eb539595-3fe1-474e-9c1d-feb3625d1be5",
+        "ecd6b820-32c2-49b6-98a6-444530e5a77a",
+        "f05ff7c9-f75a-4acd-a3b5-f4b6a870245d",
+        "f44b1140-bc5e-48c6-8dc0-5cf5a53c0e34",
+        "be1918be-3fe3-4be9-b32b-b542fc27f02e",
+        "cab96880-db5b-4e15-90a7-f3f1d62ffe39",
+        "d7b530a4-7680-4c23-a8bf-c52c121d2e87",
+        "dd47d17a-3194-4d86-bfd5-c6ae6f5651e3",
+        "e9b154d0-7658-433b-bb25-6b8e0a8a7c59"
+      ]
+    },
+    {
+      "field": "o365.audit.objectid",
+      "raw_field": "o365.audit.ObjectId",
+      "operator": "in",
+      "values": [
+        "00000003-0000-0000-c000-000000000000",
+        "00000002-0000-0000-c000-000000000000"
+      ],
+      "raw_values": [
+        "00000003-0000-0000-c000-000000000000",
+        "00000002-0000-0000-c000-000000000000"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "userloggedin"
+      ],
+      "raw_values": [
+        "UserLoggedIn"
+      ]
+    },
+    {
+      "field": "o365.audit.objectid",
+      "raw_field": "o365.audit.ObjectId",
+      "operator": "==",
+      "values": [
+        "00000002-0000-0000-c000-000000000000"
+      ],
+      "raw_values": [
+        "00000002-0000-0000-c000-000000000000"
+      ]
+    },
+    {
+      "field": "o365.audit.extendedproperties.requesttype",
+      "raw_field": "o365.audit.ExtendedProperties.RequestType",
+      "operator": "==",
+      "values": [
+        "oauth2:authorize",
+        "oauth2:token"
+      ],
+      "raw_values": [
+        "OAuth2:Authorize",
+        "OAuth2:Token"
+      ]
+    },
+    {
+      "field": "o365.audit.extendedproperties.resultstatusdetail",
+      "raw_field": "o365.audit.ExtendedProperties.ResultStatusDetail",
+      "operator": "==",
+      "values": [
+        "redirect"
+      ],
+      "raw_values": [
+        "Redirect"
+      ]
+    }
+  ],
+  "raw_query": "from logs-o365.audit-*\n| where\n    data_stream.dataset == \"o365.audit\" and\n    event.action == \"UserLoggedIn\" and\n    source.ip is not null and\n    o365.audit.UserId is not null and\n    o365.audit.ApplicationId is not null and\n    o365.audit.UserType in (\"0\", \"2\", \"3\", \"10\") and\n    (\n        /* Developer tools accessing Graph OR Legacy AAD */\n        (\n            o365.audit.ApplicationId in (\n                \"aebc6443-996d-45c2-90f0-388ff96faa56\",\n                \"29d9ed98-a469-4536-ade2-f981bc1d605e\",\n                \"04b07795-8ddb-461a-bbee-02f9e1bf7b46\",\n                \"1950a258-227b-4e31-a9cf-717495945fc2\"\n            ) and\n            o365.audit.ObjectId in (\n                \"00000003-0000-0000-c000-000000000000\",\n                \"00000002-0000-0000-c000-000000000000\"\n            )\n        ) or\n        /* Any FOCI app accessing Legacy AAD only */\n        (\n            o365.audit.ApplicationId in (\n                \"00b41c95-dab0-4487-9791-b9d2c32c80f2\",\n                \"1fec8e78-bce4-4aaf-ab1b-5451cc387264\",\n                \"26a7ee05-5602-4d76-a7ba-eae8b7b67941\",\n                \"27922004-5251-4030-b22d-91ecd9a37ea4\",\n                \"4813382a-8fa7-425e-ab75-3b753aab3abb\",\n                \"ab9b8c07-8f02-4f72-87fa-80105867a763\",\n                \"d3590ed6-52b3-4102-aeff-aad2292ab01c\",\n                \"872cd9fa-d31f-45e0-9eab-6e460a02d1f1\",\n                \"af124e86-4e96-495a-b70a-90f90ab96707\",\n                \"2d7f3606-b07d-41d1-b9d2-0d0c9296a6e8\",\n                \"844cca35-0656-46ce-b636-13f48b0eecbd\",\n                \"87749df4-7ccf-48f8-aa87-704bad0e0e16\",\n                \"cf36b471-5b44-428c-9ce7-313bf84528de\",\n                \"0ec893e0-5785-4de6-99da-4ed124e5296c\",\n                \"22098786-6e16-43cc-a27d-191a01a1e3b5\",\n                \"4e291c71-d680-4d0e-9640-0a3358e31177\",\n                \"57336123-6e14-4acc-8dcf-287b6088aa28\",\n                \"57fcbcfa-7cee-4eb1-8b25-12d2030b4ee0\",\n                \"66375f6b-983f-4c2c-9701-d680650f588f\",\n                \"9ba1a5c7-f17a-4de9-a1f1-6178c8d51223\",\n                \"a40d7d7d-59aa-447e-a655-679a4107e548\",\n                \"a569458c-7f2b-45cb-bab9-b7dee514d112\",\n                \"b26aadf8-566f-4478-926f-589f601d9c74\",\n                \"c0d2a505-13b8-4ae0-aa9e-cddd5eab0b12\",\n                \"d326c1ce-6cc6-4de2-bebc-4591e5e13ef0\",\n                \"e9c51622-460d-4d3d-952d-966a5b1da34c\",\n                \"eb539595-3fe1-474e-9c1d-feb3625d1be5\",\n                \"ecd6b820-32c2-49b6-98a6-444530e5a77a\",\n                \"f05ff7c9-f75a-4acd-a3b5-f4b6a870245d\",\n                \"f44b1140-bc5e-48c6-8dc0-5cf5a53c0e34\",\n                \"be1918be-3fe3-4be9-b32b-b542fc27f02e\",\n                \"cab96880-db5b-4e15-90a7-f3f1d62ffe39\",\n                \"d7b530a4-7680-4c23-a8bf-c52c121d2e87\",\n                \"dd47d17a-3194-4d86-bfd5-c6ae6f5651e3\",\n                \"e9b154d0-7658-433b-bb25-6b8e0a8a7c59\"\n            ) and\n            o365.audit.ObjectId == \"00000002-0000-0000-c000-000000000000\"\n        )\n    )\n| eval\n    Esql.time_window_date_trunc = date_trunc(30 minutes, @timestamp),\n    Esql.oauth_authorize_user_id_case = case(\n        o365.audit.ExtendedProperties.RequestType == \"OAuth2:Authorize\" and o365.audit.ExtendedProperties.ResultStatusDetail == \"Redirect\",\n        o365.audit.UserId,\n        null\n    ),\n    Esql.oauth_token_user_id_case = case(\n        o365.audit.ExtendedProperties.RequestType == \"OAuth2:Token\",\n        o365.audit.UserId,\n        null\n    )\n| stats\n    Esql.source_ip_count_distinct = count_distinct(source.ip),\n    Esql.source_ip_values = values(source.ip),\n    Esql.o365_audit_ApplicationId_values = values(o365.audit.ApplicationId),\n    Esql.source_as_organization_name_values = values(source.`as`.organization.name),\n    Esql.oauth_token_count_distinct = count_distinct(Esql.oauth_token_user_id_case),\n    Esql.oauth_authorize_count_distinct = count_distinct(Esql.oauth_authorize_user_id_case)\n  by\n    o365.audit.UserId,\n    Esql.time_window_date_trunc,\n    o365.audit.ApplicationId,\n    o365.audit.ObjectId\n| keep\n    Esql.time_window_date_trunc,\n    Esql.source_ip_values,\n    Esql.source_ip_count_distinct,\n    Esql.o365_audit_ApplicationId_values,\n    Esql.source_as_organization_name_values,\n    Esql.oauth_token_count_distinct,\n    Esql.oauth_authorize_count_distinct\n| where\n    Esql.source_ip_count_distinct >= 2 and\n    Esql.oauth_token_count_distinct > 0 and\n    Esql.oauth_authorize_count_distinct > 0\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/defense_evasion_entra_id_susp_oauth2_authorization.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Email",
+      "Domain: Identity",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide",
+      "Tactic: Defense Evasion"
+    ]
+  }
+}

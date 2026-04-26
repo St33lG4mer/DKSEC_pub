@@ -1,0 +1,58 @@
+{
+  "id": "a6bc1cd5-c4dc-559e-9efe-cb249afd1756",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_shim_database_susp_application",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\csrss.exe",
+        "\\\\dllhost.exe",
+        "\\\\explorer.exe",
+        "\\\\runtimebroker.exe",
+        "\\\\services.exe",
+        "\\\\sihost.exe",
+        "\\\\svchost.exe",
+        "\\\\taskhostw.exe",
+        "\\\\winlogon.exe",
+        "\\\\wmiprvse.exe"
+      ],
+      "raw_values": [
+        "*\\\\csrss.exe",
+        "*\\\\dllhost.exe",
+        "*\\\\explorer.exe",
+        "*\\\\RuntimeBroker.exe",
+        "*\\\\services.exe",
+        "*\\\\sihost.exe",
+        "*\\\\svchost.exe",
+        "*\\\\taskhostw.exe",
+        "*\\\\winlogon.exe",
+        "*\\\\WmiPrvSe.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\custom\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom\\\\*\" and (registry.path like~ (\"*\\\\csrss.exe\", \"*\\\\dllhost.exe\", \"*\\\\explorer.exe\", \"*\\\\RuntimeBroker.exe\", \"*\\\\services.exe\", \"*\\\\sihost.exe\", \"*\\\\svchost.exe\", \"*\\\\taskhostw.exe\", \"*\\\\winlogon.exe\", \"*\\\\WmiPrvSe.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_shim_database_susp_application.eql",
+  "metadata": {}
+}

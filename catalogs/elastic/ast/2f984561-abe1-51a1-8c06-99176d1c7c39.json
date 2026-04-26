@@ -1,0 +1,94 @@
+{
+  "id": "2f984561-abe1-51a1-8c06-99176d1c7c39",
+  "catalog": "elastic",
+  "name": "Execution with Explicit Credentials via Scripting",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like~",
+      "values": [
+        "osascript",
+        "com.apple.automator.runner",
+        "bash",
+        "dash",
+        "zsh",
+        "python",
+        "perl",
+        "php",
+        "ruby",
+        "pwsh"
+      ],
+      "raw_values": [
+        "osascript",
+        "com.apple.automator.runner",
+        "sh",
+        "bash",
+        "dash",
+        "zsh",
+        "python*",
+        "perl*",
+        "php*",
+        "ruby",
+        "pwsh"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "security_authtrampoline"
+      ],
+      "raw_values": [
+        "security_authtrampoline"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.name == \"security_authtrampoline\" and\n process.parent.name like~ (\"osascript\", \"com.apple.automator.runner\", \"sh\", \"bash\", \"dash\", \"zsh\", \"python*\", \"perl*\", \"php*\", \"ruby\", \"pwsh\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/privilege_escalation_explicit_creds_via_scripting.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

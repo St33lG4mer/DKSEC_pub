@@ -1,0 +1,53 @@
+{
+  "id": "dcb17597-e498-52e1-921f-22bfb5565322",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_compression_params",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "7z*.exe",
+        "rar.exe",
+        "command*line*rar"
+      ],
+      "raw_values": [
+        "7z*.exe",
+        "*rar.exe",
+        "*Command*Line*RAR*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-ta",
+        "-tb",
+        "-sdel",
+        "-dw",
+        "-hp"
+      ],
+      "raw_values": [
+        "* -p*",
+        "* -ta*",
+        "* -tb*",
+        "* -sdel*",
+        "* -dw*",
+        "* -hp*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.pe.original_file_name like~ (\"7z*.exe\", \"*rar.exe\", \"*Command*Line*RAR*\")) and (process.command_line like~ (\"* -p*\", \"* -ta*\", \"* -tb*\", \"* -sdel*\", \"* -dw*\", \"* -hp*\"))) and (not (process.parent.executable like~ (\"*:\\\\Program Files\\\\*\", \"*:\\\\Program Files (x86)\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_susp_compression_params.eql",
+  "metadata": {}
+}

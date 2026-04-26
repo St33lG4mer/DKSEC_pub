@@ -1,0 +1,29 @@
+{
+  "id": "7997407a-0c6c-5604-8f05-d11c8f084bd9",
+  "catalog": "sigma",
+  "name": "registry_set_rpcrt4_etw_tamper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\rpc\\\\exterrorinformation"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\Rpc\\\\ExtErrorInformation"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\Rpc\\\\ExtErrorInformation\" and (winlog.event_data.Details like~ (\"DWORD (0x00000000)\", \"DWORD (0x00000002)\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_rpcrt4_etw_tamper.eql",
+  "metadata": {}
+}

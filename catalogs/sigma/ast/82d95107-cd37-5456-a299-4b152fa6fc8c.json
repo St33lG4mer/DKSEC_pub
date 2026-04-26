@@ -1,0 +1,42 @@
+{
+  "id": "82d95107-cd37-5456-a299-4b152fa6fc8c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_gather_network_info_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "gathernetworkinfo.vbs"
+      ],
+      "raw_values": [
+        "*gatherNetworkInfo.vbs*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*gatherNetworkInfo.vbs*\" and (not (process.executable like~ (\"*\\\\cscript.exe\", \"*\\\\wscript.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_gather_network_info_execution.eql",
+  "metadata": {}
+}

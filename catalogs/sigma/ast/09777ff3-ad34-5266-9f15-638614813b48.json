@@ -1,0 +1,40 @@
+{
+  "id": "09777ff3-ad34-5266-9f15-638614813b48",
+  "catalog": "sigma",
+  "name": "proc_creation_win_diskshadow_script_mode_susp_location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "diskshadow.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "diskshadow.exe"
+      ],
+      "raw_values": [
+        "*\\\\diskshadow.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"diskshadow.exe\" or process.executable:\"*\\\\diskshadow.exe\") and process.command_line like~ (\"*-s *\", \"*/s *\", \"*–s *\", \"*—s *\", \"*―s *\") and (process.command_line like~ (\"*:\\\\Temp\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*\\\\ProgramData\\\\*\", \"*\\\\Users\\\\Public\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_diskshadow_script_mode_susp_location.eql",
+  "metadata": {}
+}

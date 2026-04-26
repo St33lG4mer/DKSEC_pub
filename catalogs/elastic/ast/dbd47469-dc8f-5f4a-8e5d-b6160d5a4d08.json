@@ -1,0 +1,65 @@
+{
+  "id": "dbd47469-dc8f-5f4a-8e5d-b6160d5a4d08",
+  "catalog": "elastic",
+  "name": "Entra ID MFA Disabled for User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.auditlogs"
+      ],
+      "raw_values": [
+        "azure.auditlogs"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "disable strong authentication",
+        "user deleted security info"
+      ],
+      "raw_values": [
+        "Disable Strong Authentication",
+        "User deleted security info"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.properties.additional_details.key",
+      "raw_field": "azure.auditlogs.properties.additional_details.key",
+      "operator": ":",
+      "values": [
+        "authenticationmethod"
+      ],
+      "raw_values": [
+        "AuthenticationMethod"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"azure.auditlogs\" and\n    (azure.auditlogs.operation_name: \"Disable Strong Authentication\" or\n    (\n        azure.auditlogs.operation_name: \"User deleted security info\" and\n        azure.auditlogs.properties.additional_details.key: \"AuthenticationMethod\"\n    )) and event.outcome: (Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/persistence_entra_id_mfa_disabled_for_user.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Persistence"
+    ]
+  }
+}

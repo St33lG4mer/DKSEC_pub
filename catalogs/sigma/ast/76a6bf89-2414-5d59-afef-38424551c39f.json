@@ -1,0 +1,48 @@
+{
+  "id": "76a6bf89-2414-5d59-afef-38424551c39f",
+  "catalog": "sigma",
+  "name": "registry_set_policies_attachments_tamper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\attachments\\\\",
+        "\\\\hidezoneinfoonproperties",
+        "\\\\savezoneinformation",
+        "\\\\scanwithantivirus"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Attachments\\\\*",
+        "*\\\\HideZoneInfoOnProperties",
+        "*\\\\SaveZoneInformation",
+        "*\\\\ScanWithAntiVirus"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)",
+        "dword (0x00000002)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)",
+        "DWORD (0x00000002)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Attachments\\\\*\" and ((registry.path:\"*\\\\HideZoneInfoOnProperties\" and winlog.event_data.Details:\"DWORD (0x00000001)\") or (registry.path:\"*\\\\SaveZoneInformation\" and winlog.event_data.Details:\"DWORD (0x00000002)\") or (registry.path:\"*\\\\ScanWithAntiVirus\" and winlog.event_data.Details:\"DWORD (0x00000001)\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_policies_attachments_tamper.eql",
+  "metadata": {}
+}

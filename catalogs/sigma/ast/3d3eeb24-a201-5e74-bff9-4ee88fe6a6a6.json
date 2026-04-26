@@ -1,0 +1,44 @@
+{
+  "id": "3d3eeb24-a201-5e74-bff9-4ee88fe6a6a6",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_com_key_linking",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hku\\\\",
+        "classes\\\\clsid\\\\",
+        "\\\\treatas"
+      ],
+      "raw_values": [
+        "*HKU\\\\*",
+        "*Classes\\\\CLSID\\\\*",
+        "*\\\\TreatAs*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\system32\\\\svchost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*HKU\\\\*\" and registry.path:\"*Classes\\\\CLSID\\\\*\" and registry.path:\"*\\\\TreatAs*\") and (not process.executable:\"C:\\\\WINDOWS\\\\system32\\\\svchost.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_com_key_linking.eql",
+  "metadata": {}
+}

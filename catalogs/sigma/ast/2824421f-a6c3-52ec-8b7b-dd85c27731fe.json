@@ -1,0 +1,75 @@
+{
+  "id": "2824421f-a6c3-52ec-8b7b-dd85c27731fe",
+  "catalog": "sigma",
+  "name": "win_security_alert_ruler",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4624",
+        "4625"
+      ],
+      "raw_values": [
+        "4624",
+        "4625"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4776"
+      ],
+      "raw_values": [
+        "4776"
+      ]
+    },
+    {
+      "field": "winlog.event_data.workstation",
+      "raw_field": "winlog.event_data.Workstation",
+      "operator": ":",
+      "values": [
+        "ruler"
+      ],
+      "raw_values": [
+        "RULER"
+      ]
+    },
+    {
+      "field": "source.domain",
+      "raw_field": "source.domain",
+      "operator": ":",
+      "values": [
+        "ruler"
+      ],
+      "raw_values": [
+        "RULER"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4776\" and winlog.event_data.Workstation:\"RULER\") or ((event.code like~ (\"4624\", \"4625\")) and source.domain:\"RULER\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_alert_ruler.eql",
+  "metadata": {}
+}

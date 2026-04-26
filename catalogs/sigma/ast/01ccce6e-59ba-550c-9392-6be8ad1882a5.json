@@ -1,0 +1,31 @@
+{
+  "id": "01ccce6e-59ba-550c-9392-6be8ad1882a5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_register_app",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "register_app.vbs",
+        "-register"
+      ],
+      "raw_values": [
+        "*\\\\register_app.vbs*",
+        "*-register*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\register_app.vbs*\" and process.command_line:\"*-register*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_register_app.eql",
+  "metadata": {}
+}

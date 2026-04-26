@@ -1,0 +1,44 @@
+{
+  "id": "1bd28931-ce47-5a57-89a4-0235c121433d",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_darkgate_autoit3_save_temp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".au3",
+        "autoit3.exe"
+      ],
+      "raw_values": [
+        "*.au3",
+        "*\\\\autoit3.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        ".au3",
+        "autoit3.exe"
+      ],
+      "raw_values": [
+        "*.au3",
+        "*\\\\autoit3.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*:\\\\temp\\\\*\" and (file.path like~ (\"*.au3\", \"*\\\\autoit3.exe\"))) or (process.executable:\"*:\\\\temp\\\\*\" and (process.executable like~ (\"*.au3\", \"*\\\\autoit3.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/DarkGate/file_event_win_malware_darkgate_autoit3_save_temp.eql",
+  "metadata": {}
+}

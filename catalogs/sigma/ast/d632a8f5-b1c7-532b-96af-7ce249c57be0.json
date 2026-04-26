@@ -1,0 +1,54 @@
+{
+  "id": "d632a8f5-b1c7-532b-96af-7ce249c57be0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mode_codepage_change",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mode.com"
+      ],
+      "raw_values": [
+        "*\\\\mode.com"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "mode.com"
+      ],
+      "raw_values": [
+        "MODE.COM"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "con",
+        "select="
+      ],
+      "raw_values": [
+        "* con *",
+        "* cp *",
+        "* select=*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\mode.com\" or process.pe.original_file_name:\"MODE.COM\") and (process.command_line:\"* con *\" and process.command_line:\"* cp *\" and process.command_line:\"* select=*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_mode_codepage_change.eql",
+  "metadata": {}
+}

@@ -1,0 +1,42 @@
+{
+  "id": "51f25ea8-a71f-513e-a05d-2c7c5ad52d5d",
+  "catalog": "sigma",
+  "name": "file_event_win_cve_2022_24527_lpe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "webadministration.psm1"
+      ],
+      "raw_values": [
+        "*WindowsPowerShell\\\\Modules\\\\webAdministration\\\\webAdministration.psm1"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*WindowsPowerShell\\\\Modules\\\\webAdministration\\\\webAdministration.psm1\" and (not (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Exploits/CVE-2022-24527/file_event_win_cve_2022_24527_lpe.eql",
+  "metadata": {}
+}

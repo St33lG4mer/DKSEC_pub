@@ -1,0 +1,31 @@
+{
+  "id": "0e97d4ad-45d5-5ccb-96e3-c03f8ee083b6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_remotefxvgpudisablement_abuse",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "invoke-athremotefxvgpudisablementcommand",
+        "invoke-athremotefxvgpudisableme"
+      ],
+      "raw_values": [
+        "*Invoke-ATHRemoteFXvGPUDisablementCommand*",
+        "*Invoke-ATHRemoteFXvGPUDisableme*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*Invoke-ATHRemoteFXvGPUDisablementCommand*\", \"*Invoke-ATHRemoteFXvGPUDisableme*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_remotefxvgpudisablement_abuse.eql",
+  "metadata": {}
+}

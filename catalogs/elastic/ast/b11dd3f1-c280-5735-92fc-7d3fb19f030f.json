@@ -1,0 +1,84 @@
+{
+  "id": "b11dd3f1-c280-5735-92fc-7d3fb19f030f",
+  "catalog": "elastic",
+  "name": "Entra ID User Reported Suspicious Activity",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.auditlogs"
+      ],
+      "raw_values": [
+        "azure.auditlogs"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "suspicious activity reported"
+      ],
+      "raw_values": [
+        "Suspicious activity reported"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.properties.additional_details.key",
+      "raw_field": "azure.auditlogs.properties.additional_details.key",
+      "operator": ":",
+      "values": [
+        "authenticationmethod"
+      ],
+      "raw_values": [
+        "AuthenticationMethod"
+      ]
+    },
+    {
+      "field": ".type",
+      "raw_field": ".type",
+      "operator": ":",
+      "values": [
+        "user"
+      ],
+      "raw_values": [
+        "User"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"azure.auditlogs\"\n    and azure.auditlogs.operation_name: \"Suspicious activity reported\"\n    and azure.auditlogs.properties.additional_details.key: \"AuthenticationMethod\"\n    and azure.auditlogs.properties.target_resources.*.type: \"User\"\n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_user_reported_risk.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Initial Access"
+    ]
+  }
+}

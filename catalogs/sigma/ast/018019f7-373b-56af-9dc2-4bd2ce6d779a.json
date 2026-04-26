@@ -1,0 +1,77 @@
+{
+  "id": "018019f7-373b-56af-9dc2-4bd2ce6d779a",
+  "catalog": "sigma",
+  "name": "win_system_malware_goofy_guineapig_service_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicename",
+      "raw_field": "winlog.event_data.ServiceName",
+      "operator": ":",
+      "values": [
+        "googleupdate"
+      ],
+      "raw_values": [
+        "GoogleUpdate"
+      ]
+    },
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": ":",
+      "values": [
+        "rundll32",
+        "fileprotocolhandler",
+        "\\\\programdata\\\\googleupdate\\\\googleupdate.exe"
+      ],
+      "raw_values": [
+        "*rundll32*",
+        "*FileProtocolHandler*",
+        "*\\\\ProgramData\\\\GoogleUpdate\\\\GoogleUpdate.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\" and winlog.event_data.ServiceName:\"GoogleUpdate\" and (winlog.event_data.ImagePath:\"*rundll32*\" and winlog.event_data.ImagePath:\"*FileProtocolHandler*\" and winlog.event_data.ImagePath:\"*\\\\ProgramData\\\\GoogleUpdate\\\\GoogleUpdate.exe*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Goofy-Guineapig/win_system_malware_goofy_guineapig_service_persistence.eql",
+  "metadata": {}
+}

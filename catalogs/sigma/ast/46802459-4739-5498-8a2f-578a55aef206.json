@@ -1,0 +1,31 @@
+{
+  "id": "46802459-4739-5498-8a2f-578a55aef206",
+  "catalog": "sigma",
+  "name": "proc_creation_win_bginfo_uncommon_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "bginfo.exe",
+        "bginfo64.exe"
+      ],
+      "raw_values": [
+        "*\\\\bginfo.exe",
+        "*\\\\bginfo64.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable like~ (\"*\\\\bginfo.exe\", \"*\\\\bginfo64.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_bginfo_uncommon_child_process.eql",
+  "metadata": {}
+}

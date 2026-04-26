@@ -1,0 +1,41 @@
+{
+  "id": "f09bad6f-bad5-5f30-ab07-46be0c7edd32",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_dpapi_backup_and_cert_export_ioc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "ntds_capi_",
+        "ntds_legacy_",
+        "ntds_unknown_",
+        ".cer",
+        ".key",
+        ".pfx",
+        ".pvk"
+      ],
+      "raw_values": [
+        "*ntds_capi_*",
+        "*ntds_legacy_*",
+        "*ntds_unknown_*",
+        "*.cer",
+        "*.key",
+        "*.pfx",
+        "*.pvk"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*ntds_capi_*\", \"*ntds_legacy_*\", \"*ntds_unknown_*\")) and (file.path like~ (\"*.cer\", \"*.key\", \"*.pfx\", \"*.pvk\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_dpapi_backup_and_cert_export_ioc.eql",
+  "metadata": {}
+}

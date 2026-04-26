@@ -1,0 +1,42 @@
+{
+  "id": "a6b5e515-9f7a-5a65-a932-a6bbcde104cf",
+  "catalog": "sigma",
+  "name": "registry_set_malware_kapeka_backdoor_configuration",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\cryptography\\\\providers\\\\{",
+        "\\\\seed"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\Providers\\\\{*",
+        "*\\\\Seed"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "*(Empty)*"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\Providers\\\\{*\" and registry.path:\"*\\\\Seed\") and (not winlog.event_data.Details:\"*(Empty)*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/kapeka/registry_set_malware_kapeka_backdoor_configuration.eql",
+  "metadata": {}
+}

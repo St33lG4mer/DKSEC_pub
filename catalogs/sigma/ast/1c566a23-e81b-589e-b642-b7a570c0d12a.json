@@ -1,0 +1,55 @@
+{
+  "id": "1c566a23-e81b-589e-b642-b7a570c0d12a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_gather_network_info",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cscript.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "cscript.exe",
+        "wscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "gathernetworkinfo.vbs"
+      ],
+      "raw_values": [
+        "*gatherNetworkInfo.vbs*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\cscript.exe\", \"*\\\\wscript.exe\")) or (process.pe.original_file_name like~ (\"cscript.exe\", \"wscript.exe\"))) and process.command_line:\"*gatherNetworkInfo.vbs*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_gather_network_info.eql",
+  "metadata": {}
+}

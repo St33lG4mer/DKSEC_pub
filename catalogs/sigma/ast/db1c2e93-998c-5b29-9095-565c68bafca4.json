@@ -1,0 +1,43 @@
+{
+  "id": "db1c2e93-998c-5b29-9095-565c68bafca4",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_xll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\microsoft\\\\office\\\\",
+        "\\\\excel\\\\options"
+      ],
+      "raw_values": [
+        "*Software\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Excel\\\\Options"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        ".xll"
+      ],
+      "raw_values": [
+        "/R *",
+        "*.xll"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*Software\\\\Microsoft\\\\Office\\\\*\" and registry.path:\"*\\\\Excel\\\\Options\" and winlog.event_data.Details:\"/R *\" and winlog.event_data.Details:\"*.xll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_xll.eql",
+  "metadata": {}
+}

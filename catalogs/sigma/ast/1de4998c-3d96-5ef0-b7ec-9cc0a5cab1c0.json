@@ -1,0 +1,33 @@
+{
+  "id": "1de4998c-3d96-5ef0-b7ec-9cc0a5cab1c0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_import_cert_susp_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "import-certificate",
+        "-filepath",
+        "root"
+      ],
+      "raw_values": [
+        "*Import-Certificate*",
+        "* -FilePath *",
+        "*Cert:\\\\LocalMachine\\\\Root*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*Import-Certificate*\" and process.command_line:\"* -FilePath *\" and process.command_line:\"*Cert:\\\\LocalMachine\\\\Root*\") and (process.command_line like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*:\\\\Windows\\\\TEMP\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_import_cert_susp_locations.eql",
+  "metadata": {}
+}

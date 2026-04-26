@@ -1,0 +1,75 @@
+{
+  "id": "5672c4e0-c1ed-5db5-a500-10a85b218af8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_schtasks_reg_loader",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "get-itemproperty",
+        "hkcu:",
+        "hklm:",
+        "registry::",
+        "hkey_",
+        "frombase64string",
+        "encodedcommand"
+      ],
+      "raw_values": [
+        "*Get-ItemProperty*",
+        "* gp *",
+        "*HKCU:*",
+        "*HKLM:*",
+        "*registry::*",
+        "*HKEY_*",
+        "*FromBase64String*",
+        "*encodedcommand*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "*/Create*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\schtasks.exe\" or process.pe.original_file_name:\"schtasks.exe\") and process.command_line:\"*/Create*\" and (process.command_line like~ (\"*Get-ItemProperty*\", \"* gp *\")) and (process.command_line like~ (\"*HKCU:*\", \"*HKLM:*\", \"*registry::*\", \"*HKEY_*\"))) and (not (process.command_line like~ (\"*FromBase64String*\", \"*encodedcommand*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_schtasks_reg_loader.eql",
+  "metadata": {}
+}

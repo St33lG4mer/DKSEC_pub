@@ -1,0 +1,42 @@
+{
+  "id": "a728f239-823a-56b5-ab04-a61b710d31dd",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_creation_by_mobsync",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".dll",
+        ".exe"
+      ],
+      "raw_values": [
+        "*.dll",
+        "*.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mobsync.exe"
+      ],
+      "raw_values": [
+        "*\\\\mobsync.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\mobsync.exe\" and (file.path like~ (\"*.dll\", \"*.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_creation_by_mobsync.eql",
+  "metadata": {}
+}

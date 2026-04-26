@@ -1,0 +1,79 @@
+{
+  "id": "942d94b1-a1bb-56dd-a8a7-bad661bf48bd",
+  "catalog": "sigma",
+  "name": "file_event_win_adsi_cache_creation_by_uncommon_tool",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cylancesvc.exe",
+        "ccmexec.exe",
+        "dllhost.exe",
+        "dsac.exe",
+        "efsui.exe",
+        "mmc.exe",
+        "svchost.exe",
+        "wmiprvse.exe",
+        "powershell.exe",
+        "ccmsetup",
+        "sentinel agent",
+        "ldapwhoami.exe",
+        "citrix.deliveryservices.domainservices.servicehost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Cylance\\\\Desktop\\\\CylanceSvc.exe",
+        "*:\\\\Windows\\\\CCM\\\\CcmExec.exe",
+        "*:\\\\windows\\\\system32\\\\dllhost.exe",
+        "*:\\\\Windows\\\\system32\\\\dsac.exe",
+        "*:\\\\Windows\\\\system32\\\\efsui.exe",
+        "*:\\\\windows\\\\system32\\\\mmc.exe",
+        "*:\\\\windows\\\\system32\\\\svchost.exe",
+        "*:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe",
+        "*:\\\\windows\\\\system32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+        "*:\\\\Windows\\\\ccmsetup\\\\autoupgrade\\\\ccmsetup*",
+        "*:\\\\Program Files\\\\SentinelOne\\\\Sentinel Agent*",
+        "*\\\\LANDesk\\\\LDCLient\\\\ldapwhoami.exe",
+        "*:\\\\Program Files\\\\Citrix\\\\Receiver StoreFront\\\\Services\\\\DefaultDomainServices\\\\Citrix.DeliveryServices.DomainServices.ServiceHost.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".sch"
+      ],
+      "raw_values": [
+        "*\\\\Local\\\\Microsoft\\\\Windows\\\\SchCache\\\\*",
+        "*.sch"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microsoft office",
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\*",
+        "*\\\\Microsoft Office*",
+        "*\\\\OUTLOOK.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\Local\\\\Microsoft\\\\Windows\\\\SchCache\\\\*\" and file.path:\"*.sch\") and (not (((process.executable like~ (\"*:\\\\Program Files\\\\Cylance\\\\Desktop\\\\CylanceSvc.exe\", \"*:\\\\Windows\\\\CCM\\\\CcmExec.exe\", \"*:\\\\windows\\\\system32\\\\dllhost.exe\", \"*:\\\\Windows\\\\system32\\\\dsac.exe\", \"*:\\\\Windows\\\\system32\\\\efsui.exe\", \"*:\\\\windows\\\\system32\\\\mmc.exe\", \"*:\\\\windows\\\\system32\\\\svchost.exe\", \"*:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSE.exe\", \"*:\\\\windows\\\\system32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\")) or (process.executable like~ (\"*:\\\\Windows\\\\ccmsetup\\\\autoupgrade\\\\ccmsetup*\", \"*:\\\\Program Files\\\\SentinelOne\\\\Sentinel Agent*\"))) or ((process.executable:\"*:\\\\Program Files\\\\*\" and process.executable:\"*\\\\Microsoft Office*\") and process.executable:\"*\\\\OUTLOOK.EXE\"))) and (not (process.executable like~ (\"*\\\\LANDesk\\\\LDCLient\\\\ldapwhoami.exe\", \"*:\\\\Program Files\\\\Citrix\\\\Receiver StoreFront\\\\Services\\\\DefaultDomainServices\\\\Citrix.DeliveryServices.DomainServices.ServiceHost.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_adsi_cache_creation_by_uncommon_tool.eql",
+  "metadata": {}
+}

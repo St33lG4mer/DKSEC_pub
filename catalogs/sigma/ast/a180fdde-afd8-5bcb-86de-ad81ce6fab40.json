@@ -1,0 +1,64 @@
+{
+  "id": "a180fdde-afd8-5bcb-86de-ad81ce6fab40",
+  "catalog": "sigma",
+  "name": "file_access_win_susp_crypto_currency_wallets",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "wallet.dat"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Roaming\\\\Ethereum\\\\keystore\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\EthereumClassic\\\\keystore\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\monero\\\\wallets\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\Bitcoin\\\\wallet.dat",
+        "*\\\\AppData\\\\Roaming\\\\BitcoinABC\\\\wallet.dat",
+        "*\\\\AppData\\\\Roaming\\\\BitcoinSV\\\\wallet.dat",
+        "*\\\\AppData\\\\Roaming\\\\DashCore\\\\wallet.dat",
+        "*\\\\AppData\\\\Roaming\\\\DogeCoin\\\\wallet.dat",
+        "*\\\\AppData\\\\Roaming\\\\Litecoin\\\\wallet.dat",
+        "*\\\\AppData\\\\Roaming\\\\Ripple\\\\wallet.dat",
+        "*\\\\AppData\\\\Roaming\\\\Zcash\\\\wallet.dat"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mpcopyaccelerator.exe",
+        "msmpeng.exe"
+      ],
+      "raw_values": [
+        "*\\\\MpCopyAccelerator.exe",
+        "*\\\\MsMpEng.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System",
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((file.path like~ (\"*\\\\AppData\\\\Roaming\\\\Ethereum\\\\keystore\\\\*\", \"*\\\\AppData\\\\Roaming\\\\EthereumClassic\\\\keystore\\\\*\", \"*\\\\AppData\\\\Roaming\\\\monero\\\\wallets\\\\*\")) or (file.path like~ (\"*\\\\AppData\\\\Roaming\\\\Bitcoin\\\\wallet.dat\", \"*\\\\AppData\\\\Roaming\\\\BitcoinABC\\\\wallet.dat\", \"*\\\\AppData\\\\Roaming\\\\BitcoinSV\\\\wallet.dat\", \"*\\\\AppData\\\\Roaming\\\\DashCore\\\\wallet.dat\", \"*\\\\AppData\\\\Roaming\\\\DogeCoin\\\\wallet.dat\", \"*\\\\AppData\\\\Roaming\\\\Litecoin\\\\wallet.dat\", \"*\\\\AppData\\\\Roaming\\\\Ripple\\\\wallet.dat\", \"*\\\\AppData\\\\Roaming\\\\Zcash\\\\wallet.dat\"))) and (not (process.executable:\"System\" or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\*\", \"C:\\\\Program Files\\\\*\", \"C:\\\\Windows\\\\system32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")))) and (not (process.executable:\"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\\\\*\" and (process.executable like~ (\"*\\\\MpCopyAccelerator.exe\", \"*\\\\MsMpEng.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_access/file_access_win_susp_crypto_currency_wallets.eql",
+  "metadata": {}
+}

@@ -1,0 +1,26 @@
+{
+  "id": "09421230-fc7a-5346-8a13-56539a7ed686",
+  "catalog": "elastic",
+  "name": "Google Workspace Admin Role Deletion",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:google_workspace.admin and event.provider:admin and event.category:iam and event.action:DELETE_ROLE\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/impact_google_workspace_admin_role_deletion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

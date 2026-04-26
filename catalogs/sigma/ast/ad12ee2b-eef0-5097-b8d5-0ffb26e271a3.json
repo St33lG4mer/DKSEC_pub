@@ -1,0 +1,35 @@
+{
+  "id": "ad12ee2b-eef0-5097-b8d5-0ffb26e271a3",
+  "catalog": "sigma",
+  "name": "dns_query_win_apt_diamond_steel_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        "3dkit.org",
+        "dersmarketim.com",
+        "galerielamy.com",
+        "olidhealth.com"
+      ],
+      "raw_values": [
+        "*3dkit.org*",
+        "*dersmarketim.com*",
+        "*galerielamy.com*",
+        "*olidhealth.com*"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name like~ (\"*3dkit.org*\", \"*dersmarketim.com*\", \"*galerielamy.com*\", \"*olidhealth.com*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Diamond-Sleet/dns_query_win_apt_diamond_steel_indicators.eql",
+  "metadata": {}
+}

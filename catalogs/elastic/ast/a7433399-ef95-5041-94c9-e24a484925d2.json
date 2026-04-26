@@ -1,0 +1,65 @@
+{
+  "id": "a7433399-ef95-5041-94c9-e24a484925d2",
+  "catalog": "elastic",
+  "name": "Potential Okta Credential Stuffing (Single Source)",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "okta.outcome.reason",
+      "raw_field": "okta.outcome.reason",
+      "operator": "in",
+      "values": [
+        "invalid_credentials",
+        "locked_out"
+      ],
+      "raw_values": [
+        "INVALID_CREDENTIALS",
+        "LOCKED_OUT"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "okta.system"
+      ],
+      "raw_values": [
+        "okta.system"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "user.authentication.",
+        "user.session.start"
+      ],
+      "raw_values": [
+        "user.authentication.*",
+        "user.session.start"
+      ]
+    }
+  ],
+  "raw_query": "FROM logs-okta.system-* METADATA _id, _version, _index\n| WHERE\n    data_stream.dataset == \"okta.system\"\n    AND (event.action LIKE \"user.authentication.*\" OR event.action == \"user.session.start\")\n    AND okta.outcome.reason IN (\"INVALID_CREDENTIALS\", \"LOCKED_OUT\")\n    AND okta.actor.alternate_id IS NOT NULL\n// Build user-source context as JSON for enrichment\n| EVAL Esql.user_source_info = CONCAT(\n    \"{\\\"user\\\":\\\"\", okta.actor.alternate_id,\n    \"\\\",\\\"ip\\\":\\\"\", COALESCE(okta.client.ip::STRING, \"unknown\"),\n    \"\\\",\\\"user_agent\\\":\\\"\", COALESCE(okta.client.user_agent.raw_user_agent, \"unknown\"), \"\\\"}\"\n  )\n// FIRST STATS: Aggregate by (IP, user) to get per-user attempt counts\n// This prevents skew from outlier users with many attempts\n| STATS\n    Esql.user_attempts = COUNT(*),\n    Esql.user_dt_hashes = COUNT_DISTINCT(okta.debug_context.debug_data.dt_hash),\n    Esql.user_source_info = VALUES(Esql.user_source_info),\n    Esql.user_agents_per_user = VALUES(okta.client.user_agent.raw_user_agent),\n    Esql.devices_per_user = VALUES(okta.client.device),\n    Esql.is_proxy = VALUES(okta.security_context.is_proxy),\n    Esql.geo_country = VALUES(client.geo.country_name),\n    Esql.geo_city = VALUES(client.geo.city_name),\n    Esql.asn_number = VALUES(source.as.number),\n    Esql.asn_org = VALUES(source.as.organization.name),\n    Esql.threat_suspected = VALUES(okta.debug_context.debug_data.threat_suspected),\n    Esql.risk_level = VALUES(okta.debug_context.debug_data.risk_level),\n    Esql.risk_reasons = VALUES(okta.debug_context.debug_data.risk_reasons),\n    Esql.event_actions = VALUES(event.action),\n    Esql.first_seen_user = MIN(@timestamp),\n    Esql.last_seen_user = MAX(@timestamp)\n  BY okta.client.ip, okta.actor.alternate_id\n// SECOND STATS: Aggregate by IP to detect credential stuffing pattern\n// Now we can accurately measure the distribution of attempts across users\n| STATS\n    Esql.unique_users = COUNT(*),\n    Esql.total_attempts = SUM(Esql.user_attempts),\n    Esql.max_attempts_per_user = MAX(Esql.user_attempts),\n    Esql.min_attempts_per_user = MIN(Esql.user_attempts),\n    Esql.avg_attempts_per_user = AVG(Esql.user_attempts),\n    Esql.users_with_single_attempt = SUM(CASE(Esql.user_attempts == 1, 1, 0)),\n    Esql.users_with_few_attempts = SUM(CASE(Esql.user_attempts <= 2, 1, 0)),\n    Esql.first_seen = MIN(Esql.first_seen_user),\n    Esql.last_seen = MAX(Esql.last_seen_user),\n    Esql.target_users = VALUES(okta.actor.alternate_id),\n    Esql.user_source_mapping = VALUES(Esql.user_source_info),\n    Esql.event_action_values = VALUES(Esql.event_actions),\n    Esql.user_agent_values = VALUES(Esql.user_agents_per_user),\n    Esql.device_values = VALUES(Esql.devices_per_user),\n    Esql.is_proxy_values = VALUES(Esql.is_proxy),\n    Esql.geo_country_values = VALUES(Esql.geo_country),\n    Esql.geo_city_values = VALUES(Esql.geo_city),\n    Esql.source_asn_values = VALUES(Esql.asn_number),\n    Esql.source_asn_org_values = VALUES(Esql.asn_org),\n    Esql.threat_suspected_values = VALUES(Esql.threat_suspected),\n    Esql.risk_level_values = VALUES(Esql.risk_level),\n    Esql.risk_reasons_values = VALUES(Esql.risk_reasons)\n  BY okta.client.ip\n// Calculate stuffing signature: most users should have very few attempts\n| EVAL Esql.pct_users_few_attempts = Esql.users_with_few_attempts * 100.0 / Esql.unique_users\n// Credential stuffing: many users, most with 1-2 attempts each, low max per user\n// Stacked stats gives us accurate per-user distribution instead of skewed averages\n| WHERE\n    Esql.total_attempts >= 25\n    AND Esql.unique_users >= 15\n    AND Esql.max_attempts_per_user <= 2\n    AND Esql.pct_users_few_attempts >= 80.0\n| SORT Esql.unique_users DESC\n| KEEP Esql.*, okta.client.ip\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/credential_access_okta_credential_stuffing_single_source.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Identity",
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Data Source: Okta System Logs",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

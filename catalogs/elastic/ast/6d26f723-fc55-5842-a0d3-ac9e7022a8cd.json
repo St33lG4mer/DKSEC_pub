@@ -1,0 +1,26 @@
+{
+  "id": "6d26f723-fc55-5842-a0d3-ac9e7022a8cd",
+  "catalog": "elastic",
+  "name": "High Command Line Entropy Detected for Privileged Commands",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/pad/privileged_access_ml_linux_high_median_process_command_line_entropy_by_user.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Privileged Access Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

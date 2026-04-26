@@ -1,0 +1,25 @@
+{
+  "id": "a690e092-dc7c-5215-927b-7c9601da4d88",
+  "catalog": "elastic",
+  "name": "Attempts to Brute Force an Okta User Account",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:user.account.lock\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/credential_access_attempts_to_brute_force_okta_user_account.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Tactic: Credential Access",
+      "Data Source: Okta",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

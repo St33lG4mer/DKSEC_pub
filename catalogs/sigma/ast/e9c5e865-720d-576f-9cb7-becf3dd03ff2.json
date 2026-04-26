@@ -1,0 +1,37 @@
+{
+  "id": "e9c5e865-720d-576f-9cb7-becf3dd03ff2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_virtualbox_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "vboxrt.dll,rtr3init",
+        "vboxc.dll",
+        "vboxdrv.sys",
+        "startvm",
+        "controlvm"
+      ],
+      "raw_values": [
+        "*VBoxRT.dll,RTR3Init*",
+        "*VBoxC.dll*",
+        "*VBoxDrv.sys*",
+        "*startvm*",
+        "*controlvm*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*VBoxRT.dll,RTR3Init*\", \"*VBoxC.dll*\", \"*VBoxDrv.sys*\")) or (process.command_line like~ (\"*startvm*\", \"*controlvm*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_virtualbox_execution.eql",
+  "metadata": {}
+}

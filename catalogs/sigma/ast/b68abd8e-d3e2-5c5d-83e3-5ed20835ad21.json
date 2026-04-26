@@ -1,0 +1,42 @@
+{
+  "id": "b68abd8e-d3e2-5c5d-83e3-5ed20835ad21",
+  "catalog": "sigma",
+  "name": "file_event_win_lsass_werfault_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "lsass",
+        "lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass*",
+        "*lsass.exe*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\system32\\\\WerFault.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"C:\\\\WINDOWS\\\\system32\\\\WerFault.exe\" and (file.path like~ (\"*\\\\lsass*\", \"*lsass.exe*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_lsass_werfault_dump.eql",
+  "metadata": {}
+}

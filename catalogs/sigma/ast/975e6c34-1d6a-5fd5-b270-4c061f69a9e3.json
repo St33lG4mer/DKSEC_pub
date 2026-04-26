@@ -1,0 +1,57 @@
+{
+  "id": "975e6c34-1d6a-5fd5-b270-4c061f69a9e3",
+  "catalog": "sigma",
+  "name": "win_security_sdelete_potential_secure_deletion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "4656",
+        "4663",
+        "4658"
+      ],
+      "raw_values": [
+        "4656",
+        "4663",
+        "4658"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        ".aaa",
+        ".zzz"
+      ],
+      "raw_values": [
+        "*.AAA",
+        "*.ZZZ"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"4656\", \"4663\", \"4658\")) and (winlog.event_data.ObjectName like~ (\"*.AAA\", \"*.ZZZ\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_sdelete_potential_secure_deletion.eql",
+  "metadata": {}
+}

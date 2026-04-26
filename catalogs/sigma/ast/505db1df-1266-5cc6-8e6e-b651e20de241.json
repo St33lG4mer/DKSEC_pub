@@ -1,0 +1,29 @@
+{
+  "id": "505db1df-1266-5cc6-8e6e-b651e20de241",
+  "catalog": "sigma",
+  "name": "registry_set_bginfo_custom_db",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\winternals\\\\bginfo\\\\database"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Winternals\\\\BGInfo\\\\Database"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\Winternals\\\\BGInfo\\\\Database\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_bginfo_custom_db.eql",
+  "metadata": {}
+}

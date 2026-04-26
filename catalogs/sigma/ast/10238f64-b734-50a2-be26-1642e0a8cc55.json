@@ -1,0 +1,35 @@
+{
+  "id": "10238f64-b734-50a2-be26-1642e0a8cc55",
+  "catalog": "sigma",
+  "name": "proc_creation_win_vscode_tunnel_service_install",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "tunnel",
+        "service",
+        "internal-run",
+        "tunnel-service.log"
+      ],
+      "raw_values": [
+        "*tunnel *",
+        "*service*",
+        "*internal-run*",
+        "*tunnel-service.log*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*tunnel *\" and process.command_line:\"*service*\" and process.command_line:\"*internal-run*\" and process.command_line:\"*tunnel-service.log*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_vscode_tunnel_service_install.eql",
+  "metadata": {}
+}

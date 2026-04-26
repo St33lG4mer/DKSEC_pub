@@ -1,0 +1,52 @@
+{
+  "id": "9ab29ed7-fa66-5f95-b371-54e590dd72a4",
+  "catalog": "sigma",
+  "name": "image_load_malware_kapeka_backdoor_wll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "programdata"
+      ],
+      "raw_values": [
+        "*:\\\\ProgramData*",
+        "*\\\\AppData\\\\Local\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".wll']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['[a-zA-Z]{5,6}\\\\.wll']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\rundll32.exe\" and (file.path like~ (\"*:\\\\ProgramData*\", \"*\\\\AppData\\\\Local\\\\*\")) and file.path:\"SigmaRegularExpression(regexp=SigmaString(['[a-zA-Z]{5,6}\\\\.wll']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/kapeka/image_load_malware_kapeka_backdoor_wll.eql",
+  "metadata": {}
+}

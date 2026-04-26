@@ -1,0 +1,122 @@
+{
+  "id": "4c5aeca8-4e69-5e5f-bd3b-c333bd1dc702",
+  "catalog": "elastic",
+  "name": "AWS Credentials Searched For Inside A Container",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "aws_access_key_id",
+        "aws_secret_access_key",
+        "aws_session_token",
+        "accesskeyid",
+        "secretaccesskey",
+        "access_key",
+        "credentials"
+      ],
+      "raw_values": [
+        "*aws_access_key_id*",
+        "*aws_secret_access_key*",
+        "*aws_session_token*",
+        "*accesskeyid*",
+        "*secretaccesskey*",
+        "*access_key*",
+        "*.aws/credentials*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "grep",
+        "egrep",
+        "fgrep",
+        "find",
+        "locate",
+        "mlocate",
+        "cat",
+        "sed",
+        "awk"
+      ],
+      "raw_values": [
+        "grep",
+        "egrep",
+        "fgrep",
+        "find",
+        "locate",
+        "mlocate",
+        "cat",
+        "sed",
+        "awk"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.entry_leader.entry_meta.type",
+      "raw_field": "process.entry_leader.entry_meta.type",
+      "operator": "==",
+      "values": [
+        "container"
+      ],
+      "raw_values": [
+        "container"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.entry_leader.entry_meta.type == \"container\" and\nprocess.name in (\"grep\", \"egrep\", \"fgrep\", \"find\", \"locate\", \"mlocate\", \"cat\", \"sed\", \"awk\") and\nprocess.command_line like~ (\n  \"*aws_access_key_id*\", \"*aws_secret_access_key*\", \"*aws_session_token*\", \"*accesskeyid*\", \"*secretaccesskey*\",\n  \"*access_key*\", \"*.aws/credentials*\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_aws_creds_search_inside_container.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

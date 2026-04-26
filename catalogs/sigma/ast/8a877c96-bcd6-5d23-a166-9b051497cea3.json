@@ -1,0 +1,57 @@
+{
+  "id": "8a877c96-bcd6-5d23-a166-9b051497cea3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_net_user_add",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "*\\\\net.exe",
+        "*\\\\net1.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "net.exe",
+        "net1.exe"
+      ],
+      "raw_values": [
+        "net.exe",
+        "net1.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "user",
+        "add"
+      ],
+      "raw_values": [
+        "*user*",
+        "*add*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) or (process.pe.original_file_name like~ (\"net.exe\", \"net1.exe\"))) and (process.command_line:\"*user*\" and process.command_line:\"*add*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_net_user_add.eql",
+  "metadata": {}
+}

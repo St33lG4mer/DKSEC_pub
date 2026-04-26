@@ -1,0 +1,51 @@
+{
+  "id": "674f0e63-68a7-59c4-a623-71c918fff5cb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uac_bypass_hijacking_firwall_snap_in",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "mmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mmc.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "wf.msc"
+      ],
+      "raw_values": [
+        "*WF.msc*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*\\\\WerFault.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\mmc.exe\" and process.parent.command_line:\"*WF.msc*\") and (not process.executable:\"*\\\\WerFault.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_hijacking_firwall_snap_in.eql",
+  "metadata": {}
+}

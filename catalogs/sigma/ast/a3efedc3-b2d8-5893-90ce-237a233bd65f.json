@@ -1,0 +1,51 @@
+{
+  "id": "a3efedc3-b2d8-5893-90ce-237a233bd65f",
+  "catalog": "sigma",
+  "name": "win_system_vul_cve_2020_1472",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "netlogon"
+      ],
+      "raw_values": [
+        "NetLogon"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5829"
+      ],
+      "raw_values": [
+        "5829"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and (winlog.provider_name:\"NetLogon\" and event.code:\"5829\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/netlogon/win_system_vul_cve_2020_1472.eql",
+  "metadata": {}
+}

@@ -1,0 +1,101 @@
+{
+  "id": "b98514e8-c430-5df8-824f-fb30c944ff91",
+  "catalog": "sigma",
+  "name": "proc_creation_win_python_inline_command_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "python.exe",
+        "python3.exe",
+        "python2.exe"
+      ],
+      "raw_values": [
+        "*python.exe",
+        "*python3.exe",
+        "*python2.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "python",
+        "code.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Python*",
+        "C:\\\\Program Files\\\\Microsoft VS Code\\\\Code.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "python.exe"
+      ],
+      "raw_values": [
+        "python.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-w ignore::deprecationwarning",
+        "['install', '--no-cache-dir', '--no-index', '--find-links',",
+        "'--upgrade', 'pip'",
+        "<pip-setuptools-caller>",
+        "exec(compile("
+      ],
+      "raw_values": [
+        "* -c*",
+        "*-W ignore::DeprecationWarning*",
+        "*['install', '--no-cache-dir', '--no-index', '--find-links',*",
+        "*'--upgrade', 'pip'*",
+        "*<pip-setuptools-caller>*",
+        "*exec(compile(*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "python.exe",
+        "code.exe"
+      ],
+      "raw_values": [
+        "*\\\\python.exe",
+        "*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft VS Code\\\\Code.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "-e -s -m ensurepip -u --default-pip"
+      ],
+      "raw_values": [
+        "*-E -s -m ensurepip -U --default-pip*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.pe.original_file_name:\"python.exe\" or (process.executable like~ (\"*python.exe\", \"*python3.exe\", \"*python2.exe\"))) and process.command_line:\"* -c*\") and (not (((process.parent.executable like~ (\"C:\\\\Program Files\\\\Python*\", \"C:\\\\Program Files (x86)\\\\Python*\")) and process.parent.executable:\"*\\\\python.exe\" and process.parent.command_line:\"*-E -s -m ensurepip -U --default-pip*\") or ((process.parent.executable like~ (\"C:\\\\Program Files\\\\Python*\", \"C:\\\\Program Files (x86)\\\\Python*\")) and (process.command_line:\"*-W ignore::DeprecationWarning*\" and process.command_line:\"*['install', '--no-cache-dir', '--no-index', '--find-links',*\" and process.command_line:\"*'--upgrade', 'pip'*\")))) and (not ((process.parent.executable:\"*\\\\AppData\\\\Local\\\\Programs\\\\Microsoft VS Code\\\\Code.exe\" or (process.parent.executable like~ (\"C:\\\\Program Files\\\\Microsoft VS Code\\\\Code.exe\", \"C:\\\\Program Files (x86)\\\\Microsoft VS Code\\\\Code.exe\"))) or (process.command_line:\"*<pip-setuptools-caller>*\" and process.command_line:\"*exec(compile(*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_python_inline_command_execution.eql",
+  "metadata": {}
+}

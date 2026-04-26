@@ -1,0 +1,42 @@
+{
+  "id": "ddc634b1-aa52-5426-90fd-f5a93350b139",
+  "catalog": "sigma",
+  "name": "dns_query_win_mal_cobaltstrike",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        "aaa.stage.",
+        "post.1"
+      ],
+      "raw_values": [
+        "aaa.stage.*",
+        "post.1*"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        ".stage.123456."
+      ],
+      "raw_values": [
+        "*.stage.123456.*"
+      ]
+    }
+  ],
+  "raw_query": "any where (dns.question.name like~ (\"aaa.stage.*\", \"post.1*\")) or dns.question.name:\"*.stage.123456.*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_mal_cobaltstrike.eql",
+  "metadata": {}
+}

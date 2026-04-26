@@ -1,0 +1,27 @@
+{
+  "id": "753013ba-af56-5bbc-b908-ccf8e774b802",
+  "catalog": "elastic",
+  "name": "GCP Service Account Disabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.iam.admin.v*.DisableServiceAccount and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/impact_gcp_service_account_disabled.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

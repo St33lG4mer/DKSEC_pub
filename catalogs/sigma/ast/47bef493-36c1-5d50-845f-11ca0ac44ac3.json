@@ -1,0 +1,64 @@
+{
+  "id": "47bef493-36c1-5d50-845f-11ca0ac44ac3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_recon_system_info_uncommon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "logicaldisk get name,size,freespace",
+        "os get caption,osarchitecture,version"
+      ],
+      "raw_values": [
+        "*LOGICALDISK get Name,Size,FreeSpace*",
+        "*os get Caption,OSArchitecture,Version*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "wmi commandline utility"
+      ],
+      "raw_values": [
+        "WMI Commandline Utility"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.description:\"WMI Commandline Utility\" or process.pe.original_file_name:\"wmic.exe\" or process.executable:\"*\\\\WMIC.exe\") and (process.command_line like~ (\"*LOGICALDISK get Name,Size,FreeSpace*\", \"*os get Caption,OSArchitecture,Version*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_recon_system_info_uncommon.eql",
+  "metadata": {}
+}

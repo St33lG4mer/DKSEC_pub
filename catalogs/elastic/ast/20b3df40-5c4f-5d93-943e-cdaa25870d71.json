@@ -1,0 +1,121 @@
+{
+  "id": "20b3df40-5c4f-5d93-943e-cdaa25870d71",
+  "catalog": "elastic",
+  "name": "Suspicious Endpoint Security Parent Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "esensor.exe",
+        "elastic-endpoint.exe"
+      ],
+      "raw_values": [
+        "esensor.exe",
+        "elastic-endpoint.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "services.exe",
+        "werfault*.exe",
+        "wermgr.exe",
+        "explorer.exe",
+        "cmd.exe",
+        "securityhealthhost.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\Elastic\\\\*",
+        "?:\\\\Windows\\\\System32\\\\services.exe",
+        "?:\\\\Windows\\\\System32\\\\WerFault*.exe",
+        "?:\\\\Windows\\\\System32\\\\wermgr.exe",
+        "?:\\\\Windows\\\\explorer.exe",
+        "?:\\\\Windows\\\\System32\\\\cmd.exe",
+        "?:\\\\Windows\\\\System32\\\\SecurityHealthHost.exe",
+        "?:\\\\Windows\\\\System32\\\\SecurityHealth\\\\*\\\\SecurityHealthHost.exe",
+        "?:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "test",
+        "version",
+        "top",
+        "run",
+        "help",
+        "status",
+        "upgrade",
+        "launch",
+        "enable"
+      ],
+      "raw_values": [
+        "test",
+        "version",
+        "top",
+        "run",
+        "*help",
+        "status",
+        "upgrade",
+        "/launch",
+        "/enable",
+        "/av"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : (\"esensor.exe\", \"elastic-endpoint.exe\") and\n  process.parent.executable != null and\n  process.args != null and\n  /* add FPs here */\n  not process.parent.executable : (\n        \"?:\\\\Program Files\\\\Elastic\\\\*\",\n        \"?:\\\\Windows\\\\System32\\\\services.exe\",\n        \"?:\\\\Windows\\\\System32\\\\WerFault*.exe\",\n        \"?:\\\\Windows\\\\System32\\\\wermgr.exe\",\n        \"?:\\\\Windows\\\\explorer.exe\"\n  ) and\n  not (\n    process.parent.executable : (\n        \"?:\\\\Windows\\\\System32\\\\cmd.exe\",\n        \"?:\\\\Windows\\\\System32\\\\SecurityHealthHost.exe\",\n        \"?:\\\\Windows\\\\System32\\\\SecurityHealth\\\\*\\\\SecurityHealthHost.exe\",\n        \"?:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\"\n    ) and\n    process.args : (\n        \"test\", \"version\",\n        \"top\", \"run\",\n        \"*help\", \"status\",\n        \"upgrade\", \"/launch\",\n        \"/enable\", \"/av\"\n    )\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_masquerading_as_elastic_endpoint_process.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

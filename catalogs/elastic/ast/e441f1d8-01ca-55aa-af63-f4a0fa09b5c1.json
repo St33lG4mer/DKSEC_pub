@@ -1,0 +1,85 @@
+{
+  "id": "e441f1d8-01ca-55aa-af63-f4a0fa09b5c1",
+  "catalog": "elastic",
+  "name": "Multiple Vault Web Credentials Read",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "5382"
+      ],
+      "raw_values": [
+        "5382"
+      ]
+    },
+    {
+      "field": "winlog.event_data.schemafriendlyname",
+      "raw_field": "winlog.event_data.SchemaFriendlyName",
+      "operator": ":",
+      "values": [
+        "windows web password credential"
+      ],
+      "raw_values": [
+        "Windows Web Password Credential"
+      ]
+    },
+    {
+      "field": "winlog.event_data.resource",
+      "raw_field": "winlog.event_data.Resource",
+      "operator": ":",
+      "values": [
+        "http",
+        "http://localhost/"
+      ],
+      "raw_values": [
+        "http*",
+        "http://localhost/"
+      ]
+    },
+    {
+      "field": "winlog.event_data.subjectlogonid",
+      "raw_field": "winlog.event_data.SubjectLogonId",
+      "operator": ":",
+      "values": [
+        "0x3e7"
+      ],
+      "raw_values": [
+        "0x3e7"
+      ]
+    }
+  ],
+  "raw_query": "sequence by winlog.computer_name, winlog.process.pid with maxspan=1s\n\n /* 2 consecutive vault reads from same pid for web creds */\n\n [any where host.os.type == \"windows\" and event.code == \"5382\" and\n  (winlog.event_data.SchemaFriendlyName : \"Windows Web Password Credential\" and winlog.event_data.Resource : \"http*\") and\n  not winlog.event_data.SubjectLogonId : \"0x3e7\" and\n  not winlog.event_data.Resource : \"http://localhost/\"]\n\n [any where host.os.type == \"windows\" and event.code == \"5382\" and\n  (winlog.event_data.SchemaFriendlyName : \"Windows Web Password Credential\" and winlog.event_data.Resource : \"http*\") and\n  not winlog.event_data.SubjectLogonId : \"0x3e7\" and\n  not winlog.event_data.Resource : \"http://localhost/\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_saved_creds_vault_winlog.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

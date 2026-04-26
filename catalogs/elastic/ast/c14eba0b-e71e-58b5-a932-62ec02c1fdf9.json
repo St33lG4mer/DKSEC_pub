@@ -1,0 +1,130 @@
+{
+  "id": "c14eba0b-e71e-58b5-a932-62ec02c1fdf9",
+  "catalog": "elastic",
+  "name": "ESXI Discovery via Grep",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "executed",
+        "process_started",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "executed",
+        "process_started",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "grep",
+        "egrep",
+        "pgrep"
+      ],
+      "raw_values": [
+        "grep",
+        "egrep",
+        "pgrep"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "vmdk",
+        "vmx",
+        "vmxf",
+        "vmsd",
+        "vmsn",
+        "vswp",
+        "vmss",
+        "nvram",
+        "vmem"
+      ],
+      "raw_values": [
+        "vmdk",
+        "vmx",
+        "vmxf",
+        "vmsd",
+        "vmsn",
+        "vswp",
+        "vmss",
+        "nvram",
+        "vmem"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "qemu-kvm-init",
+        "kvm.modules"
+      ],
+      "raw_values": [
+        "/usr/share/qemu/init/qemu-kvm-init",
+        "/etc/sysconfig/modules/kvm.modules"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"executed\", \"process_started\", \"ProcessRollup2\") and\nprocess.name in (\"grep\", \"egrep\", \"pgrep\") and\nprocess.args in (\"vmdk\", \"vmx\", \"vmxf\", \"vmsd\", \"vmsn\", \"vswp\", \"vmss\", \"nvram\", \"vmem\") and\nnot ?process.parent.executable in (\"/usr/share/qemu/init/qemu-kvm-init\", \"/etc/sysconfig/modules/kvm.modules\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_esxi_software_via_grep.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

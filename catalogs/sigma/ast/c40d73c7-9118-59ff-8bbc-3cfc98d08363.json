@@ -1,0 +1,40 @@
+{
+  "id": "c40d73c7-9118-59ff-8bbc-3cfc98d08363",
+  "catalog": "sigma",
+  "name": "image_load_side_load_avkkid",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "avkkid.dll"
+      ],
+      "raw_values": [
+        "*\\\\AVKkid.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "avkkid.exe"
+      ],
+      "raw_values": [
+        "*\\\\AVKKid.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\AVKkid.dll\" and (not ((process.executable like~ (\"*C:\\\\Program Files (x86)\\\\G DATA\\\\*\", \"*C:\\\\Program Files\\\\G DATA\\\\*\")) and process.executable:\"*\\\\AVKKid.exe\" and (file.path like~ (\"C:\\\\Program Files (x86)\\\\G DATA\\\\*\", \"C:\\\\Program Files\\\\G DATA\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_avkkid.eql",
+  "metadata": {}
+}

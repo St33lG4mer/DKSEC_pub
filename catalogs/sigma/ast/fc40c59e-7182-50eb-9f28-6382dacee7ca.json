@@ -1,0 +1,31 @@
+{
+  "id": "fc40c59e-7182-50eb-9f28-6382dacee7ca",
+  "catalog": "sigma",
+  "name": "proc_creation_win_infdefaultinstall_execute_sct_scripts",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "infdefaultinstall.exe",
+        ".inf"
+      ],
+      "raw_values": [
+        "*InfDefaultInstall.exe *",
+        "*.inf*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*InfDefaultInstall.exe *\" and process.command_line:\"*.inf*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_infdefaultinstall_execute_sct_scripts.eql",
+  "metadata": {}
+}

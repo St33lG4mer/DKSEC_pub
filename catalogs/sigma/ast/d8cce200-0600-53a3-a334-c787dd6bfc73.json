@@ -1,0 +1,111 @@
+{
+  "id": "d8cce200-0600-53a3-a334-c787dd6bfc73",
+  "catalog": "sigma",
+  "name": "file_event_win_office_susp_file_extension",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "excel.exe",
+        "msaccess.exe",
+        "mspub.exe",
+        "powerpnt.exe",
+        "visio.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe",
+        "*\\\\msaccess.exe",
+        "*\\\\mspub.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\visio.exe",
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".cmd",
+        ".com",
+        ".dll",
+        ".exe",
+        ".hta",
+        ".ocx",
+        ".proj",
+        ".ps1",
+        ".scf",
+        ".scr",
+        ".sys",
+        ".vbe",
+        ".vbs",
+        ".wsf",
+        ".wsh"
+      ],
+      "raw_values": [
+        "*.bat",
+        "*.cmd",
+        "*.com",
+        "*.dll",
+        "*.exe",
+        "*.hta",
+        "*.ocx",
+        "*.proj",
+        "*.ps1",
+        "*.scf",
+        "*.scr",
+        "*.sys",
+        "*.vbe",
+        "*.vbs",
+        "*.wsf",
+        "*.wsh"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll",
+        "allusers",
+        ".com"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\assembly\\\\tmp\\\\*",
+        "*.dll",
+        "*C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\WebServiceCache\\\\AllUsers*",
+        "*.com",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\webexdelta\\\\*",
+        "*\\\\BackstageInAppNavCache\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\winword.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\excel.exe\", \"*\\\\msaccess.exe\", \"*\\\\mspub.exe\", \"*\\\\powerpnt.exe\", \"*\\\\visio.exe\", \"*\\\\winword.exe\")) and (file.path like~ (\"*.bat\", \"*.cmd\", \"*.com\", \"*.dll\", \"*.exe\", \"*.hta\", \"*.ocx\", \"*.proj\", \"*.ps1\", \"*.scf\", \"*.scr\", \"*.sys\", \"*.vbe\", \"*.vbs\", \"*.wsf\", \"*.wsh\"))) and (not (file.path:\"*\\\\AppData\\\\Local\\\\assembly\\\\tmp\\\\*\" and file.path:\"*.dll\")) and (not (((file.path:\"*C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\Office\\\\*\" and file.path:\"*\\\\WebServiceCache\\\\AllUsers*\") and file.path:\"*.com\") or (process.executable:\"*\\\\winword.exe\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\webexdelta\\\\*\" and (file.path like~ (\"*.dll\", \"*.exe\"))) or ((file.path:\"*C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Microsoft\\\\Office\\\\*\" and file.path:\"*\\\\BackstageInAppNavCache\\\\*\") and file.path:\"*.com\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_susp_file_extension.eql",
+  "metadata": {}
+}

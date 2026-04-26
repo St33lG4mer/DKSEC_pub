@@ -1,0 +1,72 @@
+{
+  "id": "d5a10e5d-4395-5fa1-9381-5afdf5bd6552",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_direct_asep_registry_keys_modification",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "run",
+        "userinit",
+        "shell",
+        "windows",
+        "alternateshell"
+      ],
+      "raw_values": [
+        "*\\\\software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*\\\\software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*\\\\software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*",
+        "*\\\\software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit*",
+        "*\\\\software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell*",
+        "*\\\\software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows*",
+        "*\\\\system\\\\CurrentControlSet\\\\Control\\\\SafeBoot\\\\AlternateShell*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add"
+      ],
+      "raw_values": [
+        "*add*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and process.command_line:\"*add*\" and (process.command_line like~ (\"*\\\\software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\", \"*\\\\software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\", \"*\\\\software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*\", \"*\\\\software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Userinit*\", \"*\\\\software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell*\", \"*\\\\software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Windows*\", \"*\\\\system\\\\CurrentControlSet\\\\Control\\\\SafeBoot\\\\AlternateShell*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_direct_asep_registry_keys_modification.eql",
+  "metadata": {}
+}

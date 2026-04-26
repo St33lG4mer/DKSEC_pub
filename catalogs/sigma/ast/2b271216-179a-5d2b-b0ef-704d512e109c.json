@@ -1,0 +1,40 @@
+{
+  "id": "2b271216-179a-5d2b-b0ef-704d512e109c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_remote_access_tools_anyviewer_shell_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "avcore.exe"
+      ],
+      "raw_values": [
+        "*\\\\AVCore.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\AVCore.exe\" and process.parent.command_line:\"*AVCore.exe\\\" -d*\" and process.executable:\"*\\\\cmd.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_remote_access_tools_anyviewer_shell_exec.eql",
+  "metadata": {}
+}

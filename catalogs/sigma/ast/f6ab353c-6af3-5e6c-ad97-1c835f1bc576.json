@@ -1,0 +1,52 @@
+{
+  "id": "f6ab353c-6af3-5e6c-ad97-1c835f1bc576",
+  "catalog": "sigma",
+  "name": "proc_creation_win_office_svchost_parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "eqnedt32.exe",
+        "excel.exe",
+        "msaccess.exe",
+        "mspub.exe",
+        "powerpnt.exe",
+        "visio.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\eqnedt32.exe",
+        "*\\\\excel.exe",
+        "*\\\\msaccess.exe",
+        "*\\\\mspub.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\visio.exe",
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\svchost.exe\" and (process.executable like~ (\"*\\\\eqnedt32.exe\", \"*\\\\excel.exe\", \"*\\\\msaccess.exe\", \"*\\\\mspub.exe\", \"*\\\\powerpnt.exe\", \"*\\\\visio.exe\", \"*\\\\winword.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_office_svchost_parent.eql",
+  "metadata": {}
+}

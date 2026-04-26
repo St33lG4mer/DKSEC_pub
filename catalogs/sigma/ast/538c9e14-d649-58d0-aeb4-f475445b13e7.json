@@ -1,0 +1,52 @@
+{
+  "id": "538c9e14-d649-58d0-aeb4-f475445b13e7",
+  "catalog": "sigma",
+  "name": "image_load_office_dotnet_clr_dll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "excel.exe",
+        "mspub.exe",
+        "outlook.exe",
+        "onenote.exe",
+        "onenoteim.exe",
+        "powerpnt.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe",
+        "*\\\\mspub.exe",
+        "*\\\\outlook.exe",
+        "*\\\\onenote.exe",
+        "*\\\\onenoteim.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "clr.dll"
+      ],
+      "raw_values": [
+        "*\\\\clr.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\excel.exe\", \"*\\\\mspub.exe\", \"*\\\\outlook.exe\", \"*\\\\onenote.exe\", \"*\\\\onenoteim.exe\", \"*\\\\powerpnt.exe\", \"*\\\\winword.exe\")) and file.path:\"*\\\\clr.dll*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_office_dotnet_clr_dll_load.eql",
+  "metadata": {}
+}

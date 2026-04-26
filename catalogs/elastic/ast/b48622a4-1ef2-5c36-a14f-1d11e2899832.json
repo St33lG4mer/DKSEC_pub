@@ -1,0 +1,63 @@
+{
+  "id": "b48622a4-1ef2-5c36-a14f-1d11e2899832",
+  "catalog": "elastic",
+  "name": "Potential Microsoft Office Sandbox Evasion",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "modification",
+        "rename"
+      ],
+      "raw_values": [
+        "modification",
+        "rename"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "~$*.zip"
+      ],
+      "raw_values": [
+        "~$*.zip"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"macos\" and event.action in (\"modification\", \"rename\") and file.name like~ \"~$*.zip\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/defense_evasion_sandboxed_office_app_suspicious_zip_file.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

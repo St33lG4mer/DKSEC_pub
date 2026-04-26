@@ -1,0 +1,51 @@
+{
+  "id": "94aa5e50-5b66-5f83-9bbe-2343844720b2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dsquery_domain_trust_discovery",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dsquery.exe"
+      ],
+      "raw_values": [
+        "*\\\\dsquery.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dsquery.exe"
+      ],
+      "raw_values": [
+        "dsquery.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "trusteddomain"
+      ],
+      "raw_values": [
+        "*trustedDomain*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\dsquery.exe\" or process.pe.original_file_name:\"dsquery.exe\") and process.command_line:\"*trustedDomain*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dsquery_domain_trust_discovery.eql",
+  "metadata": {}
+}

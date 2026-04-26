@@ -1,0 +1,40 @@
+{
+  "id": "1f2d9e4b-2b7f-5691-bc09-2ceaf9c71a19",
+  "catalog": "sigma",
+  "name": "proc_creation_win_imewbdld_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "imewdbld.exe"
+      ],
+      "raw_values": [
+        "*\\\\IMEWDBLD.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "imewdbld.exe"
+      ],
+      "raw_values": [
+        "imewdbld.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\IMEWDBLD.exe\" or process.pe.original_file_name:\"imewdbld.exe\") and (process.command_line like~ (\"*http://*\", \"*https://*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_imewbdld_download.eql",
+  "metadata": {}
+}

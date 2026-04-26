@@ -1,0 +1,29 @@
+{
+  "id": "3b3c247f-3f49-501a-ba73-21f93a61be69",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rasdial_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rasdial.exe"
+      ],
+      "raw_values": [
+        "*rasdial.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*rasdial.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rasdial_execution.eql",
+  "metadata": {}
+}

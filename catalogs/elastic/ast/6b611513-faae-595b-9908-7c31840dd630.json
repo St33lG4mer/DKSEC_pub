@@ -1,0 +1,95 @@
+{
+  "id": "6b611513-faae-595b-9908-7c31840dd630",
+  "catalog": "elastic",
+  "name": "Outlook Home Page Registry Modification",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\office\\\\*\\\\outlook\\\\webview\\\\",
+        "\\\\software\\\\microsoft\\\\office\\\\*\\\\outlook\\\\today\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\\\\Outlook\\\\Webview\\\\*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\\\\Outlook\\\\Today\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "://",
+        ":\\\\",
+        "\\\\\\\\*\\\\"
+      ],
+      "raw_values": [
+        "*://*",
+        "*:\\\\*",
+        "\\\\\\\\*\\\\*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "!=",
+      "values": [
+        "deletion"
+      ],
+      "raw_values": [
+        "deletion"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "url"
+      ],
+      "raw_values": [
+        "URL"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.action != \"deletion\" and registry.value : \"URL\" and\n    registry.path : (\n        \"*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\\\\Outlook\\\\Webview\\\\*\",\n        \"*\\\\SOFTWARE\\\\Microsoft\\\\Office\\\\*\\\\Outlook\\\\Today\\\\*\"\n    ) and registry.data.strings : (\"*://*\", \"*:\\\\*\", \"\\\\\\\\*\\\\*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/command_and_control_outlook_home_page.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Tactic: Persistence",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide",
+      "Data Source: Crowdstrike"
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "id": "7b25929f-c754-5e9f-a981-b31162be05d5",
+  "catalog": "elastic",
+  "name": "Suspicious Curl to Google App Script Endpoint",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "nscurl"
+      ],
+      "raw_values": [
+        "curl",
+        "nscurl"
+      ]
+    },
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "in",
+      "values": [
+        "script.google.com",
+        "script.google.com."
+      ],
+      "raw_values": [
+        "script.google.com",
+        "script.google.com."
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": "like",
+      "values": [
+        "/library/kandji/kandji agent.app/contents/helpers/kandji library manager.app/contents/macos/kandji-library-manager"
+      ],
+      "raw_values": [
+        "/Library/Kandji/Kandji Agent.app/Contents/Helpers/Kandji Library Manager.app/Contents/MacOS/kandji-library-manager"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=15s\n  [process where host.os.type == \"macos\" and event.type == \"start\" and process.name in (\"curl\", \"nscurl\") and\n    not process.Ext.effective_parent.executable like \"/Library/Kandji/Kandji Agent.app/Contents/Helpers/Kandji Library Manager.app/Contents/MacOS/kandji-library-manager\"]\n  [network where host.os.type == \"macos\" and event.type == \"start\" and process.name in (\"curl\", \"nscurl\") and \n    destination.domain in (\"script.google.com\", \"script.google.com.\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/command_and_control_suspicious_curl_to_google_app_script.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

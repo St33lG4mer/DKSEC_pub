@@ -1,0 +1,29 @@
+{
+  "id": "a3247491-6ecb-56a8-8460-4bb83e204b40",
+  "catalog": "sigma",
+  "name": "pipe_created_pua_paexec_default_pipe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "paexec"
+      ],
+      "raw_values": [
+        "\\\\PAExec*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.name:\"\\\\PAExec*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_pua_paexec_default_pipe.eql",
+  "metadata": {}
+}

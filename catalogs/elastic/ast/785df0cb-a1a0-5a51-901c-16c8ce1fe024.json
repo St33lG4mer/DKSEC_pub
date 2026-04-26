@@ -1,0 +1,79 @@
+{
+  "id": "785df0cb-a1a0-5a51-901c-16c8ce1fe024",
+  "catalog": "elastic",
+  "name": "Potential Privacy Control Bypass via Localhost Secure Copy",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "stricthostkeychecking=no",
+        "vagrant@*127.0.0.1"
+      ],
+      "raw_values": [
+        "*scp *localhost:/*",
+        "*scp *127.0.0.?:/*",
+        "StrictHostKeyChecking=no",
+        "*vagrant@*127.0.0.1*"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "scp"
+      ],
+      "raw_values": [
+        "scp"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.name == \"scp\" and\n process.args like~ \"StrictHostKeyChecking=no\" and\n process.command_line like~ (\"*scp *localhost:/*\", \"*scp *127.0.0.?:/*\") and\n not process.command_line like~ \"*vagrant@*127.0.0.1*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/defense_evasion_privilege_escalation_privacy_pref_sshd_fulldiskaccess.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

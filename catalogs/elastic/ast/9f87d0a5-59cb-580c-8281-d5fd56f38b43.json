@@ -1,0 +1,77 @@
+{
+  "id": "9f87d0a5-59cb-580c-8281-d5fd56f38b43",
+  "catalog": "elastic",
+  "name": "Potential Evasion via Filter Manager",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "fltmc.exe"
+      ],
+      "raw_values": [
+        "fltMC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "unload"
+      ],
+      "raw_values": [
+        "unload"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : \"fltMC.exe\" and process.args : \"unload\" and\n  not process.parent.executable : \n                   (\"?:\\\\Program Files (x86)\\\\ManageEngine\\\\UEMS_Agent\\\\bin\\\\DCFAService64.exe\", \n                    \"?:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\", \n                    \"?:\\\\Program Files\\\\Bitdefender\\\\Endpoint Security\\\\installer\\\\installer.exe\", \n                    \"?:\\\\Program Files\\\\Bitdefender\\\\Endpoint Security\\\\EPSecurityService.exe\", \n                    \"?:\\\\Program Files\\\\Bitdefender\\\\Bitdefender Security\\\\productcfg.exe\", \n                    \"?:\\\\Program Files\\\\Bitdefender\\\\Bitdefender Security\\\\bdservicehost.exe\", \n                    \"?:\\\\Program Files\\\\Bitdefender\\\\EndpointSetupInformation\\\\{*}\\\\Installer.exe\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_via_filter_manager.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

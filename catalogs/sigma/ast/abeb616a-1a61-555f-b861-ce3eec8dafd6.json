@@ -1,0 +1,44 @@
+{
+  "id": "abeb616a-1a61-555f-b861-ce3eec8dafd6",
+  "catalog": "sigma",
+  "name": "file_event_win_apt_lace_tempest_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "user.exe",
+        "usersfiles.war",
+        "leave"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\SysAidServer\\\\tomcat\\\\webapps\\\\usersfiles\\\\user.exe",
+        "*:\\\\Program Files\\\\SysAidServer\\\\tomcat\\\\webapps\\\\usersfiles.war",
+        "*:\\\\Program Files\\\\SysAidServer\\\\tomcat\\\\webapps\\\\leave"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "user."
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\SysAidServer\\\\tomcat\\\\webapps\\\\user.*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*:\\\\Program Files\\\\SysAidServer\\\\tomcat\\\\webapps\\\\usersfiles\\\\user.exe\", \"*:\\\\Program Files\\\\SysAidServer\\\\tomcat\\\\webapps\\\\usersfiles.war\", \"*:\\\\Program Files\\\\SysAidServer\\\\tomcat\\\\webapps\\\\leave\")) or file.path:\"*:\\\\Program Files\\\\SysAidServer\\\\tomcat\\\\webapps\\\\user.*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Lace-Tempest/file_event_win_apt_lace_tempest_indicators.eql",
+  "metadata": {}
+}

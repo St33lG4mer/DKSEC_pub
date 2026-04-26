@@ -1,0 +1,40 @@
+{
+  "id": "ce093ae7-b366-5d5e-992d-b98f8723a2f5",
+  "catalog": "elastic",
+  "name": "First Time Python Created a LaunchAgent or LaunchDaemon",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "launch_daemon"
+      ],
+      "raw_values": [
+        "launch_daemon"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:macos and event.action:\"launch_daemon\" and\nprocess.name:python*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/macos/persistence_python_launch_agent_or_daemon_creation_first_occurrence.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide",
+      "Domain: LLM"
+    ]
+  }
+}

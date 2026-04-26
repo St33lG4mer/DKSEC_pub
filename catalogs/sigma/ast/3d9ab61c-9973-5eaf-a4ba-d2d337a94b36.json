@@ -1,0 +1,97 @@
+{
+  "id": "3d9ab61c-9973-5eaf-a4ba-d2d337a94b36",
+  "catalog": "sigma",
+  "name": "win_security_exploit_cve_2024_1708_screenconnect",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": "like~",
+      "values": [
+        "screenconnect\\\\app_extensions\\\\*.ashx",
+        "screenconnect\\\\app_extensions\\\\*.aspx"
+      ],
+      "raw_values": [
+        "*ScreenConnect\\\\App_Extensions\\\\*.ashx",
+        "*ScreenConnect\\\\App_Extensions\\\\*.aspx"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4663"
+      ],
+      "raw_values": [
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "file"
+      ],
+      "raw_values": [
+        "File"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "screenconnect.service.exe"
+      ],
+      "raw_values": [
+        "*ScreenConnect.Service.exe*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x6"
+      ],
+      "raw_values": [
+        "0x6"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "screenconnect\\\\app_extensions\\\\*\\\\"
+      ],
+      "raw_values": [
+        "*ScreenConnect\\\\App_Extensions\\\\*\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4663\" and winlog.event_data.ObjectType:\"File\" and process.executable:\"*ScreenConnect.Service.exe*\" and winlog.event_data.AccessMask:\"0x6\" and (winlog.event_data.ObjectName like~ (\"*ScreenConnect\\\\App_Extensions\\\\*.ashx\", \"*ScreenConnect\\\\App_Extensions\\\\*.aspx\"))) and (not winlog.event_data.ObjectName:\"*ScreenConnect\\\\App_Extensions\\\\*\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Exploits/CVE-2024-1708/win_security_exploit_cve_2024_1708_screenconnect.eql",
+  "metadata": {}
+}

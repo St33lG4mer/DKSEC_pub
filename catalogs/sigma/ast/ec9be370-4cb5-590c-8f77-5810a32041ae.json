@@ -1,0 +1,29 @@
+{
+  "id": "ec9be370-4cb5-590c-8f77-5810a32041ae",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pressanykey_lolbin_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "microsoft.nodejstools.pressanykey.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft.NodejsTools.PressAnyKey.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\Microsoft.NodejsTools.PressAnyKey.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pressanykey_lolbin_execution.eql",
+  "metadata": {}
+}

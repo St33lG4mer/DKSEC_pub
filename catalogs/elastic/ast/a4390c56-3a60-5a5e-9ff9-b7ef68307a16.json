@@ -1,0 +1,25 @@
+{
+  "id": "a4390c56-3a60-5a5e-9ff9-b7ef68307a16",
+  "catalog": "elastic",
+  "name": "Azure VNet Full Network Packet Capture Enabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\n    (\n        MICROSOFT.NETWORK/*/STARTPACKETCAPTURE/ACTION or\n        MICROSOFT.NETWORK/*/VPNCONNECTIONS/STARTPACKETCAPTURE/ACTION or\n        MICROSOFT.NETWORK/*/PACKETCAPTURES/WRITE\n    ) and\nevent.outcome:(Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/credential_access_network_full_network_packet_capture_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

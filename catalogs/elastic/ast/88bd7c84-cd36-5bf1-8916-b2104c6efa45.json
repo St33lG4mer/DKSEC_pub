@@ -1,0 +1,92 @@
+{
+  "id": "88bd7c84-cd36-5bf1-8916-b2104c6efa45",
+  "catalog": "elastic",
+  "name": "PowerShell Script with Token Impersonation Capabilities",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "invoke-tokenmanipulation",
+        "impersonatenamedpipeclient",
+        "ntimpersonatethread",
+        "startupinfoex",
+        "updateprocthreadattribute",
+        "sentinelbreakpoints",
+        "set-psbreakpoint",
+        "powersploitindicators",
+        "new-hpprivatetoastnotificationlogo"
+      ],
+      "raw_values": [
+        "Invoke-TokenManipulation",
+        "ImpersonateNamedPipeClient",
+        "NtImpersonateThread",
+        "STARTUPINFOEX",
+        "UpdateProcThreadAttribute",
+        "sentinelbreakpoints",
+        "Set-PSBreakpoint",
+        "PowerSploitIndicators",
+        "New-HPPrivateToastNotificationLogo"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    },
+    {
+      "field": "file.directory",
+      "raw_field": "file.directory",
+      "operator": ":",
+      "values": [
+        "c:\\\\programdata\\\\microsoft\\\\windows defender advanced threat protection\\\\downloads"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced Threat Protection\\\\Downloads"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "hp.notifications.psm1"
+      ],
+      "raw_values": [
+        "C:\\Program Files\\HPConnect\\hp-cmsl-wl\\modules\\HP.Notifications\\HP.Notifications.psm1"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text:(\n    \"Invoke-TokenManipulation\" or\n    \"ImpersonateNamedPipeClient\" or\n    \"NtImpersonateThread\" or\n    (\n      \"STARTUPINFOEX\" and\n      \"UpdateProcThreadAttribute\"\n    ) or\n    (\n      \"AdjustTokenPrivileges\" and\n      \"SeDebugPrivilege\"\n    ) or\n    (\n      (\"DuplicateToken\" or\n      \"DuplicateTokenEx\") and\n      (\"SetThreadToken\" or\n      \"ImpersonateLoggedOnUser\" or\n      \"CreateProcessWithTokenW\" or\n      \"CreatePRocessAsUserW\" or\n      \"CreateProcessAsUserA\")\n    ) \n  ) and\n  not (\n    user.id:(\"S-1-5-18\" or \"S-1-5-19\" or \"S-1-5-20\") and\n    file.directory: \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced Threat Protection\\\\Downloads\"\n  ) and\n  not powershell.file.script_block_text : (\n    \"sentinelbreakpoints\" and \"Set-PSBreakpoint\" and \"PowerSploitIndicators\"\n  ) and\n  not (\n    powershell.file.script_block_text : \"New-HPPrivateToastNotificationLogo\" and\n    file.path : \"C:\\Program Files\\HPConnect\\hp-cmsl-wl\\modules\\HP.Notifications\\HP.Notifications.psm1\"\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_posh_token_impersonation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: PowerShell Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

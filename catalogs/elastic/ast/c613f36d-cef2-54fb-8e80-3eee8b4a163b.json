@@ -1,0 +1,38 @@
+{
+  "id": "c613f36d-cef2-54fb-8e80-3eee8b4a163b",
+  "catalog": "elastic",
+  "name": "M365 Exchange Email Safe Attachment Rule Disabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "disable-safeattachmentrule"
+      ],
+      "raw_values": [
+        "Disable-SafeAttachmentRule"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:o365.audit and event.provider:Exchange and event.category:web and event.action:\"Disable-SafeAttachmentRule\" and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/defense_evasion_exchange_safe_attach_rule_disabled.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Microsoft 365",
+      "Use Case: Configuration Audit",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

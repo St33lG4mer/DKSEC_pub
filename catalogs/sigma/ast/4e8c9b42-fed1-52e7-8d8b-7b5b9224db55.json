@@ -1,0 +1,37 @@
+{
+  "id": "4e8c9b42-fed1-52e7-8d8b-7b5b9224db55",
+  "catalog": "sigma",
+  "name": "proc_creation_win_remote_access_tools_screenconnect_installation_cli_param",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "e=access&",
+        "y=guest&",
+        "&p=",
+        "&c=",
+        "&k="
+      ],
+      "raw_values": [
+        "*e=Access&*",
+        "*y=Guest&*",
+        "*&p=*",
+        "*&c=*",
+        "*&k=*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*e=Access&*\" and process.command_line:\"*y=Guest&*\" and process.command_line:\"*&p=*\" and process.command_line:\"*&c=*\" and process.command_line:\"*&k=*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_screenconnect_installation_cli_param.eql",
+  "metadata": {}
+}

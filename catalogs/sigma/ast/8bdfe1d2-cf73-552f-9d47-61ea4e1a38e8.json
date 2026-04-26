@@ -1,0 +1,76 @@
+{
+  "id": "8bdfe1d2-cf73-552f-9d47-61ea4e1a38e8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_service_dacl_modification_set_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-securitydescriptorsddl",
+        "-sd",
+        ";;;iu",
+        ";;;su",
+        ";;;ba",
+        ";;;sy",
+        ";;;wd"
+      ],
+      "raw_values": [
+        "*-SecurityDescriptorSddl *",
+        "*-sd *",
+        "*;;;IU*",
+        "*;;;SU*",
+        "*;;;BA*",
+        "*;;;SY*",
+        "*;;;WD*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "set-service",
+        "d;;"
+      ],
+      "raw_values": [
+        "*Set-Service *",
+        "*D;;*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\pwsh.exe\" or process.pe.original_file_name:\"pwsh.dll\") and (process.command_line like~ (\"*-SecurityDescriptorSddl *\", \"*-sd *\")) and ((process.command_line:\"*Set-Service *\" and process.command_line:\"*D;;*\") and (process.command_line like~ (\"*;;;IU*\", \"*;;;SU*\", \"*;;;BA*\", \"*;;;SY*\", \"*;;;WD*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_service_dacl_modification_set_service.eql",
+  "metadata": {}
+}

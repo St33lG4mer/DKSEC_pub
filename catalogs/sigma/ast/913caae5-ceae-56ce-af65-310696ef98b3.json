@@ -1,0 +1,33 @@
+{
+  "id": "913caae5-ceae-56ce-af65-310696ef98b3",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_other_systemnightmare",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "printnightmare.gentilkiwi.com",
+        "user:gentilguest",
+        "kiwi legit printer"
+      ],
+      "raw_values": [
+        "*printnightmare.gentilkiwi.com*",
+        "* /user:gentilguest *",
+        "*Kiwi Legit Printer*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*printnightmare.gentilkiwi.com*\", \"* /user:gentilguest *\", \"*Kiwi Legit Printer*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/SystemNightmare-Exploit/proc_creation_win_exploit_other_systemnightmare.eql",
+  "metadata": {}
+}

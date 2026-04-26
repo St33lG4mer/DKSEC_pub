@@ -1,0 +1,35 @@
+{
+  "id": "c941323c-eb5d-5021-95cd-5f27684b71fe",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_actinium_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "schtasks",
+        "create",
+        "wscript",
+        "e:vbscript"
+      ],
+      "raw_values": [
+        "*schtasks*",
+        "*create*",
+        "*wscript*",
+        "* /e:vbscript*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*schtasks*\" and process.command_line:\"*create*\" and process.command_line:\"*wscript*\" and process.command_line:\"* /e:vbscript*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/TA/ACTINIUM/proc_creation_win_apt_actinium_persistence.eql",
+  "metadata": {}
+}

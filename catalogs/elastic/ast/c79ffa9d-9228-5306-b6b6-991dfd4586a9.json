@@ -1,0 +1,38 @@
+{
+  "id": "c79ffa9d-9228-5306-b6b6-991dfd4586a9",
+  "catalog": "elastic",
+  "name": "Azure Compute VM Command Executed",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.compute/virtualmachines/runcommand/action"
+      ],
+      "raw_values": [
+        "MICROSOFT.COMPUTE/VIRTUALMACHINES/RUNCOMMAND/ACTION"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.activitylogs and azure.activitylogs.operation_name:\"MICROSOFT.COMPUTE/VIRTUALMACHINES/RUNCOMMAND/ACTION\" and event.outcome:(Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/execution_compute_vm_command_executed.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Log Auditing",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

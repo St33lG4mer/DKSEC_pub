@@ -1,0 +1,52 @@
+{
+  "id": "80dfadab-c20d-53b2-8424-d53a5a96f763",
+  "catalog": "sigma",
+  "name": "proc_creation_win_certutil_ntlm_coercion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-syncwithwu"
+      ],
+      "raw_values": [
+        "* -syncwithWU *",
+        "* \\\\\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\certutil.exe\" or process.pe.original_file_name:\"CertUtil.exe\") and (process.command_line:\"* -syncwithWU *\" and process.command_line:\"* \\\\\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_certutil_ntlm_coercion.eql",
+  "metadata": {}
+}

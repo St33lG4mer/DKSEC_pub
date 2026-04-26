@@ -1,0 +1,71 @@
+{
+  "id": "372098c0-a24a-55a0-a4b7-1b84cf79dd96",
+  "catalog": "sigma",
+  "name": "dns_query_win_malware_3cx_compromise",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": "like~",
+      "values": [
+        "akamaicontainer.com",
+        "akamaitechcloudservices.com",
+        "azuredeploystore.com",
+        "azureonlinecloud.com",
+        "azureonlinestorage.com",
+        "dunamistrd.com",
+        "glcloudservice.com",
+        "journalide.org",
+        "msedgepackageinfo.com",
+        "msedgeupdate.net",
+        "msstorageazure.com",
+        "msstorageboxes.com",
+        "officeaddons.com",
+        "officestoragebox.com",
+        "pbxcloudeservices.com",
+        "pbxphonenetwork.com",
+        "pbxsources.com",
+        "qwepoi123098.com",
+        "sbmsa.wiki",
+        "sourceslabs.com",
+        "visualstudiofactory.com",
+        "zacharryblogs.com"
+      ],
+      "raw_values": [
+        "*akamaicontainer.com*",
+        "*akamaitechcloudservices.com*",
+        "*azuredeploystore.com*",
+        "*azureonlinecloud.com*",
+        "*azureonlinestorage.com*",
+        "*dunamistrd.com*",
+        "*glcloudservice.com*",
+        "*journalide.org*",
+        "*msedgepackageinfo.com*",
+        "*msedgeupdate.net*",
+        "*msstorageazure.com*",
+        "*msstorageboxes.com*",
+        "*officeaddons.com*",
+        "*officestoragebox.com*",
+        "*pbxcloudeservices.com*",
+        "*pbxphonenetwork.com*",
+        "*pbxsources.com*",
+        "*qwepoi123098.com*",
+        "*sbmsa.wiki*",
+        "*sourceslabs.com*",
+        "*visualstudiofactory.com*",
+        "*zacharryblogs.com*"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name like~ (\"*akamaicontainer.com*\", \"*akamaitechcloudservices.com*\", \"*azuredeploystore.com*\", \"*azureonlinecloud.com*\", \"*azureonlinestorage.com*\", \"*dunamistrd.com*\", \"*glcloudservice.com*\", \"*journalide.org*\", \"*msedgepackageinfo.com*\", \"*msedgeupdate.net*\", \"*msstorageazure.com*\", \"*msstorageboxes.com*\", \"*officeaddons.com*\", \"*officestoragebox.com*\", \"*pbxcloudeservices.com*\", \"*pbxphonenetwork.com*\", \"*pbxsources.com*\", \"*qwepoi123098.com*\", \"*sbmsa.wiki*\", \"*sourceslabs.com*\", \"*visualstudiofactory.com*\", \"*zacharryblogs.com*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/3CX-Supply-Chain/dns_query_win_malware_3cx_compromise.eql",
+  "metadata": {}
+}

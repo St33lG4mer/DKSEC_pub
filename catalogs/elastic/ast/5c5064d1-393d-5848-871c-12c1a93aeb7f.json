@@ -1,0 +1,74 @@
+{
+  "id": "5c5064d1-393d-5848-871c-12c1a93aeb7f",
+  "catalog": "elastic",
+  "name": "Potential Execution of rc.local Script",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "info"
+      ],
+      "raw_values": [
+        "info"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "already_running"
+      ],
+      "raw_values": [
+        "already_running"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "/etc/rc.local",
+        "start"
+      ],
+      "raw_values": [
+        "/etc/rc.local",
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"info\" and event.action == \"already_running\" and\nprocess.parent.args == \"/etc/rc.local\" and process.parent.args == \"start\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_rc_local_service_already_running.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

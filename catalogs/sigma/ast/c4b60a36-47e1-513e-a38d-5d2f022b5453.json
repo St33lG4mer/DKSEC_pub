@@ -1,0 +1,53 @@
+{
+  "id": "c4b60a36-47e1-513e-a38d-5d2f022b5453",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_terminate_application",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "call",
+        "terminate"
+      ],
+      "raw_values": [
+        "*call*",
+        "*terminate*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\WMIC.exe\" or process.pe.original_file_name:\"wmic.exe\") and (process.command_line:\"*call*\" and process.command_line:\"*terminate*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_terminate_application.eql",
+  "metadata": {}
+}

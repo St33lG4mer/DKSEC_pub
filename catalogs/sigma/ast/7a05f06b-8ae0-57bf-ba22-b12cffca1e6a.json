@@ -1,0 +1,59 @@
+{
+  "id": "7a05f06b-8ae0-57bf-ba22-b12cffca1e6a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_privilege_escalation_via_service_key",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "medium",
+        "s-1-16-8192"
+      ],
+      "raw_values": [
+        "Medium",
+        "S-1-16-8192"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "imagepath",
+        "failurecommand",
+        "servicedll"
+      ],
+      "raw_values": [
+        "*\\\\ImagePath*",
+        "*\\\\FailureCommand*",
+        "*\\\\ServiceDll*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "controlset",
+        "services"
+      ],
+      "raw_values": [
+        "*ControlSet*",
+        "*services*"
+      ]
+    }
+  ],
+  "raw_query": "any where (winlog.event_data.IntegrityLevel like~ (\"Medium\", \"S-1-16-8192\")) and (process.command_line:\"*ControlSet*\" and process.command_line:\"*services*\") and (process.command_line like~ (\"*\\\\ImagePath*\", \"*\\\\FailureCommand*\", \"*\\\\ServiceDll*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_privilege_escalation_via_service_key.eql",
+  "metadata": {}
+}

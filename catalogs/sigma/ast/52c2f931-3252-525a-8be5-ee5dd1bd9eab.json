@@ -1,0 +1,73 @@
+{
+  "id": "52c2f931-3252-525a-8be5-ee5dd1bd9eab",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_double_extension",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".exe",
+        ".iso",
+        ".rar",
+        ".svg",
+        ".zip",
+        ".doc.",
+        ".docx.",
+        ".gif.",
+        ".jpeg.",
+        ".jpg.",
+        ".mp3.",
+        ".mp4.",
+        ".pdf.",
+        ".png.",
+        ".ppt.",
+        ".pptx.",
+        ".rtf.",
+        ".svg.",
+        ".txt.",
+        ".xls.",
+        ".xlsx.",
+        ".rar.exe",
+        ".zip.exe"
+      ],
+      "raw_values": [
+        "*.exe",
+        "*.iso",
+        "*.rar",
+        "*.svg",
+        "*.zip",
+        "*.doc.*",
+        "*.docx.*",
+        "*.gif.*",
+        "*.jpeg.*",
+        "*.jpg.*",
+        "*.mp3.*",
+        "*.mp4.*",
+        "*.pdf.*",
+        "*.png.*",
+        "*.ppt.*",
+        "*.pptx.*",
+        "*.rtf.*",
+        "*.svg.*",
+        "*.txt.*",
+        "*.xls.*",
+        "*.xlsx.*",
+        "*.rar.exe",
+        "*.zip.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (((file.path like~ (\"*.exe\", \"*.iso\", \"*.rar\", \"*.svg\", \"*.zip\")) and (file.path like~ (\"*.doc.*\", \"*.docx.*\", \"*.gif.*\", \"*.jpeg.*\", \"*.jpg.*\", \"*.mp3.*\", \"*.mp4.*\", \"*.pdf.*\", \"*.png.*\", \"*.ppt.*\", \"*.pptx.*\", \"*.rtf.*\", \"*.svg.*\", \"*.txt.*\", \"*.xls.*\", \"*.xlsx.*\"))) or (file.path like~ (\"*.rar.exe\", \"*.zip.exe\"))) and (not file.path:\"/usr/share/icons/*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_double_extension.eql",
+  "metadata": {}
+}

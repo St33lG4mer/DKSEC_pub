@@ -1,0 +1,31 @@
+{
+  "id": "95eecad0-8e63-50b8-b6f6-ddda96a09587",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hxtsr_masquerading",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "hxtsr.exe",
+        "microsoft.windowscommunicationsapps_"
+      ],
+      "raw_values": [
+        "*\\\\hxtsr.exe",
+        "*:\\\\program files\\\\windowsapps\\\\microsoft.windowscommunicationsapps_*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\hxtsr.exe\" and (not (process.executable:\"*:\\\\program files\\\\windowsapps\\\\microsoft.windowscommunicationsapps_*\" and process.executable:\"*\\\\hxtsr.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hxtsr_masquerading.eql",
+  "metadata": {}
+}

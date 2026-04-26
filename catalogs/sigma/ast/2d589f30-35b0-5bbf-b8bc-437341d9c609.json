@@ -1,0 +1,29 @@
+{
+  "id": "2d589f30-35b0-5bbf-b8bc-437341d9c609",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_logon_scripts_userinitmprlogonscript",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "userinitmprlogonscript"
+      ],
+      "raw_values": [
+        "*UserInitMprLogonScript*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*UserInitMprLogonScript*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_logon_scripts_userinitmprlogonscript.eql",
+  "metadata": {}
+}

@@ -1,0 +1,108 @@
+{
+  "id": "d3bbee07-e984-5e78-a5db-06117aab3693",
+  "catalog": "elastic",
+  "name": "Suspicious Installer Package Spawns Network Event",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "like~",
+      "values": [
+        "installer",
+        "package_script_service"
+      ],
+      "raw_values": [
+        "installer",
+        "package_script_service"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like~",
+      "values": [
+        "python",
+        "osascript",
+        "tclsh",
+        "curl",
+        "nscurl"
+      ],
+      "raw_values": [
+        "python*",
+        "osascript",
+        "tclsh*",
+        "curl",
+        "nscurl"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "zsh"
+      ],
+      "raw_values": [
+        "bash",
+        "sh",
+        "zsh"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.entity_id with maxspan=15s\n[process where host.os.type == \"macos\" and event.type == \"start\" and event.action == \"exec\" and process.parent.name like~ (\"installer\", \"package_script_service\") and ((process.name in (\"bash\", \"sh\", \"zsh\") and process.args == \"-c\") or (process.name like~ (\"python*\", \"osascript\", \"tclsh*\", \"curl\", \"nscurl\")))]\n[network where host.os.type == \"macos\" and event.type == \"start\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/execution_installer_package_spawned_network_event.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

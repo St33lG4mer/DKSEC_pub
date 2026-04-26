@@ -1,0 +1,17 @@
+{
+  "id": "6a6f6de0-084b-5b82-832a-a04a1d097016",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_provlaunch_provisioning_command",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.command_line:\"*SOFTWARE\\\\Microsoft\\\\Provisioning\\\\Commands\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_provlaunch_provisioning_command.eql",
+  "metadata": {}
+}

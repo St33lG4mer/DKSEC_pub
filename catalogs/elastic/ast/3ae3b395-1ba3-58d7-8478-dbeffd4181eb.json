@@ -1,0 +1,28 @@
+{
+  "id": "3ae3b395-1ba3-58d7-8478-dbeffd4181eb",
+  "catalog": "elastic",
+  "name": "Parent Process Detected with Suspicious Windows Process(es)",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/problemchild/defense_evasion_ml_suspicious_windows_process_cluster_from_parent_process.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Living off the Land Attack Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

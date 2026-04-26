@@ -1,0 +1,42 @@
+{
+  "id": "bbcef7d4-d2b0-5c37-bae5-4fcac27c1d07",
+  "catalog": "sigma",
+  "name": "proc_creation_win_browsers_remote_debugging",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--remote-debugging-",
+        "-start-debugger-server"
+      ],
+      "raw_values": [
+        "* --remote-debugging-*",
+        "* -start-debugger-server*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "firefox.exe"
+      ],
+      "raw_values": [
+        "*\\\\firefox.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"* --remote-debugging-*\" or (process.executable:\"*\\\\firefox.exe\" and process.command_line:\"* -start-debugger-server*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_browsers_remote_debugging.eql",
+  "metadata": {}
+}

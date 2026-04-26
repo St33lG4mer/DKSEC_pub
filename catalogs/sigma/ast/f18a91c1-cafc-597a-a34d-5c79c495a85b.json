@@ -1,0 +1,29 @@
+{
+  "id": "f18a91c1-cafc-597a-a34d-5c79c495a85b",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_snake_encrypted_payload_ioc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "comadmin.dat"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\Com\\\\Comadmin.dat"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\System32\\\\Com\\\\Comadmin.dat\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/SNAKE/file_event_win_malware_snake_encrypted_payload_ioc.eql",
+  "metadata": {}
+}

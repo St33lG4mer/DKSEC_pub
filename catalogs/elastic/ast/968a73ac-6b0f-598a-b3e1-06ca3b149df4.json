@@ -1,0 +1,54 @@
+{
+  "id": "968a73ac-6b0f-598a-b3e1-06ca3b149df4",
+  "catalog": "elastic",
+  "name": "PowerShell Keylogging Script",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "get-keystrokes",
+        "sentinelbreakpoints",
+        "set-psbreakpoint"
+      ],
+      "raw_values": [
+        "Get-Keystrokes",
+        "sentinelbreakpoints",
+        "Set-PSBreakpoint"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  (\n    powershell.file.script_block_text : (GetAsyncKeyState or NtUserGetAsyncKeyState or GetKeyboardState or \"Get-Keystrokes\") or\n    powershell.file.script_block_text : (\n      (SetWindowsHookEx or SetWindowsHookExA or SetWindowsHookExW or NtUserSetWindowsHookEx) and\n      (\n        GetForegroundWindow or GetWindowTextA or GetWindowTextW or \"WM_KEYBOARD_LL\" or \"WH_MOUSE_LL\" or\n        \"WH_KEYBOARD_LL\" or \"LowLevelKeyboardProc\" or \"CallNextHookEx\"\n      )\n   )\n  ) and not user.id : \"S-1-5-18\" and\n  not powershell.file.script_block_text : (\n    \"sentinelbreakpoints\" and \"Set-PSBreakpoint\"\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/collection_posh_keylogger.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

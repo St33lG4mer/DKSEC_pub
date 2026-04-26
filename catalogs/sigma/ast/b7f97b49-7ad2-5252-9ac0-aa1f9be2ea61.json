@@ -1,0 +1,29 @@
+{
+  "id": "b7f97b49-7ad2-5252-9ac0-aa1f9be2ea61",
+  "catalog": "sigma",
+  "name": "create_remote_thread_win_susp_password_dumper_lsass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and winlog.event_data.StartModule==\"\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/create_remote_thread/create_remote_thread_win_susp_password_dumper_lsass.eql",
+  "metadata": {}
+}

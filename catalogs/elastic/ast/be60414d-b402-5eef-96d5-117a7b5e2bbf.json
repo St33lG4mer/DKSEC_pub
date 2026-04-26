@@ -1,0 +1,106 @@
+{
+  "id": "be60414d-b402-5eef-96d5-117a7b5e2bbf",
+  "catalog": "elastic",
+  "name": "Potential Credential Access via Renamed COM+ Services DLL",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "rundll32.exe"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "windows.sysmon_operational"
+      ],
+      "raw_values": [
+        "windows.sysmon_operational"
+      ]
+    },
+    {
+      "field": "file.pe.original_file_name",
+      "raw_field": "file.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "comsvcs.dll"
+      ],
+      "raw_values": [
+        "COMSVCS.DLL"
+      ]
+    },
+    {
+      "field": "file.pe.imphash",
+      "raw_field": "file.pe.imphash",
+      "operator": ":",
+      "values": [
+        "eadbccbb324829acb5f2bbe87e5549a8"
+      ],
+      "raw_values": [
+        "EADBCCBB324829ACB5F2BBE87E5549A8"
+      ]
+    },
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "comsvcs.dll"
+      ],
+      "raw_values": [
+        "COMSVCS.DLL"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=1m\n [process where host.os.type == \"windows\" and event.category == \"process\" and\n    process.name : \"rundll32.exe\"]\n [process where host.os.type == \"windows\" and event.category == \"process\" and data_stream.dataset : \"windows.sysmon_operational\" and event.code == \"7\" and\n   (file.pe.original_file_name : \"COMSVCS.DLL\" or file.pe.imphash : \"EADBCCBB324829ACB5F2BBE87E5549A8\") and\n    /* renamed COMSVCS */\n    not file.name : \"COMSVCS.DLL\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_suspicious_comsvcs_imageload.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Defense Evasion",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

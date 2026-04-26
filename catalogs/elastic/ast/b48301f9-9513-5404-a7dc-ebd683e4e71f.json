@@ -1,0 +1,207 @@
+{
+  "id": "b48301f9-9513-5404-a7dc-ebd683e4e71f",
+  "catalog": "elastic",
+  "name": "M365 SharePoint Site Sharing Policy Weakened",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "sharepoint",
+        "onedrive"
+      ],
+      "raw_values": [
+        "SharePoint",
+        "OneDrive"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.sharewithguests.newvalue",
+      "raw_field": "o365.audit.ModifiedProperties.ShareWithGuests.NewValue",
+      "operator": ":",
+      "values": [
+        "enabled"
+      ],
+      "raw_values": [
+        "Enabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.sharewithguests.oldvalue",
+      "raw_field": "o365.audit.ModifiedProperties.ShareWithGuests.OldValue",
+      "operator": ":",
+      "values": [
+        "disabled"
+      ],
+      "raw_values": [
+        "Disabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.shareusinganonymouslinks.newvalue",
+      "raw_field": "o365.audit.ModifiedProperties.ShareUsingAnonymousLinks.NewValue",
+      "operator": ":",
+      "values": [
+        "enabled"
+      ],
+      "raw_values": [
+        "Enabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.shareusinganonymouslinks.oldvalue",
+      "raw_field": "o365.audit.ModifiedProperties.ShareUsingAnonymousLinks.OldValue",
+      "operator": ":",
+      "values": [
+        "disabled"
+      ],
+      "raw_values": [
+        "Disabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.ispublic.newvalue",
+      "raw_field": "o365.audit.ModifiedProperties.IsPublic.NewValue",
+      "operator": ":",
+      "values": [
+        "enabled"
+      ],
+      "raw_values": [
+        "Enabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.ispublic.oldvalue",
+      "raw_field": "o365.audit.ModifiedProperties.IsPublic.OldValue",
+      "operator": ":",
+      "values": [
+        "disabled"
+      ],
+      "raw_values": [
+        "Disabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.allowguestuser.newvalue",
+      "raw_field": "o365.audit.ModifiedProperties.AllowGuestUser.NewValue",
+      "operator": ":",
+      "values": [
+        "enabled"
+      ],
+      "raw_values": [
+        "Enabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.allowguestuser.oldvalue",
+      "raw_field": "o365.audit.ModifiedProperties.AllowGuestUser.OldValue",
+      "operator": ":",
+      "values": [
+        "disabled"
+      ],
+      "raw_values": [
+        "Disabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.allowfederatedusers.newvalue",
+      "raw_field": "o365.audit.ModifiedProperties.AllowFederatedUsers.NewValue",
+      "operator": ":",
+      "values": [
+        "enabled"
+      ],
+      "raw_values": [
+        "Enabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.allowfederatedusers.oldvalue",
+      "raw_field": "o365.audit.ModifiedProperties.AllowFederatedUsers.OldValue",
+      "operator": ":",
+      "values": [
+        "disabled"
+      ],
+      "raw_values": [
+        "Disabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.allowteamsconsumer.newvalue",
+      "raw_field": "o365.audit.ModifiedProperties.AllowTeamsConsumer.NewValue",
+      "operator": ":",
+      "values": [
+        "enabled"
+      ],
+      "raw_values": [
+        "Enabled"
+      ]
+    },
+    {
+      "field": "o365.audit.modifiedproperties.allowteamsconsumer.oldvalue",
+      "raw_field": "o365.audit.ModifiedProperties.AllowTeamsConsumer.OldValue",
+      "operator": ":",
+      "values": [
+        "disabled"
+      ],
+      "raw_values": [
+        "Disabled"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "o365.audit"
+      ],
+      "raw_values": [
+        "o365.audit"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "sharingpolicychanged"
+      ],
+      "raw_values": [
+        "SharingPolicyChanged"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"o365.audit\" and event.provider: (\"SharePoint\" or \"OneDrive\") and\n    event.action: \"SharingPolicyChanged\" and event.outcome: \"success\" and\n    (\n        (o365.audit.ModifiedProperties.ShareWithGuests.NewValue: (true or \"Enabled\") and\n            o365.audit.ModifiedProperties.ShareWithGuests.OldValue: (false or \"Disabled\"))\n        or\n        (o365.audit.ModifiedProperties.ShareUsingAnonymousLinks.NewValue: (true or \"Enabled\") and\n            o365.audit.ModifiedProperties.ShareUsingAnonymousLinks.OldValue: (false or \"Disabled\"))\n        or\n        (o365.audit.ModifiedProperties.IsPublic.NewValue: (true or \"Enabled\") and\n            o365.audit.ModifiedProperties.IsPublic.OldValue: (false or \"Disabled\"))\n        or\n        (o365.audit.ModifiedProperties.AllowGuestUser.NewValue: (true or \"Enabled\") and\n            o365.audit.ModifiedProperties.AllowGuestUser.OldValue: (false or \"Disabled\"))\n        or\n        (o365.audit.ModifiedProperties.AllowFederatedUsers.NewValue: (true or \"Enabled\") and\n            o365.audit.ModifiedProperties.AllowFederatedUsers.OldValue: (false or \"Disabled\"))\n        or\n        (o365.audit.ModifiedProperties.AllowTeamsConsumer.NewValue: (true or \"Enabled\") and\n            o365.audit.ModifiedProperties.AllowTeamsConsumer.OldValue: (false or \"Disabled\"))\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/defense_evasion_sharepoint_sharing_policy_weakened.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: SaaS",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

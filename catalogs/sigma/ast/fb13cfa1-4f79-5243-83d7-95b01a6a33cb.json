@@ -1,0 +1,29 @@
+{
+  "id": "fb13cfa1-4f79-5243-83d7-95b01a6a33cb",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sdclt_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "sdclt.exe"
+      ],
+      "raw_values": [
+        "*\\\\sdclt.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\sdclt.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sdclt_child_process.eql",
+  "metadata": {}
+}

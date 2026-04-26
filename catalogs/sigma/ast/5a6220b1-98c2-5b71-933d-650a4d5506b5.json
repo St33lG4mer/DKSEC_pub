@@ -1,0 +1,48 @@
+{
+  "id": "5a6220b1-98c2-5b71-933d-650a4d5506b5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_alternate_data_streams",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "txt:",
+        "type",
+        "makecab",
+        ".cab",
+        "reg",
+        "export",
+        "regedit",
+        "esentutl"
+      ],
+      "raw_values": [
+        "*txt:*",
+        "*type *",
+        "* > *",
+        "*makecab *",
+        "*.cab*",
+        "*reg *",
+        "* export *",
+        "*regedit *",
+        "* /E *",
+        "*esentutl *",
+        "* /y *",
+        "* /d *",
+        "* /o *"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*txt:*\" and ((process.command_line:\"*type *\" and process.command_line:\"* > *\") or (process.command_line:\"*makecab *\" and process.command_line:\"*.cab*\") or (process.command_line:\"*reg *\" and process.command_line:\"* export *\") or (process.command_line:\"*regedit *\" and process.command_line:\"* /E *\") or (process.command_line:\"*esentutl *\" and process.command_line:\"* /y *\" and process.command_line:\"* /d *\" and process.command_line:\"* /o *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_alternate_data_streams.eql",
+  "metadata": {}
+}

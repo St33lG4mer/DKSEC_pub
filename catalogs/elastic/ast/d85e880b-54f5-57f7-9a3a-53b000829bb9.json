@@ -1,0 +1,91 @@
+{
+  "id": "d85e880b-54f5-57f7-9a3a-53b000829bb9",
+  "catalog": "elastic",
+  "name": "WPS Office Exploitation via DLL Hijack",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "dll.path",
+      "raw_field": "dll.path",
+      "operator": ":",
+      "values": [
+        ":\\\\users\\\\*\\\\appdata\\\\local\\\\temp\\\\wps\\\\inetcache\\\\",
+        "\\\\device\\\\mup\\\\",
+        "\\\\\\\\"
+      ],
+      "raw_values": [
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\wps\\\\INetCache\\\\*",
+        "\\\\Device\\\\Mup\\\\**",
+        "\\\\\\\\*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "promecefpluginhost.exe"
+      ],
+      "raw_values": [
+        "promecefpluginhost.exe"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "library",
+        "process"
+      ],
+      "raw_values": [
+        "library",
+        "process"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "image loaded"
+      ],
+      "raw_values": [
+        "Image loaded*"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and process.name : \"promecefpluginhost.exe\" and\n(\n (event.category == \"library\" and\n  ?dll.path :\n     (\"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\wps\\\\INetCache\\\\*\",\n      \"\\\\Device\\\\Mup\\\\**\", \"\\\\\\\\*\")) or\n\n  ((event.category == \"process\" and event.action : \"Image loaded*\") and\n  ?file.path :\n     (\"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\wps\\\\INetCache\\\\*\",\n      \"\\\\Device\\\\Mup\\\\**\", \"\\\\\\\\*\"))\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_initial_access_wps_dll_exploit.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

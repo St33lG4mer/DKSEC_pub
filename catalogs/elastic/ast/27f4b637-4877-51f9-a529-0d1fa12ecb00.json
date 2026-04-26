@@ -1,0 +1,75 @@
+{
+  "id": "27f4b637-4877-51f9-a529-0d1fa12ecb00",
+  "catalog": "elastic",
+  "name": "AWS SNS Rare Protocol Subscription by User",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "sns.amazonaws.com"
+      ],
+      "raw_values": [
+        "sns.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "subscribe"
+      ],
+      "raw_values": [
+        "Subscribe"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"sns.amazonaws.com\"\n    and event.action: \"Subscribe\"\n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/exfiltration_sns_rare_protocol_subscription_by_user.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS SNS",
+      "Resources: Investigation Guide",
+      "Use Case: Threat Detection",
+      "Tactic: Exfiltration",
+      "Tactic: Collection",
+      "Tactic: Impact"
+    ]
+  }
+}

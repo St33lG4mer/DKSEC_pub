@@ -1,0 +1,92 @@
+{
+  "id": "eaef104b-9b49-537c-adb9-29eebf1bd53c",
+  "catalog": "elastic",
+  "name": "Potential Malware-Driven SSH Brute Force Attempt",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "in",
+      "values": [
+        "rclone",
+        "sss_ssh_knownhostsproxy",
+        "sshd",
+        "ssh",
+        "php",
+        "apache2",
+        "nginx",
+        "argocd-repo-server",
+        "nessusd",
+        "source-controller"
+      ],
+      "raw_values": [
+        "/usr/bin/rclone",
+        "/usr/bin/sss_ssh_knownhostsproxy",
+        "/usr/sbin/sshd",
+        "/usr/bin/ssh",
+        "/usr/local/bin/php",
+        "/usr/sbin/apache2",
+        "/usr/sbin/nginx",
+        "/usr/local/bin/argocd-repo-server",
+        "/opt/nessus/sbin/nessusd",
+        "/usr/local/bin/source-controller"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "connection_attempted"
+      ]
+    }
+  ],
+  "raw_query": "from logs-endpoint.events.network-* metadata _id, _index, _version\n\n| mv_expand event.action \n\n| where\n    host.os.type == \"linux\" and\n    event.type == \"start\" and\n    event.action == \"connection_attempted\" and\n    destination.port in (22, 222, 2222, 10022, 2022, 2200, 62612, 8022) and\n    not (\n      cidr_match(\n        destination.ip,\n        \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\",\n        \"192.0.0.0/24\", \"192.0.0.0/29\", \"192.0.0.8/32\", \"192.0.0.9/32\",\n        \"192.0.0.10/32\", \"192.0.0.170/32\", \"192.0.0.171/32\", \"192.0.2.0/24\",\n        \"192.31.196.0/24\", \"192.52.193.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\",\n        \"224.0.0.0/4\", \"100.64.0.0/10\", \"192.175.48.0/24\", \"198.18.0.0/15\",\n        \"198.51.100.0/24\", \"203.0.113.0/24\", \"240.0.0.0/4\", \"::1\", \"FE80::/10\", \"FF00::/8\"\n      ) or\n      process.executable in (\n        \"/usr/bin/rclone\", \"/usr/bin/sss_ssh_knownhostsproxy\", \"/usr/sbin/sshd\", \"/usr/bin/ssh\",\n        \"/usr/local/bin/php\", \"/usr/sbin/apache2\", \"/usr/sbin/nginx\", \"/usr/local/bin/argocd-repo-server\",\n        \"/opt/nessus/sbin/nessusd\", \"/usr/local/bin/source-controller\"\n      ) or\n      process.executable like \"/usr/local/efax/*\"\n    )\n\n| keep\n    @timestamp,\n    _id,\n    _index,\n    _version,\n    host.os.type,\n    event.type,\n    event.action,\n    destination.port,\n    destination.ip,\n    process.executable,\n    agent.id,\n    host.name,\n    data_stream.dataset,\n    data_stream.namespace\n\n| stats\n    Esql.event_count = count(),\n    Esql.agent_id_count_distinct = count_distinct(agent.id),\n    Esql.host_name_values = values(host.name),\n    Esql.agent_id_values = values(agent.id),\n    Esql.data_stream_dataset_values = values(data_stream.dataset),\n    Esql.data_stream_namespace_values = values(data_stream.namespace)\n\n  by process.executable, destination.port\n\n| where\n    Esql.agent_id_count_distinct == 1 and\n    Esql.event_count >= 100\n\n// Extract unique values to ECS fields for alerts exclusion\n| eval agent.id = mv_min(Esql.agent_id_values),\n       host.name = mv_min(Esql.host_name_values)\n\n| sort Esql.event_count asc\n\n| keep Esql.*, agent.id, host.name, process.executable, destination.port\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/linux/impact_potential_bruteforce_malware_infection.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Tactic: Execution",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

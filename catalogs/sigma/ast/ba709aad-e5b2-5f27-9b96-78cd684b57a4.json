@@ -1,0 +1,80 @@
+{
+  "id": "ba709aad-e5b2-5f27-9b96-78cd684b57a4",
+  "catalog": "sigma",
+  "name": "net_connection_win_malware_3cx_compromise_beaconing_activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        "akamaicontainer.com",
+        "akamaitechcloudservices.com",
+        "azuredeploystore.com",
+        "azureonlinecloud.com",
+        "azureonlinestorage.com",
+        "dunamistrd.com",
+        "glcloudservice.com",
+        "journalide.org",
+        "msedgepackageinfo.com",
+        "msstorageazure.com",
+        "msstorageboxes.com",
+        "officeaddons.com",
+        "officestoragebox.com",
+        "pbxcloudeservices.com",
+        "pbxphonenetwork.com",
+        "pbxsources.com",
+        "qwepoi123098.com",
+        "sbmsa.wiki",
+        "sourceslabs.com",
+        "visualstudiofactory.com",
+        "zacharryblogs.com"
+      ],
+      "raw_values": [
+        "*akamaicontainer.com*",
+        "*akamaitechcloudservices.com*",
+        "*azuredeploystore.com*",
+        "*azureonlinecloud.com*",
+        "*azureonlinestorage.com*",
+        "*dunamistrd.com*",
+        "*glcloudservice.com*",
+        "*journalide.org*",
+        "*msedgepackageinfo.com*",
+        "*msstorageazure.com*",
+        "*msstorageboxes.com*",
+        "*officeaddons.com*",
+        "*officestoragebox.com*",
+        "*pbxcloudeservices.com*",
+        "*pbxphonenetwork.com*",
+        "*pbxsources.com*",
+        "*qwepoi123098.com*",
+        "*sbmsa.wiki*",
+        "*sourceslabs.com*",
+        "*visualstudiofactory.com*",
+        "*zacharryblogs.com*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "3cxdesktopapp.exe"
+      ],
+      "raw_values": [
+        "*\\\\3CXDesktopApp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\3CXDesktopApp.exe\" and (destination.domain like~ (\"*akamaicontainer.com*\", \"*akamaitechcloudservices.com*\", \"*azuredeploystore.com*\", \"*azureonlinecloud.com*\", \"*azureonlinestorage.com*\", \"*dunamistrd.com*\", \"*glcloudservice.com*\", \"*journalide.org*\", \"*msedgepackageinfo.com*\", \"*msstorageazure.com*\", \"*msstorageboxes.com*\", \"*officeaddons.com*\", \"*officestoragebox.com*\", \"*pbxcloudeservices.com*\", \"*pbxphonenetwork.com*\", \"*pbxsources.com*\", \"*qwepoi123098.com*\", \"*sbmsa.wiki*\", \"*sourceslabs.com*\", \"*visualstudiofactory.com*\", \"*zacharryblogs.com*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/3CX-Supply-Chain/net_connection_win_malware_3cx_compromise_beaconing_activity.eql",
+  "metadata": {}
+}

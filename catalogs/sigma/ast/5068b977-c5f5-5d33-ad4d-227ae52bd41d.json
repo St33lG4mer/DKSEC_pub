@@ -1,0 +1,40 @@
+{
+  "id": "5068b977-c5f5-5d33-ad4d-227ae52bd41d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_ditsnap",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ditsnap.exe"
+      ],
+      "raw_values": [
+        "*\\\\ditsnap.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ditsnap.exe"
+      ],
+      "raw_values": [
+        "*ditsnap.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\ditsnap.exe\" or process.command_line:\"*ditsnap.exe*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_ditsnap.eql",
+  "metadata": {}
+}

@@ -1,0 +1,25 @@
+{
+  "id": "a48cf760-ca76-5696-8d0e-accb093d3f88",
+  "catalog": "elastic",
+  "name": "Attempt to Modify an Okta Policy",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:policy.lifecycle.update\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/defense_evasion_okta_attempt_to_modify_okta_policy.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

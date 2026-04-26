@@ -1,0 +1,108 @@
+{
+  "id": "1b68a181-3cb5-5504-97f3-5bdd5e391e46",
+  "catalog": "sigma",
+  "name": "proc_creation_win_schtasks_change",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "temp",
+        "temporary internet",
+        "%programdata%",
+        "%appdata%",
+        "%comspec%",
+        "%localappdata%",
+        "regsvr32",
+        "rundll32",
+        "powershell",
+        "mshta",
+        "wscript",
+        "cscript",
+        "certutil",
+        "bitsadmin",
+        "bash.exe",
+        "bash",
+        "scrcons",
+        "wmic",
+        "wmic.exe",
+        "forfiles",
+        "scriptrunner",
+        "hh.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\WINDOWS\\\\Temp\\\\*",
+        "*\\\\Desktop\\\\*",
+        "*\\\\Downloads\\\\*",
+        "*\\\\Temporary Internet*",
+        "*C:\\\\ProgramData\\\\*",
+        "*C:\\\\Perflogs\\\\*",
+        "*%ProgramData%*",
+        "*%appdata%*",
+        "*%comspec%*",
+        "*%localappdata%*",
+        "*regsvr32*",
+        "*rundll32*",
+        "*cmd /c *",
+        "*cmd /k *",
+        "*cmd /r *",
+        "*cmd.exe /c *",
+        "*cmd.exe /k *",
+        "*cmd.exe /r *",
+        "*powershell*",
+        "*mshta*",
+        "*wscript*",
+        "*cscript*",
+        "*certutil*",
+        "*bitsadmin*",
+        "*bash.exe*",
+        "*bash *",
+        "*scrcons*",
+        "*wmic *",
+        "*wmic.exe*",
+        "*forfiles*",
+        "*scriptrunner*",
+        "*hh.exe*",
+        "*hh *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "* /Change *",
+        "* /TN *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe\" and (process.command_line:\"* /Change *\" and process.command_line:\"* /TN *\")) and (process.command_line like~ (\"*\\\\AppData\\\\Local\\\\Temp*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\WINDOWS\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\", \"*\\\\Temporary Internet*\", \"*C:\\\\ProgramData\\\\*\", \"*C:\\\\Perflogs\\\\*\", \"*%ProgramData%*\", \"*%appdata%*\", \"*%comspec%*\", \"*%localappdata%*\")) and (process.command_line like~ (\"*regsvr32*\", \"*rundll32*\", \"*cmd /c *\", \"*cmd /k *\", \"*cmd /r *\", \"*cmd.exe /c *\", \"*cmd.exe /k *\", \"*cmd.exe /r *\", \"*powershell*\", \"*mshta*\", \"*wscript*\", \"*cscript*\", \"*certutil*\", \"*bitsadmin*\", \"*bash.exe*\", \"*bash *\", \"*scrcons*\", \"*wmic *\", \"*wmic.exe*\", \"*forfiles*\", \"*scriptrunner*\", \"*hh.exe*\", \"*hh *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_schtasks_change.eql",
+  "metadata": {}
+}

@@ -1,0 +1,125 @@
+{
+  "id": "6a8b75c2-cac8-5f03-b98b-e1aaf0e1648b",
+  "catalog": "elastic",
+  "name": "Suspicious Network Tool Launched Inside A Container",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-*z",
+        "localhost",
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "-*z*",
+        "localhost",
+        "127.0.0.1"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "nc.traditional",
+        "ncat",
+        "netcat",
+        "nmap",
+        "tcpdump",
+        "tshark",
+        "ngrep",
+        "telnet",
+        "mitmproxy",
+        "socat",
+        "zmap",
+        "masscan",
+        "zgrab"
+      ],
+      "raw_values": [
+        "nc.traditional",
+        "nc",
+        "ncat",
+        "netcat",
+        "nmap",
+        "tcpdump",
+        "tshark",
+        "ngrep",
+        "telnet",
+        "mitmproxy",
+        "socat",
+        "zmap",
+        "masscan",
+        "zgrab"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.entry_leader.entry_meta.type",
+      "raw_field": "process.entry_leader.entry_meta.type",
+      "operator": "==",
+      "values": [
+        "container"
+      ],
+      "raw_values": [
+        "container"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\nprocess.entry_leader.entry_meta.type == \"container\" and process.name in (\n  \"nc.traditional\", \"nc\", \"ncat\", \"netcat\", \"nmap\", \"tcpdump\", \"tshark\", \"ngrep\", \"telnet\",\n  \"mitmproxy\", \"socat\", \"zmap\", \"masscan\", \"zgrab\"\n) and\nnot (process.name in (\"nc.traditional\", \"nc\", \"ncat\", \"netcat\") and process.args like (\"-*z*\", \"localhost\", \"127.0.0.1\"))\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_suspicious_network_tool_launched_inside_container.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Command and Control",
+      "Tactic: Reconnaissance",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

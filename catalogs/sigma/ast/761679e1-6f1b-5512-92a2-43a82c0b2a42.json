@@ -1,0 +1,75 @@
+{
+  "id": "761679e1-6f1b-5512-92a2-43a82c0b2a42",
+  "catalog": "sigma",
+  "name": "registry_set_terminal_server_tampering",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\control\\\\terminal server\\\\",
+        "\\\\windows nt\\\\terminal services\\\\",
+        "\\\\disableremotedesktopantialias",
+        "\\\\disablesecuritysettings",
+        "\\\\fallowunsolicited",
+        "\\\\fallowunsolicitedfullcontrol",
+        "\\\\control\\\\terminal server\\\\initialprogram",
+        "\\\\control\\\\terminal server\\\\winstations\\\\rdp-tcp\\\\initialprogram",
+        "\\\\services\\\\termservice\\\\parameters\\\\servicedll",
+        "\\\\terminal server\\\\winstations\\\\rdp-tcp\\\\securitylayer",
+        "\\\\windows nt\\\\terminal services\\\\initialprogram"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\Terminal Server\\\\*",
+        "*\\\\Windows NT\\\\Terminal Services\\\\*",
+        "*\\\\DisableRemoteDesktopAntiAlias",
+        "*\\\\DisableSecuritySettings",
+        "*\\\\fAllowUnsolicited",
+        "*\\\\fAllowUnsolicitedFullControl",
+        "*\\\\Control\\\\Terminal Server\\\\InitialProgram*",
+        "*\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\InitialProgram*",
+        "*\\\\services\\\\TermService\\\\Parameters\\\\ServiceDll*",
+        "*\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\SecurityLayer*",
+        "*\\\\Windows NT\\\\Terminal Services\\\\InitialProgram*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\shadow",
+        "\\\\securitylayer"
+      ],
+      "raw_values": [
+        "*\\\\Shadow",
+        "*\\\\SecurityLayer"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)",
+        "dword (0x00000002)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)",
+        "DWORD (0x00000002)"
+      ]
+    }
+  ],
+  "raw_query": "any where (((registry.path like~ (\"*\\\\Control\\\\Terminal Server\\\\*\", \"*\\\\Windows NT\\\\Terminal Services\\\\*\")) and registry.path:\"*\\\\Shadow\" and (winlog.event_data.Details like~ (\"DWORD (0x00000001)\", \"DWORD (0x00000002)\", \"DWORD (0x00000003)\", \"DWORD (0x00000004)\"))) or ((registry.path like~ (\"*\\\\Control\\\\Terminal Server\\\\*\", \"*\\\\Windows NT\\\\Terminal Services\\\\*\")) and (registry.path like~ (\"*\\\\DisableRemoteDesktopAntiAlias\", \"*\\\\DisableSecuritySettings\", \"*\\\\fAllowUnsolicited\", \"*\\\\fAllowUnsolicitedFullControl\")) and winlog.event_data.Details:\"DWORD (0x00000001)\") or (registry.path like~ (\"*\\\\Control\\\\Terminal Server\\\\InitialProgram*\", \"*\\\\Control\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\InitialProgram*\", \"*\\\\services\\\\TermService\\\\Parameters\\\\ServiceDll*\", \"*\\\\Terminal Server\\\\WinStations\\\\RDP-Tcp\\\\SecurityLayer*\", \"*\\\\Windows NT\\\\Terminal Services\\\\InitialProgram*\"))) and (not (registry.path:\"*\\\\SecurityLayer\" and winlog.event_data.Details:\"DWORD (0x00000002)\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_terminal_server_tampering.eql",
+  "metadata": {}
+}

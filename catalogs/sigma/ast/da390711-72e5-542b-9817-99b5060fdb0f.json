@@ -1,0 +1,44 @@
+{
+  "id": "da390711-72e5-542b-9817-99b5060fdb0f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_winrm_awl_bypass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "format:pretty",
+        "format:text"
+      ],
+      "raw_values": [
+        "*format:pretty*",
+        "*format:\\",
+        "*",
+        "*format:text*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "winrm"
+      ],
+      "raw_values": [
+        "*winrm*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*winrm*\" and ((process.command_line like~ (\"*format:pretty*\", \"*format:\\\"pretty\\\"*\", \"*format:\\\"text\\\"*\", \"*format:text*\")) and (not (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_winrm_awl_bypass.eql",
+  "metadata": {}
+}

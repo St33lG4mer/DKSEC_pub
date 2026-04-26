@@ -1,0 +1,166 @@
+{
+  "id": "e0e7b755-c898-5749-9ff5-6573d4ad318c",
+  "catalog": "sigma",
+  "name": "proc_access_win_lsass_susp_source_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": "like~",
+      "values": [
+        "0x14c2",
+        "0x410",
+        "0x1410",
+        "0x1fffff",
+        "0x1010",
+        "0x101010"
+      ],
+      "raw_values": [
+        "*10",
+        "*30",
+        "*50",
+        "*70",
+        "*90",
+        "*B0",
+        "*D0",
+        "*F0",
+        "*18",
+        "*38",
+        "*58",
+        "*78",
+        "*98",
+        "*B8",
+        "*D8",
+        "*F8",
+        "*1A",
+        "*3A",
+        "*5A",
+        "*7A",
+        "*9A",
+        "*BA",
+        "*DA",
+        "*FA",
+        "*0x14C2",
+        "*FF",
+        "0x410",
+        "0x1410",
+        "0x1fffff",
+        "0x1010",
+        "0x101010"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "temporary",
+        "code.exe",
+        "software_reporter_tool.exe",
+        "dropboxupdate.exe",
+        "mbaminstallerservice.exe",
+        "webexmta.exe",
+        "webexmtav2.exe",
+        "webexhost.exe",
+        "jetbrains-toolbox.exe",
+        "thor64.exe",
+        "thor.exe",
+        "aurora-agent-64.exe",
+        "aurora-agent.exe"
+      ],
+      "raw_values": [
+        "*\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*\\\\PerfLogs\\\\*",
+        "*\\\\AppData\\\\*",
+        "*\\\\Temporary*",
+        "*\\\\Microsoft VS Code\\\\Code.exe",
+        "*\\\\software_reporter_tool.exe",
+        "*\\\\DropboxUpdate.exe",
+        "*\\\\MBAMInstallerService.exe",
+        "*\\\\WebexMTA.exe",
+        "*\\\\Meetings\\\\WebexMTAV2.exe",
+        "*\\\\WebEx\\\\WebexHost.exe",
+        "*\\\\JetBrains\\\\Toolbox\\\\bin\\\\jetbrains-toolbox.exe",
+        "*:\\\\Windows\\\\Temp\\\\asgard2-agent\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\asgard2-agent-sc\\\\*",
+        "*\\\\thor64.exe",
+        "*\\\\thor.exe",
+        "*\\\\aurora-agent-64.exe",
+        "*\\\\aurora-agent.exe",
+        "*:\\\\Program Files\\\\Common Files\\\\Adobe\\\\ARM\\\\*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe",
+        "\\\\winlogon.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe",
+        "*\\\\winlogon.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dropboxupdate.exe",
+        "vs_bootstrapper_",
+        "googleupdate.exe",
+        "keybase.exe",
+        "is-",
+        "avira_system_speedup.tmp",
+        "updater.exe",
+        "adobearmhelper.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*.tmp\\\\DropboxUpdate.exe",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\DropboxUpdate.exe",
+        "*\\\\vs_bootstrapper_*",
+        "*:\\\\Program Files (x86)\\\\Google\\\\Temp\\\\*",
+        "*.tmp\\\\GoogleUpdate.exe",
+        "*\\\\AppData\\\\Local\\\\Keybase\\\\keybase.exe",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\is-*",
+        "*.tmp\\\\avira_system_speedup.tmp",
+        "*\\\\AppData\\\\Roaming\\\\ViberPC\\\\*",
+        "*\\\\updater.exe",
+        "*\\\\AdobeARMHelper.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x410",
+        "0x1410",
+        "0x1fffff"
+      ],
+      "raw_values": [
+        "0x410",
+        "0x1410",
+        "0x1fffff"
+      ]
+    }
+  ],
+  "raw_query": "any where (winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and (winlog.event_data.GrantedAccess like~ (\"*10\", \"*30\", \"*50\", \"*70\", \"*90\", \"*B0\", \"*D0\", \"*F0\", \"*18\", \"*38\", \"*58\", \"*78\", \"*98\", \"*B8\", \"*D8\", \"*F8\", \"*1A\", \"*3A\", \"*5A\", \"*7A\", \"*9A\", \"*BA\", \"*DA\", \"*FA\", \"*0x14C2\", \"*FF\")) and (process.executable like~ (\"*\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*\\\\PerfLogs\\\\*\", \"*\\\\AppData\\\\*\", \"*\\\\Temporary*\"))) and (not (((process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\*\") and (process.executable like~ (\"*\\\\Microsoft VS Code\\\\Code.exe\", \"*\\\\software_reporter_tool.exe\", \"*\\\\DropboxUpdate.exe\", \"*\\\\MBAMInstallerService.exe\", \"*\\\\WebexMTA.exe\", \"*\\\\Meetings\\\\WebexMTAV2.exe\", \"*\\\\WebEx\\\\WebexHost.exe\", \"*\\\\JetBrains\\\\Toolbox\\\\bin\\\\jetbrains-toolbox.exe\")) and winlog.event_data.GrantedAccess:\"0x410\") or (process.executable:\"*:\\\\Windows\\\\Temp\\\\*\" and process.executable:\"*.tmp\\\\DropboxUpdate.exe\" and (winlog.event_data.GrantedAccess like~ (\"0x410\", \"0x1410\"))) or ((process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\") and process.executable:\"*.tmp\\\\DropboxUpdate.exe\" and winlog.event_data.GrantedAccess:\"0x1410\") or ((process.executable like~ (\"*:\\\\Program Files (x86)\\\\Dropbox\\\\*\", \"*:\\\\Program Files\\\\Dropbox\\\\*\")) and process.executable:\"*\\\\DropboxUpdate.exe\" and winlog.event_data.GrantedAccess:\"0x1410\") or ((process.executable like~ (\"*:\\\\Windows\\\\Temp\\\\asgard2-agent\\\\*\", \"*:\\\\Windows\\\\Temp\\\\asgard2-agent-sc\\\\*\")) and (process.executable like~ (\"*\\\\thor64.exe\", \"*\\\\thor.exe\", \"*\\\\aurora-agent-64.exe\", \"*\\\\aurora-agent.exe\")) and (winlog.event_data.GrantedAccess like~ (\"0x1fffff\", \"0x1010\", \"0x101010\"))) or ((process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and process.executable:\"*\\\\vs_bootstrapper_*\") and winlog.event_data.GrantedAccess:\"0x1410\") or (process.executable:\"*:\\\\Program Files (x86)\\\\Google\\\\Temp\\\\*\" and process.executable:\"*.tmp\\\\GoogleUpdate.exe\" and (winlog.event_data.GrantedAccess like~ (\"0x410\", \"0x1410\"))) or (process.executable:\"*:\\\\Users\\\\*\" and process.executable:\"*\\\\AppData\\\\Local\\\\Keybase\\\\keybase.exe\" and winlog.event_data.GrantedAccess:\"0x1fffff\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Temp\\\\is-*\" and process.executable:\"*.tmp\\\\avira_system_speedup.tmp\" and winlog.event_data.GrantedAccess:\"0x1410\") or (process.executable:\"*\\\\AppData\\\\Roaming\\\\ViberPC\\\\*\" and process.executable:\"*\\\\updater.exe\" and winlog.event_data.TargetImage:\"*\\\\winlogon.exe\" and winlog.event_data.GrantedAccess:\"0x1fffff\") or ((process.executable like~ (\"*:\\\\Program Files\\\\Common Files\\\\Adobe\\\\ARM\\\\*\", \"*:\\\\Program Files (x86)\\\\Common Files\\\\Adobe\\\\ARM\\\\*\")) and process.executable:\"*\\\\AdobeARMHelper.exe\" and winlog.event_data.GrantedAccess:\"0x1410\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_access/proc_access_win_lsass_susp_source_process.eql",
+  "metadata": {}
+}

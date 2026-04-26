@@ -1,0 +1,103 @@
+{
+  "id": "d1d1373d-edb6-580a-8492-69b8cf9491c8",
+  "catalog": "sigma",
+  "name": "dns_query_win_domain_azurewebsites",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "chrome.exe",
+        "firefox.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "msmpeng.exe",
+        "mssense.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe",
+        "C:\\\\Program Files\\\\Mozilla Firefox\\\\firefox.exe",
+        "*\\\\msedge.exe",
+        "*\\\\msedgewebview2.exe",
+        "*\\\\MsMpEng.exe",
+        "*\\\\MsSense.exe",
+        "C:\\\\Program Files\\\\SeaMonkey\\\\*",
+        "C:\\\\Program Files\\\\Naver\\\\Naver Whale\\\\*",
+        "C:\\\\Program Files\\\\Waterfox\\\\*",
+        "C:\\\\Program Files\\\\SlimBrowser\\\\*",
+        "C:\\\\Program Files\\\\Falkon\\\\*"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "azurewebsites.net"
+      ],
+      "raw_values": [
+        "*azurewebsites.net"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microsoftedge.exe",
+        "safari.exe",
+        "brave.exe",
+        "maxthon.exe",
+        "opera.exe",
+        "seamonkey.exe",
+        "vivaldi.exe",
+        "whale.exe",
+        "waterfox.exe",
+        "midori next generation.exe",
+        "slimbrowser.exe",
+        "flock.exe",
+        "phoebe.exe",
+        "falkon.exe",
+        "avant.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\*",
+        "*\\\\WindowsApps\\\\MicrosoftEdge.exe",
+        "*\\\\safari.exe",
+        "*\\\\brave.exe",
+        "C:\\\\Program Files\\\\BraveSoftware\\\\*",
+        "*\\\\AppData\\\\Local\\\\Maxthon\\\\*",
+        "*\\\\maxthon.exe",
+        "*\\\\AppData\\\\Local\\\\Programs\\\\Opera\\\\*",
+        "*\\\\opera.exe",
+        "*\\\\seamonkey.exe",
+        "*\\\\AppData\\\\Local\\\\Vivaldi\\\\*",
+        "*\\\\vivaldi.exe",
+        "*\\\\whale.exe",
+        "*\\\\Tor Browser\\\\*",
+        "*\\\\Waterfox.exe",
+        "*\\\\AppData\\\\Local\\\\Programs\\\\midori-ng\\\\*",
+        "*\\\\Midori Next Generation.exe",
+        "*\\\\slimbrowser.exe",
+        "*\\\\AppData\\\\Local\\\\Flock\\\\*",
+        "*\\\\Flock.exe",
+        "*\\\\AppData\\\\Local\\\\Phoebe\\\\*",
+        "*\\\\Phoebe.exe",
+        "*\\\\falkon.exe",
+        "*\\\\avant.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name:\"*azurewebsites.net\" and (not ((process.executable like~ (\"C:\\\\Program Files\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\", \"C:\\\\Program Files (x86)\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\")) or (process.executable like~ (\"C:\\\\Program Files\\\\Mozilla Firefox\\\\firefox.exe\", \"C:\\\\Program Files (x86)\\\\Mozilla Firefox\\\\firefox.exe\")) or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Internet Explorer\\\\iexplore.exe\", \"C:\\\\Program Files\\\\Internet Explorer\\\\iexplore.exe\")) or (process.executable:\"C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeWebView\\\\Application\\\\*\" or process.executable:\"*\\\\WindowsApps\\\\MicrosoftEdge.exe\" or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\", \"C:\\\\Program Files\\\\Microsoft\\\\Edge\\\\Application\\\\msedge.exe\"))) or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft\\\\EdgeCore\\\\*\", \"C:\\\\Program Files\\\\Microsoft\\\\EdgeCore\\\\*\")) and (process.executable like~ (\"*\\\\msedge.exe\", \"*\\\\msedgewebview2.exe\"))) or process.executable:\"*\\\\safari.exe\" or (process.executable like~ (\"*\\\\MsMpEng.exe\", \"*\\\\MsSense.exe\")) or (process.executable:\"*\\\\brave.exe\" and process.executable:\"C:\\\\Program Files\\\\BraveSoftware\\\\*\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Maxthon\\\\*\" and process.executable:\"*\\\\maxthon.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Programs\\\\Opera\\\\*\" and process.executable:\"*\\\\opera.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\SeaMonkey\\\\*\", \"C:\\\\Program Files (x86)\\\\SeaMonkey\\\\*\")) and process.executable:\"*\\\\seamonkey.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Vivaldi\\\\*\" and process.executable:\"*\\\\vivaldi.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\Naver\\\\Naver Whale\\\\*\", \"C:\\\\Program Files (x86)\\\\Naver\\\\Naver Whale\\\\*\")) and process.executable:\"*\\\\whale.exe\") or process.executable:\"*\\\\Tor Browser\\\\*\" or ((process.executable like~ (\"C:\\\\Program Files\\\\Waterfox\\\\*\", \"C:\\\\Program Files (x86)\\\\Waterfox\\\\*\")) and process.executable:\"*\\\\Waterfox.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Programs\\\\midori-ng\\\\*\" and process.executable:\"*\\\\Midori Next Generation.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\SlimBrowser\\\\*\", \"C:\\\\Program Files (x86)\\\\SlimBrowser\\\\*\")) and process.executable:\"*\\\\slimbrowser.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Flock\\\\*\" and process.executable:\"*\\\\Flock.exe\") or (process.executable:\"*\\\\AppData\\\\Local\\\\Phoebe\\\\*\" and process.executable:\"*\\\\Phoebe.exe\") or ((process.executable like~ (\"C:\\\\Program Files\\\\Falkon\\\\*\", \"C:\\\\Program Files (x86)\\\\Falkon\\\\*\")) and process.executable:\"*\\\\falkon.exe\") or ((process.executable like~ (\"C:\\\\Program Files (x86)\\\\Avant Browser\\\\*\", \"C:\\\\Program Files\\\\Avant Browser\\\\*\")) and process.executable:\"*\\\\avant.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_domain_azurewebsites.eql",
+  "metadata": {}
+}

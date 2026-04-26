@@ -1,0 +1,54 @@
+{
+  "id": "05c4503c-aec4-5f28-897d-cd881deb5ddd",
+  "catalog": "sigma",
+  "name": "registry_event_cve_2021_1675_mimikatz_printernightmare_drivers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\control\\\\print\\\\environments\\\\windows x64\\\\drivers\\\\version-3\\\\qms 810\\\\",
+        "\\\\control\\\\print\\\\environments\\\\windows x64\\\\drivers\\\\version-3\\\\mimikatz",
+        "\\\\control\\\\print\\\\environments",
+        "\\\\currentversion\\\\print\\\\printers",
+        "gentil kiwi",
+        "mimikatz printer",
+        "kiwi legit printer"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\Print\\\\Environments\\\\Windows x64\\\\Drivers\\\\Version-3\\\\QMS 810\\\\*",
+        "*\\\\Control\\\\Print\\\\Environments\\\\Windows x64\\\\Drivers\\\\Version-3\\\\mimikatz*",
+        "*\\\\Control\\\\Print\\\\Environments*",
+        "*\\\\CurrentVersion\\\\Print\\\\Printers*",
+        "*Gentil Kiwi*",
+        "*mimikatz printer*",
+        "*Kiwi Legit Printer*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "legitprinter",
+        "\\\\control\\\\print\\\\environments\\\\windows"
+      ],
+      "raw_values": [
+        "*legitprinter*",
+        "*\\\\Control\\\\Print\\\\Environments\\\\Windows*"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Control\\\\Print\\\\Environments\\\\Windows x64\\\\Drivers\\\\Version-3\\\\QMS 810\\\\*\", \"*\\\\Control\\\\Print\\\\Environments\\\\Windows x64\\\\Drivers\\\\Version-3\\\\mimikatz*\")) or (registry.path:\"*legitprinter*\" and registry.path:\"*\\\\Control\\\\Print\\\\Environments\\\\Windows*\") or ((registry.path like~ (\"*\\\\Control\\\\Print\\\\Environments*\", \"*\\\\CurrentVersion\\\\Print\\\\Printers*\")) and (registry.path like~ (\"*Gentil Kiwi*\", \"*mimikatz printer*\", \"*Kiwi Legit Printer*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-1675/registry_event_cve_2021_1675_mimikatz_printernightmare_drivers.eql",
+  "metadata": {}
+}

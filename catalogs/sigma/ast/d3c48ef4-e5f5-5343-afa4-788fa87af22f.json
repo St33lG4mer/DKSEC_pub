@@ -1,0 +1,67 @@
+{
+  "id": "d3c48ef4-e5f5-5343-afa4-788fa87af22f",
+  "catalog": "sigma",
+  "name": "registry_set_netsh_help_dll_persistence_susp_location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        ":\\\\perflogs\\\\",
+        ":\\\\users\\\\public\\\\",
+        ":\\\\windows\\\\temp\\\\",
+        "\\\\appdata\\\\local\\\\temp\\\\",
+        "\\\\temporary internet"
+      ],
+      "raw_values": [
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Temporary Internet*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\netsh"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\NetSh*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        ":\\\\users\\\\",
+        "\\\\favorites\\\\",
+        "\\\\favourites\\\\",
+        "\\\\contacts\\\\",
+        "\\\\pictures\\\\"
+      ],
+      "raw_values": [
+        "*:\\\\Users\\\\*",
+        "*\\\\Favorites\\\\*",
+        "*\\\\Favourites\\\\*",
+        "*\\\\Contacts\\\\*",
+        "*\\\\Pictures\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\NetSh*\" and ((winlog.event_data.Details like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Temporary Internet*\")) or ((winlog.event_data.Details:\"*:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\Favorites\\\\*\") or (winlog.event_data.Details:\"*:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\Favourites\\\\*\") or (winlog.event_data.Details:\"*:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\Contacts\\\\*\") or (winlog.event_data.Details:\"*:\\\\Users\\\\*\" and winlog.event_data.Details:\"*\\\\Pictures\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_netsh_help_dll_persistence_susp_location.eql",
+  "metadata": {}
+}

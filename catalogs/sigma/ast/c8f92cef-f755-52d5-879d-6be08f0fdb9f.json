@@ -1,0 +1,59 @@
+{
+  "id": "c8f92cef-f755-52d5-879d-6be08f0fdb9f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_appvlp_uncommon_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\SysWOW64\\\\rundll32.exe",
+        "*:\\\\Windows\\\\System32\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "appvlp.exe"
+      ],
+      "raw_values": [
+        "*\\\\appvlp.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "microsoft office",
+        "msoasb.exe",
+        "skypeserver.exe",
+        "msouc.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\Microsoft Office*",
+        "*\\\\msoasb.exe",
+        "*\\\\SkypeSrv\\\\*",
+        "*\\\\SKYPESERVER.EXE",
+        "*\\\\MSOUC.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\appvlp.exe\" and (not (process.executable like~ (\"*:\\\\Windows\\\\SysWOW64\\\\rundll32.exe\", \"*:\\\\Windows\\\\System32\\\\rundll32.exe\"))) and (not ((process.executable:\"*:\\\\Program Files\\\\Microsoft Office*\" and process.executable:\"*\\\\msoasb.exe\") or ((process.executable:\"*:\\\\Program Files\\\\Microsoft Office*\" and process.executable:\"*\\\\SkypeSrv\\\\*\") and process.executable:\"*\\\\SKYPESERVER.EXE\") or (process.executable:\"*:\\\\Program Files\\\\Microsoft Office*\" and process.executable:\"*\\\\MSOUC.EXE\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_appvlp_uncommon_child_process.eql",
+  "metadata": {}
+}

@@ -1,0 +1,55 @@
+{
+  "id": "b975c38b-9664-5ffc-9b77-d6f885fc707c",
+  "catalog": "sigma",
+  "name": "file_event_win_anydesk_writing_susp_binaries",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "anydesk.exe",
+        "anydeskmsi.exe"
+      ],
+      "raw_values": [
+        "*\\\\AnyDesk.exe",
+        "*\\\\AnyDeskMSI.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".dll",
+        ".exe"
+      ],
+      "raw_values": [
+        "*.dll",
+        "*.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "gcapi.dll"
+      ],
+      "raw_values": [
+        "*\\\\gcapi.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\AnyDesk.exe\", \"*\\\\AnyDeskMSI.exe\")) and (file.path like~ (\"*.dll\", \"*.exe\"))) and (not file.path:\"*\\\\gcapi.dll\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_anydesk_writing_susp_binaries.eql",
+  "metadata": {}
+}

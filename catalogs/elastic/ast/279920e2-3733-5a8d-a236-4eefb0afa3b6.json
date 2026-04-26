@@ -1,0 +1,39 @@
+{
+  "id": "279920e2-3733-5a8d-a236-4eefb0afa3b6",
+  "catalog": "elastic",
+  "name": "Potential macOS SSH Brute Force Detected",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "sshd-keygen-wrapper"
+      ],
+      "raw_values": [
+        "sshd-keygen-wrapper"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:macos and event.type:start and process.name:\"sshd-keygen-wrapper\" and process.parent.name:launchd\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/macos/credential_access_potential_macos_ssh_bruteforce.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

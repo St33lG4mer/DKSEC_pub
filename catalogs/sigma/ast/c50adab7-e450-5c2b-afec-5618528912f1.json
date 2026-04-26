@@ -1,0 +1,51 @@
+{
+  "id": "c50adab7-e450-5c2b-afec-5618528912f1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_recon_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "service"
+      ],
+      "raw_values": [
+        "*service*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\WMIC.exe\" or process.pe.original_file_name:\"wmic.exe\") and process.command_line:\"*service*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_recon_service.eql",
+  "metadata": {}
+}

@@ -1,0 +1,32 @@
+{
+  "id": "c290c6e1-5ff0-5cc3-8b4f-46b36e8ea2f6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_credential_access_via_password_filter",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "lsa",
+        "reg add"
+      ],
+      "raw_values": [
+        "*HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Lsa*",
+        "*scecli\\\\0*",
+        "*reg add*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Control\\\\Lsa*\" and process.command_line:\"*scecli\\\\0*\" and process.command_line:\"*reg add*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_credential_access_via_password_filter.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "1781b7bf-92de-5ed5-84af-f85ba992d751",
+  "catalog": "sigma",
+  "name": "pipe_created_sysinternals_psexec_default_pipe_susp_location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "psexesvc"
+      ],
+      "raw_values": [
+        "\\\\PSEXESVC"
+      ]
+    }
+  ],
+  "raw_query": "any where file.name:\"\\\\PSEXESVC\" and (process.executable like~ (\"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_sysinternals_psexec_default_pipe_susp_location.eql",
+  "metadata": {}
+}

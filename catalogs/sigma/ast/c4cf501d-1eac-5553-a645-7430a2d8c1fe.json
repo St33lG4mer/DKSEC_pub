@@ -1,0 +1,41 @@
+{
+  "id": "c4cf501d-1eac-5553-a645-7430a2d8c1fe",
+  "catalog": "sigma",
+  "name": "registry_set_aedebug_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\aedebug\\\\debugger"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AeDebug\\\\Debugger*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "*.dll",
+        "\\"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AeDebug\\\\Debugger*\" and winlog.event_data.Details:\"*.dll\") and (not winlog.event_data.Details:\"\\\"C:\\\\WINDOWS\\\\system32\\\\vsjitdebugger.exe\\\" -p %ld -e %ld -j 0x%p\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_aedebug_persistence.eql",
+  "metadata": {}
+}

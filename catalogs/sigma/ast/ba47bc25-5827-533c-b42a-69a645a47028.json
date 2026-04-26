@@ -1,0 +1,64 @@
+{
+  "id": "ba47bc25-5827-533c-b42a-69a645a47028",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sqlite_chromium_profile_data",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "sqlite.exe",
+        "sqlite3.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlite.exe",
+        "*\\\\sqlite3.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "login data",
+        "cookies",
+        "web data",
+        "history",
+        "bookmarks"
+      ],
+      "raw_values": [
+        "*\\\\User Data\\\\*",
+        "*\\\\Opera Software\\\\*",
+        "*\\\\ChromiumViewer\\\\*",
+        "*Login Data*",
+        "*Cookies*",
+        "*Web Data*",
+        "*History*",
+        "*Bookmarks*"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "sqlite"
+      ],
+      "raw_values": [
+        "SQLite"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.product:\"SQLite\" or (process.executable like~ (\"*\\\\sqlite.exe\", \"*\\\\sqlite3.exe\"))) and (process.command_line like~ (\"*\\\\User Data\\\\*\", \"*\\\\Opera Software\\\\*\", \"*\\\\ChromiumViewer\\\\*\")) and (process.command_line like~ (\"*Login Data*\", \"*Cookies*\", \"*Web Data*\", \"*History*\", \"*Bookmarks*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sqlite_chromium_profile_data.eql",
+  "metadata": {}
+}

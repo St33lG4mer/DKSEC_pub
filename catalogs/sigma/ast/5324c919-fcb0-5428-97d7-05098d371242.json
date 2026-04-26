@@ -1,0 +1,59 @@
+{
+  "id": "5324c919-fcb0-5428-97d7-05098d371242",
+  "catalog": "sigma",
+  "name": "proc_creation_win_whoami_all_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-all",
+        "all",
+        "–all",
+        "—all",
+        "―all"
+      ],
+      "raw_values": [
+        "* -all*",
+        "* /all*",
+        "* –all*",
+        "* —all*",
+        "* ―all*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\whoami.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "whoami.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\whoami.exe\" or process.pe.original_file_name:\"whoami.exe\") and process.command_line like~ (\"* -all*\", \"* /all*\", \"* –all*\", \"* —all*\", \"* ―all*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_whoami_all_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,91 @@
+{
+  "id": "94ea9c73-f381-529c-b2f3-78da9f9021fb",
+  "catalog": "elastic",
+  "name": "AWS Sensitive IAM Operations Performed via CloudShell",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "createaccesskey",
+        "createuser",
+        "attachuserpolicy",
+        "putuserpolicy",
+        "createrole",
+        "attachrolepolicy",
+        "putrolepolicy",
+        "createinstanceprofile",
+        "addroletoinstanceprofile"
+      ],
+      "raw_values": [
+        "CreateAccessKey",
+        "CreateUser",
+        "AttachUserPolicy",
+        "PutUserPolicy",
+        "CreateRole",
+        "AttachRolePolicy",
+        "PutRolePolicy",
+        "CreateInstanceProfile",
+        "AddRoleToInstanceProfile"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "iam.amazonaws.com"
+      ],
+      "raw_values": [
+        "iam.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"iam.amazonaws.com\"\n    and event.action: (\n        \"CreateAccessKey\" or\n        \"CreateUser\" or\n        \"AttachUserPolicy\" or\n        \"PutUserPolicy\" or\n        \"CreateRole\" or\n        \"AttachRolePolicy\" or\n        \"PutRolePolicy\" or\n        \"CreateInstanceProfile\" or\n        \"AddRoleToInstanceProfile\"\n    )\n    and event.outcome: \"success\"\n    and user_agent.original: *CloudShell*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_sensitive_operations_via_cloudshell.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS CloudTrail",
+      "Data Source: AWS IAM",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

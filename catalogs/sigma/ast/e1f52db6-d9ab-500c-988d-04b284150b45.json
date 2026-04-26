@@ -1,0 +1,98 @@
+{
+  "id": "e1f52db6-d9ab-500c-988d-04b284150b45",
+  "catalog": "sigma",
+  "name": "registry_set_suspicious_env_variables",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "powershell",
+        "pwsh",
+        "\\\\appdata\\\\local\\\\temp\\\\",
+        "c:\\\\users\\\\public\\\\",
+        "tvqqaamaaaaeaaaa",
+        "tvpqaaiaaaaeaa8a",
+        "tvqaaaeaaaaeabaa",
+        "tvoaaaaaaaaaaaaa",
+        "tvptaqeaaaaeaaaa",
+        "sw52b2tll",
+        "ludm9rzs",
+        "jbnzva2ut",
+        "sqbuahyabwbragualq",
+        "kabgb2ag8aawblac0a",
+        "jag4adgbvagsazqata",
+        "suvy",
+        "sqbfaf",
+        "sqbuah",
+        "cwbha",
+        "awv4",
+        "aqbla",
+        "r2v0",
+        "dmfy",
+        "dgbha",
+        "dxnpbm",
+        "h4sia",
+        "y21k",
+        "cabhah",
+        "qzpc",
+        "yzpc"
+      ],
+      "raw_values": [
+        "powershell",
+        "pwsh",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*C:\\\\Users\\\\Public\\\\*",
+        "*TVqQAAMAAAAEAAAA*",
+        "*TVpQAAIAAAAEAA8A*",
+        "*TVqAAAEAAAAEABAA*",
+        "*TVoAAAAAAAAAAAAA*",
+        "*TVpTAQEAAAAEAAAA*",
+        "*SW52b2tlL*",
+        "*ludm9rZS*",
+        "*JbnZva2Ut*",
+        "*SQBuAHYAbwBrAGUALQ*",
+        "*kAbgB2AG8AawBlAC0A*",
+        "*JAG4AdgBvAGsAZQAtA*",
+        "SUVY*",
+        "SQBFAF*",
+        "SQBuAH*",
+        "cwBhA*",
+        "aWV4*",
+        "aQBlA*",
+        "R2V0*",
+        "dmFy*",
+        "dgBhA*",
+        "dXNpbm*",
+        "H4sIA*",
+        "Y21k*",
+        "cABhAH*",
+        "Qzpc*",
+        "Yzpc*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\environment\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Environment\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Environment\\\\*\" and ((winlog.event_data.Details like~ (\"powershell\", \"pwsh\")) or (winlog.event_data.Details like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*C:\\\\Users\\\\Public\\\\*\", \"*TVqQAAMAAAAEAAAA*\", \"*TVpQAAIAAAAEAA8A*\", \"*TVqAAAEAAAAEABAA*\", \"*TVoAAAAAAAAAAAAA*\", \"*TVpTAQEAAAAEAAAA*\", \"*SW52b2tlL*\", \"*ludm9rZS*\", \"*JbnZva2Ut*\", \"*SQBuAHYAbwBrAGUALQ*\", \"*kAbgB2AG8AawBlAC0A*\", \"*JAG4AdgBvAGsAZQAtA*\")) or (winlog.event_data.Details like~ (\"SUVY*\", \"SQBFAF*\", \"SQBuAH*\", \"cwBhA*\", \"aWV4*\", \"aQBlA*\", \"R2V0*\", \"dmFy*\", \"dgBhA*\", \"dXNpbm*\", \"H4sIA*\", \"Y21k*\", \"cABhAH*\", \"Qzpc*\", \"Yzpc*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_suspicious_env_variables.eql",
+  "metadata": {}
+}

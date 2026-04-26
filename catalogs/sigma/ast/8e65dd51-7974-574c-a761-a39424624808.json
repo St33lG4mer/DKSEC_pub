@@ -1,0 +1,29 @@
+{
+  "id": "8e65dd51-7974-574c-a761-a39424624808",
+  "catalog": "sigma",
+  "name": "proc_access_win_uac_bypass_editionupgrademanagerobj",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.calltrace",
+      "raw_field": "winlog.event_data.CallTrace",
+      "operator": ":",
+      "values": [
+        "editionupgrademanagerobj.dll"
+      ],
+      "raw_values": [
+        "*editionupgrademanagerobj.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.CallTrace:\"*editionupgrademanagerobj.dll*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_access/proc_access_win_uac_bypass_editionupgrademanagerobj.eql",
+  "metadata": {}
+}

@@ -1,0 +1,62 @@
+{
+  "id": "eb72a317-1906-526f-b63b-2878139a321b",
+  "catalog": "elastic",
+  "name": "AWS IAM CompromisedKeyQuarantine Policy Attached to User",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "iam"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "attachuserpolicy"
+      ],
+      "raw_values": [
+        "AttachUserPolicy"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "iam where data_stream.dataset == \"aws.cloudtrail\"\n   and event.action == \"AttachUserPolicy\"\n   and event.outcome == \"success\"\n   and stringContains(aws.cloudtrail.request_parameters, \"AWSCompromisedKeyQuarantine\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/credential_access_iam_compromisedkeyquarantine_policy_attached_to_user.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS IAM",
+      "Resources: Investigation Guide",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Credential Access"
+    ]
+  }
+}

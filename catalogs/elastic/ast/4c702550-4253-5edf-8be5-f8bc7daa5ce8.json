@@ -1,0 +1,167 @@
+{
+  "id": "4c702550-4253-5edf-8be5-f8bc7daa5ce8",
+  "catalog": "elastic",
+  "name": "Potential Git CVE-2025-48384 Exploitation",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "linux",
+        "macos"
+      ],
+      "raw_values": [
+        "linux",
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "executed",
+        "process_started",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "executed",
+        "process_started",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dash",
+        "static-sh",
+        "bash",
+        "bash-static",
+        "zsh",
+        "ash",
+        "csh",
+        "ksh",
+        "tcsh",
+        "busybox",
+        "fish",
+        "ksh93",
+        "rksh",
+        "rksh93",
+        "lksh",
+        "mksh",
+        "mksh-static",
+        "csharp",
+        "posh",
+        "sash",
+        "yash",
+        "zsh5",
+        "zsh5-static"
+      ],
+      "raw_values": [
+        "dash",
+        "sh",
+        "static-sh",
+        "bash",
+        "bash-static",
+        "zsh",
+        "ash",
+        "csh",
+        "ksh",
+        "tcsh",
+        "busybox",
+        "fish",
+        "ksh93",
+        "rksh",
+        "rksh93",
+        "lksh",
+        "mksh",
+        "mksh-static",
+        "csharp",
+        "posh",
+        "rc",
+        "sash",
+        "yash",
+        "zsh5",
+        "zsh5-static"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "git"
+      ],
+      "raw_values": [
+        "git"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "clone",
+        "--recursive"
+      ],
+      "raw_values": [
+        "clone",
+        "--recursive"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "http*"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=1m\n  [process where host.os.type in (\"linux\", \"macos\") and event.type == \"start\" and event.action in (\"exec\", \"executed\", \"process_started\", \"start\", \"ProcessRollup2\") and\n   process.name == \"git\" and process.args == \"clone\" and process.args == \"--recursive\" and process.args like~ \"http*\"] by process.entity_id\n  [process where host.os.type in (\"linux\", \"macos\") and event.type == \"start\" and event.action in (\"exec\", \"executed\", \"process_started\", \"start\", \"ProcessRollup2\") and\n   process.name in (\n    \"dash\", \"sh\", \"static-sh\", \"bash\", \"bash-static\", \"zsh\", \"ash\", \"csh\", \"ksh\", \"tcsh\", \"busybox\", \"fish\", \"ksh93\", \"rksh\",\n    \"rksh93\", \"lksh\", \"mksh\", \"mksh-static\", \"csharp\", \"posh\", \"rc\", \"sash\", \"yash\", \"zsh5\", \"zsh5-static\"\n   )] by process.parent.entity_id\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_git_exploit_cve_2025_48384.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Data Source: Auditd Manager",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

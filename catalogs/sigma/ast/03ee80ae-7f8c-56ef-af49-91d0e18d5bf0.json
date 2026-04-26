@@ -1,0 +1,81 @@
+{
+  "id": "03ee80ae-7f8c-56ef-af49-91d0e18d5bf0",
+  "catalog": "sigma",
+  "name": "win_security_net_share_obj_susp_desktop_ini",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": "like~",
+      "values": [
+        "writedata",
+        "delete",
+        "writedac",
+        "appenddata",
+        "addsubdirectory"
+      ],
+      "raw_values": [
+        "*WriteData*",
+        "*DELETE*",
+        "*WriteDAC*",
+        "*AppendData*",
+        "*AddSubdirectory*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "file"
+      ],
+      "raw_values": [
+        "File"
+      ]
+    },
+    {
+      "field": "winlog.event_data.relativetargetname",
+      "raw_field": "winlog.event_data.RelativeTargetName",
+      "operator": ":",
+      "values": [
+        "\\\\desktop.ini"
+      ],
+      "raw_values": [
+        "*\\\\desktop.ini"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"5145\" and winlog.event_data.ObjectType:\"File\" and winlog.event_data.RelativeTargetName:\"*\\\\desktop.ini\" and (winlog.event_data.AccessList like~ (\"*WriteData*\", \"*DELETE*\", \"*WriteDAC*\", \"*AppendData*\", \"*AddSubdirectory*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_net_share_obj_susp_desktop_ini.eql",
+  "metadata": {}
+}

@@ -1,0 +1,40 @@
+{
+  "id": "d5a0f1c2-942a-560d-b9bf-2d4d4adee7fa",
+  "catalog": "sigma",
+  "name": "file_event_win_hktl_remote_cred_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".tmp$']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\Windows\\\\\\\\System32\\\\\\\\[a-zA-Z0-9]{8}\\\\.tmp$']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\svchost.exe\" and file.path:\"SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\Windows\\\\\\\\System32\\\\\\\\[a-zA-Z0-9]{8}\\\\.tmp$']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_hktl_remote_cred_dump.eql",
+  "metadata": {}
+}

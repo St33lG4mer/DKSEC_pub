@@ -1,0 +1,31 @@
+{
+  "id": "ecf4e839-2e0c-5a78-a18c-20ce6adfead5",
+  "catalog": "sigma",
+  "name": "file_event_win_hktl_quarkspw_filedump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "sam-",
+        ".dmp"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\SAM-*",
+        "*.dmp*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\SAM-*\" and file.path:\"*.dmp*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_hktl_quarkspw_filedump.eql",
+  "metadata": {}
+}

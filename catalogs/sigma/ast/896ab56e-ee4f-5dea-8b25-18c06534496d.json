@@ -1,0 +1,29 @@
+{
+  "id": "896ab56e-ee4f-5dea-8b25-18c06534496d",
+  "catalog": "sigma",
+  "name": "registry_set_hangs_debugger_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\windows error reporting\\\\hangs\\\\debugger"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\Hangs\\\\Debugger*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows\\\\Windows Error Reporting\\\\Hangs\\\\Debugger*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_hangs_debugger_persistence.eql",
+  "metadata": {}
+}

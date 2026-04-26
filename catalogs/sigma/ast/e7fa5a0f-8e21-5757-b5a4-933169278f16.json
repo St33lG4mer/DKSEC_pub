@@ -1,0 +1,79 @@
+{
+  "id": "e7fa5a0f-8e21-5757-b5a4-933169278f16",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regedit_import_keys",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".reg"
+      ],
+      "raw_values": [
+        "* /i *",
+        "* /s *",
+        "*.reg*",
+        "* -e *",
+        "* /e *",
+        "* –e *",
+        "* —e *",
+        "* ―e *",
+        "* -a *",
+        "* /a *",
+        "* –a *",
+        "* —a *",
+        "* ―a *",
+        "* -c *",
+        "* /c *",
+        "* –c *",
+        "* —c *",
+        "* ―c *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\regedit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "REGEDIT.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "]']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString([':[^ \\\\\\\\]']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\regedit.exe\" or process.pe.original_file_name:\"REGEDIT.EXE\") and (process.command_line like~ (\"* /i *\", \"* /s *\", \"*.reg*\"))) and (not ((process.command_line like~ (\"* -e *\", \"* /e *\", \"* –e *\", \"* —e *\", \"* ―e *\") or process.command_line like~ (\"* -a *\", \"* /a *\", \"* –a *\", \"* —a *\", \"* ―a *\") or process.command_line like~ (\"* -c *\", \"* /c *\", \"* –c *\", \"* —c *\", \"* ―c *\")) and process.command_line:\"SigmaRegularExpression(regexp=SigmaString([':[^ \\\\\\\\]']), flags=set())\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regedit_import_keys.eql",
+  "metadata": {}
+}

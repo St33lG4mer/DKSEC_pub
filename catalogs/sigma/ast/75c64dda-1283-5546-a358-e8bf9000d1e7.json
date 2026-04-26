@@ -1,0 +1,31 @@
+{
+  "id": "75c64dda-1283-5546-a358-e8bf9000d1e7",
+  "catalog": "sigma",
+  "name": "file_event_win_hktl_crackmapexec_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "temp.ps1",
+        "msol.ps1"
+      ],
+      "raw_values": [
+        "*\\\\temp.ps1",
+        "*\\\\msol.ps1"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\Temp\\\\*\" and ((file.path like~ (\"*\\\\temp.ps1\", \"*\\\\msol.ps1\")) or (file.path like~ (\"SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\\\.txt$']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\[a-zA-Z]{8}\\\\.tmp$']), flags=set())\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_hktl_crackmapexec_indicators.eql",
+  "metadata": {}
+}

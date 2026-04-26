@@ -1,0 +1,40 @@
+{
+  "id": "926b87ee-f24d-5d46-afab-ed39304114c9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dsacls_abuse_permissions",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dsacls.exe"
+      ],
+      "raw_values": [
+        "*\\\\dsacls.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dsacls.exe"
+      ],
+      "raw_values": [
+        "DSACLS.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\dsacls.exe\" or process.pe.original_file_name:\"DSACLS.EXE\") and process.command_line:\"* /G *\" and (process.command_line like~ (\"*GR*\", \"*GE*\", \"*GW*\", \"*GA*\", \"*WP*\", \"*WD*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dsacls_abuse_permissions.eql",
+  "metadata": {}
+}

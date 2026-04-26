@@ -1,0 +1,119 @@
+{
+  "id": "44450e15-a314-5f13-b940-4b46a674cbf3",
+  "catalog": "elastic",
+  "name": "Potential Shadow File Read via Command Line Utilities",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exec",
+        "exec_event"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "chown",
+        "chmod",
+        "passwd",
+        "lynis",
+        "rkhunter",
+        "v-check-user-password",
+        "setroubleshootd",
+        "check_passwdformat"
+      ],
+      "raw_values": [
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/etc/cron.daily/passwd",
+        "/usr/sbin/lynis",
+        "/usr/bin/rkhunter",
+        "/usr/local/hestia/bin/v-check-user-password",
+        "/usr/sbin/setroubleshootd",
+        "/usr/lib/tiger/scripts/check_passwdformat"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "process"
+      ],
+      "raw_values": [
+        "process"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "shadow",
+        "root:shadow",
+        "640"
+      ],
+      "raw_values": [
+        "/etc/shadow",
+        "shadow",
+        "root:shadow",
+        "640"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/etc"
+      ],
+      "raw_values": [
+        "/etc"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type : \"linux\" and event.category : \"process\" and event.action : (\"exec\" or \"exec_event\") and\n(\n  process.args : \"/etc/shadow\" or\n  (process.working_directory: \"/etc\" and process.args: \"shadow\")\n) and not (\n  (process.executable : (\"/bin/chown\" or \"/usr/bin/chown\") and process.args : \"root:shadow\") or\n  (process.executable : (\"/bin/chmod\" or \"/usr/bin/chmod\") and process.args : \"640\") or\n  process.executable:(\n    /vz/* or /var/lib/docker/* or /run/containerd/* or /tmp/.criu* or /tmp/newroot/* or\n    \"/etc/cron.daily/passwd\" or \"/usr/sbin/lynis\" or \"/usr/bin/rkhunter\" or\n    \"/usr/local/hestia/bin/v-check-user-password\" or \"/usr/sbin/setroubleshootd\" or\n    \"/usr/lib/tiger/scripts/check_passwdformat\"\n  ) or\n  process.parent.name:(gen_passwd_sets or scc_* or wazuh-modulesd)\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_shadow_file_read.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

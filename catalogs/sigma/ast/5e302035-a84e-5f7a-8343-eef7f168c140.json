@@ -1,0 +1,40 @@
+{
+  "id": "5e302035-a84e-5f7a-8343-eef7f168c140",
+  "catalog": "sigma",
+  "name": "win_codeintegrity_revoked_image_blocked",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-codeintegrity/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-CodeIntegrity/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "3036"
+      ],
+      "raw_values": [
+        "3036"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-CodeIntegrity/Operational\" and event.code:\"3036\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/code_integrity/win_codeintegrity_revoked_image_blocked.eql",
+  "metadata": {}
+}

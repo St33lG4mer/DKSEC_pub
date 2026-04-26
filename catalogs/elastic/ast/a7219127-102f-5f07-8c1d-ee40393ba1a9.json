@@ -1,0 +1,74 @@
+{
+  "id": "a7219127-102f-5f07-8c1d-ee40393ba1a9",
+  "catalog": "elastic",
+  "name": "Network Connection via Compiled HTML File",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "hh.exe"
+      ],
+      "raw_values": [
+        "hh.exe"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "localhost"
+      ],
+      "raw_values": [
+        "localhost"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id\n  [process where host.os.type == \"windows\" and process.name : \"hh.exe\" and event.type == \"start\"]\n  [network where host.os.type == \"windows\" and process.name : \"hh.exe\" and\n     not cidrmatch(destination.ip, \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\", \"192.0.0.0/24\",\n       \"192.0.0.0/29\", \"192.0.0.8/32\", \"192.0.0.9/32\", \"192.0.0.10/32\", \"192.0.0.170/32\", \"192.0.0.171/32\",\n       \"192.0.2.0/24\", \"192.31.196.0/24\", \"192.52.193.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\", \"224.0.0.0/4\",\n       \"100.64.0.0/10\", \"192.175.48.0/24\",\"198.18.0.0/15\", \"198.51.100.0/24\", \"203.0.113.0/24\", \"240.0.0.0/4\", \"::1\",\n       \"FE80::/10\", \"FF00::/8\") and\n     not dns.question.name : \"localhost\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_html_help_executable_program_connecting_to_the_internet.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

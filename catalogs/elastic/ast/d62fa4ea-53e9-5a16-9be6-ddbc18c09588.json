@@ -1,0 +1,100 @@
+{
+  "id": "d62fa4ea-53e9-5a16-9be6-ddbc18c09588",
+  "catalog": "elastic",
+  "name": "Unusual File Operation by dns.exe",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "creation",
+        "deletion",
+        "change"
+      ],
+      "raw_values": [
+        "creation",
+        "deletion",
+        "change"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "old",
+        "temp",
+        "bak",
+        "dns",
+        "arpa",
+        "log"
+      ],
+      "raw_values": [
+        "old",
+        "temp",
+        "bak",
+        "dns",
+        "arpa",
+        "log"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "file"
+      ],
+      "raw_values": [
+        "file"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "dns.exe"
+      ],
+      "raw_values": [
+        "dns.exe"
+      ]
+    }
+  ],
+  "raw_query": "event.category : \"file\" and host.os.type : \"windows\" and\n  event.type : (\"creation\" or \"deletion\" or \"change\") and process.name : \"dns.exe\" and\n  not file.extension : (\"old\" or \"temp\" or \"bak\" or \"dns\" or \"arpa\" or \"log\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/lateral_movement_unusual_dns_service_file_writes.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Endgame",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

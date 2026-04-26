@@ -1,0 +1,54 @@
+{
+  "id": "a6fdc4f3-97f1-53c9-a76e-36172e2d5b87",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sysinternals_procdump_evasion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "copy procdump",
+        "move procdump",
+        "2.dmp",
+        "lsass",
+        "out.dmp",
+        "copy lsass.exe_",
+        "move lsass.exe_"
+      ],
+      "raw_values": [
+        "*copy procdump*",
+        "*move procdump*",
+        "*2.dmp*",
+        "*lsass*",
+        "*out.dmp*",
+        "*copy lsass.exe_*",
+        "*move lsass.exe_*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "copy",
+        ".dmp"
+      ],
+      "raw_values": [
+        "*copy *",
+        "*.dmp *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*copy procdump*\", \"*move procdump*\")) or ((process.command_line:\"*copy *\" and process.command_line:\"*.dmp *\") and (process.command_line like~ (\"*2.dmp*\", \"*lsass*\", \"*out.dmp*\"))) or (process.command_line like~ (\"*copy lsass.exe_*\", \"*move lsass.exe_*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sysinternals_procdump_evasion.eql",
+  "metadata": {}
+}

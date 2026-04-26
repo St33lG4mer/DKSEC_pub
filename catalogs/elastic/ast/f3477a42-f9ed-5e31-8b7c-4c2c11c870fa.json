@@ -1,0 +1,60 @@
+{
+  "id": "f3477a42-f9ed-5e31-8b7c-4c2c11c870fa",
+  "catalog": "elastic",
+  "name": "Google Workspace Bitlocker Setting Disabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "google_workspace.admin"
+      ],
+      "raw_values": [
+        "google_workspace.admin"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "change_application_setting"
+      ],
+      "raw_values": [
+        "CHANGE_APPLICATION_SETTING"
+      ]
+    },
+    {
+      "field": "google_workspace.admin.new_value",
+      "raw_field": "google_workspace.admin.new_value",
+      "operator": ":",
+      "values": [
+        "disabled"
+      ],
+      "raw_values": [
+        "Disabled"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"google_workspace.admin\" and event.action:\"CHANGE_APPLICATION_SETTING\" and event.category:(iam or configuration)\n    and google_workspace.admin.new_value:\"Disabled\" and google_workspace.admin.setting.name:BitLocker*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/defense_evasion_google_workspace_bitlocker_setting_disabled.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Configuration Audit",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

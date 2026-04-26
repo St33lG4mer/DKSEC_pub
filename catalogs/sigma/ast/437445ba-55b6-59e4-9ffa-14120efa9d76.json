@@ -1,0 +1,111 @@
+{
+  "id": "437445ba-55b6-59e4-9ffa-14120efa9d76",
+  "catalog": "sigma",
+  "name": "registry_set_asep_reg_keys_modification_common",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\windows ce services\\\\autostart",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\command processor\\\\autorun",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\active setup\\\\installed components",
+        "\\\\software\\\\microsoft\\\\windows ce services\\\\autostartondisconnect",
+        "\\\\software\\\\microsoft\\\\windows ce services\\\\autostartonconnect",
+        "\\\\system\\\\setup\\\\cmdline",
+        "\\\\software\\\\microsoft\\\\ctf\\\\langbaraddin",
+        "\\\\software\\\\microsoft\\\\command processor\\\\autorun",
+        "\\\\software\\\\microsoft\\\\active setup\\\\installed components",
+        "\\\\software\\\\classes\\\\protocols\\\\handler",
+        "\\\\software\\\\classes\\\\protocols\\\\filter",
+        "\\\\office\\\\clicktorun\\\\registry\\\\machine\\\\software\\\\classes\\\\protocols\\\\handler\\\\",
+        "\\\\clicktorunstore\\\\hkmu\\\\software\\\\classes\\\\protocols\\\\handler\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows CE Services\\\\AutoStart*",
+        "*\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Command Processor\\\\Autorun*",
+        "*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Active Setup\\\\Installed Components*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows CE Services\\\\AutoStartOnDisconnect*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows CE Services\\\\AutoStartOnConnect*",
+        "*\\\\SYSTEM\\\\Setup\\\\CmdLine*",
+        "*\\\\Software\\\\Microsoft\\\\Ctf\\\\LangBarAddin*",
+        "*\\\\Software\\\\Microsoft\\\\Command Processor\\\\Autorun*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components*",
+        "*\\\\SOFTWARE\\\\Classes\\\\Protocols\\\\Handler*",
+        "*\\\\SOFTWARE\\\\Classes\\\\Protocols\\\\Filter*",
+        "*\\\\Office\\\\ClickToRun\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Classes\\\\PROTOCOLS\\\\Handler\\\\*",
+        "*\\\\ClickToRunStore\\\\HKMU\\\\SOFTWARE\\\\Classes\\\\PROTOCOLS\\\\Handler\\\\*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "{314111c7-a502-11d2-bbca-00c04f8ec294}",
+        "{3459b272-cc19-4448-86c9-ddc3b4b2fad3}",
+        "{42089d2d-912d-4018-9087-2b87803e93fb}",
+        "{5504be45-a83b-4808-900a-3a5c36e7f77a}",
+        "{807583e5-5146-11d5-a672-00b0d022e945}"
+      ],
+      "raw_values": [
+        "{314111c7-a502-11d2-bbca-00c04f8ec294}",
+        "{3459B272-CC19-4448-86C9-DDC3B4B2FAD3}",
+        "{42089D2D-912D-4018-9087-2B87803E93FB}",
+        "{5504BE45-A83B-4808-900A-3A5C36E7F77A}",
+        "{807583E5-5146-11D5-A672-00B0D022E945}"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "poqexec.exe",
+        "officeclicktorun.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\poqexec.exe",
+        "*\\\\OfficeClickToRun.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\active setup\\\\installed components\\\\{8a69d345-d564-463c-aff1-a69d9e530f96}",
+        "\\\\software\\\\microsoft\\\\active setup\\\\installed components\\\\{9459c573-b17a-45ae-9f64-1857b5d58cee}",
+        "\\\\software\\\\microsoft\\\\active setup\\\\installed components\\\\{89820200-ecbd-11cf-8b85-00aa005b4383}"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\{8A69D345-D564-463c-AFF1-A69D9E530F96}*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\{9459C573-B17A-45AE-9F64-1857B5D58CEE}*",
+        "*\\\\Software\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\{89820200-ECBD-11cf-8B85-00AA005B4383}*"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Windows CE Services\\\\AutoStart*\", \"*\\\\Software\\\\Wow6432Node\\\\Microsoft\\\\Command Processor\\\\Autorun*\", \"*\\\\SOFTWARE\\\\Wow6432Node\\\\Microsoft\\\\Active Setup\\\\Installed Components*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows CE Services\\\\AutoStartOnDisconnect*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows CE Services\\\\AutoStartOnConnect*\", \"*\\\\SYSTEM\\\\Setup\\\\CmdLine*\", \"*\\\\Software\\\\Microsoft\\\\Ctf\\\\LangBarAddin*\", \"*\\\\Software\\\\Microsoft\\\\Command Processor\\\\Autorun*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components*\", \"*\\\\SOFTWARE\\\\Classes\\\\Protocols\\\\Handler*\", \"*\\\\SOFTWARE\\\\Classes\\\\Protocols\\\\Filter*\", \"*\\\\SOFTWARE\\\\Classes\\\\Htmlfile\\\\Shell\\\\Open\\\\Command\\\\(Default)*\", \"*\\\\Environment\\\\UserInitMprLogonScript*\", \"*\\\\SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows\\\\Control Panel\\\\Desktop\\\\Scrnsave.exe*\", \"*\\\\Software\\\\Microsoft\\\\Internet Explorer\\\\UrlSearchHooks*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Internet Explorer\\\\Desktop\\\\Components*\", \"*\\\\Software\\\\Classes\\\\Clsid\\\\{AB8902B4-09CA-4bb6-B78D-A8F59079A8D5}\\\\Inprocserver32*\", \"*\\\\Control Panel\\\\Desktop\\\\Scrnsave.exe*\")) and (not (winlog.event_data.Details:\"(Empty)\" or (?winlog.event_data.Details == null) or process.executable:\"C:\\\\Windows\\\\System32\\\\poqexec.exe\")) and (not (((registry.path like~ (\"*\\\\Office\\\\ClickToRun\\\\REGISTRY\\\\MACHINE\\\\Software\\\\Classes\\\\PROTOCOLS\\\\Handler\\\\*\", \"*\\\\ClickToRunStore\\\\HKMU\\\\SOFTWARE\\\\Classes\\\\PROTOCOLS\\\\Handler\\\\*\")) or (winlog.event_data.Details like~ (\"{314111c7-a502-11d2-bbca-00c04f8ec294}\", \"{3459B272-CC19-4448-86C9-DDC3B4B2FAD3}\", \"{42089D2D-912D-4018-9087-2B87803E93FB}\", \"{5504BE45-A83B-4808-900A-3A5C36E7F77A}\", \"{807583E5-5146-11D5-A672-00B0D022E945}\"))) or registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\{8A69D345-D564-463c-AFF1-A69D9E530F96}*\" or registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\{9459C573-B17A-45AE-9F64-1857B5D58CEE}*\" or registry.path:\"*\\\\Software\\\\Microsoft\\\\Active Setup\\\\Installed Components\\\\{89820200-ECBD-11cf-8B85-00AA005B4383}*\" or (process.executable like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\", \"C:\\\\Program Files\\\\Microsoft Office\\\\root\\\\integration\\\\integrator.exe\")) or ((process.executable like~ (\"C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\*\", \"C:\\\\Program Files\\\\Common Files\\\\Microsoft Shared\\\\ClickToRun\\\\Updates\\\\*\")) and process.executable:\"*\\\\OfficeClickToRun.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_asep_reg_keys_modification_common.eql",
+  "metadata": {}
+}

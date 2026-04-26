@@ -1,0 +1,99 @@
+{
+  "id": "04456d65-c847-5e4d-9ac0-394a09beb79b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_abusing_debug_privilege",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "winlogon.exe",
+        "services.exe",
+        "lsass.exe",
+        "csrss.exe",
+        "smss.exe",
+        "wininit.exe",
+        "spoolsv.exe",
+        "searchindexer.exe"
+      ],
+      "raw_values": [
+        "*\\\\winlogon.exe",
+        "*\\\\services.exe",
+        "*\\\\lsass.exe",
+        "*\\\\csrss.exe",
+        "*\\\\smss.exe",
+        "*\\\\wininit.exe",
+        "*\\\\spoolsv.exe",
+        "*\\\\searchindexer.exe"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll",
+        "Cmd.Exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "route",
+        "add"
+      ],
+      "raw_values": [
+        "* route *",
+        "* ADD *"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.parent.executable like~ (\"*\\\\winlogon.exe\", \"*\\\\services.exe\", \"*\\\\lsass.exe\", \"*\\\\csrss.exe\", \"*\\\\smss.exe\", \"*\\\\wininit.exe\", \"*\\\\spoolsv.exe\", \"*\\\\searchindexer.exe\")) and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\"))) and ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\cmd.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\", \"Cmd.Exe\")))) and (not (process.command_line:\"* route *\" and process.command_line:\"* ADD *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_abusing_debug_privilege.eql",
+  "metadata": {}
+}

@@ -1,0 +1,70 @@
+{
+  "id": "1531a5e4-5f1a-5d67-97dc-bee406403011",
+  "catalog": "sigma",
+  "name": "file_event_win_ps_script_policy_test_creation_by_uncommon_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "pwsh.exe",
+        "powershell_ise.exe",
+        "powershell.exe",
+        "microsoft.powershellpreview",
+        "dsac.exe",
+        "sdiagnhost.exe",
+        "servermanager.exe",
+        "wsmprovhost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\PowerShell\\\\7-preview\\\\pwsh.exe",
+        "C:\\\\Program Files\\\\PowerShell\\\\7\\\\pwsh.exe",
+        "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe",
+        "C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe",
+        "*C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.PowerShellPreview*",
+        "*\\\\AppData\\\\Local\\\\Microsoft\\\\WindowsApps\\\\Microsoft.PowerShellPreview*",
+        "C:\\\\Windows\\\\System32\\\\dsac.exe",
+        "C:\\\\Windows\\\\System32\\\\sdiagnhost.exe",
+        "C:\\\\Windows\\\\System32\\\\ServerManager.exe",
+        "C:\\\\Windows\\\\System32\\\\wsmprovhost.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\sdiagnhost.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "__psscriptpolicytest_"
+      ],
+      "raw_values": [
+        "*__PSScriptPolicyTest_*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\pwsh.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*__PSScriptPolicyTest_*\" and (not ((process.executable like~ (\"C:\\\\Program Files\\\\PowerShell\\\\7-preview\\\\pwsh.exe\", \"C:\\\\Program Files\\\\PowerShell\\\\7\\\\pwsh.exe\", \"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe\", \"C:\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell_ise.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\")) or ((process.executable like~ (\"*C:\\\\Program Files\\\\WindowsApps\\\\Microsoft.PowerShellPreview*\", \"*\\\\AppData\\\\Local\\\\Microsoft\\\\WindowsApps\\\\Microsoft.PowerShellPreview*\")) and process.executable:\"*\\\\pwsh.exe\") or (process.executable like~ (\"C:\\\\Windows\\\\System32\\\\dsac.exe\", \"C:\\\\Windows\\\\System32\\\\sdiagnhost.exe\", \"C:\\\\Windows\\\\System32\\\\ServerManager.exe\", \"C:\\\\Windows\\\\System32\\\\wsmprovhost.exe\", \"C:\\\\Windows\\\\SysWOW64\\\\sdiagnhost.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_ps_script_policy_test_creation_by_uncommon_process.eql",
+  "metadata": {}
+}

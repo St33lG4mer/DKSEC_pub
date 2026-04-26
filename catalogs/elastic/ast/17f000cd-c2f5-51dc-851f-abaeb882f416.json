@@ -1,0 +1,76 @@
+{
+  "id": "17f000cd-c2f5-51dc-851f-abaeb882f416",
+  "catalog": "elastic",
+  "name": "Group Policy Abuse for Privilege Addition",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5136"
+      ],
+      "raw_values": [
+        "5136"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": ":",
+      "values": [
+        "gpcmachineextensionnames"
+      ],
+      "raw_values": [
+        "gPCMachineExtensionNames"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributevalue",
+      "raw_field": "winlog.event_data.AttributeValue",
+      "operator": ":",
+      "values": [
+        "827d319e-6eac-11d2-a4ea-00c04f79f83a",
+        "803e14a0-b4fb-11d0-a0d0-00a0c90f574b"
+      ],
+      "raw_values": [
+        "*827D319E-6EAC-11D2-A4EA-00C04F79F83A*",
+        "*803E14A0-B4FB-11D0-A0D0-00A0C90F574B*"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and event.code: \"5136\" and\n  winlog.event_data.AttributeLDAPDisplayName: \"gPCMachineExtensionNames\" and\n  winlog.event_data.AttributeValue: \"*827D319E-6EAC-11D2-A4EA-00C04F79F83A*\" and\n  winlog.event_data.AttributeValue: \"*803E14A0-B4FB-11D0-A0D0-00A0C90F574B*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_group_policy_privileged_groups.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Active Directory",
+      "Resources: Investigation Guide",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "id": "42cf70a3-b118-5bec-a92f-40384e9d7d76",
+  "catalog": "sigma",
+  "name": "win_security_wmi_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4662"
+      ],
+      "raw_values": [
+        "4662"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "wmi namespace"
+      ],
+      "raw_values": [
+        "WMI Namespace"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "subscription"
+      ],
+      "raw_values": [
+        "*subscription*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4662\" and winlog.event_data.ObjectType:\"WMI Namespace\" and winlog.event_data.ObjectName:\"*subscription*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_wmi_persistence.eql",
+  "metadata": {}
+}

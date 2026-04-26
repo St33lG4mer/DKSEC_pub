@@ -1,0 +1,61 @@
+{
+  "id": "ba269fc0-4c92-5696-80cd-229ba88400da",
+  "catalog": "elastic",
+  "name": "Elastic Defend Alert Followed by Telemetry Loss",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "in",
+      "values": [
+        "process",
+        "library",
+        "registry",
+        "network",
+        "dns",
+        "file"
+      ],
+      "raw_values": [
+        "process",
+        "library",
+        "registry",
+        "network",
+        "dns",
+        "file"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "endpoint.alerts"
+      ],
+      "raw_values": [
+        "endpoint.alerts"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=5m\n [any where data_stream.dataset == \"endpoint.alerts\"]\n ![any where event.category in (\"process\", \"library\", \"registry\", \"network\", \"dns\", \"file\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/defense_evasion_missing_events_after_alert.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "Data Source: Elastic Defend",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

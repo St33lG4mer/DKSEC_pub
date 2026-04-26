@@ -1,0 +1,29 @@
+{
+  "id": "4efc1a05-f050-5f87-9c9f-1c24ab035e23",
+  "catalog": "sigma",
+  "name": "dns_query_win_devtunnels_communication",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        ".devtunnels.ms"
+      ],
+      "raw_values": [
+        "*.devtunnels.ms"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name:\"*.devtunnels.ms\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_devtunnels_communication.eql",
+  "metadata": {}
+}

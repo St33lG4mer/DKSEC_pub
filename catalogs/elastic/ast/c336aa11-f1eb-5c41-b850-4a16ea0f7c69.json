@@ -1,0 +1,106 @@
+{
+  "id": "c336aa11-f1eb-5c41-b850-4a16ea0f7c69",
+  "catalog": "elastic",
+  "name": "Potential Admin Group Account Addition",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "admin"
+      ],
+      "raw_values": [
+        "/Groups/admin",
+        "admin"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-append"
+      ],
+      "raw_values": [
+        "-a",
+        "-append"
+      ]
+    },
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": ":",
+      "values": [
+        "/library/application support/jamf/jamf.app/contents/macos/jamfdaemon.app/contents/macos/jamfdaemon",
+        "/library/application support/jamf/jamf.app/contents/macos/jamfmanagementservice.app/contents/macos/jamfmanagementservice",
+        "/opt/jc/bin/jumpcloud-agent",
+        "/library/addigy/go-agent"
+      ],
+      "raw_values": [
+        "/Library/Application Support/JAMF/Jamf.app/Contents/MacOS/JamfDaemon.app/Contents/MacOS/JamfDaemon",
+        "/Library/Application Support/JAMF/Jamf.app/Contents/MacOS/JamfManagementService.app/Contents/MacOS/JamfManagementService",
+        "/opt/jc/bin/jumpcloud-agent",
+        "/Library/Addigy/go-agent"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "in",
+      "values": [
+        "start",
+        "process_started"
+      ],
+      "raw_values": [
+        "start",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "dscl",
+        "dseditgroup"
+      ],
+      "raw_values": [
+        "dscl",
+        "dseditgroup"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"macos\" and event.type in (\"start\", \"process_started\") and\n process.name in (\"dscl\", \"dseditgroup\") and process.args like~ (\"/Groups/admin\", \"admin\") and process.args like (\"-a\", \"-append\") and\n not process.Ext.effective_parent.executable like (\"/Library/Application Support/JAMF/Jamf.app/Contents/MacOS/JamfDaemon.app/Contents/MacOS/JamfDaemon\",\n                                                   \"/Library/Application Support/JAMF/Jamf.app/Contents/MacOS/JamfManagementService.app/Contents/MacOS/JamfManagementService\",\n                                                   \"/opt/jc/bin/jumpcloud-agent\",\n                                                   \"/Library/Addigy/go-agent\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/privilege_escalation_local_user_added_to_admin.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

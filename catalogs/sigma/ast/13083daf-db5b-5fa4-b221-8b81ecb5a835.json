@@ -1,0 +1,40 @@
+{
+  "id": "13083daf-db5b-5fa4-b221-8b81ecb5a835",
+  "catalog": "sigma",
+  "name": "image_load_dll_sdiageng_load_by_msdt",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "sdiageng.dll"
+      ],
+      "raw_values": [
+        "*\\\\sdiageng.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\msdt.exe\" and file.path:\"*\\\\sdiageng.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_dll_sdiageng_load_by_msdt.eql",
+  "metadata": {}
+}

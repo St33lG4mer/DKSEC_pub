@@ -1,0 +1,76 @@
+{
+  "id": "175c759a-2c52-59d7-9bf8-87b54f82c4c6",
+  "catalog": "elastic",
+  "name": "M365 Identity Global Administrator Role Assigned",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "o365.audit.modifiedproperties.role_displayname.newvalue",
+      "raw_field": "o365.audit.ModifiedProperties.Role_DisplayName.NewValue",
+      "operator": ":",
+      "values": [
+        "global administrator",
+        "company administrator"
+      ],
+      "raw_values": [
+        "Global Administrator",
+        "Company Administrator"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "azureactivedirectory"
+      ],
+      "raw_values": [
+        "AzureActiveDirectory"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "add member to role."
+      ],
+      "raw_values": [
+        "Add member to role."
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:o365.audit\n    and event.code:\"AzureActiveDirectory\"\n    and event.action:\"Add member to role.\"\n    and event.outcome: \"success\"\n    and o365.audit.ModifiedProperties.Role_DisplayName.NewValue: (\n        \"Global Administrator\" or \"Company Administrator\"\n    )\n    and o365.audit.AzureActiveDirectoryEventType: 1\n    and o365.audit.RecordType: 8\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/persistence_entra_id_global_administrator_role_assign.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: SaaS",
+      "Domain: Identity",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

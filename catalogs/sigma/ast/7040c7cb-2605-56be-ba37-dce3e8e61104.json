@@ -1,0 +1,53 @@
+{
+  "id": "7040c7cb-2605-56be-ba37-dce3e8e61104",
+  "catalog": "sigma",
+  "name": "win_security_hktl_edr_silencer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "5441",
+        "5447"
+      ],
+      "raw_values": [
+        "5441",
+        "5447"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "winlog.event_data.filtername",
+      "raw_field": "winlog.event_data.FilterName",
+      "operator": ":",
+      "values": [
+        "custom outbound filter"
+      ],
+      "raw_values": [
+        "*Custom Outbound Filter*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code like~ (\"5441\", \"5447\")) and winlog.event_data.FilterName:\"*Custom Outbound Filter*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_hktl_edr_silencer.eql",
+  "metadata": {}
+}

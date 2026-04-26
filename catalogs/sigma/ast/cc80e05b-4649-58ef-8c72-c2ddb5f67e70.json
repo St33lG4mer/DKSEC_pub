@@ -1,0 +1,51 @@
+{
+  "id": "cc80e05b-4649-58ef-8c72-c2ddb5f67e70",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_safetykatz",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "safetykatz.exe"
+      ],
+      "raw_values": [
+        "*\\\\SafetyKatz.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "safetykatz.exe"
+      ],
+      "raw_values": [
+        "SafetyKatz.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "safetykatz"
+      ],
+      "raw_values": [
+        "SafetyKatz"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\SafetyKatz.exe\" or process.pe.original_file_name:\"SafetyKatz.exe\" or process.pe.description:\"SafetyKatz\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_safetykatz.eql",
+  "metadata": {}
+}

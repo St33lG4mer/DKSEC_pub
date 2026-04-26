@@ -1,0 +1,41 @@
+{
+  "id": "cf5d4d49-ee7a-5e6b-b743-7901b80cd5c5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_bash_command_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "bash.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\bash.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\bash.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "bash.exe"
+      ],
+      "raw_values": [
+        "Bash.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*:\\\\Windows\\\\System32\\\\bash.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\bash.exe\")) or process.pe.original_file_name:\"Bash.exe\") and process.command_line:\"* -c *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_bash_command_execution.eql",
+  "metadata": {}
+}

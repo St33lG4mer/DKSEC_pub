@@ -1,0 +1,27 @@
+{
+  "id": "b2226e6b-5865-5311-aa21-bb23546fba59",
+  "catalog": "elastic",
+  "name": "Unusual Remote File Creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.category:file and host.os.type:linux and event.action:creation and\nprocess.name:(scp or ftp or sftp or vsftpd or sftp-server or sync) and\nnot (\n  file.path:(\n    /dev/ptmx or /run/* or /var/run/* or /home/*/.ansible/*AnsiballZ_*.py or /home/*/.ansible/tmp/ansible-tmp* or\n    /root/.ansible/*AnsiballZ_*.py or /tmp/ansible-chief/ansible-tmp*AnsiballZ_*.py or\n    /tmp/newroot/home/*/.ansible/tmp/ansible-tmp*AnsiballZ_*.py or /tmp/.ansible/tmp/ansible-tmp*AnsiballZ_*.py or\n    /tmp/ansible-tmp-*/AnsiballZ_*.py or /tmp/.ansible/ansible-tmp-*AnsiballZ_*.py or /var/tmp/ansible-tmp-* or\n    /tmp/.ansible/ansible-tmp-*/.source or /root/.ansible/tmp/ansible-tmp-*/.source\n  ) or\n  file.extension:(filepart or yaml or new or rpm or deb)\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/lateral_movement_unusual_remote_file_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

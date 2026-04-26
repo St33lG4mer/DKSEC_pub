@@ -1,0 +1,31 @@
+{
+  "id": "c81e79bd-dd2e-5c7d-a53d-a5fee40c78ce",
+  "catalog": "sigma",
+  "name": "file_event_win_apt_fin7_powershell_scripts_naming_convention",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "_64refl.ps1",
+        "host_ip.ps1"
+      ],
+      "raw_values": [
+        "*_64refl.ps1",
+        "host_ip.ps1"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*_64refl.ps1\", \"host_ip.ps1\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/FIN7/file_event_win_apt_fin7_powershell_scripts_naming_convention.eql",
+  "metadata": {}
+}

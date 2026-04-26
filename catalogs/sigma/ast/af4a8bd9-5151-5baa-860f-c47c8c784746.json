@@ -1,0 +1,29 @@
+{
+  "id": "af4a8bd9-5151-5baa-860f-c47c8c784746",
+  "catalog": "sigma",
+  "name": "file_delete_win_zone_identifier_ads",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ":zone.identifier"
+      ],
+      "raw_values": [
+        "*:Zone.Identifier"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*:Zone.Identifier\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/file/file_delete/file_delete_win_zone_identifier_ads.eql",
+  "metadata": {}
+}

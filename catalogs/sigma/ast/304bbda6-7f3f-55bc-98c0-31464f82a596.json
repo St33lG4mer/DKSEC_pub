@@ -1,0 +1,17 @@
+{
+  "id": "304bbda6-7f3f-55bc-98c0-31464f82a596",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_invoke_obfuscation_via_stdin",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['(', <SpecialChars.WILDCARD_SINGLE: 2>, 'i)(set).', <SpecialChars.WILDCARD_MULTI: 1>, '&&\\\\s', <SpecialChars.WILDCARD_SINGLE: 2>, 'set.', <SpecialChars.WILDCARD_MULTI: 1>, '(environment|invoke|\\\\$\\\\{', <SpecialChars.WILDCARD_SINGLE: 2>, 'input).', <SpecialChars.WILDCARD_MULTI: 1>, '&&.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\"']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_invoke_obfuscation_via_stdin.eql",
+  "metadata": {}
+}

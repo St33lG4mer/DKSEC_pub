@@ -1,0 +1,87 @@
+{
+  "id": "9ebd2258-050f-5621-aa1e-5262c5171b0a",
+  "catalog": "elastic",
+  "name": "SeDebugPrivilege Enabled by a Suspicious Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.subjectusersid",
+      "raw_field": "winlog.event_data.SubjectUserSid",
+      "operator": ":",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-security-auditing"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Security-Auditing"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "token right adjusted events"
+      ],
+      "raw_values": [
+        "Token Right Adjusted Events"
+      ]
+    },
+    {
+      "field": "winlog.event_data.enabledprivilegelist",
+      "raw_field": "winlog.event_data.EnabledPrivilegeList",
+      "operator": ":",
+      "values": [
+        "sedebugprivilege"
+      ],
+      "raw_values": [
+        "SeDebugPrivilege"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and event.provider: \"Microsoft-Windows-Security-Auditing\" and\n event.action : \"Token Right Adjusted Events\" and\n\n winlog.event_data.EnabledPrivilegeList : \"SeDebugPrivilege\" and\n\n /* exclude processes with System Integrity  */\n not winlog.event_data.SubjectUserSid : (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\") and\n\n not winlog.event_data.ProcessName : (\n        \"?:\\\\Program Files (x86)\\\\*\",\n        \"?:\\\\Program Files\\\\*\",\n        \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\*-*\\\\DismHost.exe\",\n        \"?:\\\\Windows\\\\System32\\\\auditpol.exe\",\n        \"?:\\\\Windows\\\\System32\\\\cleanmgr.exe\",\n        \"?:\\\\Windows\\\\System32\\\\lsass.exe\",\n        \"?:\\\\Windows\\\\System32\\\\mmc.exe\",\n        \"?:\\\\Windows\\\\System32\\\\MRT.exe\",\n        \"?:\\\\Windows\\\\System32\\\\msiexec.exe\",\n        \"?:\\\\Windows\\\\System32\\\\sdiagnhost.exe\",\n        \"?:\\\\Windows\\\\System32\\\\ServerManager.exe\",\n        \"?:\\\\Windows\\\\System32\\\\taskhostw.exe\",\n        \"?:\\\\Windows\\\\System32\\\\wbem\\\\WmiPrvSe.exe\",\n        \"?:\\\\Windows\\\\System32\\\\WerFault.exe\",\n        \"?:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\",\n        \"?:\\\\Windows\\\\SysWOW64\\\\wbem\\\\WmiPrvSe.exe\",\n        \"?:\\\\Windows\\\\SysWOW64\\\\WerFault.exe\",\n        \"?:\\\\Windows\\\\WinSxS\\\\*\"\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_tokenmanip_sedebugpriv_enabled.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

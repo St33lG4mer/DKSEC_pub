@@ -1,0 +1,86 @@
+{
+  "id": "c6a0031c-2289-5f17-843d-f2f3187d22e8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_base64_encoded_cmd_patterns",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.Exe",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-en",
+        "-enc",
+        "-enco",
+        "jab",
+        "suvyi",
+        "sqbfafga",
+        "awv4i",
+        "iab",
+        "paa",
+        "aqblahga"
+      ],
+      "raw_values": [
+        "* -e *",
+        "* -en *",
+        "* -enc *",
+        "* -enco*",
+        "* JAB*",
+        "* SUVYI*",
+        "* SQBFAFgA*",
+        "* aWV4I*",
+        "* IAB*",
+        "* PAA*",
+        "* aQBlAHgA*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "gc_worker.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Packages\\\\Plugins\\\\Microsoft.GuestConfiguration.ConfigurationforWindows\\\\*",
+        "*\\\\gc_worker.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.Exe\", \"pwsh.dll\"))) and (process.command_line like~ (\"* -e *\", \"* -en *\", \"* -enc *\", \"* -enco*\")) and (process.command_line like~ (\"* JAB*\", \"* SUVYI*\", \"* SQBFAFgA*\", \"* aWV4I*\", \"* IAB*\", \"* PAA*\", \"* aQBlAHgA*\"))) and (not (process.parent.executable like~ (\"*C:\\\\Packages\\\\Plugins\\\\Microsoft.GuestConfiguration.ConfigurationforWindows\\\\*\", \"*\\\\gc_worker.exe*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_base64_encoded_cmd_patterns.eql",
+  "metadata": {}
+}

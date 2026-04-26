@@ -1,0 +1,50 @@
+{
+  "id": "48e5a38f-b72b-54d1-843f-645c394345cf",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_susp_shimcache_flush",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "shimflushcache",
+        "#250",
+        "baseflushappcompatcache",
+        "#46"
+      ],
+      "raw_values": [
+        "*ShimFlushCache*",
+        "*#250*",
+        "*BaseFlushAppcompatCache*",
+        "*#46*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rundll32",
+        "apphelp.dll",
+        "kernel32.dll"
+      ],
+      "raw_values": [
+        "*rundll32*",
+        "*apphelp.dll*",
+        "*kernel32.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.command_line:\"*rundll32*\" and process.command_line:\"*apphelp.dll*\") and (process.command_line like~ (\"*ShimFlushCache*\", \"*#250*\"))) or ((process.command_line:\"*rundll32*\" and process.command_line:\"*kernel32.dll*\") and (process.command_line like~ (\"*BaseFlushAppcompatCache*\", \"*#46*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_susp_shimcache_flush.eql",
+  "metadata": {}
+}

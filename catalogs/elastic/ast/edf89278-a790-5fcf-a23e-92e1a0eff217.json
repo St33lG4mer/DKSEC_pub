@@ -1,0 +1,83 @@
+{
+  "id": "edf89278-a790-5fcf-a23e-92e1a0eff217",
+  "catalog": "elastic",
+  "name": "AWS CloudWatch Alarm Deletion",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "monitoring.amazonaws.com"
+      ],
+      "raw_values": [
+        "monitoring.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "deletealarms"
+      ],
+      "raw_values": [
+        "DeleteAlarms"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "user_agent.original",
+      "raw_field": "user_agent.original",
+      "operator": ":",
+      "values": [
+        "aws internal"
+      ],
+      "raw_values": [
+        "AWS Internal"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" \n  and event.provider: \"monitoring.amazonaws.com\" \n  and event.action: \"DeleteAlarms\"\n  and event.outcome: \"success\"\n  and source.ip: *\n  and not user_agent.original : \"AWS Internal\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_cloudwatch_alarm_deletion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: Amazon CloudWatch",
+      "Resources: Investigation Guide",
+      "Tactic: Defense Evasion"
+    ]
+  }
+}

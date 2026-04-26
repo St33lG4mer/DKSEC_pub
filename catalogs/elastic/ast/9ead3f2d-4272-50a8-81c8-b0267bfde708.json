@@ -1,0 +1,26 @@
+{
+  "id": "9ead3f2d-4272-50a8-81c8-b0267bfde708",
+  "catalog": "elastic",
+  "name": "Spike in Bytes Sent to an External Device via Airdrop",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/ded/exfiltration_ml_high_bytes_written_to_external_device_airdrop.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Data Exfiltration Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Exfiltration",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

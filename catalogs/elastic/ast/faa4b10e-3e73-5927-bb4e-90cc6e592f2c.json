@@ -1,0 +1,50 @@
+{
+  "id": "faa4b10e-3e73-5927-bb4e-90cc6e592f2c",
+  "catalog": "elastic",
+  "name": "Tainted Out-Of-Tree Kernel Module Load",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "system.syslog"
+      ],
+      "raw_values": [
+        "system.syslog"
+      ]
+    },
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": ":",
+      "values": [
+        "loading out-of-tree module taints kernel."
+      ],
+      "raw_values": [
+        "loading out-of-tree module taints kernel."
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:linux and data_stream.dataset:\"system.syslog\" and process.name:kernel and\nmessage:\"loading out-of-tree module taints kernel.\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_tainted_kernel_module_out_of_tree_load.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

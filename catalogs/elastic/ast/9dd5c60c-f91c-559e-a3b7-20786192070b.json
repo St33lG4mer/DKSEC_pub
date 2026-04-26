@@ -1,0 +1,95 @@
+{
+  "id": "9dd5c60c-f91c-559e-a3b7-20786192070b",
+  "catalog": "elastic",
+  "name": "Potential Privilege Escalation via Recently Compiled Executable",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "gcc",
+        "g++"
+      ],
+      "raw_values": [
+        "gcc",
+        "g++",
+        "cc"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "uid_change",
+        "guid_change"
+      ],
+      "raw_values": [
+        "uid_change",
+        "guid_change"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start",
+        "creation",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "creation",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec",
+        "creation"
+      ],
+      "raw_values": [
+        "exec",
+        "creation"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=1m\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.name in (\"gcc\", \"g++\", \"cc\") and user.id != \"0\"] by process.args\n  [file where host.os.type == \"linux\" and event.action == \"creation\" and event.type == \"creation\" and\n   process.name == \"ld\" and user.id != \"0\"] by file.name\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   user.id != \"0\"] by process.name\n  [process where host.os.type == \"linux\" and event.action in (\"uid_change\", \"guid_change\") and event.type == \"change\" and\n   user.id == \"0\"] by process.name\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_uid_change_post_compilation.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

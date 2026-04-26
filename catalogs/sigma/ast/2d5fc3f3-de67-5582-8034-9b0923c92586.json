@@ -1,0 +1,41 @@
+{
+  "id": "2d5fc3f3-de67-5582-8034-9b0923c92586",
+  "catalog": "sigma",
+  "name": "proc_creation_win_auditpol_nt_resource_kit_usage",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "logon:none",
+        "system:none",
+        "sam:none",
+        "privilege:none",
+        "object:none",
+        "process:none",
+        "policy:none"
+      ],
+      "raw_values": [
+        "*/logon:none*",
+        "*/system:none*",
+        "*/sam:none*",
+        "*/privilege:none*",
+        "*/object:none*",
+        "*/process:none*",
+        "*/policy:none*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*/logon:none*\", \"*/system:none*\", \"*/sam:none*\", \"*/privilege:none*\", \"*/object:none*\", \"*/process:none*\", \"*/policy:none*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_auditpol_nt_resource_kit_usage.eql",
+  "metadata": {}
+}

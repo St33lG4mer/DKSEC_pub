@@ -1,0 +1,51 @@
+{
+  "id": "ddbbfb0a-5a13-59ec-9a6c-893d452c5b28",
+  "catalog": "sigma",
+  "name": "proc_creation_win_conhost_susp_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\conhost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\System32\\\\conhost.exe"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "systemtraceprovider-process"
+      ],
+      "raw_values": [
+        "SystemTraceProvider-Process"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\conhost.exe\" and (not (process.executable:\"*:\\\\Windows\\\\System32\\\\conhost.exe\" or (?process.executable == null) or process.executable==\"\")) and (not winlog.provider_name:\"SystemTraceProvider-Process\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_conhost_susp_child_process.eql",
+  "metadata": {}
+}

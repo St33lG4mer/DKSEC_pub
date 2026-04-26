@@ -1,0 +1,40 @@
+{
+  "id": "706f3c9c-03dc-548e-b9bd-e8c9907a0185",
+  "catalog": "sigma",
+  "name": "registry_set_services_etw_tamper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\microsoft\\\\windows nt\\\\currentversion\\\\tracing\\\\scm\\\\regular\\\\tracingdisabled"
+      ],
+      "raw_values": [
+        "*Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Tracing\\\\SCM\\\\Regular\\\\TracingDisabled"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Tracing\\\\SCM\\\\Regular\\\\TracingDisabled\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_services_etw_tamper.eql",
+  "metadata": {}
+}

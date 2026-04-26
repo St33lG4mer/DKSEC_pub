@@ -1,0 +1,94 @@
+{
+  "id": "3bcd7a07-69f1-54b3-a97c-81510ec2e823",
+  "catalog": "elastic",
+  "name": "Installation of Security Support Provider",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\*controlset*\\\\control\\\\lsa\\\\security packages",
+        "\\\\system\\\\*controlset*\\\\control\\\\lsa\\\\osconfig\\\\security packages"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\*ControlSet*\\\\Control\\\\Lsa\\\\Security Packages",
+        "*\\\\SYSTEM\\\\*ControlSet*\\\\Control\\\\Lsa\\\\OSConfig\\\\Security Packages"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\msiexec.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\SysWOW64\\\\msiexec.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "security packages"
+      ],
+      "raw_values": [
+        "Security Packages"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.value : \"Security Packages\" and\n  registry.path : (\n      \"*\\\\SYSTEM\\\\*ControlSet*\\\\Control\\\\Lsa\\\\Security Packages\",\n      \"*\\\\SYSTEM\\\\*ControlSet*\\\\Control\\\\Lsa\\\\OSConfig\\\\Security Packages\"\n  ) and\n  not process.executable : (\n        \"C:\\\\Windows\\\\System32\\\\msiexec.exe\",\n        \"C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\",\n        /* Crowdstrike specific exclusion as it uses NT Object paths */\n        \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\System32\\\\msiexec.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Windows\\\\SysWOW64\\\\msiexec.exe\"\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_via_lsa_security_support_provider_registry.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "id": "8f54ab95-f201-5384-8cb1-6054b2ea6a72",
+  "catalog": "elastic",
+  "name": "AWS EC2 EBS Snapshot Access Removed",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "modifysnapshotattribute"
+      ],
+      "raw_values": [
+        "ModifySnapshotAttribute"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "source.address",
+      "raw_field": "source.address",
+      "operator": "==",
+      "values": [
+        "backup.amazonaws.com"
+      ],
+      "raw_values": [
+        "backup.amazonaws.com"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\"  \n  and event.action == \"ModifySnapshotAttribute\"\n  and event.outcome == \"success\"\n  and stringContains (aws.cloudtrail.request_parameters, \"attributeType=CREATE_VOLUME_PERMISSION\")\n  and stringContains (aws.cloudtrail.request_parameters, \"remove=\")\n  and not source.address == \"backup.amazonaws.com\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_ec2_ebs_snapshot_access_removed.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS EC2",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

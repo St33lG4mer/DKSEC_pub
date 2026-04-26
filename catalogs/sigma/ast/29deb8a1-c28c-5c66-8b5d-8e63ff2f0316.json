@@ -1,0 +1,78 @@
+{
+  "id": "29deb8a1-c28c-5c66-8b5d-8e63ff2f0316",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regedit_import_keys_ads",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".reg"
+      ],
+      "raw_values": [
+        "* /i *",
+        "*.reg*",
+        "* -e *",
+        "* /e *",
+        "* –e *",
+        "* —e *",
+        "* ―e *",
+        "* -a *",
+        "* /a *",
+        "* –a *",
+        "* —a *",
+        "* ―a *",
+        "* -c *",
+        "* /c *",
+        "* –c *",
+        "* —c *",
+        "* ―c *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\regedit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "REGEDIT.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "]']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString([':[^ \\\\\\\\]']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\regedit.exe\" or process.pe.original_file_name:\"REGEDIT.EXE\") and ((process.command_line like~ (\"* /i *\", \"*.reg*\")) and process.command_line:\"SigmaRegularExpression(regexp=SigmaString([':[^ \\\\\\\\]']), flags=set())\")) and (not (process.command_line like~ (\"* -e *\", \"* /e *\", \"* –e *\", \"* —e *\", \"* ―e *\") or process.command_line like~ (\"* -a *\", \"* /a *\", \"* –a *\", \"* —a *\", \"* ―a *\") or process.command_line like~ (\"* -c *\", \"* /c *\", \"* –c *\", \"* —c *\", \"* ―c *\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regedit_import_keys_ads.eql",
+  "metadata": {}
+}

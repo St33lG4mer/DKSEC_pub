@@ -1,0 +1,55 @@
+{
+  "id": "b9c3f678-34da-5d7b-857f-305acb1f8ab2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wbadmin_restore_file",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wbadmin.exe"
+      ],
+      "raw_values": [
+        "*\\\\wbadmin.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wbadmin.exe"
+      ],
+      "raw_values": [
+        "WBADMIN.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "recovery",
+        "recoverytarget",
+        "itemtype:file"
+      ],
+      "raw_values": [
+        "* recovery*",
+        "*recoveryTarget*",
+        "*itemtype:File*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\wbadmin.exe\" or process.pe.original_file_name:\"WBADMIN.EXE\") and (process.command_line:\"* recovery*\" and process.command_line:\"*recoveryTarget*\" and process.command_line:\"*itemtype:File*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wbadmin_restore_file.eql",
+  "metadata": {}
+}

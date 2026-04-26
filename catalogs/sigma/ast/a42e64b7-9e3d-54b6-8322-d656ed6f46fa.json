@@ -1,0 +1,40 @@
+{
+  "id": "a42e64b7-9e3d-54b6-8322-d656ed6f46fa",
+  "catalog": "sigma",
+  "name": "registry_delete_enable_windows_recall",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.eventtype",
+      "raw_field": "winlog.event_data.EventType",
+      "operator": ":",
+      "values": [
+        "deletevalue"
+      ],
+      "raw_values": [
+        "DeleteValue"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows\\\\windowsai\\\\disableaidataanalysis"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows\\\\WindowsAI\\\\DisableAIDataAnalysis"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.EventType:\"DeleteValue\" and registry.path:\"*\\\\Microsoft\\\\Windows\\\\WindowsAI\\\\DisableAIDataAnalysis\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_delete/registry_delete_enable_windows_recall.eql",
+  "metadata": {}
+}

@@ -1,0 +1,51 @@
+{
+  "id": "8a16e001-379e-5085-ab71-167bbe51862b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_mmc_mmc20_lateral_movement",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mmc.exe"
+      ],
+      "raw_values": [
+        "*\\\\mmc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-embedding"
+      ],
+      "raw_values": [
+        "*-Embedding*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\svchost.exe\" and process.executable:\"*\\\\mmc.exe\" and process.command_line:\"*-Embedding*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_mmc_mmc20_lateral_movement.eql",
+  "metadata": {}
+}

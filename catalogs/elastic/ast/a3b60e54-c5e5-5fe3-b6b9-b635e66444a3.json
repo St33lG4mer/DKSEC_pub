@@ -1,0 +1,41 @@
+{
+  "id": "a3b60e54-c5e5-5fe3-b6b9-b635e66444a3",
+  "catalog": "elastic",
+  "name": "Potential Kerberos Coercion via DNS-Based SPN Spoofing",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:\"windows\" and\n(\n  (event.code:4662 and winlog.event_data.AdditionalInfo: *UWhRC*BAAAA*MicrosoftDNS*) or \n  (event.code:5137 and winlog.event_data.ObjectDN: *UWhRC*BAAAA*MicrosoftDNS*)\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_kerberos_coerce.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Active Directory",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

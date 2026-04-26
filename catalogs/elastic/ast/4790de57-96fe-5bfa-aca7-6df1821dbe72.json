@@ -1,0 +1,42 @@
+{
+  "id": "4790de57-96fe-5bfa-aca7-6df1821dbe72",
+  "catalog": "elastic",
+  "name": "Potential Process Injection via PowerShell",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.directory",
+      "raw_field": "file.directory",
+      "operator": ":",
+      "values": [
+        "c:\\programdata\\microsoft\\windows defender advanced threat protection\\sensecm",
+        "c:\\programdata\\microsoft\\windows defender advanced threat protection\\downloads"
+      ],
+      "raw_values": [
+        "C:\\ProgramData\\Microsoft\\Windows Defender Advanced Threat Protection\\SenseCM",
+        "C:\\ProgramData\\Microsoft\\Windows Defender Advanced Threat Protection\\Downloads"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text : (\n   (VirtualAlloc or VirtualAllocEx or VirtualProtect or LdrLoadDll or LoadLibrary or LoadLibraryA or\n      LoadLibraryEx or GetProcAddress or OpenProcess or OpenProcessToken or AdjustTokenPrivileges) and\n   (WriteProcessMemory or CreateRemoteThread or NtCreateThreadEx or CreateThread or QueueUserAPC or\n      SuspendThread or ResumeThread or GetDelegateForFunctionPointer)\n  ) and not \n  file.directory: (\n    \"C:\\ProgramData\\Microsoft\\Windows Defender Advanced Threat Protection\\SenseCM\" or\n    \"C:\\ProgramData\\Microsoft\\Windows Defender Advanced Threat Protection\\Downloads\"\n  )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_posh_process_injection.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

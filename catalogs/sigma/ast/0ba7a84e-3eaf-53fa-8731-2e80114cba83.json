@@ -1,0 +1,52 @@
+{
+  "id": "0ba7a84e-3eaf-53fa-8731-2e80114cba83",
+  "catalog": "sigma",
+  "name": "proc_creation_win_setres_uncommon_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "choice.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\System32\\\\choice.exe",
+        "*C:\\\\Windows\\\\SysWOW64\\\\choice.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "setres.exe"
+      ],
+      "raw_values": [
+        "*\\\\setres.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "choice"
+      ],
+      "raw_values": [
+        "*\\\\choice*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\setres.exe\" and process.executable:\"*\\\\choice*\") and (not (process.executable like~ (\"*C:\\\\Windows\\\\System32\\\\choice.exe\", \"*C:\\\\Windows\\\\SysWOW64\\\\choice.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_setres_uncommon_child_process.eql",
+  "metadata": {}
+}

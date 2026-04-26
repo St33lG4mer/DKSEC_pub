@@ -1,0 +1,23 @@
+{
+  "id": "31220baf-b0eb-59e4-b4c9-84d8bee675d8",
+  "catalog": "elastic",
+  "name": "Web Application Suspicious Activity: POST Request Declined",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "http.response.status_code:403 and http.request.method:post\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/apm/apm_403_response_to_a_post.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: APM",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

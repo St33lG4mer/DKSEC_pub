@@ -1,0 +1,92 @@
+{
+  "id": "aa79fd04-0732-5f23-b867-2d57483d0c04",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_lnk_double_extension",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".doc.",
+        ".docx.",
+        ".jpg.",
+        ".pdf.",
+        ".ppt.",
+        ".pptx.",
+        ".xls.",
+        ".xlsx."
+      ],
+      "raw_values": [
+        "*.doc.*",
+        "*.docx.*",
+        "*.jpg.*",
+        "*.pdf.*",
+        "*.ppt.*",
+        "*.pptx.*",
+        "*.xls.*",
+        "*.xlsx.*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "excel.exe",
+        "powerpnt.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\winword.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".lnk",
+        "excel",
+        "powerpoint",
+        "word"
+      ],
+      "raw_values": [
+        "*.lnk",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Recent\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Office\\\\Recent\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Excel*",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\PowerPoint*",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Word*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "excel.exe",
+        "powerpnt.exe",
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\winword.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*.lnk\" and (file.path like~ (\"*.doc.*\", \"*.docx.*\", \"*.jpg.*\", \"*.pdf.*\", \"*.ppt.*\", \"*.pptx.*\", \"*.xls.*\", \"*.xlsx.*\"))) and (not file.path:\"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Recent\\\\*\") and (not (((process.executable like~ (\"*\\\\excel.exe\", \"*\\\\powerpnt.exe\", \"*\\\\winword.exe\")) and file.path:\"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Office\\\\Recent\\\\*\") or (process.executable:\"*\\\\excel.exe\" and file.path:\"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Excel*\") or (process.executable:\"*\\\\powerpnt.exe\" and file.path:\"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\PowerPoint*\") or (process.executable:\"*\\\\winword.exe\" and file.path:\"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Word*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_lnk_double_extension.eql",
+  "metadata": {}
+}

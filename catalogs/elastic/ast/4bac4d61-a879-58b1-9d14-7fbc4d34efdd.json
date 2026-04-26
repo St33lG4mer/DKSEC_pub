@@ -1,0 +1,85 @@
+{
+  "id": "4bac4d61-a879-58b1-9d14-7fbc4d34efdd",
+  "catalog": "elastic",
+  "name": "Potential Local NTLM Relay via HTTP",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "davclnt.dll,davsetcookie",
+        "spoolss",
+        "srvsvc"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\davclnt.dll,DavSetCookie",
+        "?:\\\\Windows\\\\SysWOW64\\\\davclnt.dll,DavSetCookie",
+        "http*/print/pipe/*",
+        "http*/pipe/spoolss",
+        "http*/pipe/srvsvc"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "rundll32.exe"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  process.name : \"rundll32.exe\" and\n\n  /* Rundll32 WbeDav Client  */\n  process.args : (\"?:\\\\Windows\\\\System32\\\\davclnt.dll,DavSetCookie\", \"?:\\\\Windows\\\\SysWOW64\\\\davclnt.dll,DavSetCookie\") and\n\n  /* Access to named pipe via http */\n  process.args : (\"http*/print/pipe/*\", \"http*/pipe/spoolss\", \"http*/pipe/srvsvc\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_relay_ntlm_auth_via_http_spoolss.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

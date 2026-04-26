@@ -1,0 +1,146 @@
+{
+  "id": "f4c9d2ae-c42d-580f-a685-a51878c7885a",
+  "catalog": "elastic",
+  "name": "File made Immutable by Chattr",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-*i",
+        "+*i"
+      ],
+      "raw_values": [
+        "-*i*",
+        "+*i*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "systemd",
+        "php-fpm",
+        "php"
+      ],
+      "raw_values": [
+        "/lib/systemd/systemd",
+        "/usr/local/uems_agent/bin/*",
+        "/usr/lib/systemd/systemd",
+        "/usr/local/emps/sbin/php-fpm",
+        "/usr/local/emps/bin/php"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "systemd",
+        "cf-agent",
+        "ntpdate",
+        "xargs",
+        "preinst",
+        "auth",
+        "dcservice",
+        "dcagentupgrader",
+        "sudo",
+        "ephemeral-disk-warning"
+      ],
+      "raw_values": [
+        "systemd",
+        "cf-agent",
+        "ntpdate",
+        "xargs",
+        "px",
+        "preinst",
+        "auth",
+        "dcservice",
+        "dcagentupgrader",
+        "sudo",
+        "ephemeral-disk-warning"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "chattr"
+      ],
+      "raw_values": [
+        "chattr"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\n?process.parent.executable != null and\nprocess.name == \"chattr\" and process.args : (\"-*i*\", \"+*i*\") and\nnot (\n  ?process.parent.executable: (\n    \"/lib/systemd/systemd\", \"/usr/local/uems_agent/bin/*\", \"/usr/lib/systemd/systemd\", \"/usr/local/emps/sbin/php-fpm\",\n    \"/usr/local/emps/bin/php\"\n  ) or\n  ?process.parent.name in (\n    \"systemd\", \"cf-agent\", \"ntpdate\", \"xargs\", \"px\", \"preinst\", \"auth\", \"cf-agent\", \"dcservice\", \"dcagentupgrader\",\n    \"sudo\", \"ephemeral-disk-warning\"\n  ) or\n  process.args like \"/opt/ai-bolit/*\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_chattr_immutable_file.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Data Source: Auditd Manager",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

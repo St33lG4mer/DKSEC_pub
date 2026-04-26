@@ -1,0 +1,62 @@
+{
+  "id": "2aa66ca2-c083-55f3-8edd-93758b42efa2",
+  "catalog": "elastic",
+  "name": "Linux User Account Creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "iam"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "user",
+        "creation"
+      ],
+      "raw_values": [
+        "user",
+        "creation"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "iam where host.os.type == \"linux\" and event.type == \"user\" and event.type == \"creation\" and event.outcome == \"success\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_linux_user_account_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

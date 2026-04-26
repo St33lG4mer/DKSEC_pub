@@ -1,0 +1,84 @@
+{
+  "id": "fbf6486a-7e90-56c0-9615-0dba02e244b8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wget_download_direct_ip",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".ps1",
+        ".msi",
+        ".exe",
+        ".vbe",
+        ".dll"
+      ],
+      "raw_values": [
+        "*.ps1",
+        "*.ps1'",
+        "*.ps1\\",
+        ", ",
+        "",
+        "*.msi",
+        "*.msi'",
+        "*.msi\\",
+        "*.exe",
+        "*.exe'",
+        "*.exe\\",
+        "*.vbe",
+        "*.vbe'",
+        "*.vbe\\",
+        "*.dll",
+        "*.dll'",
+        "*.dll\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wget.exe"
+      ],
+      "raw_values": [
+        "*\\\\wget.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wget.exe"
+      ],
+      "raw_values": [
+        "wget.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".[0-9]{1,3}']), flags=set())",
+        "http"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['://[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}']), flags=set())",
+        "*http*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\wget.exe\" or process.pe.original_file_name:\"wget.exe\") and process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['://[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[0-9]{1,3}']), flags=set())\" and process.command_line:\"*http*\" and (process.command_line like~ (\"SigmaRegularExpression(regexp=SigmaString(['\\\\s-O\\\\s']), flags=set())\", \"*--output-document*\")) and (process.command_line like~ (\"*.ps1\", \"*.ps1'\", \"*.ps1\\\"\", \"*.dat\", \"*.dat'\", \"*.dat\\\"\", \"*.msi\", \"*.msi'\", \"*.msi\\\"\", \"*.bat\", \"*.bat'\", \"*.bat\\\"\", \"*.exe\", \"*.exe'\", \"*.exe\\\"\", \"*.vbs\", \"*.vbs'\", \"*.vbs\\\"\", \"*.vbe\", \"*.vbe'\", \"*.vbe\\\"\", \"*.hta\", \"*.hta'\", \"*.hta\\\"\", \"*.dll\", \"*.dll'\", \"*.dll\\\"\", \"*.psm1\", \"*.psm1'\", \"*.psm1\\\"\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wget_download_direct_ip.eql",
+  "metadata": {}
+}

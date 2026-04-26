@@ -1,0 +1,109 @@
+{
+  "id": "4eec02be-4fbb-5a54-9f9b-3d30c3ade2e2",
+  "catalog": "elastic",
+  "name": "System Path File Creation and Execution Detected via Defend for Containers",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "entrypoint"
+      ],
+      "raw_values": [
+        "/etc/*",
+        "/root/*",
+        "/bin/*",
+        "/usr/bin/*",
+        "/usr/local/bin/*",
+        "/entrypoint*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "wget",
+        "curl"
+      ],
+      "raw_values": [
+        "wget",
+        "curl",
+        "/tmp/*",
+        "/dev/shm/*",
+        "/var/tmp/*",
+        "/run/*",
+        "/var/run/*",
+        "/mnt/*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "busybox"
+      ],
+      "raw_values": [
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "wget"
+      ],
+      "raw_values": [
+        "wget"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"linux\" and event.type == \"creation\" and process.interactive == true and\nfile.path like (\n  \"/etc/*\", \"/root/*\", \"/bin/*\", \"/usr/bin/*\", \"/usr/local/bin/*\", \"/entrypoint*\"\n) and (\n  process.name like (\"wget\", \"curl\") or\n  (process.name == \"busybox\" and process.args == \"wget\") or\n  process.executable like (\"/tmp/*\", \"/dev/shm/*\", \"/var/tmp/*\", \"/run/*\", \"/var/run/*\", \"/mnt/*\")\n) and container.id like \"?*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/execution_interactive_file_creation_in_system_binary_locations.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Command and Control",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

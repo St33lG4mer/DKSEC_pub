@@ -1,0 +1,51 @@
+{
+  "id": "287b3988-09eb-5d13-aa22-644864238ca1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ksetup_password_change_user",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ksetup.exe"
+      ],
+      "raw_values": [
+        "*\\\\ksetup.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ksetup.exe"
+      ],
+      "raw_values": [
+        "ksetup.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "changepassword"
+      ],
+      "raw_values": [
+        "* /ChangePassword *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\ksetup.exe\" or process.pe.original_file_name:\"ksetup.exe\") and process.command_line:\"* /ChangePassword *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ksetup_password_change_user.eql",
+  "metadata": {}
+}

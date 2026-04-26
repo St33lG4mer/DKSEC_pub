@@ -1,0 +1,33 @@
+{
+  "id": "1b5ef946-00b1-58e4-9e47-75b3ff03df44",
+  "catalog": "sigma",
+  "name": "proc_creation_win_remote_access_tools_anydesk_silent_install",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--install",
+        "--start-with-win",
+        "--silent"
+      ],
+      "raw_values": [
+        "*--install*",
+        "*--start-with-win*",
+        "*--silent*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*--install*\" and process.command_line:\"*--start-with-win*\" and process.command_line:\"*--silent*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_remote_access_tools_anydesk_silent_install.eql",
+  "metadata": {}
+}

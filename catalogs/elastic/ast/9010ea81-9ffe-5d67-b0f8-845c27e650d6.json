@@ -1,0 +1,102 @@
+{
+  "id": "9010ea81-9ffe-5d67-b0f8-845c27e650d6",
+  "catalog": "elastic",
+  "name": "PsExec Network Connection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "psexec.exe",
+        "dsdns.exe"
+      ],
+      "raw_values": [
+        "?:\\\\ProgramData\\\\Docusnap\\\\Discovery\\\\discovery\\\\plugins\\\\17\\\\Bin\\\\psexec.exe",
+        "?:\\\\Docusnap 11\\\\Bin\\\\psexec.exe",
+        "?:\\\\Program Files\\\\Docusnap X\\\\Bin\\\\psexec.exe",
+        "?:\\\\Program Files\\\\Docusnap X\\\\Tools\\\\dsDNS.exe",
+        "PsExec.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "psexec.c"
+      ],
+      "raw_values": [
+        "psexec.c"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-accepteula"
+      ],
+      "raw_values": [
+        "-accepteula"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cynetscanner.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files (x86)\\\\Cynet\\\\Cynet Scanner\\\\CynetScanner.exe"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n   (process.name : \"PsExec.exe\" or ?process.pe.original_file_name : \"psexec.c\") and\n\n   /* This flag suppresses the display of the license dialog and may\n      indicate that psexec executed for the first time in the machine */\n   process.args : \"-accepteula\" and\n\n   not process.executable : (\"?:\\\\ProgramData\\\\Docusnap\\\\Discovery\\\\discovery\\\\plugins\\\\17\\\\Bin\\\\psexec.exe\",\n                             \"?:\\\\Docusnap 11\\\\Bin\\\\psexec.exe\",\n                             \"?:\\\\Program Files\\\\Docusnap X\\\\Bin\\\\psexec.exe\",\n                             \"?:\\\\Program Files\\\\Docusnap X\\\\Tools\\\\dsDNS.exe\") and\n   not process.parent.executable : \"?:\\\\Program Files (x86)\\\\Cynet\\\\Cynet Scanner\\\\CynetScanner.exe\"]\n  [network where host.os.type == \"windows\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_psexec_lateral_movement_command.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

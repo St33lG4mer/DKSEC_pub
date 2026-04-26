@@ -1,0 +1,31 @@
+{
+  "id": "8741a53d-5dfa-5963-b422-ecd6fbac1f6c",
+  "catalog": "sigma",
+  "name": "file_event_win_hktl_mimikatz_files",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".kirbi",
+        "mimilsa.log"
+      ],
+      "raw_values": [
+        "*.kirbi",
+        "*mimilsa.log"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*.kirbi\", \"*mimilsa.log\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_hktl_mimikatz_files.eql",
+  "metadata": {}
+}

@@ -1,0 +1,31 @@
+{
+  "id": "dbb4d1dd-bd17-5804-9c48-2280b3abf6ff",
+  "catalog": "sigma",
+  "name": "proc_creation_win_tapinstall_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "tapinstall.exe"
+      ],
+      "raw_values": [
+        "*\\\\tapinstall.exe",
+        "*:\\\\Program Files\\\\OpenVPN Connect\\\\drivers\\\\tap\\\\*",
+        "*:\\\\Program Files (x86)\\\\Proton Technologies\\\\ProtonVPNTap\\\\installer\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\tapinstall.exe\" and (not ((process.executable like~ (\"*:\\\\Program Files\\\\Avast Software\\\\SecureLine VPN\\\\*\", \"*:\\\\Program Files (x86)\\\\Avast Software\\\\SecureLine VPN\\\\*\")) or process.executable:\"*:\\\\Program Files\\\\OpenVPN Connect\\\\drivers\\\\tap\\\\*\" or process.executable:\"*:\\\\Program Files (x86)\\\\Proton Technologies\\\\ProtonVPNTap\\\\installer\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_tapinstall_execution.eql",
+  "metadata": {}
+}

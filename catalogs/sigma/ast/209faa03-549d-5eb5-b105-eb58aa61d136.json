@@ -1,0 +1,40 @@
+{
+  "id": "209faa03-549d-5eb5-b105-eb58aa61d136",
+  "catalog": "sigma",
+  "name": "registry_set_enable_periodic_backup",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\control\\\\session manager\\\\configuration manager\\\\enableperiodicbackup"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\Session Manager\\\\Configuration Manager\\\\EnablePeriodicBackup"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Control\\\\Session Manager\\\\Configuration Manager\\\\EnablePeriodicBackup\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_enable_periodic_backup.eql",
+  "metadata": {}
+}

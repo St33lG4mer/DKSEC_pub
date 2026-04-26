@@ -1,0 +1,58 @@
+{
+  "id": "144282fd-6338-52ac-b50c-1f47315b36b8",
+  "catalog": "elastic",
+  "name": "PowerShell Share Enumeration Script",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "powershell.file.script_block_text",
+      "raw_field": "powershell.file.script_block_text",
+      "operator": ":",
+      "values": [
+        "invoke-sharefinder",
+        "invoke-sharefinderthreaded",
+        "shi1_netname",
+        "shi1_remark"
+      ],
+      "raw_values": [
+        "Invoke-ShareFinder",
+        "Invoke-ShareFinderThreaded",
+        "shi1_netname",
+        "shi1_remark"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text:(\n    \"Invoke-ShareFinder\" or\n    \"Invoke-ShareFinderThreaded\" or\n    (\n      \"shi1_netname\" and\n      \"shi1_remark\"\n    ) or\n    (\n      \"NetShareEnum\" and\n      \"NetApiBufferFree\"\n    )\n  ) and not user.id : \"S-1-5-18\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/discovery_posh_invoke_sharefinder.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Collection",
+      "Tactic: Execution",
+      "Resources: Investigation Guide",
+      "Data Source: PowerShell Logs"
+    ]
+  }
+}

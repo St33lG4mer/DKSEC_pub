@@ -1,0 +1,175 @@
+{
+  "id": "a50df4ab-936c-521b-8888-fef3d25a6f5b",
+  "catalog": "elastic",
+  "name": "Encoded Payload Detected via Defend for Containers",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "-*r",
+        "-*p",
+        "-*d"
+      ],
+      "raw_values": [
+        "-*r*",
+        "-*p*",
+        "*-*d*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "base64",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "base32",
+        "base16"
+      ],
+      "raw_values": [
+        "base64",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "base32",
+        "base16"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "-base64"
+      ],
+      "raw_values": [
+        "-d",
+        "-base64",
+        "-a",
+        "-u",
+        "-t"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "xxd",
+        "openssl"
+      ],
+      "raw_values": [
+        "xxd",
+        "openssl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "enc",
+        "base64"
+      ],
+      "raw_values": [
+        "enc",
+        "base64",
+        "-c",
+        "-e"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python",
+        "perl",
+        "ruby"
+      ],
+      "raw_values": [
+        "python*",
+        "perl*",
+        "ruby*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "base64",
+        "b64decode",
+        "decode_base64",
+        "base64.decode64"
+      ],
+      "raw_values": [
+        "*base64*",
+        "*b64decode*",
+        "*decode_base64*",
+        "*Base64.decode64*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and process.interactive == true and (\n  (process.name in (\"base64\", \"base64plain\", \"base64url\", \"base64mime\", \"base64pem\", \"base32\", \"base16\") and process.args like~ \"*-*d*\") or\n  (process.name == \"xxd\" and process.args like~ (\"-*r*\", \"-*p*\")) or\n  (process.name == \"openssl\" and process.args == \"enc\" and process.args in (\"-d\", \"-base64\", \"-a\")) or\n  (process.name like \"python*\" and (\n    (process.args == \"base64\" and process.args in (\"-d\", \"-u\", \"-t\")) or\n    (process.args == \"-c\" and process.args like \"*base64*\" and process.args like \"*b64decode*\")\n  )) or\n  (process.name like \"perl*\" and process.args like \"*decode_base64*\") or\n  (process.name like \"ruby*\" and process.args == \"-e\" and process.args like \"*Base64.decode64*\")\n) and container.id like \"?*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/defense_evasion_potential_evasion_via_encoded_payload.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "id": "bf96b339-cdb5-5531-83b6-0150156bbe85",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powercfg_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "powercfg.exe"
+      ],
+      "raw_values": [
+        "*\\\\powercfg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "powercfg.exe"
+      ],
+      "raw_values": [
+        "PowerCfg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "setacvalueindex",
+        "scheme_current",
+        "sub_video",
+        "videoconlock",
+        "-change",
+        "-standby-timeout-"
+      ],
+      "raw_values": [
+        "*/setacvalueindex *",
+        "*SCHEME_CURRENT*",
+        "*SUB_VIDEO*",
+        "*VIDEOCONLOCK*",
+        "*-change *",
+        "*-standby-timeout-*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\powercfg.exe\" or process.pe.original_file_name:\"PowerCfg.exe\") and ((process.command_line:\"*/setacvalueindex *\" and process.command_line:\"*SCHEME_CURRENT*\" and process.command_line:\"*SUB_VIDEO*\" and process.command_line:\"*VIDEOCONLOCK*\") or (process.command_line:\"*-change *\" and process.command_line:\"*-standby-timeout-*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powercfg_execution.eql",
+  "metadata": {}
+}

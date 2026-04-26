@@ -1,0 +1,98 @@
+{
+  "id": "ad1a4e74-25a4-5b96-b511-8081e5afdf8d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_java_manageengine_susp_child_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "appvlp.exe",
+        "bash.exe",
+        "bitsadmin.exe",
+        "calc.exe",
+        "certutil.exe",
+        "cscript.exe",
+        "curl.exe",
+        "forfiles.exe",
+        "mftrace.exe",
+        "mshta.exe",
+        "net.exe",
+        "net1.exe",
+        "notepad.exe",
+        "powershell.exe",
+        "pwsh.exe",
+        "query.exe",
+        "reg.exe",
+        "schtasks.exe",
+        "scrcons.exe",
+        "sh.exe",
+        "systeminfo.exe",
+        "whoami.exe",
+        "wmic.exe",
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\AppVLP.exe",
+        "*\\\\bash.exe",
+        "*\\\\bitsadmin.exe",
+        "*\\\\calc.exe",
+        "*\\\\certutil.exe",
+        "*\\\\cscript.exe",
+        "*\\\\curl.exe",
+        "*\\\\forfiles.exe",
+        "*\\\\mftrace.exe",
+        "*\\\\mshta.exe",
+        "*\\\\net.exe",
+        "*\\\\net1.exe",
+        "*\\\\notepad.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\query.exe",
+        "*\\\\reg.exe",
+        "*\\\\schtasks.exe",
+        "*\\\\scrcons.exe",
+        "*\\\\sh.exe",
+        "*\\\\systeminfo.exe",
+        "*\\\\whoami.exe",
+        "*\\\\wmic.exe",
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "java.exe"
+      ],
+      "raw_values": [
+        "*\\\\ManageEngine\\\\ServiceDesk\\\\*",
+        "*\\\\java.exe*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "stop"
+      ],
+      "raw_values": [
+        "* stop*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable:\"*\\\\ManageEngine\\\\ServiceDesk\\\\*\" and process.parent.executable:\"*\\\\java.exe*\") and (process.executable like~ (\"*\\\\AppVLP.exe\", \"*\\\\bash.exe\", \"*\\\\bitsadmin.exe\", \"*\\\\calc.exe\", \"*\\\\certutil.exe\", \"*\\\\cscript.exe\", \"*\\\\curl.exe\", \"*\\\\forfiles.exe\", \"*\\\\mftrace.exe\", \"*\\\\mshta.exe\", \"*\\\\net.exe\", \"*\\\\net1.exe\", \"*\\\\notepad.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\query.exe\", \"*\\\\reg.exe\", \"*\\\\schtasks.exe\", \"*\\\\scrcons.exe\", \"*\\\\sh.exe\", \"*\\\\systeminfo.exe\", \"*\\\\whoami.exe\", \"*\\\\wmic.exe\", \"*\\\\wscript.exe\"))) and (not ((process.executable like~ (\"*\\\\net.exe\", \"*\\\\net1.exe\")) and process.command_line:\"* stop*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_java_manageengine_susp_child_process.eql",
+  "metadata": {}
+}

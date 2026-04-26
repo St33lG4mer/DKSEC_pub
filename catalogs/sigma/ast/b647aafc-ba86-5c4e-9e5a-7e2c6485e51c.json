@@ -1,0 +1,42 @@
+{
+  "id": "b647aafc-ba86-5c4e-9e5a-7e2c6485e51c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_turla_comrat_may20",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "tracert -h 10 yahoo.com"
+      ],
+      "raw_values": [
+        "*tracert -h 10 yahoo.com*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "docs.live.net']), flags=set())",
+        "@aol.co.uk"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['net\\\\s+use\\\\s+https://docs.live.net']), flags=set())",
+        "*@aol.co.uk*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*tracert -h 10 yahoo.com*\", \"*.WSqmCons))|iex;*\", \"*Fr`omBa`se6`4Str`ing*\")) or (process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['net\\\\s+use\\\\s+https://docs.live.net']), flags=set())\" and process.command_line:\"*@aol.co.uk*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2014/TA/Turla/proc_creation_win_apt_turla_comrat_may20.eql",
+  "metadata": {}
+}

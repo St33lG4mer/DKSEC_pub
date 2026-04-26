@@ -1,0 +1,33 @@
+{
+  "id": "6217ab54-39ef-5eb2-beb2-a51ddac58b93",
+  "catalog": "sigma",
+  "name": "create_remote_thread_win_hktl_cobaltstrike",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.startaddress",
+      "raw_field": "winlog.event_data.StartAddress",
+      "operator": "like~",
+      "values": [
+        "0b80",
+        "0c7c",
+        "0c88"
+      ],
+      "raw_values": [
+        "*0B80",
+        "*0C7C",
+        "*0C88"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.StartAddress like~ (\"*0B80\", \"*0C7C\", \"*0C88\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/create_remote_thread/create_remote_thread_win_hktl_cobaltstrike.eql",
+  "metadata": {}
+}

@@ -1,0 +1,45 @@
+{
+  "id": "fa31812b-8aa4-5380-af6e-59f62be4fbe4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_print_remote_file_copy",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "print.exe"
+      ],
+      "raw_values": [
+        "*\\\\print.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "print",
+        ".exe",
+        "print.exe"
+      ],
+      "raw_values": [
+        "print*",
+        "*/D*",
+        "*.exe*",
+        "*print.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\print.exe\" and process.command_line:\"print*\" and (process.command_line:\"*/D*\" and process.command_line:\"*.exe*\")) and (not process.command_line:\"*print.exe*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_print_remote_file_copy.eql",
+  "metadata": {}
+}

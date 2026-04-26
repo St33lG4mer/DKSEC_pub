@@ -1,0 +1,167 @@
+{
+  "id": "e6377215-1569-5c5f-afcc-29ce9da1aa3d",
+  "catalog": "elastic",
+  "name": "Process Created with a Duplicated Token",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-21-",
+        "s-1-12-1-"
+      ],
+      "raw_values": [
+        "S-1-5-21-*",
+        "S-1-12-1-*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "powershell.exe",
+        "cmd.exe",
+        "rundll32.exe",
+        "notepad.exe",
+        "net.exe",
+        "ntdsutil.exe",
+        "tasklist.exe",
+        "reg.exe",
+        "certutil.exe",
+        "bitsadmin.exe",
+        "msbuild.exe",
+        "esentutl.exe"
+      ],
+      "raw_values": [
+        "powershell.exe",
+        "cmd.exe",
+        "rundll32.exe",
+        "notepad.exe",
+        "net.exe",
+        "ntdsutil.exe",
+        "tasklist.exe",
+        "reg.exe",
+        "certutil.exe",
+        "bitsadmin.exe",
+        "msbuild.exe",
+        "esentutl.exe",
+        "?:\\\\Program Files\\\\*"
+      ]
+    },
+    {
+      "field": "process.code_signature.status",
+      "raw_field": "process.code_signature.status",
+      "operator": ":",
+      "values": [
+        "trusted",
+        "errorexpired",
+        "errorcode_endpoint"
+      ],
+      "raw_values": [
+        "trusted",
+        "errorExpired",
+        "errorCode_endpoint*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "davclnt.dll,davsetcookie",
+        "program files",
+        "winethc.dll",
+        "edgehtml.dll",
+        "shell32.dll,shcreatelocalserverrundll"
+      ],
+      "raw_values": [
+        "*davclnt.dll,DavSetCookie*",
+        "*?:\\\\Program Files*",
+        "*\\\\Windows\\\\System32\\\\winethc.dll*",
+        "*\\\\Windows\\\\SYSTEM32\\\\EDGEHTML.dll*",
+        "*shell32.dll,SHCreateLocalServerRunDll*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe",
+        "msiexec.exe",
+        ".exe",
+        "wmiprvse.exe",
+        "sihost.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\svchost.exe",
+        "?:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "?:\\\\Windows\\\\twain_32\\\\*.exe",
+        "wmiprvse.exe",
+        "?:\\\\Windows\\\\System32\\\\sihost.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": ":",
+      "values": [
+        ":\\\\windows\\\\explorer.exe",
+        ":\\\\windows\\\\system32\\\\wsmprovhost.exe",
+        ":\\\\windows\\\\system32\\\\runtimebroker.exe",
+        ":\\\\windows\\\\system32\\\\sethc.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\explorer.exe",
+        "?:\\\\Windows\\\\System32\\\\wsmprovhost.exe",
+        "?:\\\\Windows\\\\System32\\\\RuntimeBroker.exe",
+        "?:\\\\Windows\\\\System32\\\\sethc.exe"
+      ]
+    }
+  ],
+  "raw_query": "/* This rule is only compatible with Elastic Endpoint 8.4+ */\n\nprocess where host.os.type == \"windows\" and event.action == \"start\" and\n\n user.id : (\"S-1-5-21-*\", \"S-1-12-1-*\") and\n\n (process.Ext.effective_parent.executable regex~ \"\"\"[C-Z]:\\\\Windows\\\\(System32|SysWOW64)\\\\[a-zA-Z0-9\\-\\_\\.]+\\.exe\"\"\" or\n  process.Ext.effective_parent.executable : \"?:\\\\Windows\\\\explorer.exe\") and\n\n (\n  process.name : (\"powershell.exe\", \"cmd.exe\", \"rundll32.exe\", \"notepad.exe\", \"net.exe\", \"ntdsutil.exe\",\n                  \"tasklist.exe\", \"reg.exe\", \"certutil.exe\", \"bitsadmin.exe\", \"msbuild.exe\", \"esentutl.exe\") or\n\n  ((process.Ext.relative_file_creation_time <= 900 or process.Ext.relative_file_name_modify_time <= 900) and\n   not process.code_signature.status : (\"trusted\", \"errorExpired\", \"errorCode_endpoint*\") and\n   not process.executable : (\"?:\\\\Program Files\\\\*\", \"?:\\\\Program Files (x86)\\\\*\"))\n ) and\n not (process.name : \"rundll32.exe\" and\n      process.command_line : (\"*davclnt.dll,DavSetCookie*\", \"*?:\\\\Program Files*\",\n                              \"*\\\\Windows\\\\System32\\\\winethc.dll*\", \"*\\\\Windows\\\\SYSTEM32\\\\EDGEHTML.dll*\",\n                              \"*shell32.dll,SHCreateLocalServerRunDll*\")) and\n not startswith~(process.Ext.effective_parent.name, process.parent.name) and\n not (process.name : \"powershell.exe\" and process.parent.name : \"wmiprvse.exe\" and process.Ext.effective_parent.executable : \"?:\\\\Windows\\\\System32\\\\wsmprovhost.exe\") and\n not (process.Ext.effective_parent.executable : \"?:\\\\Windows\\\\System32\\\\RuntimeBroker.exe\" and process.parent.executable : \"?:\\\\Windows\\\\System32\\\\sihost.exe\") and\n not (process.Ext.effective_parent.executable : \"?:\\\\Windows\\\\System32\\\\sethc.exe\" and process.parent.executable : \"?:\\\\Windows\\\\System32\\\\svchost.exe\") and\n not (process.Ext.effective_parent.executable : \"?:\\\\Windows\\\\explorer.exe\" and\n      process.parent.executable : (\"?:\\\\Windows\\\\System32\\\\svchost.exe\", \"?:\\\\Windows\\\\System32\\\\msiexec.exe\", \"?:\\\\Windows\\\\twain_32\\\\*.exe\"))\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_create_process_with_token_unpriv.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

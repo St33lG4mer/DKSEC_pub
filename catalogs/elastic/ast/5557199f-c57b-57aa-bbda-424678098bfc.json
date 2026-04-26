@@ -1,0 +1,42 @@
+{
+  "id": "5557199f-c57b-57aa-bbda-424678098bfc",
+  "catalog": "elastic",
+  "name": "Suspicious rc.local Error Message",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "message",
+      "raw_field": "message",
+      "operator": ":",
+      "values": [
+        "connection refused",
+        "no such file or directory",
+        "command not found"
+      ],
+      "raw_values": [
+        "Connection refused",
+        "No such file or directory",
+        "command not found"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:linux and data_stream.dataset:system.syslog and process.name:rc.local and\nmessage:(\"Connection refused\" or \"No such file or directory\" or \"command not found\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_rc_local_error_via_syslog.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

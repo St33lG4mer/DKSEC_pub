@@ -1,0 +1,112 @@
+{
+  "id": "1ab7b380-0872-5f32-9b35-c43b953ca2c3",
+  "catalog": "elastic",
+  "name": "User Added to Privileged Group in Active Directory",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "iam"
+  ],
+  "conditions": [
+    {
+      "field": "group.name",
+      "raw_field": "group.name",
+      "operator": ":",
+      "values": [
+        "admin",
+        "domain admins",
+        "enterprise admins",
+        "backup admins",
+        "schema admins",
+        "dnsadmins",
+        "exchange organization administrators",
+        "print operators",
+        "server operators",
+        "account operators"
+      ],
+      "raw_values": [
+        "Admin*",
+        "Domain Admins",
+        "Enterprise Admins",
+        "Backup Admins",
+        "Schema Admins",
+        "DnsAdmins",
+        "Exchange Organization Administrators",
+        "Print Operators",
+        "Server Operators",
+        "Account Operators"
+      ]
+    },
+    {
+      "field": "group.id",
+      "raw_field": "group.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-21-*-544",
+        "s-1-5-21-*-512",
+        "s-1-5-21-*-519",
+        "s-1-5-21-*-551",
+        "s-1-5-21-*-518",
+        "s-1-5-21-*-1101",
+        "s-1-5-21-*-1102",
+        "s-1-5-21-*-550",
+        "s-1-5-21-*-549",
+        "s-1-5-21-*-548",
+        "s-1-5-21"
+      ],
+      "raw_values": [
+        "S-1-5-21-*-544",
+        "S-1-5-21-*-512",
+        "S-1-5-21-*-519",
+        "S-1-5-21-*-551",
+        "S-1-5-21-*-518",
+        "S-1-5-21-*-1101",
+        "S-1-5-21-*-1102",
+        "S-1-5-21-*-550",
+        "S-1-5-21-*-549",
+        "S-1-5-21-*-548",
+        "S-1-5-21*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "added-member-to-group"
+      ],
+      "raw_values": [
+        "added-member-to-group"
+      ]
+    }
+  ],
+  "raw_query": "iam where host.os.type == \"windows\" and event.action == \"added-member-to-group\" and\n(\n    group.id : \"S-1-5-21*\" and\n    (\n        group.name : (\n            \"Admin*\",\n            \"Domain Admins\",\n            \"Enterprise Admins\",\n            \"Backup Admins\",\n            \"Schema Admins\",\n            \"DnsAdmins\",\n            \"Exchange Organization Administrators\",\n            \"Print Operators\",\n            \"Server Operators\",\n            \"Account Operators\"\n        )\n    ) or\n    (\n        group.id : (\n            \"S-1-5-21-*-544\",\n            \"S-1-5-21-*-512\",\n            \"S-1-5-21-*-519\",\n            \"S-1-5-21-*-551\",\n            \"S-1-5-21-*-518\",\n            \"S-1-5-21-*-1101\",\n            \"S-1-5-21-*-1102\",\n            \"S-1-5-21-*-550\",\n            \"S-1-5-21-*-549\",\n            \"S-1-5-21-*-548\"\n        )\n    )\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_user_account_added_to_privileged_group_ad.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Active Directory",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

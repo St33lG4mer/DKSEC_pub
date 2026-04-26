@@ -1,0 +1,146 @@
+{
+  "id": "6f2827c4-cfa7-52c1-9c67-a65577b17982",
+  "catalog": "elastic",
+  "name": "Process Capability Set via setcap Utility",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmake",
+        "zpa-connector"
+      ],
+      "raw_values": [
+        "/var/lib/dpkg/*",
+        "/var/lib/docker/*",
+        "/tmp/newroot/*",
+        "/var/tmp/newroot/*",
+        "/usr/bin/cmake",
+        "/opt/zscaler/bin/zpa-connector"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "jem",
+        "vzctl"
+      ],
+      "raw_values": [
+        "jem",
+        "vzctl"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "in",
+      "values": [
+        "/opt/dynatrace/oneagent",
+        "/opt/sophos-spl/plugins/av/sbin"
+      ],
+      "raw_values": [
+        "/opt/dynatrace/oneagent",
+        "/opt/sophos-spl/plugins/av/sbin"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "in",
+      "values": [
+        "entrypoint.sh telegraf",
+        "docker-entrypoint.sh server"
+      ],
+      "raw_values": [
+        "/bin/bash /entrypoint.sh telegraf",
+        "/bin/sh /usr/local/bin/docker-entrypoint.sh server"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "setcap"
+      ],
+      "raw_values": [
+        "setcap"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "like",
+      "values": [
+        "/var/lib/dpkg/info/"
+      ],
+      "raw_values": [
+        "/var/lib/dpkg/info/*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\") and\nprocess.name == \"setcap\" and not (\n  process.parent.executable == null or\n  process.parent.executable like (\n    \"/var/lib/dpkg/*\", \"/var/lib/docker/*\", \"/tmp/newroot/*\", \"/var/tmp/newroot/*\", \"/usr/bin/cmake\",\n    \"/opt/zscaler/bin/zpa-connector\"\n  ) or\n  process.parent.name in (\"jem\", \"vzctl\") or\n  process.parent.args like \"/var/lib/dpkg/info/*\" or\n  ?process.working_directory in (\"/opt/dynatrace/oneagent\", \"/opt/sophos-spl/plugins/av/sbin\") or\n  process.parent.command_line in (\"/bin/bash /entrypoint.sh telegraf\", \"/bin/sh /usr/local/bin/docker-entrypoint.sh server\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/persistence_process_capability_set_via_setcap.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

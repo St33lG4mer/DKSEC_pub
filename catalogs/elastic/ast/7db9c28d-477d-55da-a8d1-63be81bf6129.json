@@ -1,0 +1,43 @@
+{
+  "id": "7db9c28d-477d-55da-a8d1-63be81bf6129",
+  "catalog": "elastic",
+  "name": "Potential Widespread Malware Infection Across Multiple Hosts",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "in",
+      "values": [
+        "malicious_file",
+        "memory_signature",
+        "shellcode_thread"
+      ],
+      "raw_values": [
+        "malicious_file",
+        "memory_signature",
+        "shellcode_thread"
+      ]
+    }
+  ],
+  "raw_query": "from logs-endpoint.alerts-*\n| where event.code in (\"malicious_file\", \"memory_signature\", \"shellcode_thread\") and rule.name is not null\n| keep host.id, rule.name, event.code\n| stats Esql.host_id_count_distinct = count_distinct(host.id) by rule.name, event.code\n| where Esql.host_id_count_distinct >= 3\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_potential_widespread_malware_infection.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "Data Source: Elastic Defend",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Rule Type: Higher-Order Rule",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

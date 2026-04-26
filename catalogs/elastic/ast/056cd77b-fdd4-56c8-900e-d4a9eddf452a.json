@@ -1,0 +1,81 @@
+{
+  "id": "056cd77b-fdd4-56c8-900e-d4a9eddf452a",
+  "catalog": "elastic",
+  "name": "Entra ID Protection - Risk Detection - User Risk",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "user risk detection",
+        "risky user"
+      ],
+      "raw_values": [
+        "User Risk Detection",
+        "Risky user"
+      ]
+    },
+    {
+      "field": "azure.identityprotection.properties.risk_state",
+      "raw_field": "azure.identityprotection.properties.risk_state",
+      "operator": ":",
+      "values": [
+        "remediated",
+        "dismissed",
+        "confirmedsafe"
+      ],
+      "raw_values": [
+        "remediated",
+        "dismissed",
+        "confirmedSafe"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.identity_protection"
+      ],
+      "raw_values": [
+        "azure.identity_protection"
+      ]
+    },
+    {
+      "field": "azure.identityprotection.properties.activity",
+      "raw_field": "azure.identityprotection.properties.activity",
+      "operator": ":",
+      "values": [
+        "user"
+      ],
+      "raw_values": [
+        "user"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"azure.identity_protection\" and\n    event.action: (\"User Risk Detection\" or \"Risky user\") and\n    azure.identityprotection.properties.activity: \"user\" and\n    not azure.identityprotection.properties.risk_state: (\n        \"remediated\" or \"dismissed\" or \"confirmedSafe\"\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_protection_user_risk_detected.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Entra ID",
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Use Case: Risk Detection",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

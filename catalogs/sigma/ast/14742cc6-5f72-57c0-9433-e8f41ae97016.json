@@ -1,0 +1,70 @@
+{
+  "id": "14742cc6-5f72-57c0-9433-e8f41ae97016",
+  "catalog": "sigma",
+  "name": "registry_set_telemetry_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".bin",
+        ".cmd",
+        ".dat",
+        ".dll",
+        ".exe",
+        ".hta",
+        ".jar",
+        ".js",
+        ".msi",
+        ".ps",
+        ".sh",
+        ".vb",
+        "\\\\system32\\\\compattelrunner.exe",
+        "\\\\system32\\\\devicecensus.exe"
+      ],
+      "raw_values": [
+        "*.bat*",
+        "*.bin*",
+        "*.cmd*",
+        "*.dat*",
+        "*.dll*",
+        "*.exe*",
+        "*.hta*",
+        "*.jar*",
+        "*.js*",
+        "*.msi*",
+        "*.ps*",
+        "*.sh*",
+        "*.vb*",
+        "*\\\\system32\\\\CompatTelRunner.exe*",
+        "*\\\\system32\\\\DeviceCensus.exe*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\telemetrycontroller\\\\",
+        "\\\\command"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\TelemetryController\\\\*",
+        "*\\\\Command"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\TelemetryController\\\\*\" and registry.path:\"*\\\\Command\" and (winlog.event_data.Details like~ (\"*.bat*\", \"*.bin*\", \"*.cmd*\", \"*.dat*\", \"*.dll*\", \"*.exe*\", \"*.hta*\", \"*.jar*\", \"*.js*\", \"*.msi*\", \"*.ps*\", \"*.sh*\", \"*.vb*\"))) and (not (winlog.event_data.Details like~ (\"*\\\\system32\\\\CompatTelRunner.exe*\", \"*\\\\system32\\\\DeviceCensus.exe*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_telemetry_persistence.eql",
+  "metadata": {}
+}

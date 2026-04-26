@@ -1,0 +1,65 @@
+{
+  "id": "38875bae-e883-5ca5-9007-2ce7f017b031",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_script_exec_from_temp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe",
+        "mshta.exe",
+        "wscript.exe",
+        "cscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe",
+        "*\\\\mshta.exe",
+        "*\\\\wscript.exe",
+        "*\\\\cscript.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "temp",
+        "temporary internet",
+        "%temp%",
+        "%tmp%",
+        "out-file",
+        "convertto-json",
+        "-windowstyle hidden -verb runas"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\Temp*",
+        "*\\\\Temporary Internet*",
+        "*\\\\AppData\\\\Local\\\\Temp*",
+        "*\\\\AppData\\\\Roaming\\\\Temp*",
+        "*%TEMP%*",
+        "*%TMP%*",
+        "*%LocalAppData%\\\\Temp*",
+        "* >*",
+        "*Out-File*",
+        "*ConvertTo-Json*",
+        "*-WindowStyle hidden -Verb runAs*",
+        "*\\\\Windows\\\\system32\\\\config\\\\systemprofile\\\\AppData\\\\Local\\\\Temp\\\\Amazon\\\\EC2-Windows\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\", \"*\\\\mshta.exe\", \"*\\\\wscript.exe\", \"*\\\\cscript.exe\")) and (process.command_line like~ (\"*\\\\Windows\\\\Temp*\", \"*\\\\Temporary Internet*\", \"*\\\\AppData\\\\Local\\\\Temp*\", \"*\\\\AppData\\\\Roaming\\\\Temp*\", \"*%TEMP%*\", \"*%TMP%*\", \"*%LocalAppData%\\\\Temp*\"))) and (not (process.command_line like~ (\"* >*\", \"*Out-File*\", \"*ConvertTo-Json*\", \"*-WindowStyle hidden -Verb runAs*\", \"*\\\\Windows\\\\system32\\\\config\\\\systemprofile\\\\AppData\\\\Local\\\\Temp\\\\Amazon\\\\EC2-Windows\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_script_exec_from_temp.eql",
+  "metadata": {}
+}

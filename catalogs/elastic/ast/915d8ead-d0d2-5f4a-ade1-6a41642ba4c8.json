@@ -1,0 +1,102 @@
+{
+  "id": "915d8ead-d0d2-5f4a-ade1-6a41642ba4c8",
+  "catalog": "elastic",
+  "name": "Script Execution via Microsoft HTML Application",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe",
+        "mshta.exe"
+      ],
+      "raw_values": [
+        "rundll32.exe",
+        "mshta.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "script*eval(",
+        "script*getobject",
+        ".regread(",
+        "wscript.shell",
+        ".run(",
+        ".hta",
+        ".htm",
+        "-embedding",
+        "rar$",
+        "temp?_",
+        "bnz."
+      ],
+      "raw_values": [
+        "*script*eval(*",
+        "*script*GetObject*",
+        "*.regread(*",
+        "*WScript.Shell*",
+        "*.run(*",
+        "*.hta*",
+        "*.htm*",
+        "-Embedding",
+        "?:\\\\Users\\\\*\\\\Temp\\\\7z*",
+        "?:\\\\Users\\\\*\\\\Temp\\\\Rar$*",
+        "?:\\\\Users\\\\*\\\\Temp\\\\Temp?_*",
+        "?:\\\\Users\\\\*\\\\Temp\\\\BNZ.*",
+        "*\\\\Users\\\\*\\\\Downloads\\\\*.hta*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n process.name : (\"rundll32.exe\", \"mshta.exe\") and\n  (\n     (process.command_line :\n        (\n        \"*script*eval(*\",\n         \"*script*GetObject*\",\n         \"*.regread(*\",\n         \"*WScript.Shell*\",\n         \"*.run(*\",\n         \"*).Exec()*\",\n         \"*mshta*http*\",\n         \"*mshtml*RunHTMLApplication*\",\n         \"*mshtml*,#135*\",\n         \"*StrReverse*\",\n         \"*.RegWrite*\",\n         /* Issue #379 */\n         \"*window.close(*\",\n         \"* Chr(*\"\n         )\n     and not ?process.parent.executable :\n                  (\"?:\\\\Program Files (x86)\\\\Citrix\\\\System32\\\\wfshell.exe\",\n                   \"?:\\\\Program Files (x86)\\\\Microsoft Office\\\\Office*\\\\MSACCESS.EXE\",\n                   \"?:\\\\Program Files\\\\Quokka.Works GTInstaller\\\\GTInstaller.exe\")\n     ) or\n\n    (process.name : \"mshta.exe\" and\n     not process.command_line : (\"*.hta*\", \"*.htm*\", \"-Embedding\") and ?process.args_count >=2) or\n\n     /* Execution of HTA file downloaded from the internet */\n     (process.name : \"mshta.exe\" and process.command_line : \"*\\\\Users\\\\*\\\\Downloads\\\\*.hta*\") or\n\n     /* Execution of HTA file from archive */\n     (process.name : \"mshta.exe\" and\n      process.args : (\"?:\\\\Users\\\\*\\\\Temp\\\\7z*\", \"?:\\\\Users\\\\*\\\\Temp\\\\Rar$*\", \"?:\\\\Users\\\\*\\\\Temp\\\\Temp?_*\", \"?:\\\\Users\\\\*\\\\Temp\\\\BNZ.*\"))\n   )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_script_via_html_app.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Elastic Defend",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame"
+    ]
+  }
+}

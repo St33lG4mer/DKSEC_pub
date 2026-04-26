@@ -1,0 +1,42 @@
+{
+  "id": "7222e841-09cd-5f75-b20c-88968112cb9a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sysinternals_sysmon_config_update",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "sysmon64.exe",
+        "sysmon.exe"
+      ],
+      "raw_values": [
+        "*\\\\Sysmon64.exe",
+        "*\\\\Sysmon.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "system activity monitor"
+      ],
+      "raw_values": [
+        "System activity monitor"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\Sysmon64.exe\", \"*\\\\Sysmon.exe\")) or process.pe.description:\"System activity monitor\") and process.command_line like~ (\"*-c*\", \"*/c*\", \"*–c*\", \"*—c*\", \"*―c*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sysinternals_sysmon_config_update.eql",
+  "metadata": {}
+}

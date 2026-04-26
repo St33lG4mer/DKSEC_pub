@@ -1,0 +1,31 @@
+{
+  "id": "27aa8daa-8149-566c-8209-2e2c850c9337",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_conti",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "vssadmin list shadows",
+        "log.txt"
+      ],
+      "raw_values": [
+        "*vssadmin list shadows*",
+        "*log.txt*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*vssadmin list shadows*\" and process.command_line:\"*log.txt*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Conti/proc_creation_win_malware_conti.eql",
+  "metadata": {}
+}

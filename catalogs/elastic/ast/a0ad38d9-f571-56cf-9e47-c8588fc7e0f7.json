@@ -1,0 +1,63 @@
+{
+  "id": "a0ad38d9-f571-56cf-9e47-c8588fc7e0f7",
+  "catalog": "elastic",
+  "name": "Suspicious Kworker UID Elevation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "session_id_change"
+      ],
+      "raw_values": [
+        "session_id_change"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "kworker"
+      ],
+      "raw_values": [
+        "kworker*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.action == \"session_id_change\" and process.name : \"kworker*\" and\nuser.id == \"0\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/privilege_escalation_kworker_uid_elevation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

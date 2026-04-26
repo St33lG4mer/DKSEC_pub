@@ -1,0 +1,67 @@
+{
+  "id": "6ab250e4-cf26-5eff-94a7-12b2318bdc8a",
+  "catalog": "sigma",
+  "name": "registry_set_powershell_crypto_namespace",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "powershell",
+        "pwsh",
+        ".aescryptoserviceprovider",
+        ".descryptoserviceprovider",
+        ".dsacryptoserviceprovider",
+        ".rc2cryptoserviceprovider",
+        ".rijndael",
+        ".rsacryptoserviceprovider",
+        ".tripledescryptoserviceprovider"
+      ],
+      "raw_values": [
+        "*powershell*",
+        "*pwsh*",
+        "*.AesCryptoServiceProvider*",
+        "*.DESCryptoServiceProvider*",
+        "*.DSACryptoServiceProvider*",
+        "*.RC2CryptoServiceProvider*",
+        "*.Rijndael*",
+        "*.RSACryptoServiceProvider*",
+        "*.TripleDESCryptoServiceProvider*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\shell\\\\open\\\\command"
+      ],
+      "raw_values": [
+        "*\\\\Shell\\\\Open\\\\Command*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "system.security.cryptography."
+      ],
+      "raw_values": [
+        "*System.Security.Cryptography.*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Shell\\\\Open\\\\Command*\" and (winlog.event_data.Details like~ (\"*powershell*\", \"*pwsh*\")) and winlog.event_data.Details:\"*System.Security.Cryptography.*\" and (winlog.event_data.Details like~ (\"*.AesCryptoServiceProvider*\", \"*.DESCryptoServiceProvider*\", \"*.DSACryptoServiceProvider*\", \"*.RC2CryptoServiceProvider*\", \"*.Rijndael*\", \"*.RSACryptoServiceProvider*\", \"*.TripleDESCryptoServiceProvider*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/registry/registry_set/registry_set_powershell_crypto_namespace.eql",
+  "metadata": {}
+}

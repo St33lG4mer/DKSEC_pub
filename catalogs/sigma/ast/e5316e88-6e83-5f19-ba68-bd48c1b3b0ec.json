@@ -1,0 +1,64 @@
+{
+  "id": "e5316e88-6e83-5f19-ba68-bd48c1b3b0ec",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_advanced_ip_scanner",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "advanced_ip_scanner"
+      ],
+      "raw_values": [
+        "*\\\\advanced_ip_scanner*"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "advanced_ip_scanner"
+      ],
+      "raw_values": [
+        "*advanced_ip_scanner*"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "advanced ip scanner"
+      ],
+      "raw_values": [
+        "*Advanced IP Scanner*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "portable",
+        "lng"
+      ],
+      "raw_values": [
+        "*/portable*",
+        "*/lng*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\advanced_ip_scanner*\" or process.pe.original_file_name:\"*advanced_ip_scanner*\" or process.pe.description:\"*Advanced IP Scanner*\") or (process.command_line:\"*/portable*\" and process.command_line:\"*/lng*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_advanced_ip_scanner.eql",
+  "metadata": {}
+}

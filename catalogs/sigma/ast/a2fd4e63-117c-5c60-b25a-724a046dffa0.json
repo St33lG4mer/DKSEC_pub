@@ -1,0 +1,29 @@
+{
+  "id": "a2fd4e63-117c-5c60-b25a-724a046dffa0",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_pcwrun",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "pcwrun.exe"
+      ],
+      "raw_values": [
+        "*\\\\pcwrun.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\pcwrun.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_pcwrun.eql",
+  "metadata": {}
+}

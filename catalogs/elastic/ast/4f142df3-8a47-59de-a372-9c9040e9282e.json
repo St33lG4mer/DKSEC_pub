@@ -1,0 +1,163 @@
+{
+  "id": "4f142df3-8a47-59de-a372-9c9040e9282e",
+  "catalog": "elastic",
+  "name": "Startup or Run Key Registry Modification",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.hive",
+      "raw_field": "registry.hive",
+      "operator": ":",
+      "values": [
+        "hkey_users",
+        "hklm"
+      ],
+      "raw_values": [
+        "HKEY_USERS",
+        "HKLM"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\",
+        "hklm\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\runonce\\\\",
+        "hklm\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\runonceex\\\\",
+        "hklm\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run\\\\",
+        "hklm\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\shell\\\\",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\run\\\\",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\runonce\\\\",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\runonceex\\\\",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run\\\\",
+        "hkey_users\\\\*\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\winlogon\\\\shell\\\\"
+      ],
+      "raw_values": [
+        "HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*",
+        "HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\*",
+        "HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnceEx\\\\*",
+        "HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*",
+        "HKLM\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell\\\\*",
+        "HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*",
+        "HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\*",
+        "HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnceEx\\\\*",
+        "HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*",
+        "HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell\\\\*"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        ":\\\\program files\\\\",
+        "ctfmon.exe /n"
+      ],
+      "raw_values": [
+        "*:\\\\Program Files\\\\*",
+        "ctfmon.exe /n"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe",
+        "mup",
+        "reg.exe",
+        "changepk.exe",
+        "netsh.exe",
+        "setupplatform.exe",
+        "setuphost.exe",
+        "ciscocollabhost.exe",
+        "ccleaner64.exe",
+        "csrss.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "D:\\\\*",
+        "\\\\Device\\\\Mup*",
+        "C:\\\\Windows\\\\SysWOW64\\\\reg.exe",
+        "C:\\\\Windows\\\\System32\\\\changepk.exe",
+        "C:\\\\Windows\\\\System32\\\\netsh.exe",
+        "C:\\\\$WINDOWS.~BT\\\\Sources\\\\SetupPlatform.exe",
+        "C:\\\\$WINDOWS.~BT\\\\Sources\\\\SetupHost.exe",
+        "C:\\\\Program Files\\\\Cisco Spark\\\\CiscoCollabHost.exe",
+        "C:\\\\Sistemas\\\\Programas MP\\\\CCleaner\\\\CCleaner64.exe",
+        "csrss.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "application restart #"
+      ],
+      "raw_values": [
+        "Application Restart #*"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and \n registry.data.strings != null and registry.hive : (\"HKEY_USERS\", \"HKLM\") and\n registry.path : (\n     /* Machine Hive */\n     \"HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*\",\n     \"HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\*\",\n     \"HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnceEx\\\\*\",\n     \"HKLM\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*\",\n     \"HKLM\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell\\\\*\",\n     /* Users Hive */\n     \"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run\\\\*\",\n     \"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnce\\\\*\",\n     \"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\RunOnceEx\\\\*\",\n     \"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run\\\\*\",\n     \"HKEY_USERS\\\\*\\\\Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\\\\Shell\\\\*\"\n     ) and\n  /* add common legitimate changes without being too restrictive as this is one of the most abused AESPs */\n  not registry.data.strings : \"ctfmon.exe /n\" and\n  not (registry.value : \"Application Restart #*\" and process.name : \"csrss.exe\") and\n  not user.id : (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\") and\n  not registry.data.strings : (\"*:\\\\Program Files\\\\*\",\n                               \"*:\\\\Program Files (x86)\\\\*\",\n                               \"*:\\\\Users\\\\*\\\\AppData\\\\Local\\\\*\",\n                               \"* --processStart *\",\n                               \"* --process-start-args *\",\n                               \"ms-teamsupdate.exe -UninstallT20\",\n                               \" \",\n                               \"grpconv -o\", \"* /burn.runonce*\", \"* /startup\",\n                               \"?:\\\\WINDOWS\\\\SysWOW64\\\\Macromed\\\\Flash\\\\FlashUtil32_*_Plugin.exe -update plugin\") and\n  not process.executable : (\"?:\\\\Windows\\\\System32\\\\msiexec.exe\",\n                            \"?:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\",\n                            \"D:\\\\*\",\n                            \"\\\\Device\\\\Mup*\",\n                            \"C:\\\\Windows\\\\SysWOW64\\\\reg.exe\",\n                            \"C:\\\\Windows\\\\System32\\\\changepk.exe\",\n                            \"C:\\\\Windows\\\\System32\\\\netsh.exe\",\n                            \"C:\\\\$WINDOWS.~BT\\\\Sources\\\\SetupPlatform.exe\",\n                            \"C:\\\\$WINDOWS.~BT\\\\Sources\\\\SetupHost.exe\",\n                            \"C:\\\\Program Files\\\\Cisco Spark\\\\CiscoCollabHost.exe\",\n                            \"C:\\\\Sistemas\\\\Programas MP\\\\CCleaner\\\\CCleaner64.exe\",\n                            \"C:\\\\Program Files (x86)\\\\FastTrack Software\\\\Admin By Request\\\\AdminByRequest.exe\",\n                            \"C:\\\\Program Files (x86)\\\\Exclaimer Ltd\\\\Cloud Signature Update Agent\\\\Exclaimer.CloudSignatureAgent.exe\",\n                            \"C:\\\\ProgramData\\\\Lenovo\\\\Vantage\\\\AddinData\\\\LenovoBatteryGaugeAddin\\\\x64\\\\QSHelper.exe\",\n                            \"C:\\\\Program Files (x86)\\\\Microsoft\\\\Edge\\\\Application\\\\*\\\\Installer\\\\setup.exe\",\n                            \"C:\\\\ProgramData\\\\bomgar-scc-*\\\\bomgar-scc.exe\",\n                            \"C:\\\\Windows\\\\SysWOW64\\\\Macromed\\\\Flash\\\\FlashUtil*_pepper.exe\",\n                            \"C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\3\\\\*.EXE\",\n                            \"C:\\\\Program Files (x86)\\\\Common Files\\\\Adobe\\\\ARM\\\\*\\\\AdobeARM.exe\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_run_key_and_startup_broad.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "id": "7cd0c298-80a0-5fb8-a098-d12e5c286364",
+  "catalog": "sigma",
+  "name": "win_security_service_install_remote_access_software",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "service.name",
+      "raw_field": "service.name",
+      "operator": "like~",
+      "values": [
+        "ammyyadmin",
+        "anydesk",
+        "atera",
+        "basupportexpresssrvcupdater",
+        "basupportexpressstandaloneservice",
+        "chromoting",
+        "gotoassist",
+        "gotomypc",
+        "jumpcloud",
+        "lmiguardiansvc",
+        "logmein",
+        "monblanking",
+        "parsec",
+        "rmanservice",
+        "rpcperformanceservice",
+        "rpcservice",
+        "splashtopremoteservice",
+        "ssuservice",
+        "teamviewer",
+        "tightvnc",
+        "vncserver",
+        "zoho"
+      ],
+      "raw_values": [
+        "*AmmyyAdmin*",
+        "*AnyDesk*",
+        "*Atera*",
+        "*BASupportExpressSrvcUpdater*",
+        "*BASupportExpressStandaloneService*",
+        "*chromoting*",
+        "*GoToAssist*",
+        "*GoToMyPC*",
+        "*jumpcloud*",
+        "*LMIGuardianSvc*",
+        "*LogMeIn*",
+        "*monblanking*",
+        "*Parsec*",
+        "*RManService*",
+        "*RPCPerformanceService*",
+        "*RPCService*",
+        "*SplashtopRemoteService*",
+        "*SSUService*",
+        "*TeamViewer*",
+        "*TightVNC*",
+        "*vncserver*",
+        "*Zoho*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (service.name like~ (\"*AmmyyAdmin*\", \"*AnyDesk*\", \"*Atera*\", \"*BASupportExpressSrvcUpdater*\", \"*BASupportExpressStandaloneService*\", \"*chromoting*\", \"*GoToAssist*\", \"*GoToMyPC*\", \"*jumpcloud*\", \"*LMIGuardianSvc*\", \"*LogMeIn*\", \"*monblanking*\", \"*Parsec*\", \"*RManService*\", \"*RPCPerformanceService*\", \"*RPCService*\", \"*SplashtopRemoteService*\", \"*SSUService*\", \"*TeamViewer*\", \"*TightVNC*\", \"*vncserver*\", \"*Zoho*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_service_install_remote_access_software.eql",
+  "metadata": {}
+}

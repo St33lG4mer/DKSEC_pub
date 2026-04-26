@@ -1,0 +1,31 @@
+{
+  "id": "2e224219-6c9d-5f0e-b308-772bf0ec5888",
+  "catalog": "sigma",
+  "name": "registry_set_persistence_chm",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\htmlhelp author\\\\location",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\htmlhelp author\\\\location"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\HtmlHelp Author\\\\Location*",
+        "*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\HtmlHelp Author\\\\Location*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path like~ (\"*\\\\Software\\\\Microsoft\\\\HtmlHelp Author\\\\Location*\", \"*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\HtmlHelp Author\\\\Location*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_persistence_chm.eql",
+  "metadata": {}
+}

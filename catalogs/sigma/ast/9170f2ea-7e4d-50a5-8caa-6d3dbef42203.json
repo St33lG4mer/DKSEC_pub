@@ -1,0 +1,53 @@
+{
+  "id": "9170f2ea-7e4d-50a5-8caa-6d3dbef42203",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_plink",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "plink"
+      ],
+      "raw_values": [
+        "Plink"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-l forward"
+      ],
+      "raw_values": [
+        "* -l forward*",
+        "* -P *",
+        "* -R *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "plink.exe"
+      ],
+      "raw_values": [
+        "*\\\\plink.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"Plink\" or (process.command_line:\"* -l forward*\" and process.command_line:\"* -P *\" and process.command_line:\"* -R *\")) and (not process.executable:\"*\\\\plink.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_plink.eql",
+  "metadata": {}
+}

@@ -1,0 +1,85 @@
+{
+  "id": "9a36e5ef-ce63-567a-a84f-b248cc6feafb",
+  "catalog": "sigma",
+  "name": "registry_set_sip_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\cryptography\\\\providers\\\\",
+        "\\\\software\\\\microsoft\\\\cryptography\\\\oid\\\\encodingtype",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\cryptography\\\\providers\\\\",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\cryptography\\\\oid\\\\encodingtype",
+        "\\\\dll",
+        "\\\\$dll"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\Providers\\\\*",
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType*",
+        "*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\Providers\\\\*",
+        "*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType*",
+        "*\\\\Dll*",
+        "*\\\\$DLL*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "wintrust.dll",
+        "mso.dll"
+      ],
+      "raw_values": [
+        "WINTRUST.DLL",
+        "mso.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "poqexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\poqexec.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\cryptsipdll"
+      ],
+      "raw_values": [
+        "*\\\\CryptSIPDll*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "c:\\\\windows\\\\system32\\\\psfsip.dll"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\PsfSip.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where ((registry.path like~ (\"*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\Providers\\\\*\", \"*\\\\SOFTWARE\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType*\", \"*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\Providers\\\\*\", \"*\\\\SOFTWARE\\\\WOW6432Node\\\\Microsoft\\\\Cryptography\\\\OID\\\\EncodingType*\")) and (registry.path like~ (\"*\\\\Dll*\", \"*\\\\$DLL*\"))) and (not ((winlog.event_data.Details like~ (\"WINTRUST.DLL\", \"mso.dll\")) or (process.executable:\"C:\\\\Windows\\\\System32\\\\poqexec.exe\" and registry.path:\"*\\\\CryptSIPDll*\" and winlog.event_data.Details:\"C:\\\\Windows\\\\System32\\\\PsfSip.dll\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_sip_persistence.eql",
+  "metadata": {}
+}

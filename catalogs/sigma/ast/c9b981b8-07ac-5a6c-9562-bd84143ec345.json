@@ -1,0 +1,40 @@
+{
+  "id": "c9b981b8-07ac-5a6c-9562-bd84143ec345",
+  "catalog": "sigma",
+  "name": "proc_creation_win_regsvr32_http_ip_pattern",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "*\\\\regsvr32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "regsvr32.exe"
+      ],
+      "raw_values": [
+        "REGSVR32.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\regsvr32.exe\" or process.pe.original_file_name:\"REGSVR32.EXE\") and (process.command_line like~ (\"* /i:http://1*\", \"* /i:http://2*\", \"* /i:http://3*\", \"* /i:http://4*\", \"* /i:http://5*\", \"* /i:http://6*\", \"* /i:http://7*\", \"* /i:http://8*\", \"* /i:http://9*\", \"* /i:https://1*\", \"* /i:https://2*\", \"* /i:https://3*\", \"* /i:https://4*\", \"* /i:https://5*\", \"* /i:https://6*\", \"* /i:https://7*\", \"* /i:https://8*\", \"* /i:https://9*\", \"* -i:http://1*\", \"* -i:http://2*\", \"* -i:http://3*\", \"* -i:http://4*\", \"* -i:http://5*\", \"* -i:http://6*\", \"* -i:http://7*\", \"* -i:http://8*\", \"* -i:http://9*\", \"* -i:https://1*\", \"* -i:https://2*\", \"* -i:https://3*\", \"* -i:https://4*\", \"* -i:https://5*\", \"* -i:https://6*\", \"* -i:https://7*\", \"* -i:https://8*\", \"* -i:https://9*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_regsvr32_http_ip_pattern.eql",
+  "metadata": {}
+}

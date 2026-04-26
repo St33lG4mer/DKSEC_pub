@@ -1,0 +1,44 @@
+{
+  "id": "22e271e1-c427-5e8a-853c-1fae0f9f3e8b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2023_36874_fake_wermgr",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "cmd.exe",
+        "powershell_ise.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe",
+        "powershell_ise.EXE",
+        "powershell.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wermgr.exe"
+      ],
+      "raw_values": [
+        "*\\\\wermgr.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name like~ (\"Cmd.Exe\", \"powershell_ise.EXE\", \"powershell.exe\")) and process.executable:\"*\\\\wermgr.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-36874/proc_creation_win_exploit_cve_2023_36874_fake_wermgr.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "6faa1ece-eac1-5c98-9c9d-233c50d73e6d",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_vscode_powershell_profile",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "microsoft.vscode_profile.ps1"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft.VSCode_profile.ps1"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Microsoft.VSCode_profile.ps1\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_vscode_powershell_profile.eql",
+  "metadata": {}
+}

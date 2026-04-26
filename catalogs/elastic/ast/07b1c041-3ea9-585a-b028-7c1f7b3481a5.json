@@ -1,0 +1,80 @@
+{
+  "id": "07b1c041-3ea9-585a-b028-7c1f7b3481a5",
+  "catalog": "elastic",
+  "name": "AWS GuardDuty Member Account Manipulation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "disassociatefromadministratoraccount",
+        "deletemembers",
+        "stopmonitoringmembers",
+        "deleteinvitations",
+        "disassociatemembers"
+      ],
+      "raw_values": [
+        "DisassociateFromAdministratorAccount",
+        "DeleteMembers",
+        "StopMonitoringMembers",
+        "DeleteInvitations",
+        "DisassociateMembers"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "guardduty.amazonaws.com"
+      ],
+      "raw_values": [
+        "guardduty.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"guardduty.amazonaws.com\"\n    and event.action: (\n        \"DisassociateFromAdministratorAccount\" or\n        \"DeleteMembers\" or\n        \"StopMonitoringMembers\" or\n        \"DeleteInvitations\" or\n        \"DisassociateMembers\"\n    )\n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_guardduty_member_manipulation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS GuardDuty",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

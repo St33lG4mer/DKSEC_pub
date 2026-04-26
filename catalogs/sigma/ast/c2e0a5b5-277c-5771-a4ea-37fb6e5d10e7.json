@@ -1,0 +1,31 @@
+{
+  "id": "c2e0a5b5-277c-5771-a4ea-37fb6e5d10e7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_conti_7zip",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "7za.exe",
+        "log.zip"
+      ],
+      "raw_values": [
+        "*7za.exe*",
+        "*\\\\C$\\\\temp\\\\log.zip*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*7za.exe*\" and process.command_line:\"*\\\\C$\\\\temp\\\\log.zip*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Conti/proc_creation_win_malware_conti_7zip.eql",
+  "metadata": {}
+}

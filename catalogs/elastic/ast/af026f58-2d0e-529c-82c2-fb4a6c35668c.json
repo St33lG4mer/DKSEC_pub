@@ -1,0 +1,108 @@
+{
+  "id": "af026f58-2d0e-529c-82c2-fb4a6c35668c",
+  "catalog": "elastic",
+  "name": "Potential Enumeration via Active Directory Web Service",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "dll.name",
+      "raw_field": "dll.name",
+      "operator": ":",
+      "values": [
+        "system.directoryservices*.dll",
+        "system.identitymodel*.dll"
+      ],
+      "raw_values": [
+        "System.DirectoryServices*.dll",
+        "System.IdentityModel*.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dsac.exe",
+        "pwsh.exe",
+        ".exe",
+        "microsoft.activedirectory.webservices.exe"
+      ],
+      "raw_values": [
+        "?:\\\\windows\\\\system32\\\\dsac.exe",
+        "?:\\\\program files\\\\powershell\\\\?\\\\pwsh.exe",
+        "?:\\\\windows\\\\system32\\\\windowspowershell\\\\*.exe",
+        "?:\\\\windows\\\\syswow64\\\\windowspowershell\\\\*.exe",
+        "?:\\\\program files\\\\microsoft monitoring agent\\\\*.exe",
+        "?:\\\\windows\\\\adws\\\\microsoft.activedirectory.webservices.exe"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "in",
+      "values": [
+        "s-1-5-18",
+        "s-1-5-19",
+        "s-1-5-20"
+      ],
+      "raw_values": [
+        "S-1-5-18",
+        "S-1-5-19",
+        "S-1-5-20"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "network.direction",
+      "raw_field": "network.direction",
+      "operator": "==",
+      "values": [
+        "egress"
+      ],
+      "raw_values": [
+        "egress"
+      ]
+    },
+    {
+      "field": "network.transport",
+      "raw_field": "network.transport",
+      "operator": "==",
+      "values": [
+        "tcp"
+      ],
+      "raw_values": [
+        "tcp"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=3m\n [library where host.os.type == \"windows\" and\n  dll.name : (\"System.DirectoryServices*.dll\", \"System.IdentityModel*.dll\") and\n  not user.id in (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\") and\n  not process.executable :\n                (\"?:\\\\windows\\\\system32\\\\dsac.exe\",\n                 \"?:\\\\program files\\\\powershell\\\\?\\\\pwsh.exe\",\n                 \"?:\\\\windows\\\\system32\\\\windowspowershell\\\\*.exe\",\n                 \"?:\\\\windows\\\\syswow64\\\\windowspowershell\\\\*.exe\",\n                 \"?:\\\\program files\\\\microsoft monitoring agent\\\\*.exe\",\n                 \"?:\\\\windows\\\\adws\\\\microsoft.activedirectory.webservices.exe\")]\n [network where host.os.type == \"windows\" and destination.port == 9389 and source.port >= 49152 and\n  network.direction == \"egress\" and network.transport == \"tcp\" and not cidrmatch(destination.ip, \"127.0.0.0/8\", \"::1/128\")]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/discovery_active_directory_webservice.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

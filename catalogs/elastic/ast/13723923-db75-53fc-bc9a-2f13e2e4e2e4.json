@@ -1,0 +1,156 @@
+{
+  "id": "13723923-db75-53fc-bc9a-2f13e2e4e2e4",
+  "catalog": "elastic",
+  "name": "Suspicious Data Encryption via OpenSSL Utility",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "perl",
+        "php",
+        "python",
+        "xargs"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "perl*",
+        "php*",
+        "python*",
+        "xargs"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "-kfile",
+        "-pass",
+        "-iv",
+        "-md",
+        "-base64",
+        "-none",
+        "-nosalt"
+      ],
+      "raw_values": [
+        "-k",
+        "-K",
+        "-kfile",
+        "-pass",
+        "-iv",
+        "-md",
+        "-d",
+        "-a",
+        "-A",
+        "-base64",
+        "-none",
+        "-nosalt"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "openssl"
+      ],
+      "raw_values": [
+        "openssl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "-in",
+        "-out"
+      ],
+      "raw_values": [
+        "-in",
+        "-out"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "==",
+      "values": [
+        "bash -s"
+      ],
+      "raw_values": [
+        "bash -s"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "recipes"
+      ],
+      "raw_values": [
+        "/root/recipes/recipes*"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, user.name, process.parent.entity_id with maxspan=5s\n  [ process where host.os.type == \"linux\" and event.action == \"exec\" and\n    process.name == \"openssl\" and process.parent.name : (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"perl*\", \"php*\", \"python*\", \"xargs\") and\n    process.args == \"-in\" and process.args == \"-out\" and\n    process.args in (\"-k\", \"-K\", \"-kfile\", \"-pass\", \"-iv\", \"-md\") and\n    /* excluding base64 encoding options and including encryption password or key params */\n    not process.args in (\"-d\", \"-a\", \"-A\", \"-base64\", \"-none\", \"-nosalt\") and\n    not (process.parent.command_line == \"bash -s\" and process.args like \"/root/recipes/recipes*\")\n  ] with runs=10\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/impact_data_encrypted_via_openssl.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

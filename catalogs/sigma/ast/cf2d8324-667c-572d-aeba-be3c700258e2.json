@@ -1,0 +1,58 @@
+{
+  "id": "cf2d8324-667c-572d-aeba-be3c700258e2",
+  "catalog": "sigma",
+  "name": "registry_set_pua_sysinternals_susp_execution_via_eula",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\active directory explorer",
+        "\\\\handle",
+        "\\\\livekd",
+        "\\\\process explorer",
+        "\\\\procdump",
+        "\\\\psexec",
+        "\\\\psloglist",
+        "\\\\pspasswd",
+        "\\\\sdelete",
+        "\\\\sysinternals"
+      ],
+      "raw_values": [
+        "*\\\\Active Directory Explorer*",
+        "*\\\\Handle*",
+        "*\\\\LiveKd*",
+        "*\\\\Process Explorer*",
+        "*\\\\ProcDump*",
+        "*\\\\PsExec*",
+        "*\\\\PsLoglist*",
+        "*\\\\PsPasswd*",
+        "*\\\\SDelete*",
+        "*\\\\Sysinternals*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\eulaaccepted"
+      ],
+      "raw_values": [
+        "*\\\\EulaAccepted"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Active Directory Explorer*\", \"*\\\\Handle*\", \"*\\\\LiveKd*\", \"*\\\\Process Explorer*\", \"*\\\\ProcDump*\", \"*\\\\PsExec*\", \"*\\\\PsLoglist*\", \"*\\\\PsPasswd*\", \"*\\\\SDelete*\", \"*\\\\Sysinternals*\")) and registry.path:\"*\\\\EulaAccepted\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_pua_sysinternals_susp_execution_via_eula.eql",
+  "metadata": {}
+}

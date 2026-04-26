@@ -1,0 +1,44 @@
+{
+  "id": "98fbba38-3c8e-5256-897e-4133a51deba1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sqlcmd_veeam_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqlcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlcmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "select",
+        "top",
+        "[veeambackup].[dbo].[credentials]"
+      ],
+      "raw_values": [
+        "*SELECT*",
+        "*TOP*",
+        "*[VeeamBackup].[dbo].[Credentials]*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\sqlcmd.exe\" and (process.command_line:\"*SELECT*\" and process.command_line:\"*TOP*\" and process.command_line:\"*[VeeamBackup].[dbo].[Credentials]*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sqlcmd_veeam_dump.eql",
+  "metadata": {}
+}

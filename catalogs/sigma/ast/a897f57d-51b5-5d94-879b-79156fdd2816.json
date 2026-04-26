@@ -1,0 +1,79 @@
+{
+  "id": "a897f57d-51b5-5d94-879b-79156fdd2816",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_kapeka_backdoor_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "sens api",
+        "onedrive"
+      ],
+      "raw_values": [
+        "*Sens Api*",
+        "*OneDrive*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe",
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe",
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "schtasks.exe",
+        "reg.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe",
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "create",
+        "onstart",
+        "add",
+        "run",
+        "rundll32",
+        ".wll"
+      ],
+      "raw_values": [
+        "*create*",
+        "*ONSTART*",
+        "*add*",
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*rundll32*",
+        "*.wll*",
+        "*#1*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable:\"*\\\\schtasks.exe\" or process.pe.original_file_name:\"schtasks.exe\") and (process.command_line:\"*create*\" and process.command_line:\"*ONSTART*\")) or ((process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and (process.command_line:\"*add*\" and process.command_line:\"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\"))) and ((process.command_line:\"*rundll32*\" and process.command_line:\"*.wll*\" and process.command_line:\"*#1*\") and (process.command_line like~ (\"*Sens Api*\", \"*OneDrive*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Malware/kapeka/proc_creation_win_malware_kapeka_backdoor_persistence.eql",
+  "metadata": {}
+}

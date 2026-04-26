@@ -1,0 +1,30 @@
+{
+  "id": "bd653ff4-21ba-59f9-9b80-877eb3560837",
+  "catalog": "sigma",
+  "name": "file_delete_win_delete_event_log_files",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".evtx"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\winevt\\\\Logs\\\\*",
+        "*.evtx"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\System32\\\\winevt\\\\Logs\\\\*\" and file.path:\"*.evtx\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_delete/file_delete_win_delete_event_log_files.eql",
+  "metadata": {}
+}

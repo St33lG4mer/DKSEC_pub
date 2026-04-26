@@ -1,0 +1,77 @@
+{
+  "id": "b4d3b9c6-9cb9-51ca-83a0-6c7282e9fe54",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2019_1388",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "consent.exe"
+      ],
+      "raw_values": [
+        "*\\\\consent.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "iexplore.exe"
+      ],
+      "raw_values": [
+        "*\\\\iexplore.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "http"
+      ],
+      "raw_values": [
+        "* http*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\consent.exe\" and process.executable:\"*\\\\iexplore.exe\" and process.command_line:\"* http*\") and ((winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\")) or (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/Exploits/CVE-2019-1388/proc_creation_win_exploit_cve_2019_1388.eql",
+  "metadata": {}
+}

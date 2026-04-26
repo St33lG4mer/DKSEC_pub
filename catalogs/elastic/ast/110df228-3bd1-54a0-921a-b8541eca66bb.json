@@ -1,0 +1,135 @@
+{
+  "id": "110df228-3bd1-54a0-921a-b8541eca66bb",
+  "catalog": "elastic",
+  "name": "Docker Socket Enumeration",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "docker.sock"
+      ],
+      "raw_values": [
+        "*/var/run/docker.sock*",
+        "*/run/docker.sock*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "curl",
+        "socat",
+        "netcat",
+        "ncat",
+        "nc.traditional"
+      ],
+      "raw_values": [
+        "curl",
+        "socat",
+        "nc",
+        "netcat",
+        "ncat",
+        "nc.traditional"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "sshd",
+        "bt-panel"
+      ],
+      "raw_values": [
+        "/usr/sbin/sshd",
+        "/www/server/panel/BT-Panel"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/usr/libexec/netdata/plugins.d/cgroup-name.sh",
+        "/docker-entrypoint"
+      ],
+      "raw_values": [
+        "/usr/libexec/netdata/plugins.d/cgroup-name.sh",
+        "/docker-entrypoint"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name in (\"curl\", \"socat\", \"nc\", \"netcat\", \"ncat\", \"nc.traditional\") and\nprocess.args like (\"*/var/run/docker.sock*\", \"*/run/docker.sock*\") and\nprocess.parent.executable != null and\nnot (\n  process.parent.executable in (\"/usr/sbin/sshd\", \"/www/server/panel/BT-Panel\") or\n  process.parent.args in (\"/usr/libexec/netdata/plugins.d/cgroup-name.sh\", \"/docker-entrypoint\")\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_docker_socket_discovery.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Defend for Containers",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

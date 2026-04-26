@@ -1,0 +1,53 @@
+{
+  "id": "b573b737-f37e-5388-9690-ae2b51401041",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_susp_shellexec_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "comspec",
+        "iex",
+        "invoke-",
+        "msiexec",
+        "odbcconf",
+        "regsvr32"
+      ],
+      "raw_values": [
+        "*\\\\Desktop\\\\*",
+        "*\\\\Temp\\\\*",
+        "*\\\\Users\\\\Public\\\\*",
+        "*comspec*",
+        "*iex*",
+        "*Invoke-*",
+        "*msiexec*",
+        "*odbcconf*",
+        "*regsvr32*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "shellexec_rundll"
+      ],
+      "raw_values": [
+        "*ShellExec_RunDLL*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*ShellExec_RunDLL*\" and (process.command_line like~ (\"*\\\\Desktop\\\\*\", \"*\\\\Temp\\\\*\", \"*\\\\Users\\\\Public\\\\*\", \"*comspec*\", \"*iex*\", \"*Invoke-*\", \"*msiexec*\", \"*odbcconf*\", \"*regsvr32*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_susp_shellexec_execution.eql",
+  "metadata": {}
+}

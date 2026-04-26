@@ -1,0 +1,68 @@
+{
+  "id": "6ac9057f-7d1e-5048-8caa-51949ddea77b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_del_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "del",
+        "erase"
+      ],
+      "raw_values": [
+        "*del *",
+        "*erase *",
+        "* -f*",
+        "* /f*",
+        "* –f*",
+        "* —f*",
+        "* ―f*",
+        "* -s*",
+        "* /s*",
+        "* –s*",
+        "* —s*",
+        "* ―s*",
+        "* -q*",
+        "* /q*",
+        "* –q*",
+        "* —q*",
+        "* ―q*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "Cmd.Exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cmd.exe\" or process.pe.original_file_name:\"Cmd.Exe\") and (process.command_line like~ (\"*del *\", \"*erase *\")) and (process.command_line like~ (\"* -f*\", \"* /f*\", \"* –f*\", \"* —f*\", \"* ―f*\") or process.command_line like~ (\"* -s*\", \"* /s*\", \"* –s*\", \"* —s*\", \"* ―s*\") or process.command_line like~ (\"* -q*\", \"* /q*\", \"* –q*\", \"* —q*\", \"* ―q*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_del_execution.eql",
+  "metadata": {}
+}

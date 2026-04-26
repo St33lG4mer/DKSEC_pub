@@ -1,0 +1,33 @@
+{
+  "id": "413f1492-9775-58cc-a26a-654463c9b9ce",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_office_disable_python_security_warnings",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "security",
+        "pythonfunctionwarnings"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Office\\\\*",
+        "*\\\\Excel\\\\Security*",
+        "*PythonFunctionWarnings*",
+        "* 0*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*\\\\Microsoft\\\\Office\\\\*\" and process.command_line:\"*\\\\Excel\\\\Security*\" and process.command_line:\"*PythonFunctionWarnings*\") and process.command_line:\"* 0*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_office_disable_python_security_warnings.eql",
+  "metadata": {}
+}

@@ -1,0 +1,31 @@
+{
+  "id": "5a32ae6b-a1e8-5eb0-8506-a0e0d97a90e0",
+  "catalog": "sigma",
+  "name": "file_event_win_exploit_cve_2023_36884_office_windows_html_rce_file_patterns",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "file001.url"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Office\\\\Recent\\\\*",
+        "*\\\\file001.url"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Office\\\\Recent\\\\*\" and file.path:\"*\\\\file001.url\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/CVE-2023-36884/file_event_win_exploit_cve_2023_36884_office_windows_html_rce_file_patterns.eql",
+  "metadata": {}
+}

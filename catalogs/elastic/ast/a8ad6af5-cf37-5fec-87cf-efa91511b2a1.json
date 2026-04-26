@@ -1,0 +1,25 @@
+{
+  "id": "a8ad6af5-cf37-5fec-87cf-efa91511b2a1",
+  "catalog": "elastic",
+  "name": "Splunk External Alerts",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind: alert and data_stream.dataset: splunk.alert\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/splunk_external_alerts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Splunk",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide",
+      "Promotion: External Alerts"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "a821ac1b-47fb-5cbc-b474-41d6a73d4775",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmi_persistence_script_event_consumer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "scrcons.exe"
+      ],
+      "raw_values": [
+        "C:\\\\WINDOWS\\\\system32\\\\wbem\\\\scrcons.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\svchost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"C:\\\\WINDOWS\\\\system32\\\\wbem\\\\scrcons.exe\" and process.parent.executable:\"C:\\\\Windows\\\\System32\\\\svchost.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmi_persistence_script_event_consumer.eql",
+  "metadata": {}
+}

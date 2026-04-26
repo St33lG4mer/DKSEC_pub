@@ -1,0 +1,38 @@
+{
+  "id": "cb87acf8-8866-5fb0-ba1d-03108d21ac86",
+  "catalog": "elastic",
+  "name": "Inbound Connection to an Unsecure Elasticsearch Node",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "type",
+      "raw_field": "type",
+      "operator": ":",
+      "values": [
+        "image/x-icon"
+      ],
+      "raw_values": [
+        "image/x-icon"
+      ]
+    }
+  ],
+  "raw_query": "(data_stream.dataset: network_traffic.http OR (event.category: network_traffic AND network.protocol: http)) AND\n    status:OK AND destination.port:9200 AND network.direction:inbound AND NOT http.response.headers.content-type:\"image/x-icon\" AND NOT\n    _exists_:http.request.headers.authorization\n",
+  "language": "lucene",
+  "translated_query": null,
+  "source_path": "rules/network/initial_access_unsecure_elasticsearch_node.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Reconnaissance",
+      "Domain: Endpoint",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "id": "9b7c1529-ca90-595d-ba12-cc5d511b8bc9",
+  "catalog": "elastic",
+  "name": "Entra ID Protection User Alert and Device Registration",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "azure.identity_protection",
+        "azure.auditlogs"
+      ],
+      "raw_values": [
+        "azure.identity_protection",
+        "azure.auditlogs"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "register device"
+      ],
+      "raw_values": [
+        "Register device"
+      ]
+    }
+  ],
+  "raw_query": "sequence with maxspan=5m\n[any where data_stream.dataset == \"azure.identity_protection\"] by azure.identityprotection.properties.user_principal_name\n[any where data_stream.dataset == \"azure.auditlogs\" and event.action == \"Register device\"] by azure.auditlogs.properties.initiated_by.user.userPrincipalName\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/persistence_identity_protect_alert_followed_by_device_reg.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Protection Logs",
+      "Data Source: Microsoft Entra ID Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Persistence"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "6af61e88-7446-575b-8eb6-345b569558dd",
+  "catalog": "sigma",
+  "name": "win_security_invoke_obfuscation_obfuscated_iex_services_security",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (winlog.event_data.ServiceFileName like~ (\"SigmaRegularExpression(regexp=SigmaString(['\\\\$PSHome\\\\[\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\d{1,3}\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\]\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\$PSHome\\\\[']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\$ShellId\\\\[\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\d{1,3}\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\]\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\$ShellId\\\\[']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\$env:Public\\\\[\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\d{1,3}\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\]\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\+\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\$env:Public\\\\[']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\$env:ComSpec\\\\[(\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\d{1,3}\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, ',){2}']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\\\\\', <SpecialChars.WILDCARD_MULTI: 1>, 'mdr\\\\', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\W\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\)\\\\.Name']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\$VerbosePreference\\\\.ToString\\\\(']), flags=set())\", \"SigmaRegularExpression(regexp=SigmaString(['\\\\String\\\\]\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\$VerbosePreference']), flags=set())\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_invoke_obfuscation_obfuscated_iex_services_security.eql",
+  "metadata": {}
+}

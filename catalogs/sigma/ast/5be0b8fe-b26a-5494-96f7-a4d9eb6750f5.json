@@ -1,0 +1,40 @@
+{
+  "id": "5be0b8fe-b26a-5494-96f7-a4d9eb6750f5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_vsiisexelauncher",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "vsiisexelauncher.exe"
+      ],
+      "raw_values": [
+        "*\\\\VSIISExeLauncher.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "vsiisexelauncher.exe"
+      ],
+      "raw_values": [
+        "VSIISExeLauncher.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\VSIISExeLauncher.exe\" or process.pe.original_file_name:\"VSIISExeLauncher.exe\") and (process.command_line like~ (\"* -p *\", \"* -a *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_vsiisexelauncher.eql",
+  "metadata": {}
+}

@@ -1,0 +1,62 @@
+{
+  "id": "2d3b2ac3-00b0-5df4-b9b3-3c7a018cdba6",
+  "catalog": "elastic",
+  "name": "Azure Storage Account Blob Public Access Enabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.activitylogs"
+      ],
+      "raw_values": [
+        "azure.activitylogs"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "microsoft.storage/storageaccounts/write"
+      ],
+      "raw_values": [
+        "MICROSOFT.STORAGE/STORAGEACCOUNTS/WRITE"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"azure.activitylogs\" and\nevent.action: \"MICROSOFT.STORAGE/STORAGEACCOUNTS/WRITE\" and\nevent.outcome: \"success\" and\nazure.activitylogs.properties.responseBody: *\\\"allowBlobPublicAccess\\\"\\:true*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/collection_azure_storage_account_blob_public_access_enabled.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Storage",
+      "Data Source: Azure",
+      "Data Source: Azure Activity Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

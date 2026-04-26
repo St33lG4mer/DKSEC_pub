@@ -1,0 +1,71 @@
+{
+  "id": "aa37078b-30f2-5425-bc1c-3da6dc19558b",
+  "catalog": "elastic",
+  "name": "Google Workspace Admin Role Assigned to a User",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "google_workspace.admin"
+      ],
+      "raw_values": [
+        "google_workspace.admin"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "iam"
+      ],
+      "raw_values": [
+        "iam"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "assign_role"
+      ],
+      "raw_values": [
+        "ASSIGN_ROLE"
+      ]
+    },
+    {
+      "field": "google_workspace.event.type",
+      "raw_field": "google_workspace.event.type",
+      "operator": ":",
+      "values": [
+        "delegated_admin_settings"
+      ],
+      "raw_values": [
+        "DELEGATED_ADMIN_SETTINGS"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"google_workspace.admin\" and event.category:\"iam\" and event.action:\"ASSIGN_ROLE\"\n  and google_workspace.event.type:\"DELEGATED_ADMIN_SETTINGS\" and google_workspace.admin.role.name : *_ADMIN_ROLE\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/persistence_google_workspace_admin_role_assigned_to_user.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

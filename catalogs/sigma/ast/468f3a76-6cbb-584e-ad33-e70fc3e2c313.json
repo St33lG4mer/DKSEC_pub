@@ -1,0 +1,79 @@
+{
+  "id": "468f3a76-6cbb-584e-ad33-e70fc3e2c313",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_other_win_server_undocumented_rce",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "network service",
+        "netzwerkdienst",
+        "servizio di rete",
+        "servicio de red"
+      ],
+      "raw_values": [
+        "*NETWORK SERVICE*",
+        "*NETZWERKDIENST*",
+        "*SERVIZIO DI RETE*",
+        "*SERVICIO DE RED*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "svchost.exe"
+      ],
+      "raw_values": [
+        "*\\\\svchost.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "-k dhcpserver"
+      ],
+      "raw_values": [
+        "*-k DHCPServer*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-k dhcpserver"
+      ],
+      "raw_values": [
+        "*-k DHCPServer*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\svchost.exe\" and process.executable:\"*\\\\svchost.exe\" and process.parent.command_line:\"*-k DHCPServer*\" and process.command_line:\"*-k DHCPServer*\" and (user.name like~ (\"*NETWORK SERVICE*\", \"*NETZWERKDIENST*\", \"*SERVIZIO DI RETE*\", \"*SERVICIO DE RED*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Exploits/Windows-Server-Unknown-Exploit/proc_creation_win_exploit_other_win_server_undocumented_rce.eql",
+  "metadata": {}
+}

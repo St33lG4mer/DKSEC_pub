@@ -1,0 +1,33 @@
+{
+  "id": "e17b2086-ec56-55a4-87e5-516d4d517bae",
+  "catalog": "sigma",
+  "name": "file_event_win_redmimicry_winnti_filedrop",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "gthread-3.6.dll",
+        "sigcmm-2.4.dll",
+        "tmp.bat"
+      ],
+      "raw_values": [
+        "*\\\\gthread-3.6.dll",
+        "*\\\\sigcmm-2.4.dll",
+        "*\\\\Windows\\\\Temp\\\\tmp.bat"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*\\\\gthread-3.6.dll\", \"*\\\\sigcmm-2.4.dll\", \"*\\\\Windows\\\\Temp\\\\tmp.bat\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_redmimicry_winnti_filedrop.eql",
+  "metadata": {}
+}

@@ -1,0 +1,70 @@
+{
+  "id": "c5fe45a4-7cb8-5237-9858-e49d9092fce1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_revil_kaseya",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "cert.exe",
+        "agent.crt",
+        "kaseya vsa agent hot-fix",
+        "msmpeng.exe",
+        "logs",
+        ".log",
+        "agent.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\cert.exe*",
+        "*del /q /f c:\\\\kworking\\\\agent.crt*",
+        "*Kaseya VSA Agent Hot-fix*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\MsMpEng.exe*",
+        "*rmdir /s /q %SystemDrive%\\\\inetpub\\\\logs*",
+        "*del /s /q /f %SystemDrive%\\\\*.log*",
+        "*c:\\\\kworking1\\\\agent.exe*",
+        "*c:\\\\kworking1\\\\agent.crt*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "msmpeng.exe",
+        "cert.exe",
+        "agent.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\MsMpEng.exe",
+        "C:\\\\Windows\\\\cert.exe",
+        "C:\\\\kworking\\\\agent.exe",
+        "C:\\\\kworking1\\\\agent.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "weberrorlog.txt"
+      ],
+      "raw_values": [
+        "*del /s /q /f*",
+        "*WebPages\\\\Errors\\\\webErrorLog.txt*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*C:\\\\Windows\\\\cert.exe*\", \"*del /q /f c:\\\\kworking\\\\agent.crt*\", \"*Kaseya VSA Agent Hot-fix*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\MsMpEng.exe*\", \"*rmdir /s /q %SystemDrive%\\\\inetpub\\\\logs*\", \"*del /s /q /f %SystemDrive%\\\\*.log*\", \"*c:\\\\kworking1\\\\agent.exe*\", \"*c:\\\\kworking1\\\\agent.crt*\")) or (process.executable like~ (\"C:\\\\Windows\\\\MsMpEng.exe\", \"C:\\\\Windows\\\\cert.exe\", \"C:\\\\kworking\\\\agent.exe\", \"C:\\\\kworking1\\\\agent.exe\")) or (process.command_line:\"*del /s /q /f*\" and process.command_line:\"*WebPages\\\\Errors\\\\webErrorLog.txt*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/TA/Kaseya-Supply-Chain/proc_creation_win_apt_revil_kaseya.eql",
+  "metadata": {}
+}

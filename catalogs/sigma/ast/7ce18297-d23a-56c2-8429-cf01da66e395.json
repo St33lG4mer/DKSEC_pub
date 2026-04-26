@@ -1,0 +1,64 @@
+{
+  "id": "7ce18297-d23a-56c2-8429-cf01da66e395",
+  "catalog": "sigma",
+  "name": "win_security_registry_permissions_weakness_check",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4663"
+      ],
+      "raw_values": [
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        "\\\\system\\\\",
+        "controlset\\\\services\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SYSTEM\\\\*",
+        "*ControlSet\\\\Services\\\\*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accesslist",
+      "raw_field": "winlog.event_data.AccessList",
+      "operator": ":",
+      "values": [
+        "%%1538"
+      ],
+      "raw_values": [
+        "*%%1538*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4663\" and (winlog.event_data.ObjectName:\"*\\\\SYSTEM\\\\*\" and winlog.event_data.ObjectName:\"*ControlSet\\\\Services\\\\*\") and winlog.event_data.AccessList:\"*%%1538*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_registry_permissions_weakness_check.eql",
+  "metadata": {}
+}

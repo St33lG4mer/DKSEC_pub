@@ -1,0 +1,46 @@
+{
+  "id": "9945ebe1-3e0b-506e-8f8d-96aa5d4458ef",
+  "catalog": "sigma",
+  "name": "win_appxdeployment_server_policy_block",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "441",
+        "442",
+        "453",
+        "454"
+      ],
+      "raw_values": [
+        "441",
+        "442",
+        "453",
+        "454"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-appxdeploymentserver/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-AppXDeploymentServer/Operational"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-AppXDeploymentServer/Operational\" and (event.code like~ (\"441\", \"442\", \"453\", \"454\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/appxdeployment_server/win_appxdeployment_server_policy_block.eql",
+  "metadata": {}
+}

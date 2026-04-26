@@ -1,0 +1,28 @@
+{
+  "id": "f57f8134-0142-53a0-8de2-cc63f24d4328",
+  "catalog": "elastic",
+  "name": "AWS RDS DB Instance or Cluster Deleted",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: rds.amazonaws.com \n    and event.action: (DeleteDBCluster or DeleteGlobalCluster or DeleteDBInstance)\n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/impact_rds_instance_cluster_deletion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS RDS",
+      "Use Case: Asset Visibility",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

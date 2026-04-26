@@ -1,0 +1,47 @@
+{
+  "id": "37ff2583-60a4-5965-b082-1728aa812759",
+  "catalog": "sigma",
+  "name": "file_event_win_powershell_drop_powershell",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".ps1",
+        "__psscriptpolicytest_"
+      ],
+      "raw_values": [
+        "*.ps1",
+        "*__PSScriptPolicyTest_*",
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "C:\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and file.path:\"*.ps1\") and (not (file.path:\"*__PSScriptPolicyTest_*\" or (file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\") or file.path:\"C:\\\\Windows\\\\Temp\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_powershell_drop_powershell.eql",
+  "metadata": {}
+}

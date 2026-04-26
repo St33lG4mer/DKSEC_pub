@@ -1,0 +1,48 @@
+{
+  "id": "88e2ed16-50ce-5484-b75d-6e475a747235",
+  "catalog": "sigma",
+  "name": "file_event_win_cve_2021_26858_msexchange",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "cachecleanup.bin",
+        ".txt",
+        ".log",
+        ".cfg",
+        "cleanup.bin"
+      ],
+      "raw_values": [
+        "*CacheCleanup.bin",
+        "*.txt",
+        "*.LOG",
+        "*.cfg",
+        "*cleanup.bin"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "umworkerprocess.exe"
+      ],
+      "raw_values": [
+        "*UMWorkerProcess.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*UMWorkerProcess.exe\" and (not (file.path like~ (\"*CacheCleanup.bin\", \"*.txt\", \"*.LOG\", \"*.cfg\", \"*cleanup.bin\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-26858/file_event_win_cve_2021_26858_msexchange.eql",
+  "metadata": {}
+}

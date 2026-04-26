@@ -1,0 +1,91 @@
+{
+  "id": "f018cf7c-d602-5e9b-80af-dada0d02168b",
+  "catalog": "elastic",
+  "name": "Microsoft IIS Connection Strings Decryption",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "aspnet_regiis.exe"
+      ],
+      "raw_values": [
+        "aspnet_regiis.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "==",
+      "values": [
+        "aspnet_regiis.exe"
+      ],
+      "raw_values": [
+        "aspnet_regiis.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "connectionstrings",
+        "-pdf"
+      ],
+      "raw_values": [
+        "connectionStrings",
+        "-pdf"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n  (process.name : \"aspnet_regiis.exe\" or ?process.pe.original_file_name == \"aspnet_regiis.exe\") and\n  process.args : \"connectionStrings\" and process.args : \"-pdf\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_iis_connectionstrings_dumping.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

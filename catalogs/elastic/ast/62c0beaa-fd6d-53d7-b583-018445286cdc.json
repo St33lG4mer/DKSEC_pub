@@ -1,0 +1,66 @@
+{
+  "id": "62c0beaa-fd6d-53d7-b583-018445286cdc",
+  "catalog": "elastic",
+  "name": "Remote Computer Account DnsHostName Update",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "iam"
+  ],
+  "conditions": [
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-21-",
+        "s-1-12-1-"
+      ],
+      "raw_values": [
+        "S-1-5-21-*",
+        "S-1-12-1-*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "changed-computer-account"
+      ],
+      "raw_values": [
+        "changed-computer-account"
+      ]
+    }
+  ],
+  "raw_query": "iam where host.os.type == \"windows\" and event.action == \"changed-computer-account\" and\n    user.id : (\"S-1-5-21-*\", \"S-1-12-1-*\") and\n\n    /* if DnsHostName value equal a DC DNS hostname then it's highly suspicious */\n    winlog.event_data.DnsHostName : \"??*\" and\n\n    /* exclude FPs where DnsHostName starts with the ComputerName that was changed */\n    not startswith~(winlog.event_data.DnsHostName, substring(winlog.event_data.TargetUserName, 0, length(winlog.event_data.TargetUserName) - 1))\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_suspicious_dnshostname_update.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Active Directory",
+      "Use Case: Vulnerability",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "id": "9fb0402e-3cfc-5474-8042-9f1bfef55a32",
+  "catalog": "elastic",
+  "name": "First Time Seen NewCredentials Logon Process",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "authentication"
+      ],
+      "raw_values": [
+        "authentication"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "winlog.logon.type",
+      "raw_field": "winlog.logon.type",
+      "operator": ":",
+      "values": [
+        "newcredentials"
+      ],
+      "raw_values": [
+        "NewCredentials"
+      ]
+    }
+  ],
+  "raw_query": "event.category:\"authentication\" and host.os.type:\"windows\" and winlog.logon.type:\"NewCredentials\" and\n    winlog.event_data.LogonProcessName:Advapi* and\n    not winlog.event_data.SubjectUserName:*$ and\n    not process.executable: (C\\:\\\\Program*Files*\\(x86\\)\\\\*.exe or C\\:\\\\Program*Files\\\\*.exe)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_newcreds_logon_rare_process.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

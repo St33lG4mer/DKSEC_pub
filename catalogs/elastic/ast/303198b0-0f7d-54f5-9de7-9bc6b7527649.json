@@ -1,0 +1,40 @@
+{
+  "id": "303198b0-0f7d-54f5-9de7-9bc6b7527649",
+  "catalog": "elastic",
+  "name": "AWS CloudTrail Log Evasion",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "aws.cloudtrail.flattened.request_parameters.reason",
+      "raw_field": "aws.cloudtrail.flattened.request_parameters.reason",
+      "operator": ":",
+      "values": [
+        "requestparameters too large"
+      ],
+      "raw_values": [
+        "requestParameters too large"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: aws.cloudtrail and event.provider: iam.amazonaws.com and aws.cloudtrail.flattened.request_parameters.reason: \"requestParameters too large\" and aws.cloudtrail.flattened.request_parameters.omitted : true and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/defense_evasion_cloudtrail_logging_evasion.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS IAM",
+      "Use Case: Log Auditing",
+      "Resources: Investigation Guide",
+      "Tactic: Defense Evasion"
+    ]
+  }
+}

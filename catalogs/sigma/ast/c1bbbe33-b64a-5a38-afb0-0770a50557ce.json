@@ -1,0 +1,63 @@
+{
+  "id": "c1bbbe33-b64a-5a38-afb0-0770a50557ce",
+  "catalog": "sigma",
+  "name": "file_event_win_apt_forest_blizzard_activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "prnms003.inf_",
+        "prnms009.inf_",
+        ".save",
+        "doit.bat",
+        "execute.bat",
+        "servtask.bat"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\Microsoft\\\\v*",
+        "C:\\\\ProgramData\\\\Adobe\\\\v*",
+        "C:\\\\ProgramData\\\\Comms\\\\v*",
+        "C:\\\\ProgramData\\\\Intel\\\\v*",
+        "C:\\\\ProgramData\\\\Kaspersky Lab\\\\v*",
+        "C:\\\\ProgramData\\\\Bitdefender\\\\v*",
+        "C:\\\\ProgramData\\\\ESET\\\\v*",
+        "C:\\\\ProgramData\\\\NVIDIA\\\\v*",
+        "C:\\\\ProgramData\\\\UbiSoft\\\\v*",
+        "C:\\\\ProgramData\\\\Steam\\\\v*",
+        "*\\\\prnms003.inf_*",
+        "*\\\\prnms009.inf_*",
+        "*.save",
+        "*\\\\doit.bat",
+        "*\\\\execute.bat",
+        "*\\\\servtask.bat"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "wayzgoose",
+        ".dll"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\*",
+        "*\\\\wayzgoose*",
+        "*.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where ((file.path like~ (\"C:\\\\ProgramData\\\\Microsoft\\\\v*\", \"C:\\\\ProgramData\\\\Adobe\\\\v*\", \"C:\\\\ProgramData\\\\Comms\\\\v*\", \"C:\\\\ProgramData\\\\Intel\\\\v*\", \"C:\\\\ProgramData\\\\Kaspersky Lab\\\\v*\", \"C:\\\\ProgramData\\\\Bitdefender\\\\v*\", \"C:\\\\ProgramData\\\\ESET\\\\v*\", \"C:\\\\ProgramData\\\\NVIDIA\\\\v*\", \"C:\\\\ProgramData\\\\UbiSoft\\\\v*\", \"C:\\\\ProgramData\\\\Steam\\\\v*\")) and (file.path like~ (\"*\\\\prnms003.inf_*\", \"*\\\\prnms009.inf_*\"))) or (file.path:\"C:\\\\ProgramData\\\\*\" and ((file.path like~ (\"*.save\", \"*\\\\doit.bat\", \"*\\\\execute.bat\", \"*\\\\servtask.bat\")) or (file.path:\"*\\\\wayzgoose*\" and file.path:\"*.dll\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/TA/Forest-Blizzard/file_event_win_apt_forest_blizzard_activity.eql",
+  "metadata": {}
+}

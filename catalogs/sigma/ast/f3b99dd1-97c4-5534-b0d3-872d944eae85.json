@@ -1,0 +1,29 @@
+{
+  "id": "f3b99dd1-97c4-5534-b0d3-872d944eae85",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_invoke_obfuscation_via_use_clip",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "sigmaregularexpression(regexp=sigmastring(['(', <specialchars.wildcard_single: 2>, 'i)echo.', <specialchars.wildcard_multi: 1>, 'clip.', <specialchars.wildcard_multi: 1>, '&&.', <specialchars.wildcard_multi: 1>, '(clipboard|i`', <specialchars.wildcard_single: 2>, 'n`', <specialchars.wildcard_single: 2>, 'v`', <specialchars.wildcard_single: 2>, 'o`', <specialchars.wildcard_single: 2>, 'k`', <specialchars.wildcard_single: 2>, 'e`', <specialchars.wildcard_single: 2>, ')']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['(', <SpecialChars.WILDCARD_SINGLE: 2>, 'i)echo.', <SpecialChars.WILDCARD_MULTI: 1>, 'clip.', <SpecialChars.WILDCARD_MULTI: 1>, '&&.', <SpecialChars.WILDCARD_MULTI: 1>, '(Clipboard|i`', <SpecialChars.WILDCARD_SINGLE: 2>, 'n`', <SpecialChars.WILDCARD_SINGLE: 2>, 'v`', <SpecialChars.WILDCARD_SINGLE: 2>, 'o`', <SpecialChars.WILDCARD_SINGLE: 2>, 'k`', <SpecialChars.WILDCARD_SINGLE: 2>, 'e`', <SpecialChars.WILDCARD_SINGLE: 2>, ')']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['(', <SpecialChars.WILDCARD_SINGLE: 2>, 'i)echo.', <SpecialChars.WILDCARD_MULTI: 1>, 'clip.', <SpecialChars.WILDCARD_MULTI: 1>, '&&.', <SpecialChars.WILDCARD_MULTI: 1>, '(Clipboard|i`', <SpecialChars.WILDCARD_SINGLE: 2>, 'n`', <SpecialChars.WILDCARD_SINGLE: 2>, 'v`', <SpecialChars.WILDCARD_SINGLE: 2>, 'o`', <SpecialChars.WILDCARD_SINGLE: 2>, 'k`', <SpecialChars.WILDCARD_SINGLE: 2>, 'e`', <SpecialChars.WILDCARD_SINGLE: 2>, ')']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_invoke_obfuscation_via_use_clip.eql",
+  "metadata": {}
+}

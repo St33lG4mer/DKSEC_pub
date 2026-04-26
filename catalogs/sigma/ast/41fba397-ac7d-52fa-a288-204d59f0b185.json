@@ -1,0 +1,88 @@
+{
+  "id": "41fba397-ac7d-52fa-a288-204d59f0b185",
+  "catalog": "sigma",
+  "name": "net_connection_win_susp_azurefd_connection",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "brave.exe",
+        "chrome.exe",
+        "chromium.exe",
+        "firefox.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "opera.exe",
+        "vivaldi.exe"
+      ],
+      "raw_values": [
+        "*brave.exe",
+        "*chrome.exe",
+        "*chromium.exe",
+        "*firefox.exe",
+        "*msedge.exe",
+        "*msedgewebview2.exe",
+        "*opera.exe",
+        "*vivaldi.exe"
+      ]
+    },
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like~",
+      "values": [
+        "afdxtest.z01.azurefd.net",
+        "fp-afd.azurefd.net",
+        "fp-afdx-bpdee4gtg6frejfd.z01.azurefd.net",
+        "roxy.azurefd.net",
+        "powershellinfraartifacts-gkhedzdeaghdezhr.z01.azurefd.net",
+        "storage-explorer-publishing-feapcgfgbzc2cjek.b01.azurefd.net",
+        "graph.azurefd.net"
+      ],
+      "raw_values": [
+        "*afdxtest.z01.azurefd.net*",
+        "*fp-afd.azurefd.net*",
+        "*fp-afdx-bpdee4gtg6frejfd.z01.azurefd.net*",
+        "*roxy.azurefd.net*",
+        "*powershellinfraartifacts-gkhedzdeaghdezhr.z01.azurefd.net*",
+        "*storage-explorer-publishing-feapcgfgbzc2cjek.b01.azurefd.net*",
+        "*graph.azurefd.net*"
+      ]
+    },
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": ":",
+      "values": [
+        "azurefd.net"
+      ],
+      "raw_values": [
+        "*azurefd.net*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "searchapp.exe"
+      ],
+      "raw_values": [
+        "*searchapp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where destination.domain:\"*azurefd.net*\" and (not ((process.executable like~ (\"*brave.exe\", \"*chrome.exe\", \"*chromium.exe\", \"*firefox.exe\", \"*msedge.exe\", \"*msedgewebview2.exe\", \"*opera.exe\", \"*vivaldi.exe\")) or process.executable:\"*searchapp.exe\" or (destination.domain like~ (\"*afdxtest.z01.azurefd.net*\", \"*fp-afd.azurefd.net*\", \"*fp-afdx-bpdee4gtg6frejfd.z01.azurefd.net*\", \"*roxy.azurefd.net*\", \"*powershellinfraartifacts-gkhedzdeaghdezhr.z01.azurefd.net*\", \"*storage-explorer-publishing-feapcgfgbzc2cjek.b01.azurefd.net*\", \"*graph.azurefd.net*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/network_connection/net_connection_win_susp_azurefd_connection.eql",
+  "metadata": {}
+}

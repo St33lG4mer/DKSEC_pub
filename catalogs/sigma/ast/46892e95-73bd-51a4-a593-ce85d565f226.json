@@ -1,0 +1,40 @@
+{
+  "id": "46892e95-73bd-51a4-a593-ce85d565f226",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_ttdinject",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ttdinject.exe"
+      ],
+      "raw_values": [
+        "*ttdinject.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ttdinject.exe"
+      ],
+      "raw_values": [
+        "TTDInject.EXE"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*ttdinject.exe\" or process.pe.original_file_name:\"TTDInject.EXE\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_ttdinject.eql",
+  "metadata": {}
+}

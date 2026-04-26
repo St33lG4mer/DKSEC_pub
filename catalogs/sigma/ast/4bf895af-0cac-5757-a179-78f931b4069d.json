@@ -1,0 +1,29 @@
+{
+  "id": "4bf895af-0cac-5757-a179-78f931b4069d",
+  "catalog": "sigma",
+  "name": "create_remote_thread_win_keepass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\keepass.exe"
+      ],
+      "raw_values": [
+        "*\\\\KeePass.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.event_data.TargetImage:\"*\\\\KeePass.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/create_remote_thread/create_remote_thread_win_keepass.eql",
+  "metadata": {}
+}

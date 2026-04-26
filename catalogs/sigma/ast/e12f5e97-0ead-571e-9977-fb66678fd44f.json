@@ -1,0 +1,88 @@
+{
+  "id": "e12f5e97-0ead-571e-9977-fb66678fd44f",
+  "catalog": "sigma",
+  "name": "win_security_exploit_cve_2024_1709_user_database_modification_screenconnect",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4663"
+      ],
+      "raw_values": [
+        "4663"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objecttype",
+      "raw_field": "winlog.event_data.ObjectType",
+      "operator": ":",
+      "values": [
+        "file"
+      ],
+      "raw_values": [
+        "File"
+      ]
+    },
+    {
+      "field": "winlog.event_data.accessmask",
+      "raw_field": "winlog.event_data.AccessMask",
+      "operator": ":",
+      "values": [
+        "0x6"
+      ],
+      "raw_values": [
+        "0x6"
+      ]
+    },
+    {
+      "field": "winlog.event_data.objectname",
+      "raw_field": "winlog.event_data.ObjectName",
+      "operator": ":",
+      "values": [
+        ".xml",
+        "temp",
+        "screenconnect"
+      ],
+      "raw_values": [
+        "*.xml",
+        "*Temp*",
+        "*ScreenConnect*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "screenconnect.service.exe"
+      ],
+      "raw_values": [
+        "*ScreenConnect.Service.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4663\" and winlog.event_data.ObjectType:\"File\" and winlog.event_data.AccessMask:\"0x6\" and winlog.event_data.ObjectName:\"*.xml\" and (winlog.event_data.ObjectName:\"*Temp*\" and winlog.event_data.ObjectName:\"*ScreenConnect*\") and process.executable:\"*ScreenConnect.Service.exe*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/Exploits/CVE-2024-1709/win_security_exploit_cve_2024_1709_user_database_modification_screenconnect.eql",
+  "metadata": {}
+}

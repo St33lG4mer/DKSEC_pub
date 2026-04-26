@@ -1,0 +1,29 @@
+{
+  "id": "000e22a7-1911-5a18-8a5b-4b83b6068cc9",
+  "catalog": "sigma",
+  "name": "file_event_win_hktl_safetykatz",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "debug.bin"
+      ],
+      "raw_values": [
+        "*\\\\Temp\\\\debug.bin"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Temp\\\\debug.bin\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_hktl_safetykatz.eql",
+  "metadata": {}
+}

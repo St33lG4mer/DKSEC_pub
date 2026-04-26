@@ -1,0 +1,23 @@
+{
+  "id": "3fb9bdfa-2087-5131-a5bc-298df0c0857d",
+  "catalog": "elastic",
+  "name": "Threat Intel Email Indicator Match",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "email.from.address:* or email.sender.address:* or email.reply_to.address:* or email.to.address:*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/threat_intel/threat_intel_indicator_match_email.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Rule Type: Threat Match",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

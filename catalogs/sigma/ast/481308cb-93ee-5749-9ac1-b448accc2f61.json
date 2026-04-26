@@ -1,0 +1,40 @@
+{
+  "id": "481308cb-93ee-5749-9ac1-b448accc2f61",
+  "catalog": "sigma",
+  "name": "win_security_not_allowed_rdp_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4825"
+      ],
+      "raw_values": [
+        "4825"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and event.code:\"4825\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_not_allowed_rdp_access.eql",
+  "metadata": {}
+}

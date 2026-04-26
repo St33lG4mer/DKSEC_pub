@@ -1,0 +1,60 @@
+{
+  "id": "851c4e92-e342-51f6-ae8d-46233b0349ac",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_netcat",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "nc.exe",
+        "ncat.exe",
+        "netcat.exe"
+      ],
+      "raw_values": [
+        "*\\\\nc.exe",
+        "*\\\\ncat.exe",
+        "*\\\\netcat.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-lvp",
+        "-lvnp",
+        "-l -v -p",
+        "-lv -p",
+        "-l --proxy-type http",
+        "-vnl --exec",
+        "-vnl -e",
+        "--lua-exec",
+        "--sh-exec"
+      ],
+      "raw_values": [
+        "* -lvp *",
+        "* -lvnp*",
+        "* -l -v -p *",
+        "* -lv -p *",
+        "* -l --proxy-type http *",
+        "* -vnl --exec *",
+        "* -vnl -e *",
+        "* --lua-exec *",
+        "* --sh-exec *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\nc.exe\", \"*\\\\ncat.exe\", \"*\\\\netcat.exe\")) or (process.command_line like~ (\"* -lvp *\", \"* -lvnp*\", \"* -l -v -p *\", \"* -lv -p *\", \"* -l --proxy-type http *\", \"* -vnl --exec *\", \"* -vnl -e *\", \"* --lua-exec *\", \"* --sh-exec *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_netcat.eql",
+  "metadata": {}
+}

@@ -1,0 +1,161 @@
+{
+  "id": "4e6251bd-a736-5624-8243-d41323a57c94",
+  "catalog": "elastic",
+  "name": "Execution via GitHub Actions Runner",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "curl",
+        "curl.exe",
+        "wget",
+        "wget.exe",
+        "powershell.exe",
+        "cmd.exe",
+        "pwsh.exe",
+        "certutil.exe",
+        "rundll32.exe",
+        "bash",
+        "zsh",
+        "tar",
+        "sed",
+        "osascript",
+        "chmod",
+        "nohup",
+        "setsid",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "ksh",
+        "fish",
+        "python",
+        "perl",
+        "ruby",
+        "lua",
+        "php",
+        "node",
+        "node.exe"
+      ],
+      "raw_values": [
+        "curl",
+        "curl.exe",
+        "wget",
+        "wget.exe",
+        "powershell.exe",
+        "cmd.exe",
+        "pwsh.exe",
+        "certutil.exe",
+        "rundll32.exe",
+        "bash",
+        "sh",
+        "zsh",
+        "tar",
+        "rm",
+        "sed",
+        "osascript",
+        "chmod",
+        "nohup",
+        "setsid",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "ksh",
+        "fish",
+        "python*",
+        "perl*",
+        "ruby*",
+        "lua*",
+        "php*",
+        "node",
+        "node.exe",
+        "/tmp/*",
+        "/private/tmp/*",
+        "/var/tmp/*",
+        "/dev/shm/*",
+        "/run/*",
+        "/var/run/*",
+        "?:\\\\Users\\\\*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "runner.worker",
+        "runner.worker.exe"
+      ],
+      "raw_values": [
+        "Runner.Worker",
+        "Runner.Worker.exe"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\n process.parent.name in (\"Runner.Worker\", \"Runner.Worker.exe\") and\n (\n   process.name like (\"curl\", \"curl.exe\", \"wget\", \"wget.exe\", \"powershell.exe\", \"cmd.exe\", \"pwsh.exe\", \"certutil.exe\", \"rundll32.exe\", \"bash\", \"sh\", \"zsh\", \"tar\", \"rm\",\n                     \"sed\", \"osascript\", \"chmod\", \"nohup\", \"setsid\", \"dash\", \"ash\", \"tcsh\", \"csh\", \"ksh\", \"fish\", \"python*\", \"perl*\", \"ruby*\", \"lua*\", \"php*\", \"node\", \"node.exe\") or\n   process.executable : (\"/tmp/*\", \"/private/tmp/*\", \"/var/tmp/*\", \"/dev/shm/*\", \"/run/*\", \"/var/run/*\", \"?:\\\\Users\\\\*\")\n )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/execution_via_github_actions_runner.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: Windows",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Initial Access",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

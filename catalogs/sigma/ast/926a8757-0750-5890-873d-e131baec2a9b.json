@@ -1,0 +1,17 @@
+{
+  "id": "926a8757-0750-5890-873d-e131baec2a9b",
+  "catalog": "sigma",
+  "name": "image_load_susp_dll_load_system_process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.executable:\"C:\\\\Windows\\\\*\" and (file.path like~ (\"C:\\\\Users\\\\Public\\\\*\", \"C:\\\\PerfLogs\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_susp_dll_load_system_process.eql",
+  "metadata": {}
+}

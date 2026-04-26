@@ -1,0 +1,42 @@
+{
+  "id": "8798e84a-03c8-50cb-9865-58943bee9678",
+  "catalog": "sigma",
+  "name": "win_firewall_as_reset_config",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "like~",
+      "values": [
+        "2032",
+        "2060"
+      ],
+      "raw_values": [
+        "2032",
+        "2060"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows firewall with advanced security/firewall"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Firewall With Advanced Security/Firewall"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Firewall With Advanced Security/Firewall\" and (event.code like~ (\"2032\", \"2060\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/firewall_as/win_firewall_as_reset_config.eql",
+  "metadata": {}
+}

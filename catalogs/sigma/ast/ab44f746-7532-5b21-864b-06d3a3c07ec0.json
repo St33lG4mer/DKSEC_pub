@@ -1,0 +1,31 @@
+{
+  "id": "ab44f746-7532-5b21-864b-06d3a3c07ec0",
+  "catalog": "sigma",
+  "name": "registry_event_scheduled_task_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tasks\\\\",
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\schedule\\\\taskcache\\\\tree\\\\"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tasks\\\\*",
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path like~ (\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tasks\\\\*\", \"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Schedule\\\\TaskCache\\\\Tree\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/registry/registry_event/registry_event_scheduled_task_creation.eql",
+  "metadata": {}
+}

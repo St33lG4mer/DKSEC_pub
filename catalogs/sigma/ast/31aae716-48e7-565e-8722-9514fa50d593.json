@@ -1,0 +1,51 @@
+{
+  "id": "31aae716-48e7-565e-8722-9514fa50d593",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sc_stop_service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "sc.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sc.exe"
+      ],
+      "raw_values": [
+        "*\\\\sc.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "stop"
+      ],
+      "raw_values": [
+        "* stop *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"sc.exe\" or process.executable:\"*\\\\sc.exe\") and process.command_line:\"* stop *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sc_stop_service.eql",
+  "metadata": {}
+}

@@ -1,0 +1,30 @@
+{
+  "id": "fa1d31ae-0d47-5c7b-8293-f13d6ec2465a",
+  "catalog": "sigma",
+  "name": "file_event_win_apt_forest_blizzard_constrained_js",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".js"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository\\\\*",
+        "*\\\\.js"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Windows\\\\System32\\\\DriverStore\\\\FileRepository\\\\*\" and file.path:\"*\\\\.js\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2024/TA/Forest-Blizzard/file_event_win_apt_forest_blizzard_constrained_js.eql",
+  "metadata": {}
+}

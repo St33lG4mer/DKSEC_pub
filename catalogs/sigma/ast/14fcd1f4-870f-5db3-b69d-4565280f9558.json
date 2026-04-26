@@ -1,0 +1,98 @@
+{
+  "id": "14fcd1f4-870f-5db3-b69d-4565280f9558",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_copy_browser_data",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "copy-item",
+        "copy",
+        "cpi",
+        "move",
+        "move-item",
+        "user data",
+        "users",
+        "profiles"
+      ],
+      "raw_values": [
+        "*copy-item*",
+        "*copy *",
+        "*cpi *",
+        "* cp *",
+        "*move *",
+        "*move-item*",
+        "* mi *",
+        "* mv *",
+        "*\\\\Amigo\\\\User Data*",
+        "*\\\\BraveSoftware\\\\Brave-Browser\\\\User Data*",
+        "*\\\\CentBrowser\\\\User Data*",
+        "*\\\\Chromium\\\\User Data*",
+        "*\\\\CocCoc\\\\Browser\\\\User Data*",
+        "*\\\\Comodo\\\\Dragon\\\\User Data*",
+        "*\\\\Elements Browser\\\\User Data*",
+        "*\\\\Epic Privacy Browser\\\\User Data*",
+        "*\\\\Google\\\\Chrome Beta\\\\User Data*",
+        "*\\\\Google\\\\Chrome SxS\\\\User Data*",
+        "*\\\\Google\\\\Chrome\\\\User Data\\\\*",
+        "*\\\\Kometa\\\\User Data*",
+        "*\\\\Maxthon5\\\\Users*",
+        "*\\\\Microsoft\\\\Edge\\\\User Data*",
+        "*\\\\Mozilla\\\\Firefox\\\\Profiles*",
+        "*\\\\Nichrome\\\\User Data*",
+        "*\\\\Opera Software\\\\Opera GX Stable\\\\*",
+        "*\\\\Opera Software\\\\Opera Neon\\\\User Data*",
+        "*\\\\Opera Software\\\\Opera Stable\\\\*",
+        "*\\\\Orbitum\\\\User Data*",
+        "*\\\\QIP Surf\\\\User Data*",
+        "*\\\\Sputnik\\\\User Data*",
+        "*\\\\Torch\\\\User Data*",
+        "*\\\\uCozMedia\\\\Uran\\\\User Data*",
+        "*\\\\Vivaldi\\\\User Data*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "esentutl.exe",
+        "xcopy.exe",
+        "robocopy.exe"
+      ],
+      "raw_values": [
+        "*\\\\esentutl.exe",
+        "*\\\\xcopy.exe",
+        "*\\\\robocopy.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "esentutl.exe",
+        "xcopy.exe",
+        "robocopy.exe"
+      ],
+      "raw_values": [
+        "esentutl.exe",
+        "XCOPY.EXE",
+        "robocopy.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.command_line like~ (\"*copy-item*\", \"*copy *\", \"*cpi *\", \"* cp *\", \"*move *\", \"*move-item*\", \"* mi *\", \"* mv *\")) or (process.executable like~ (\"*\\\\esentutl.exe\", \"*\\\\xcopy.exe\", \"*\\\\robocopy.exe\")) or (process.pe.original_file_name like~ (\"esentutl.exe\", \"XCOPY.EXE\", \"robocopy.exe\"))) and (process.command_line like~ (\"*\\\\Amigo\\\\User Data*\", \"*\\\\BraveSoftware\\\\Brave-Browser\\\\User Data*\", \"*\\\\CentBrowser\\\\User Data*\", \"*\\\\Chromium\\\\User Data*\", \"*\\\\CocCoc\\\\Browser\\\\User Data*\", \"*\\\\Comodo\\\\Dragon\\\\User Data*\", \"*\\\\Elements Browser\\\\User Data*\", \"*\\\\Epic Privacy Browser\\\\User Data*\", \"*\\\\Google\\\\Chrome Beta\\\\User Data*\", \"*\\\\Google\\\\Chrome SxS\\\\User Data*\", \"*\\\\Google\\\\Chrome\\\\User Data\\\\*\", \"*\\\\Kometa\\\\User Data*\", \"*\\\\Maxthon5\\\\Users*\", \"*\\\\Microsoft\\\\Edge\\\\User Data*\", \"*\\\\Mozilla\\\\Firefox\\\\Profiles*\", \"*\\\\Nichrome\\\\User Data*\", \"*\\\\Opera Software\\\\Opera GX Stable\\\\*\", \"*\\\\Opera Software\\\\Opera Neon\\\\User Data*\", \"*\\\\Opera Software\\\\Opera Stable\\\\*\", \"*\\\\Orbitum\\\\User Data*\", \"*\\\\QIP Surf\\\\User Data*\", \"*\\\\Sputnik\\\\User Data*\", \"*\\\\Torch\\\\User Data*\", \"*\\\\uCozMedia\\\\Uran\\\\User Data*\", \"*\\\\Vivaldi\\\\User Data*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_copy_browser_data.eql",
+  "metadata": {}
+}

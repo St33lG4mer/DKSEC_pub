@@ -1,0 +1,53 @@
+{
+  "id": "deb96953-5dc3-5a90-868c-7aef79cb1c3a",
+  "catalog": "sigma",
+  "name": "win_security_invoke_obfuscation_var_services_security",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "cmd"
+      ],
+      "raw_values": [
+        "*cmd*",
+        "*\\",
+        "*-f*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"4697\" and (winlog.event_data.ServiceFileName:\"*cmd*\" and winlog.event_data.ServiceFileName:\"*\\\"set*\" and winlog.event_data.ServiceFileName:\"*-f*\") and (winlog.event_data.ServiceFileName like~ (\"*/c*\", \"*/r*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_invoke_obfuscation_var_services_security.eql",
+  "metadata": {}
+}

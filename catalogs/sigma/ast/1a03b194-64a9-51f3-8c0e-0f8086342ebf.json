@@ -1,0 +1,44 @@
+{
+  "id": "1a03b194-64a9-51f3-8c0e-0f8086342ebf",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_mavinject",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "mavinject32.exe",
+        "mavinject64.exe"
+      ],
+      "raw_values": [
+        "mavinject32.exe",
+        "mavinject64.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "mavinject32.exe",
+        "mavinject64.exe"
+      ],
+      "raw_values": [
+        "*\\\\mavinject32.exe",
+        "*\\\\mavinject64.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name like~ (\"mavinject32.exe\", \"mavinject64.exe\")) and (not (process.executable like~ (\"*\\\\mavinject32.exe\", \"*\\\\mavinject64.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_mavinject.eql",
+  "metadata": {}
+}

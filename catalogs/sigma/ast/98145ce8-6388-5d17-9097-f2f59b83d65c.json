@@ -1,0 +1,56 @@
+{
+  "id": "98145ce8-6388-5d17-9097-f2f59b83d65c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_secedit_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "secedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\secedit.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "secedit"
+      ],
+      "raw_values": [
+        "SeCEdit"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "export",
+        "cfg",
+        "configure"
+      ],
+      "raw_values": [
+        "*/export*",
+        "*/cfg*",
+        "*/configure*",
+        "*/db*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\secedit.exe\" or process.pe.original_file_name:\"SeCEdit\") and ((process.command_line:\"*/export*\" and process.command_line:\"*/cfg*\") or (process.command_line:\"*/configure*\" and process.command_line:\"*/db*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_secedit_execution.eql",
+  "metadata": {}
+}

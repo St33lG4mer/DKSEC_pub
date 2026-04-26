@@ -1,0 +1,29 @@
+{
+  "id": "6a91e314-3ce7-5767-887d-7d12e890e6b0",
+  "catalog": "sigma",
+  "name": "registry_set_optimize_file_sharing_network",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\services\\\\lanmanserver\\\\parameters\\\\maxmpxct"
+      ],
+      "raw_values": [
+        "*\\\\Services\\\\LanmanServer\\\\Parameters\\\\MaxMpxCt"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Services\\\\LanmanServer\\\\Parameters\\\\MaxMpxCt\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_optimize_file_sharing_network.eql",
+  "metadata": {}
+}

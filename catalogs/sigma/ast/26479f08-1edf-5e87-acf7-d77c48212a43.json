@@ -1,0 +1,40 @@
+{
+  "id": "26479f08-1edf-5e87-acf7-d77c48212a43",
+  "catalog": "sigma",
+  "name": "proc_creation_win_csvde_export",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "csvde.exe"
+      ],
+      "raw_values": [
+        "*\\\\csvde.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "csvde.exe"
+      ],
+      "raw_values": [
+        "csvde.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\csvde.exe\" or process.pe.original_file_name:\"csvde.exe\") and process.command_line:\"* -f*\") and (not process.command_line:\"* -i*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_csvde_export.eql",
+  "metadata": {}
+}

@@ -1,0 +1,79 @@
+{
+  "id": "b44d7c64-bedb-57cf-9411-0e133730e091",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_sysinternals_procdump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-ma",
+        "–ma",
+        "—ma",
+        "―ma",
+        "-mp",
+        "–mp",
+        "—mp",
+        "―mp",
+        "-accepteula",
+        "accepteula",
+        "–accepteula",
+        "—accepteula",
+        "―accepteula"
+      ],
+      "raw_values": [
+        "* -ma *",
+        "* /ma *",
+        "* –ma *",
+        "* —ma *",
+        "* ―ma *",
+        "* -mp *",
+        "* /mp *",
+        "* –mp *",
+        "* —mp *",
+        "* ―mp *",
+        "* -accepteula*",
+        "* /accepteula*",
+        "* –accepteula*",
+        "* —accepteula*",
+        "* ―accepteula*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "procdump.exe",
+        "procdump64.exe"
+      ],
+      "raw_values": [
+        "*\\\\procdump.exe",
+        "*\\\\procdump64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "procdump"
+      ],
+      "raw_values": [
+        "procdump"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"procdump\" or ((process.command_line like~ (\"* -ma *\", \"* /ma *\", \"* –ma *\", \"* —ma *\", \"* ―ma *\") or process.command_line like~ (\"* -mp *\", \"* /mp *\", \"* –mp *\", \"* —mp *\", \"* ―mp *\")) and process.command_line like~ (\"* -accepteula*\", \"* /accepteula*\", \"* –accepteula*\", \"* —accepteula*\", \"* ―accepteula*\"))) and (not (process.executable like~ (\"*\\\\procdump.exe\", \"*\\\\procdump64.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_sysinternals_procdump.eql",
+  "metadata": {}
+}

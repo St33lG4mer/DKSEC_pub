@@ -1,0 +1,64 @@
+{
+  "id": "d4882eef-8cb9-5051-ab72-b27967781c90",
+  "catalog": "sigma",
+  "name": "proc_creation_win_agentexecutor_potential_abuse",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-powershell",
+        "-remediationscript"
+      ],
+      "raw_values": [
+        "* -powershell*",
+        "* -remediationScript*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "agentexecutor.exe"
+      ],
+      "raw_values": [
+        "\\\\AgentExecutor.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "agentexecutor.exe"
+      ],
+      "raw_values": [
+        "AgentExecutor.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "microsoft.management.services.intunewindowsagent.exe"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft.Management.Services.IntuneWindowsAgent.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"\\\\AgentExecutor.exe\" or process.pe.original_file_name:\"AgentExecutor.exe\") and (process.command_line like~ (\"* -powershell*\", \"* -remediationScript*\"))) and (not process.parent.executable:\"*\\\\Microsoft.Management.Services.IntuneWindowsAgent.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_agentexecutor_potential_abuse.eql",
+  "metadata": {}
+}

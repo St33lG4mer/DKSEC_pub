@@ -1,0 +1,198 @@
+{
+  "id": "349af103-24ba-5e11-8132-0c159e3a252e",
+  "catalog": "elastic",
+  "name": "Potential Reverse Shell via Java",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "java"
+      ],
+      "raw_values": [
+        "/usr/bin/java",
+        "/bin/java",
+        "/usr/lib/jvm/*",
+        "/usr/java/*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "java"
+      ],
+      "raw_values": [
+        "/usr/bin/java",
+        "/bin/java",
+        "/usr/lib/jvm/*",
+        "/usr/java/*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "bash -c ps -eo pid,lstart,comm",
+        "application | tail -n 1",
+        "hudson*.sh"
+      ],
+      "raw_values": [
+        "bash -c ps -eo pid,lstart,comm*",
+        "bash -c df -i /application | tail -n 1",
+        "/bin/sh -xe /tmp/hudson*.sh",
+        "bash -c cat /application/HES/*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "connection_accepted",
+        "connection_attempted"
+      ],
+      "raw_values": [
+        "connection_accepted",
+        "connection_attempted"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "bash",
+        "dash",
+        "ash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "ash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "in",
+      "values": [
+        "/usr/lib/jenkins/jenkins.war",
+        "/etc/remote-iot/services/remoteiot.jar",
+        "/opt/pentaho/data-integration/launcher/launcher.jar",
+        "/usr/share/java/jenkins.war",
+        "/opt//tomcat/statistics/statistics.jar",
+        "/usr/lib64/netextender.jar",
+        "/var/lib/jenkins/workspace/mp-qa/tc_certified_copy*/tc_certified_copy_web_ui_test/target/surefire/surefirebooter*.jar",
+        "-javaagent:/opt/opentelemetry/opentelemetry-javaagent-all.jar",
+        "./lib/pipeline-job-executor*snapshot.jar",
+        "./lib/worker-launcher-agent*snapshot.jar",
+        "/opt/seqrite_endpoint_security/wildfly/jboss-modules.jar",
+        "/home/data/jenkins.war",
+        "/pro/service-modules/deployment.jar",
+        "/application/hes/reader/*.jar",
+        "-snapshot.jar",
+        "reader/g1a/reader_g1a.jar",
+        "reader_g1.jar"
+      ],
+      "raw_values": [
+        "/usr/lib/jenkins/jenkins.war",
+        "/etc/remote-iot/services/remoteiot.jar",
+        "/opt/pentaho/data-integration/launcher/launcher.jar",
+        "/usr/share/java/jenkins.war",
+        "/opt//tomcat/statistics/statistics.jar",
+        "/usr/lib64/NetExtender.jar",
+        "/var/lib/jenkins/workspace/MP-QA/tc_certified_copy*/tc_certified_copy_web_ui_test/target/surefire/surefirebooter*.jar",
+        "-javaagent:/opt/opentelemetry/opentelemetry-javaagent-all.jar",
+        "./lib/pipeline-job-executor*SNAPSHOT.jar",
+        "./lib/worker-launcher-agent*SNAPSHOT.jar",
+        "/opt/Seqrite_EndPoint_Security/wildfly/jboss-modules.jar",
+        "/home/data/jenkins.war",
+        "/pro/service-modules/deployment.jar",
+        "/application/HES/READER/*.jar",
+        "*-SNAPSHOT.jar",
+        "READER/G1A/READER_G1A.jar",
+        "READER_G1.jar"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "destination.ip",
+      "raw_field": "destination.ip",
+      "operator": "==",
+      "values": [
+        "0.0.0.0"
+      ],
+      "raw_values": [
+        "0.0.0.0"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "-jar"
+      ],
+      "raw_values": [
+        "-jar"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id with maxspan=5s\n  [network where host.os.type == \"linux\" and event.action in (\"connection_accepted\", \"connection_attempted\") and\n   process.executable : (\"/usr/bin/java\", \"/bin/java\", \"/usr/lib/jvm/*\", \"/usr/java/*\") and\n   not (destination.ip == null or destination.ip == \"0.0.0.0\" or cidrmatch(\n     destination.ip, \"10.0.0.0/8\", \"127.0.0.0/8\", \"169.254.0.0/16\", \"172.16.0.0/12\", \"192.0.0.0/24\", \"192.0.0.0/29\",\n     \"192.0.0.8/32\", \"192.0.0.9/32\", \"192.0.0.10/32\", \"192.0.0.170/32\", \"192.0.0.171/32\", \"192.0.2.0/24\",\n     \"192.31.196.0/24\", \"192.52.193.0/24\", \"192.168.0.0/16\", \"192.88.99.0/24\", \"224.0.0.0/4\", \"100.64.0.0/10\",\n     \"192.175.48.0/24\",\"198.18.0.0/15\", \"198.51.100.0/24\", \"203.0.113.0/24\", \"240.0.0.0/4\", \"::1\", \"FE80::/10\",\n     \"FF00::/8\"\n    )\n  )] by process.entity_id\n  [process where host.os.type == \"linux\" and event.action == \"exec\" and\n   process.parent.executable : (\"/usr/bin/java\", \"/bin/java\", \"/usr/lib/jvm/*\", \"/usr/java/*\") and\n   process.parent.args : \"-jar\" and process.name in (\"bash\", \"dash\", \"ash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\")\n   and not (\n     process.parent.args in (\n       \"/usr/lib/jenkins/jenkins.war\", \"/etc/remote-iot/services/remoteiot.jar\", \"/opt/pentaho/data-integration/launcher/launcher.jar\",\n       \"/usr/share/java/jenkins.war\", \"/opt//tomcat/statistics/statistics.jar\", \"/usr/lib64/NetExtender.jar\",\n       \"/var/lib/jenkins/workspace/MP-QA/tc_certified_copy*/tc_certified_copy_web_ui_test/target/surefire/surefirebooter*.jar\",\n       \"-javaagent:/opt/opentelemetry/opentelemetry-javaagent-all.jar\", \"./lib/pipeline-job-executor*SNAPSHOT.jar\",\n       \"./lib/worker-launcher-agent*SNAPSHOT.jar\", \"/opt/Seqrite_EndPoint_Security/wildfly/jboss-modules.jar\",\n       \"/home/data/jenkins.war\", \"/pro/service-modules/deployment.jar\", \"/application/HES/READER/*.jar\", \"*-SNAPSHOT.jar\",\n       \"READER/G1A/READER_G1A.jar\", \"READER_G1.jar\"\n     ) or\n    process.command_line like~ (\n      \"bash -c ps -eo pid,lstart,comm*\",\n      \"bash -c df -i /application | tail -n 1\",\n      \"/bin/sh -xe /tmp/hudson*.sh\",\n      \"bash -c cat /application/HES/*\"\n    )\n   )] by process.parent.entity_id\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_shell_via_java_revshell_linux.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

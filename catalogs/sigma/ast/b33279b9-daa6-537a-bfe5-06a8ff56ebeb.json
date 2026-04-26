@@ -1,0 +1,35 @@
+{
+  "id": "b33279b9-daa6-537a-bfe5-06a8ff56ebeb",
+  "catalog": "sigma",
+  "name": "file_event_win_malware_goofy_guineapig_file_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "config.dat",
+        "googleupdate.exe",
+        "tmp.bat",
+        "goopdate.dll"
+      ],
+      "raw_values": [
+        "C:\\\\ProgramData\\\\GoogleUpdate\\\\config.dat",
+        "C:\\\\ProgramData\\\\GoogleUpdate\\\\GoogleUpdate.exe",
+        "C:\\\\ProgramData\\\\GoogleUpdate\\\\GoogleUpdate\\\\tmp.bat",
+        "C:\\\\ProgramData\\\\GoogleUpdate\\\\goopdate.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"C:\\\\ProgramData\\\\GoogleUpdate\\\\config.dat\", \"C:\\\\ProgramData\\\\GoogleUpdate\\\\GoogleUpdate.exe\", \"C:\\\\ProgramData\\\\GoogleUpdate\\\\GoogleUpdate\\\\tmp.bat\", \"C:\\\\ProgramData\\\\GoogleUpdate\\\\goopdate.dll\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Goofy-Guineapig/file_event_win_malware_goofy_guineapig_file_indicators.eql",
+  "metadata": {}
+}

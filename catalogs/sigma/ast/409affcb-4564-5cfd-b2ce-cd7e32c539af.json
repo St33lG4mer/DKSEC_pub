@@ -1,0 +1,71 @@
+{
+  "id": "409affcb-4564-5cfd-b2ce-cd7e32c539af",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_devil_bait_output_redirect",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ".xml",
+        ".txt",
+        "dir",
+        "systeminfo",
+        "tasklist"
+      ],
+      "raw_values": [
+        "*.xml",
+        "*.txt",
+        "*dir*",
+        "*systeminfo*",
+        "*tasklist*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wscript.exe"
+      ],
+      "raw_values": [
+        "*\\\\wscript.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "all']), flags=set())"
+      ],
+      "raw_values": [
+        "*>>%APPDATA%\\\\Microsoft\\\\*",
+        "SigmaRegularExpression(regexp=SigmaString(['ipconfig\\\\s+/all']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\wscript.exe\" and process.executable:\"*\\\\cmd.exe\" and process.command_line:\"*>>%APPDATA%\\\\Microsoft\\\\*\" and (process.command_line like~ (\"*.xml\", \"*.txt\"))) and (process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['ipconfig\\\\s+/all']), flags=set())\" or (process.command_line like~ (\"*dir*\", \"*systeminfo*\", \"*tasklist*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Devil-Bait/proc_creation_win_malware_devil_bait_output_redirect.eql",
+  "metadata": {}
+}

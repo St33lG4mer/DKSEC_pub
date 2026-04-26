@@ -1,0 +1,43 @@
+{
+  "id": "bfd94df2-6492-5c01-bd7d-db7b16b4d3c8",
+  "catalog": "sigma",
+  "name": "proc_creation_win_registry_install_reg_debugger_backdoor",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "sethc.exe",
+        "utilman.exe",
+        "osk.exe",
+        "magnify.exe",
+        "narrator.exe",
+        "displayswitch.exe",
+        "atbroker.exe",
+        "helppane.exe"
+      ],
+      "raw_values": [
+        "*sethc.exe*",
+        "*utilman.exe*",
+        "*osk.exe*",
+        "*magnify.exe*",
+        "*narrator.exe*",
+        "*displayswitch.exe*",
+        "*atbroker.exe*",
+        "*HelpPane.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\CurrentVersion\\\\Image File Execution Options\\\\*\" and (process.command_line like~ (\"*sethc.exe*\", \"*utilman.exe*\", \"*osk.exe*\", \"*magnify.exe*\", \"*narrator.exe*\", \"*displayswitch.exe*\", \"*atbroker.exe*\", \"*HelpPane.exe*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_registry_install_reg_debugger_backdoor.eql",
+  "metadata": {}
+}

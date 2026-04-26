@@ -1,0 +1,32 @@
+{
+  "id": "ef043229-4b23-55bd-b852-38950eb75020",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_griffon_patterns",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "e:jscript",
+        ".txt"
+      ],
+      "raw_values": [
+        "*\\\\local\\\\temp\\\\*",
+        "*//b /e:jscript*",
+        "*.txt*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\local\\\\temp\\\\*\" and process.command_line:\"*//b /e:jscript*\" and process.command_line:\"*.txt*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/Griffon/proc_creation_win_malware_griffon_patterns.eql",
+  "metadata": {}
+}

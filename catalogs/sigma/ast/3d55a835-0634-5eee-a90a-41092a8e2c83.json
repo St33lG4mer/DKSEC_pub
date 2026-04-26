@@ -1,0 +1,40 @@
+{
+  "id": "3d55a835-0634-5eee-a90a-41092a8e2c83",
+  "catalog": "sigma",
+  "name": "image_load_dll_taskschd_by_process_in_potentially_suspicious_location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "taskschd.dll"
+      ],
+      "raw_values": [
+        "*\\\\taskschd.dll"
+      ]
+    },
+    {
+      "field": "file.pe.original_file_name",
+      "raw_field": "file.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "taskschd.dll"
+      ],
+      "raw_values": [
+        "taskschd.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\taskschd.dll\" or file.pe.original_file_name:\"taskschd.dll\") and (process.executable like~ (\"*:\\\\Temp\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Desktop\\\\*\", \"*\\\\Downloads\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/image_load/image_load_dll_taskschd_by_process_in_potentially_suspicious_location.eql",
+  "metadata": {}
+}

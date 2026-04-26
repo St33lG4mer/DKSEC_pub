@@ -1,0 +1,59 @@
+{
+  "id": "abd5a20d-a9be-5776-a561-a3a2933bfad2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sysinternals_procdump_lsass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-ma",
+        "–ma",
+        "—ma",
+        "―ma",
+        "-mm",
+        "–mm",
+        "—mm",
+        "―mm",
+        "-mp",
+        "–mp",
+        "—mp",
+        "―mp",
+        "keyiso",
+        "samss"
+      ],
+      "raw_values": [
+        "* -ma *",
+        "* /ma *",
+        "* –ma *",
+        "* —ma *",
+        "* ―ma *",
+        "* -mm *",
+        "* /mm *",
+        "* –mm *",
+        "* —mm *",
+        "* ―mm *",
+        "* -mp *",
+        "* /mp *",
+        "* –mp *",
+        "* —mp *",
+        "* ―mp *",
+        "* ls*",
+        "* keyiso*",
+        "* samss*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"* -ma *\", \"* /ma *\", \"* –ma *\", \"* —ma *\", \"* ―ma *\") or process.command_line like~ (\"* -mm *\", \"* /mm *\", \"* –mm *\", \"* —mm *\", \"* ―mm *\") or process.command_line like~ (\"* -mp *\", \"* /mp *\", \"* –mp *\", \"* —mp *\", \"* ―mp *\")) and (process.command_line like~ (\"* ls*\", \"* keyiso*\", \"* samss*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sysinternals_procdump_lsass.eql",
+  "metadata": {}
+}

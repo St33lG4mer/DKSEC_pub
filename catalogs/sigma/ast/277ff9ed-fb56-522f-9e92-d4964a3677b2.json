@@ -1,0 +1,53 @@
+{
+  "id": "277ff9ed-fb56-522f-9e92-d4964a3677b2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_schtasks_persistence_windows_telemetry",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "*\\\\schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "schtasks.exe"
+      ],
+      "raw_values": [
+        "schtasks.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "run",
+        "microsoft compatibility appraiser"
+      ],
+      "raw_values": [
+        "*run *",
+        "*\\\\Application Experience\\\\Microsoft Compatibility Appraiser*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\schtasks.exe\" or process.pe.original_file_name:\"schtasks.exe\") and (process.command_line:\"*run *\" and process.command_line:\"*\\\\Application Experience\\\\Microsoft Compatibility Appraiser*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_schtasks_persistence_windows_telemetry.eql",
+  "metadata": {}
+}

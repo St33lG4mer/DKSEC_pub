@@ -1,0 +1,28 @@
+{
+  "id": "706de961-f1c0-5471-a2af-3b5c9958e5a3",
+  "catalog": "elastic",
+  "name": "AWS Bedrock Guardrails Detected Multiple Violations by a Single User Over a Session",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "from logs-aws_bedrock.invocation-*\n\n// Filter for compliance violations detected\n| where gen_ai.compliance.violation_detected\n\n// keep relevant ECS + model fields\n| keep\n  user.id,\n  gen_ai.request.model.id,\n  cloud.account.id\n\n// count violations by user, model, and account\n| stats\n    Esql.ml_violations_count = count(*)\n  by\n    user.id,\n    gen_ai.request.model.id,\n    cloud.account.id\n\n// Filter for repeated violations\n| where Esql.ml_violations_count > 1\n\n// sort descending by violation volume\n| sort Esql.ml_violations_count desc\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws_bedrock/aws_bedrock_guardrails_multiple_violations_by_single_user.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: LLM",
+      "Data Source: AWS Bedrock",
+      "Data Source: AWS S3",
+      "Resources: Investigation Guide",
+      "Use Case: Policy Violation",
+      "Mitre Atlas: T0051",
+      "Mitre Atlas: T0054"
+    ]
+  }
+}

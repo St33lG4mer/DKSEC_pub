@@ -1,0 +1,40 @@
+{
+  "id": "3d41e64a-319d-54d8-8143-e375c6ce05f6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_conhost_headless_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "conhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\conhost.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "--headless"
+      ],
+      "raw_values": [
+        "*--headless*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\conhost.exe\" and process.parent.command_line:\"*--headless*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/process_creation/proc_creation_win_conhost_headless_execution.eql",
+  "metadata": {}
+}

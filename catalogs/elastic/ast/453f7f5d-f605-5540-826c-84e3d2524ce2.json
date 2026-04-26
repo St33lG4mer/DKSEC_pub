@@ -1,0 +1,100 @@
+{
+  "id": "453f7f5d-f605-5540-826c-84e3d2524ce2",
+  "catalog": "elastic",
+  "name": "Potential Timestomp in Executable Files",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "exe",
+        "dll",
+        "sys",
+        "msi",
+        "scr",
+        "pif",
+        "lnk"
+      ],
+      "raw_values": [
+        "exe",
+        "dll",
+        "sys",
+        "msi",
+        "scr",
+        "pif",
+        "lnk"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "spoolsv.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Program Files\\\\*",
+        "?:\\\\Windows\\\\System32\\\\spoolsv.exe"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": ":",
+      "values": [
+        "system",
+        "local service",
+        "network service"
+      ],
+      "raw_values": [
+        "SYSTEM",
+        "Local Service",
+        "Network Service"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "microsoft-windows-sysmon"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Sysmon"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and\n  event.provider == \"Microsoft-Windows-Sysmon\" and event.code == \"2\" and\n  file.extension : (\n    \"exe\", \"dll\", \"sys\", \"msi\", \"scr\", \"pif\", \"lnk\"\n  ) and\n  file.path : (\n    \"?:\\\\Windows\\\\System32\\\\*\",\n    \"?:\\\\Windows\\\\SysWOW64\\\\*\",\n    \"?:\\\\ProgramData\\\\*\",\n    \"?:\\\\Users\\\\Public\\\\*\",\n    \"?:\\\\Users\\\\*\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*\",\n    \"?:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\Start Menu\\\\Programs\\\\Startup\\\\*\"\n  ) and\n  not process.executable : (\n    \"?:\\\\Program Files\\\\*\",\n    \"?:\\\\Program Files (x86)\\\\*\",\n    \"?:\\\\Windows\\\\system32\\\\cleanmgr.exe\",\n    \"?:\\\\Windows\\\\system32\\\\msiexec.exe\",\n    \"?:\\\\Windows\\\\syswow64\\\\msiexec.exe\",\n    \"?:\\\\Windows\\\\system32\\\\svchost.exe\",\n    \"?:\\\\Windows\\\\System32\\\\Robocopy.exe\",\n    \"?:\\\\Windows\\\\SysWOW64\\\\Robocopy.exe\"\n  ) and\n  not (process.executable : \"?:\\\\Windows\\\\System32\\\\spoolsv.exe\" and file.path : \"?:\\\\Windows\\\\System32\\\\spool\\\\*\") and\n  not user.name : (\"SYSTEM\", \"Local Service\", \"Network Service\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_timestomp_sysmon.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

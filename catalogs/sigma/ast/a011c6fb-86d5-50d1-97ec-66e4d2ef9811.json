@@ -1,0 +1,29 @@
+{
+  "id": "a011c6fb-86d5-50d1-97ec-66e4d2ef9811",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_goofy_guineapig_broken_cmd",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "n >nul"
+      ],
+      "raw_values": [
+        "*choice /t %d /d y /n >nul*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*choice /t %d /d y /n >nul*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Goofy-Guineapig/proc_creation_win_malware_goofy_guineapig_broken_cmd.eql",
+  "metadata": {}
+}

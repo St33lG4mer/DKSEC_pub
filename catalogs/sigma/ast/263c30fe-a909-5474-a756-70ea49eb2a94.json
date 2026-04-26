@@ -1,0 +1,29 @@
+{
+  "id": "263c30fe-a909-5474-a756-70ea49eb2a94",
+  "catalog": "sigma",
+  "name": "file_delete_win_delete_own_image",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "sigmafieldreference(field='process.executable', starts_with=false, ends_with=false)"
+      ],
+      "raw_values": [
+        "SigmaFieldReference(field='process.executable', starts_with=False, ends_with=False)"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"SigmaFieldReference(field='process.executable', starts_with=False, ends_with=False)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_delete/file_delete_win_delete_own_image.eql",
+  "metadata": {}
+}

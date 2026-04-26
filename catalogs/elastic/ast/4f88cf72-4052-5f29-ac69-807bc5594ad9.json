@@ -1,0 +1,53 @@
+{
+  "id": "4f88cf72-4052-5f29-ac69-807bc5594ad9",
+  "catalog": "elastic",
+  "name": "FirstTime Seen Account Performing DCSync",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4662"
+      ],
+      "raw_values": [
+        "4662"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": ":",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    }
+  ],
+  "raw_query": "event.code:\"4662\" and host.os.type:\"windows\" and \n  winlog.event_data.Properties:(\n    *DS-Replication-Get-Changes* or *DS-Replication-Get-Changes-All* or\n    *DS-Replication-Get-Changes-In-Filtered-Set* or *1131f6ad-9c07-11d1-f79f-00c04fc2dcd2* or\n    *1131f6aa-9c07-11d1-f79f-00c04fc2dcd2* or *89e95b76-444d-4c62-991a-0facbeda640c*) and\n  not winlog.event_data.SubjectUserName:(*$ or MSOL_*)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_dcsync_newterm_subjectuser.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Privilege Escalation",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Active Directory",
+      "Resources: Investigation Guide",
+      "Data Source: Windows Security Event Logs"
+    ]
+  }
+}

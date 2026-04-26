@@ -1,0 +1,17 @@
+{
+  "id": "ec45b30d-9608-5100-8fe9-25dc48d54471",
+  "catalog": "sigma",
+  "name": "image_load_dll_pcre_dotnet_dll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [],
+  "raw_query": "any where file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\ba9ea7344a4a5f591d6e5dc32a13494b\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_dll_pcre_dotnet_dll_load.eql",
+  "metadata": {}
+}

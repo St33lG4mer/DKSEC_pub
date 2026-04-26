@@ -1,0 +1,77 @@
+{
+  "id": "80afed00-8820-5341-9195-d6cff8fe2465",
+  "catalog": "elastic",
+  "name": "Potential Process Name Stomping with Prctl",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "veeamagent",
+        "xmonad*linux"
+      ],
+      "raw_values": [
+        "/boot/*",
+        "/dev/shm/*",
+        "/etc/cron.*/*",
+        "/etc/init.d/*",
+        "/var/run/*",
+        "/etc/update-motd.d/*",
+        "/tmp/*",
+        "/var/log/*",
+        "/var/tmp/*",
+        "/home/*",
+        "/run/shm/*",
+        "/run/*",
+        "./*",
+        "/home/*/.vscode-server/*",
+        "/tmp/VeeamAgent*",
+        "/home/*/.xmonad/xmonad*linux*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "auditd.data.syscall",
+      "raw_field": "auditd.data.syscall",
+      "operator": "==",
+      "values": [
+        "prctl"
+      ],
+      "raw_values": [
+        "prctl"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and auditd.data.syscall == \"prctl\" and auditd.data.a0 == \"f\" and\nprocess.executable like (\n  \"/boot/*\", \"/dev/shm/*\", \"/etc/cron.*/*\", \"/etc/init.d/*\", \"/var/run/*\", \"/etc/update-motd.d/*\",\n  \"/tmp/*\", \"/var/log/*\", \"/var/tmp/*\", \"/home/*\", \"/run/shm/*\", \"/run/*\", \"./*\"\n) and\nnot process.executable like (\"/home/*/.vscode-server/*\", \"/tmp/VeeamAgent*\", \"/home/*/.xmonad/xmonad*linux*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_prctl_process_name_tampering.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Data Source: Auditd Manager",
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

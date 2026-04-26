@@ -1,0 +1,75 @@
+{
+  "id": "1caab717-5e6d-5694-8307-dcd132b49332",
+  "catalog": "sigma",
+  "name": "win_system_service_install_remote_utilities",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    },
+    {
+      "field": "winlog.provider_name",
+      "raw_field": "winlog.provider_name",
+      "operator": ":",
+      "values": [
+        "service control manager"
+      ],
+      "raw_values": [
+        "Service Control Manager"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "7045"
+      ],
+      "raw_values": [
+        "7045"
+      ]
+    },
+    {
+      "field": "winlog.event_data.imagepath",
+      "raw_field": "winlog.event_data.ImagePath",
+      "operator": ":",
+      "values": [
+        "\\\\rutserv.exe",
+        "-service"
+      ],
+      "raw_values": [
+        "*\\\\rutserv.exe*",
+        "*-service*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicename",
+      "raw_field": "winlog.event_data.ServiceName",
+      "operator": ":",
+      "values": [
+        "remote utilities - host"
+      ],
+      "raw_values": [
+        "Remote Utilities - Host"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"System\" and ((winlog.provider_name:\"Service Control Manager\" and event.code:\"7045\") and ((winlog.event_data.ImagePath:\"*\\\\rutserv.exe*\" and winlog.event_data.ImagePath:\"*-service*\") or winlog.event_data.ServiceName:\"Remote Utilities - Host\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/system/service_control_manager/win_system_service_install_remote_utilities.eql",
+  "metadata": {}
+}

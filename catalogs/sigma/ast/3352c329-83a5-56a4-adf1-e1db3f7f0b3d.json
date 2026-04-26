@@ -1,0 +1,42 @@
+{
+  "id": "3352c329-83a5-56a4-adf1-e1db3f7f0b3d",
+  "catalog": "sigma",
+  "name": "file_event_win_uac_bypass_ieinstal",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ieinstal.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\Internet Explorer\\\\IEInstal.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "consent.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*consent.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"C:\\\\Program Files\\\\Internet Explorer\\\\IEInstal.exe\" and file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and file.path:\"*consent.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_uac_bypass_ieinstal.eql",
+  "metadata": {}
+}

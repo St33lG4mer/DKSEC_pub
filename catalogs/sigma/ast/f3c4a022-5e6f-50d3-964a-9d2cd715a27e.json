@@ -1,0 +1,29 @@
+{
+  "id": "f3c4a022-5e6f-50d3-964a-9d2cd715a27e",
+  "catalog": "sigma",
+  "name": "create_stream_hash_regedit_export_to_ads",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "regedit.exe"
+      ],
+      "raw_values": [
+        "*\\\\regedit.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\regedit.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/create_stream_hash/create_stream_hash_regedit_export_to_ads.eql",
+  "metadata": {}
+}

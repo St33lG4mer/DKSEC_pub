@@ -1,0 +1,26 @@
+{
+  "id": "6d15e990-259a-5957-af83-5b6d37ab4b84",
+  "catalog": "elastic",
+  "name": "External Alerts",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind:alert and not event.module:(endgame or endpoint or cloud_defend)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/external_alerts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "OS: Windows",
+      "Data Source: APM",
+      "OS: macOS",
+      "OS: Linux",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

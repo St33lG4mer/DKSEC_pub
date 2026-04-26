@@ -1,0 +1,29 @@
+{
+  "id": "90920d4e-e0c2-5b20-9ea9-6fd1c15fda27",
+  "catalog": "sigma",
+  "name": "proc_creation_win_gfxdownloadwrapper_arbitrary_file_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "gfxdownloadwrapper.exe"
+      ],
+      "raw_values": [
+        "*\\\\GfxDownloadWrapper.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\GfxDownloadWrapper.exe\" and (process.command_line like~ (\"*http://*\", \"*https://*\"))) and (not process.command_line:\"*https://gameplayapi.intel.com/*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_gfxdownloadwrapper_arbitrary_file_download.eql",
+  "metadata": {}
+}

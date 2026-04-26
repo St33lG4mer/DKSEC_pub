@@ -1,0 +1,32 @@
+{
+  "id": "d7b5856c-2b89-5a67-a5c2-378a653d68eb",
+  "catalog": "sigma",
+  "name": "image_load_side_load_shelldispatch",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "shelldispatch.dll"
+      ],
+      "raw_values": [
+        "*\\\\ShellDispatch.dll",
+        "*:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\ShellDispatch.dll\" and (not ((file.path:\"*:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\") or file.path:\"*:\\\\Windows\\\\Temp\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_shelldispatch.eql",
+  "metadata": {}
+}

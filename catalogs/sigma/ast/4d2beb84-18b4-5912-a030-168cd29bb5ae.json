@@ -1,0 +1,59 @@
+{
+  "id": "4d2beb84-18b4-5912-a030-168cd29bb5ae",
+  "catalog": "sigma",
+  "name": "proc_creation_win_certutil_encode",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-encode",
+        "encode",
+        "–encode",
+        "—encode",
+        "―encode"
+      ],
+      "raw_values": [
+        "*-encode*",
+        "*/encode*",
+        "*–encode*",
+        "*—encode*",
+        "*―encode*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "*\\\\certutil.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "certutil.exe"
+      ],
+      "raw_values": [
+        "CertUtil.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\certutil.exe\" or process.pe.original_file_name:\"CertUtil.exe\") and process.command_line like~ (\"*-encode*\", \"*/encode*\", \"*–encode*\", \"*—encode*\", \"*―encode*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_certutil_encode.eql",
+  "metadata": {}
+}

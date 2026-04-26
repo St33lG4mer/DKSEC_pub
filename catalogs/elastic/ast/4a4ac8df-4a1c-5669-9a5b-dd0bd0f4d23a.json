@@ -1,0 +1,129 @@
+{
+  "id": "4a4ac8df-4a1c-5669-9a5b-dd0bd0f4d23a",
+  "catalog": "elastic",
+  "name": "Prompt for Credentials with Osascript",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "osascript*display*dialog*password",
+        "osascript*display*dialog*passphrase",
+        "osascript*display*dialog*authenticate",
+        "pass*display*dialog",
+        "encryption key escrow",
+        "-e with timeout of 3600 seconds"
+      ],
+      "raw_values": [
+        "*osascript*display*dialog*password*",
+        "*osascript*display*dialog*passphrase*",
+        "*osascript*display*dialog*authenticate*",
+        "*pass*display*dialog*",
+        "*Encryption Key Escrow*",
+        "*-e with timeout of 3600 seconds*"
+      ]
+    },
+    {
+      "field": "process.ext.effective_parent.executable",
+      "raw_field": "process.Ext.effective_parent.executable",
+      "operator": "like~",
+      "values": [
+        "/usr/local/jamf/",
+        "/library/intune/microsoft intune agent.app/contents/macos/intunemdmdaemon",
+        "/library/application support/mosyle/mosylemdm.app/contents/macos/mosylemdm",
+        "/applications/ninjarmmagent/programfiles/ninjarmm-macagent",
+        "/applications/karabiner-elements.app/contents/macos/karabiner-elements",
+        "/library/application support/jamf/jamf.app/contents/macos/jamfdaemon.app/contents/macos/jamfdaemon",
+        "/library/application support/jamf/jamf.app/contents/macos/jamfmanagementservice.app/contents/macos/jamfmanagementservice"
+      ],
+      "raw_values": [
+        "/usr/local/jamf/*",
+        "/Library/Intune/Microsoft Intune Agent.app/Contents/MacOS/IntuneMdmDaemon",
+        "/Library/Application Support/Mosyle/MosyleMDM.app/Contents/MacOS/MosyleMDM",
+        "/Applications/NinjaRMMAgent/programfiles/ninjarmm-macagent",
+        "/Applications/Karabiner-Elements.app/Contents/MacOS/Karabiner-Elements",
+        "/Library/Application Support/JAMF/Jamf.app/Contents/MacOS/JamfDaemon.app/Contents/MacOS/JamfDaemon",
+        "/Library/Application Support/JAMF/Jamf.app/Contents/MacOS/JamfManagementService.app/Contents/MacOS/JamfManagementService"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "osascript"
+      ],
+      "raw_values": [
+        "osascript"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "==",
+      "values": [
+        "sudo",
+        "bash"
+      ],
+      "raw_values": [
+        "/usr/bin/sudo",
+        "/bin/bash"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like",
+      "values": [
+        "sudo"
+      ],
+      "raw_values": [
+        "sudo*"
+      ]
+    }
+  ],
+  "raw_query": "process where event.action == \"exec\" and host.os.type == \"macos\" and\n process.name == \"osascript\" and process.args == \"-e\" and process.command_line like~ (\"*osascript*display*dialog*password*\", \"*osascript*display*dialog*passphrase*\", \"*osascript*display*dialog*authenticate*\", \"*pass*display*dialog*\") and\n not (process.parent.executable == \"/usr/bin/sudo\" and process.command_line like~ \"*Encryption Key Escrow*\") and\n not (process.command_line like~ \"*-e with timeout of 3600 seconds*\" and user.id like \"0\" and process.parent.executable == \"/bin/bash\") and\n not process.parent.command_line like \"sudo*\" and\n not process.Ext.effective_parent.executable like~\n                                               (\"/usr/local/jamf/*\",\n                                                \"/Library/Intune/Microsoft Intune Agent.app/Contents/MacOS/IntuneMdmDaemon\",\n                                                \"/Library/Application Support/Mosyle/MosyleMDM.app/Contents/MacOS/MosyleMDM\",\n                                                \"/Applications/NinjaRMMAgent/programfiles/ninjarmm-macagent\",\n                                                \"/Applications/Karabiner-Elements.app/Contents/MacOS/Karabiner-Elements\",\n                                                \"/Library/Application Support/JAMF/Jamf.app/Contents/MacOS/JamfDaemon.app/Contents/MacOS/JamfDaemon\",\n                                                \"/Library/Application Support/JAMF/Jamf.app/Contents/MacOS/JamfManagementService.app/Contents/MacOS/JamfManagementService\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/credential_access_promt_for_pwd_via_osascript.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

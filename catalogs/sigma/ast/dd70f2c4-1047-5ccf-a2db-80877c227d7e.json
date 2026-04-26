@@ -1,0 +1,29 @@
+{
+  "id": "dd70f2c4-1047-5ccf-a2db-80877c227d7e",
+  "catalog": "sigma",
+  "name": "registry_set_pua_sysinternals_execution_via_eula",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\eulaaccepted"
+      ],
+      "raw_values": [
+        "*\\\\EulaAccepted"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\EulaAccepted\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_pua_sysinternals_execution_via_eula.eql",
+  "metadata": {}
+}

@@ -1,0 +1,25 @@
+{
+  "id": "67793526-6b0e-53bd-9e30-3f90f79b96e6",
+  "catalog": "elastic",
+  "name": "Permission Theft - Prevented - Elastic Endgame",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind:alert and event.module:endgame and endgame.metadata.type:prevention and (event.action:token_protection_event or endgame.event_subtype_full:token_protection_event)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/privilege_escalation_endgame_permission_theft_prevented.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Endgame",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

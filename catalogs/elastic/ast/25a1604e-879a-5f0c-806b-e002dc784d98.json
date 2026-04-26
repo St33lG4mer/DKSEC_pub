@@ -1,0 +1,63 @@
+{
+  "id": "25a1604e-879a-5f0c-806b-e002dc784d98",
+  "catalog": "elastic",
+  "name": "Kubernetes Secret Access via Unusual User Agent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "get",
+        "list"
+      ],
+      "raw_values": [
+        "get",
+        "list"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "secrets"
+      ],
+      "raw_values": [
+        "secrets"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"kubernetes.audit_logs\" and kubernetes.audit.objectRef.resource:\"secrets\" and\nkubernetes.audit.verb:(\"get\" or \"list\") and user_agent.original:(* and not (*kubernetes/$Format))\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/credential_access_get_secrets_access.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Domain: Cloud",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "id": "f4c81fda-6caa-5faf-80e4-6aca1ebb51c3",
+  "catalog": "elastic",
+  "name": "Privileges Elevation via Parent Process PID Spoofing",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe",
+        "werfaultsecure.exe",
+        "wermgr.exe",
+        "securityhealthsetup.exe",
+        "osk.exe",
+        "narrator.exe",
+        "magnify.exe",
+        "voiceaccess.exe",
+        "mpsigstub.exe",
+        "adcrcpy.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\WerFault.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\WerFault.exe",
+        "?:\\\\Windows\\\\System32\\\\WerFaultSecure.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\WerFaultSecure.exe",
+        "?:\\\\Windows\\\\System32\\\\Wermgr.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\Wermgr.exe",
+        "?:\\\\Windows\\\\SoftwareDistribution\\\\Download\\\\Install\\\\securityhealthsetup.exe",
+        "?:\\\\Windows\\\\System32\\\\osk.exe",
+        "?:\\\\Windows\\\\System32\\\\Narrator.exe",
+        "?:\\\\Windows\\\\System32\\\\Magnify.exe",
+        "?:\\\\Windows\\\\System32\\\\VoiceAccess.exe",
+        "?:\\\\Windows\\\\System32\\\\MpSigStub.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\MpSigStub.exe",
+        "adcrcpy.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "wuauclt.exe",
+        "wuaucltcore.exe",
+        "utilman.exe",
+        "atbroker.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Windows\\\\System32\\\\wuauclt.exe",
+        "?:\\\\Windows\\\\SysWOW64\\\\wuauclt.exe",
+        "?:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\*\\\\wuaucltcore.exe",
+        "?:\\\\Windows\\\\UUS\\\\amd64\\\\wuauclt.exe",
+        "?:\\\\Windows\\\\UUS\\\\amd64\\\\wuaucltcore.exe",
+        "?:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\UUS\\\\*\\\\wuaucltcore.exe",
+        "?:\\\\Windows\\\\System32\\\\Utilman.exe",
+        "?:\\\\Windows\\\\System32\\\\AtBroker.exe"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": "in",
+      "values": [
+        "philandro software gmbh",
+        "freedom scientific inc.",
+        "teamviewer germany gmbh",
+        "projector.is, inc.",
+        "teamviewer gmbh",
+        "cisco webex llc",
+        "dell inc"
+      ],
+      "raw_values": [
+        "philandro Software GmbH",
+        "Freedom Scientific Inc.",
+        "TeamViewer Germany GmbH",
+        "Projector.is, Inc.",
+        "TeamViewer GmbH",
+        "Cisco WebEx LLC",
+        "Dell Inc"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": ":",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    },
+    {
+      "field": "process.code_signature.subject_name",
+      "raw_field": "process.code_signature.subject_name",
+      "operator": "==",
+      "values": [
+        "netwrix corporation"
+      ],
+      "raw_values": [
+        "Netwrix Corporation"
+      ]
+    }
+  ],
+  "raw_query": "/* This rule is compatible with Elastic Endpoint only */\n\nprocess where host.os.type == \"windows\" and event.action == \"start\" and\n\n /* process creation via seclogon */\n process.parent.Ext.real.pid > 0 and\n\n /* PrivEsc to SYSTEM */\n user.id : \"S-1-5-18\"  and\n\n /* Common FPs - evasion via hollowing is possible, should be covered by code injection */\n not process.executable : (\"?:\\\\Windows\\\\System32\\\\WerFault.exe\",\n                           \"?:\\\\Windows\\\\SysWOW64\\\\WerFault.exe\",\n                           \"?:\\\\Windows\\\\System32\\\\WerFaultSecure.exe\",\n                           \"?:\\\\Windows\\\\SysWOW64\\\\WerFaultSecure.exe\",\n                           \"?:\\\\Windows\\\\System32\\\\Wermgr.exe\",\n                           \"?:\\\\Windows\\\\SysWOW64\\\\Wermgr.exe\",\n                           \"?:\\\\Windows\\\\SoftwareDistribution\\\\Download\\\\Install\\\\securityhealthsetup.exe\") and\n /* Logon Utilities */\n not (process.parent.executable : \"?:\\\\Windows\\\\System32\\\\Utilman.exe\" and\n     process.executable : (\"?:\\\\Windows\\\\System32\\\\osk.exe\",\n                           \"?:\\\\Windows\\\\System32\\\\Narrator.exe\",\n                           \"?:\\\\Windows\\\\System32\\\\Magnify.exe\",\n                           \"?:\\\\Windows\\\\System32\\\\VoiceAccess.exe\")) and\n\n not process.parent.executable : \"?:\\\\Windows\\\\System32\\\\AtBroker.exe\" and\n\n not (process.code_signature.subject_name in\n           (\"philandro Software GmbH\", \"Freedom Scientific Inc.\", \"TeamViewer Germany GmbH\", \"Projector.is, Inc.\",\n            \"TeamViewer GmbH\", \"Cisco WebEx LLC\", \"Dell Inc\") and process.code_signature.trusted == true) and\n\n /* AM_Delta_Patch Windows Update */\n not (process.executable : (\"?:\\\\Windows\\\\System32\\\\MpSigStub.exe\", \"?:\\\\Windows\\\\SysWOW64\\\\MpSigStub.exe\") and\n      process.parent.executable : (\"?:\\\\Windows\\\\System32\\\\wuauclt.exe\",\n                                   \"?:\\\\Windows\\\\SysWOW64\\\\wuauclt.exe\",\n                                   \"?:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\*\\\\wuaucltcore.exe\",\n                                   \"?:\\\\Windows\\\\UUS\\\\amd64\\\\wuauclt.exe\",\n                                   \"?:\\\\Windows\\\\UUS\\\\amd64\\\\wuaucltcore.exe\",\n                                   \"?:\\\\ProgramData\\\\Microsoft\\\\Windows\\\\UUS\\\\*\\\\wuaucltcore.exe\")) and\n not (process.executable : (\"?:\\\\Windows\\\\System32\\\\MpSigStub.exe\", \"?:\\\\Windows\\\\SysWOW64\\\\MpSigStub.exe\") and process.parent.executable == null) and\n\n /* Other third party SW */\n not process.parent.executable :\n                   (\"?:\\\\Program Files (x86)\\\\HEAT Software\\\\HEAT Remote\\\\HEATRemoteServer.exe\",\n                    \"?:\\\\Program Files (x86)\\\\VisualCron\\\\VisualCronService.exe\",\n                    \"?:\\\\Program Files\\\\BinaryDefense\\\\Vision\\\\Agent\\\\bds-vision-agent-app.exe\",\n                    \"?:\\\\Program Files\\\\Tablet\\\\Wacom\\\\WacomHost.exe\",\n                    \"?:\\\\Program Files (x86)\\\\LogMeIn\\\\x64\\\\LogMeIn.exe\",\n                    \"?:\\\\Program Files (x86)\\\\EMC Captiva\\\\Captiva Cloud Runtime\\\\Emc.Captiva.WebCaptureRunner.exe\",\n                    \"?:\\\\Program Files\\\\Freedom Scientific\\\\*.exe\",\n                    \"?:\\\\Program Files (x86)\\\\Google\\\\Chrome Remote Desktop\\\\*\\\\remoting_host.exe\",\n                    \"?:\\\\Program Files (x86)\\\\GoToAssist Remote Support Customer\\\\*\\\\g2ax_comm_customer.exe\") and\n not (\n    process.code_signature.trusted == true and process.code_signature.subject_name == \"Netwrix Corporation\" and\n    process.name : \"adcrcpy.exe\" and process.parent.executable : (\n      \"?:\\\\Program Files (x86)\\\\Netwrix Auditor\\\\Active Directory Auditing\\\\Netwrix.ADA.EventCollector.exe\",\n      \"?:\\\\Program Files (x86)\\\\Netwrix Auditor\\\\Active Directory Auditing\\\\Netwrix.ADA.Analyzer.exe\",\n      \"?:\\\\Netwrix Auditor\\\\Active Directory Auditing\\\\Netwrix.ADA.EventCollector.exe\"\n    )\n )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_via_ppid_spoofing.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

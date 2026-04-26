@@ -1,0 +1,25 @@
+{
+  "id": "44c2e060-20fb-5d48-a415-3ce6d688d64c",
+  "catalog": "elastic",
+  "name": "Attempt to Delete an Okta Application",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:application.lifecycle.delete\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/impact_okta_attempt_to_delete_okta_application.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

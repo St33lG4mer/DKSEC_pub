@@ -1,0 +1,29 @@
+{
+  "id": "ad6b4d81-579f-5623-9aec-d68545875240",
+  "catalog": "sigma",
+  "name": "file_event_win_msdt_susp_directories",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\msdt.exe\" and (file.path like~ (\"*\\\\Desktop\\\\*\", \"*\\\\Start Menu\\\\Programs\\\\Startup\\\\*\", \"*C:\\\\PerfLogs\\\\*\", \"*C:\\\\ProgramData\\\\*\", \"*C:\\\\Users\\\\Public\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_msdt_susp_directories.eql",
+  "metadata": {}
+}

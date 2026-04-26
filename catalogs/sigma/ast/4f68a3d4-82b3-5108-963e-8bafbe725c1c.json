@@ -1,0 +1,35 @@
+{
+  "id": "4f68a3d4-82b3-5108-963e-8bafbe725c1c",
+  "catalog": "sigma",
+  "name": "registry_event_malware_flowcloud_markers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\hardware\\\\{2db80286-1784-48b5-a751-b6ed1f490303}",
+        "\\\\hardware\\\\{804423c2-f490-4ac3-bfa5-13dede63a71a}",
+        "\\\\hardware\\\\{a5124af5-df23-49bf-b0ed-a18ed3dea027}",
+        "\\\\system\\\\setup\\\\printresponsor\\\\"
+      ],
+      "raw_values": [
+        "*\\\\HARDWARE\\\\{2DB80286-1784-48b5-A751-B6ED1F490303}*",
+        "*\\\\HARDWARE\\\\{804423C2-F490-4ac3-BFA5-13DEDE63A71A}*",
+        "*\\\\HARDWARE\\\\{A5124AF5-DF23-49bf-B0ED-A18ED3DEA027}*",
+        "*\\\\SYSTEM\\\\Setup\\\\PrintResponsor\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path like~ (\"*\\\\HARDWARE\\\\{2DB80286-1784-48b5-A751-B6ED1F490303}*\", \"*\\\\HARDWARE\\\\{804423C2-F490-4ac3-BFA5-13DEDE63A71A}*\", \"*\\\\HARDWARE\\\\{A5124AF5-DF23-49bf-B0ED-A18ED3DEA027}*\", \"*\\\\SYSTEM\\\\Setup\\\\PrintResponsor\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Malware/FlowCloud/registry_event_malware_flowcloud_markers.eql",
+  "metadata": {}
+}

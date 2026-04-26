@@ -1,0 +1,73 @@
+{
+  "id": "d8b48c16-c214-5be0-b953-413850e1a6d8",
+  "catalog": "elastic",
+  "name": "AWS CloudTrail Log Created",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "cloudtrail.amazonaws.com"
+      ],
+      "raw_values": [
+        "cloudtrail.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "createtrail"
+      ],
+      "raw_values": [
+        "CreateTrail"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\" \n    and event.provider: \"cloudtrail.amazonaws.com\" \n    and event.action: \"CreateTrail\" \n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/collection_cloudtrail_logging_created.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Cloudtrail",
+      "Use Case: Log Auditing",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

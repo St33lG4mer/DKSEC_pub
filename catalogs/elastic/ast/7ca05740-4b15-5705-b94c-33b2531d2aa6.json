@@ -1,0 +1,30 @@
+{
+  "id": "7ca05740-4b15-5705-b94c-33b2531d2aa6",
+  "catalog": "elastic",
+  "name": "Privileged Docker Container Creation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "host.os.type:linux and event.category:process and event.type:start and\nevent.action:(exec or exec_event or start) and\nprocess.name:docker and process.args:(run and --privileged)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/execution_potentially_overly_permissive_container_creation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

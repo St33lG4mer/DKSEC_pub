@@ -1,0 +1,25 @@
+{
+  "id": "42a9ee5b-1c72-5cbe-93a4-7181c5727fc7",
+  "catalog": "elastic",
+  "name": "Threat Intel URL Indicator Match",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "url.full:*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/threat_intel/threat_intel_indicator_match_url.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "OS: Windows",
+      "Data Source: Elastic Endgame",
+      "Rule Type: Threat Match",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

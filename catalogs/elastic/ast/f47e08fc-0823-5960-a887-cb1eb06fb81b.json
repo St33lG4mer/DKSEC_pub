@@ -1,0 +1,29 @@
+{
+  "id": "f47e08fc-0823-5960-a887-cb1eb06fb81b",
+  "catalog": "elastic",
+  "name": "Potential HTTP Downgrade Attack",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "http.version:*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/defense_evasion_potential_http_downgrade_attack.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Web",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Nginx",
+      "Data Source: Apache",
+      "Data Source: Apache Tomcat",
+      "Data Source: Traefik",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

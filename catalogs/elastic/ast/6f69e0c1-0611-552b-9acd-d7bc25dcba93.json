@@ -1,0 +1,66 @@
+{
+  "id": "6f69e0c1-0611-552b-9acd-d7bc25dcba93",
+  "catalog": "elastic",
+  "name": "Installation of Custom Shim Databases",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows nt\\\\currentversion\\\\appcompatflags\\\\custom\\\\*.sdb"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom\\\\*.sdb"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.path : \"*\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\AppCompatFlags\\\\Custom\\\\*.sdb\" and\n  not process.executable : (\n        \"?:\\\\Program Files (x86)\\\\DesktopCentral_Agent\\\\*\\\\Setup\\\\NwSapSetup.exe\",\n        \"?:\\\\$WINDOWS.~BT\\\\Sources\\\\SetupPlatform.exe\",\n        \"?:\\\\Program Files (x86)\\\\SAP\\\\SAPsetup\\\\setup\\\\NwSapSetup.exe\",\n        \"?:\\\\Program Files (x86)\\\\SAP\\\\SapSetup\\\\OnRebootSvc\\\\NWSAPSetupOnRebootInstSvc.exe\",\n        \"?:\\\\Program Files (x86)\\\\Kaspersky Lab\\\\Kaspersky Security for Windows Server\\\\kavfs.exe\",\n\n        /* Crowdstrike specific exclusion as it uses NT Object paths */\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\DesktopCentral_Agent\\\\*\\\\Setup\\\\NwSapSetup.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\$WINDOWS.~BT\\\\Sources\\\\SetupPlatform.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\SAP\\\\SAPsetup\\\\setup\\\\NwSapSetup.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\SAP\\\\SapSetup\\\\OnRebootSvc\\\\NWSAPSetupOnRebootInstSvc.exe\",\n        \"\\\\Device\\\\HarddiskVolume*\\\\Program Files (x86)\\\\Kaspersky Lab\\\\Kaspersky Security for Windows Server\\\\kavfs.exe\"\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/persistence_app_compat_shim.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

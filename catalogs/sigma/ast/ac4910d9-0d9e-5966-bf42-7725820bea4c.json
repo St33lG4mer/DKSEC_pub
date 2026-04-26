@@ -1,0 +1,31 @@
+{
+  "id": "ac4910d9-0d9e-5966-bf42-7725820bea4c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_mercury",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-exec bypass -w 1 -enc",
+        "uwb0ageacgb0ac0asgbvagiaiaatafmaywbyagkacab0aeiababvagmaawagahsakabzageacabzacaakaaiahaa"
+      ],
+      "raw_values": [
+        "*-exec bypass -w 1 -enc*",
+        "*UwB0AGEAcgB0AC0ASgBvAGIAIAAtAFMAYwByAGkAcAB0AEIAbABvAGMAawAgAHsAKABzAGEAcABzACAAKAAiAHAA*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*-exec bypass -w 1 -enc*\" and process.command_line:\"*UwB0AGEAcgB0AC0ASgBvAGIAIAAtAFMAYwByAGkAcAB0AEIAbABvAGMAawAgAHsAKABzAGEAcABzACAAKAAiAHAA*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/TA/MERCURY/proc_creation_win_apt_mercury.eql",
+  "metadata": {}
+}

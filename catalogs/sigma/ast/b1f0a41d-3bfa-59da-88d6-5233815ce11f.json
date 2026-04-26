@@ -1,0 +1,29 @@
+{
+  "id": "b1f0a41d-3bfa-59da-88d6-5233815ce11f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_shutdown_logoff",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "shutdown.exe"
+      ],
+      "raw_values": [
+        "*\\\\shutdown.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\shutdown.exe\" and process.command_line:\"*/l*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_shutdown_logoff.eql",
+  "metadata": {}
+}

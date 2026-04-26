@@ -1,0 +1,29 @@
+{
+  "id": "572278d3-e943-5f03-9303-10d2a5035c8a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rar_compress_data",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rar.exe"
+      ],
+      "raw_values": [
+        "*\\\\rar.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\rar.exe\" and process.command_line:\"* a *\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rar_compress_data.eql",
+  "metadata": {}
+}

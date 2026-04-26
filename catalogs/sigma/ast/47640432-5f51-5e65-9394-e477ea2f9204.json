@@ -1,0 +1,107 @@
+{
+  "id": "47640432-5f51-5e65-9394-e477ea2f9204",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_cmdline_reversed_strings",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "hctac",
+        "kaerb",
+        "dnammoc",
+        "ekovn",
+        "elifd",
+        "rahc",
+        "etirw",
+        "golon",
+        "tninon",
+        "eddih",
+        "tpircs",
+        "ssecorp",
+        "llehsrewop",
+        "esnopser",
+        "daolnwod",
+        "tneilcbew",
+        "tneilc",
+        "ptth",
+        "elifotevas",
+        "46esab",
+        "htappmetteg",
+        "tcejbo",
+        "maerts",
+        "hcaerof",
+        "retupmoc",
+        "-encodedcommand",
+        "-enc"
+      ],
+      "raw_values": [
+        "*hctac*",
+        "*kaerb*",
+        "*dnammoc*",
+        "*ekovn*",
+        "*eliFd*",
+        "*rahc*",
+        "*etirw*",
+        "*golon*",
+        "*tninon*",
+        "*eddih*",
+        "*tpircS*",
+        "*ssecorp*",
+        "*llehsrewop*",
+        "*esnopser*",
+        "*daolnwod*",
+        "*tneilCbeW*",
+        "*tneilc*",
+        "*ptth*",
+        "*elifotevas*",
+        "*46esab*",
+        "*htaPpmeTteG*",
+        "*tcejbO*",
+        "*maerts*",
+        "*hcaerof*",
+        "*retupmoc*",
+        "* -EncodedCommand *",
+        "* -enc *"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"*hctac*\", \"*kaerb*\", \"*dnammoc*\", \"*ekovn*\", \"*eliFd*\", \"*rahc*\", \"*etirw*\", \"*golon*\", \"*tninon*\", \"*eddih*\", \"*tpircS*\", \"*ssecorp*\", \"*llehsrewop*\", \"*esnopser*\", \"*daolnwod*\", \"*tneilCbeW*\", \"*tneilc*\", \"*ptth*\", \"*elifotevas*\", \"*46esab*\", \"*htaPpmeTteG*\", \"*tcejbO*\", \"*maerts*\", \"*hcaerof*\", \"*retupmoc*\"))) and (not (process.command_line like~ (\"* -EncodedCommand *\", \"* -enc *\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_cmdline_reversed_strings.eql",
+  "metadata": {}
+}

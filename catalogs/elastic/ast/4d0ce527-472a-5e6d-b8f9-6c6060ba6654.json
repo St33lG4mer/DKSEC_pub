@@ -1,0 +1,43 @@
+{
+  "id": "4d0ce527-472a-5e6d-b8f9-6c6060ba6654",
+  "catalog": "elastic",
+  "name": "SSH Authorized Keys File Activity",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": ":",
+      "values": [
+        "authorized_keys",
+        "authorized_keys2"
+      ],
+      "raw_values": [
+        "authorized_keys",
+        "authorized_keys2"
+      ]
+    }
+  ],
+  "raw_query": "event.category:file and event.type:(change or creation) and\n file.name:(\"authorized_keys\" or \"authorized_keys2\") and\n not process.executable:\n             (/Library/Developer/CommandLineTools/usr/bin/git or\n              /usr/local/Cellar/maven/*/libexec/bin/mvn or\n              /Library/Java/JavaVirtualMachines/jdk*.jdk/Contents/Home/bin/java or\n              /usr/bin/vim or\n              /usr/local/Cellar/coreutils/*/bin/gcat or\n              /usr/bin/bsdtar or\n              /usr/bin/nautilus or\n              /usr/bin/scp or\n              /usr/bin/touch or\n              /var/lib/docker/* or\n              /usr/bin/google_guest_agent or\n              /opt/jc/bin/jumpcloud-agent or\n              /opt/puppetlabs/puppet/bin/puppet or\n              /usr/bin/chef-client\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/persistence_ssh_authorized_keys_modification.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Lateral Movement",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

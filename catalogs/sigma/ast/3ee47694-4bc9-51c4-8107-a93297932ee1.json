@@ -1,0 +1,41 @@
+{
+  "id": "3ee47694-4bc9-51c4-8107-a93297932ee1",
+  "catalog": "sigma",
+  "name": "file_event_win_uac_bypass_idiagnostic_profile",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dllhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\DllHost.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\*",
+        "*.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\DllHost.exe\" and file.path:\"C:\\\\Windows\\\\System32\\\\*\" and file.path:\"*.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_uac_bypass_idiagnostic_profile.eql",
+  "metadata": {}
+}

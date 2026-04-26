@@ -1,0 +1,17 @@
+{
+  "id": "32bc9eb3-1cca-582b-a38f-6e8e6e836f6f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_susp_download_patterns",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.command_line like~ (\"*IEX ((New-Object Net.WebClient).DownloadString*\", \"*IEX (New-Object Net.WebClient).DownloadString*\", \"*IEX((New-Object Net.WebClient).DownloadString*\", \"*IEX(New-Object Net.WebClient).DownloadString*\", \"* -command (New-Object System.Net.WebClient).DownloadFile(*\", \"* -c (New-Object System.Net.WebClient).DownloadFile(*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_susp_download_patterns.eql",
+  "metadata": {}
+}

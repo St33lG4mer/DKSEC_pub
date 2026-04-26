@@ -1,0 +1,83 @@
+{
+  "id": "eb358b0e-aaec-58cb-a9e0-2cc0bf8bd388",
+  "catalog": "elastic",
+  "name": "Virtual Machine Fingerprinting via Grep",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "parallels",
+        "vmware",
+        "virtualbox",
+        "manufacturer"
+      ],
+      "raw_values": [
+        "parallels*",
+        "vmware*",
+        "virtualbox*",
+        "Manufacturer*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "grep",
+        "egrep"
+      ],
+      "raw_values": [
+        "grep",
+        "egrep"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "docker",
+        "virt-what"
+      ],
+      "raw_values": [
+        "/Applications/Docker.app/Contents/MacOS/Docker",
+        "/usr/libexec/kcare/virt-what"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type == \"start\" and\n process.name in (\"grep\", \"egrep\") and user.id != \"0\" and\n process.args : (\"parallels*\", \"vmware*\", \"virtualbox*\") and process.args : \"Manufacturer*\" and\n not process.parent.executable in (\"/Applications/Docker.app/Contents/MacOS/Docker\", \"/usr/libexec/kcare/virt-what\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/discovery_virtual_machine_fingerprinting_grep.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

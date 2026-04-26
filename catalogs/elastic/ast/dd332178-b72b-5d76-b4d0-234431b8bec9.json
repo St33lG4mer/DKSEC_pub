@@ -1,0 +1,38 @@
+{
+  "id": "dd332178-b72b-5d76-b4d0-234431b8bec9",
+  "catalog": "elastic",
+  "name": "Entra ID PowerShell Sign-in",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.signinlogs.properties.app_display_name",
+      "raw_field": "azure.signinlogs.properties.app_display_name",
+      "operator": ":",
+      "values": [
+        "azure active directory powershell"
+      ],
+      "raw_values": [
+        "Azure Active Directory PowerShell"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.signinlogs and\n  azure.signinlogs.properties.app_display_name:\"Azure Active Directory PowerShell\" and\n  azure.signinlogs.properties.token_issuer_type:AzureAD and event.outcome:(success or Success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_powershell_signin.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Initial Access"
+    ]
+  }
+}

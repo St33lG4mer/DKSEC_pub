@@ -1,0 +1,27 @@
+{
+  "id": "2a481acf-df9c-516a-a3f7-8d6d70558f6a",
+  "catalog": "elastic",
+  "name": "GCP Pub/Sub Subscription Creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:gcp.audit and event.action:google.pubsub.v*.Subscriber.CreateSubscription and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/collection_gcp_pub_sub_subscription_creation.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: Google Cloud Platform",
+      "Use Case: Log Auditing",
+      "Tactic: Collection",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "ce4dcfbc-39d9-5a43-8c99-826834ef4aaa",
+  "catalog": "elastic",
+  "name": "AWS Route 53 Private Hosted Zone Associated With a VPC",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: route53.amazonaws.com \n    and event.action: AssociateVPCWithHostedZone \n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_route_53_hosted_zone_associated_with_a_vpc.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Route 53",
+      "Use Case: Asset Visibility",
+      "Tactic: Persistence",
+      "Tactic: Resource Development",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

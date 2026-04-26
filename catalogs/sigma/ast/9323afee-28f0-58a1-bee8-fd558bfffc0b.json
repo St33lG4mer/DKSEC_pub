@@ -1,0 +1,49 @@
+{
+  "id": "9323afee-28f0-58a1-bee8-fd558bfffc0b",
+  "catalog": "sigma",
+  "name": "file_event_win_hktl_inveigh_artefacts",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "inveigh-log.txt",
+        "inveigh-cleartext.txt",
+        "inveigh-ntlmv1users.txt",
+        "inveigh-ntlmv2users.txt",
+        "inveigh-ntlmv1.txt",
+        "inveigh-ntlmv2.txt",
+        "inveigh-forminput.txt",
+        "inveigh.dll",
+        "inveigh.exe",
+        "inveigh.ps1",
+        "inveigh-relay.ps1"
+      ],
+      "raw_values": [
+        "*\\\\Inveigh-Log.txt",
+        "*\\\\Inveigh-Cleartext.txt",
+        "*\\\\Inveigh-NTLMv1Users.txt",
+        "*\\\\Inveigh-NTLMv2Users.txt",
+        "*\\\\Inveigh-NTLMv1.txt",
+        "*\\\\Inveigh-NTLMv2.txt",
+        "*\\\\Inveigh-FormInput.txt",
+        "*\\\\Inveigh.dll",
+        "*\\\\Inveigh.exe",
+        "*\\\\Inveigh.ps1",
+        "*\\\\Inveigh-Relay.ps1"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*\\\\Inveigh-Log.txt\", \"*\\\\Inveigh-Cleartext.txt\", \"*\\\\Inveigh-NTLMv1Users.txt\", \"*\\\\Inveigh-NTLMv2Users.txt\", \"*\\\\Inveigh-NTLMv1.txt\", \"*\\\\Inveigh-NTLMv2.txt\", \"*\\\\Inveigh-FormInput.txt\", \"*\\\\Inveigh.dll\", \"*\\\\Inveigh.exe\", \"*\\\\Inveigh.ps1\", \"*\\\\Inveigh-Relay.ps1\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_hktl_inveigh_artefacts.eql",
+  "metadata": {}
+}

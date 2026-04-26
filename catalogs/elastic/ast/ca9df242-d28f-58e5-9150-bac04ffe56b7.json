@@ -1,0 +1,25 @@
+{
+  "id": "ca9df242-d28f-58e5-9150-bac04ffe56b7",
+  "catalog": "elastic",
+  "name": "Attempt to Delete an Okta Policy",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system and event.action:policy.lifecycle.delete\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/defense_evasion_okta_attempt_to_delete_okta_policy.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

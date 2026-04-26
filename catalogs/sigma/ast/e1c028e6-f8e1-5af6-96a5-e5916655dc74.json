@@ -1,0 +1,17 @@
+{
+  "id": "e1c028e6-f8e1-5af6-96a5-e5916655dc74",
+  "catalog": "sigma",
+  "name": "net_connection_win_susp_initaited_public_folder",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [],
+  "raw_query": "any where (network.direction:\"true\" and process.executable:\"*:\\\\Users\\\\Public\\\\*\") and (not process.executable:\"*:\\\\Users\\\\Public\\\\IBM\\\\ClientSolutions\\\\Start_Programs\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/network_connection/net_connection_win_susp_initaited_public_folder.eql",
+  "metadata": {}
+}

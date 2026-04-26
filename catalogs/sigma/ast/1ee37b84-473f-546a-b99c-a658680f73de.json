@@ -1,0 +1,76 @@
+{
+  "id": "1ee37b84-473f-546a-b99c-a658680f73de",
+  "catalog": "sigma",
+  "name": "win_taskscheduler_susp_schtasks_delete",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.taskname",
+      "raw_field": "winlog.event_data.TaskName",
+      "operator": "like~",
+      "values": [
+        "\\\\windows\\\\systemrestore\\\\sr",
+        "\\\\windows\\\\windows defender\\\\",
+        "\\\\windows\\\\bitlocker",
+        "\\\\windows\\\\windowsbackup\\\\",
+        "\\\\windows\\\\windowsupdate\\\\",
+        "\\\\windows\\\\updateorchestrator\\\\",
+        "\\\\windows\\\\exploitguard"
+      ],
+      "raw_values": [
+        "*\\\\Windows\\\\SystemRestore\\\\SR*",
+        "*\\\\Windows\\\\Windows Defender\\\\*",
+        "*\\\\Windows\\\\BitLocker*",
+        "*\\\\Windows\\\\WindowsBackup\\\\*",
+        "*\\\\Windows\\\\WindowsUpdate\\\\*",
+        "*\\\\Windows\\\\UpdateOrchestrator\\\\*",
+        "*\\\\Windows\\\\ExploitGuard*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.username",
+      "raw_field": "winlog.event_data.UserName",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-taskscheduler/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-TaskScheduler/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "141"
+      ],
+      "raw_values": [
+        "141"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-TaskScheduler/Operational\" and ((event.code:\"141\" and (winlog.event_data.TaskName like~ (\"*\\\\Windows\\\\SystemRestore\\\\SR*\", \"*\\\\Windows\\\\Windows Defender\\\\*\", \"*\\\\Windows\\\\BitLocker*\", \"*\\\\Windows\\\\WindowsBackup\\\\*\", \"*\\\\Windows\\\\WindowsUpdate\\\\*\", \"*\\\\Windows\\\\UpdateOrchestrator\\\\*\", \"*\\\\Windows\\\\ExploitGuard*\"))) and (not (winlog.event_data.UserName like~ (\"*AUTHORI*\", \"*AUTORI*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/taskscheduler/win_taskscheduler_susp_schtasks_delete.eql",
+  "metadata": {}
+}

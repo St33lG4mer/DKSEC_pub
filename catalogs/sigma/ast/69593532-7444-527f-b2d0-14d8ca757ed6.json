@@ -1,0 +1,29 @@
+{
+  "id": "69593532-7444-527f-b2d0-14d8ca757ed6",
+  "catalog": "sigma",
+  "name": "net_connection_win_imewdbld",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "imewdbld.exe"
+      ],
+      "raw_values": [
+        "*\\\\IMEWDBLD.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where network.direction:\"true\" and process.executable:\"*\\\\IMEWDBLD.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/network_connection/net_connection_win_imewdbld.eql",
+  "metadata": {}
+}

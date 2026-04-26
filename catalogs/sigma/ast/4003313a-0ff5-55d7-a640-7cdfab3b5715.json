@@ -1,0 +1,31 @@
+{
+  "id": "4003313a-0ff5-55d7-a640-7cdfab3b5715",
+  "catalog": "sigma",
+  "name": "file_event_win_vscode_tunnel_remote_creation_artefacts",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "stable-",
+        "node.exe"
+      ],
+      "raw_values": [
+        "*\\\\servers\\\\Stable-*",
+        "*\\\\server\\\\node.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\servers\\\\Stable-*\" and process.executable:\"*\\\\server\\\\node.exe\" and file.path:\"*\\\\.vscode-server\\\\data\\\\User\\\\History\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_vscode_tunnel_remote_creation_artefacts.eql",
+  "metadata": {}
+}

@@ -1,0 +1,73 @@
+{
+  "id": "9cb99f67-5a28-56f4-9ea9-d9454772beb1",
+  "catalog": "elastic",
+  "name": "AWS Lambda Function Policy Updated to Allow Public Invocation",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "info"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "lambda.amazonaws.com"
+      ],
+      "raw_values": [
+        "lambda.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "addpermission"
+      ],
+      "raw_values": [
+        "AddPermission*"
+      ]
+    }
+  ],
+  "raw_query": "info where data_stream.dataset == \"aws.cloudtrail\" \n    and event.provider == \"lambda.amazonaws.com\" \n    and event.outcome == \"success\" \n    and event.action : \"AddPermission*\" \n    and stringContains(aws.cloudtrail.request_parameters, \"lambda:InvokeFunction\") \n    and stringContains(aws.cloudtrail.request_parameters, \"principal=\\\\*\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_lambda_backdoor_invoke_function_for_any_principal.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Lambda",
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

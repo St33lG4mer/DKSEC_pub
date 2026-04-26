@@ -1,0 +1,29 @@
+{
+  "id": "3969516d-0319-5736-8905-315b07b5c398",
+  "catalog": "sigma",
+  "name": "file_event_win_exploit_cve_2021_1675_printspooler",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "123"
+      ],
+      "raw_values": [
+        "*C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\3\\\\old\\\\1\\\\123*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*C:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\x64\\\\3\\\\old\\\\1\\\\123*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-1675/file_event_win_exploit_cve_2021_1675_printspooler.eql",
+  "metadata": {}
+}

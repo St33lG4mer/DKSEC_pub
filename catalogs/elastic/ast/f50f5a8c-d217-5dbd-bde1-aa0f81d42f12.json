@@ -1,0 +1,28 @@
+{
+  "id": "f50f5a8c-d217-5dbd-bde1-aa0f81d42f12",
+  "catalog": "elastic",
+  "name": "AWS IAM User Addition to Group",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail and \n    event.provider: iam.amazonaws.com and \n    event.action: AddUserToGroup and \n    event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/credential_access_iam_user_addition_to_group.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Credential Access",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

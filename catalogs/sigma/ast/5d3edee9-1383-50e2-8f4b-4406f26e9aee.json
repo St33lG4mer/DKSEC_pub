@@ -1,0 +1,40 @@
+{
+  "id": "5d3edee9-1383-50e2-8f4b-4406f26e9aee",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_defendercheck",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "defendercheck.exe"
+      ],
+      "raw_values": [
+        "*\\\\DefenderCheck.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "defendercheck"
+      ],
+      "raw_values": [
+        "DefenderCheck"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\DefenderCheck.exe\" or process.pe.description:\"DefenderCheck\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_defendercheck.eql",
+  "metadata": {}
+}

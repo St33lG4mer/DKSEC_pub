@@ -1,0 +1,58 @@
+{
+  "id": "36607c84-70c9-5fce-b848-a8f6ee33f2b8",
+  "catalog": "elastic",
+  "name": "Microsoft Build Engine Started an Unusual Process",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": ":",
+      "values": [
+        "msbuild.exe"
+      ],
+      "raw_values": [
+        "MSBuild.exe",
+        "msbuild.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "csc.exe",
+        "iexplore.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "csc.exe",
+        "iexplore.exe",
+        "powershell.exe"
+      ]
+    }
+  ],
+  "raw_query": "host.os.type:windows and event.category:process and event.type:start and process.parent.name:(\"MSBuild.exe\" or \"msbuild.exe\") and\nprocess.name:(\"csc.exe\" or \"iexplore.exe\" or \"powershell.exe\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_execution_msbuild_started_unusal_process.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

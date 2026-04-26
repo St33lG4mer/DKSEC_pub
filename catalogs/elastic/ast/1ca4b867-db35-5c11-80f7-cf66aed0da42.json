@@ -1,0 +1,29 @@
+{
+  "id": "1ca4b867-db35-5c11-80f7-cf66aed0da42",
+  "catalog": "elastic",
+  "name": "Machine Learning Detected a DNS Request Predicted to be a DGA Domain",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "ml_is_dga.malicious_prediction:1 and not dns.question.registered_domain:avsvmcloud.com\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/dga/command_and_control_ml_dns_request_predicted_to_be_a_dga_domain.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Network",
+      "Domain: Endpoint",
+      "Data Source: Elastic Defend",
+      "Use Case: Domain Generation Algorithm Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Command and Control",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "4876a1d4-ba97-540f-b0a1-e07b6b31e5b1",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_embed_exe_lnk",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "explorer.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\explorer.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\System32\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "powershell",
+        ".lnk"
+      ],
+      "raw_values": [
+        "*powershell*",
+        "*.lnk*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"C:\\\\Windows\\\\explorer.exe\" and process.executable:\"C:\\\\Windows\\\\System32\\\\cmd.exe\" and (process.command_line:\"*powershell*\" and process.command_line:\"*.lnk*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_embed_exe_lnk.eql",
+  "metadata": {}
+}

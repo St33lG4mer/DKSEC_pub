@@ -1,0 +1,29 @@
+{
+  "id": "aaebc2ae-5541-5d6f-82ef-d5ef9bbba55b",
+  "catalog": "sigma",
+  "name": "file_event_win_apt_onyx_sleet_indicators",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "inetmgr.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\ADFS\\\\bg\\\\inetmgr.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*:\\\\Windows\\\\ADFS\\\\bg\\\\inetmgr.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/Onyx-Sleet/file_event_win_apt_onyx_sleet_indicators.eql",
+  "metadata": {}
+}

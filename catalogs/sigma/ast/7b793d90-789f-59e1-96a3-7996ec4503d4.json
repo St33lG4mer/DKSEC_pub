@@ -1,0 +1,40 @@
+{
+  "id": "7b793d90-789f-59e1-96a3-7996ec4503d4",
+  "catalog": "sigma",
+  "name": "file_event_win_office_outlook_susp_macro_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "vbaproject.otm"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Outlook\\\\VbaProject.OTM"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\outlook.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\Microsoft\\\\Outlook\\\\VbaProject.OTM\" and (not process.executable:\"*\\\\outlook.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_outlook_susp_macro_creation.eql",
+  "metadata": {}
+}

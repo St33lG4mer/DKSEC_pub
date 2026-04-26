@@ -1,0 +1,69 @@
+{
+  "id": "a1c974bc-af80-5f70-a7b9-419afdef620e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ftp_arbitrary_command_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-s:",
+        "–s:",
+        "—s:",
+        "―s:"
+      ],
+      "raw_values": [
+        "*-s:*",
+        "*/s:*",
+        "*–s:*",
+        "*—s:*",
+        "*―s:*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "ftp.exe"
+      ],
+      "raw_values": [
+        "*\\\\ftp.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ftp.exe"
+      ],
+      "raw_values": [
+        "*\\\\ftp.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ftp.exe"
+      ],
+      "raw_values": [
+        "ftp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.parent.executable:\"*\\\\ftp.exe\" or ((process.executable:\"*\\\\ftp.exe\" or process.pe.original_file_name:\"ftp.exe\") and process.command_line like~ (\"*-s:*\", \"*/s:*\", \"*–s:*\", \"*—s:*\", \"*―s:*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ftp_arbitrary_command_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,39 @@
+{
+  "id": "068d7e64-6849-5140-be79-32fe10bd6844",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_defender_exclusion",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "add-mppreference",
+        "set-mppreference",
+        "-exclusionpath",
+        "-exclusionextension",
+        "-exclusionprocess",
+        "-exclusionipaddress"
+      ],
+      "raw_values": [
+        "*Add-MpPreference *",
+        "*Set-MpPreference *",
+        "* -ExclusionPath *",
+        "* -ExclusionExtension *",
+        "* -ExclusionProcess *",
+        "* -ExclusionIpAddress *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*Add-MpPreference *\", \"*Set-MpPreference *\")) and (process.command_line like~ (\"* -ExclusionPath *\", \"* -ExclusionExtension *\", \"* -ExclusionProcess *\", \"* -ExclusionIpAddress *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_defender_exclusion.eql",
+  "metadata": {}
+}

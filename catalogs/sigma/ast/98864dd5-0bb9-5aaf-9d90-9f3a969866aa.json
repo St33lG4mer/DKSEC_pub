@@ -1,0 +1,17 @@
+{
+  "id": "98864dd5-0bb9-5aaf-9d90-9f3a969866aa",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_sysvol_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.command_line:\"*\\\\SYSVOL\\\\*\" and process.command_line:\"*\\\\policies\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_sysvol_access.eql",
+  "metadata": {}
+}

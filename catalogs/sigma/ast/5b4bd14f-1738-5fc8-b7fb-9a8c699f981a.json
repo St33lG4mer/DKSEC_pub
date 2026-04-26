@@ -1,0 +1,46 @@
+{
+  "id": "5b4bd14f-1738-5fc8-b7fb-9a8c699f981a",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_redmimicry_winnti_playbook",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "rundll32.exe",
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe",
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "gthread-3.6.dll",
+        "tmp.bat",
+        "sigcmm-2.4.dll"
+      ],
+      "raw_values": [
+        "*gthread-3.6.dll*",
+        "*\\\\Windows\\\\Temp\\\\tmp.bat*",
+        "*sigcmm-2.4.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\rundll32.exe\", \"*\\\\cmd.exe\")) and (process.command_line like~ (\"*gthread-3.6.dll*\", \"*\\\\Windows\\\\Temp\\\\tmp.bat*\", \"*sigcmm-2.4.dll*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_redmimicry_winnti_playbook.eql",
+  "metadata": {}
+}

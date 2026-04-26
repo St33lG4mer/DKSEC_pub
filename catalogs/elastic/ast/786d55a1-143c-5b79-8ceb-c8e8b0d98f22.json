@@ -1,0 +1,52 @@
+{
+  "id": "786d55a1-143c-5b79-8ceb-c8e8b0d98f22",
+  "catalog": "elastic",
+  "name": "Azure Arc Cluster Credential Access by Identity from Unusual Source",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.activitylogs"
+      ],
+      "raw_values": [
+        "azure.activitylogs"
+      ]
+    },
+    {
+      "field": "azure.activitylogs.operation_name",
+      "raw_field": "azure.activitylogs.operation_name",
+      "operator": ":",
+      "values": [
+        "microsoft.kubernetes/connectedclusters/listclusterusercredential/action"
+      ],
+      "raw_values": [
+        "MICROSOFT.KUBERNETES/CONNECTEDCLUSTERS/LISTCLUSTERUSERCREDENTIAL/ACTION"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"azure.activitylogs\"\n    and azure.activitylogs.operation_name: \"MICROSOFT.KUBERNETES/CONNECTEDCLUSTERS/LISTCLUSTERUSERCREDENTIAL/ACTION\"\n    and event.outcome: (Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_azure_arc_cluster_credential_access_unusual_source.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Data Source: Azure Arc",
+      "Data Source: Azure Activity Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

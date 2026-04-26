@@ -1,0 +1,41 @@
+{
+  "id": "a1ccb94d-44e5-5ce4-b30b-5c59aae6fa0d",
+  "catalog": "elastic",
+  "name": "Entra ID External Authentication Methods (EAM) Modified",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "http.request.method",
+      "raw_field": "http.request.method",
+      "operator": ":",
+      "values": [
+        "patch"
+      ],
+      "raw_values": [
+        "PATCH"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: azure.graphactivitylogs and\n    url.path: *authenticationMethodsPolicy* and\n    http.request.method: \"PATCH\" and\n    http.response.status_code: 200\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/persistence_graph_eam_addition_or_modification.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Microsoft Graph",
+      "Data Source: Microsoft Graph Activity Logs",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Persistence"
+    ]
+  }
+}

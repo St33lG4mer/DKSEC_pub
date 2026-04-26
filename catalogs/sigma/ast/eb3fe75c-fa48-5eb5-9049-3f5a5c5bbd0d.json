@@ -1,0 +1,31 @@
+{
+  "id": "eb3fe75c-fa48-5eb5-9049-3f5a5c5bbd0d",
+  "catalog": "sigma",
+  "name": "file_event_win_iphlpapi_dll_sideloading",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "iphlpapi.dll",
+        "microsoft"
+      ],
+      "raw_values": [
+        "*iphlpapi.dll*",
+        "*\\\\AppData\\\\Local\\\\Microsoft*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*iphlpapi.dll*\" and file.path:\"*\\\\AppData\\\\Local\\\\Microsoft*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_iphlpapi_dll_sideloading.eql",
+  "metadata": {}
+}

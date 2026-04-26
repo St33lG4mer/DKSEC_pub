@@ -1,0 +1,61 @@
+{
+  "id": "ec7d31c4-051c-56b1-a114-3735211c7385",
+  "catalog": "sigma",
+  "name": "proc_creation_win_adplus_memory_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-hang",
+        "-pn",
+        "-pmn",
+        "-po",
+        "-sc"
+      ],
+      "raw_values": [
+        "* -hang *",
+        "* -pn *",
+        "* -pmn *",
+        "* -p *",
+        "* -po *",
+        "* -c *",
+        "* -sc *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "adplus.exe"
+      ],
+      "raw_values": [
+        "*\\\\adplus.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "adplus.exe"
+      ],
+      "raw_values": [
+        "Adplus.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\adplus.exe\" or process.pe.original_file_name:\"Adplus.exe\") and (process.command_line like~ (\"* -hang *\", \"* -pn *\", \"* -pmn *\", \"* -p *\", \"* -po *\", \"* -c *\", \"* -sc *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_adplus_memory_dump.eql",
+  "metadata": {}
+}

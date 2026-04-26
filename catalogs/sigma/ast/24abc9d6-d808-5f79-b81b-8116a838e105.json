@@ -1,0 +1,68 @@
+{
+  "id": "24abc9d6-d808-5f79-b81b-8116a838e105",
+  "catalog": "sigma",
+  "name": "win_security_invoke_obfuscation_stdin_services_security",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": "like~",
+      "values": [
+        "${input}",
+        "noexit"
+      ],
+      "raw_values": [
+        "*${input}*",
+        "*noexit*",
+        "* /c *",
+        "* /r *"
+      ]
+    },
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4697"
+      ],
+      "raw_values": [
+        "4697"
+      ]
+    },
+    {
+      "field": "winlog.event_data.servicefilename",
+      "raw_field": "winlog.event_data.ServiceFileName",
+      "operator": ":",
+      "values": [
+        "cmd",
+        "powershell"
+      ],
+      "raw_values": [
+        "*cmd*",
+        "*powershell*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4697\" and (winlog.event_data.ServiceFileName:\"*cmd*\" and winlog.event_data.ServiceFileName:\"*powershell*\")) and (winlog.event_data.ServiceFileName like~ (\"*${input}*\", \"*noexit*\")) and (winlog.event_data.ServiceFileName like~ (\"* /c *\", \"* /r *\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_invoke_obfuscation_stdin_services_security.eql",
+  "metadata": {}
+}

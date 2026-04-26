@@ -1,0 +1,192 @@
+{
+  "id": "c5cab8b4-bee5-5682-8a84-c015f797e9f6",
+  "catalog": "elastic",
+  "name": "Security Software Discovery via Grep",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "grep",
+        "egrep",
+        "pgrep"
+      ],
+      "raw_values": [
+        "grep",
+        "egrep",
+        "pgrep"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "little snitch",
+        "avast",
+        "avira",
+        "eset",
+        "blockblock",
+        "360sec",
+        "lulu",
+        "knockknock",
+        "kav",
+        "kis",
+        "rtprotectiondaemon",
+        "malware",
+        "vshieldscanner",
+        "webprotection",
+        "webinspectord",
+        "mcafee",
+        "isecespd",
+        "macmnsvc",
+        "masvc",
+        "kesl",
+        "avscan",
+        "guard",
+        "rtvscand",
+        "symcfgd",
+        "scmdaemon",
+        "symantec",
+        "sophos",
+        "osquery",
+        "elastic-endpoint",
+        "falcond",
+        "sentinelone",
+        "cbosxsensorservice",
+        "cbdefense",
+        "whatsyoursign",
+        "reikey",
+        "oversight",
+        "kextviewr",
+        "netiquette",
+        "processmonitor",
+        "filemonitor",
+        "grep eset command-line scanner, version %s -a2",
+        "grep -i mcafee web gateway core version:",
+        "grep --color=auto eset command-line scanner, version %s -a2",
+        "passwords"
+      ],
+      "raw_values": [
+        "Little Snitch*",
+        "Avast*",
+        "Avira*",
+        "ESET*",
+        "BlockBlock*",
+        "360Sec*",
+        "LuLu*",
+        "KnockKnock*",
+        "kav",
+        "KIS",
+        "RTProtectionDaemon*",
+        "Malware*",
+        "VShieldScanner*",
+        "WebProtection*",
+        "webinspectord*",
+        "McAfee*",
+        "isecespd*",
+        "macmnsvc*",
+        "masvc*",
+        "kesl*",
+        "avscan*",
+        "guard*",
+        "rtvscand*",
+        "symcfgd*",
+        "scmdaemon*",
+        "symantec*",
+        "sophos*",
+        "osquery*",
+        "elastic-endpoint*",
+        "falcond*",
+        "SentinelOne*",
+        "CbOsxSensorService*",
+        "CbDefense*",
+        "WhatsYourSign*",
+        "reikey*",
+        "OverSight*",
+        "KextViewr*",
+        "Netiquette*",
+        "processmonitor*",
+        "filemonitor*",
+        "grep ESET Command-line scanner, version %s -A2",
+        "grep -i McAfee Web Gateway Core version:",
+        "grep --color=auto ESET Command-line scanner, version %s -A2",
+        "Avast",
+        "Passwords"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        "sh -c printf",
+        "esets_scan | grep 'eset command-line scanner, version %s' -a2 | tail -1; printf"
+      ],
+      "raw_values": [
+        "",
+        "sh -c printf ",
+        "*; perl -pe 's/[^ -~]/\\n/g' < /opt/eset/esets/sbin/esets_scan | grep 'ESET Command-line scanner, version %s' -A2 | tail -1; printf ",
+        ",\n       "
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "osquery.conf"
+      ],
+      "raw_values": [
+        "osquery.conf"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/opt/mcafee/agent/scripts/ma",
+        "checkhealth"
+      ],
+      "raw_values": [
+        "/opt/McAfee/agent/scripts/ma",
+        "checkhealth"
+      ]
+    }
+  ],
+  "raw_query": "process where event.type == \"start\" and\nprocess.name : (\"grep\", \"egrep\", \"pgrep\") and user.id != \"0\" and\n not process.parent.executable : (\"/Library/Application Support/*\", \"/opt/McAfee/agent/scripts/ma\") and\n   process.args :\n         (\"Little Snitch*\",\n          \"Avast*\",\n          \"Avira*\",\n          \"ESET*\",\n          \"BlockBlock*\",\n          \"360Sec*\",\n          \"LuLu*\",\n          \"KnockKnock*\",\n          \"kav\",\n          \"KIS\",\n          \"RTProtectionDaemon*\",\n          \"Malware*\",\n          \"VShieldScanner*\",\n          \"WebProtection*\",\n          \"webinspectord*\",\n          \"McAfee*\",\n          \"isecespd*\",\n          \"macmnsvc*\",\n          \"masvc*\",\n          \"kesl*\",\n          \"avscan*\",\n          \"guard*\",\n          \"rtvscand*\",\n          \"symcfgd*\",\n          \"scmdaemon*\",\n          \"symantec*\",\n          \"sophos*\",\n          \"osquery*\",\n          \"elastic-endpoint*\",\n          \"falcond*\",\n          \"SentinelOne*\",\n          \"CbOsxSensorService*\",\n          \"CbDefense*\",\n          \"WhatsYourSign*\",\n          \"reikey*\",\n          \"OverSight*\",\n          \"KextViewr*\",\n          \"Netiquette*\",\n          \"processmonitor*\",\n          \"filemonitor*\"\n          ) and\n   not (\n     (process.args : \"Avast\" and process.args : \"Passwords\") or\n     (process.args == \"osquery.conf\") or \n     (process.parent.args : \"/opt/McAfee/agent/scripts/ma\" and process.parent.args : \"checkhealth\") or\n     (process.command_line : (\n       \"grep ESET Command-line scanner, version %s -A2\",\n       \"grep -i McAfee Web Gateway Core version:\",\n       \"grep --color=auto ESET Command-line scanner, version %s -A2\"\n       )\n     ) or\n     (process.parent.command_line : (\n       \"\"\"sh -c printf \"command_start_%s\"*; perl -pe 's/[^ -~]/\\n/g' < /opt/eset/esets/sbin/esets_scan | grep 'ESET Command-line scanner, version %s' -A2 | tail -1; printf \"command_done_%s*\"\"\",\n       \"\"\"bash -c perl -pe 's/[^ -~]/\\n/g' < /opt/eset/esets/sbin/esets_scan | grep 'ESET Command-line scanner, version %s' -A2 | tail -1\"\"\"\n       )\n     )\n    )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/discovery_security_software_grep.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "a5098401-6f25-55dd-bca2-62f285c97176",
+  "catalog": "sigma",
+  "name": "image_load_side_load_rjvplatform_non_default_location",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "rjvplatform.dll"
+      ],
+      "raw_values": [
+        "*\\\\RjvPlatform.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "systemresetplatform.exe"
+      ],
+      "raw_values": [
+        "\\\\SystemResetPlatform.exe",
+        "C:\\\\Windows\\\\System32\\\\SystemResetPlatform\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"*\\\\RjvPlatform.dll\" and process.executable:\"\\\\SystemResetPlatform.exe\") and (not process.executable:\"C:\\\\Windows\\\\System32\\\\SystemResetPlatform\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_rjvplatform_non_default_location.eql",
+  "metadata": {}
+}

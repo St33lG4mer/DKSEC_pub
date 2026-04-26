@@ -1,0 +1,68 @@
+{
+  "id": "3fb4c80f-c27f-54f1-8561-b1586b83c8d4",
+  "catalog": "sigma",
+  "name": "registry_event_susp_atbroker_change",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "software\\\\microsoft\\\\windows nt\\\\currentversion\\\\accessibility\\\\ats",
+        "software\\\\microsoft\\\\windows nt\\\\currentversion\\\\accessibility\\\\configuration"
+      ],
+      "raw_values": [
+        "*Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Accessibility\\\\ATs*",
+        "*Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Accessibility\\\\Configuration*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "atbroker.exe",
+        "msi"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\atbroker.exe",
+        "C:\\\\Windows\\\\Installer\\\\MSI*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\accessibility\\\\configuration",
+        "software\\\\microsoft\\\\windows nt\\\\currentversion\\\\accessibility\\\\ats"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Accessibility\\\\Configuration*",
+        "*Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Accessibility\\\\ATs*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "(empty)"
+      ],
+      "raw_values": [
+        "(Empty)"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Accessibility\\\\ATs*\", \"*Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Accessibility\\\\Configuration*\")) and (not ((process.executable:\"C:\\\\Windows\\\\system32\\\\atbroker.exe\" and registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Accessibility\\\\Configuration*\" and winlog.event_data.Details:\"(Empty)\") or (process.executable:\"C:\\\\Windows\\\\Installer\\\\MSI*\" and registry.path:\"*Software\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Accessibility\\\\ATs*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_susp_atbroker_change.eql",
+  "metadata": {}
+}

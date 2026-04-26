@@ -1,0 +1,48 @@
+{
+  "id": "36e93230-203a-5a0c-b5b5-8177f2b24bc4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_browsers_chromium_load_extension",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "brave.exe",
+        "chrome.exe",
+        "msedge.exe",
+        "opera.exe",
+        "vivaldi.exe"
+      ],
+      "raw_values": [
+        "*\\\\brave.exe",
+        "*\\\\chrome.exe",
+        "*\\\\msedge.exe",
+        "*\\\\opera.exe",
+        "*\\\\vivaldi.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--load-extension="
+      ],
+      "raw_values": [
+        "*--load-extension=*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\brave.exe\", \"*\\\\chrome.exe\", \"*\\\\msedge.exe\", \"*\\\\opera.exe\", \"*\\\\vivaldi.exe\")) and process.command_line:\"*--load-extension=*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_browsers_chromium_load_extension.eql",
+  "metadata": {}
+}

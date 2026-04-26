@@ -1,0 +1,179 @@
+{
+  "id": "522899c0-b0be-5daf-8978-a936deeda542",
+  "catalog": "elastic",
+  "name": "Unusual Network Activity from a Windows System Binary",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "localhost",
+        "setup.officetimeline.com",
+        "us.deployment.endpoint.ingress.rapid7.com",
+        "ctldl.windowsupdate.com",
+        "crl?.digicert.com",
+        "ocsp.digicert.com",
+        "addon-cms-asl.eu.goskope.com",
+        "crls.ssl.com",
+        "evcs-ocsp.ws.symantec.com",
+        "s.symcd.com",
+        "s?.symcb.com",
+        "crl.verisign.com",
+        "oneocsp.microsoft.com",
+        "aka.ms",
+        "crl.comodoca.com",
+        "acroipm2.adobe.com",
+        "sv.symcd.com",
+        "_ldap._tcp.",
+        "..localmachine",
+        "secure.globalsign.com",
+        "www.ssl.com",
+        "ocsp.verisign.com",
+        "ocsp.comodoca.com",
+        "ocsp.entrust.net",
+        "ocsp.usertrust.com",
+        "ocsp.godaddy.com",
+        "ocsp.camerfirma.com",
+        "ocsp.globalsign.com",
+        "ocsp.sectigo.com",
+        ".local",
+        "client.teamviewer.com",
+        "www.teamviewer.com",
+        "images-na.ssl-images-amazon.com",
+        "searcherbar.tilda.ws"
+      ],
+      "raw_values": [
+        "localhost",
+        "setup.officetimeline.com",
+        "us.deployment.endpoint.ingress.rapid7.com",
+        "ctldl.windowsupdate.com",
+        "crl?.digicert.com",
+        "ocsp.digicert.com",
+        "addon-cms-asl.eu.goskope.com",
+        "crls.ssl.com",
+        "evcs-ocsp.ws.symantec.com",
+        "s.symcd.com",
+        "s?.symcb.com",
+        "crl.verisign.com",
+        "oneocsp.microsoft.com",
+        "aka.ms",
+        "crl.comodoca.com",
+        "acroipm2.adobe.com",
+        "sv.symcd.com",
+        "_ldap._tcp.*",
+        "..localmachine",
+        "secure.globalsign.com",
+        "www.ssl.com",
+        "ocsp.verisign.com",
+        "ocsp.comodoca.com",
+        "ocsp.entrust.net",
+        "ocsp.usertrust.com",
+        "ocsp.godaddy.com",
+        "ocsp.camerfirma.com",
+        "ocsp.globalsign.com",
+        "ocsp.sectigo.com",
+        "*.local",
+        "client.teamviewer.com",
+        "www.teamviewer.com",
+        "images-na.ssl-images-amazon.com",
+        "searcherbar.tilda.ws"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bginfo.exe",
+        "cdb.exe",
+        "control.exe",
+        "cmstp.exe",
+        "csi.exe",
+        "dnx.exe",
+        "fsi.exe",
+        "ieexec.exe",
+        "iexpress.exe",
+        "installutil.exe",
+        "microsoft.workflow.compiler.exe",
+        "msbuild.exe",
+        "msdt.exe",
+        "mshta.exe",
+        "wscript.exe",
+        "msiexec.exe",
+        "msxsl.exe",
+        "odbcconf.exe",
+        "rcsi.exe",
+        "regsvr32.exe",
+        "xwizard.exe"
+      ],
+      "raw_values": [
+        "bginfo.exe",
+        "cdb.exe",
+        "control.exe",
+        "cmstp.exe",
+        "csi.exe",
+        "dnx.exe",
+        "fsi.exe",
+        "ieexec.exe",
+        "iexpress.exe",
+        "installutil.exe",
+        "Microsoft.Workflow.Compiler.exe",
+        "MSBuild.exe",
+        "msdt.exe",
+        "mshta.exe",
+        "wscript.exe",
+        "msiexec.exe",
+        "msxsl.exe",
+        "odbcconf.exe",
+        "rcsi.exe",
+        "regsvr32.exe",
+        "xwizard.exe"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=1m\n  [process where host.os.type == \"windows\" and event.type == \"start\" and\n\n     /* known applocker bypasses */\n     (process.name : \"bginfo.exe\" or\n      process.name : \"cdb.exe\" or\n      process.name : \"control.exe\" or\n      process.name : \"cmstp.exe\" or\n      process.name : \"csi.exe\" or\n      process.name : \"dnx.exe\" or\n      process.name : \"fsi.exe\" or\n      process.name : \"ieexec.exe\" or\n      process.name : \"iexpress.exe\" or\n      process.name : \"installutil.exe\" or\n      process.name : \"Microsoft.Workflow.Compiler.exe\" or\n      process.name : \"MSBuild.exe\" or\n      process.name : \"msdt.exe\" or\n      process.name : \"mshta.exe\" or\n      process.name : \"wscript.exe\" or\n      process.name : \"msiexec.exe\" or\n      process.name : \"msxsl.exe\" or\n      process.name : \"odbcconf.exe\" or\n      process.name : \"rcsi.exe\" or\n      process.name : \"regsvr32.exe\" or\n      process.name : \"xwizard.exe\") and\n\n  not (process.name : \"mshta.exe\" and\n       process.parent.executable : (\"C:\\\\Program Files (x86)\\\\Bentley\\\\*.exe\",\n                                    \"C:\\\\Program Files\\\\Bentley\\\\*.exe\",\n                                    \"C:\\\\Program Files (x86)\\\\Amazon\\\\Amazon Assistant\\\\amazonAssistantService.exe\",\n                                    \"C:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\TeamViewer\\\\TeamViewer.exe\"))\n  ]\n  [network where dns.question.name != null and\n      not dns.question.name : (\"localhost\", \"setup.officetimeline.com\", \"us.deployment.endpoint.ingress.rapid7.com\", \n        \"ctldl.windowsupdate.com\", \"crl?.digicert.com\", \"ocsp.digicert.com\", \"addon-cms-asl.eu.goskope.com\", \"crls.ssl.com\", \n        \"evcs-ocsp.ws.symantec.com\", \"s.symcd.com\", \"s?.symcb.com\", \"crl.verisign.com\", \"oneocsp.microsoft.com\", \"crl.verisign.com\", \n        \"aka.ms\", \"crl.comodoca.com\", \"acroipm2.adobe.com\", \"sv.symcd.com\", \"_ldap._tcp.*\", \"..localmachine\", \"secure.globalsign.com\",\n        \"acroipm2.adobe.com\", \"www.ssl.com\", \"ocsp.digicert.com\", \"ocsp.verisign.com\", \"ocsp.comodoca.com\", \"ocsp.entrust.net\", \"ocsp.usertrust.com\",\n        \"ocsp.godaddy.com\", \"ocsp.camerfirma.com\", \"ocsp.globalsign.com\", \"ocsp.sectigo.com\", \"*.local\") and\n\n      not (process.name : \"mshta.exe\" and\n           dns.question.name : (\"client.teamviewer.com\", \"www.teamviewer.com\", \"images-na.ssl-images-amazon.com\", \"searcherbar.tilda.ws\")) and\n\n      /* host query itself */\n      not startswith~(dns.question.name, host.name)\n      ]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_network_connection_from_windows_binary.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon"
+    ]
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "id": "c3737ec3-5fc0-5735-8e8f-e81ac75347ee",
+  "catalog": "elastic",
+  "name": "Potential Machine Account Relay Attack via SMB",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "5145"
+      ],
+      "raw_values": [
+        "5145"
+      ]
+    },
+    {
+      "field": "source.ip",
+      "raw_field": "source.ip",
+      "operator": "!=",
+      "values": [
+        "::1",
+        "127.0.0.1"
+      ],
+      "raw_values": [
+        "::",
+        "::1",
+        "127.0.0.1"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and event.code == \"5145\" and endswith(user.name, \"$\") and\n\n /* compare computername with user.name and make sure they match */\n startswith~(winlog.computer_name, substring(user.name, 0, -1)) and\n\n /* exclude local access */\n not endswith(string(source.ip), string(host.ip)) and\n source.ip != \"::\" and source.ip != null and source.ip != \"::1\" and source.ip != \"127.0.0.1\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/credential_access_machine_account_smb_relay.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Data Source: Active Directory",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

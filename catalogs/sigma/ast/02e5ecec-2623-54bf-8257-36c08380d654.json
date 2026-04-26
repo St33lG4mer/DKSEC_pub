@@ -1,0 +1,42 @@
+{
+  "id": "02e5ecec-2623-54bf-8257-36c08380d654",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dnscmd_install_new_server_level_plugin_dll",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dnscmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\dnscmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "config",
+        "serverlevelplugindll"
+      ],
+      "raw_values": [
+        "*/config*",
+        "*/serverlevelplugindll*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\dnscmd.exe\" and (process.command_line:\"*/config*\" and process.command_line:\"*/serverlevelplugindll*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dnscmd_install_new_server_level_plugin_dll.eql",
+  "metadata": {}
+}

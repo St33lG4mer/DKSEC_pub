@@ -1,0 +1,35 @@
+{
+  "id": "c879a41c-6a2e-56e8-97bf-7d5e79a74c99",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_powershell_profile",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "microsoft.powershell_profile.ps1",
+        "profile.ps1"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft.PowerShell_profile.ps1",
+        "*\\\\PowerShell\\\\profile.ps1",
+        "*\\\\Program Files\\\\PowerShell\\\\7-preview\\\\profile.ps1",
+        "*\\\\Program Files\\\\PowerShell\\\\7\\\\profile.ps1",
+        "*\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\profile.ps1",
+        "*\\\\WindowsPowerShell\\\\profile.ps1"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path like~ (\"*\\\\Microsoft.PowerShell_profile.ps1\", \"*\\\\PowerShell\\\\profile.ps1\", \"*\\\\Program Files\\\\PowerShell\\\\7-preview\\\\profile.ps1\", \"*\\\\Program Files\\\\PowerShell\\\\7\\\\profile.ps1\", \"*\\\\Windows\\\\System32\\\\WindowsPowerShell\\\\v1.0\\\\profile.ps1\", \"*\\\\WindowsPowerShell\\\\profile.ps1\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_powershell_profile.eql",
+  "metadata": {}
+}

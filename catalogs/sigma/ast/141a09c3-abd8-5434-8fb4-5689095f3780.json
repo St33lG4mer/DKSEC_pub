@@ -1,0 +1,29 @@
+{
+  "id": "141a09c3-abd8-5434-8fb4-5689095f3780",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_pcalua",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pcalua.exe"
+      ],
+      "raw_values": [
+        "*\\\\pcalua.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\pcalua.exe\" and process.command_line:\"* -a*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_pcalua.eql",
+  "metadata": {}
+}

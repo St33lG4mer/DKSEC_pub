@@ -1,0 +1,40 @@
+{
+  "id": "a1215e20-dcc2-5dd4-904a-35150d08ea2a",
+  "catalog": "sigma",
+  "name": "registry_set_suppress_defender_notifications",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "software\\\\policies\\\\microsoft\\\\windows defender\\\\ux configuration\\\\notification_suppress"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\UX Configuration\\\\Notification_Suppress"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000001)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000001)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*SOFTWARE\\\\Policies\\\\Microsoft\\\\Windows Defender\\\\UX Configuration\\\\Notification_Suppress\" and winlog.event_data.Details:\"DWORD (0x00000001)\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_suppress_defender_notifications.eql",
+  "metadata": {}
+}

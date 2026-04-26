@@ -1,0 +1,89 @@
+{
+  "id": "da366f86-5f31-5a3e-8f15-ded02db2ae44",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_child_process_as_system_",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.parentuser",
+      "raw_field": "winlog.event_data.ParentUser",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori",
+        "\\\\network service",
+        "\\\\local service"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*",
+        "*\\\\NETWORK SERVICE",
+        "*\\\\LOCAL SERVICE"
+      ]
+    },
+    {
+      "field": "user.name",
+      "raw_field": "user.name",
+      "operator": "like~",
+      "values": [
+        "authori",
+        "autori",
+        "\\\\system",
+        "\\\\système",
+        "\\\\система"
+      ],
+      "raw_values": [
+        "*AUTHORI*",
+        "*AUTORI*",
+        "*\\\\SYSTEM",
+        "*\\\\Système",
+        "*\\\\СИСТЕМА"
+      ]
+    },
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "system",
+        "s-1-16-16384"
+      ],
+      "raw_values": [
+        "System",
+        "S-1-16-16384"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "davsetcookie"
+      ],
+      "raw_values": [
+        "*DavSetCookie*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((winlog.event_data.ParentUser like~ (\"*AUTHORI*\", \"*AUTORI*\")) and (winlog.event_data.ParentUser like~ (\"*\\\\NETWORK SERVICE\", \"*\\\\LOCAL SERVICE\")) and (user.name like~ (\"*AUTHORI*\", \"*AUTORI*\")) and (user.name like~ (\"*\\\\SYSTEM\", \"*\\\\Système\", \"*\\\\СИСТЕМА\")) and (winlog.event_data.IntegrityLevel like~ (\"System\", \"S-1-16-16384\"))) and (not (process.executable:\"*\\\\rundll32.exe\" and process.command_line:\"*DavSetCookie*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_child_process_as_system_.eql",
+  "metadata": {}
+}

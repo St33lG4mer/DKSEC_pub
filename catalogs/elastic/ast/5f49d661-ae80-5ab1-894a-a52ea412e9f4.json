@@ -1,0 +1,84 @@
+{
+  "id": "5f49d661-ae80-5ab1-894a-a52ea412e9f4",
+  "catalog": "elastic",
+  "name": "Entra ID Actor Token User Impersonation Abuse",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.auditlogs.properties.initiated_by.user.displayname",
+      "raw_field": "azure.auditlogs.properties.initiated_by.user.displayName",
+      "operator": "in",
+      "values": [
+        "office 365 exchange online",
+        "skype for business online",
+        "dataverse",
+        "office 365 sharepoint online",
+        "microsoft dynamics erp"
+      ],
+      "raw_values": [
+        "Office 365 Exchange Online",
+        "Skype for Business Online",
+        "Dataverse",
+        "Office 365 SharePoint Online",
+        "Microsoft Dynamics ERP"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": "like",
+      "values": [
+        "group"
+      ],
+      "raw_values": [
+        "*group*"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": "!=",
+      "values": [
+        "set directory feature on tenant"
+      ],
+      "raw_values": [
+        "Set directory feature on tenant"
+      ]
+    },
+    {
+      "field": "r",
+      "raw_field": "r",
+      "operator": "like",
+      "values": [
+        ".+@[a-za-z0-9.]+\\\\.[a-za-z]{2,}"
+      ],
+      "raw_values": [
+        ".+@[A-Za-z0-9.]+\\\\.[A-Za-z]{2,}"
+      ]
+    }
+  ],
+  "raw_query": "from logs-azure.auditlogs-* metadata _id, _version, _index\n| where azure.auditlogs.properties.initiated_by.user.displayName in (\n    \"Office 365 Exchange Online\",\n    \"Skype for Business Online\",\n    \"Dataverse\",\n    \"Office 365 SharePoint Online\",\n    \"Microsoft Dynamics ERP\"\n  ) and\n  not azure.auditlogs.operation_name like \"*group*\" and\n  azure.auditlogs.operation_name != \"Set directory feature on tenant\"\n  and azure.auditlogs.properties.initiated_by.user.userPrincipalName rlike \".+@[A-Za-z0-9.]+\\\\.[A-Za-z]{2,}\"\n| keep\n    @timestamp,\n    azure.*,\n    client.*,\n    event.*,\n    source.*,\n    _id,\n    _version,\n    _index\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/initial_access_entra_id_actor_token_user_impersonation_abuse.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Entra ID",
+      "Data Source: Entra Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "id": "49383a33-abf4-5a47-a764-637b404f06e7",
+  "catalog": "sigma",
+  "name": "win_security_scrcons_remote_wmi_scripteventconsumer",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "4624"
+      ],
+      "raw_values": [
+        "4624"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "scrcons.exe"
+      ],
+      "raw_values": [
+        "*scrcons.exe"
+      ]
+    },
+    {
+      "field": "winlog.logon.id",
+      "raw_field": "winlog.logon.id",
+      "operator": ":",
+      "values": [
+        "0x3e7"
+      ],
+      "raw_values": [
+        "0x3e7"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"4624\" and winlog.event_data.LogonType:\"3\" and process.executable:\"*scrcons.exe\") and (not winlog.logon.id:\"0x3e7\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/builtin/security/account_management/win_security_scrcons_remote_wmi_scripteventconsumer.eql",
+  "metadata": {}
+}

@@ -1,0 +1,60 @@
+{
+  "id": "64695887-7fca-5f38-8b0e-1ebf4f2922e7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2020_1472_zero_poc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "cool.exe",
+        "zero.exe"
+      ],
+      "raw_values": [
+        "*\\\\cool.exe",
+        "*\\\\zero.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "administrator",
+        "taskkill",
+        "powershell"
+      ],
+      "raw_values": [
+        "*Administrator*",
+        "*-c*",
+        "*taskkill*",
+        "*/f*",
+        "*/im*",
+        "*powershell*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\cmd.exe\" and (process.executable like~ (\"*\\\\cool.exe\", \"*\\\\zero.exe\")) and (process.command_line:\"*Administrator*\" and process.command_line:\"*-c*\")) and ((process.command_line:\"*taskkill*\" and process.command_line:\"*/f*\" and process.command_line:\"*/im*\") or process.command_line:\"*powershell*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Exploits/CVE-2020-1472/proc_creation_win_exploit_cve_2020_1472_zero_poc.eql",
+  "metadata": {}
+}

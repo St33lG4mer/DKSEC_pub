@@ -1,0 +1,86 @@
+{
+  "id": "ad683bec-ed5d-5d49-b396-92a571bb48fd",
+  "catalog": "elastic",
+  "name": "Google Calendar C2 via Script Interpreter",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "node",
+        "osascript"
+      ],
+      "raw_values": [
+        "node",
+        "osascript"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "macos"
+      ],
+      "raw_values": [
+        "macos"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python"
+      ],
+      "raw_values": [
+        "python*"
+      ]
+    },
+    {
+      "field": "destination.domain",
+      "raw_field": "destination.domain",
+      "operator": "like",
+      "values": [
+        "calendar.app.google"
+      ],
+      "raw_values": [
+        "calendar.app.google*"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.entity_id with maxspan=20s\n  [network where host.os.type == \"macos\" and event.type == \"start\" and\n    (process.name in (\"node\", \"osascript\") or process.name like \"python*\" or\n     process.code_signature.trusted == false or process.code_signature.exists == false) and\n    destination.domain like \"calendar.app.google*\"]\n  [network where host.os.type == \"macos\" and event.type == \"start\" and destination.domain == null]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/macos/command_and_control_google_calendar_c2_via_script.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Tactic: Execution",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

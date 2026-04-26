@@ -1,0 +1,40 @@
+{
+  "id": "eb25d434-9bf4-527b-b9cb-874904a91105",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msedge_proxy_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msedge_proxy.exe"
+      ],
+      "raw_values": [
+        "*\\\\msedge_proxy.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "msedge_proxy.exe"
+      ],
+      "raw_values": [
+        "msedge_proxy.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\msedge_proxy.exe\" or process.pe.original_file_name:\"msedge_proxy.exe\") and (process.command_line like~ (\"*http://*\", \"*https://*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msedge_proxy_download.eql",
+  "metadata": {}
+}

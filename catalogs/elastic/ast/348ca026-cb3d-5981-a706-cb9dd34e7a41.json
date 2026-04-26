@@ -1,0 +1,108 @@
+{
+  "id": "348ca026-cb3d-5981-a706-cb9dd34e7a41",
+  "catalog": "elastic",
+  "name": "Service Creation via Local Kerberos Authentication",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "logged-in"
+      ],
+      "raw_values": [
+        "logged-in"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "winlog.event_data.elevatedtoken",
+      "raw_field": "winlog.event_data.ElevatedToken",
+      "operator": "==",
+      "values": [
+        "%%1843"
+      ],
+      "raw_values": [
+        "%%1843"
+      ]
+    },
+    {
+      "field": "winlog.event_data.authenticationpackagename",
+      "raw_field": "winlog.event_data.AuthenticationPackageName",
+      "operator": ":",
+      "values": [
+        "kerberos"
+      ],
+      "raw_values": [
+        "Kerberos"
+      ]
+    },
+    {
+      "field": "winlog.logon.type",
+      "raw_field": "winlog.logon.type",
+      "operator": "==",
+      "values": [
+        "network"
+      ],
+      "raw_values": [
+        "Network"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "service-installed"
+      ],
+      "raw_values": [
+        "service-installed"
+      ]
+    }
+  ],
+  "raw_query": "sequence by winlog.computer_name with maxspan=5m\n [authentication where host.os.type == \"windows\" and\n\n  /* event 4624 need to be logged */\n  event.action == \"logged-in\" and event.outcome == \"success\" and winlog.event_data.ElevatedToken == \"%%1843\" and process.pid == 0 and \n\n  /* authenticate locally using relayed kerberos Ticket */\n  winlog.event_data.AuthenticationPackageName :\"Kerberos\" and winlog.logon.type == \"Network\" and cidrmatch(source.ip, \"127.0.0.0/8\", \"::1\")] by winlog.event_data.TargetLogonId\n\n  [any where host.os.type == \"windows\" and\n   /* event 4697 need to be logged */\n   event.action : \"service-installed\"] by winlog.event_data.SubjectLogonId\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_krbrelayup_service_creation.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Tactic: Credential Access",
+      "Use Case: Active Directory Monitoring",
+      "Data Source: Active Directory",
+      "Data Source: Windows Security Event Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "a67ff71e-06f0-540c-91af-fd27fb4b1318",
+  "catalog": "sigma",
+  "name": "proc_creation_win_exploit_cve_2021_35211_servu",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "whoami",
+        "serv-u.bat"
+      ],
+      "raw_values": [
+        "*whoami*",
+        "*C:\\\\Windows\\\\Temp\\\\Serv-U.bat*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*whoami*\" and ((process.command_line like~ (\"*./Client/Common/*\", \"*.\\\\Client\\\\Common\\\\*\")) or process.command_line:\"*C:\\\\Windows\\\\Temp\\\\Serv-U.bat*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-35211/proc_creation_win_exploit_cve_2021_35211_servu.eql",
+  "metadata": {}
+}

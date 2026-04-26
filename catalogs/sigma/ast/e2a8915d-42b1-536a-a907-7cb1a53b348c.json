@@ -1,0 +1,33 @@
+{
+  "id": "e2a8915d-42b1-536a-a907-7cb1a53b348c",
+  "catalog": "sigma",
+  "name": "posh_pm_remote_powershell_session",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "powershell"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.contextinfo",
+      "raw_field": "winlog.event_data.ContextInfo",
+      "operator": ":",
+      "values": [
+        "= serverremotehost",
+        "wsmprovhost.exe",
+        "\\\\windows\\\\system32\\\\windowspowershell\\\\v1.0\\\\modules\\\\microsoft.powershell.archive\\\\microsoft.powershell.archive.psm1"
+      ],
+      "raw_values": [
+        "* = ServerRemoteHost *",
+        "*wsmprovhost.exe*",
+        "*\\\\Windows\\\\system32\\\\WindowsPowerShell\\\\v1.0\\\\Modules\\\\Microsoft.PowerShell.Archive\\\\Microsoft.PowerShell.Archive.psm1*"
+      ]
+    }
+  ],
+  "raw_query": "any where (winlog.event_data.ContextInfo:\"* = ServerRemoteHost *\" and winlog.event_data.ContextInfo:\"*wsmprovhost.exe*\") and (not winlog.event_data.ContextInfo:\"*\\\\Windows\\\\system32\\\\WindowsPowerShell\\\\v1.0\\\\Modules\\\\Microsoft.PowerShell.Archive\\\\Microsoft.PowerShell.Archive.psm1*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/powershell/powershell_module/posh_pm_remote_powershell_session.eql",
+  "metadata": {}
+}

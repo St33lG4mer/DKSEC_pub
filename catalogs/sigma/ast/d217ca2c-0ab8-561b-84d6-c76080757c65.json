@@ -1,0 +1,40 @@
+{
+  "id": "d217ca2c-0ab8-561b-84d6-c76080757c65",
+  "catalog": "sigma",
+  "name": "registry_set_dsrm_tampering",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\control\\\\lsa\\\\dsrmadminlogonbehavior"
+      ],
+      "raw_values": [
+        "*\\\\Control\\\\Lsa\\\\DsrmAdminLogonBehavior"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "dword (0x00000000)"
+      ],
+      "raw_values": [
+        "DWORD (0x00000000)"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Control\\\\Lsa\\\\DsrmAdminLogonBehavior\" and (not winlog.event_data.Details:\"DWORD (0x00000000)\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_dsrm_tampering.eql",
+  "metadata": {}
+}

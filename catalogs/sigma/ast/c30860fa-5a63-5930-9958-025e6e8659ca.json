@@ -1,0 +1,42 @@
+{
+  "id": "c30860fa-5a63-5930-9958-025e6e8659ca",
+  "catalog": "sigma",
+  "name": "image_load_side_load_eacore",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "eacore.dll"
+      ],
+      "raw_values": [
+        "*\\\\EACore.dll",
+        "C:\\\\Program Files\\\\Electronic Arts\\\\EA Desktop\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "eacoreserver.exe"
+      ],
+      "raw_values": [
+        "*C:\\\\Program Files\\\\Electronic Arts\\\\EA Desktop\\\\*",
+        "*\\\\EACoreServer.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\EACore.dll\" and (not ((process.executable:\"*C:\\\\Program Files\\\\Electronic Arts\\\\EA Desktop\\\\*\" and process.executable:\"*\\\\EACoreServer.exe*\") and file.path:\"C:\\\\Program Files\\\\Electronic Arts\\\\EA Desktop\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_eacore.eql",
+  "metadata": {}
+}

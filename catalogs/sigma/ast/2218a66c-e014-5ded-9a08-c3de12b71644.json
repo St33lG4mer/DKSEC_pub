@@ -1,0 +1,95 @@
+{
+  "id": "2218a66c-e014-5ded-9a08-c3de12b71644",
+  "catalog": "sigma",
+  "name": "registry_set_odbc_driver_registered_susp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\driver",
+        "\\\\setup"
+      ],
+      "raw_values": [
+        "*\\\\Driver",
+        "*\\\\Setup"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        ":\\\\perflogs\\\\",
+        ":\\\\programdata\\\\",
+        ":\\\\temp\\\\",
+        ":\\\\users\\\\public\\\\",
+        ":\\\\windows\\\\registration\\\\crmlog",
+        ":\\\\windows\\\\system32\\\\com\\\\dmp\\\\",
+        ":\\\\windows\\\\system32\\\\fxstmp\\\\",
+        ":\\\\windows\\\\system32\\\\microsoft\\\\crypto\\\\rsa\\\\machinekeys\\\\",
+        ":\\\\windows\\\\system32\\\\spool\\\\drivers\\\\color\\\\",
+        ":\\\\windows\\\\system32\\\\spool\\\\printers\\\\",
+        ":\\\\windows\\\\system32\\\\spool\\\\servers\\\\",
+        ":\\\\windows\\\\system32\\\\tasks_migrated\\\\",
+        ":\\\\windows\\\\system32\\\\tasks\\\\microsoft\\\\windows\\\\synccenter\\\\",
+        ":\\\\windows\\\\syswow64\\\\com\\\\dmp\\\\",
+        ":\\\\windows\\\\syswow64\\\\fxstmp\\\\",
+        ":\\\\windows\\\\syswow64\\\\tasks\\\\microsoft\\\\windows\\\\pla\\\\system\\\\",
+        ":\\\\windows\\\\syswow64\\\\tasks\\\\microsoft\\\\windows\\\\synccenter\\\\",
+        ":\\\\windows\\\\tasks\\\\",
+        ":\\\\windows\\\\temp\\\\",
+        ":\\\\windows\\\\tracing\\\\",
+        "\\\\appdata\\\\local\\\\temp\\\\",
+        "\\\\appdata\\\\roaming\\\\"
+      ],
+      "raw_values": [
+        "*:\\\\PerfLogs\\\\*",
+        "*:\\\\ProgramData\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Registration\\\\CRMLog*",
+        "*:\\\\Windows\\\\System32\\\\com\\\\dmp\\\\*",
+        "*:\\\\Windows\\\\System32\\\\FxsTmp\\\\*",
+        "*:\\\\Windows\\\\System32\\\\Microsoft\\\\Crypto\\\\RSA\\\\MachineKeys\\\\*",
+        "*:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\*",
+        "*:\\\\Windows\\\\System32\\\\spool\\\\PRINTERS\\\\*",
+        "*:\\\\Windows\\\\System32\\\\spool\\\\SERVERS\\\\*",
+        "*:\\\\Windows\\\\System32\\\\Tasks_Migrated\\\\*",
+        "*:\\\\Windows\\\\System32\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\*",
+        "*:\\\\Windows\\\\SysWOW64\\\\com\\\\dmp\\\\*",
+        "*:\\\\Windows\\\\SysWOW64\\\\FxsTmp\\\\*",
+        "*:\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\PLA\\\\System\\\\*",
+        "*:\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\*",
+        "*:\\\\Windows\\\\Tasks\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*:\\\\Windows\\\\Tracing\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\odbc\\\\odbcinst.ini\\\\"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\ODBC\\\\ODBCINST.INI\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\ODBC\\\\ODBCINST.INI\\\\*\" and (registry.path like~ (\"*\\\\Driver\", \"*\\\\Setup\")) and (winlog.event_data.Details like~ (\"*:\\\\PerfLogs\\\\*\", \"*:\\\\ProgramData\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Registration\\\\CRMLog*\", \"*:\\\\Windows\\\\System32\\\\com\\\\dmp\\\\*\", \"*:\\\\Windows\\\\System32\\\\FxsTmp\\\\*\", \"*:\\\\Windows\\\\System32\\\\Microsoft\\\\Crypto\\\\RSA\\\\MachineKeys\\\\*\", \"*:\\\\Windows\\\\System32\\\\spool\\\\drivers\\\\color\\\\*\", \"*:\\\\Windows\\\\System32\\\\spool\\\\PRINTERS\\\\*\", \"*:\\\\Windows\\\\System32\\\\spool\\\\SERVERS\\\\*\", \"*:\\\\Windows\\\\System32\\\\Tasks_Migrated\\\\*\", \"*:\\\\Windows\\\\System32\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\com\\\\dmp\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\FxsTmp\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\PLA\\\\System\\\\*\", \"*:\\\\Windows\\\\SysWOW64\\\\Tasks\\\\Microsoft\\\\Windows\\\\SyncCenter\\\\*\", \"*:\\\\Windows\\\\Tasks\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*:\\\\Windows\\\\Tracing\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_odbc_driver_registered_susp.eql",
+  "metadata": {}
+}

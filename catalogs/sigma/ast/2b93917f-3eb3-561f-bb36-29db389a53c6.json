@@ -1,0 +1,64 @@
+{
+  "id": "2b93917f-3eb3-561f-bb36-29db389a53c6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_whoami_output",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "fo csv",
+        "-fo csv"
+      ],
+      "raw_values": [
+        "* /FO CSV*",
+        "* -FO CSV*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "*\\\\whoami.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "whoami.exe"
+      ],
+      "raw_values": [
+        "whoami.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "whoami*>"
+      ],
+      "raw_values": [
+        "*whoami*>*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\whoami.exe\" or process.pe.original_file_name:\"whoami.exe\") and (process.command_line like~ (\"* /FO CSV*\", \"* -FO CSV*\"))) or process.command_line:\"*whoami*>*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_whoami_output.eql",
+  "metadata": {}
+}

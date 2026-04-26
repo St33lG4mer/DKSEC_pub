@@ -1,0 +1,64 @@
+{
+  "id": "033bd98e-e9ba-535c-9b59-101b1c78ce3a",
+  "catalog": "sigma",
+  "name": "file_event_win_vhd_download_via_browsers",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "brave.exe",
+        "chrome.exe",
+        "firefox.exe",
+        "iexplore.exe",
+        "maxthon.exe",
+        "microsoftedge.exe",
+        "msedge.exe",
+        "msedgewebview2.exe",
+        "opera.exe",
+        "safari.exe",
+        "seamonkey.exe",
+        "vivaldi.exe",
+        "whale.exe"
+      ],
+      "raw_values": [
+        "*\\\\brave.exe",
+        "*\\\\chrome.exe",
+        "*\\\\firefox.exe",
+        "*\\\\iexplore.exe",
+        "*\\\\maxthon.exe",
+        "*\\\\MicrosoftEdge.exe",
+        "*\\\\msedge.exe",
+        "*\\\\msedgewebview2.exe",
+        "*\\\\opera.exe",
+        "*\\\\safari.exe",
+        "*\\\\seamonkey.exe",
+        "*\\\\vivaldi.exe",
+        "*\\\\whale.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".vhd"
+      ],
+      "raw_values": [
+        "*.vhd*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\brave.exe\", \"*\\\\chrome.exe\", \"*\\\\firefox.exe\", \"*\\\\iexplore.exe\", \"*\\\\maxthon.exe\", \"*\\\\MicrosoftEdge.exe\", \"*\\\\msedge.exe\", \"*\\\\msedgewebview2.exe\", \"*\\\\opera.exe\", \"*\\\\safari.exe\", \"*\\\\seamonkey.exe\", \"*\\\\vivaldi.exe\", \"*\\\\whale.exe\")) and file.path:\"*.vhd*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_vhd_download_via_browsers.eql",
+  "metadata": {}
+}

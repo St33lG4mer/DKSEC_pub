@@ -1,0 +1,64 @@
+{
+  "id": "b8d7e4fe-4ef6-5fae-bf7b-bf88d925b704",
+  "catalog": "sigma",
+  "name": "win_security_hktl_nofilter",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5447",
+        "5449"
+      ],
+      "raw_values": [
+        "5447",
+        "5449"
+      ]
+    },
+    {
+      "field": "winlog.event_data.filtername",
+      "raw_field": "winlog.event_data.FilterName",
+      "operator": ":",
+      "values": [
+        "ronpolicy"
+      ],
+      "raw_values": [
+        "*RonPolicy*"
+      ]
+    },
+    {
+      "field": "winlog.event_data.providercontextname",
+      "raw_field": "winlog.event_data.ProviderContextName",
+      "operator": ":",
+      "values": [
+        "ronpolicy"
+      ],
+      "raw_values": [
+        "*RonPolicy*"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and ((event.code:\"5447\" and winlog.event_data.FilterName:\"*RonPolicy*\") or (event.code:\"5449\" and winlog.event_data.ProviderContextName:\"*RonPolicy*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_hktl_nofilter.eql",
+  "metadata": {}
+}

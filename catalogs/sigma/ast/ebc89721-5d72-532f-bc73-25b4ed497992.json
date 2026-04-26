@@ -1,0 +1,97 @@
+{
+  "id": "ebc89721-5d72-532f-bc73-25b4ed497992",
+  "catalog": "sigma",
+  "name": "file_event_win_initial_access_dll_search_order_hijacking",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "msaccess.exe",
+        "mspub.exe",
+        "fltldr.exe",
+        "cmd.exe",
+        "certutil.exe",
+        "mshta.exe",
+        "cscript.exe",
+        "wscript.exe",
+        "curl.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\winword.exe",
+        "*\\\\excel.exe",
+        "*\\\\powerpnt.exe",
+        "*\\\\MSACCESS.EXE",
+        "*\\\\MSPUB.EXE",
+        "*\\\\fltldr.exe",
+        "*\\\\cmd.exe",
+        "*\\\\certutil.exe",
+        "*\\\\mshta.exe",
+        "*\\\\cscript.exe",
+        "*\\\\wscript.exe",
+        "*\\\\curl.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "app-"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\OneDrive\\\\*",
+        "*\\\\Microsoft OneDrive\\\\*",
+        "*\\\\Microsoft\\\\Teams\\\\*",
+        "*\\\\Local\\\\slack\\\\app-*",
+        "*\\\\Local\\\\Programs\\\\Microsoft VS Code\\\\*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".dll",
+        "api-ms-win-core-"
+      ],
+      "raw_values": [
+        "*.dll",
+        "*\\\\Users\\\\*",
+        "*\\\\AppData\\\\*",
+        "*\\\\Microsoft\\\\OneDrive\\\\*",
+        "*\\\\api-ms-win-core-*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\winword.exe\", \"*\\\\excel.exe\", \"*\\\\powerpnt.exe\", \"*\\\\MSACCESS.EXE\", \"*\\\\MSPUB.EXE\", \"*\\\\fltldr.exe\", \"*\\\\cmd.exe\", \"*\\\\certutil.exe\", \"*\\\\mshta.exe\", \"*\\\\cscript.exe\", \"*\\\\wscript.exe\", \"*\\\\curl.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and file.path:\"*.dll\" and (file.path:\"*\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\*\") and (file.path like~ (\"*\\\\Microsoft\\\\OneDrive\\\\*\", \"*\\\\Microsoft OneDrive\\\\*\", \"*\\\\Microsoft\\\\Teams\\\\*\", \"*\\\\Local\\\\slack\\\\app-*\", \"*\\\\Local\\\\Programs\\\\Microsoft VS Code\\\\*\"))) and (not (process.executable:\"*\\\\cmd.exe\" and (file.path:\"*\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\*\" and file.path:\"*\\\\Microsoft\\\\OneDrive\\\\*\" and file.path:\"*\\\\api-ms-win-core-*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_initial_access_dll_search_order_hijacking.eql",
+  "metadata": {}
+}

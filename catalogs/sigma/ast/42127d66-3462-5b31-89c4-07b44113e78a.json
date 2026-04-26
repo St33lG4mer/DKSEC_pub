@@ -1,0 +1,29 @@
+{
+  "id": "42127d66-3462-5b31-89c4-07b44113e78a",
+  "catalog": "sigma",
+  "name": "registry_set_lolbin_onedrivestandaloneupdater",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\microsoft\\\\onedrive\\\\updateofficeconfig\\\\updateringsettingurlfromoc"
+      ],
+      "raw_values": [
+        "*\\\\SOFTWARE\\\\Microsoft\\\\OneDrive\\\\UpdateOfficeConfig\\\\UpdateRingSettingURLFromOC*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\SOFTWARE\\\\Microsoft\\\\OneDrive\\\\UpdateOfficeConfig\\\\UpdateRingSettingURLFromOC*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_lolbin_onedrivestandaloneupdater.eql",
+  "metadata": {}
+}

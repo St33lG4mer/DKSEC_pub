@@ -1,0 +1,24 @@
+{
+  "id": "dba8adad-3e85-5696-a01e-e941e7f43d7d",
+  "catalog": "elastic",
+  "name": "Ransomware - Detected - Elastic Defend",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind : alert and event.code : ransomware and (event.type : allowed or (event.type: denied and event.outcome: failure))\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/endpoint/impact_elastic_ransomware_detected.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Data Source: Elastic Defend",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

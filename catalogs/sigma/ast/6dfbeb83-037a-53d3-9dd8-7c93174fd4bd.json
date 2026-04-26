@@ -1,0 +1,29 @@
+{
+  "id": "6dfbeb83-037a-53d3-9dd8-7c93174fd4bd",
+  "catalog": "sigma",
+  "name": "file_event_win_susp_diagcab",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".diagcab"
+      ],
+      "raw_values": [
+        "*.diagcab"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*.diagcab\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_susp_diagcab.eql",
+  "metadata": {}
+}

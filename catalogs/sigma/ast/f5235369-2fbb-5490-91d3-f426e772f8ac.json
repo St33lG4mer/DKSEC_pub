@@ -1,0 +1,69 @@
+{
+  "id": "f5235369-2fbb-5490-91d3-f426e772f8ac",
+  "catalog": "sigma",
+  "name": "proc_creation_win_msdt_answer_file_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-af",
+        "–af",
+        "—af",
+        "―af"
+      ],
+      "raw_values": [
+        "* -af *",
+        "* /af *",
+        "* –af *",
+        "* —af *",
+        "* ―af *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "msdt.exe"
+      ],
+      "raw_values": [
+        "*\\\\msdt.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "pcwdiagnostic.xml"
+      ],
+      "raw_values": [
+        "*\\\\WINDOWS\\\\diagnostics\\\\index\\\\PCWDiagnostic.xml*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "pcwrun.exe"
+      ],
+      "raw_values": [
+        "*\\\\pcwrun.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\msdt.exe\" and process.command_line:\"*\\\\WINDOWS\\\\diagnostics\\\\index\\\\PCWDiagnostic.xml*\" and process.command_line like~ (\"* -af *\", \"* /af *\", \"* –af *\", \"* —af *\", \"* ―af *\")) and (not process.parent.executable:\"*\\\\pcwrun.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_msdt_answer_file_exec.eql",
+  "metadata": {}
+}

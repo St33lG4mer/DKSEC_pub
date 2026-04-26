@@ -1,0 +1,65 @@
+{
+  "id": "540b9596-5474-540f-a521-4f54ac84754b",
+  "catalog": "sigma",
+  "name": "file_event_win_webshell_creation_detect",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".ashx",
+        ".asp",
+        ".ph",
+        ".soap"
+      ],
+      "raw_values": [
+        "*.ashx*",
+        "*.asp*",
+        "*.ph*",
+        "*.soap*",
+        "*\\\\www\\\\*",
+        "*\\\\htdocs\\\\*",
+        "*\\\\html\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\Windows\\\\Temp\\\\*"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".ph",
+        "xampp"
+      ],
+      "raw_values": [
+        "*\\\\inetpub\\\\wwwroot\\\\*",
+        "*.ph*",
+        "*\\\\xampp*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "system"
+      ],
+      "raw_values": [
+        "System"
+      ]
+    }
+  ],
+  "raw_query": "any where ((file.path:\"*\\\\inetpub\\\\wwwroot\\\\*\" and (file.path like~ (\"*.ashx*\", \"*.asp*\", \"*.ph*\", \"*.soap*\"))) or ((file.path like~ (\"*\\\\www\\\\*\", \"*\\\\htdocs\\\\*\", \"*\\\\html\\\\*\")) and file.path:\"*.ph*\")) and (not ((file.path like~ (\"*\\\\AppData\\\\Local\\\\Temp\\\\*\", \"*\\\\Windows\\\\Temp\\\\*\")) or process.executable:\"System\" or file.path:\"*\\\\xampp*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_webshell_creation_detect.eql",
+  "metadata": {}
+}

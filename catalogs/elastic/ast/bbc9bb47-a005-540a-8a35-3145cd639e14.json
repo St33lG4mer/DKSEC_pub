@@ -1,0 +1,97 @@
+{
+  "id": "bbc9bb47-a005-540a-8a35-3145cd639e14",
+  "catalog": "elastic",
+  "name": "Kubernetes Service Account Modified RBAC Objects",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "kubernetes.audit.user.username",
+      "raw_field": "kubernetes.audit.user.username",
+      "operator": ":",
+      "values": [
+        "system:serviceaccount:kube-system:clusterrole-aggregation-controller",
+        "system:serviceaccount:kube-system:generic-garbage-collector"
+      ],
+      "raw_values": [
+        "system:serviceaccount:kube-system:clusterrole-aggregation-controller",
+        "system:serviceaccount:kube-system:generic-garbage-collector"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "clusterrolebindings",
+        "clusterroles",
+        "rolebindings",
+        "roles"
+      ],
+      "raw_values": [
+        "clusterrolebindings",
+        "clusterroles",
+        "rolebindings",
+        "roles"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create",
+        "delete",
+        "patch",
+        "update"
+      ],
+      "raw_values": [
+        "create",
+        "delete",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:\"kubernetes.audit_logs\" and kubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.user.username:(\n  system\\:serviceaccount\\:* and not (\n    \"system:serviceaccount:kube-system:clusterrole-aggregation-controller\" or\n    \"system:serviceaccount:kube-system:generic-garbage-collector\"\n  )\n) and\nkubernetes.audit.objectRef.resource:(\"clusterrolebindings\" or \"clusterroles\" or \"rolebindings\" or \"roles\") and\nkubernetes.audit.verb:(\"create\" or \"delete\" or \"patch\" or \"update\")\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/privilege_escalation_service_account_rbac_write_operation.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

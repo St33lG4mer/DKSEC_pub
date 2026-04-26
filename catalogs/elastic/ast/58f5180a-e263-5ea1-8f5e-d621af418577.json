@@ -1,0 +1,51 @@
+{
+  "id": "58f5180a-e263-5ea1-8f5e-d621af418577",
+  "catalog": "elastic",
+  "name": "Sensitive Files Compression",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "executed",
+        "process_started"
+      ]
+    }
+  ],
+  "raw_query": "event.category:process and host.os.type:linux and event.type:start and\nevent.action:(\"exec\" or \"exec_event\" or \"start\" or \"executed\" or \"process_started\") and\nprocess.name:(zip or tar or gzip or hdiutil or 7z) and\nprocess.args:\n    (\n      /root/.ssh/id_rsa or\n      /root/.ssh/id_rsa.pub or\n      /root/.ssh/id_ed25519 or\n      /root/.ssh/id_ed25519.pub or\n      /root/.ssh/authorized_keys or\n      /root/.ssh/authorized_keys2 or\n      /root/.ssh/known_hosts or\n      /root/.bash_history or\n      /etc/hosts or\n      /home/*/.ssh/id_rsa or\n      /home/*/.ssh/id_rsa.pub or\n      /home/*/.ssh/id_ed25519 or\n      /home/*/.ssh/id_ed25519.pub or\n      /home/*/.ssh/authorized_keys or\n      /home/*/.ssh/authorized_keys2 or\n      /home/*/.ssh/known_hosts or\n      /home/*/.bash_history or\n      /root/.aws/credentials or\n      /root/.aws/config or\n      /home/*/.aws/credentials or\n      /home/*/.aws/config or\n      /root/.docker/config.json or\n      /home/*/.docker/config.json or\n      /etc/group or\n      /etc/passwd or\n      /etc/shadow or\n      /etc/gshadow\n    )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/linux/credential_access_collection_sensitive_files.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Collection",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne",
+      "Data Source: Auditd Manager",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

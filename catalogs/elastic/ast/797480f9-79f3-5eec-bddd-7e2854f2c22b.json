@@ -1,0 +1,29 @@
+{
+  "id": "797480f9-79f3-5eec-bddd-7e2854f2c22b",
+  "catalog": "elastic",
+  "name": "AWS Route 53 Domain Transfer Lock Disabled",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset: aws.cloudtrail \n    and event.provider: route53domains.amazonaws.com \n    and event.action: DisableDomainTransferLock \n    and event.outcome: success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_route_53_domain_transfer_lock_disabled.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Route 53",
+      "Use Case: Asset Visibility",
+      "Tactic: Persistence",
+      "Tactic: Resource Development",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

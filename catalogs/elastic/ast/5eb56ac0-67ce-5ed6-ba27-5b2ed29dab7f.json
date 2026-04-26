@@ -1,0 +1,92 @@
+{
+  "id": "5eb56ac0-67ce-5ed6-ba27-5b2ed29dab7f",
+  "catalog": "elastic",
+  "name": "Suspicious SolarWinds Web Help Desk Java Module Load or Child Process",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "java.exe",
+        "cmd.exe",
+        "powershell.exe",
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\WebHelpDesk\\\\*\\\\java.exe",
+        "cmd.exe",
+        "powershell.exe",
+        "rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "java*.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Program Files\\\\WebHelpDesk\\\\*\\\\java*.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": "==",
+      "values": [
+        "library",
+        "process"
+      ],
+      "raw_values": [
+        "library",
+        "process"
+      ]
+    },
+    {
+      "field": "dll.path",
+      "raw_field": "dll.path",
+      "operator": ":",
+      "values": [
+        "\\\\device\\\\mup\\\\"
+      ],
+      "raw_values": [
+        "\\\\Device\\\\Mup\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and\n(\n (event.category == \"library\" and\n  process.executable : (\"C:\\\\Program Files\\\\WebHelpDesk\\\\*\\\\java.exe\", \"C:\\\\Program Files (x86)\\\\WebHelpDesk\\\\*\\\\java.exe\") and\n  (dll.path : \"\\\\Device\\\\Mup\\\\*\" or dll.code_signature.trusted == false or ?dll.code_signature.exists == false)) or\n\n (event.category == \"process\" and process.name : (\"cmd.exe\", \"powershell.exe\", \"rundll32.exe\") and\n  process.parent.executable : (\"C:\\\\Program Files\\\\WebHelpDesk\\\\*\\\\java*.exe\", \"C:\\\\Program Files (x86)\\\\WebHelpDesk\\\\*\\\\java*.exe\"))\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/initial_access_potential_webhelpdesk_exploit.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Initial Access",
+      "Use Case: Vulnerability",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

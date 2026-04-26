@@ -1,0 +1,64 @@
+{
+  "id": "9d1dc3a6-a282-54af-88e6-770cc8762bb9",
+  "catalog": "sigma",
+  "name": "proc_creation_win_systemsettingsadminflows_turn_on_dev_features",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "developerunlock",
+        "enablesideloading"
+      ],
+      "raw_values": [
+        "*DeveloperUnlock*",
+        "*EnableSideloading*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "systemsettingsadminflows.exe"
+      ],
+      "raw_values": [
+        "*\\\\SystemSettingsAdminFlows.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "systemsettingsadminflows.exe"
+      ],
+      "raw_values": [
+        "SystemSettingsAdminFlows.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "turnondeveloperfeatures"
+      ],
+      "raw_values": [
+        "*TurnOnDeveloperFeatures*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\SystemSettingsAdminFlows.exe\" or process.pe.original_file_name:\"SystemSettingsAdminFlows.EXE\") and process.command_line:\"*TurnOnDeveloperFeatures*\" and (process.command_line like~ (\"*DeveloperUnlock*\", \"*EnableSideloading*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_systemsettingsadminflows_turn_on_dev_features.eql",
+  "metadata": {}
+}

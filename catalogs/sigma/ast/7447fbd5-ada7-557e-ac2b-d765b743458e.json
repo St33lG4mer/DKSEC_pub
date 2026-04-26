@@ -1,0 +1,62 @@
+{
+  "id": "7447fbd5-ada7-557e-ac2b-d765b743458e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_sdbinst_shim_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sdbinst.exe"
+      ],
+      "raw_values": [
+        "*\\\\sdbinst.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "sdbinst.exe"
+      ],
+      "raw_values": [
+        "sdbinst.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".sdb"
+      ],
+      "raw_values": [
+        "*.sdb*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "*\\\\msiexec.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\sdbinst.exe\" or process.pe.original_file_name:\"sdbinst.exe\") and process.command_line:\"*.sdb*\") and (not (process.parent.executable:\"*\\\\msiexec.exe\" and (process.command_line like~ (\"*:\\\\Program Files (x86)\\\\IIS Express\\\\iisexpressshim.sdb*\", \"*:\\\\Program Files\\\\IIS Express\\\\iisexpressshim.sdb*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_sdbinst_shim_persistence.eql",
+  "metadata": {}
+}

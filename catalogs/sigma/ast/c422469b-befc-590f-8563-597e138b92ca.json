@@ -1,0 +1,44 @@
+{
+  "id": "c422469b-befc-590f-8563-597e138b92ca",
+  "catalog": "sigma",
+  "name": "image_load_side_load_robform",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "roboform.dll",
+        "roboform-x64.dll"
+      ],
+      "raw_values": [
+        "*\\\\roboform.dll",
+        "*\\\\roboform-x64.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "robotaskbaricon.exe",
+        "robotaskbaricon-x64.exe"
+      ],
+      "raw_values": [
+        "*\\\\robotaskbaricon.exe",
+        "*\\\\robotaskbaricon-x64.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*\\\\roboform.dll\", \"*\\\\roboform-x64.dll\")) and (not ((process.executable like~ (\" C:\\\\Program Files (x86)\\\\Siber Systems\\\\AI RoboForm\\\\*\", \" C:\\\\Program Files\\\\Siber Systems\\\\AI RoboForm\\\\*\")) and (process.executable like~ (\"*\\\\robotaskbaricon.exe\", \"*\\\\robotaskbaricon-x64.exe\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_robform.eql",
+  "metadata": {}
+}

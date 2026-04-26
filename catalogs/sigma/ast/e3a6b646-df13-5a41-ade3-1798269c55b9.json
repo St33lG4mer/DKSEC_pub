@@ -1,0 +1,58 @@
+{
+  "id": "e3a6b646-df13-5a41-ade3-1798269c55b9",
+  "catalog": "sigma",
+  "name": "file_event_win_new_files_in_uncommon_appdata_folder",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".cmd",
+        ".cpl",
+        ".dll",
+        ".exe",
+        ".hta",
+        ".iso",
+        ".lnk",
+        ".msi",
+        ".ps1",
+        ".psm1",
+        ".scr",
+        ".vbe",
+        ".vbs"
+      ],
+      "raw_values": [
+        "*.bat",
+        "*.cmd",
+        "*.cpl",
+        "*.dll",
+        "*.exe",
+        "*.hta",
+        "*.iso",
+        "*.lnk",
+        "*.msi",
+        "*.ps1",
+        "*.psm1",
+        "*.scr",
+        "*.vbe",
+        "*.vbs",
+        "*\\\\AppData\\\\Local\\\\*",
+        "*\\\\AppData\\\\LocalLow\\\\*",
+        "*\\\\AppData\\\\Roaming\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\*\" and (file.path like~ (\"*.bat\", \"*.cmd\", \"*.cpl\", \"*.dll\", \"*.exe\", \"*.hta\", \"*.iso\", \"*.lnk\", \"*.msi\", \"*.ps1\", \"*.psm1\", \"*.scr\", \"*.vbe\", \"*.vbs\"))) and (not (file.path:\"C:\\\\Users\\\\*\" and (file.path like~ (\"*\\\\AppData\\\\Local\\\\*\", \"*\\\\AppData\\\\LocalLow\\\\*\", \"*\\\\AppData\\\\Roaming\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_new_files_in_uncommon_appdata_folder.eql",
+  "metadata": {}
+}

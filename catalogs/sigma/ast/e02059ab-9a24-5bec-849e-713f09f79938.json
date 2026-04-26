@@ -1,0 +1,57 @@
+{
+  "id": "e02059ab-9a24-5bec-849e-713f09f79938",
+  "catalog": "sigma",
+  "name": "net_dns_apt_equation_group_triangulation_c2_coms",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "query",
+      "raw_field": "query",
+      "operator": "like~",
+      "values": [
+        "addatamarket.net",
+        "ans7tv.net",
+        "anstv.net",
+        "backuprabbit.com",
+        "businessvideonews.com",
+        "cloudsponcer.com",
+        "datamarketplace.net",
+        "growthtransport.com",
+        "mobilegamerstats.com",
+        "snoweeanalytics.com",
+        "tagclick-cdn.com",
+        "topographyupdates.com",
+        "unlimitedteacup.com",
+        "virtuallaughing.com",
+        "web-trackers.com"
+      ],
+      "raw_values": [
+        "addatamarket.net",
+        "ans7tv.net",
+        "anstv.net",
+        "backuprabbit.com",
+        "businessvideonews.com",
+        "cloudsponcer.com",
+        "datamarketplace.net",
+        "growthtransport.com",
+        "mobilegamerstats.com",
+        "snoweeanalytics.com",
+        "tagclick-cdn.com",
+        "topographyupdates.com",
+        "unlimitedteacup.com",
+        "virtuallaughing.com",
+        "web-trackers.com"
+      ]
+    }
+  ],
+  "raw_query": "any where query like~ (\"addatamarket.net\", \"ans7tv.net\", \"anstv.net\", \"backuprabbit.com\", \"businessvideonews.com\", \"cloudsponcer.com\", \"datamarketplace.net\", \"growthtransport.com\", \"mobilegamerstats.com\", \"snoweeanalytics.com\", \"tagclick-cdn.com\", \"topographyupdates.com\", \"unlimitedteacup.com\", \"virtuallaughing.com\", \"web-trackers.com\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/TA/EquationGroup/net_dns_apt_equation_group_triangulation_c2_coms.eql",
+  "metadata": {}
+}

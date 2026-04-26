@@ -1,0 +1,51 @@
+{
+  "id": "d5d31911-eb4a-52f5-90c9-6e9dc3b4192e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_apt31_judgement_panda",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "procdump64.exe",
+        "netsess.exe",
+        "7za.exe"
+      ],
+      "raw_values": [
+        "*\\\\aaaa\\\\procdump64.exe*",
+        "*\\\\aaaa\\\\netsess.exe*",
+        "*\\\\aaaa\\\\7za.exe*",
+        "*\\\\c$\\\\aaaa\\\\*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "ldifde",
+        "-f -n",
+        "eprod.ldf"
+      ],
+      "raw_values": [
+        "*ldifde*",
+        "*-f -n*",
+        "*eprod.ldf*",
+        "*copy \\\\\\\\*",
+        "*c$*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*ldifde*\" and process.command_line:\"*-f -n*\" and process.command_line:\"*eprod.ldf*\") or ((process.command_line:\"*copy \\\\\\\\*\" and process.command_line:\"*c$*\") and (process.command_line like~ (\"*\\\\aaaa\\\\procdump64.exe*\", \"*\\\\aaaa\\\\netsess.exe*\", \"*\\\\aaaa\\\\7za.exe*\", \"*\\\\c$\\\\aaaa\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/TA/APT31/proc_creation_win_apt_apt31_judgement_panda.eql",
+  "metadata": {}
+}

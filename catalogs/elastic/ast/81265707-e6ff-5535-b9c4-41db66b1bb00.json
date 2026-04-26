@@ -1,0 +1,24 @@
+{
+  "id": "81265707-e6ff-5535-b9c4-41db66b1bb00",
+  "catalog": "elastic",
+  "name": "Malicious File - Detected - Elastic Defend",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind : alert and event.code : malicious_file and (event.type : allowed or (event.type: denied and event.outcome: failure))\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/endpoint/execution_elastic_malicious_file_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Elastic Defend",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

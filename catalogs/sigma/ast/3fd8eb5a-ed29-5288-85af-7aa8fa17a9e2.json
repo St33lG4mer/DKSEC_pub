@@ -1,0 +1,29 @@
+{
+  "id": "3fd8eb5a-ed29-5288-85af-7aa8fa17a9e2",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_frombase64string",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "::frombase64string("
+      ],
+      "raw_values": [
+        "*::FromBase64String(*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*::FromBase64String(*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_frombase64string.eql",
+  "metadata": {}
+}

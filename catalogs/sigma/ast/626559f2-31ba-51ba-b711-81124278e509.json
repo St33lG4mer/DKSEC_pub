@@ -1,0 +1,96 @@
+{
+  "id": "626559f2-31ba-51ba-b711-81124278e509",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_rdp_keys_tamper",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "allowtsconnections",
+        "fdenytsconnections",
+        "fenablewinstation",
+        "fsinglesessionperuser",
+        "idlewinstationpoolcount",
+        "maxinstancecount",
+        "securitylayer",
+        "tsadvertise",
+        "tsappcompat",
+        "tsenabled",
+        "tsuserenabled",
+        "rdp-tcp"
+      ],
+      "raw_values": [
+        "*AllowTSConnections*",
+        "*fDenyTSConnections*",
+        "*fEnableWinStation*",
+        "*fSingleSessionPerUser*",
+        "*IdleWinStationPoolCount*",
+        "*MaxInstanceCount*",
+        "*SecurityLayer*",
+        "*TSAdvertise*",
+        "*TSAppCompat*",
+        "*TSEnabled*",
+        "*TSUserEnabled*",
+        "*WinStations\\\\RDP-Tcp*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "terminal server",
+        "reg_dword",
+        "licensing core",
+        "enableconcurrentsessions",
+        "securitylayer"
+      ],
+      "raw_values": [
+        "* add *",
+        "*\\\\CurrentControlSet\\\\Control\\\\Terminal Server*",
+        "*REG_DWORD*",
+        "* /f*",
+        "*Licensing Core*",
+        "*EnableConcurrentSessions*",
+        "*SecurityLayer*",
+        "*02*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and (process.command_line:\"* add *\" and process.command_line:\"*\\\\CurrentControlSet\\\\Control\\\\Terminal Server*\" and process.command_line:\"*REG_DWORD*\" and process.command_line:\"* /f*\")) and ((process.command_line:\"*Licensing Core*\" and process.command_line:\"*EnableConcurrentSessions*\") or (process.command_line like~ (\"*AllowTSConnections*\", \"*fDenyTSConnections*\", \"*fEnableWinStation*\", \"*fSingleSessionPerUser*\", \"*IdleWinStationPoolCount*\", \"*MaxInstanceCount*\", \"*SecurityLayer*\", \"*TSAdvertise*\", \"*TSAppCompat*\", \"*TSEnabled*\", \"*TSUserEnabled*\", \"*WinStations\\\\RDP-Tcp*\"))) and (not (process.command_line:\"*SecurityLayer*\" and process.command_line:\"*02*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_rdp_keys_tamper.eql",
+  "metadata": {}
+}

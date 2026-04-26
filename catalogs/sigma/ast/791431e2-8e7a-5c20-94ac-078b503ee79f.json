@@ -1,0 +1,30 @@
+{
+  "id": "791431e2-8e7a-5c20-94ac-078b503ee79f",
+  "catalog": "sigma",
+  "name": "file_event_win_uac_bypass_dotnet_profiler",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "pe386.dll"
+      ],
+      "raw_values": [
+        "C:\\\\Users\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp\\\\pe386.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"C:\\\\Users\\\\*\" and file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\pe386.dll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_uac_bypass_dotnet_profiler.eql",
+  "metadata": {}
+}

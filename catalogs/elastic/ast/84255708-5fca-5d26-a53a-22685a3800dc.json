@@ -1,0 +1,55 @@
+{
+  "id": "84255708-5fca-5d26-a53a-22685a3800dc",
+  "catalog": "elastic",
+  "name": "Entra ID Sign-in BloodHound Suite User-Agent Detected",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "azure.activitylogs",
+        "azure.graphactivitylogs",
+        "azure.auditlogs",
+        "azure.signinlogs",
+        "o365.audit"
+      ],
+      "raw_values": [
+        "azure.activitylogs",
+        "azure.graphactivitylogs",
+        "azure.auditlogs",
+        "azure.signinlogs",
+        "o365.audit"
+      ]
+    }
+  ],
+  "raw_query": "any where data_stream.dataset : (\n    \"azure.activitylogs\",\n    \"azure.graphactivitylogs\",\n    \"azure.auditlogs\",\n    \"azure.signinlogs\",\n    \"o365.audit\"\n) and user_agent.original regex~ \"(azure|sharp|blood)(hound)/.*\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/discovery_bloodhound_user_agents_detected.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Data Source: Azure Activity Logs",
+      "Data Source: Graph API",
+      "Data Source: Graph API Activity Logs",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Audit Logs",
+      "Data Source: Microsoft Entra ID Sign-in Logs",
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

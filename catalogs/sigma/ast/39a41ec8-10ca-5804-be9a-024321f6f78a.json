@@ -1,0 +1,31 @@
+{
+  "id": "39a41ec8-10ca-5804-be9a-024321f6f78a",
+  "catalog": "sigma",
+  "name": "registry_event_apt_oilrig_mar18",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\ume",
+        "software\\\\microsoft\\\\windows\\\\currentversion\\\\ut"
+      ],
+      "raw_values": [
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\UMe",
+        "*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\UT"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path like~ (\"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\UMe\", \"*SOFTWARE\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\UT\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2018/TA/OilRig/registry_event_apt_oilrig_mar18.eql",
+  "metadata": {}
+}

@@ -1,0 +1,30 @@
+{
+  "id": "249fb450-6d9e-58d8-a9c2-364fdecb2760",
+  "catalog": "elastic",
+  "name": "M365 SharePoint Site Administrator Added",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:o365.audit\n    and event.provider:(SharePoint or OneDrive)\n    and event.category:web\n    and event.action:SiteCollectionAdminAdded\n    and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/o365/privilege_escalation_sharepoint_site_collection_admin_added.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: SaaS",
+      "Domain: Identity",
+      "Data Source: Microsoft 365",
+      "Data Source: Microsoft 365 Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Privilege Escalation",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

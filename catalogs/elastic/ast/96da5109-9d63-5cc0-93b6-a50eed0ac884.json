@@ -1,0 +1,28 @@
+{
+  "id": "96da5109-9d63-5cc0-93b6-a50eed0ac884",
+  "catalog": "elastic",
+  "name": "Spike in Successful Logon Events from a Source IP",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/credential_access_ml_auth_spike_in_logon_events_from_a_source_ip.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Credential Access",
+      "Tactic: Defense Evasion",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

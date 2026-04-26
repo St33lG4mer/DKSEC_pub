@@ -1,0 +1,25 @@
+{
+  "id": "3cef8790-211a-5dcd-935e-e38c4e335489",
+  "catalog": "elastic",
+  "name": "SentinelOne Threat External Alerts",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind: alert and data_stream.dataset: sentinel_one.threat\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/sentinelone_threat_external_alerts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: SentinelOne",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide",
+      "Promotion: External Alerts"
+    ]
+  }
+}

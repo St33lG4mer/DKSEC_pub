@@ -1,0 +1,40 @@
+{
+  "id": "6c8c9c84-f323-5386-92da-2b3958eef276",
+  "catalog": "sigma",
+  "name": "win_defender_real_time_protection_disabled",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-windows defender/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-Windows Defender/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5001"
+      ],
+      "raw_values": [
+        "5001"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-Windows Defender/Operational\" and event.code:\"5001\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/windefend/win_defender_real_time_protection_disabled.eql",
+  "metadata": {}
+}

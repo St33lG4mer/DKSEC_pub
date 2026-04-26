@@ -1,0 +1,29 @@
+{
+  "id": "c32ffcf7-8783-54fa-9689-3de01e9fbaec",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_obfuscation_via_utf8",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "[char]0x"
+      ],
+      "raw_values": [
+        "*[char]0x*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*[char]0x*\", \"*(WCHAR)0x*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_obfuscation_via_utf8.eql",
+  "metadata": {}
+}

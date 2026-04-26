@@ -1,0 +1,150 @@
+{
+  "id": "67d3b72a-c652-5a1a-a6e5-7c2a6e432f05",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_inline_win_api_access",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "addsecuritypackage",
+        "adjusttokenprivileges",
+        "advapi32",
+        "closehandle",
+        "createprocesswithtoken",
+        "createpseudoconsole",
+        "createremotethread",
+        "createthread",
+        "createuserthread",
+        "dangerousgethandle",
+        "duplicatetokenex",
+        "enumeratesecuritypackages",
+        "freehglobal",
+        "freelibrary",
+        "getdelegateforfunctionpointer",
+        "getlogonsessiondata",
+        "getmodulehandle",
+        "getprocaddress",
+        "getprocesshandle",
+        "gettokeninformation",
+        "impersonateloggedonuser",
+        "kernel32",
+        "loadlibrary",
+        "memcpy",
+        "minidumpwritedump",
+        "ntdll",
+        "opendesktop",
+        "openprocess",
+        "openprocesstoken",
+        "openthreadtoken",
+        "openwindowstation",
+        "ptrtostring",
+        "queueuserapc",
+        "readprocessmemory",
+        "reverttoself",
+        "rtlcreateuserthread",
+        "secur32",
+        "setthreadtoken",
+        "virtualalloc",
+        "virtualfree",
+        "virtualprotect",
+        "waitforsingleobject",
+        "writeint32",
+        "writeprocessmemory",
+        "zerofreeglobalallocunicode"
+      ],
+      "raw_values": [
+        "*AddSecurityPackage*",
+        "*AdjustTokenPrivileges*",
+        "*Advapi32*",
+        "*CloseHandle*",
+        "*CreateProcessWithToken*",
+        "*CreatePseudoConsole*",
+        "*CreateRemoteThread*",
+        "*CreateThread*",
+        "*CreateUserThread*",
+        "*DangerousGetHandle*",
+        "*DuplicateTokenEx*",
+        "*EnumerateSecurityPackages*",
+        "*FreeHGlobal*",
+        "*FreeLibrary*",
+        "*GetDelegateForFunctionPointer*",
+        "*GetLogonSessionData*",
+        "*GetModuleHandle*",
+        "*GetProcAddress*",
+        "*GetProcessHandle*",
+        "*GetTokenInformation*",
+        "*ImpersonateLoggedOnUser*",
+        "*kernel32*",
+        "*LoadLibrary*",
+        "*memcpy*",
+        "*MiniDumpWriteDump*",
+        "*ntdll*",
+        "*OpenDesktop*",
+        "*OpenProcess*",
+        "*OpenProcessToken*",
+        "*OpenThreadToken*",
+        "*OpenWindowStation*",
+        "*PtrToString*",
+        "*QueueUserApc*",
+        "*ReadProcessMemory*",
+        "*RevertToSelf*",
+        "*RtlCreateUserThread*",
+        "*secur32*",
+        "*SetThreadToken*",
+        "*VirtualAlloc*",
+        "*VirtualFree*",
+        "*VirtualProtect*",
+        "*WaitForSingleObject*",
+        "*WriteInt32*",
+        "*WriteProcessMemory*",
+        "*ZeroFreeGlobalAllocUnicode*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "mpcmdrun.exe"
+      ],
+      "raw_values": [
+        "*\\\\MpCmdRun.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "getloadlibrarywaddress32"
+      ],
+      "raw_values": [
+        "*GetLoadLibraryWAddress32*"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "compattelrunner.exe"
+      ],
+      "raw_values": [
+        "*\\\\CompatTelRunner.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*AddSecurityPackage*\", \"*AdjustTokenPrivileges*\", \"*Advapi32*\", \"*CloseHandle*\", \"*CreateProcessWithToken*\", \"*CreatePseudoConsole*\", \"*CreateRemoteThread*\", \"*CreateThread*\", \"*CreateUserThread*\", \"*DangerousGetHandle*\", \"*DuplicateTokenEx*\", \"*EnumerateSecurityPackages*\", \"*FreeHGlobal*\", \"*FreeLibrary*\", \"*GetDelegateForFunctionPointer*\", \"*GetLogonSessionData*\", \"*GetModuleHandle*\", \"*GetProcAddress*\", \"*GetProcessHandle*\", \"*GetTokenInformation*\", \"*ImpersonateLoggedOnUser*\", \"*kernel32*\", \"*LoadLibrary*\", \"*memcpy*\", \"*MiniDumpWriteDump*\", \"*ntdll*\", \"*OpenDesktop*\", \"*OpenProcess*\", \"*OpenProcessToken*\", \"*OpenThreadToken*\", \"*OpenWindowStation*\", \"*PtrToString*\", \"*QueueUserApc*\", \"*ReadProcessMemory*\", \"*RevertToSelf*\", \"*RtlCreateUserThread*\", \"*secur32*\", \"*SetThreadToken*\", \"*VirtualAlloc*\", \"*VirtualFree*\", \"*VirtualProtect*\", \"*WaitForSingleObject*\", \"*WriteInt32*\", \"*WriteProcessMemory*\", \"*ZeroFreeGlobalAllocUnicode*\")) and (not ((process.executable:\"*\\\\MpCmdRun.exe\" and process.command_line:\"*GetLoadLibraryWAddress32*\") or (process.parent.executable:\"*\\\\CompatTelRunner.exe\" and (process.command_line like~ (\"*FreeHGlobal*\", \"*PtrToString*\", \"*kernel32*\", \"*CloseHandle*\")))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_inline_win_api_access.eql",
+  "metadata": {}
+}

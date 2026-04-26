@@ -1,0 +1,119 @@
+{
+  "id": "91172ee1-689c-568d-9237-36790c0c35e7",
+  "catalog": "elastic",
+  "name": "Unusual User Privilege Enumeration via id",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": ":",
+      "values": [
+        "/var/tmp/rpm-tmp",
+        "/tmp/netdata-kickstart.sh",
+        "./k8s-certifikator.sh",
+        "/usr/local/bin/docker-entrypoint.sh",
+        "./set_quota.sh"
+      ],
+      "raw_values": [
+        "/var/tmp/rpm-tmp*",
+        "/tmp/netdata-kickstart.sh",
+        "./k8s-certifikator.sh",
+        "/usr/local/bin/docker-entrypoint.sh",
+        "./set_quota.sh"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "in",
+      "values": [
+        "rpm",
+        "snarftmp",
+        "quota_copy",
+        "java"
+      ],
+      "raw_values": [
+        "rpm",
+        "snarftmp",
+        "quota_copy",
+        "java"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.name",
+      "operator": "==",
+      "values": [
+        "java"
+      ],
+      "raw_values": [
+        "java"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "oracle"
+      ],
+      "raw_values": [
+        "oracle"
+      ]
+    }
+  ],
+  "raw_query": "sequence by host.id, process.parent.entity_id with maxspan=1s\n  [process where host.os.type == \"linux\" and event.type == \"start\" and event.action == \"exec\" and\n   process.name == \"id\" and process.args_count == 2 and\n   not (\n     process.parent.name in (\"rpm\", \"snarftmp\", \"quota_copy\", \"java\") or\n     process.parent.args like (\n       \"/var/tmp/rpm-tmp*\", \"/tmp/netdata-kickstart.sh\", \"./k8s-certifikator.sh\", \"/usr/local/bin/docker-entrypoint.sh\",\n       \"./set_quota.sh\"\n     ) or\n     (process.parent.name == \"java\" and process.args == \"oracle\")\n   )] with runs=20\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/discovery_unusual_user_enumeration_via_id.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

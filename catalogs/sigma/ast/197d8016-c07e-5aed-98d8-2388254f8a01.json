@@ -1,0 +1,42 @@
+{
+  "id": "197d8016-c07e-5aed-98d8-2388254f8a01",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_run_script_from_input_stream",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "s', <specialchars.wildcard_multi: 1>, '<']), flags=set())"
+      ],
+      "raw_values": [
+        "SigmaRegularExpression(regexp=SigmaString(['\\\\s-\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '<']), flags=set())"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) and process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['\\\\s-\\\\s', <SpecialChars.WILDCARD_MULTI: 1>, '<']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_run_script_from_input_stream.eql",
+  "metadata": {}
+}

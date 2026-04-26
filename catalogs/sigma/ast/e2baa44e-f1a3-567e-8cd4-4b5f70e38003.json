@@ -1,0 +1,29 @@
+{
+  "id": "e2baa44e-f1a3-567e-8cd4-4b5f70e38003",
+  "catalog": "sigma",
+  "name": "registry_add_malware_ursnif",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\software\\\\appdatalow\\\\software\\\\microsoft\\\\3a861d62-51e0-7c9d-ab0e-15700f2219a4"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\AppDataLow\\\\Software\\\\Microsoft\\\\3A861D62-51E0-7C9D-AB0E-15700F2219A4"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Software\\\\AppDataLow\\\\Software\\\\Microsoft\\\\3A861D62-51E0-7C9D-AB0E-15700F2219A4\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/Malware/Ursnif/registry_add_malware_ursnif.eql",
+  "metadata": {}
+}

@@ -1,0 +1,41 @@
+{
+  "id": "2d067f38-5270-58e7-9e53-3defe48bdb56",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_sftp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-d .."
+      ],
+      "raw_values": [
+        "* -D ..*",
+        "* -D C:\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sftp.exe"
+      ],
+      "raw_values": [
+        "*\\\\sftp.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\sftp.exe\" and (process.command_line like~ (\"* -D ..*\", \"* -D C:\\\\*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_sftp.eql",
+  "metadata": {}
+}

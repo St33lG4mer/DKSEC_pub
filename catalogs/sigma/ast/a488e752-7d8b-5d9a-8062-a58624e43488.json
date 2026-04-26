@@ -1,0 +1,79 @@
+{
+  "id": "a488e752-7d8b-5d9a-8062-a58624e43488",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_process_dump_via_comsvcs",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "#24",
+        "minidump",
+        "#65560",
+        ", #"
+      ],
+      "raw_values": [
+        "*#-*",
+        "*#+*",
+        "*#24*",
+        "*24 *",
+        "*MiniDump*",
+        "*#65560*",
+        "* #*",
+        "*,#*",
+        "*, #*",
+        "*\\"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "rundll32",
+        "comsvcs",
+        "full"
+      ],
+      "raw_values": [
+        "*rundll32*",
+        "*comsvcs*",
+        "*full*",
+        "*24*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\" or process.command_line:\"*rundll32*\") and ((process.command_line:\"*comsvcs*\" and process.command_line:\"*full*\") and (process.command_line like~ (\"*#-*\", \"*#+*\", \"*#24*\", \"*24 *\", \"*MiniDump*\", \"*#65560*\")))) or ((process.command_line:\"*24*\" and process.command_line:\"*comsvcs*\" and process.command_line:\"*full*\") and (process.command_line like~ (\"* #*\", \"*,#*\", \"*, #*\", \"*\\\"#*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_process_dump_via_comsvcs.eql",
+  "metadata": {}
+}

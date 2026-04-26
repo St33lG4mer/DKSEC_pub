@@ -1,0 +1,25 @@
+{
+  "id": "48fb3a36-db94-5638-9fba-444ead647ac2",
+  "catalog": "elastic",
+  "name": "IBM QRadar External Alerts",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind: alert and data_stream.dataset: ibm_qradar.offense\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/ibm_qradar_external_alerts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: IBM QRadar",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide",
+      "Promotion: External Alerts"
+    ]
+  }
+}

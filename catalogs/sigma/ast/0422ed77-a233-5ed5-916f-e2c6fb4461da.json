@@ -1,0 +1,30 @@
+{
+  "id": "0422ed77-a233-5ed5-916f-e2c6fb4461da",
+  "catalog": "sigma",
+  "name": "image_load_side_load_jsschhlp",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "jsespr.dll"
+      ],
+      "raw_values": [
+        "*\\\\JSESPR.dll",
+        "C:\\\\Program Files\\\\Common Files\\\\Justsystem\\\\JsSchHlp\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\JSESPR.dll\" and (not file.path:\"C:\\\\Program Files\\\\Common Files\\\\Justsystem\\\\JsSchHlp\\\\*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_jsschhlp.eql",
+  "metadata": {}
+}

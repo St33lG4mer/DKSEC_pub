@@ -1,0 +1,70 @@
+{
+  "id": "3c106c37-ef91-527f-875d-b433b19bd198",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_jlaive_batch_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": ":",
+      "values": [
+        ".bat"
+      ],
+      "raw_values": [
+        "*.bat"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "xcopy.exe",
+        "attrib.exe"
+      ],
+      "raw_values": [
+        "*\\\\xcopy.exe",
+        "*\\\\attrib.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "powershell.exe",
+        ".bat.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*powershell.exe*",
+        "*.bat.exe*",
+        "*pwsh.exe*",
+        "*+s*",
+        "*+h*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.parent.executable:\"*\\\\cmd.exe\" and process.parent.command_line:\"*.bat\") and ((process.executable:\"*\\\\xcopy.exe\" and (process.command_line:\"*powershell.exe*\" and process.command_line:\"*.bat.exe*\")) or (process.executable:\"*\\\\xcopy.exe\" and (process.command_line:\"*pwsh.exe*\" and process.command_line:\"*.bat.exe*\")) or (process.executable:\"*\\\\attrib.exe\" and (process.command_line:\"*+s*\" and process.command_line:\"*+h*\" and process.command_line:\"*.bat.exe*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_jlaive_batch_execution.eql",
+  "metadata": {}
+}

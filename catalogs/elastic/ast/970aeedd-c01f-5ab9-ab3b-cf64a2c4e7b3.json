@@ -1,0 +1,348 @@
+{
+  "id": "970aeedd-c01f-5ab9-ab3b-cf64a2c4e7b3",
+  "catalog": "elastic",
+  "name": "Decoded Payload Piped to Interpreter Detected via Defend for Containers",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox",
+        "python",
+        "perl",
+        "ruby",
+        "lua",
+        "php"
+      ],
+      "raw_values": [
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox",
+        "python*",
+        "perl*",
+        "ruby*",
+        "lua*",
+        "php*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "-bash",
+        "-dash",
+        "-sh",
+        "-tcsh",
+        "-csh",
+        "-zsh",
+        "-ksh",
+        "-fish",
+        "-busybox",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox",
+        "python",
+        "perl",
+        "ruby",
+        "lua",
+        "php"
+      ],
+      "raw_values": [
+        "-bash",
+        "-dash",
+        "-sh",
+        "-tcsh",
+        "-csh",
+        "-zsh",
+        "-ksh",
+        "-fish",
+        "-busybox",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox",
+        "/bin/bash",
+        "/bin/dash",
+        "/bin/sh",
+        "/bin/tcsh",
+        "/bin/csh",
+        "/bin/zsh",
+        "/bin/ksh",
+        "/bin/fish",
+        "/bin/busybox",
+        "/usr/bin/bash",
+        "/usr/bin/dash",
+        "/usr/bin/sh",
+        "/usr/bin/tcsh",
+        "/usr/bin/csh",
+        "/usr/bin/zsh",
+        "/usr/bin/ksh",
+        "/usr/bin/fish",
+        "/usr/bin/busybox",
+        "*python*",
+        "*perl*",
+        "*ruby*",
+        "*lua*",
+        "*php*",
+        "/dev/fd/*"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": ":",
+      "values": [
+        "/usr/local/zeek",
+        "/opt/zeek",
+        "/var/lib/docker/overlay2/*/opt/zeek",
+        "/usr/local/zeek_old_install",
+        "/var/lib/docker/overlay2/*/usr/local/zeek",
+        "/proc/self/fd/*/usr/local/zeek"
+      ],
+      "raw_values": [
+        "/usr/local/zeek",
+        "/opt/zeek",
+        "/var/lib/docker/overlay2/*/opt/zeek",
+        "/usr/local/zeek_old_install",
+        "/var/lib/docker/overlay2/*/usr/local/zeek",
+        "/proc/self/fd/*/usr/local/zeek"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "base64",
+        "basez",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "basenc",
+        "base32",
+        "base16",
+        "bash",
+        "dash",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ],
+      "raw_values": [
+        "base64",
+        "basez",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "basenc",
+        "base32",
+        "base16",
+        "bash",
+        "dash",
+        "sh",
+        "tcsh",
+        "csh",
+        "zsh",
+        "ksh",
+        "fish",
+        "busybox"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "base64",
+        "basez",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "basenc",
+        "base32",
+        "base16",
+        "-base64",
+        "which",
+        "man",
+        "chmod",
+        "chown"
+      ],
+      "raw_values": [
+        "base64",
+        "basez",
+        "base64plain",
+        "base64url",
+        "base64mime",
+        "base64pem",
+        "basenc",
+        "base32",
+        "base16",
+        "-d",
+        "-base64",
+        "-a",
+        "-A",
+        "-u",
+        "-t",
+        "which",
+        "/bin/which",
+        "/usr/bin/which",
+        "/usr/local/bin/which",
+        "man",
+        "/bin/man",
+        "/usr/bin/man",
+        "/usr/local/bin/man",
+        "chmod",
+        "/bin/chmod",
+        "/usr/bin/chmod",
+        "/usr/local/bin/chmod",
+        "chown",
+        "/bin/chown",
+        "/usr/bin/chown",
+        "/usr/local/bin/chown"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "exec"
+      ],
+      "raw_values": [
+        "exec"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like~",
+      "values": [
+        "-*d",
+        "b64decode",
+        "decode_base64",
+        "base64.decode64"
+      ],
+      "raw_values": [
+        "*-*d*",
+        "*b64decode*",
+        "*decode_base64*",
+        "*Base64.decode64*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "openssl"
+      ],
+      "raw_values": [
+        "openssl"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "==",
+      "values": [
+        "enc",
+        "base64"
+      ],
+      "raw_values": [
+        "enc",
+        "base64",
+        "-c",
+        "-e"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "like",
+      "values": [
+        "python",
+        "perl",
+        "ruby"
+      ],
+      "raw_values": [
+        "python*",
+        "perl*",
+        "ruby*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "base64"
+      ],
+      "raw_values": [
+        "*base64*"
+      ]
+    }
+  ],
+  "raw_query": "sequence by process.parent.entity_id, container.id with maxspan=3s\n  [process where event.type == \"start\" and event.action == \"exec\" and container.id like \"?*\" and (\n    (\n      (\n        process.name in (\"base64\", \"basez\", \"base64plain\", \"base64url\", \"base64mime\", \"base64pem\", \"basenc\", \"base32\", \"base16\") or\n        (\n          process.name in (\"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\") and\n          process.args in (\"base64\", \"basez\", \"base64plain\", \"base64url\", \"base64mime\", \"base64pem\", \"basenc\", \"base32\", \"base16\")\n        )\n      ) and\n      process.args like~ \"*-*d*\"\n    ) or\n    (\n      process.name == \"openssl\" and\n      process.args == \"enc\" and process.args in (\"-d\", \"-base64\", \"-a\", \"-A\")\n    ) or\n    (\n      process.name like \"python*\" and (\n        (process.args == \"base64\" and process.args in (\"-d\", \"-u\", \"-t\")) or\n        (process.args == \"-c\" and process.args like \"*base64*\" and process.args like~ \"*b64decode*\")\n      )\n    ) or\n    (\n      process.name like \"perl*\" and\n      process.args like~ \"*decode_base64*\"\n    ) or\n    (\n      process.name like \"ruby*\" and\n      process.args == \"-e\" and\n      process.args like~ \"*Base64.decode64*\"\n    )\n  )]\n  [process where event.type == \"start\" and event.action == \"exec\" and process.name like (\n    \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\",\n    \"python*\", \"perl*\", \"ruby*\", \"lua*\", \"php*\"\n  ) and\n  process.args like (\n    \"-bash\", \"-dash\", \"-sh\", \"-tcsh\", \"-csh\", \"-zsh\", \"-ksh\", \"-fish\", \"-busybox\",\n    \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\", \"zsh\", \"ksh\", \"fish\", \"busybox\",\n    \"/bin/bash\", \"/bin/dash\", \"/bin/sh\", \"/bin/tcsh\", \"/bin/csh\",\n    \"/bin/zsh\", \"/bin/ksh\", \"/bin/fish\", \"/bin/busybox\",\n    \"/usr/bin/bash\", \"/usr/bin/dash\", \"/usr/bin/sh\", \"/usr/bin/tcsh\",\n    \"/usr/bin/csh\", \"/usr/bin/zsh\", \"/usr/bin/ksh\", \"/usr/bin/fish\",\n    \"/usr/bin/busybox\",\n    \"*python*\", \"*perl*\", \"*ruby*\", \"*lua*\", \"*php*\", \"/dev/fd/*\"\n  ) and\n  not (\n    process.working_directory like (\n      \"/usr/local/zeek\", \"/opt/zeek\", \"/var/lib/docker/overlay2/*/opt/zeek\", \"/usr/local/zeek_old_install\",\n      \"/var/lib/docker/overlay2/*/usr/local/zeek\", \"/proc/self/fd/*/usr/local/zeek\"\n    ) or\n    process.args in (\n      \"which\", \"/bin/which\", \"/usr/bin/which\", \"/usr/local/bin/which\",\n      \"man\", \"/bin/man\", \"/usr/bin/man\", \"/usr/local/bin/man\",\n      \"chmod\", \"/bin/chmod\", \"/usr/bin/chmod\", \"/usr/local/bin/chmod\",\n      \"chown\", \"/bin/chown\", \"/usr/bin/chown\", \"/usr/local/bin/chown\"\n    )\n  )]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/cloud_defend/defense_evasion_decoded_payload_piped_to_interpreter.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Data Source: Elastic Defend for Containers",
+      "Domain: Container",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "id": "77e8a934-3b41-5200-8714-6b4572fc0354",
+  "catalog": "elastic",
+  "name": "Azure Compute Restore Point Collections Deleted",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "microsoft.compute/restorepointcollections/delete"
+      ],
+      "raw_values": [
+        "MICROSOFT.COMPUTE/RESTOREPOINTCOLLECTIONS/DELETE"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: azure.activitylogs and\n    event.action: \"MICROSOFT.COMPUTE/RESTOREPOINTCOLLECTIONS/DELETE\" and\n    event.outcome: (Success or success)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/impact_azure_compute_restore_point_collections_deleted.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Storage",
+      "Data Source: Azure",
+      "Data Source: Azure Activity Logs",
+      "Use Case: Threat Detection",
+      "Tactic: Impact",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

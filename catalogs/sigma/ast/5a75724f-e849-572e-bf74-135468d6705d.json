@@ -1,0 +1,40 @@
+{
+  "id": "5a75724f-e849-572e-bf74-135468d6705d",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ruby_inline_command_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ruby.exe"
+      ],
+      "raw_values": [
+        "*\\\\ruby.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "ruby.exe"
+      ],
+      "raw_values": [
+        "ruby.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\ruby.exe\" or process.pe.original_file_name:\"ruby.exe\") and process.command_line:\"* -e*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ruby_inline_command_execution.eql",
+  "metadata": {}
+}

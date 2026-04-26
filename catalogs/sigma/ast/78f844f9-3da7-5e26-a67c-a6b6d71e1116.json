@@ -1,0 +1,83 @@
+{
+  "id": "78f844f9-3da7-5e26-a67c-a6b6d71e1116",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_plugx_susp_exe_locations",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "microsoft visual studio",
+        "microsoft sdk",
+        "windows kit"
+      ],
+      "raw_values": [
+        "*\\\\Lenovo\\\\Communication Utility\\\\*",
+        "*\\\\Lenovo\\\\Communications Utility\\\\*",
+        "*\\\\System32\\\\*",
+        "*\\\\SysNative\\\\*",
+        "*\\\\SysWow64\\\\*",
+        "*\\\\Microsoft Visual Studio*",
+        "*\\\\Microsoft SDK*",
+        "*\\\\Windows Kit*",
+        "*\\\\Microsoft Security Client\\\\*",
+        "*\\\\Windows Defender\\\\*",
+        "*\\\\AntiMalware\\\\*",
+        "*\\\\Microsoft Security Center\\\\*",
+        "*\\\\Microsoft Security Essentials\\\\*",
+        "*\\\\Windows Resource Kit\\\\*",
+        "*\\\\Microsoft.NET\\\\*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cammute.exe",
+        "chrome_frame_helper.exe",
+        "dvcemumanager.exe",
+        "gadget.exe",
+        "hcc.exe",
+        "hkcmd.exe",
+        "mc.exe",
+        "msmpeng.exe",
+        "msseces.exe",
+        "oinfop11.exe",
+        "oleview.exe",
+        "rc.exe"
+      ],
+      "raw_values": [
+        "*\\\\CamMute.exe",
+        "*\\\\chrome_frame_helper.exe",
+        "*\\\\Google\\\\Chrome\\\\application\\\\*",
+        "*\\\\dvcemumanager.exe",
+        "*\\\\Microsoft Device Emulator\\\\*",
+        "*\\\\Gadget.exe",
+        "*\\\\Windows Media Player\\\\*",
+        "*\\\\hcc.exe",
+        "*\\\\HTML Help Workshop\\\\*",
+        "*\\\\hkcmd.exe",
+        "*\\\\Mc.exe",
+        "*\\\\MsMpEng.exe",
+        "*\\\\msseces.exe",
+        "*\\\\OInfoP11.exe",
+        "*\\\\Common Files\\\\Microsoft Shared\\\\*",
+        "*\\\\OleView.exe",
+        "*\\\\rc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\CamMute.exe\" and (not (process.executable like~ (\"*\\\\Lenovo\\\\Communication Utility\\\\*\", \"*\\\\Lenovo\\\\Communications Utility\\\\*\")))) or (process.executable:\"*\\\\chrome_frame_helper.exe\" and (not process.executable:\"*\\\\Google\\\\Chrome\\\\application\\\\*\")) or (process.executable:\"*\\\\dvcemumanager.exe\" and (not process.executable:\"*\\\\Microsoft Device Emulator\\\\*\")) or (process.executable:\"*\\\\Gadget.exe\" and (not process.executable:\"*\\\\Windows Media Player\\\\*\")) or (process.executable:\"*\\\\hcc.exe\" and (not process.executable:\"*\\\\HTML Help Workshop\\\\*\")) or (process.executable:\"*\\\\hkcmd.exe\" and (not (process.executable like~ (\"*\\\\System32\\\\*\", \"*\\\\SysNative\\\\*\", \"*\\\\SysWow64\\\\*\")))) or (process.executable:\"*\\\\Mc.exe\" and (not (process.executable like~ (\"*\\\\Microsoft Visual Studio*\", \"*\\\\Microsoft SDK*\", \"*\\\\Windows Kit*\")))) or (process.executable:\"*\\\\MsMpEng.exe\" and (not (process.executable like~ (\"*\\\\Microsoft Security Client\\\\*\", \"*\\\\Windows Defender\\\\*\", \"*\\\\AntiMalware\\\\*\")))) or (process.executable:\"*\\\\msseces.exe\" and (not (process.executable like~ (\"*\\\\Microsoft Security Center\\\\*\", \"*\\\\Microsoft Security Client\\\\*\", \"*\\\\Microsoft Security Essentials\\\\*\")))) or (process.executable:\"*\\\\OInfoP11.exe\" and (not process.executable:\"*\\\\Common Files\\\\Microsoft Shared\\\\*\")) or (process.executable:\"*\\\\OleView.exe\" and (not (process.executable like~ (\"*\\\\Microsoft Visual Studio*\", \"*\\\\Microsoft SDK*\", \"*\\\\Windows Kit*\", \"*\\\\Windows Resource Kit\\\\*\")))) or (process.executable:\"*\\\\rc.exe\" and (not (process.executable like~ (\"*\\\\Microsoft Visual Studio*\", \"*\\\\Microsoft SDK*\", \"*\\\\Windows Kit*\", \"*\\\\Windows Resource Kit\\\\*\", \"*\\\\Microsoft.NET\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/Malware/PlugX/proc_creation_win_malware_plugx_susp_exe_locations.eql",
+  "metadata": {}
+}

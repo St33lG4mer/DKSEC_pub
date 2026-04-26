@@ -1,0 +1,61 @@
+{
+  "id": "cd183e2e-fb3b-5ee4-9668-6362020c5b57",
+  "catalog": "sigma",
+  "name": "proc_creation_win_logman_disable_eventlog",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "stop",
+        "delete",
+        "circular kernel context logger",
+        "eventlog-",
+        "sysmon trace",
+        "sysmondnsetwsession"
+      ],
+      "raw_values": [
+        "*stop *",
+        "*delete *",
+        "*Circular Kernel Context Logger*",
+        "*EventLog-*",
+        "*SYSMON TRACE*",
+        "*SysmonDnsEtwSession*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "logman.exe"
+      ],
+      "raw_values": [
+        "*\\\\logman.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "logman.exe"
+      ],
+      "raw_values": [
+        "Logman.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\logman.exe\" or process.pe.original_file_name:\"Logman.exe\") and (process.command_line like~ (\"*stop *\", \"*delete *\")) and (process.command_line like~ (\"*Circular Kernel Context Logger*\", \"*EventLog-*\", \"*SYSMON TRACE*\", \"*SysmonDnsEtwSession*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_logman_disable_eventlog.eql",
+  "metadata": {}
+}

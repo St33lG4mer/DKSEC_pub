@@ -1,0 +1,51 @@
+{
+  "id": "896f3d90-cc7d-51f3-a377-0f9f00fc2558",
+  "catalog": "sigma",
+  "name": "proc_creation_win_desktopimgdownldr_remote_file_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "desktopimgdownldr.exe"
+      ],
+      "raw_values": [
+        "*\\\\desktopimgdownldr.exe"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "desktopimgdownldr.exe"
+      ],
+      "raw_values": [
+        "*\\\\desktopimgdownldr.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "lockscreenurl:http"
+      ],
+      "raw_values": [
+        "*/lockscreenurl:http*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\desktopimgdownldr.exe\" and process.parent.executable:\"*\\\\desktopimgdownldr.exe\" and process.command_line:\"*/lockscreenurl:http*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_desktopimgdownldr_remote_file_download.eql",
+  "metadata": {}
+}

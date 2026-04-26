@@ -1,0 +1,117 @@
+{
+  "id": "bce5ee0b-8c08-5517-b205-2462e900b1a7",
+  "catalog": "sigma",
+  "name": "registry_set_pua_sysinternals_renamed_execution_via_eula",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\active directory explorer",
+        "\\\\handle",
+        "\\\\livekd",
+        "\\\\procdump",
+        "\\\\process explorer",
+        "\\\\psexec",
+        "\\\\psloggedon",
+        "\\\\psloglist",
+        "\\\\pspasswd",
+        "\\\\psping",
+        "\\\\psservice",
+        "\\\\sdelete"
+      ],
+      "raw_values": [
+        "*\\\\Active Directory Explorer*",
+        "*\\\\Handle*",
+        "*\\\\LiveKd*",
+        "*\\\\ProcDump*",
+        "*\\\\Process Explorer*",
+        "*\\\\PsExec*",
+        "*\\\\PsLoggedon*",
+        "*\\\\PsLoglist*",
+        "*\\\\PsPasswd*",
+        "*\\\\PsPing*",
+        "*\\\\PsService*",
+        "*\\\\SDelete*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "adexplorer.exe",
+        "adexplorer64.exe",
+        "handle.exe",
+        "handle64.exe",
+        "livekd.exe",
+        "livekd64.exe",
+        "procdump.exe",
+        "procdump64.exe",
+        "procexp.exe",
+        "procexp64.exe",
+        "psexec.exe",
+        "psexec64.exe",
+        "psloggedon.exe",
+        "psloggedon64.exe",
+        "psloglist.exe",
+        "psloglist64.exe",
+        "pspasswd.exe",
+        "pspasswd64.exe",
+        "psping.exe",
+        "psping64.exe",
+        "psservice.exe",
+        "psservice64.exe",
+        "sdelete.exe"
+      ],
+      "raw_values": [
+        "*\\\\ADExplorer.exe",
+        "*\\\\ADExplorer64.exe",
+        "*\\\\handle.exe",
+        "*\\\\handle64.exe",
+        "*\\\\livekd.exe",
+        "*\\\\livekd64.exe",
+        "*\\\\procdump.exe",
+        "*\\\\procdump64.exe",
+        "*\\\\procexp.exe",
+        "*\\\\procexp64.exe",
+        "*\\\\PsExec.exe",
+        "*\\\\PsExec64.exe",
+        "*\\\\PsLoggedon.exe",
+        "*\\\\PsLoggedon64.exe",
+        "*\\\\psloglist.exe",
+        "*\\\\psloglist64.exe",
+        "*\\\\pspasswd.exe",
+        "*\\\\pspasswd64.exe",
+        "*\\\\PsPing.exe",
+        "*\\\\PsPing64.exe",
+        "*\\\\PsService.exe",
+        "*\\\\PsService64.exe",
+        "*\\\\sdelete.exe"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\eulaaccepted"
+      ],
+      "raw_values": [
+        "*\\\\EulaAccepted"
+      ]
+    }
+  ],
+  "raw_query": "any where ((registry.path like~ (\"*\\\\Active Directory Explorer*\", \"*\\\\Handle*\", \"*\\\\LiveKd*\", \"*\\\\ProcDump*\", \"*\\\\Process Explorer*\", \"*\\\\PsExec*\", \"*\\\\PsLoggedon*\", \"*\\\\PsLoglist*\", \"*\\\\PsPasswd*\", \"*\\\\PsPing*\", \"*\\\\PsService*\", \"*\\\\SDelete*\")) and registry.path:\"*\\\\EulaAccepted\") and (not (process.executable like~ (\"*\\\\ADExplorer.exe\", \"*\\\\ADExplorer64.exe\", \"*\\\\handle.exe\", \"*\\\\handle64.exe\", \"*\\\\livekd.exe\", \"*\\\\livekd64.exe\", \"*\\\\procdump.exe\", \"*\\\\procdump64.exe\", \"*\\\\procexp.exe\", \"*\\\\procexp64.exe\", \"*\\\\PsExec.exe\", \"*\\\\PsExec64.exe\", \"*\\\\PsLoggedon.exe\", \"*\\\\PsLoggedon64.exe\", \"*\\\\psloglist.exe\", \"*\\\\psloglist64.exe\", \"*\\\\pspasswd.exe\", \"*\\\\pspasswd64.exe\", \"*\\\\PsPing.exe\", \"*\\\\PsPing64.exe\", \"*\\\\PsService.exe\", \"*\\\\PsService64.exe\", \"*\\\\sdelete.exe\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_pua_sysinternals_renamed_execution_via_eula.eql",
+  "metadata": {}
+}

@@ -1,0 +1,51 @@
+{
+  "id": "e1e92c5a-420d-5e81-af24-5f7a12a3e6c6",
+  "catalog": "sigma",
+  "name": "proc_creation_win_wmic_namespace_defender",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "wmic.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "wmic.exe"
+      ],
+      "raw_values": [
+        "*\\\\WMIC.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "defender"
+      ],
+      "raw_values": [
+        "*/Namespace:\\\\\\\\root\\\\Microsoft\\\\Windows\\\\Defender*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"wmic.exe\" or process.executable:\"*\\\\WMIC.exe\") and process.command_line:\"*/Namespace:\\\\\\\\root\\\\Microsoft\\\\Windows\\\\Defender*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_wmic_namespace_defender.eql",
+  "metadata": {}
+}

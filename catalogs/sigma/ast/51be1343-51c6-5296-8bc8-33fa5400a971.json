@@ -1,0 +1,40 @@
+{
+  "id": "51be1343-51c6-5296-8bc8-33fa5400a971",
+  "catalog": "sigma",
+  "name": "proc_creation_win_jsc_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "jsc.exe"
+      ],
+      "raw_values": [
+        "*\\\\jsc.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "jsc.exe"
+      ],
+      "raw_values": [
+        "jsc.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\jsc.exe\" or process.pe.original_file_name:\"jsc.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_jsc_execution.eql",
+  "metadata": {}
+}

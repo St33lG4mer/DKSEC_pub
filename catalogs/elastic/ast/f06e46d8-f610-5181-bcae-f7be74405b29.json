@@ -1,0 +1,81 @@
+{
+  "id": "f06e46d8-f610-5181-bcae-f7be74405b29",
+  "catalog": "elastic",
+  "name": "AWS EC2 Route Table Modified or Deleted",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "replaceroute",
+        "replaceroutetableassociation",
+        "deleteroutetable",
+        "deleteroute",
+        "disassociateroutetable"
+      ],
+      "raw_values": [
+        "ReplaceRoute",
+        "ReplaceRouteTableAssociation",
+        "DeleteRouteTable",
+        "DeleteRoute",
+        "DisassociateRouteTable"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "ec2.amazonaws.com"
+      ],
+      "raw_values": [
+        "ec2.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"ec2.amazonaws.com\"\n    and event.action:(\n        \"ReplaceRoute\" or\n        \"ReplaceRouteTableAssociation\" or\n        \"DeleteRouteTable\" or\n        \"DeleteRoute\" or\n        \"DisassociateRouteTable\"\n    )\n    and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/persistence_ec2_route_table_modified_or_deleted.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS EC2",
+      "Use Case: Network Security Monitoring",
+      "Resources: Investigation Guide",
+      "Tactic: Persistence"
+    ]
+  }
+}

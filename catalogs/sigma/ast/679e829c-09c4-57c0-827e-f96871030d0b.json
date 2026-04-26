@@ -1,0 +1,40 @@
+{
+  "id": "679e829c-09c4-57c0-827e-f96871030d0b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pktmon_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pktmon.exe"
+      ],
+      "raw_values": [
+        "*\\\\pktmon.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "pktmon.exe"
+      ],
+      "raw_values": [
+        "PktMon.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\pktmon.exe\" or process.pe.original_file_name:\"PktMon.exe\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pktmon_execution.eql",
+  "metadata": {}
+}

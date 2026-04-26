@@ -1,0 +1,30 @@
+{
+  "id": "580cfab7-60dc-5749-a084-b1fba79d76e7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_uac_bypass_eventvwr_recentviews",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "recentviews"
+      ],
+      "raw_values": [
+        "*\\\\Event Viewer\\\\RecentViews*",
+        "*\\\\EventV~1\\\\RecentViews*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*\\\\Event Viewer\\\\RecentViews*\", \"*\\\\EventV~1\\\\RecentViews*\")) and process.command_line:\"*>*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_uac_bypass_eventvwr_recentviews.eql",
+  "metadata": {}
+}

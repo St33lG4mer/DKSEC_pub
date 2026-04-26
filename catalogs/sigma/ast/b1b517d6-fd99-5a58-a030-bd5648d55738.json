@@ -1,0 +1,47 @@
+{
+  "id": "b1b517d6-fd99-5a58-a030-bd5648d55738",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_web_request_cmd_and_cmdlets",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "[system.net.webrequest]::create",
+        "curl",
+        "invoke-restmethod",
+        "invoke-webrequest",
+        "irm",
+        "iwr",
+        "resume-bitstransfer",
+        "start-bitstransfer",
+        "wget",
+        "winhttp.winhttprequest"
+      ],
+      "raw_values": [
+        "*[System.Net.WebRequest]::create*",
+        "*curl *",
+        "*Invoke-RestMethod*",
+        "*Invoke-WebRequest*",
+        "* irm *",
+        "*iwr *",
+        "*Resume-BitsTransfer*",
+        "*Start-BitsTransfer*",
+        "*wget *",
+        "*WinHttp.WinHttpRequest*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*[System.Net.WebRequest]::create*\", \"*curl *\", \"*Invoke-RestMethod*\", \"*Invoke-WebRequest*\", \"* irm *\", \"*iwr *\", \"*Resume-BitsTransfer*\", \"*Start-BitsTransfer*\", \"*wget *\", \"*WinHttp.WinHttpRequest*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_web_request_cmd_and_cmdlets.eql",
+  "metadata": {}
+}

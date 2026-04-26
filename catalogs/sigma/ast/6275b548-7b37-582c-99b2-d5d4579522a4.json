@@ -1,0 +1,151 @@
+{
+  "id": "6275b548-7b37-582c-99b2-d5d4579522a4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_pingcastle_script_parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".chm",
+        ".cmd",
+        ".hta",
+        ".htm",
+        ".html",
+        ".js",
+        ".lnk",
+        ".ps1",
+        ".vbe",
+        ".vbs",
+        ".wsf",
+        "temp",
+        "temporary internet"
+      ],
+      "raw_values": [
+        "*.bat*",
+        "*.chm*",
+        "*.cmd*",
+        "*.hta*",
+        "*.htm*",
+        "*.html*",
+        "*.js*",
+        "*.lnk*",
+        "*.ps1*",
+        "*.vbe*",
+        "*.vbs*",
+        "*.wsf*",
+        "*:\\\\Perflogs\\\\*",
+        "*:\\\\Temp\\\\*",
+        "*:\\\\Users\\\\Public\\\\*",
+        "*:\\\\Windows\\\\Temp\\\\*",
+        "*\\\\AppData\\\\Local\\\\Temp*",
+        "*\\\\AppData\\\\Roaming\\\\*",
+        "*\\\\Temporary Internet*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "--scanner aclcheck",
+        "--scanner antivirus",
+        "--scanner computerversion",
+        "--scanner foreignusers",
+        "--scanner laps_bitlocker",
+        "--scanner localadmin",
+        "--scanner nullsession",
+        "--scanner nullsession-trust",
+        "--scanner oxidbindings",
+        "--scanner remote",
+        "--scanner share",
+        "--scanner smb",
+        "--scanner smb3querynetwork",
+        "--scanner spooler",
+        "--scanner startup",
+        "--scanner zerologon"
+      ],
+      "raw_values": [
+        "*--scanner aclcheck*",
+        "*--scanner antivirus*",
+        "*--scanner computerversion*",
+        "*--scanner foreignusers*",
+        "*--scanner laps_bitlocker*",
+        "*--scanner localadmin*",
+        "*--scanner nullsession*",
+        "*--scanner nullsession-trust*",
+        "*--scanner oxidbindings*",
+        "*--scanner remote*",
+        "*--scanner share*",
+        "*--scanner smb*",
+        "*--scanner smb3querynetwork*",
+        "*--scanner spooler*",
+        "*--scanner startup*",
+        "*--scanner zerologon*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pingcastle.exe"
+      ],
+      "raw_values": [
+        "*\\\\PingCastle.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "pingcastle.exe"
+      ],
+      "raw_values": [
+        "PingCastle.exe"
+      ]
+    },
+    {
+      "field": "process.pe.product",
+      "raw_field": "process.pe.product",
+      "operator": ":",
+      "values": [
+        "ping castle"
+      ],
+      "raw_values": [
+        "Ping Castle"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "--no-enum-limit",
+        "--healthcheck",
+        "--level full",
+        "--server"
+      ],
+      "raw_values": [
+        "*--no-enum-limit*",
+        "*--healthcheck*",
+        "*--level Full*",
+        "*--server *"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.command_line like~ (\"*.bat*\", \"*.chm*\", \"*.cmd*\", \"*.hta*\", \"*.htm*\", \"*.html*\", \"*.js*\", \"*.lnk*\", \"*.ps1*\", \"*.vbe*\", \"*.vbs*\", \"*.wsf*\")) or (process.parent.command_line like~ (\"*:\\\\Perflogs\\\\*\", \"*:\\\\Temp\\\\*\", \"*:\\\\Users\\\\Public\\\\*\", \"*:\\\\Windows\\\\Temp\\\\*\", \"*\\\\AppData\\\\Local\\\\Temp*\", \"*\\\\AppData\\\\Roaming\\\\*\", \"*\\\\Temporary Internet*\")) or ((process.parent.command_line:\"*:\\\\Users\\\\*\" and process.parent.command_line:\"*\\\\Favorites\\\\*\") or (process.parent.command_line:\"*:\\\\Users\\\\*\" and process.parent.command_line:\"*\\\\Favourites\\\\*\") or (process.parent.command_line:\"*:\\\\Users\\\\*\" and process.parent.command_line:\"*\\\\Contacts\\\\*\"))) and (process.parent.command_line like~ (\"*.bat*\", \"*.chm*\", \"*.cmd*\", \"*.hta*\", \"*.htm*\", \"*.html*\", \"*.js*\", \"*.lnk*\", \"*.ps1*\", \"*.vbe*\", \"*.vbs*\", \"*.wsf*\")) and (process.executable:\"*\\\\PingCastle.exe\" or process.pe.original_file_name:\"PingCastle.exe\" or process.pe.product:\"Ping Castle\" or (process.command_line like~ (\"*--scanner aclcheck*\", \"*--scanner antivirus*\", \"*--scanner computerversion*\", \"*--scanner foreignusers*\", \"*--scanner laps_bitlocker*\", \"*--scanner localadmin*\", \"*--scanner nullsession*\", \"*--scanner nullsession-trust*\", \"*--scanner oxidbindings*\", \"*--scanner remote*\", \"*--scanner share*\", \"*--scanner smb*\", \"*--scanner smb3querynetwork*\", \"*--scanner spooler*\", \"*--scanner startup*\", \"*--scanner zerologon*\")) or process.command_line:\"*--no-enum-limit*\" or (process.command_line:\"*--healthcheck*\" and process.command_line:\"*--level Full*\") or (process.command_line:\"*--healthcheck*\" and process.command_line:\"*--server *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_pingcastle_script_parent.eql",
+  "metadata": {}
+}

@@ -1,0 +1,86 @@
+{
+  "id": "b4154039-20fd-5527-bd40-1f722b78febe",
+  "catalog": "sigma",
+  "name": "registry_set_powershell_in_run_keys",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\run",
+        "\\\\software\\\\wow6432node\\\\microsoft\\\\windows\\\\currentversion\\\\run",
+        "\\\\software\\\\microsoft\\\\windows\\\\currentversion\\\\policies\\\\explorer\\\\run"
+      ],
+      "raw_values": [
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*",
+        "*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "powershell",
+        "pwsh",
+        "frombase64string",
+        ".downloadfile(",
+        ".downloadstring(",
+        "-w hidden",
+        "-w 1",
+        "-windowstyle hidden",
+        "-window hidden",
+        "-nop",
+        "-encodedcommand",
+        "-executionpolicy bypass",
+        "invoke-expression",
+        "iex (",
+        "invoke-command",
+        "icm -",
+        "invoke-webrequest",
+        "iwr",
+        "invoke-restmethod",
+        "irm",
+        "-noni",
+        "-noninteractive"
+      ],
+      "raw_values": [
+        "*powershell*",
+        "*pwsh *",
+        "*FromBase64String*",
+        "*.DownloadFile(*",
+        "*.DownloadString(*",
+        "* -w hidden *",
+        "* -w 1 *",
+        "*-windowstyle hidden*",
+        "*-window hidden*",
+        "* -nop *",
+        "* -encodedcommand *",
+        "*-ExecutionPolicy Bypass*",
+        "*Invoke-Expression*",
+        "*IEX (*",
+        "*Invoke-Command*",
+        "*ICM -*",
+        "*Invoke-WebRequest*",
+        "*IWR *",
+        "*Invoke-RestMethod*",
+        "*IRM *",
+        "* -noni *",
+        "* -noninteractive *"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\", \"*\\\\Software\\\\WOW6432Node\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Run*\", \"*\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Policies\\\\Explorer\\\\Run*\")) and (winlog.event_data.Details like~ (\"*powershell*\", \"*pwsh *\", \"*FromBase64String*\", \"*.DownloadFile(*\", \"*.DownloadString(*\", \"* -w hidden *\", \"* -w 1 *\", \"*-windowstyle hidden*\", \"*-window hidden*\", \"* -nop *\", \"* -encodedcommand *\", \"*-ExecutionPolicy Bypass*\", \"*Invoke-Expression*\", \"*IEX (*\", \"*Invoke-Command*\", \"*ICM -*\", \"*Invoke-WebRequest*\", \"*IWR *\", \"*Invoke-RestMethod*\", \"*IRM *\", \"* -noni *\", \"* -noninteractive *\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_powershell_in_run_keys.eql",
+  "metadata": {}
+}

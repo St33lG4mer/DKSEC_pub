@@ -1,0 +1,53 @@
+{
+  "id": "4eaa304b-6b14-53f5-be13-f6535db7a103",
+  "catalog": "sigma",
+  "name": "registry_set_exploit_cve_2020_1048_new_printer_port",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        ".bat",
+        ".com",
+        ".dll",
+        ".exe",
+        ".ps1",
+        ".vbe",
+        ".vbs"
+      ],
+      "raw_values": [
+        "*.bat*",
+        "*.com*",
+        "*.dll*",
+        "*.exe*",
+        "*.ps1*",
+        "*.vbe*",
+        "*.vbs*",
+        "*C:*"
+      ]
+    },
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\windows nt\\\\currentversion\\\\ports"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Ports*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Ports*\" and (winlog.event_data.Details like~ (\"*.bat*\", \"*.com*\", \"*.dll*\", \"*.exe*\", \"*.ps1*\", \"*.vbe*\", \"*.vbs*\", \"*C:*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Exploits/CVE-2020-1048/registry_set_exploit_cve_2020_1048_new_printer_port.eql",
+  "metadata": {}
+}

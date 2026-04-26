@@ -1,0 +1,29 @@
+{
+  "id": "64f6de90-6a3f-55ab-8617-8a10b47f3001",
+  "catalog": "sigma",
+  "name": "image_load_side_load_mscorsvc",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "mscorsvc.dll"
+      ],
+      "raw_values": [
+        "*\\\\mscorsvc.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where file.path:\"*\\\\mscorsvc.dll\" and (not (file.path like~ (\"C:\\\\Windows\\\\Microsoft.NET\\\\Framework\\\\*\", \"C:\\\\Windows\\\\Microsoft.NET\\\\Framework64\\\\*\", \"C:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm\\\\*\", \"C:\\\\Windows\\\\Microsoft.NET\\\\FrameworkArm64\\\\*\", \"C:\\\\Windows\\\\WinSxS\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_mscorsvc.eql",
+  "metadata": {}
+}

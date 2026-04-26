@@ -1,0 +1,48 @@
+{
+  "id": "fbf73cb9-94ce-5e3b-bfc1-d6e1b5d72a1b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_snake_installer_exec",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "jpsetup.exe",
+        "jpinst.exe"
+      ],
+      "raw_values": [
+        "*\\\\jpsetup.exe",
+        "*\\\\jpinst.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "jpinst.exe",
+        "jpinst",
+        "jpsetup.exe",
+        "jpsetup"
+      ],
+      "raw_values": [
+        "jpinst.exe",
+        "jpinst",
+        "jpsetup.exe",
+        "jpsetup"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*\\\\jpsetup.exe\", \"*\\\\jpinst.exe\")) and (not ((process.command_line like~ (\"jpinst.exe\", \"jpinst\", \"jpsetup.exe\", \"jpsetup\")) or process.command_line==\"\" or (?process.command_line == null)))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2023/Malware/SNAKE/proc_creation_win_malware_snake_installer_exec.eql",
+  "metadata": {}
+}

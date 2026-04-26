@@ -1,0 +1,83 @@
+{
+  "id": "ca2f9b3f-f8c8-597c-bee8-0c2466a7dfb4",
+  "catalog": "elastic",
+  "name": "Kubernetes Suspicious Assignment of Controller Service Account",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "kubernetes.audit_logs"
+      ],
+      "raw_values": [
+        "kubernetes.audit_logs"
+      ]
+    },
+    {
+      "field": "decision",
+      "raw_field": "decision",
+      "operator": ":",
+      "values": [
+        "allow"
+      ],
+      "raw_values": [
+        "allow"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.verb",
+      "raw_field": "kubernetes.audit.verb",
+      "operator": ":",
+      "values": [
+        "create"
+      ],
+      "raw_values": [
+        "create"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.resource",
+      "raw_field": "kubernetes.audit.objectRef.resource",
+      "operator": ":",
+      "values": [
+        "pods"
+      ],
+      "raw_values": [
+        "pods"
+      ]
+    },
+    {
+      "field": "kubernetes.audit.objectref.namespace",
+      "raw_field": "kubernetes.audit.objectRef.namespace",
+      "operator": ":",
+      "values": [
+        "kube-system"
+      ],
+      "raw_values": [
+        "kube-system"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset : \"kubernetes.audit_logs\" and kubernetes.audit.annotations.authorization_k8s_io/decision:\"allow\" and\nkubernetes.audit.verb : \"create\" and kubernetes.audit.objectRef.resource : \"pods\" and\nkubernetes.audit.objectRef.namespace : \"kube-system\" and kubernetes.audit.requestObject.spec.serviceAccountName:*controller and\nnot kubernetes.audit.requestObject.spec.containers.image:(\n  mirror.gcr.io/aquasec/trivy* or *amazonaws.com/eks/snapshot-controller* or rancher/mirrored-sig-storage-snapshot-controller* or\n  public.ecr.aws/eks/aws-load-balancer-controller* or docker.io/bitnami/sealed-secrets-controller* or exoscale/csi-driver* or\n  registry.k8s.io/autoscaling/vpa-admission-controller* or registry.k8s.io/sig-storage/csi-attacher* or registry.k8s.io/sig-storage/csi-provisioner*\n)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/kubernetes/privilege_escalation_suspicious_assignment_of_controller_service_account.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Kubernetes",
+      "Domain: Kubernetes",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

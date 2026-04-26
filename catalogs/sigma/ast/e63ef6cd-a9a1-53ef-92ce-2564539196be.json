@@ -1,0 +1,33 @@
+{
+  "id": "e63ef6cd-a9a1-53ef-92ce-2564539196be",
+  "catalog": "sigma",
+  "name": "file_event_win_winrm_awl_bypass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": "like~",
+      "values": [
+        "wsmpty.xsl",
+        "wsmtxt.xsl"
+      ],
+      "raw_values": [
+        "*WsmPty.xsl",
+        "*WsmTxt.xsl",
+        "C:\\\\Windows\\\\System32\\\\*",
+        "C:\\\\Windows\\\\SysWOW64\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (file.path like~ (\"*WsmPty.xsl\", \"*WsmTxt.xsl\")) and (not (file.path like~ (\"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_winrm_awl_bypass.eql",
+  "metadata": {}
+}

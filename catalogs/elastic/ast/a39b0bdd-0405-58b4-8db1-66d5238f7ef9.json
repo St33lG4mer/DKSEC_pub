@@ -1,0 +1,96 @@
+{
+  "id": "a39b0bdd-0405-58b4-8db1-66d5238f7ef9",
+  "catalog": "elastic",
+  "name": "Remote File Copy to a Hidden Share",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "cmd.exe",
+        "powershell.exe"
+      ],
+      "raw_values": [
+        "cmd.exe",
+        "powershell.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "copy",
+        "move"
+      ],
+      "raw_values": [
+        "* copy*",
+        "* move*",
+        "* cp *",
+        "* mv *",
+        "*\\\\\\\\*\\\\*$*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "user.id",
+      "raw_field": "user.id",
+      "operator": "!=",
+      "values": [
+        "s-1-5-18"
+      ],
+      "raw_values": [
+        "S-1-5-18"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and user.id != \"S-1-5-18\" and\n  process.name : (\"cmd.exe\", \"powershell.exe\") and\n  process.command_line : \"*\\\\\\\\*\\\\*$*\" and process.command_line : (\"* copy*\", \"* move*\", \"* cp *\", \"* mv *\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/lateral_movement_remote_file_copy_hidden_share.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "id": "999be98d-c577-5ab7-9fa7-a8e14a5e8675",
+  "catalog": "sigma",
+  "name": "proc_creation_win_esentutl_sensitive_file_copy",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "vss",
+        "sam",
+        "security",
+        "system",
+        "ntds.dit"
+      ],
+      "raw_values": [
+        "*vss*",
+        "* -m *",
+        "* /m *",
+        "* –m *",
+        "* —m *",
+        "* ―m *",
+        "* -y *",
+        "* /y *",
+        "* –y *",
+        "* —y *",
+        "* ―y *",
+        "*\\\\config\\\\RegBack\\\\sam*",
+        "*\\\\config\\\\RegBack\\\\security*",
+        "*\\\\config\\\\RegBack\\\\system*",
+        "*\\\\config\\\\sam*",
+        "*\\\\config\\\\security*",
+        "*\\\\config\\\\system *",
+        "*\\\\repair\\\\sam*",
+        "*\\\\repair\\\\security*",
+        "*\\\\repair\\\\system*",
+        "*\\\\windows\\\\ntds\\\\ntds.dit*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "esentutl.exe"
+      ],
+      "raw_values": [
+        "*\\\\esentutl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "\\\\esentutl.exe"
+      ],
+      "raw_values": [
+        "\\\\esentutl.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\esentutl.exe\" or process.pe.original_file_name:\"\\\\esentutl.exe\") and (process.command_line like~ (\"*vss*\") or process.command_line like~ (\"* -m *\", \"* /m *\", \"* –m *\", \"* —m *\", \"* ―m *\") or process.command_line like~ (\"* -y *\", \"* /y *\", \"* –y *\", \"* —y *\", \"* ―y *\"))) or (process.command_line like~ (\"*\\\\config\\\\RegBack\\\\sam*\", \"*\\\\config\\\\RegBack\\\\security*\", \"*\\\\config\\\\RegBack\\\\system*\", \"*\\\\config\\\\sam*\", \"*\\\\config\\\\security*\", \"*\\\\config\\\\system *\", \"*\\\\repair\\\\sam*\", \"*\\\\repair\\\\security*\", \"*\\\\repair\\\\system*\", \"*\\\\windows\\\\ntds\\\\ntds.dit*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_esentutl_sensitive_file_copy.eql",
+  "metadata": {}
+}

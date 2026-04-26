@@ -1,0 +1,63 @@
+{
+  "id": "1e3f1a81-2ebf-5451-beb1-098004693ead",
+  "catalog": "elastic",
+  "name": "Entra ID Elevated Access to User Access Administrator",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "user has elevated their access to user access administrator for their azure resources"
+      ],
+      "raw_values": [
+        "User has elevated their access to User Access Administrator for their Azure Resources"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.properties.additional_details.value",
+      "raw_field": "azure.auditlogs.properties.additional_details.value",
+      "operator": ":",
+      "values": [
+        "microsoft.authorization/elevateaccess/action"
+      ],
+      "raw_values": [
+        "Microsoft.Authorization/elevateAccess/action"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: azure.auditlogs\n    and (\n      azure.auditlogs.operation_name: \"User has elevated their access to User Access Administrator for their Azure Resources\" or\n      azure.auditlogs.properties.additional_details.value: \"Microsoft.Authorization/elevateAccess/action\"\n    ) and event.outcome: \"success\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/privilege_escalation_entra_id_elevate_to_user_administrator_access.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Privilege Escalation",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

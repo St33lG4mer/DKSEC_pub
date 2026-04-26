@@ -1,0 +1,44 @@
+{
+  "id": "276ecfb0-b40e-51b1-ab1e-e3e88968d7f0",
+  "catalog": "sigma",
+  "name": "file_event_win_taskmgr_lsass_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "taskmgr.exe"
+      ],
+      "raw_values": [
+        "*:\\\\Windows\\\\system32\\\\taskmgr.exe",
+        "*:\\\\Windows\\\\SysWOW64\\\\taskmgr.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "lsass",
+        ".dmp"
+      ],
+      "raw_values": [
+        "*\\\\AppData\\\\Local\\\\Temp\\\\*",
+        "*\\\\lsass*",
+        "*.DMP*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable like~ (\"*:\\\\Windows\\\\system32\\\\taskmgr.exe\", \"*:\\\\Windows\\\\SysWOW64\\\\taskmgr.exe\")) and (file.path:\"*\\\\AppData\\\\Local\\\\Temp\\\\*\" and file.path:\"*\\\\lsass*\" and file.path:\"*.DMP*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_taskmgr_lsass_dump.eql",
+  "metadata": {}
+}

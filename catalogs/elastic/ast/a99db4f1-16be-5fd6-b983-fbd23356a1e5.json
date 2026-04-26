@@ -1,0 +1,28 @@
+{
+  "id": "a99db4f1-16be-5fd6-b983-fbd23356a1e5",
+  "catalog": "elastic",
+  "name": "Spike in GCP Audit Failed Messages",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/gcp/ml_gcp_error_message_spike.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: GCP",
+      "Data Source: GCP Audit Logs",
+      "Data Source: Google Cloud Platform",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "id": "d95a559d-390e-55e0-a3ff-b2c375359238",
+  "catalog": "elastic",
+  "name": "Local Account TokenFilter Policy Disabled",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\*\\\\localaccounttokenfilterpolicy",
+        "\\\\registry\\\\machine\\\\*\\\\localaccounttokenfilterpolicy",
+        "machine\\\\*\\\\localaccounttokenfilterpolicy"
+      ],
+      "raw_values": [
+        "HKLM\\\\*\\\\LocalAccountTokenFilterPolicy",
+        "\\\\REGISTRY\\\\MACHINE\\\\*\\\\LocalAccountTokenFilterPolicy",
+        "MACHINE\\\\*\\\\LocalAccountTokenFilterPolicy"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "registry.data.strings",
+      "operator": ":",
+      "values": [
+        "0x00000001"
+      ],
+      "raw_values": [
+        "1",
+        "0x00000001"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "deviceenroller.exe",
+        "omadmclient.exe",
+        "mousocoreworker.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\deviceenroller.exe",
+        "C:\\\\Windows\\\\system32\\\\omadmclient.exe",
+        "C:\\\\Windows\\\\UUS\\\\amd64\\\\MoUsoCoreWorker.exe",
+        "C:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\MoUsoCoreWorker.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\system32\\\\deviceenroller.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\system32\\\\omadmclient.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\UUS\\\\amd64\\\\MoUsoCoreWorker.exe",
+        "\\\\Device\\\\HarddiskVolume*\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\MoUsoCoreWorker.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "change"
+      ],
+      "raw_values": [
+        "change"
+      ]
+    },
+    {
+      "field": "registry.value",
+      "raw_field": "registry.value",
+      "operator": ":",
+      "values": [
+        "localaccounttokenfilterpolicy"
+      ],
+      "raw_values": [
+        "LocalAccountTokenFilterPolicy"
+      ]
+    }
+  ],
+  "raw_query": "registry where host.os.type == \"windows\" and event.type == \"change\" and\n  registry.value : \"LocalAccountTokenFilterPolicy\" and\n  registry.path : (\n    \"HKLM\\\\*\\\\LocalAccountTokenFilterPolicy\",\n    \"\\\\REGISTRY\\\\MACHINE\\\\*\\\\LocalAccountTokenFilterPolicy\",\n    \"MACHINE\\\\*\\\\LocalAccountTokenFilterPolicy\"\n  ) and registry.data.strings : (\"1\", \"0x00000001\") and\n  not process.executable : (\n    /* Intune */\n    \"C:\\\\Windows\\\\system32\\\\deviceenroller.exe\",\n    \"C:\\\\Windows\\\\system32\\\\omadmclient.exe\",\n    \"C:\\\\Windows\\\\UUS\\\\amd64\\\\MoUsoCoreWorker.exe\",\n    \"C:\\\\Windows\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\MoUsoCoreWorker.exe\",\n\n    /* Crowdstrike specific exclusion as it uses NT Object paths */\n    \"\\\\Device\\\\HarddiskVolume*\\\\system32\\\\deviceenroller.exe\",\n    \"\\\\Device\\\\HarddiskVolume*\\\\system32\\\\omadmclient.exe\",\n    \"\\\\Device\\\\HarddiskVolume*\\\\UUS\\\\amd64\\\\MoUsoCoreWorker.exe\",\n    \"\\\\Device\\\\HarddiskVolume*\\\\UUS\\\\Packages\\\\Preview\\\\amd64\\\\MoUsoCoreWorker.exe\"\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_persistence_account_tokenfilterpolicy.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Lateral Movement",
+      "Data Source: Elastic Endgame",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Data Source: Crowdstrike",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

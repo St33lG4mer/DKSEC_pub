@@ -1,0 +1,68 @@
+{
+  "id": "7b99bf80-0f9b-50b4-ac55-64b09f5cc392",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_install_unsigned_appx_packages",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "add-apppackage",
+        "add-appxpackage"
+      ],
+      "raw_values": [
+        "*Add-AppPackage *",
+        "*Add-AppxPackage *"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-allowunsigned"
+      ],
+      "raw_values": [
+        "* -AllowUnsigned*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\powershell.exe\", \"*\\\\pwsh.exe\")) or (process.pe.original_file_name like~ (\"PowerShell.EXE\", \"pwsh.dll\"))) and (process.command_line like~ (\"*Add-AppPackage *\", \"*Add-AppxPackage *\")) and process.command_line:\"* -AllowUnsigned*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_install_unsigned_appx_packages.eql",
+  "metadata": {}
+}

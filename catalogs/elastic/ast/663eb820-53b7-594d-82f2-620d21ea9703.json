@@ -1,0 +1,31 @@
+{
+  "id": "663eb820-53b7-594d-82f2-620d21ea9703",
+  "catalog": "elastic",
+  "name": "Entra ID Sharepoint or OneDrive Accessed by Unusual Client",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:azure.signinlogs\n    and azure.signinlogs.properties.resource_id: (\n        00000003-0000-0ff1-ce00-000000000000 or\n        6a9b9266-8161-4a7b-913a-a9eda19da220\n    ) and azure.signinlogs.properties.app_id: ( *\n        and not (\n            00000003-0000-0ff1-ce00-000000000000 or\n            08e18876-6177-487e-b8b5-cf950c1e598c or\n            ab9b8c07-8f02-4f72-87fa-80105867a763 or\n            af124e86-4e96-495a-b70a-90f90ab96707\n        )\n    )\n    and azure.signinlogs.properties.tenant_id:*\n    and event.outcome:success\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/collection_entra_id_sharepoint_access_from_unusual_application.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Domain: Identity",
+      "Domain: Storage",
+      "Use Case: Identity and Access Audit",
+      "Tactic: Collection",
+      "Tactic: Initial Access",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Sign-in Logs",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

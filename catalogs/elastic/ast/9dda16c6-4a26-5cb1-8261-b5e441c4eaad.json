@@ -1,0 +1,118 @@
+{
+  "id": "9dda16c6-4a26-5cb1-8261-b5e441c4eaad",
+  "catalog": "elastic",
+  "name": "Remote File Copy via TeamViewer",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "exe",
+        "dll",
+        "scr",
+        "com",
+        "bat",
+        "cmd",
+        "ps1",
+        "vbs",
+        "vbe",
+        "jse",
+        "wsh",
+        "wsf",
+        "sct",
+        "hta"
+      ],
+      "raw_values": [
+        "exe",
+        "dll",
+        "scr",
+        "com",
+        "bat",
+        "cmd",
+        "ps1",
+        "vbs",
+        "vbe",
+        "js",
+        "jse",
+        "wsh",
+        "wsf",
+        "sct",
+        "hta"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".js",
+        "update.exe",
+        "teamviewer_resource_??.dll",
+        "teamviewer*.exe"
+      ],
+      "raw_values": [
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\INetCache\\\\*.js",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\TeamViewer\\\\update.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\?\\\\TeamViewer\\\\update.exe",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\TeamViewer\\\\CustomConfigs\\\\???????\\\\TeamViewer_Resource_??.dll",
+        "?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\TeamViewer\\\\CustomConfigs\\\\???????\\\\TeamViewer*.exe"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "creation"
+      ],
+      "raw_values": [
+        "creation"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "teamviewer.exe"
+      ],
+      "raw_values": [
+        "TeamViewer.exe"
+      ]
+    }
+  ],
+  "raw_query": "file where host.os.type == \"windows\" and event.type == \"creation\" and process.name : \"TeamViewer.exe\" and\n  file.extension : (\"exe\", \"dll\", \"scr\", \"com\", \"bat\", \"cmd\", \"ps1\", \"vbs\", \"vbe\", \"js\", \"jse\", \"wsh\", \"wsf\", \"sct\", \"hta\") and\n  not \n  (\n    file.path : (\n      \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Microsoft\\\\Windows\\\\INetCache\\\\*.js\",\n      \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\TeamViewer\\\\update.exe\",\n      \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Temp\\\\?\\\\TeamViewer\\\\update.exe\",\n      \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\TeamViewer\\\\CustomConfigs\\\\???????\\\\TeamViewer_Resource_??.dll\",\n      \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\TeamViewer\\\\CustomConfigs\\\\???????\\\\TeamViewer*.exe\"\n    ) and process.code_signature.trusted == true\n  )\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/command_and_control_teamviewer_remote_file_copy.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Resources: Investigation Guide",
+      "Data Source: Elastic Defend",
+      "Data Source: SentinelOne"
+    ]
+  }
+}

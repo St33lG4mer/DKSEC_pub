@@ -1,0 +1,63 @@
+{
+  "id": "22c5cd41-daa5-5775-8aa1-7e0f3d87c84e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dumpminitool_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "dumpminitool.exe",
+        "dumpminitool.x86.exe",
+        "dumpminitool.arm64.exe"
+      ],
+      "raw_values": [
+        "*\\\\DumpMinitool.exe",
+        "*\\\\DumpMinitool.x86.exe",
+        "*\\\\DumpMinitool.arm64.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "dumpminitool.exe",
+        "dumpminitool.x86.exe",
+        "dumpminitool.arm64.exe"
+      ],
+      "raw_values": [
+        "DumpMinitool.exe",
+        "DumpMinitool.x86.exe",
+        "DumpMinitool.arm64.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "full",
+        "mini",
+        "withheap"
+      ],
+      "raw_values": [
+        "* Full*",
+        "* Mini*",
+        "* WithHeap*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\DumpMinitool.exe\", \"*\\\\DumpMinitool.x86.exe\", \"*\\\\DumpMinitool.arm64.exe\")) or (process.pe.original_file_name like~ (\"DumpMinitool.exe\", \"DumpMinitool.x86.exe\", \"DumpMinitool.arm64.exe\"))) and (process.command_line like~ (\"* Full*\", \"* Mini*\", \"* WithHeap*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dumpminitool_execution.eql",
+  "metadata": {}
+}

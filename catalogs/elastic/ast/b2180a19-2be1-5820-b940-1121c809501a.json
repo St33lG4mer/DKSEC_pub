@@ -1,0 +1,25 @@
+{
+  "id": "b2180a19-2be1-5820-b940-1121c809501a",
+  "catalog": "elastic",
+  "name": "Multiple Okta User Auth Events with Same Device Token Hash Behind a Proxy",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system\n    and not okta.actor.id:okta* and okta.debug_context.debug_data.dt_hash:*\n    and okta.event_type:user.authentication* and okta.security_context.is_proxy:true\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/credential_access_multiple_auth_events_from_single_device_behind_proxy.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "8206056e-f6af-54f9-a1a3-d00b2ddcb793",
+  "catalog": "sigma",
+  "name": "registry_event_susp_lsass_dll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": "like~",
+      "values": [
+        "\\\\currentcontrolset\\\\services\\\\ntds\\\\directoryserviceextpt",
+        "\\\\currentcontrolset\\\\services\\\\ntds\\\\lsadbextpt"
+      ],
+      "raw_values": [
+        "*\\\\CurrentControlSet\\\\Services\\\\NTDS\\\\DirectoryServiceExtPt*",
+        "*\\\\CurrentControlSet\\\\Services\\\\NTDS\\\\LsaDbExtPt*"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "%%systemroot%%\\\\system32\\\\ntdsa.dll",
+        "%%systemroot%%\\\\system32\\\\lsadb.dll"
+      ],
+      "raw_values": [
+        "%%systemroot%%\\\\system32\\\\ntdsa.dll",
+        "%%systemroot%%\\\\system32\\\\lsadb.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "lsass.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\system32\\\\lsass.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*\\\\CurrentControlSet\\\\Services\\\\NTDS\\\\DirectoryServiceExtPt*\", \"*\\\\CurrentControlSet\\\\Services\\\\NTDS\\\\LsaDbExtPt*\")) and (not (process.executable:\"C:\\\\Windows\\\\system32\\\\lsass.exe\" and (winlog.event_data.Details like~ (\"%%systemroot%%\\\\system32\\\\ntdsa.dll\", \"%%systemroot%%\\\\system32\\\\lsadb.dll\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_event/registry_event_susp_lsass_dll_load.eql",
+  "metadata": {}
+}

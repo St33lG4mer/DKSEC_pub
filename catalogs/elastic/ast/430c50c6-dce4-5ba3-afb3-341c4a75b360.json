@@ -1,0 +1,25 @@
+{
+  "id": "430c50c6-dce4-5ba3-afb3-341c4a75b360",
+  "catalog": "elastic",
+  "name": "CrowdStrike External Alerts",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind: alert and data_stream.dataset: crowdstrike.alert\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/promotions/crowdstrike_external_alerts.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Data Source: Crowdstrike",
+      "Use Case: Threat Detection",
+      "Resources: Investigation Guide",
+      "Promotion: External Alerts"
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "id": "8bc083ea-d512-54bc-b10b-e807545a0fd4",
+  "catalog": "sigma",
+  "name": "proc_creation_win_dsacls_password_spray",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dsacls.exe"
+      ],
+      "raw_values": [
+        "*\\\\dsacls.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "dsacls.exe"
+      ],
+      "raw_values": [
+        "DSACLS.EXE"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "user:",
+        "passwd:"
+      ],
+      "raw_values": [
+        "*/user:*",
+        "*/passwd:*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\dsacls.exe\" or process.pe.original_file_name:\"DSACLS.EXE\") and (process.command_line:\"*/user:*\" and process.command_line:\"*/passwd:*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_dsacls_password_spray.eql",
+  "metadata": {}
+}

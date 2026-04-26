@@ -1,0 +1,59 @@
+{
+  "id": "54634208-7a13-5c4c-a605-38de97055c89",
+  "catalog": "elastic",
+  "name": "Entra ID Service Principal Created",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "azure.auditlogs.identity",
+      "raw_field": "azure.auditlogs.identity",
+      "operator": ":",
+      "values": [
+        "managed service identity",
+        "windows azure service management api",
+        "microsoft azure ad internal - jit provisioning",
+        "aad app management",
+        "power virtual agents service"
+      ],
+      "raw_values": [
+        "Managed Service Identity",
+        "Windows Azure Service Management API",
+        "Microsoft Azure AD Internal - Jit Provisioning",
+        "AAD App Management",
+        "Power Virtual Agents Service"
+      ]
+    },
+    {
+      "field": "azure.auditlogs.operation_name",
+      "raw_field": "azure.auditlogs.operation_name",
+      "operator": ":",
+      "values": [
+        "add service principal"
+      ],
+      "raw_values": [
+        "Add service principal"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset:azure.auditlogs\n    and azure.auditlogs.operation_name:\"Add service principal\"\n    and event.outcome:(success or Success)\n    and not azure.auditlogs.identity: (\n        \"Managed Service Identity\" or\n        \"Windows Azure Service Management API\" or\n        \"Microsoft Azure AD Internal - Jit Provisioning\" or\n        \"AAD App Management\" or\n        \"Power Virtual Agents Service\"\n        )\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/azure/persistence_entra_id_service_principal_created.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Azure",
+      "Data Source: Microsoft Entra ID",
+      "Data Source: Microsoft Entra ID Audit Logs",
+      "Use Case: Identity and Access Audit",
+      "Resources: Investigation Guide",
+      "Tactic: Persistence"
+    ]
+  }
+}

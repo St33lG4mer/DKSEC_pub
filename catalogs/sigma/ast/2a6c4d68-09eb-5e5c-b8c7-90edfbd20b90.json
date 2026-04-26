@@ -1,0 +1,33 @@
+{
+  "id": "2a6c4d68-09eb-5e5c-b8c7-90edfbd20b90",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_bear_activity_gtr19",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".snp"
+      ],
+      "raw_values": [
+        "*xcopy /S /E /C /Q /H \\\\\\\\*",
+        "*\\\\sysvol\\\\*",
+        "*adexplorer -snapshot \\",
+        "*\\\\downloads\\\\*",
+        "*.snp*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*xcopy /S /E /C /Q /H \\\\\\\\*\" and process.command_line:\"*\\\\sysvol\\\\*\") or (process.command_line:\"*adexplorer -snapshot \\\"\\\" c:\\\\users\\\\*\" and process.command_line:\"*\\\\downloads\\\\*\" and process.command_line:\"*.snp*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2019/TA/Bear-APT-Activity/proc_creation_win_apt_bear_activity_gtr19.eql",
+  "metadata": {}
+}

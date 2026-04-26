@@ -1,0 +1,40 @@
+{
+  "id": "339afa43-833d-561f-a245-a35d263f094e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_presentationhost_download",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "presentationhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\presentationhost.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "presentationhost.exe"
+      ],
+      "raw_values": [
+        "PresentationHost.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\presentationhost.exe\" or process.pe.original_file_name:\"PresentationHost.exe\") and (process.command_line like~ (\"*http://*\", \"*https://*\", \"*ftp://*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_presentationhost_download.eql",
+  "metadata": {}
+}

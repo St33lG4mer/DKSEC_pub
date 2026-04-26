@@ -1,0 +1,53 @@
+{
+  "id": "178a3508-2d6c-534a-b387-c6b80da24c7b",
+  "catalog": "elastic",
+  "name": "AWS IAM Long-Term Access Key First Seen from Source IP",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.outcome: \"success\"\n    and source.ip:*\n    and aws.cloudtrail.user_identity.access_key_id: AKIA*\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/credential_access_iam_long_term_access_key_first_seen_from_source_ip.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS CloudTrail",
+      "Data Source: AWS IAM",
+      "Use Case: Threat Detection",
+      "Tactic: Credential Access",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

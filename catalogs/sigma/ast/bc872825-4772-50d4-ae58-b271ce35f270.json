@@ -1,0 +1,31 @@
+{
+  "id": "bc872825-4772-50d4-ae58-b271ce35f270",
+  "catalog": "sigma",
+  "name": "registry_set_cve_2021_31979_cve_2021_33771_exploits",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": "like~",
+      "values": [
+        "system32\\\\wbem\\\\wmiutils.dll",
+        "system32\\\\wbem\\\\wbemsvc.dll"
+      ],
+      "raw_values": [
+        "*system32\\\\wbem\\\\wmiutils.dll",
+        "*system32\\\\wbem\\\\wbemsvc.dll"
+      ]
+    }
+  ],
+  "raw_query": "any where (registry.path like~ (\"*CLSID\\\\{CF4CC405-E2C5-4DDD-B3CE-5E7582D8C9FA}\\\\InprocServer32\\\\(Default)\", \"*CLSID\\\\{7C857801-7381-11CF-884D-00AA004B2E24}\\\\InProcServer32\\\\(Default)\")) and (not (winlog.event_data.Details like~ (\"*system32\\\\wbem\\\\wmiutils.dll\", \"*system32\\\\wbem\\\\wbemsvc.dll\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Exploits/CVE-2021-33771/registry_set_cve_2021_31979_cve_2021_33771_exploits.eql",
+  "metadata": {}
+}

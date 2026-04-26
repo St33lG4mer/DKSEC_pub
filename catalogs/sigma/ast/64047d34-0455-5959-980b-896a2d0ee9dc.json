@@ -1,0 +1,29 @@
+{
+  "id": "64047d34-0455-5959-980b-896a2d0ee9dc",
+  "catalog": "sigma",
+  "name": "image_load_side_load_coregen",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "coregen.exe"
+      ],
+      "raw_values": [
+        "*\\\\coregen.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\coregen.exe\" and (not (file.path like~ (\"C:\\\\Program Files (x86)\\\\Microsoft Silverlight\\\\*\", \"C:\\\\Program Files\\\\Microsoft Silverlight\\\\*\", \"C:\\\\Windows\\\\System32\\\\*\", \"C:\\\\Windows\\\\SysWOW64\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_coregen.eql",
+  "metadata": {}
+}

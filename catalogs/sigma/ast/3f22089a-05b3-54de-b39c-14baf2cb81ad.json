@@ -1,0 +1,46 @@
+{
+  "id": "3f22089a-05b3-54de-b39c-14baf2cb81ad",
+  "catalog": "sigma",
+  "name": "proc_creation_win_conhost_legacy_option",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.event_data.integritylevel",
+      "raw_field": "winlog.event_data.IntegrityLevel",
+      "operator": "like~",
+      "values": [
+        "high",
+        "s-1-16-12288"
+      ],
+      "raw_values": [
+        "High",
+        "S-1-16-12288"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "conhost.exe",
+        "0xffffffff",
+        "-forcev1"
+      ],
+      "raw_values": [
+        "*conhost.exe*",
+        "*0xffffffff*",
+        "*-ForceV1*"
+      ]
+    }
+  ],
+  "raw_query": "any where (winlog.event_data.IntegrityLevel like~ (\"High\", \"S-1-16-12288\")) and (process.command_line:\"*conhost.exe*\" and process.command_line:\"*0xffffffff*\" and process.command_line:\"*-ForceV1*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_conhost_legacy_option.eql",
+  "metadata": {}
+}

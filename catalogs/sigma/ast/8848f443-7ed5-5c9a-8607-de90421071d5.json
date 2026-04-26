@@ -1,0 +1,43 @@
+{
+  "id": "8848f443-7ed5-5c9a-8607-de90421071d5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_mshtml_runhtmlapplication",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "#135",
+        "runhtmlapplication"
+      ],
+      "raw_values": [
+        "*#135*",
+        "*RunHTMLApplication*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "mshtml"
+      ],
+      "raw_values": [
+        "*\\\\..\\\\*",
+        "*mshtml*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*\\\\..\\\\*\" and process.command_line:\"*mshtml*\") and (process.command_line like~ (\"*#135*\", \"*RunHTMLApplication*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_mshtml_runhtmlapplication.eql",
+  "metadata": {}
+}

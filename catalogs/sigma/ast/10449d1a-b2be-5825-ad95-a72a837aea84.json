@@ -1,0 +1,83 @@
+{
+  "id": "10449d1a-b2be-5825-ad95-a72a837aea84",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_set_policies_to_unsecure_level",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.dll"
+      ],
+      "raw_values": [
+        "powershell_ise.exe",
+        "PowerShell.EXE",
+        "pwsh.dll"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "powershell_ise.exe",
+        "powershell.exe",
+        "pwsh.exe"
+      ],
+      "raw_values": [
+        "*\\\\powershell_ise.exe",
+        "*\\\\powershell.exe",
+        "*\\\\pwsh.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-executionpolicy",
+        "-ep",
+        "-exec",
+        "bypass",
+        "unrestricted"
+      ],
+      "raw_values": [
+        "*-executionpolicy *",
+        "* -ep *",
+        "* -exec *",
+        "*Bypass*",
+        "*Unrestricted*",
+        "*-NoProfile -ExecutionPolicy Bypass -File \\",
+        ", ",
+        "*-ExecutionPolicy ByPass -File \\"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "msiexec.exe"
+      ],
+      "raw_values": [
+        "C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe",
+        "C:\\\\Windows\\\\System32\\\\msiexec.exe",
+        "*C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where (((process.pe.original_file_name like~ (\"powershell_ise.exe\", \"PowerShell.EXE\", \"pwsh.dll\")) or (process.executable like~ (\"*\\\\powershell_ise.exe\", \"*\\\\powershell.exe\", \"*\\\\pwsh.exe\"))) and (process.command_line like~ (\"*-executionpolicy *\", \"* -ep *\", \"* -exec *\")) and (process.command_line like~ (\"*Bypass*\", \"*Unrestricted*\"))) and (not ((process.parent.executable like~ (\"C:\\\\Windows\\\\SysWOW64\\\\msiexec.exe\", \"C:\\\\Windows\\\\System32\\\\msiexec.exe\")) and (process.command_line like~ (\"*-NoProfile -ExecutionPolicy Bypass -File \\\"C:\\\\Program Files\\\\PowerShell\\\\7\\\\*\", \"*-NoProfile -ExecutionPolicy Bypass -File \\\"C:\\\\Program Files (x86)\\\\PowerShell\\\\7\\\\*\")))) and (not ((process.parent.executable like~ (\"*C:\\\\Program Files\\\\Avast Software\\\\Avast\\\\*\", \"*C:\\\\Program Files (x86)\\\\Avast Software\\\\Avast\\\\*\", \"*\\\\instup.exe*\")) and (process.command_line like~ (\"*-ExecutionPolicy ByPass -File \\\"C:\\\\Program Files\\\\Avast Software\\\\Avast*\", \"*-ExecutionPolicy ByPass -File \\\"C:\\\\Program Files (x86)\\\\Avast Software\\\\Avast\\\\*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_set_policies_to_unsecure_level.eql",
+  "metadata": {}
+}

@@ -1,0 +1,29 @@
+{
+  "id": "ec137460-2ae3-57c8-b7ac-b69ae833dbc3",
+  "catalog": "sigma",
+  "name": "registry_set_exploit_cve_2022_30190_msdt_follina",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hkcr\\\\ms-msdt\\\\"
+      ],
+      "raw_values": [
+        "HKCR\\\\ms-msdt\\\\*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"HKCR\\\\ms-msdt\\\\*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2022/Exploits/CVE-2022-30190/registry_set_exploit_cve_2022_30190_msdt_follina.eql",
+  "metadata": {}
+}

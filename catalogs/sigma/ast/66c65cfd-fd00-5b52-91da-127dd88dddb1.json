@@ -1,0 +1,31 @@
+{
+  "id": "66c65cfd-fd00-5b52-91da-127dd88dddb1",
+  "catalog": "sigma",
+  "name": "pipe_created_hktl_koh_default_pipe",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "pipe"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "imposecost",
+        "imposingcost"
+      ],
+      "raw_values": [
+        "*\\\\imposecost*",
+        "*\\\\imposingcost*"
+      ]
+    }
+  ],
+  "raw_query": "any where file.name like~ (\"*\\\\imposecost*\", \"*\\\\imposingcost*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/pipe_created/pipe_created_hktl_koh_default_pipe.eql",
+  "metadata": {}
+}

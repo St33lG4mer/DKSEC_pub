@@ -1,0 +1,40 @@
+{
+  "id": "a60dfa24-a735-53ac-be89-0299ed997554",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmdkey_adding_generic_creds",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmdkey.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmdkey.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "cmdkey.exe"
+      ],
+      "raw_values": [
+        "cmdkey.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\cmdkey.exe\" or process.pe.original_file_name:\"cmdkey.exe\") and process.command_line like~ (\"* -g*\", \"* /g*\", \"* –g*\", \"* —g*\", \"* ―g*\") and process.command_line like~ (\"* -u*\", \"* /u*\", \"* –u*\", \"* —u*\", \"* ―u*\") and process.command_line like~ (\"* -p*\", \"* /p*\", \"* –p*\", \"* —p*\", \"* ―p*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmdkey_adding_generic_creds.eql",
+  "metadata": {}
+}

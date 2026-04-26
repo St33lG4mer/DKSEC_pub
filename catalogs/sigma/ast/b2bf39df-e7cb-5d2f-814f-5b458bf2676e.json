@@ -1,0 +1,68 @@
+{
+  "id": "b2bf39df-e7cb-5d2f-814f-5b458bf2676e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_emotet_rundll32_execution",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        ",rundll",
+        ",control_rundll",
+        ".dll,control_rundll"
+      ],
+      "raw_values": [
+        "*,RunDLL",
+        "*,Control_RunDLL",
+        "*.dll,Control_RunDLL",
+        "*.dll\\",
+        ", "
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "RUNDLL32.EXE"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": ":",
+      "values": [
+        "tracker.exe"
+      ],
+      "raw_values": [
+        "*\\\\tracker.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\rundll32.exe\" or process.pe.original_file_name:\"RUNDLL32.EXE\") and (process.command_line like~ (\"*,RunDLL\", \"*,Control_RunDLL\"))) and (not ((process.command_line like~ (\"*.dll,Control_RunDLL\", \"*.dll\\\",Control_RunDLL\", \"*.dll',Control_RunDLL\")) or process.parent.executable:\"*\\\\tracker.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/Malware/Emotet/proc_creation_win_malware_emotet_rundll32_execution.eql",
+  "metadata": {}
+}

@@ -1,0 +1,17 @@
+{
+  "id": "25aac93f-52d9-5eec-88a8-c9ae3ce4269f",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_homoglyph_cyrillic_lookalikes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where (process.command_line like~ (\"*А*\", \"*В*\", \"*Е*\", \"*К*\", \"*М*\", \"*Н*\", \"*О*\", \"*Р*\", \"*С*\", \"*Т*\", \"*Х*\", \"*Ѕ*\", \"*І*\", \"*Ј*\", \"*Ү*\", \"*Ӏ*\", \"*Ԍ*\", \"*Ԛ*\", \"*Ԝ*\", \"*Α*\", \"*Β*\", \"*Ε*\", \"*Ζ*\", \"*Η*\", \"*Ι*\", \"*Κ*\", \"*Μ*\", \"*Ν*\", \"*Ο*\", \"*Ρ*\", \"*Τ*\", \"*Υ*\", \"*Χ*\")) or (process.command_line like~ (\"*а*\", \"*е*\", \"*о*\", \"*р*\", \"*с*\", \"*х*\", \"*ѕ*\", \"*і*\", \"*ӏ*\", \"*ј*\", \"*һ*\", \"*ԁ*\", \"*ԛ*\", \"*ԝ*\", \"*ο*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_homoglyph_cyrillic_lookalikes.eql",
+  "metadata": {}
+}

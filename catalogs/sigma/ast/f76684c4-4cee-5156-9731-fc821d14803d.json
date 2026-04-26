@@ -1,0 +1,51 @@
+{
+  "id": "f76684c4-4cee-5156-9731-fc821d14803d",
+  "catalog": "sigma",
+  "name": "win_security_susp_possible_shadow_credentials_added",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "security"
+      ],
+      "raw_values": [
+        "Security"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "5136"
+      ],
+      "raw_values": [
+        "5136"
+      ]
+    },
+    {
+      "field": "winlog.event_data.attributeldapdisplayname",
+      "raw_field": "winlog.event_data.AttributeLDAPDisplayName",
+      "operator": ":",
+      "values": [
+        "msds-keycredentiallink"
+      ],
+      "raw_values": [
+        "msDS-KeyCredentialLink"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Security\" and (event.code:\"5136\" and winlog.event_data.AttributeLDAPDisplayName:\"msDS-KeyCredentialLink\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/security/win_security_susp_possible_shadow_credentials_added.eql",
+  "metadata": {}
+}

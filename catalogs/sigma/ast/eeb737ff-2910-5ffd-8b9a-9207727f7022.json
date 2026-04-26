@@ -1,0 +1,31 @@
+{
+  "id": "eeb737ff-2910-5ffd-8b9a-9207727f7022",
+  "catalog": "sigma",
+  "name": "proc_creation_win_rundll32_no_params",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "rundll32.exe"
+      ],
+      "raw_values": [
+        "*\\\\rundll32.exe",
+        "*\\\\rundll32.exe\\",
+        ", "
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"*\\\\rundll32.exe\", \"*\\\\rundll32.exe\\\"\", \"*\\\\rundll32\")) and (not (process.parent.executable like~ (\"*\\\\AppData\\\\Local\\\\*\", \"*\\\\Microsoft\\\\Edge\\\\*\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_rundll32_no_params.eql",
+  "metadata": {}
+}

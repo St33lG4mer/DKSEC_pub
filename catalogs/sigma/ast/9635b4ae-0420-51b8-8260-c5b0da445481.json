@@ -1,0 +1,37 @@
+{
+  "id": "9635b4ae-0420-51b8-8260-c5b0da445481",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_amsi_init_failed_bypass",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "system.management.automation.amsiutils",
+        "amsiinitfailed",
+        "[ref].assembly.gettype",
+        "setvalue($null,$true)",
+        "nonpublic,static"
+      ],
+      "raw_values": [
+        "*System.Management.Automation.AmsiUtils*",
+        "*amsiInitFailed*",
+        "*[Ref].Assembly.GetType*",
+        "*SetValue($null,$true)*",
+        "*NonPublic,Static*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line:\"*System.Management.Automation.AmsiUtils*\" and process.command_line:\"*amsiInitFailed*\") or (process.command_line:\"*[Ref].Assembly.GetType*\" and process.command_line:\"*SetValue($null,$true)*\" and process.command_line:\"*NonPublic,Static*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_amsi_init_failed_bypass.eql",
+  "metadata": {}
+}

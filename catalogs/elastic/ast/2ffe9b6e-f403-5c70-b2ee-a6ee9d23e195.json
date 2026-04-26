@@ -1,0 +1,23 @@
+{
+  "id": "2ffe9b6e-f403-5c70-b2ee-a6ee9d23e195",
+  "catalog": "elastic",
+  "name": "My First Rule",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "event.kind:event\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/guided_onboarding_sample_rule.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Guided Onboarding",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

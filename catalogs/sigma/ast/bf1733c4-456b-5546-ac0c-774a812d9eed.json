@@ -1,0 +1,31 @@
+{
+  "id": "bf1733c4-456b-5546-ac0c-774a812d9eed",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_etw_modification_cmdline",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "complus_etwenabled",
+        "complus_etwflags"
+      ],
+      "raw_values": [
+        "*COMPlus_ETWEnabled*",
+        "*COMPlus_ETWFlags*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line like~ (\"*COMPlus_ETWEnabled*\", \"*COMPlus_ETWFlags*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_etw_modification_cmdline.eql",
+  "metadata": {}
+}

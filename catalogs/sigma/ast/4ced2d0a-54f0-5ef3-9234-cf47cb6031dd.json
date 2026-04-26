@@ -1,0 +1,40 @@
+{
+  "id": "4ced2d0a-54f0-5ef3-9234-cf47cb6031dd",
+  "catalog": "sigma",
+  "name": "proc_creation_win_curl_cookie_hijacking",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "*\\\\curl.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "curl.exe"
+      ],
+      "raw_values": [
+        "curl.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\curl.exe\" or process.pe.original_file_name:\"curl.exe\") and (process.command_line like~ (\"SigmaRegularExpression(regexp=SigmaString(['\\\\s-c\\\\s']), flags=set())\", \"*--cookie-jar*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_curl_cookie_hijacking.eql",
+  "metadata": {}
+}

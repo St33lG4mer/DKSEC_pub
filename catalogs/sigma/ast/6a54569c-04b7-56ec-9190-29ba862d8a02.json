@@ -1,0 +1,29 @@
+{
+  "id": "6a54569c-04b7-56ec-9190-29ba862d8a02",
+  "catalog": "sigma",
+  "name": "proc_creation_win_ssh_port_forward",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "ssh.exe"
+      ],
+      "raw_values": [
+        "*\\\\ssh.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\ssh.exe\" and process.command_line like~ (\"* -R *\", \"* /R *\", \"* –R *\", \"* —R *\", \"* ―R *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_ssh_port_forward.eql",
+  "metadata": {}
+}

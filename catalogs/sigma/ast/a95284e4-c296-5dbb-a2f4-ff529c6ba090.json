@@ -1,0 +1,51 @@
+{
+  "id": "a95284e4-c296-5dbb-a2f4-ff529c6ba090",
+  "catalog": "sigma",
+  "name": "proc_access_win_lsass_werfault",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "werfault.exe"
+      ],
+      "raw_values": [
+        "*\\\\WerFault.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.targetimage",
+      "raw_field": "winlog.event_data.TargetImage",
+      "operator": ":",
+      "values": [
+        "\\\\lsass.exe"
+      ],
+      "raw_values": [
+        "*\\\\lsass.exe"
+      ]
+    },
+    {
+      "field": "winlog.event_data.grantedaccess",
+      "raw_field": "winlog.event_data.GrantedAccess",
+      "operator": ":",
+      "values": [
+        "0x1fffff"
+      ],
+      "raw_values": [
+        "0x1FFFFF"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\WerFault.exe\" and winlog.event_data.TargetImage:\"*\\\\lsass.exe\" and winlog.event_data.GrantedAccess:\"0x1FFFFF\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_access/proc_access_win_lsass_werfault.eql",
+  "metadata": {}
+}

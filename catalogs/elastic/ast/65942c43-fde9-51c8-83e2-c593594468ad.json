@@ -1,0 +1,111 @@
+{
+  "id": "65942c43-fde9-51c8-83e2-c593594468ad",
+  "catalog": "elastic",
+  "name": "Directory Creation in /bin directory",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "start",
+        "processrollup2",
+        "exec_event"
+      ],
+      "raw_values": [
+        "exec",
+        "start",
+        "ProcessRollup2",
+        "exec_event"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "mkdir",
+        "cursor",
+        "coreutils"
+      ],
+      "raw_values": [
+        "/bin/mkdir",
+        "/usr/bin/mkdir",
+        "/usr/local/bin/mkdir",
+        "/usr/local/bin/cursor",
+        "/usr/bin/coreutils"
+      ]
+    },
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "in",
+      "values": [
+        "make"
+      ],
+      "raw_values": [
+        "/usr/bin/make",
+        "/bin/make"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "mkdir"
+      ],
+      "raw_values": [
+        "mkdir"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and\nevent.action in (\"exec\", \"start\", \"ProcessRollup2\", \"exec_event\") and process.name == \"mkdir\" and\nprocess.args like (\"/bin/*\", \"/usr/bin/*\", \"/usr/local/bin/*\", \"/sbin/*\", \"/usr/sbin/*\", \"/usr/local/sbin/*\") and\nnot process.args in (\"/bin/mkdir\", \"/usr/bin/mkdir\", \"/usr/local/bin/mkdir\", \"/usr/local/bin/cursor\", \"/usr/bin/coreutils\") and\nnot process.parent.executable in (\"/usr/bin/make\", \"/bin/make\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/defense_evasion_directory_creation_in_bin.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Tactic: Persistence",
+      "Data Source: Elastic Defend",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Endgame",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

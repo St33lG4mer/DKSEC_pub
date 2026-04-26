@@ -1,0 +1,29 @@
+{
+  "id": "2ca07904-5f08-5fbc-bb54-5997ecc14aab",
+  "catalog": "elastic",
+  "name": "Unusual Windows Path Activity",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/persistence_ml_windows_anomalous_path_activity.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Persistence",
+      "Tactic: Execution",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

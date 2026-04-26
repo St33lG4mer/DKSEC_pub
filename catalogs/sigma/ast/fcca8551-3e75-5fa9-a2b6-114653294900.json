@@ -1,0 +1,64 @@
+{
+  "id": "fcca8551-3e75-5fa9-a2b6-114653294900",
+  "catalog": "sigma",
+  "name": "image_load_side_load_keyscrambler",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": "like~",
+      "values": [
+        "keyscrambler.exe",
+        "keyscramblerlogon.exe"
+      ],
+      "raw_values": [
+        "*\\\\KeyScrambler.exe",
+        "*\\\\KeyScramblerLogon.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "keyscramblerie.dll"
+      ],
+      "raw_values": [
+        "*\\\\KeyScramblerIE.dll"
+      ]
+    },
+    {
+      "field": "winlog.event_data.signature",
+      "raw_field": "winlog.event_data.Signature",
+      "operator": ":",
+      "values": [
+        "qfx software corporation"
+      ],
+      "raw_values": [
+        "QFX Software Corporation"
+      ]
+    },
+    {
+      "field": "file.code_signature.status",
+      "raw_field": "file.code_signature.status",
+      "operator": ":",
+      "values": [
+        "valid"
+      ],
+      "raw_values": [
+        "Valid"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable like~ (\"*\\\\KeyScrambler.exe\", \"*\\\\KeyScramblerLogon.exe\")) and file.path:\"*\\\\KeyScramblerIE.dll\") and (not (((process.executable like~ (\"*C:\\\\Program Files (x86)\\\\KeyScrambler\\\\*\", \"*C:\\\\Program Files\\\\KeyScrambler\\\\*\")) and (file.path like~ (\"*C:\\\\Program Files (x86)\\\\KeyScrambler\\\\*\", \"*C:\\\\Program Files\\\\KeyScrambler\\\\*\"))) or (winlog.event_data.Signature:\"QFX Software Corporation\" and file.code_signature.status:\"Valid\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/image_load/image_load_side_load_keyscrambler.eql",
+  "metadata": {}
+}

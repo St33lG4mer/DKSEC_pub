@@ -1,0 +1,40 @@
+{
+  "id": "8b7f3f5d-a2e6-5e6c-b3e2-a77220acf7f1",
+  "catalog": "sigma",
+  "name": "image_load_office_excel_xll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "excel.exe"
+      ],
+      "raw_values": [
+        "*\\\\excel.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        ".xll"
+      ],
+      "raw_values": [
+        "*.xll"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\excel.exe\" and file.path:\"*.xll\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-threat-hunting/windows/image_load/image_load_office_excel_xll_load.eql",
+  "metadata": {}
+}

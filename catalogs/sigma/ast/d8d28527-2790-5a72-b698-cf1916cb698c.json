@@ -1,0 +1,46 @@
+{
+  "id": "d8d28527-2790-5a72-b698-cf1916cb698c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_apt_winnti_pipemon",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-x:0",
+        "-x:1",
+        "-x:2"
+      ],
+      "raw_values": [
+        "*-x:0",
+        "*-x:1",
+        "*-x:2"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "setup0.exe -p",
+        "setup.exe"
+      ],
+      "raw_values": [
+        "*setup0.exe -p*",
+        "*setup.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*setup0.exe -p*\" or (process.command_line:\"*setup.exe*\" and (process.command_line like~ (\"*-x:0\", \"*-x:1\", \"*-x:2\")))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2020/TA/Winnti/proc_creation_win_apt_winnti_pipemon.eql",
+  "metadata": {}
+}

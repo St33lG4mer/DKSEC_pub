@@ -1,0 +1,30 @@
+{
+  "id": "6398cdf5-0c4d-5fd9-a3d3-d7206806542b",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_syncappvpublishingserver_vbs_execute_psh",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "syncappvpublishingserver.vbs"
+      ],
+      "raw_values": [
+        "*\\\\SyncAppvPublishingServer.vbs*",
+        "*;*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*\\\\SyncAppvPublishingServer.vbs*\" and process.command_line:\"*;*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_syncappvpublishingserver_vbs_execute_psh.eql",
+  "metadata": {}
+}

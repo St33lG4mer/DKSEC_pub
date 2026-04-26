@@ -1,0 +1,32 @@
+{
+  "id": "0cdbd83e-2a17-555f-ba57-07320ebd6ed7",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_sticky_keys_replace",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "copy",
+        "sethc.exe"
+      ],
+      "raw_values": [
+        "*copy *",
+        "*/y *",
+        "*C:\\\\windows\\\\system32\\\\cmd.exe C:\\\\windows\\\\system32\\\\sethc.exe*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*copy *\" and process.command_line:\"*/y *\" and process.command_line:\"*C:\\\\windows\\\\system32\\\\cmd.exe C:\\\\windows\\\\system32\\\\sethc.exe*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_sticky_keys_replace.eql",
+  "metadata": {}
+}

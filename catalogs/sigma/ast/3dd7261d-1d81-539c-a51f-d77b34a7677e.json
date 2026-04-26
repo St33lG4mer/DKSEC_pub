@@ -1,0 +1,51 @@
+{
+  "id": "3dd7261d-1d81-539c-a51f-d77b34a7677e",
+  "catalog": "sigma",
+  "name": "proc_creation_win_pua_crassus",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "crassus.exe"
+      ],
+      "raw_values": [
+        "*\\\\Crassus.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "crassus.exe"
+      ],
+      "raw_values": [
+        "Crassus.exe"
+      ]
+    },
+    {
+      "field": "process.pe.description",
+      "raw_field": "process.pe.description",
+      "operator": ":",
+      "values": [
+        "crassus"
+      ],
+      "raw_values": [
+        "*Crassus*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\Crassus.exe\" or process.pe.original_file_name:\"Crassus.exe\" or process.pe.description:\"*Crassus*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_pua_crassus.eql",
+  "metadata": {}
+}

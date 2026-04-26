@@ -1,0 +1,101 @@
+{
+  "id": "44361206-2e88-5b25-b1ef-b0e20d79cb0c",
+  "catalog": "elastic",
+  "name": "Unsigned DLL loaded by DNS Service",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.category",
+      "raw_field": "event.category",
+      "operator": ":",
+      "values": [
+        "library",
+        "process"
+      ],
+      "raw_values": [
+        "library",
+        "process"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": ":",
+      "values": [
+        "start",
+        "change"
+      ],
+      "raw_values": [
+        "start",
+        "change"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "load",
+        "image loaded"
+      ],
+      "raw_values": [
+        "load",
+        "Image loaded*"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "dns.exe"
+      ],
+      "raw_values": [
+        "?:\\\\windows\\\\system32\\\\dns.exe"
+      ]
+    },
+    {
+      "field": "file.code_signature.status",
+      "raw_field": "file.code_signature.status",
+      "operator": "==",
+      "values": [
+        "valid"
+      ],
+      "raw_values": [
+        "Valid"
+      ]
+    }
+  ],
+  "raw_query": "any where host.os.type == \"windows\" and event.category : (\"library\", \"process\") and\n  event.type : (\"start\", \"change\") and event.action : (\"load\", \"Image loaded*\") and\n  process.executable : \"?:\\\\windows\\\\system32\\\\dns.exe\" and\n  not ?dll.code_signature.trusted == true and\n  not file.code_signature.status == \"Valid\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/privilege_escalation_dns_serverlevelplugindll.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Privilege Escalation",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

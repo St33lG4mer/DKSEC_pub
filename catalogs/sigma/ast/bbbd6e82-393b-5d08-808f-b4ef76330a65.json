@@ -1,0 +1,31 @@
+{
+  "id": "bbbd6e82-393b-5d08-808f-b4ef76330a65",
+  "catalog": "sigma",
+  "name": "proc_creation_win_powershell_decode_gzip",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "gzipstream",
+        "::decompress"
+      ],
+      "raw_values": [
+        "*GZipStream*",
+        "*::Decompress*"
+      ]
+    }
+  ],
+  "raw_query": "any where process.command_line:\"*GZipStream*\" and process.command_line:\"*::Decompress*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_powershell_decode_gzip.eql",
+  "metadata": {}
+}

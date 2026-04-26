@@ -1,0 +1,26 @@
+{
+  "id": "cb3495df-deea-5ba5-9162-e20946d2e100",
+  "catalog": "elastic",
+  "name": "High Mean of Process Arguments in an RDP Session",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/integrations/lmd/lateral_movement_ml_high_mean_rdp_process_args.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Lateral Movement Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

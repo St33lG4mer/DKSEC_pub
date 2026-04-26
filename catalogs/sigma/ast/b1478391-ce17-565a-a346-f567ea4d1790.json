@@ -1,0 +1,29 @@
+{
+  "id": "b1478391-ce17-565a-a346-f567ea4d1790",
+  "catalog": "sigma",
+  "name": "proc_creation_win_lolbin_pcwrun_follina",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "pcwrun.exe"
+      ],
+      "raw_values": [
+        "*\\\\pcwrun.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\pcwrun.exe\" and process.command_line:\"*../*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_lolbin_pcwrun_follina.eql",
+  "metadata": {}
+}

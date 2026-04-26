@@ -1,0 +1,155 @@
+{
+  "id": "7f702244-aa03-5e60-9a0f-fbfe50999d37",
+  "catalog": "elastic",
+  "name": "Potential Linux Tunneling and/or Port Forwarding via SSH Option",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "proxycommand",
+        "localforward",
+        "remoteforward",
+        "dynamicforward",
+        "tunnel",
+        "gatewayports",
+        "exitonforwardfailure",
+        "proxyjump"
+      ],
+      "raw_values": [
+        "*ProxyCommand*",
+        "*LocalForward*",
+        "*RemoteForward*",
+        "*DynamicForward*",
+        "*Tunnel*",
+        "*GatewayPorts*",
+        "*ExitOnForwardFailure*",
+        "*ProxyJump*"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "in",
+      "values": [
+        "ssh",
+        "sshd"
+      ],
+      "raw_values": [
+        "ssh",
+        "sshd"
+      ]
+    },
+    {
+      "field": "process.parent.command_line",
+      "raw_field": "process.parent.command_line",
+      "operator": "in",
+      "values": [
+        "pvedaemon",
+        "pve-ha-lrm"
+      ],
+      "raw_values": [
+        "pvedaemon",
+        "pve-ha-lrm"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "linux"
+      ],
+      "raw_values": [
+        "linux"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "like",
+      "values": [
+        "ansible"
+      ],
+      "raw_values": [
+        "-o*",
+        "*ansible*"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "/usr/bin/pvedaemon"
+      ],
+      "raw_values": [
+        "/usr/bin/pvedaemon"
+      ]
+    },
+    {
+      "field": "process.working_directory",
+      "raw_field": "process.working_directory",
+      "operator": "like",
+      "values": [
+        "ansible"
+      ],
+      "raw_values": [
+        "*ansible*"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"linux\" and event.type == \"start\" and event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\") and\nprocess.name in (\"ssh\", \"sshd\") and process.args like \"-o*\" and\nprocess.command_line like~ (\n  \"*ProxyCommand*\", \"*LocalForward*\", \"*RemoteForward*\", \"*DynamicForward*\", \"*Tunnel*\", \"*GatewayPorts*\",\n  \"*ExitOnForwardFailure*\", \"*ProxyCommand*\", \"*ProxyJump*\"\n) and \nnot (\n  ?process.parent.args == \"/usr/bin/pvedaemon\" or\n  ?process.parent.command_line in (\"pvedaemon\", \"pve-ha-lrm\") or\n  ?process.working_directory like \"*ansible*\" or\n  process.command_line like \"*ansible*\"\n)\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/linux/command_and_control_linux_tunneling_via_ssh_option.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Linux",
+      "Use Case: Threat Detection",
+      "Tactic: Command and Control",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

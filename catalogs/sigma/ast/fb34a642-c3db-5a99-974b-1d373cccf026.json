@@ -1,0 +1,55 @@
+{
+  "id": "fb34a642-c3db-5a99-974b-1d373cccf026",
+  "catalog": "sigma",
+  "name": "proc_creation_win_office_spawn_exe_from_users_directory",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "winword.exe",
+        "excel.exe",
+        "powerpnt.exe",
+        "mspub.exe",
+        "visio.exe",
+        "msaccess.exe",
+        "eqnedt32.exe"
+      ],
+      "raw_values": [
+        "*\\\\WINWORD.EXE",
+        "*\\\\EXCEL.EXE",
+        "*\\\\POWERPNT.exe",
+        "*\\\\MSPUB.exe",
+        "*\\\\VISIO.exe",
+        "*\\\\MSACCESS.exe",
+        "*\\\\EQNEDT32.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        ".exe",
+        "teams.exe"
+      ],
+      "raw_values": [
+        "C:\\\\users\\\\*",
+        "*.exe",
+        "*\\\\Teams.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.parent.executable like~ (\"*\\\\WINWORD.EXE\", \"*\\\\EXCEL.EXE\", \"*\\\\POWERPNT.exe\", \"*\\\\MSPUB.exe\", \"*\\\\VISIO.exe\", \"*\\\\MSACCESS.exe\", \"*\\\\EQNEDT32.exe\")) and process.executable:\"C:\\\\users\\\\*\" and process.executable:\"*.exe\") and (not process.executable:\"*\\\\Teams.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_office_spawn_exe_from_users_directory.eql",
+  "metadata": {}
+}

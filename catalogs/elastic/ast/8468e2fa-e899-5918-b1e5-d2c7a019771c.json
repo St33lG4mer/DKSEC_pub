@@ -1,0 +1,84 @@
+{
+  "id": "8468e2fa-e899-5918-b1e5-d2c7a019771c",
+  "catalog": "elastic",
+  "name": "AWS Service Quotas Multi-Region GetServiceQuota Requests",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": "==",
+      "values": [
+        "servicequotas.amazonaws.com"
+      ],
+      "raw_values": [
+        "servicequotas.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "getservicequota"
+      ],
+      "raw_values": [
+        "GetServiceQuota"
+      ]
+    },
+    {
+      "field": "esql.aws_cloudtrail_request_parameters_service_code",
+      "raw_field": "Esql.aws_cloudtrail_request_parameters_service_code",
+      "operator": "==",
+      "values": [
+        "ec2"
+      ],
+      "raw_values": [
+        "ec2"
+      ]
+    },
+    {
+      "field": "esql.aws_cloudtrail_request_parameters_quota_code",
+      "raw_field": "Esql.aws_cloudtrail_request_parameters_quota_code",
+      "operator": "==",
+      "values": [
+        "l-1216c47a"
+      ],
+      "raw_values": [
+        "L-1216C47A"
+      ]
+    }
+  ],
+  "raw_query": "from logs-aws.cloudtrail-* METADATA _id, _version, _index\n\n// filter for GetServiceQuota API calls\n| where\n  data_stream.dataset == \"aws.cloudtrail\"\n  and event.provider == \"servicequotas.amazonaws.com\"\n  and event.action == \"GetServiceQuota\"\n\n// truncate the timestamp to a 30-second window\n| eval Esql.time_window_date_trunc = date_trunc(30 seconds, @timestamp)\n\n// dissect request parameters to extract service and quota code\n| dissect aws.cloudtrail.request_parameters \"{%{?Esql.aws_cloudtrail_request_parameters_service_code_key}=%{Esql.aws_cloudtrail_request_parameters_service_code}, %{?quota_code_key}=%{Esql.aws_cloudtrail_request_parameters_quota_code}}\"\n\n// filter for EC2 service quota L-1216C47A (vCPU on-demand instances)\n| where Esql.aws_cloudtrail_request_parameters_service_code == \"ec2\" and Esql.aws_cloudtrail_request_parameters_quota_code == \"L-1216C47A\"\n\n// keep only the relevant fields\n| keep\n    Esql.time_window_date_trunc,\n    aws.cloudtrail.user_identity.arn,\n    cloud.region,\n    Esql.aws_cloudtrail_request_parameters_service_code,\n    Esql.aws_cloudtrail_request_parameters_quota_code,\n    aws.cloudtrail.request_parameters,\n    @timestamp, \n    aws.cloudtrail.user_identity.type, \n    aws.cloudtrail.user_identity.access_key_id, \n    source.ip, \n    cloud.account.id, \n    user_agent.original, \n    source.as.organization.name, \n    data_stream.namespace\n    \n// count the number of unique regions and total API calls within the time window\n| stats\n    Esql.cloud_region_count_distinct = count_distinct(cloud.region),\n    Esql.event_count = count(*),\n    Esql.aws_cloudtrail_request_parameters_values = VALUES(aws.cloudtrail.request_parameters),\n    Esql.event_timestamp_values = VALUES(@timestamp),\n    Esql.aws_cloudtrail_user_identity_type_values = VALUES(aws.cloudtrail.user_identity.type),\n    Esql.aws_cloudtrail_user_identity_access_key_id_values = VALUES(aws.cloudtrail.user_identity.access_key_id),\n    Esql.source_ip_values = VALUES(source.ip),\n    Esql.cloud_account_id_values = VALUES(cloud.account.id),\n    Esql.user_agent_original_values = VALUES(user_agent.original),\n    Esql.source_as_organization_name_values = VALUES(source.as.organization.name),\n    Esql.cloud_region_values = VALUES(cloud.region),\n    Esql.data_stream_namespace_values = VALUES(data_stream.namespace)\n  by Esql.time_window_date_trunc, aws.cloudtrail.user_identity.arn\n\n// filter for API calls in more than 10 regions within the 30-second window\n| where\n  Esql.cloud_region_count_distinct >= 10\n  and Esql.event_count >= 10\n",
+  "language": "esql",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/discovery_servicequotas_multi_region_service_quota_requests.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: AWS Service Quotas",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "b1c0e2d1-dc8a-5310-99e7-4752c953381d",
+  "catalog": "sigma",
+  "name": "registry_set_dbgmanageddebugger_persistence",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "\\\\microsoft\\\\.netframework\\\\dbgmanageddebugger"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\.NETFramework\\\\DbgManagedDebugger"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"*\\\\Microsoft\\\\.NETFramework\\\\DbgManagedDebugger\" and (not winlog.event_data.Details:\"\\\"C:\\\\Windows\\\\system32\\\\vsjitdebugger.exe\\\" PID %d APPDOM %d EXTEXT \\\"%s\\\" EVTHDL %d\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_dbgmanageddebugger_persistence.eql",
+  "metadata": {}
+}

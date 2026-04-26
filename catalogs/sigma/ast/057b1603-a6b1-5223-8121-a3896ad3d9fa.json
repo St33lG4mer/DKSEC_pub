@@ -1,0 +1,17 @@
+{
+  "id": "057b1603-a6b1-5223-8121-a3896ad3d9fa",
+  "catalog": "sigma",
+  "name": "proc_creation_win_hktl_invoke_obfuscation_var",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [],
+  "raw_query": "any where process.command_line:\"SigmaRegularExpression(regexp=SigmaString(['cmd.{0,5}(', <SpecialChars.WILDCARD_SINGLE: 2>, ':/c|/r)(', <SpecialChars.WILDCARD_SINGLE: 2>, ':\\\\s|)\\\\\\\"set\\\\s[a-zA-Z]{3,6}.', <SpecialChars.WILDCARD_MULTI: 1>, '(', <SpecialChars.WILDCARD_SINGLE: 2>, ':\\\\{\\\\d\\\\}){1,}\\\\\\\\\\\\\\\"\\\\s+', <SpecialChars.WILDCARD_SINGLE: 2>, '\\\\-f(', <SpecialChars.WILDCARD_SINGLE: 2>, ':.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\)){1,}.', <SpecialChars.WILDCARD_MULTI: 1>, '\\\\\\\"']), flags=set())\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_hktl_invoke_obfuscation_var.eql",
+  "metadata": {}
+}

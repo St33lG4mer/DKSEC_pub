@@ -1,0 +1,112 @@
+{
+  "id": "393da756-f27c-5bd2-8d65-93103d5eab7c",
+  "catalog": "elastic",
+  "name": "Potential Execution via FileFix Phishing Attack",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "pwsh.exe",
+        "powershell.exe",
+        "curl.exe",
+        "msiexec.exe",
+        "mshta.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "rundll32.exe",
+        "certutil.exe",
+        "certreq.exe"
+      ],
+      "raw_values": [
+        "pwsh.exe",
+        "powershell.exe",
+        "curl.exe",
+        "msiexec.exe",
+        "mshta.exe",
+        "wscript.exe",
+        "cscript.exe",
+        "rundll32.exe",
+        "certutil.exe",
+        "certreq.exe",
+        "?:\\\\Users\\\\*\\\\Downloads\\\\*"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": ":",
+      "values": [
+        "ndfapi.dll,ndfrundlldiagnosewithanswerfile",
+        "shwebsvc.dll,addnetplacerundll"
+      ],
+      "raw_values": [
+        "ndfapi.dll,NdfRunDllDiagnoseWithAnswerFile",
+        "shwebsvc.dll,AddNetPlaceRunDll"
+      ]
+    },
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.parent.args",
+      "raw_field": "process.parent.args",
+      "operator": "==",
+      "values": [
+        "--message-loop-type-ui",
+        "--service-sandbox-type=none"
+      ],
+      "raw_values": [
+        "--message-loop-type-ui",
+        "--service-sandbox-type=none"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type == \"windows\" and event.type == \"start\" and\n process.parent.args == \"--message-loop-type-ui\" and process.parent.args == \"--service-sandbox-type=none\" and\n (\n  process.name : (\"pwsh.exe\", \"powershell.exe\", \"curl.exe\", \"msiexec.exe\", \"mshta.exe\", \"wscript.exe\", \"cscript.exe\", \"rundll32.exe\", \"certutil.exe\", \"certreq.exe\") or\n  process.executable : \"?:\\\\Users\\\\*\\\\Downloads\\\\*\"\n  ) and\nnot (process.name : \"rundll32.exe\" and process.args : (\"ndfapi.dll,NdfRunDllDiagnoseWithAnswerFile\", \"shwebsvc.dll,AddNetPlaceRunDll\"))\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/execution_windows_phish_clickfix.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Execution",
+      "Tactic: Initial Access",
+      "Tactic: Defense Evasion",
+      "Data Source: Windows Security Event Logs",
+      "Data Source: Elastic Defend",
+      "Data Source: Sysmon",
+      "Data Source: SentinelOne",
+      "Data Source: Microsoft Defender for Endpoint",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "id": "8faf96ef-de48-54c5-8396-0527a55c6593",
+  "catalog": "sigma",
+  "name": "proc_creation_win_cmd_unusual_parent",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.parent.name",
+      "raw_field": "process.parent.executable",
+      "operator": "like~",
+      "values": [
+        "csrss.exe",
+        "ctfmon.exe",
+        "dllhost.exe",
+        "epad.exe",
+        "flashplayerupdateservice.exe",
+        "googleupdate.exe",
+        "jucheck.exe",
+        "jusched.exe",
+        "logonui.exe",
+        "lsass.exe",
+        "regsvr32.exe",
+        "searchindexer.exe",
+        "searchprotocolhost.exe",
+        "sihclient.exe",
+        "sihost.exe",
+        "slui.exe",
+        "spoolsv.exe",
+        "sppsvc.exe",
+        "taskhostw.exe",
+        "unsecapp.exe",
+        "werfault.exe",
+        "wermgr.exe",
+        "wlanext.exe",
+        "wudfhost.exe"
+      ],
+      "raw_values": [
+        "*\\\\csrss.exe",
+        "*\\\\ctfmon.exe",
+        "*\\\\dllhost.exe",
+        "*\\\\epad.exe",
+        "*\\\\FlashPlayerUpdateService.exe",
+        "*\\\\GoogleUpdate.exe",
+        "*\\\\jucheck.exe",
+        "*\\\\jusched.exe",
+        "*\\\\LogonUI.exe",
+        "*\\\\lsass.exe",
+        "*\\\\regsvr32.exe",
+        "*\\\\SearchIndexer.exe",
+        "*\\\\SearchProtocolHost.exe",
+        "*\\\\SIHClient.exe",
+        "*\\\\sihost.exe",
+        "*\\\\slui.exe",
+        "*\\\\spoolsv.exe",
+        "*\\\\sppsvc.exe",
+        "*\\\\taskhostw.exe",
+        "*\\\\unsecapp.exe",
+        "*\\\\WerFault.exe",
+        "*\\\\wermgr.exe",
+        "*\\\\wlanext.exe",
+        "*\\\\WUDFHost.exe"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "cmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\cmd.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\cmd.exe\" and (process.parent.executable like~ (\"*\\\\csrss.exe\", \"*\\\\ctfmon.exe\", \"*\\\\dllhost.exe\", \"*\\\\epad.exe\", \"*\\\\FlashPlayerUpdateService.exe\", \"*\\\\GoogleUpdate.exe\", \"*\\\\jucheck.exe\", \"*\\\\jusched.exe\", \"*\\\\LogonUI.exe\", \"*\\\\lsass.exe\", \"*\\\\regsvr32.exe\", \"*\\\\SearchIndexer.exe\", \"*\\\\SearchProtocolHost.exe\", \"*\\\\SIHClient.exe\", \"*\\\\sihost.exe\", \"*\\\\slui.exe\", \"*\\\\spoolsv.exe\", \"*\\\\sppsvc.exe\", \"*\\\\taskhostw.exe\", \"*\\\\unsecapp.exe\", \"*\\\\WerFault.exe\", \"*\\\\wermgr.exe\", \"*\\\\wlanext.exe\", \"*\\\\WUDFHost.exe\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_cmd_unusual_parent.eql",
+  "metadata": {}
+}

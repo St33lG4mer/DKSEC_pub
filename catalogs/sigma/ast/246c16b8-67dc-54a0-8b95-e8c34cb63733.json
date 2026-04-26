@@ -1,0 +1,50 @@
+{
+  "id": "246c16b8-67dc-54a0-8b95-e8c34cb63733",
+  "catalog": "sigma",
+  "name": "proc_creation_win_susp_privilege_escalation_cli_patterns",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "-u system",
+        "--user system",
+        "-u nt",
+        "-c cmd",
+        "powershell",
+        "--command cmd",
+        "--command powershell",
+        "-c whoami",
+        "-c wscript",
+        "-c cscript"
+      ],
+      "raw_values": [
+        "* -u system *",
+        "* --user system *",
+        "* -u NT*",
+        "* -u \\",
+        ", ",
+        "* -c cmd*",
+        "* -c \\",
+        "powershell*",
+        "* --command cmd*",
+        "* --command powershell*",
+        "* -c whoami*",
+        "* -c wscript*",
+        "* -c cscript*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.command_line like~ (\"* -u system *\", \"* --user system *\", \"* -u NT*\", \"* -u \\\"NT*\", \"* -u 'NT*\", \"* --system *\", \"* -u administrator *\")) and (process.command_line like~ (\"* -c cmd*\", \"* -c \\\"cmd*\", \"* -c powershell*\", \"* -c \\\"powershell*\", \"* --command cmd*\", \"* --command powershell*\", \"* -c whoami*\", \"* -c wscript*\", \"* -c cscript*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_susp_privilege_escalation_cli_patterns.eql",
+  "metadata": {}
+}

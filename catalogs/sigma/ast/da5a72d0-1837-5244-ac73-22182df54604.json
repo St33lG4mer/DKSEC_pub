@@ -1,0 +1,52 @@
+{
+  "id": "da5a72d0-1837-5244-ac73-22182df54604",
+  "catalog": "sigma",
+  "name": "proc_creation_win_office_winword_dll_load",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "*\\\\WINWORD.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "winword.exe"
+      ],
+      "raw_values": [
+        "WinWord.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".dll"
+      ],
+      "raw_values": [
+        "*/l *",
+        "*.dll*"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\WINWORD.exe\" or process.pe.original_file_name:\"WinWord.exe\") and (process.command_line:\"*/l *\" and process.command_line:\"*.dll*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_office_winword_dll_load.eql",
+  "metadata": {}
+}

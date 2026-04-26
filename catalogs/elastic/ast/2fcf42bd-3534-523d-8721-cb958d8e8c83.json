@@ -1,0 +1,113 @@
+{
+  "id": "2fcf42bd-3534-523d-8721-cb958d8e8c83",
+  "catalog": "elastic",
+  "name": "Kubectl Secrets Enumeration Across All Namespaces",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "in",
+      "values": [
+        "linux",
+        "macos"
+      ],
+      "raw_values": [
+        "linux",
+        "macos"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "in",
+      "values": [
+        "exec",
+        "exec_event",
+        "start",
+        "processrollup2",
+        "executed",
+        "process_started"
+      ],
+      "raw_values": [
+        "exec",
+        "exec_event",
+        "start",
+        "ProcessRollup2",
+        "executed",
+        "process_started"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.args",
+      "operator": "in",
+      "values": [
+        "get",
+        "describe",
+        "secret",
+        "secrets",
+        "--all-namespaces"
+      ],
+      "raw_values": [
+        "get",
+        "describe",
+        "secret",
+        "secrets",
+        "--all-namespaces",
+        "-A"
+      ]
+    },
+    {
+      "field": "event.type",
+      "raw_field": "event.type",
+      "operator": "==",
+      "values": [
+        "start"
+      ],
+      "raw_values": [
+        "start"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": "==",
+      "values": [
+        "kubectl"
+      ],
+      "raw_values": [
+        "kubectl"
+      ]
+    }
+  ],
+  "raw_query": "process where host.os.type in (\"linux\", \"macos\") and event.type == \"start\" and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\", \"executed\", \"process_started\") and\nprocess.name == \"kubectl\" and process.args in (\"get\", \"describe\") and process.args in (\"secret\", \"secrets\") and\nprocess.args in (\"--all-namespaces\", \"-A\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/cross-platform/discovery_kubectl_secrets_all_namespaces.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "Domain: Container",
+      "Domain: Kubernetes",
+      "OS: Linux",
+      "OS: macOS",
+      "Use Case: Threat Detection",
+      "Tactic: Discovery",
+      "Tactic: Credential Access",
+      "Data Source: Elastic Defend",
+      "Data Source: Elastic Endgame",
+      "Data Source: Auditd Manager",
+      "Data Source: Crowdstrike",
+      "Data Source: SentinelOne",
+      "Data Source: Elastic Defend for Containers",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

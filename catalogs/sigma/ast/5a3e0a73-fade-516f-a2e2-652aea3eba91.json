@@ -1,0 +1,59 @@
+{
+  "id": "5a3e0a73-fade-516f-a2e2-652aea3eba91",
+  "catalog": "sigma",
+  "name": "proc_creation_win_malware_conti_ransomware_database_dump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "sqlcmd",
+        "sqlcmd.exe",
+        "sys.sysprocesses",
+        "master.dbo.sysdatabases",
+        "backup database"
+      ],
+      "raw_values": [
+        "*sqlcmd *",
+        "*sqlcmd.exe*",
+        "*sys.sysprocesses*",
+        "*master.dbo.sysdatabases*",
+        "*BACKUP DATABASE*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "sqlcmd.exe"
+      ],
+      "raw_values": [
+        "*\\\\sqlcmd.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "-s localhost"
+      ],
+      "raw_values": [
+        "* -S localhost *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\sqlcmd.exe\" or (process.command_line like~ (\"*sqlcmd *\", \"*sqlcmd.exe*\"))) and process.command_line:\"* -S localhost *\" and (process.command_line like~ (\"*sys.sysprocesses*\", \"*master.dbo.sysdatabases*\", \"*BACKUP DATABASE*\"))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2021/Malware/Conti/proc_creation_win_malware_conti_ransomware_database_dump.eql",
+  "metadata": {}
+}

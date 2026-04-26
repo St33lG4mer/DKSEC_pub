@@ -1,0 +1,74 @@
+{
+  "id": "f0afb2f8-8c26-5d9b-91f2-576f0276b32c",
+  "catalog": "sigma",
+  "name": "proc_creation_win_control_panel_item",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": "like~",
+      "values": [
+        "%system%",
+        "system32|"
+      ],
+      "raw_values": [
+        "*\\\\System32\\\\*",
+        "*%System%*",
+        "*|C:\\\\Windows\\\\system32|*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "cpls",
+        ".cpl",
+        "regsvr32",
+        "igfxcpl.cpl"
+      ],
+      "raw_values": [
+        "*add*",
+        "*CurrentVersion\\\\Control Panel\\\\CPLs*",
+        "*.cpl",
+        "*regsvr32 *",
+        "* /s *",
+        "*igfxCPL.cpl*"
+      ]
+    }
+  ],
+  "raw_query": "any where ((process.executable:\"*\\\\reg.exe\" or process.pe.original_file_name:\"reg.exe\") and (process.command_line:\"*add*\" and process.command_line:\"*CurrentVersion\\\\Control Panel\\\\CPLs*\")) or (process.command_line:\"*.cpl\" and (not ((process.command_line like~ (\"*\\\\System32\\\\*\", \"*%System%*\", \"*|C:\\\\Windows\\\\system32|*\")) or (process.command_line:\"*regsvr32 *\" and process.command_line:\"* /s *\" and process.command_line:\"*igfxCPL.cpl*\"))))",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_control_panel_item.eql",
+  "metadata": {}
+}

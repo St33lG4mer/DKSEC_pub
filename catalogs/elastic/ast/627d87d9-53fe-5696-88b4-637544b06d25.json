@@ -1,0 +1,142 @@
+{
+  "id": "627d87d9-53fe-5696-88b4-637544b06d25",
+  "catalog": "elastic",
+  "name": "Google Workspace Drive Encryption Key(s) Accessed from Anonymous User",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "copy",
+        "view",
+        "download"
+      ],
+      "raw_values": [
+        "copy",
+        "view",
+        "download"
+      ]
+    },
+    {
+      "field": "file.extension",
+      "raw_field": "file.extension",
+      "operator": ":",
+      "values": [
+        "token",
+        "assig",
+        "pssc",
+        "keystore",
+        "pub",
+        "pgp.asc",
+        "ps1xml",
+        "pem",
+        "gpg.sig",
+        "der",
+        "key",
+        "p7r",
+        "p12",
+        "asc",
+        "jks",
+        "p7b",
+        "signature",
+        "gpg",
+        "pgp.sig",
+        "sst",
+        "pgp",
+        "gpgz",
+        "pfx",
+        "crt",
+        "sig",
+        "pkcs7",
+        "jceks",
+        "pkcs8",
+        "psc1",
+        "p7c",
+        "csr",
+        "cer",
+        "spc",
+        "ps2xml"
+      ],
+      "raw_values": [
+        "token",
+        "assig",
+        "pssc",
+        "keystore",
+        "pub",
+        "pgp.asc",
+        "ps1xml",
+        "pem",
+        "gpg.sig",
+        "der",
+        "key",
+        "p7r",
+        "p12",
+        "asc",
+        "jks",
+        "p7b",
+        "signature",
+        "gpg",
+        "pgp.sig",
+        "sst",
+        "pgp",
+        "gpgz",
+        "pfx",
+        "crt",
+        "p8",
+        "sig",
+        "pkcs7",
+        "jceks",
+        "pkcs8",
+        "psc1",
+        "p7c",
+        "csr",
+        "cer",
+        "spc",
+        "ps2xml"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "google_workspace.drive"
+      ],
+      "raw_values": [
+        "google_workspace.drive"
+      ]
+    },
+    {
+      "field": "google_workspace.drive.visibility",
+      "raw_field": "google_workspace.drive.visibility",
+      "operator": ":",
+      "values": [
+        "people_with_link"
+      ],
+      "raw_values": [
+        "people_with_link"
+      ]
+    }
+  ],
+  "raw_query": "file where data_stream.dataset == \"google_workspace.drive\" and event.action : (\"copy\", \"view\", \"download\") and\n    google_workspace.drive.visibility: \"people_with_link\" and source.user.email == \"\" and\n    file.extension: (\n        \"token\",\"assig\", \"pssc\", \"keystore\", \"pub\", \"pgp.asc\", \"ps1xml\", \"pem\", \"gpg.sig\", \"der\", \"key\",\n        \"p7r\", \"p12\", \"asc\", \"jks\", \"p7b\", \"signature\", \"gpg\", \"pgp.sig\", \"sst\", \"pgp\", \"gpgz\", \"pfx\", \"crt\",\n        \"p8\", \"sig\", \"pkcs7\", \"jceks\", \"pkcs8\", \"psc1\", \"p7c\", \"csr\", \"cer\", \"spc\", \"ps2xml\")\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/integrations/google_workspace/credential_access_google_workspace_drive_encryption_key_accessed_by_anonymous_user.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: Google Workspace",
+      "Use Case: Configuration Audit",
+      "Tactic: Credential Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

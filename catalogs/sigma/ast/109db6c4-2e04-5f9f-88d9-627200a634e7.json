@@ -1,0 +1,40 @@
+{
+  "id": "109db6c4-2e04-5f9f-88d9-627200a634e7",
+  "catalog": "sigma",
+  "name": "file_event_win_office_outlook_macro_creation",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "file"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "outlook.exe"
+      ],
+      "raw_values": [
+        "*\\\\outlook.exe"
+      ]
+    },
+    {
+      "field": "file.path",
+      "raw_field": "file.path",
+      "operator": ":",
+      "values": [
+        "vbaproject.otm"
+      ],
+      "raw_values": [
+        "*\\\\Microsoft\\\\Outlook\\\\VbaProject.OTM"
+      ]
+    }
+  ],
+  "raw_query": "any where process.executable:\"*\\\\outlook.exe\" and file.path:\"*\\\\Microsoft\\\\Outlook\\\\VbaProject.OTM\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/file/file_event/file_event_win_office_outlook_macro_creation.eql",
+  "metadata": {}
+}

@@ -1,0 +1,25 @@
+{
+  "id": "f2f0179e-9d32-5c0e-8d5c-aea1fc137d50",
+  "catalog": "elastic",
+  "name": "Multiple Okta Sessions Detected for a Single User",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "data_stream.dataset:okta.system\n    and okta.event_type:user.session.start\n    and okta.authentication_context.external_session_id:*\n    and not (okta.actor.id: okta* or okta.actor.display_name: okta*)\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/okta/lateral_movement_multiple_sessions_for_single_user.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Data Source: Okta",
+      "Tactic: Lateral Movement",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "id": "96eb564d-b66b-5b16-80d1-3a858ec19745",
+  "catalog": "elastic",
+  "name": "FortiGate SSO Login Followed by Administrator Account Creation",
+  "description": "",
+  "severity": "critical",
+  "mitre_techniques": [],
+  "event_categories": [
+    "network"
+  ],
+  "conditions": [
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": "==",
+      "values": [
+        "fortinet_fortigate.log"
+      ],
+      "raw_values": [
+        "fortinet_fortigate.log"
+      ]
+    },
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": "==",
+      "values": [
+        "login"
+      ],
+      "raw_values": [
+        "login"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": "==",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.method",
+      "raw_field": "fortinet.firewall.method",
+      "operator": "==",
+      "values": [
+        "sso"
+      ],
+      "raw_values": [
+        "sso"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.ui",
+      "raw_field": "fortinet.firewall.ui",
+      "operator": "like~",
+      "values": [
+        "sso"
+      ],
+      "raw_values": [
+        "sso*"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": "==",
+      "values": [
+        "0100044547"
+      ],
+      "raw_values": [
+        "0100044547"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.cfgpath",
+      "raw_field": "fortinet.firewall.cfgpath",
+      "operator": "==",
+      "values": [
+        "system.admin"
+      ],
+      "raw_values": [
+        "system.admin"
+      ]
+    },
+    {
+      "field": "fortinet.firewall.action",
+      "raw_field": "fortinet.firewall.action",
+      "operator": "==",
+      "values": [
+        "add"
+      ],
+      "raw_values": [
+        "Add"
+      ]
+    }
+  ],
+  "raw_query": "sequence by observer.name with maxspan=15m\n  [authentication where data_stream.dataset == \"fortinet_fortigate.log\" and\n    event.action == \"login\" and event.outcome == \"success\" and\n    (fortinet.firewall.method == \"sso\" or fortinet.firewall.ui like~ \"sso*\")]\n  [any where data_stream.dataset == \"fortinet_fortigate.log\" and\n    event.code == \"0100044547\" and\n    fortinet.firewall.cfgpath == \"system.admin\" and\n    fortinet.firewall.action == \"Add\"]\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/network/persistence_fortigate_sso_login_followed_by_admin_creation.toml",
+  "metadata": {
+    "risk_score": 73,
+    "tags": [
+      "Use Case: Threat Detection",
+      "Tactic: Persistence",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide",
+      "Domain: Network",
+      "Domain: Identity",
+      "Data Source: Fortinet",
+      "Data Source: Fortinet FortiGate"
+    ]
+  }
+}

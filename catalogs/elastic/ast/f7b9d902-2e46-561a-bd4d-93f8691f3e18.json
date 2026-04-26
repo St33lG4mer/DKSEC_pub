@@ -1,0 +1,105 @@
+{
+  "id": "f7b9d902-2e46-561a-bd4d-93f8691f3e18",
+  "catalog": "elastic",
+  "name": "AWS S3 Unauthenticated Bucket Access by Rare Source",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "event.action",
+      "raw_field": "event.action",
+      "operator": ":",
+      "values": [
+        "getobject",
+        "putobject",
+        "listobjects",
+        "deleteobject",
+        "listbucket"
+      ],
+      "raw_values": [
+        "GetObject",
+        "PutObject",
+        "ListObjects",
+        "DeleteObject",
+        "ListBucket"
+      ]
+    },
+    {
+      "field": "aws.cloudtrail.user_identity.type",
+      "raw_field": "aws.cloudtrail.user_identity.type",
+      "operator": ":",
+      "values": [
+        "awsaccount",
+        "unknown"
+      ],
+      "raw_values": [
+        "AWSAccount",
+        "Unknown"
+      ]
+    },
+    {
+      "field": "data_stream.dataset",
+      "raw_field": "data_stream.dataset",
+      "operator": ":",
+      "values": [
+        "aws.cloudtrail"
+      ],
+      "raw_values": [
+        "aws.cloudtrail"
+      ]
+    },
+    {
+      "field": "event.provider",
+      "raw_field": "event.provider",
+      "operator": ":",
+      "values": [
+        "s3.amazonaws.com"
+      ],
+      "raw_values": [
+        "s3.amazonaws.com"
+      ]
+    },
+    {
+      "field": "event.outcome",
+      "raw_field": "event.outcome",
+      "operator": ":",
+      "values": [
+        "success"
+      ],
+      "raw_values": [
+        "success"
+      ]
+    },
+    {
+      "field": "cloud.account.id",
+      "raw_field": "cloud.account.id",
+      "operator": ":",
+      "values": [
+        "anonymous"
+      ],
+      "raw_values": [
+        "anonymous"
+      ]
+    }
+  ],
+  "raw_query": "data_stream.dataset: \"aws.cloudtrail\"\n    and event.provider: \"s3.amazonaws.com\"\n    and event.action: (\n        \"GetObject\" or\n        \"PutObject\" or\n        \"ListObjects\" or\n        \"DeleteObject\" or\n        \"ListBucket\")\n    and event.outcome: \"success\"\n    and aws.cloudtrail.user_identity.type: (\"AWSAccount\" or \"Unknown\")\n    and cloud.account.id: \"anonymous\"\n",
+  "language": "kuery",
+  "translated_query": null,
+  "source_path": "rules/integrations/aws/collection_s3_unauthenticated_bucket_access_by_rare_source.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Cloud",
+      "Data Source: AWS",
+      "Data Source: Amazon Web Services",
+      "Data Source: Amazon S3",
+      "Use Case: Asset Visibility",
+      "Resources: Investigation Guide",
+      "Tactic: Collection"
+    ]
+  }
+}

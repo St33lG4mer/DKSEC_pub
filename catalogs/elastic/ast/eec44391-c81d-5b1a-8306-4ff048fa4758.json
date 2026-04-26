@@ -1,0 +1,61 @@
+{
+  "id": "eec44391-c81d-5b1a-8306-4ff048fa4758",
+  "catalog": "elastic",
+  "name": "Potential Windows Session Hijacking via CcmExec",
+  "description": "",
+  "severity": "high",
+  "mitre_techniques": [],
+  "event_categories": [
+    "library"
+  ],
+  "conditions": [
+    {
+      "field": "host.os.type",
+      "raw_field": "host.os.type",
+      "operator": "==",
+      "values": [
+        "windows"
+      ],
+      "raw_values": [
+        "windows"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.name",
+      "operator": ":",
+      "values": [
+        "scnotification.exe"
+      ],
+      "raw_values": [
+        "SCNotification.exe"
+      ]
+    },
+    {
+      "field": "dll.code_signature.status",
+      "raw_field": "dll.code_signature.status",
+      "operator": "!=",
+      "values": [
+        "trusted"
+      ],
+      "raw_values": [
+        "trusted"
+      ]
+    }
+  ],
+  "raw_query": "library where host.os.type == \"windows\" and process.name : \"SCNotification.exe\" and\n  (dll.Ext.relative_file_creation_time < 86400 or dll.Ext.relative_file_name_modify_time <= 500) and dll.code_signature.status != \"trusted\"\n",
+  "language": "eql",
+  "translated_query": null,
+  "source_path": "rules/windows/defense_evasion_sccm_scnotification_dll.toml",
+  "metadata": {
+    "risk_score": 47,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Tactic: Defense Evasion",
+      "Data Source: Elastic Defend",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

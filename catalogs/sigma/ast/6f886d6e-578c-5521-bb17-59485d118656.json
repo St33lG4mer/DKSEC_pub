@@ -1,0 +1,37 @@
+{
+  "id": "6f886d6e-578c-5521-bb17-59485d118656",
+  "catalog": "sigma",
+  "name": "pipe_created_apt_turla_named_pipes",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [
+    {
+      "field": "file.name",
+      "raw_field": "file.name",
+      "operator": "like~",
+      "values": [
+        "atctl",
+        "comnap",
+        "iehelper",
+        "sdlrpc",
+        "userpipe"
+      ],
+      "raw_values": [
+        "\\\\atctl",
+        "\\\\comnap",
+        "\\\\iehelper",
+        "\\\\sdlrpc",
+        "\\\\userpipe"
+      ]
+    }
+  ],
+  "raw_query": "any where file.name like~ (\"\\\\atctl\", \"\\\\comnap\", \"\\\\iehelper\", \"\\\\sdlrpc\", \"\\\\userpipe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules-emerging-threats/2017/TA/Turla/pipe_created_apt_turla_named_pipes.eql",
+  "metadata": {}
+}

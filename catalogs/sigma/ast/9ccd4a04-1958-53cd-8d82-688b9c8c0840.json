@@ -1,0 +1,40 @@
+{
+  "id": "9ccd4a04-1958-53cd-8d82-688b9c8c0840",
+  "catalog": "sigma",
+  "name": "win_appxdeployment_server_applocker_block",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "builtin"
+  ],
+  "conditions": [
+    {
+      "field": "winlog.channel",
+      "raw_field": "winlog.channel",
+      "operator": ":",
+      "values": [
+        "microsoft-windows-appxdeploymentserver/operational"
+      ],
+      "raw_values": [
+        "Microsoft-Windows-AppXDeploymentServer/Operational"
+      ]
+    },
+    {
+      "field": "event.code",
+      "raw_field": "event.code",
+      "operator": ":",
+      "values": [
+        "412"
+      ],
+      "raw_values": [
+        "412"
+      ]
+    }
+  ],
+  "raw_query": "any where winlog.channel:\"Microsoft-Windows-AppXDeploymentServer/Operational\" and event.code:\"412\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/builtin/appxdeployment_server/win_appxdeployment_server_applocker_block.eql",
+  "metadata": {}
+}

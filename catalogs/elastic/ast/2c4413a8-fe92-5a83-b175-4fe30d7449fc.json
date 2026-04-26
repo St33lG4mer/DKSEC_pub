@@ -1,0 +1,28 @@
+{
+  "id": "2c4413a8-fe92-5a83-b175-4fe30d7449fc",
+  "catalog": "elastic",
+  "name": "Unusual Windows Service",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/persistence_ml_windows_anomalous_service.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Domain: Endpoint",
+      "OS: Windows",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Persistence",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

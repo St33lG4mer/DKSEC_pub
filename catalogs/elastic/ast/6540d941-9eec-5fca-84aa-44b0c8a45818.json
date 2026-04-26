@@ -1,0 +1,27 @@
+{
+  "id": "6540d941-9eec-5fca-84aa-44b0c8a45818",
+  "catalog": "elastic",
+  "name": "Unusual Source IP for a User to Logon from",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "any"
+  ],
+  "conditions": [],
+  "raw_query": "",
+  "language": "",
+  "translated_query": null,
+  "source_path": "rules/ml/initial_access_ml_auth_rare_source_ip_for_a_user.toml",
+  "metadata": {
+    "risk_score": 21,
+    "tags": [
+      "Use Case: Identity and Access Audit",
+      "Use Case: Threat Detection",
+      "Rule Type: ML",
+      "Rule Type: Machine Learning",
+      "Tactic: Initial Access",
+      "Resources: Investigation Guide"
+    ]
+  }
+}

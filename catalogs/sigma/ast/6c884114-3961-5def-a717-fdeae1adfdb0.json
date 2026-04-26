@@ -1,0 +1,40 @@
+{
+  "id": "6c884114-3961-5def-a717-fdeae1adfdb0",
+  "catalog": "sigma",
+  "name": "dns_query_win_hybridconnectionmgr_servicebus",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "dns"
+  ],
+  "conditions": [
+    {
+      "field": "dns.question.name",
+      "raw_field": "dns.question.name",
+      "operator": ":",
+      "values": [
+        "servicebus.windows.net"
+      ],
+      "raw_values": [
+        "*servicebus.windows.net*"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "hybridconnectionmanager"
+      ],
+      "raw_values": [
+        "*HybridConnectionManager*"
+      ]
+    }
+  ],
+  "raw_query": "any where dns.question.name:\"*servicebus.windows.net*\" and process.executable:\"*HybridConnectionManager*\"",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/dns_query/dns_query_win_hybridconnectionmgr_servicebus.eql",
+  "metadata": {}
+}

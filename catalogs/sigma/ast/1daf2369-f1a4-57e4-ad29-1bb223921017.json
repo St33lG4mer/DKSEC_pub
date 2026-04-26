@@ -1,0 +1,40 @@
+{
+  "id": "1daf2369-f1a4-57e4-ad29-1bb223921017",
+  "catalog": "sigma",
+  "name": "registry_set_fax_change_service_user",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "registry"
+  ],
+  "conditions": [
+    {
+      "field": "registry.path",
+      "raw_field": "registry.path",
+      "operator": ":",
+      "values": [
+        "hklm\\\\system\\\\currentcontrolset\\\\services\\\\fax\\\\objectname"
+      ],
+      "raw_values": [
+        "HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\Fax\\\\ObjectName"
+      ]
+    },
+    {
+      "field": "registry.data.strings",
+      "raw_field": "winlog.event_data.Details",
+      "operator": ":",
+      "values": [
+        "networkservice"
+      ],
+      "raw_values": [
+        "*NetworkService*"
+      ]
+    }
+  ],
+  "raw_query": "any where registry.path:\"HKLM\\\\System\\\\CurrentControlSet\\\\Services\\\\Fax\\\\ObjectName\" and (not winlog.event_data.Details:\"*NetworkService*\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/registry/registry_set/registry_set_fax_change_service_user.eql",
+  "metadata": {}
+}

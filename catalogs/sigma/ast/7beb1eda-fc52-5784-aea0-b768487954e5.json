@@ -1,0 +1,57 @@
+{
+  "id": "7beb1eda-fc52-5784-aea0-b768487954e5",
+  "catalog": "sigma",
+  "name": "proc_creation_win_renamed_createdump",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.pe.original_file_name",
+      "raw_field": "process.pe.original_file_name",
+      "operator": ":",
+      "values": [
+        "fx_ver_internalname_str"
+      ],
+      "raw_values": [
+        "FX_VER_INTERNALNAME_STR"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        ".dmp",
+        "--full",
+        "--name"
+      ],
+      "raw_values": [
+        "* -u *",
+        "* -f *",
+        "*.dmp*",
+        "* --full *",
+        "* --name *"
+      ]
+    },
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "createdump.exe"
+      ],
+      "raw_values": [
+        "*\\\\createdump.exe"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.pe.original_file_name:\"FX_VER_INTERNALNAME_STR\" or ((process.command_line:\"* -u *\" and process.command_line:\"* -f *\" and process.command_line:\"*.dmp*\") or (process.command_line:\"* --full *\" and process.command_line:\"* --name *\" and process.command_line:\"*.dmp*\"))) and (not process.executable:\"*\\\\createdump.exe\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_renamed_createdump.eql",
+  "metadata": {}
+}

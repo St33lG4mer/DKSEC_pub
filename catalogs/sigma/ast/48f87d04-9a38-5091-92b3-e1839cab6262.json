@@ -1,0 +1,43 @@
+{
+  "id": "48f87d04-9a38-5091-92b3-e1839cab6262",
+  "catalog": "sigma",
+  "name": "proc_creation_win_reg_service_imagepath_change",
+  "description": "",
+  "severity": "medium",
+  "mitre_techniques": [],
+  "event_categories": [
+    "process"
+  ],
+  "conditions": [
+    {
+      "field": "process.name",
+      "raw_field": "process.executable",
+      "operator": ":",
+      "values": [
+        "reg.exe"
+      ],
+      "raw_values": [
+        "*\\\\reg.exe"
+      ]
+    },
+    {
+      "field": "process.command_line",
+      "raw_field": "process.command_line",
+      "operator": ":",
+      "values": [
+        "add",
+        "imagepath"
+      ],
+      "raw_values": [
+        "*add *",
+        "*SYSTEM\\\\CurrentControlSet\\\\Services\\\\*",
+        "* ImagePath *"
+      ]
+    }
+  ],
+  "raw_query": "any where (process.executable:\"*\\\\reg.exe\" and (process.command_line:\"*add *\" and process.command_line:\"*SYSTEM\\\\CurrentControlSet\\\\Services\\\\*\" and process.command_line:\"* ImagePath *\")) and process.command_line like~ (\"* -d *\", \"* /d *\", \"* –d *\", \"* —d *\", \"* ―d *\")",
+  "language": "sigma",
+  "translated_query": null,
+  "source_path": "rules/windows/process_creation/proc_creation_win_reg_service_imagepath_change.eql",
+  "metadata": {}
+}
