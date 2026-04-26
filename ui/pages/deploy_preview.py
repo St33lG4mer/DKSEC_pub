@@ -31,9 +31,14 @@ if len(catalogs) < 2:
     st.stop()
 
 with st.sidebar:
-    catalog_a = st.selectbox("Source catalog", catalogs, index=0)
+    _SIEM_CATALOGS = {"elastic", "sentinel", "splunk", "qradar", "chronicle"}
+    non_siem = [c for c in catalogs if c not in _SIEM_CATALOGS]
+    src_idx = catalogs.index(non_siem[0]) if non_siem else 0
+    catalog_a = st.selectbox("Source ruleset", catalogs, index=src_idx,
+                              help="External ruleset (e.g. Sigma)")
     remaining = [c for c in catalogs if c != catalog_a]
-    catalog_b = st.selectbox("Target SIEM catalog", remaining if remaining else catalogs)
+    catalog_b = st.selectbox("Target SIEM catalog", remaining if remaining else catalogs,
+                              help="Your SIEM (e.g. Elastic)")
 
 decisions = result_store.load_decisions(catalog_a, catalog_b)
 unique_dicts = result_store.load_unique(catalog_a, catalog_b)

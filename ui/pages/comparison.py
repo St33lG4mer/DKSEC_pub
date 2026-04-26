@@ -26,6 +26,16 @@ store = RuleStore(_CATALOGS_DIR)
 result_store = ResultStore(_OUTPUT_DIR)
 catalogs = store.list_catalogs()
 
+# Prefer non-SIEM catalogs as source (catalog_a). SIEMs are the comparison target.
+_SIEM_CATALOGS = {"elastic", "sentinel", "splunk", "qradar", "chronicle"}
+
+def _default_source(cats: list[str]) -> int:
+    """Return index of the best default source catalog (non-SIEM first)."""
+    for i, c in enumerate(cats):
+        if c not in _SIEM_CATALOGS:
+            return i
+    return 0
+
 if len(catalogs) < 2:
     st.warning(
         "Need at least 2 catalogs loaded.  \n"
@@ -35,10 +45,12 @@ if len(catalogs) < 2:
 
 with st.sidebar:
     st.markdown("**Comparison settings**")
-    catalog_a = st.selectbox("Catalog A (source)", catalogs, index=0, key="cmp_a")
+    src_idx = _default_source(catalogs)
+    catalog_a = st.selectbox("Source ruleset", catalogs, index=src_idx, key="cmp_a",
+                              help="External ruleset to evaluate (e.g. Sigma)")
     remaining = [c for c in catalogs if c != catalog_a]
-    catalog_b = st.selectbox("Catalog B (target)", remaining if remaining else catalogs,
-                              key="cmp_b")
+    catalog_b = st.selectbox("Target SIEM", remaining if remaining else catalogs,
+                              key="cmp_b", help="Your SIEM's existing ruleset (e.g. Elastic)")
     threshold = st.slider("Jaccard threshold", 0.05, 0.80, 0.15, 0.05)
     run_id = None
     runs = result_store.list_alert_runs()
@@ -80,7 +92,7 @@ st.caption(f"Confidence: **{result.confidence}**")
 st.divider()
 
 # Unique rules table
-st.markdown(f"### {catalog_a.title()} Rules to Add ({len(result.unique_a)})")
+st.markdown(f"### {catalog_a.title()} rules NOT in {catalog_b.title()} — add these ({len(result.unique_a)})")
 if result.unique_a:
     sev_filter = st.multiselect(
         "Filter by severity", ["critical", "high", "medium", "low"],

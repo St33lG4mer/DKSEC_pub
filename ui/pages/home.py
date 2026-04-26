@@ -45,8 +45,12 @@ st.divider()
 # Comparison summary (if at least 2 catalogs)
 if len(catalogs) >= 2:
     st.markdown("### Comparison Results")
-    catalog_a = catalogs[0]
-    catalog_b = catalogs[1]
+    _SIEM_CATALOGS = {"elastic", "sentinel", "splunk", "qradar", "chronicle"}
+    # Source = non-SIEM; target = SIEM
+    non_siem = [c for c in catalogs if c not in _SIEM_CATALOGS]
+    siem = [c for c in catalogs if c in _SIEM_CATALOGS]
+    catalog_a = non_siem[0] if non_siem else catalogs[0]
+    catalog_b = siem[0] if siem else catalogs[1]
     decisions = result_store.load_decisions(catalog_a, catalog_b)
 
     if decisions:
