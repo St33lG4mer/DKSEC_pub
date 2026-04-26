@@ -50,16 +50,30 @@ for other in catalogs:
     for pair in result_store.load_overlaps(catalog, other):
         overlap_ids.add(pair.get("rule_a_id", ""))
 
-# Score rules
-raw_scores = [score_rule(r, r.id in overlap_ids, 0) for r in rules]
+# Load alert fire counts from the most recent run (if available)
+alert_fire_counts: dict[str, int] = {}
+runs = result_store.list_alert_runs()
+if runs:
+    latest_alerts = result_store.load_alerts(runs[-1])
+    for alert in latest_alerts:
+        rule_id = alert.get("rule_id", "")
+        if rule_id:
+            alert_fire_counts[rule_id] = alert_fire_counts.get(rule_id, 0) + 1
+
+# Score rules using actual alert data where available
+raw_scores = [
+    score_rule(r, r.id in overlap_ids, alert_fire_counts.get(r.id, 0))
+    for r in rules
+]
 norm_scores = normalize_scores(raw_scores)
 
+has_alert_data = bool(runs)
 rows = [
     {
         "Name": r.name,
         "Severity": r.severity,
         "Score": round(ns, 1),
-        "Class": classify_rule(0, r.severity),
+        "Class": classify_rule(alert_fire_counts.get(r.id, 0), r.severity) if has_alert_data else "N/A",
         "MITRE": ", ".join(r.mitre_techniques[:2]),
         "Overlap": "⚠️ overlap" if r.id in overlap_ids else "✅ unique",
     }
@@ -71,4 +85,6 @@ if sev_filter:
 df = df.sort_values("Score", ascending=False)
 
 st.caption(f"Scoring **{len(df)}** rules from **{catalog}**")
+if not has_alert_data:
+    st.caption("💡 Run `dksec attack` to enable alert-based classification and scoring.")
 st.dataframe(df, use_container_width=True, hide_index=True)
