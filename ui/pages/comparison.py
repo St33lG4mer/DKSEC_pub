@@ -52,7 +52,7 @@ with st.sidebar:
     remaining = [c for c in catalogs if c != catalog_a]
     catalog_b = st.selectbox("Target SIEM", remaining if remaining else catalogs,
                               key="cmp_b", help="Your SIEM's existing ruleset (e.g. Elastic)")
-    threshold = st.slider("Jaccard threshold", 0.05, 0.80, 0.15, 0.05)
+    threshold = st.slider("Jaccard threshold", 0.05, 0.80, 0.40, 0.05)
     run_id = None
     runs = result_store.list_alert_runs()
     if runs:

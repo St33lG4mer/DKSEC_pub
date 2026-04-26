@@ -73,15 +73,19 @@ def compare_rules(
     rules_a: list[RuleAST],
     rules_b: list[RuleAST],
     alerts: list[dict] | None = None,
-    threshold: float = 0.15,
+    threshold: float = 0.40,
 ) -> CompareResult:
     """
     Compare two rule sets and return overlaps + unique rules.
 
+    For each rule in catalog A, at most one best-matching rule in catalog B
+    is recorded as an overlap (highest Jaccard score >= threshold wins).
+    This prevents N×M inflation where one rule matches many counterparts.
+
     Logic-only mode (alerts=None):
         - Extract tokens from each rule (translated_query preferred)
         - Pre-filter by shared tokens or MITRE techniques
-        - Compute Jaccard; pairs >= threshold → overlap
+        - For each rule_a, pick best rule_b by Jaccard; pair >= threshold → overlap
         - confidence = "logic-only"
 
     Full mode (alerts provided):
@@ -108,6 +112,7 @@ def compare_rules(
     # Pre-compute tokens
     tokens_a = {r.id: _tokens_for(r) for r in rules_a}
     tokens_b = {r.id: _tokens_for(r) for r in rules_b}
+    rules_b_by_id = {r.id: r for r in rules_b}
 
     # Build alert co-firing index: scenario_id → set of rule_ids that fired
     scenario_to_rules: dict[str, set[str]] = {}
@@ -123,17 +128,21 @@ def compare_rules(
     overlapped_b_ids: set[str] = set()
 
     for a in rules_a:
-        for b in rules_b:
-            ta, tb = tokens_a[a.id], tokens_b[b.id]
+        ta = tokens_a[a.id]
 
-            # Logic signal
-            logic_overlap = False
+        # Find best-matching rule_b for this rule_a
+        best_score = 0.0
+        best_b: RuleAST | None = None
+        alert_confirmed_for_best = False
+
+        for b in rules_b:
+            tb = tokens_b[b.id]
+
             score = 0.0
             if _should_compare(a, b, ta, tb):
                 score = jaccard(ta, tb)
-                logic_overlap = score >= threshold
 
-            # Alert signal
+            # Check alert co-firing
             alert_confirmed = False
             if alerts is not None:
                 for fired_ids in scenario_to_rules.values():
@@ -141,17 +150,29 @@ def compare_rules(
                         alert_confirmed = True
                         break
 
-            if logic_overlap or alert_confirmed:
-                overlap_pairs.append(
-                    OverlapPair(
-                        rule_a=a,
-                        rule_b=b,
-                        jaccard_score=score,
-                        alert_confirmed=alert_confirmed,
-                    )
+            # Update best match: alert confirmation overrides logic score
+            if alert_confirmed and not alert_confirmed_for_best:
+                best_score = score
+                best_b = b
+                alert_confirmed_for_best = True
+            elif alert_confirmed and alert_confirmed_for_best and score > best_score:
+                best_score = score
+                best_b = b
+            elif not alert_confirmed_for_best and score > best_score:
+                best_score = score
+                best_b = b
+
+        if best_b is not None and (best_score >= threshold or alert_confirmed_for_best):
+            overlap_pairs.append(
+                OverlapPair(
+                    rule_a=a,
+                    rule_b=best_b,
+                    jaccard_score=best_score,
+                    alert_confirmed=alert_confirmed_for_best,
                 )
-                overlapped_a_ids.add(a.id)
-                overlapped_b_ids.add(b.id)
+            )
+            overlapped_a_ids.add(a.id)
+            overlapped_b_ids.add(best_b.id)
 
     unique_a = [r for r in rules_a if r.id not in overlapped_a_ids]
     unique_b = [r for r in rules_b if r.id not in overlapped_b_ids]
