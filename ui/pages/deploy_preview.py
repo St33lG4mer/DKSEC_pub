@@ -94,9 +94,11 @@ if not add_rules:
     st.info("Triage rules on the Comparison page first, then return here to deploy.")
     st.stop()
 
+_VALID_TARGETS = {"elastic", "sentinel", "splunk", "qradar", "chronicle"}
+
 col1, col2 = st.columns(2)
 dry_run = col1.checkbox("Dry run (preview only)", value=True)
-target = col2.text_input("Target SIEM name", value=catalog_b)
+target = col2.selectbox("Target SIEM", sorted(_VALID_TARGETS), index=sorted(_VALID_TARGETS).index(catalog_b) if catalog_b in _VALID_TARGETS else 0)
 
 st.warning(
     f"This will deploy **{len(add_rules)} rules** from `{catalog_a}` to `{target}`.  \n"
