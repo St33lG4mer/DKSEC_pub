@@ -61,6 +61,8 @@ def run_attack_chain(
             try:
                 result: ScenarioResult = runner.run_scenario(scenario)
                 all_alerts.extend(result.to_alert_dicts())
+                if result.error is not None:
+                    errors.append(f"{scenario.id}: {result.error}")
             except (RuntimeError, NotImplementedError) as exc:
                 errors.append(f"{scenario.id}: {exc}")
 

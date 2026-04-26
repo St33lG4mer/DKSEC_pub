@@ -99,6 +99,25 @@ def test_run_attack_chain_records_runtime_error_and_continues(tmp_path):
     assert "not configured" in result.errors[0]
 
 
+def test_run_attack_chain_records_not_implemented_error_and_continues(tmp_path):
+    store = ResultStore(tmp_path)
+    s1 = _make_scenario("S1")
+    s2 = _make_scenario("S2")
+
+    failing_runner = MagicMock(spec=AttackRunner)
+    failing_runner.list_scenarios.return_value = [s1]
+    failing_runner.run_scenario.side_effect = NotImplementedError("runner not implemented")
+
+    good_runner = _mock_runner([s2], {"S2": ["rule-ok"]})
+
+    result = run_attack_chain([failing_runner, good_runner], store, run_id="r1")
+
+    assert len(result.alerts) == 1
+    assert result.alerts[0]["rule_id"] == "rule-ok"
+    assert len(result.errors) == 1
+    assert "runner not implemented" in result.errors[0]
+
+
 def test_run_attack_chain_empty_runners_returns_empty(tmp_path):
     store = ResultStore(tmp_path)
     result = run_attack_chain([], store, run_id="empty")
