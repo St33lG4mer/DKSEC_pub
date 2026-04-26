@@ -132,3 +132,25 @@ def test_run_attack_chain_auto_generates_run_id_when_none(tmp_path):
     result = run_attack_chain([runner], store)
     assert result.run_id != ""
     assert len(result.run_id) > 0
+
+
+def test_run_attack_chain_records_scenario_result_error(tmp_path):
+    store = ResultStore(tmp_path)
+    s1 = _make_scenario("S1")
+
+    runner = MagicMock(spec=AttackRunner)
+    runner.list_scenarios.return_value = [s1]
+    runner.run_scenario.return_value = ScenarioResult(
+        scenario_id="S1",
+        mitre_techniques=["T1059.001"],
+        fired_rule_ids=["rule-partial"],
+        raw_alert_count=1,
+        error="partial execution failure",
+    )
+
+    result = run_attack_chain([runner], store, run_id="r1")
+
+    assert len(result.alerts) == 1
+    assert result.alerts[0]["rule_id"] == "rule-partial"
+    assert len(result.errors) == 1
+    assert "partial execution failure" in result.errors[0]
