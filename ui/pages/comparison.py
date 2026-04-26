@@ -267,7 +267,7 @@ with tab_heatmap:
         df_heatmap.style.background_gradient(
             subset=["Coverage %"], cmap="RdYlGn", vmin=0, vmax=100
         ).format({"Coverage %": "{}%"}),
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 

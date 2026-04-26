@@ -85,7 +85,7 @@ rule_counts = (
     .reset_index(name="Alert Count")
     .sort_values("Alert Count", ascending=False)
 )
-st.dataframe(rule_counts, use_container_width=True, hide_index=True)
+st.dataframe(rule_counts, width="stretch", hide_index=True)
 
 with st.expander("By scenario"):
     scenario_counts = (
@@ -94,4 +94,4 @@ with st.expander("By scenario"):
         .reset_index(name="Alerts")
         .sort_values("Alerts", ascending=False)
     )
-    st.dataframe(scenario_counts, use_container_width=True, hide_index=True)
+    st.dataframe(scenario_counts, width="stretch", hide_index=True)

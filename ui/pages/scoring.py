@@ -88,4 +88,4 @@ df = df.sort_values("Score", ascending=False)
 st.caption(f"Scoring **{len(df)}** rules from **{catalog}**")
 if not has_alert_data:
     st.caption("💡 Run `dksec attack` to enable alert-based classification and scoring.")
-st.dataframe(df, use_container_width=True, hide_index=True)
+st.dataframe(df, width="stretch", hide_index=True)
