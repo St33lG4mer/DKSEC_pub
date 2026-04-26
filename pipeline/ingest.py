@@ -52,4 +52,5 @@ def ingest_catalog(adapter: BaseAdapter, store: RuleStore) -> IngestResult:
         return IngestResult(catalog=adapter.name, raw_count=0, failed_count=0, errors=[str(exc)])
 
     store.save_raw(adapter.name, raws)
+    # failed_count is always 0 at ingest level — load() is all-or-nothing
     return IngestResult(catalog=adapter.name, raw_count=len(raws), failed_count=0, errors=[])

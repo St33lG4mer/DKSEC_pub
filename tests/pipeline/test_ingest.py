@@ -6,7 +6,6 @@ from unittest.mock import MagicMock
 import pytest
 
 from adapters.base import BaseAdapter
-from core.ast_model import RuleAST
 from pipeline.ingest import IngestResult, ingest_catalog
 from storage.rule_store import RuleStore
 
@@ -72,3 +71,14 @@ def test_ingest_catalog_empty_load_returns_zero_count(tmp_path):
 
     assert result.raw_count == 0
     assert result.errors == []
+
+
+def test_ingest_catalog_storage_failure_propagates(tmp_path):
+    """save_raw exceptions propagate — storage failure is fatal."""
+    from unittest.mock import patch
+    store = RuleStore(tmp_path)
+    adapter = _mock_adapter([_make_raw()])
+
+    with patch.object(store, "save_raw", side_effect=OSError("disk full")):
+        with pytest.raises(OSError, match="disk full"):
+            ingest_catalog(adapter, store)
