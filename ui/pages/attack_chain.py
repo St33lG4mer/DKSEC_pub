@@ -23,11 +23,38 @@ result_store = ResultStore(_OUTPUT_DIR)
 runs = result_store.list_alert_runs()
 
 if not runs:
-    st.info(
-        "No attack runs yet.  \n"
-        "Run `dksec attack --framework sliver` or `dksec run-all` "
-        "to execute MITRE ATT&CK scenarios."
+    st.info("No attack runs recorded yet.")
+    st.divider()
+
+    st.markdown("### CLI setup required")
+    st.markdown(
+        "The Attack Chain feature runs MITRE ATT&CK scenarios against a live environment "
+        "and records which detection rules fire. This page displays those results once data exists."
     )
+
+    with st.expander("How to run the attack chain"):
+        st.markdown(
+            "**Prerequisites:**\n"
+            "- A Sliver C2 server running, or Atomic Red Team installed\n"
+            "- The target SIEM (Elastic) has the translated rules applied\n\n"
+            "**Run:**\n"
+            "```bash\n"
+            "dksec attack --framework sliver\n"
+            "# or\n"
+            "dksec attack --framework atomic\n"
+            "```\n\n"
+            "Results will appear on this page automatically after the run completes."
+        )
+
+    with st.expander("What this does"):
+        st.markdown(
+            "1. Executes pre-defined MITRE ATT&CK scenarios (credential dumping, lateral movement, etc.)\n"
+            "2. Polls the SIEM for alerts triggered during the scenario\n"
+            "3. Maps each alert back to its source rule\n"
+            "4. Uses the alert data to **confirm** or **refute** overlap detections on the Comparison page\n"
+            "5. Upgrades comparison confidence from `logic-only` to `full`"
+        )
+
     st.stop()
 
 st.caption(f"**{len(runs)} run(s)** found in output/alerts/")
