@@ -1,15 +1,21 @@
 FROM python:3.13-slim
 
-RUN pip install --no-cache-dir requests pyyaml && \
-    apt-get update && apt-get install -y --no-install-recommends git && \
+RUN apt-get update && apt-get install -y --no-install-recommends git && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-COPY threat_hunter.py .
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN mkdir -p /data/state /data/reports
+COPY . .
 
-VOLUME ["/data/state", "/data/reports", "/data/repo"]
+# Streamlit config: disable telemetry, bind to all interfaces
+ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false \
+    STREAMLIT_SERVER_HEADLESS=true \
+    STREAMLIT_SERVER_PORT=8501 \
+    STREAMLIT_SERVER_ADDRESS=0.0.0.0
 
-ENTRYPOINT ["python3", "threat_hunter.py", "--config", "/app/config.yaml"]
+EXPOSE 8501
+
+CMD ["python", "-m", "streamlit", "run", "ui/dashboard.py"]

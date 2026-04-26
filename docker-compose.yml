@@ -1,13 +1,26 @@
 services:
-  threat-hunter:
+  dksec:
     build: .
-    container_name: threat-hunter
+    container_name: dksec
     restart: unless-stopped
+    expose:
+      - "8501"
     volumes:
-      - ./config.yaml:/app/config.yaml:ro
-      - threat-hunter-state:/data/state
-      - ./reports:/data/reports
-      - ./:/data/repo
+      - ./catalogs:/app/catalogs
+      - ./output:/app/output
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
 
 volumes:
-  threat-hunter-state:
+  caddy_data:
+  caddy_config:
