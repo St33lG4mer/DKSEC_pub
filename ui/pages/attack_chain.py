@@ -13,7 +13,8 @@ import streamlit as st
 from core.theme import apply_theme
 from storage.result_store import ResultStore
 
-_OUTPUT_DIR = Path("output")
+_ROOT = Path(__file__).parent.parent.parent
+_OUTPUT_DIR = _ROOT / "output"
 
 apply_theme()
 st.title("⚔️ Attack Chain")

@@ -13,7 +13,8 @@ import streamlit as st
 from core.theme import apply_theme
 from storage.rule_store import RuleStore
 
-_CATALOGS_DIR = Path("catalogs")
+_ROOT = Path(__file__).parent.parent.parent
+_CATALOGS_DIR = _ROOT / "catalogs"
 
 apply_theme()
 st.title("📋 Browse Rules")

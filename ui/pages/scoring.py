@@ -15,8 +15,9 @@ from core.theme import apply_theme
 from storage.result_store import ResultStore
 from storage.rule_store import RuleStore
 
-_CATALOGS_DIR = Path("catalogs")
-_OUTPUT_DIR = Path("output")
+_ROOT = Path(__file__).parent.parent.parent
+_CATALOGS_DIR = _ROOT / "catalogs"
+_OUTPUT_DIR = _ROOT / "output"
 
 apply_theme()
 st.title("🏆 Scoring")

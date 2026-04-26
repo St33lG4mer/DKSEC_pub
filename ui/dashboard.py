@@ -21,8 +21,9 @@ from core.theme import apply_theme
 from storage.result_store import ResultStore
 from storage.rule_store import RuleStore
 
-_CATALOGS_DIR = Path("catalogs")
-_OUTPUT_DIR = Path("output")
+_ROOT = Path(__file__).parent.parent
+_CATALOGS_DIR = _ROOT / "catalogs"
+_OUTPUT_DIR = _ROOT / "output"
 
 st.set_page_config(
     page_title="DKSec",
@@ -54,20 +55,22 @@ with st.sidebar:
 
     st.divider()
 
+_PAGES = Path(__file__).parent / "pages"
+
 # --- Page navigation ---
 pg = st.navigation(
     {
         "Analysis": [
-            st.Page("ui/pages/comparison.py", title="Comparison",  icon="📊", default=True),
-            st.Page("ui/pages/home.py",        title="Overview",    icon="🏠"),
-            st.Page("ui/pages/scoring.py",     title="Scoring",     icon="🏆"),
+            st.Page(str(_PAGES / "comparison.py"),   title="Comparison",    icon="📊", default=True),
+            st.Page(str(_PAGES / "home.py"),          title="Overview",      icon="🏠"),
+            st.Page(str(_PAGES / "scoring.py"),       title="Scoring",       icon="🏆"),
         ],
         "Catalogs": [
-            st.Page("ui/pages/catalogs.py",    title="Browse Rules", icon="📋"),
+            st.Page(str(_PAGES / "catalogs.py"),      title="Browse Rules",  icon="📋"),
         ],
         "Operations": [
-            st.Page("ui/pages/attack_chain.py",   title="Attack Chain",   icon="⚔️"),
-            st.Page("ui/pages/deploy_preview.py", title="Deploy Preview", icon="🚀"),
+            st.Page(str(_PAGES / "attack_chain.py"),   title="Attack Chain",   icon="⚔️"),
+            st.Page(str(_PAGES / "deploy_preview.py"), title="Deploy Preview", icon="🚀"),
         ],
     }
 )
