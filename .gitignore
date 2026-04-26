@@ -35,6 +35,10 @@ config.yaml
 .alerts_cache.json
 .kibana_rules_cache.json
 
+# Pipeline runtime data (populated by dksec ingest/translate/compare)
+catalogs/
+output/
+
 # Sigma community rule packs (large, pulled at runtime)
 sigma_rules/rules/
 sigma_rules/rules-threat-hunting/
