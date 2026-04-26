@@ -12,6 +12,7 @@ Usage examples:
 """
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -30,11 +31,11 @@ _OUTPUT_DIR = Path("output")
 
 
 def _rule_store() -> RuleStore:
-    return RuleStore(_CATALOGS_DIR)
+    return RuleStore(Path(os.environ.get("DKSEC_CATALOGS", "catalogs")))
 
 
 def _result_store() -> ResultStore:
-    return ResultStore(_OUTPUT_DIR)
+    return ResultStore(Path(os.environ.get("DKSEC_OUTPUT", "output")))
 
 
 def _make_adapter(catalog: str, source: str, path: str | None, url: str | None = None, config: str | None = None):
@@ -186,14 +187,49 @@ def attack(framework: str, run_id: str | None):
 )
 @click.option("--catalog", required=True, help="Catalog to deploy")
 @click.option("--target", required=True, help="Target SIEM (e.g. elastic)")
+@click.option(
+    "--compare-catalog", "compare_catalog", default=None,
+    help="SIEM catalog used during compare step (to look up ADD decisions). "
+         "If omitted, all rules are deployed.",
+)
 @click.option("--dry-run", is_flag=True, default=False, help="Print rules without deploying")
-def deploy(mode: str, catalog: str, target: str, dry_run: bool):
-    """Step 3 (test) / Step 6 (permanent): Deploy rules to SIEM."""
+def deploy(mode: str, catalog: str, target: str, compare_catalog: str | None, dry_run: bool):
+    """Step 3 (test) / Step 6 (permanent): Deploy rules to SIEM.
+
+    When --compare-catalog is provided, only rules marked ADD in the decisions
+    file are deployed. Without it, all rules in the catalog are deployed.
+    """
     store = _rule_store()
-    rules = store.load_all(catalog)
+    result_store = _result_store()
+    all_rules = store.load_all(catalog)
+
+    if compare_catalog:
+        decisions = result_store.load_decisions(catalog, compare_catalog)
+        if decisions:
+            rules = [r for r in all_rules if decisions.get(r.id) == "ADD"]
+            if not rules:
+                click.echo(
+                    f"No ADD-decision rules found for '{catalog}' vs '{compare_catalog}'. "
+                    "Nothing to deploy."
+                )
+                return
+        else:
+            click.echo(
+                f"Warning: no decisions file for '{catalog}' vs '{compare_catalog}'. "
+                "Deploying all rules."
+            )
+            rules = all_rules
+    else:
+        rules = all_rules
+
     if dry_run:
-        click.echo(f"Dry-run: would deploy {len(rules)} rules from '{catalog}' to '{target}' [{mode}]")
+        click.echo(
+            f"Dry-run: would deploy {len(rules)} rules from '{catalog}' to '{target}' [{mode}]"
+        )
+        for r in rules:
+            click.echo(f"  - [{r.severity}] {r.name}")
         return
+
     adapter = _make_adapter(target, "api", path=None, url=None)
     result = deploy_rules(adapter, rules, client=None, mode=mode)
     status = "WARNING" if result.failed_count else "OK"
