@@ -1,5 +1,5 @@
 # ui/pages/deploy_preview.py
-"""Deploy Preview — review unique rules and launch deploy via CLI."""
+"""Deploy Preview — review ADD-decision rules and launch deploy via CLI."""
 from __future__ import annotations
 
 import subprocess
@@ -8,7 +8,6 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-import pandas as pd
 import streamlit as st
 
 from core.theme import apply_theme
@@ -51,39 +50,68 @@ st.caption(
 if not unique_dicts:
     st.info(
         "No comparison results yet.  \n"
-        "Run `dksec compare --a sigma --b elastic` first to identify unique rules."
+        f"Run `dksec compare --a {catalog_a} --b {catalog_b}` first."
     )
     st.stop()
 
+# Split rules by decision status
 add_rules = [r for r in unique_dicts if decisions.get(r.get("id")) == "ADD"]
-st.metric(f"Rules to add ({catalog_a} → {catalog_b})", len(unique_dicts))
-if decisions:
-    st.caption(f"Decisions available: {len(add_rules)} marked ADD")
+skip_rules = [r for r in unique_dicts if decisions.get(r.get("id")) == "SKIP"]
+review_rules = [r for r in unique_dicts if decisions.get(r.get("id")) == "REVIEW"]
+undecided = [r for r in unique_dicts if r.get("id") not in decisions]
 
-# Table
-rows = [
-    {
-        "ID": r.get("id", "?")[:10] + "…",
-        "Name": r.get("name", "?"),
-        "Severity": r.get("severity", "?"),
-        "MITRE": ", ".join((r.get("mitre_techniques") or [])[:3]),
-    }
-    for r in unique_dicts
-]
-st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+# Summary metrics
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Total unique", len(unique_dicts))
+c2.metric("ADD (deploy)", len(add_rules))
+c3.metric("SKIP", len(skip_rules))
+c4.metric("Undecided", len(undecided))
+
+if not add_rules:
+    st.warning(
+        f"No rules are marked ADD yet. Use the **Comparison** page to triage rules, "
+        "or run `dksec decide` to auto-generate decisions."
+    )
+else:
+    st.divider()
+    st.markdown(f"### Rules queued for deploy ({len(add_rules)})")
+    st.caption("These are the **only** rules that will be sent to the SIEM.")
+
+    for r in add_rules:
+        with st.expander(f"[{r.get('severity','?').upper()}] {r.get('name','?')}"):
+            st.markdown(f"**ID:** `{r.get('id','?')}`")
+            st.markdown(f"**Description:** {r.get('description') or '_No description_'}")
+            tq = r.get("translated_query") or r.get("raw_query") or "_No query_"
+            st.code(tq, language="sql")
+            mitre = ", ".join((r.get("mitre_techniques") or [])[:5])
+            if mitre:
+                st.caption(f"MITRE: {mitre}")
 
 st.divider()
 st.markdown("### Deploy to SIEM")
+
+if not add_rules:
+    st.info("Triage rules on the Comparison page first, then return here to deploy.")
+    st.stop()
+
 col1, col2 = st.columns(2)
 dry_run = col1.checkbox("Dry run (preview only)", value=True)
-target = col2.text_input("Target", value=catalog_b)
+target = col2.text_input("Target SIEM name", value=catalog_b)
 
-if st.button("🚀 Deploy unique rules", type="primary"):
+st.warning(
+    f"This will deploy **{len(add_rules)} rules** from `{catalog_a}` to `{target}`.  \n"
+    f"{'(DRY RUN — no changes will be made)' if dry_run else '**LIVE DEPLOY — rules will be created in the SIEM.**'}"
+)
+
+if st.button("🚀 Deploy ADD rules", type="primary"):
     cmd = [
-        sys.executable, "cli.py", "deploy",
+        sys.executable,
+        str(_ROOT / "cli.py"),
+        "deploy",
         "--mode", "permanent",
         "--catalog", catalog_a,
         "--target", target,
+        "--compare-catalog", catalog_b,
     ]
     if dry_run:
         cmd.append("--dry-run")
@@ -93,7 +121,7 @@ if st.button("🚀 Deploy unique rules", type="primary"):
             cmd,
             capture_output=True,
             text=True,
-            cwd=str(Path(__file__).parent.parent.parent),
+            cwd=str(_ROOT),
         )
 
     if proc.returncode == 0:
