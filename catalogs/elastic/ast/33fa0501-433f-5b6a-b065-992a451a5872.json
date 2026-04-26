@@ -4,7 +4,11 @@
   "name": "Service Control Spawned via Script Interpreter",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "any"
   ],

@@ -4,7 +4,11 @@
   "name": "AWS STS AssumeRole with New MFA Device",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.persistence",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "any"
   ],

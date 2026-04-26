@@ -4,7 +4,10 @@
   "name": "Kubernetes Service Account Secret Access",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.discovery"
+  ],
   "event_categories": [
     "process"
   ],

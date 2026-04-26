@@ -4,7 +4,10 @@
   "name": "Potential CVE-2025-33053 Exploitation",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

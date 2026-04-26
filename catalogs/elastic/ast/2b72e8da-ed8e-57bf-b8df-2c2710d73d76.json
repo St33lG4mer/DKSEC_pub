@@ -4,7 +4,10 @@
   "name": "Base64 Decoded Payload Piped to Interpreter",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "any"
   ],

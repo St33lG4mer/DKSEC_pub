@@ -4,7 +4,10 @@
   "name": "Unusual Process Modifying GenAI Configuration File",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

@@ -4,7 +4,10 @@
   "name": "File Transfer Utility Launched from Unusual Parent",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.exfiltration",
+    "attack.execution"
+  ],
   "event_categories": [
     "any"
   ],

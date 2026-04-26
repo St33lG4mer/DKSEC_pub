@@ -4,7 +4,11 @@
   "name": "Root Network Connection via GDB CAP_SYS_PTRACE",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.execution",
+    "attack.command-and-control"
+  ],
   "event_categories": [
     "any"
   ],

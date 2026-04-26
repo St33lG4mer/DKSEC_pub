@@ -4,7 +4,11 @@
   "name": "AWS STS Role Chaining",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "any"
   ],

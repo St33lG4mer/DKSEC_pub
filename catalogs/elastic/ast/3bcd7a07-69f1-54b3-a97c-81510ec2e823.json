@@ -4,7 +4,10 @@
   "name": "Installation of Security Support Provider",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "registry"
   ],

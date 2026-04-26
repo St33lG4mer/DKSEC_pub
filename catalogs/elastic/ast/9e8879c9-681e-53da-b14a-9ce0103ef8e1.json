@@ -4,7 +4,11 @@
   "name": "Pluggable Authentication Module (PAM) Version Discovery",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.persistence",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "process"
   ],

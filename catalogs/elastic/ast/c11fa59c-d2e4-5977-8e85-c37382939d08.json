@@ -4,7 +4,10 @@
   "name": "Web Server Suspicious User Agent Requests",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.reconnaissance",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "any"
   ],

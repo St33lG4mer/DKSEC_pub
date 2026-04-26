@@ -4,7 +4,10 @@
   "name": "Windows Script Interpreter Executing Process via WMI",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.execution"
+  ],
   "event_categories": [
     "any"
   ],

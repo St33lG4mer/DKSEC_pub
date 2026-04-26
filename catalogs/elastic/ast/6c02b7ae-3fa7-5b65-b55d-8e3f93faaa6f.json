@@ -4,7 +4,10 @@
   "name": "React2Shell Network Security Alert",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.execution"
+  ],
   "event_categories": [
     "network"
   ],

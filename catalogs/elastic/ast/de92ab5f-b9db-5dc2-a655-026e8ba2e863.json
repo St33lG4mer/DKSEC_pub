@@ -4,7 +4,10 @@
   "name": "Suspicious Path Invocation from Command Line",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

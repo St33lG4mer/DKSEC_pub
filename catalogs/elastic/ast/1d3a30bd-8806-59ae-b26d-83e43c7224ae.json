@@ -4,7 +4,10 @@
   "name": "AWS CloudWatch Log Group Deletion",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.impact"
+  ],
   "event_categories": [
     "any"
   ],

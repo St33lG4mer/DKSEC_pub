@@ -4,7 +4,10 @@
   "name": "Suspicious Kworker UID Elevation",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

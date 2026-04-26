@@ -4,7 +4,11 @@
   "name": "Suspicious DLL Loaded for Persistence or Privilege Escalation",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

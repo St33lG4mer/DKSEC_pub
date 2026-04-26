@@ -4,7 +4,10 @@
   "name": "Kubernetes Direct API Request via Curl or Wget",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.discovery"
+  ],
   "event_categories": [
     "process"
   ],

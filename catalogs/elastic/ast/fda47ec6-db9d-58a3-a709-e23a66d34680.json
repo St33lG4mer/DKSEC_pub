@@ -4,7 +4,10 @@
   "name": "Persistence via a Hidden Plist Filename",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "file"
   ],

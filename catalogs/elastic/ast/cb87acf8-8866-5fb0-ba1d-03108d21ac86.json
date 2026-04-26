@@ -4,7 +4,10 @@
   "name": "Inbound Connection to an Unsecure Elasticsearch Node",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.reconnaissance"
+  ],
   "event_categories": [
     "network"
   ],

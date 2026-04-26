@@ -4,7 +4,11 @@
   "name": "Unusual D-Bus Daemon Child Process",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

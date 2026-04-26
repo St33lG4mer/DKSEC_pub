@@ -4,7 +4,10 @@
   "name": "UID Elevation from Previously Unknown Executable",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

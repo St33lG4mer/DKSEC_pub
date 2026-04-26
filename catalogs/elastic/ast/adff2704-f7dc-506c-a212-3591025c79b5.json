@@ -4,7 +4,10 @@
   "name": "Authentication via Unusual PAM Grantor",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

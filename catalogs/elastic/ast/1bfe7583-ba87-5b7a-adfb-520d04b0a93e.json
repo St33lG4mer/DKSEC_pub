@@ -4,7 +4,10 @@
   "name": "Potential Remote Credential Access via Registry",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "file"
   ],

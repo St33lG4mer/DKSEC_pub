@@ -4,7 +4,10 @@
   "name": "Account Discovery Command via SYSTEM Account",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "process"
   ],

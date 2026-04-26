@@ -4,7 +4,10 @@
   "name": "Kernel Module Load via Built-in Utility",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

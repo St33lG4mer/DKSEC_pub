@@ -4,7 +4,10 @@
   "name": "Kubernetes Secret or ConfigMap Access via Azure Arc Proxy",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.collection"
+  ],
   "event_categories": [
     "any"
   ],

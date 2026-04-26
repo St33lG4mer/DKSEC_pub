@@ -4,7 +4,10 @@
   "name": "File Execution Permission Modification Detected via Defend for Containers",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

@@ -4,7 +4,10 @@
   "name": "AWS S3 Bucket Policy Added to Allow Public Access",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.exfiltration",
+    "attack.collection"
+  ],
   "event_categories": [
     "info"
   ],

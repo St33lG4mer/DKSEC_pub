@@ -4,7 +4,10 @@
   "name": "Potential Webshell Deployed via Apache Struts CVE-2023-50164 Exploitation",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

@@ -4,7 +4,10 @@
   "name": "Suspicious File Made Executable via Chmod Inside A Container",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,11 @@
   "name": "Git Hook Egress Network Connection",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

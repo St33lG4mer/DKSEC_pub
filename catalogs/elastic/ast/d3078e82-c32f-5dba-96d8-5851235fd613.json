@@ -4,7 +4,10 @@
   "name": "Ingress Transfer via Windows BITS",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.command-and-control"
+  ],
   "event_categories": [
     "file"
   ],

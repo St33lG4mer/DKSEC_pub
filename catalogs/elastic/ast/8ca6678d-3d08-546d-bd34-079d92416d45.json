@@ -4,7 +4,10 @@
   "name": "Sensitive Files Compression Inside A Container",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.collection"
+  ],
   "event_categories": [
     "process"
   ],

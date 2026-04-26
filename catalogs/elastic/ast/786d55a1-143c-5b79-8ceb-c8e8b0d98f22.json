@@ -4,7 +4,10 @@
   "name": "Azure Arc Cluster Credential Access by Identity from Unusual Source",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "any"
   ],

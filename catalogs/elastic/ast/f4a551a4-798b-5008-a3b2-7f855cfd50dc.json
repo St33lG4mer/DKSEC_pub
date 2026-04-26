@@ -4,7 +4,10 @@
   "name": "Suspicious Portable Executable Encoded in Powershell Script",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

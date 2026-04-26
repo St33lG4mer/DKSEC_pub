@@ -4,7 +4,10 @@
   "name": "Azure Service Principal Sign-In Followed by Arc Cluster Credential Access",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.initial-access"
+  ],
   "event_categories": [
     "any"
   ],

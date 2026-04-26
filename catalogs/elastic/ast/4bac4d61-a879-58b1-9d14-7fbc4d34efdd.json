@@ -4,7 +4,10 @@
   "name": "Potential Local NTLM Relay via HTTP",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

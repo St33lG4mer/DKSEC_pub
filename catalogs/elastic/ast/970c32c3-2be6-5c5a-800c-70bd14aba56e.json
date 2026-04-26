@@ -4,7 +4,11 @@
   "name": "Tampering with RUNNER_TRACKING_ID in GitHub Actions Runners",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.initial-access",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

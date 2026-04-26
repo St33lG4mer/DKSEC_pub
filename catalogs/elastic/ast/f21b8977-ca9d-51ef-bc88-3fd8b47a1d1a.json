@@ -4,7 +4,10 @@
   "name": "Discovery Command Output Written to Suspicious File",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.collection",
+    "attack.discovery"
+  ],
   "event_categories": [
     "any"
   ],

@@ -4,7 +4,10 @@
   "name": "Windows Registry File Creation in SMB Share",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "file"
   ],

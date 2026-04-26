@@ -4,7 +4,10 @@
   "name": "Suspicious TCC Access Granted for User Folders",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.collection"
+  ],
   "event_categories": [
     "any"
   ],

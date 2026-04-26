@@ -4,7 +4,10 @@
   "name": "AWS EC2 Full Network Packet Capture Detected",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.exfiltration",
+    "attack.collection"
+  ],
   "event_categories": [
     "any"
   ],

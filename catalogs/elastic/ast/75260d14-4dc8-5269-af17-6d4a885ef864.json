@@ -4,7 +4,10 @@
   "name": "Shadow File Modification by Unusual Process",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "file"
   ],

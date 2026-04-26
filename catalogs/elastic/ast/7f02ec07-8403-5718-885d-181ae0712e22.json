@@ -4,7 +4,10 @@
   "name": "Kernel Driver Load by non-root User",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "driver"
   ],

@@ -4,7 +4,10 @@
   "name": "Suspicious Child Execution via Web Server",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.initial-access"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,10 @@
   "name": "AWS Route 53 Domain Transfer Lock Disabled",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.resource-development"
+  ],
   "event_categories": [
     "any"
   ],

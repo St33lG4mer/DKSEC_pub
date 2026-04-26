@@ -4,7 +4,10 @@
   "name": "Potential SYN-Based Port Scan Detected",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.reconnaissance"
+  ],
   "event_categories": [
     "network"
   ],

@@ -4,7 +4,11 @@
   "name": "AWS S3 Bucket Enumeration or Brute Force",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.impact",
+    "attack.discovery",
+    "attack.collection"
+  ],
   "event_categories": [
     "any"
   ],

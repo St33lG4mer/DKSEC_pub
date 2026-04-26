@@ -4,7 +4,10 @@
   "name": "Microsoft Exchange Server UM Spawning Suspicious Processes",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "process"
   ],

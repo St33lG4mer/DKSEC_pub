@@ -4,7 +4,10 @@
   "name": "System File Ownership Change",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.persistence"
+  ],
   "event_categories": [
     "process"
   ],

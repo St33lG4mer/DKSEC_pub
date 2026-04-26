@@ -4,7 +4,11 @@
   "name": "Conhost Spawned By Suspicious Parent Process",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.defense-evasion",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "process"
   ],

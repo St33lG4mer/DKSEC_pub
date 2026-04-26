@@ -4,7 +4,11 @@
   "name": "UAC Bypass Attempt via Elevated COM Internet Explorer Add-On Installer",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

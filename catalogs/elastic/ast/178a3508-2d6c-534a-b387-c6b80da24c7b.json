@@ -4,7 +4,10 @@
   "name": "AWS IAM Long-Term Access Key First Seen from Source IP",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.initial-access"
+  ],
   "event_categories": [
     "any"
   ],

@@ -4,7 +4,11 @@
   "name": "Modification of Persistence Relevant Files Detected via Defend for Containers",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.execution",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "file"
   ],

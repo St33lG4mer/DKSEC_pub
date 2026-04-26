@@ -4,7 +4,10 @@
   "name": "RPC (Remote Procedure Call) to the Internet",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "network"
   ],

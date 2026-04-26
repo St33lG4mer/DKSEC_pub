@@ -4,7 +4,10 @@
   "name": "Entra ID Sharepoint or OneDrive Accessed by Unusual Client",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.collection",
+    "attack.initial-access"
+  ],
   "event_categories": [
     "any"
   ],

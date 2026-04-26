@@ -4,7 +4,10 @@
   "name": "Registry Persistence via AppInit DLL",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "registry"
   ],

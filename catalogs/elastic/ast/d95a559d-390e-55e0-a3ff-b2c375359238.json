@@ -4,7 +4,10 @@
   "name": "Local Account TokenFilter Policy Disabled",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "registry"
   ],

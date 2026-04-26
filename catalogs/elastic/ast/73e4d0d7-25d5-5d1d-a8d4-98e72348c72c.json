@@ -4,7 +4,10 @@
   "name": "GenAI Process Compiling or Generating Executables",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,11 @@
   "name": "Pod or Container Creation with Suspicious Command-Line",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.privilege-escalation",
+    "attack.persistence"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,10 @@
   "name": "Kubernetes Cluster-Admin Role Binding Created",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "any"
   ],

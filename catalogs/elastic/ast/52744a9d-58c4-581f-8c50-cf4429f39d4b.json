@@ -4,7 +4,10 @@
   "name": "Direct Interactive Kubernetes API Request Detected via Defend for Containers",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.discovery"
+  ],
   "event_categories": [
     "process"
   ],

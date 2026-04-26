@@ -4,7 +4,10 @@
   "name": "Persistence via Update Orchestrator Service Hijack",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,10 @@
   "name": "Outlook Home Page Registry Modification",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.command-and-control",
+    "attack.persistence"
+  ],
   "event_categories": [
     "registry"
   ],

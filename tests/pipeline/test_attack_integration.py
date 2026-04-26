@@ -19,12 +19,13 @@ def _make_rule(
     query: str = "",
     mitre: list[str] | None = None,
     translated: str | None = None,
+    name: str | None = None,  # explicit name overrides the default
 ) -> RuleAST:
     """Helper to create RuleAST for testing."""
     return RuleAST(
         id=rule_id,
         catalog=catalog,
-        name=f"Rule {rule_id}",
+        name=name or f"Rule {rule_id}",
         description="",
         severity="medium",
         mitre_techniques=mitre or ["T1059.001"],
@@ -99,8 +100,12 @@ def test_full_pipeline_unique_rules_get_add_decision(tmp_path):
     # Create rules with different queries:
     # rule-a (Sigma): process detection
     # rule-b (Elastic): network detection (different, no overlap)
-    rule_a = _make_rule("rule-a", catalog="sigma", translated='process where process.name == "cmd.exe"')
-    rule_b = _make_rule("rule-b", catalog="elastic", translated='network where destination.port == 443')
+    rule_a = _make_rule("rule-a", catalog="sigma",
+                        translated='process where process.name == "cmd.exe"',
+                        name="sigma_cmdexec_process_alpha")
+    rule_b = _make_rule("rule-b", catalog="elastic",
+                        translated='network where destination.port == 443',
+                        name="elastic_network_portmon_beta")
     
     # Compare with alerts from chain
     compare_result = compare_rules(
@@ -165,8 +170,12 @@ def test_full_pipeline_alerts_persisted_and_reloadable(tmp_path):
     # Reload alerts from store
     reloaded_alerts = store.load_alerts("persist-run")
     
-    rule_1 = _make_rule("rule-1", catalog="sigma", translated='process where process.name == "cmd.exe"')
-    rule_2 = _make_rule("rule-2", catalog="elastic", translated='file where file.name == "test.txt"')
+    rule_1 = _make_rule("rule-1", catalog="sigma",
+                        translated='process where process.name == "cmd.exe"',
+                        name="sigma_cmdexec_process_one")
+    rule_2 = _make_rule("rule-2", catalog="elastic",
+                        translated='file where file.name == "test.txt"',
+                        name="elastic_filewatch_monitor_two")
     
     compare_result = compare_rules(
         rules_a=[rule_1],

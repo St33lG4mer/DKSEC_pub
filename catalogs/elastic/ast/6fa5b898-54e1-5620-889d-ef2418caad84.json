@@ -4,7 +4,11 @@
   "name": "Potential Privilege Escalation via SUID/SGID Proxy Execution",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.persistence",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

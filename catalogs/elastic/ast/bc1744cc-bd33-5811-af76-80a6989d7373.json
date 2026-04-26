@@ -4,7 +4,11 @@
   "name": "AWS RDS DB Instance or Cluster Password Modified",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "info"
   ],

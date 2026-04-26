@@ -4,7 +4,10 @@
   "name": "Scheduled Task Execution at Scale via GPO",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "any"
   ],

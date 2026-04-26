@@ -4,7 +4,11 @@
   "name": "Persistence via Hidden Run Key Detected",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "any"
   ],

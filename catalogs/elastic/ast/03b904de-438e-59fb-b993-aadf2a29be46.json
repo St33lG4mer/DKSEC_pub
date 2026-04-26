@@ -4,7 +4,10 @@
   "name": "UAC Bypass via Windows Firewall Snap-In Hijack",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

@@ -101,7 +101,7 @@ def test_full_pipeline_with_alert_overlay(store):
         {"rule_id": "e1", "catalog": "elastic", "scenario_id": "t1059"},
     ]
 
-    result = compare_rules(sigma_rules, elastic_rules, alerts=alerts, threshold=0.15)
+    result = compare_rules(sigma_rules, elastic_rules, alerts=alerts, threshold=0.35)
     assert result.confidence == "full"
     assert len(result.overlaps) == 1
     assert result.overlaps[0].alert_confirmed is True
@@ -116,7 +116,7 @@ def test_full_pipeline_all_unique(store):
     sigma_rules = [_make_rule(f"s{i}", "sigma", translated=UNIQUE_SIGMA) for i in range(3)]
     elastic_rules = [_make_rule(f"e{i}", "elastic", translated=UNIQUE_ELASTIC) for i in range(3)]
 
-    result = compare_rules(sigma_rules, elastic_rules, threshold=0.15)
+    result = compare_rules(sigma_rules, elastic_rules, threshold=0.4)
     assert result.overlaps == []
     decisions = decide(result)
     assert all(v == "ADD" for v in decisions.values())

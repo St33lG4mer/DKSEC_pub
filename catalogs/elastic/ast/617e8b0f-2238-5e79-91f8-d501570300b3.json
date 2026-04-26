@@ -4,7 +4,11 @@
   "name": "Suspicious Network Connection via systemd",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.command-and-control",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

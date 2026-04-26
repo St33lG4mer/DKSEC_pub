@@ -4,7 +4,10 @@
   "name": "Potential Shell via Wildcard Injection Detected",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.execution"
+  ],
   "event_categories": [
     "any"
   ],

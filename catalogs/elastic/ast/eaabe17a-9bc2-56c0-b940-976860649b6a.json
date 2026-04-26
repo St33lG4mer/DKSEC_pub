@@ -4,7 +4,10 @@
   "name": "M365 Identity OAuth Illicit Consent Grant by Rare Client and User",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "any"
   ],

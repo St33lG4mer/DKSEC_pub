@@ -4,7 +4,10 @@
   "name": "Registry Persistence via AppCert DLL",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "registry"
   ],

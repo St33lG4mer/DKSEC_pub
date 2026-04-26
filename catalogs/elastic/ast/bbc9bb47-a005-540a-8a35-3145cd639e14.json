@@ -4,7 +4,10 @@
   "name": "Kubernetes Service Account Modified RBAC Objects",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

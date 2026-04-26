@@ -4,7 +4,10 @@
   "name": "AWS IAM AdministratorAccess Policy Attached to Group",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.persistence"
+  ],
   "event_categories": [
     "iam"
   ],

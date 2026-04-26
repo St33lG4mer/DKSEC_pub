@@ -4,7 +4,10 @@
   "name": "Initial Access via File Upload Followed by GET Request",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

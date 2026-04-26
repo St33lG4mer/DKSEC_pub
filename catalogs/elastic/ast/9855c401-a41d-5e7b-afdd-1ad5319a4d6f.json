@@ -4,7 +4,11 @@
   "name": "Unsigned DLL Loaded by Svchost",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "library"
   ],

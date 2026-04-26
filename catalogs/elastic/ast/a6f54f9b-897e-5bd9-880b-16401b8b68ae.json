@@ -4,7 +4,11 @@
   "name": "File Creation in /var/log via Suspicious Process",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.execution",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

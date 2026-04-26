@@ -4,7 +4,10 @@
   "name": "Kubectl Secrets Enumeration Across All Namespaces",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "process"
   ],

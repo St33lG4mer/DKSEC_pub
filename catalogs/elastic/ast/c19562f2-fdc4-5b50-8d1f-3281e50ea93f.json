@@ -4,7 +4,10 @@
   "name": "Potential Impersonation Attempt via Kubectl",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.discovery"
+  ],
   "event_categories": [
     "process"
   ],

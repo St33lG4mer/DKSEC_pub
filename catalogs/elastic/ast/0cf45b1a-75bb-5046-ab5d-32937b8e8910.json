@@ -4,7 +4,10 @@
   "name": "GenAI Process Accessing Sensitive Files",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.collection",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "file"
   ],

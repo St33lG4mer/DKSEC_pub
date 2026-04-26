@@ -4,7 +4,10 @@
   "name": "Execution via OpenClaw Agent",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.command-and-control"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,10 @@
   "name": "Kernel Seeking Activity",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

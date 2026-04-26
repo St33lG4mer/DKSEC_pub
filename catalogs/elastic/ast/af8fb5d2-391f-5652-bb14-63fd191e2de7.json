@@ -4,7 +4,10 @@
   "name": "Suspicious Curl to Jamf Endpoint",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

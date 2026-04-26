@@ -4,7 +4,9 @@
   "name": "Untrusted DLL Loaded by Azure AD Sync Service",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access"
+  ],
   "event_categories": [
     "any"
   ],

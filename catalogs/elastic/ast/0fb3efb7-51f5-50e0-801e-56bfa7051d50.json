@@ -4,7 +4,10 @@
   "name": "Abnormally Large DNS Response",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.impact"
+  ],
   "event_categories": [
     "network"
   ],

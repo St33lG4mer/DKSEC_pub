@@ -4,7 +4,11 @@
   "name": "At Job Created or Modified",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.execution"
+  ],
   "event_categories": [
     "file"
   ],

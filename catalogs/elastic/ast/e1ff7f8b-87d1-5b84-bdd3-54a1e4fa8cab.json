@@ -4,7 +4,11 @@
   "name": "Kernel Load or Unload via Kexec Detected",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

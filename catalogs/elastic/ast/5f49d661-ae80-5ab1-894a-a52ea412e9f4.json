@@ -4,7 +4,10 @@
   "name": "Entra ID Actor Token User Impersonation Abuse",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "any"
   ],

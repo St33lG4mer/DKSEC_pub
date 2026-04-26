@@ -4,7 +4,10 @@
   "name": "Process Backgrounded by Unusual Parent",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

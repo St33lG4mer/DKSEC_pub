@@ -4,7 +4,10 @@
   "name": "Okta AiTM Session Cookie Replay",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "any"
   ],

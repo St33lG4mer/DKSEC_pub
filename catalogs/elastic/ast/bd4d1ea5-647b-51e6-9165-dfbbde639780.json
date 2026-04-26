@@ -4,7 +4,11 @@
   "name": "PowerShell Suspicious Discovery Related Windows API Functions",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.collection",
+    "attack.execution"
+  ],
   "event_categories": [
     "any"
   ],

@@ -4,7 +4,10 @@
   "name": "Incoming DCOM Lateral Movement with MMC",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

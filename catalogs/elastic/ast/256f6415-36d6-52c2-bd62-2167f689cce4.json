@@ -4,7 +4,10 @@
   "name": "Manual Dracut Execution",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

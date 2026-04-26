@@ -4,7 +4,11 @@
   "name": "Uncommon Destination Port Connection by Web Server",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.execution",
+    "attack.command-and-control"
+  ],
   "event_categories": [
     "network"
   ],

@@ -4,7 +4,11 @@
   "name": "Kubeconfig File Creation or Modification",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.defense-evasion",
+    "attack.initial-access"
+  ],
   "event_categories": [
     "file"
   ],

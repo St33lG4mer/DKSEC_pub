@@ -4,7 +4,10 @@
   "name": "Potential Telnet Authentication Bypass (CVE-2026-24061)",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "process"
   ],

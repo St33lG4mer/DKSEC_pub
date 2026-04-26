@@ -4,7 +4,10 @@
   "name": "Kubernetes Container Created with Excessive Linux Capabilities",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "any"
   ],

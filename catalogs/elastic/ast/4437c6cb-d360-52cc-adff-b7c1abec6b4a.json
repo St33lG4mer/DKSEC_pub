@@ -4,7 +4,10 @@
   "name": "Hidden Directory Creation via Unusual Parent",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.persistence"
+  ],
   "event_categories": [
     "process"
   ],

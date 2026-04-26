@@ -4,7 +4,10 @@
   "name": "Creation or Modification of a new GPO Scheduled Task or Service",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.persistence"
+  ],
   "event_categories": [
     "file"
   ],

@@ -4,7 +4,10 @@
   "name": "Suspicious Named Pipe Creation",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.command-and-control"
+  ],
   "event_categories": [
     "any"
   ],

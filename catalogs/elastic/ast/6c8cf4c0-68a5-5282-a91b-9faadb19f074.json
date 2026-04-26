@@ -4,7 +4,10 @@
   "name": "Suspicious Execution via Microsoft Office Add-Ins",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.persistence"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,11 @@
   "name": "AWS SNS Topic Message Publish by Rare User",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.exfiltration",
+    "attack.impact"
+  ],
   "event_categories": [
     "any"
   ],

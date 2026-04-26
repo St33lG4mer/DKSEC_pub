@@ -4,7 +4,10 @@
   "name": "AWS IAM Long-Term Access Key Correlated with Elevated Detection Alerts",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access",
+    "attack.initial-access"
+  ],
   "event_categories": [
     "any"
   ],

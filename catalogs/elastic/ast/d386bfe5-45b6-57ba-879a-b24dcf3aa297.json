@@ -4,7 +4,10 @@
   "name": "Remote Windows Service Installed",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

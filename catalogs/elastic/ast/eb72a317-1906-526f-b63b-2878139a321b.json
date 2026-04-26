@@ -4,7 +4,9 @@
   "name": "AWS IAM CompromisedKeyQuarantine Policy Attached to User",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access"
+  ],
   "event_categories": [
     "iam"
   ],

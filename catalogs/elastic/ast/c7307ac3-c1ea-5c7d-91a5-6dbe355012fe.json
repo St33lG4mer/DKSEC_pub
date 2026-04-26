@@ -4,7 +4,11 @@
   "name": "UAC Bypass Attempt with IEditionUpgradeManager Elevated COM Interface",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

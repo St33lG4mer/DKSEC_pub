@@ -4,7 +4,10 @@
   "name": "AWS IAM Principal Enumeration via UpdateAssumeRolePolicy",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "any"
   ],

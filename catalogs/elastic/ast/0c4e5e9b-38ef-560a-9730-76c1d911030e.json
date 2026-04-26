@@ -4,7 +4,10 @@
   "name": "Systemd Service Started by Unusual Parent Process",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "any"
   ],

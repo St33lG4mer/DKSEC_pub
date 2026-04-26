@@ -4,7 +4,10 @@
   "name": "Potential OpenSSH Backdoor Logging Activity",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "file"
   ],

@@ -4,7 +4,10 @@
   "name": "Execution via Electron Child Process Node.js Module",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

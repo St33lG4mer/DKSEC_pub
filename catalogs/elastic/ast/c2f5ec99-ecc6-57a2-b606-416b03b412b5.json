@@ -4,7 +4,13 @@
   "name": "Web Server Potential Command Injection Request",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.reconnaissance",
+    "attack.persistence",
+    "attack.execution",
+    "attack.credential-access",
+    "attack.command-and-control"
+  ],
   "event_categories": [
     "any"
   ],

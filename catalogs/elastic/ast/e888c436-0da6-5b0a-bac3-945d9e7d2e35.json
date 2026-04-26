@@ -4,7 +4,10 @@
   "name": "Private Key Searching Activity",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,10 @@
   "name": "Suspicious Microsoft Antimalware Service Execution",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

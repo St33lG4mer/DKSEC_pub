@@ -4,7 +4,10 @@
   "name": "Unusual LD_PRELOAD/LD_LIBRARY_PATH Command Line Arguments",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

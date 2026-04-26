@@ -4,7 +4,10 @@
   "name": "Potential Direct Kubelet Access via Process Arguments Detected via Defend for Containers",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.discovery"
+  ],
   "event_categories": [
     "process"
   ],

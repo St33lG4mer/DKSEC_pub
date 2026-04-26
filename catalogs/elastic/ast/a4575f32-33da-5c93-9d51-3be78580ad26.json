@@ -4,7 +4,10 @@
   "name": "Suspicious Execution from VS Code Extension",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

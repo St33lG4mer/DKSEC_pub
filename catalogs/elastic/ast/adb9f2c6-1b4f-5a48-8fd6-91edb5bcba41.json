@@ -4,7 +4,9 @@
   "name": "Mimikatz Memssp Log File Detected",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.credential-access"
+  ],
   "event_categories": [
     "file"
   ],

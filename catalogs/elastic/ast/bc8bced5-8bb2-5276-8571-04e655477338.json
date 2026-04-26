@@ -4,7 +4,10 @@
   "name": "Incoming Execution via PowerShell Remoting",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.lateral-movement",
+    "attack.execution"
+  ],
   "event_categories": [
     "any"
   ],

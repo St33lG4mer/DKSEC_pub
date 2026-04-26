@@ -4,7 +4,10 @@
   "name": "Windows Script Executing PowerShell",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

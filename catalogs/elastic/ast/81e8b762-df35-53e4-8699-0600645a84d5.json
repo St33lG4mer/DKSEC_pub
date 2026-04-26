@@ -4,7 +4,10 @@
   "name": "Kubernetes Pod Created With HostNetwork",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "any"
   ],

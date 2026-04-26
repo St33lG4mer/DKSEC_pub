@@ -4,7 +4,10 @@
   "name": "Manual Loading of a Suspicious Chromium Extension",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "process"
   ],

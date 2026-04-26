@@ -4,7 +4,10 @@
   "name": "Kubernetes Suspicious Assignment of Controller Service Account",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.execution",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "any"
   ],

@@ -4,7 +4,10 @@
   "name": "Disabling Windows Defender Security Settings via PowerShell",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.execution"
+  ],
   "event_categories": [
     "process"
   ],

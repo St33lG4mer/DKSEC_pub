@@ -4,7 +4,10 @@
   "name": "SUID/SGUID Enumeration Detected",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.discovery",
+    "attack.privilege-escalation"
+  ],
   "event_categories": [
     "process"
   ],

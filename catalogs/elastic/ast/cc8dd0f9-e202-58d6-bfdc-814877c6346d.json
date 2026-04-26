@@ -4,7 +4,10 @@
   "name": "FortiGate FortiCloud SSO Login from Unusual Source",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "network"
   ],

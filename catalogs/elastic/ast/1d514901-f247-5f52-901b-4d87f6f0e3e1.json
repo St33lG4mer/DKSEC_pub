@@ -4,7 +4,10 @@
   "name": "Mounting Hidden or WebDav Remote Shares",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.lateral-movement"
+  ],
   "event_categories": [
     "process"
   ],

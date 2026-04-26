@@ -4,7 +4,10 @@
   "name": "Entra ID OAuth Authorization Code Grant for Unusual User, App, and Resource",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "any"
   ],

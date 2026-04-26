@@ -4,7 +4,10 @@
   "name": "UAC Bypass Attempt via Privileged IFileOperation COM Interface",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "file"
   ],

@@ -4,7 +4,10 @@
   "name": "Entra ID OAuth User Impersonation to Microsoft Graph",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.defense-evasion",
+    "attack.initial-access"
+  ],
   "event_categories": [
     "any"
   ],

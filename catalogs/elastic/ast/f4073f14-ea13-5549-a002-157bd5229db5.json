@@ -4,7 +4,10 @@
   "name": "Curl Execution via Shell Profile",
   "description": "",
   "severity": "critical",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.command-and-control"
+  ],
   "event_categories": [
     "any"
   ],

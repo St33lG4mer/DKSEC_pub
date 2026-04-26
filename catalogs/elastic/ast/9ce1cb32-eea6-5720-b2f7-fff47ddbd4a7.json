@@ -4,7 +4,10 @@
   "name": "Kubernetes Anonymous Request Authorized by Unusual User Agent",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.initial-access",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "any"
   ],

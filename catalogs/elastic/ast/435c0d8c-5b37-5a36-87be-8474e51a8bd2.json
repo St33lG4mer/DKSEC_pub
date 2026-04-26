@@ -4,7 +4,11 @@
   "name": "Suspicious Shell Execution via Velociraptor",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.command-and-control",
+    "attack.execution",
+    "attack.defense-evasion"
+  ],
   "event_categories": [
     "process"
   ],

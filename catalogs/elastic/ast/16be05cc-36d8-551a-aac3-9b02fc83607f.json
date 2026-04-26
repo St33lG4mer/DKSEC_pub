@@ -4,7 +4,10 @@
   "name": "Potential Buffer Overflow Attack Detected",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.initial-access"
+  ],
   "event_categories": [
     "any"
   ],

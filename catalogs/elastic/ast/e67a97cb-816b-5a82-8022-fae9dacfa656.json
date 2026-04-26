@@ -4,7 +4,10 @@
   "name": "AWS IAM User Created Access Keys For Another User",
   "description": "",
   "severity": "high",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.privilege-escalation",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],

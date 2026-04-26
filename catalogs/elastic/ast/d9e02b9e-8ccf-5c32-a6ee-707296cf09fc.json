@@ -4,7 +4,10 @@
   "name": "New GitHub Personal Access Token (PAT) Added",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.persistence",
+    "attack.credential-access"
+  ],
   "event_categories": [
     "configuration"
   ],

@@ -4,7 +4,11 @@
   "name": "Github Activity on a Private Repository from an Unusual IP",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.impact",
+    "attack.initial-access",
+    "attack.persistence"
+  ],
   "event_categories": [
     "any"
   ],
