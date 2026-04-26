@@ -58,3 +58,4 @@ def test_deploy_dry_run_no_decisions_falls_back_to_all(tmp_project, monkeypatch)
     ])
     assert result.exit_code == 0
     assert "3 rules" in result.output  # all 3 rules (no filter)
+    assert "Warning" in result.output
