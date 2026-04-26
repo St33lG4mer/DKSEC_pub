@@ -79,10 +79,17 @@ else:
 
     for r in add_rules:
         with st.expander(f"[{r.get('severity','?').upper()}] {r.get('name','?')}"):
+            st.caption(f"📂 Source: **{catalog_a.title()}** rule → deploying to **{catalog_b.title()}**")
             st.markdown(f"**ID:** `{r.get('id','?')}`")
             st.markdown(f"**Description:** {r.get('description') or '_No description_'}")
-            tq = r.get("translated_query") or r.get("raw_query") or "_No query_"
-            st.code(tq, language="sql")
+            if r.get("translated_query"):
+                st.markdown(f"**Translated Query** (for {catalog_b.title()}):")
+                st.code(r["translated_query"], language="sql")
+            elif r.get("raw_query"):
+                st.markdown(f"**Original {catalog_a.title()} Query:**")
+                st.code(r["raw_query"], language="sql")
+            else:
+                st.code("_No query_", language="sql")
             mitre = ", ".join((r.get("mitre_techniques") or [])[:5])
             if mitre:
                 st.caption(f"MITRE: {mitre}")

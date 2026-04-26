@@ -144,18 +144,24 @@ with tab_gaps:
                     f"{badge} [{rule.severity.upper()}] {rule.name}",
                     expanded=(current_decision == "UNDECIDED"),
                 ):
+                    st.caption(f"📂 Source: **{catalog_a.title()}** rule")
                     st.markdown(f"**Description:** {rule.description or '_No description provided._'}")
 
                     if rule.conditions:
-                        st.markdown("**Conditions:**")
+                        st.markdown(f"**{catalog_a.title()} Conditions:**")
                         cond_lines = [
                             f"- `{c.field}` {c.operator} `{', '.join(c.values)}`"
                             for c in rule.conditions
                         ]
                         st.markdown("\n".join(cond_lines))
 
-                    query = rule.translated_query or rule.raw_query or "_No query available_"
-                    st.markdown("**Query:**")
+                    if rule.translated_query:
+                        query_label = f"**Translated Query** (for {catalog_b.title()}):"
+                        query = rule.translated_query
+                    else:
+                        query_label = f"**Original {catalog_a.title()} Query:**"
+                        query = rule.raw_query or "_No query available_"
+                    st.markdown(query_label)
                     st.code(query, language="sql")
 
                     mitre = ", ".join(rule.mitre_techniques[:5])

@@ -39,7 +39,7 @@ if sev_filter:
 if search:
     rules = [r for r in rules if search.lower() in r.name.lower()]
 
-st.caption(f"Showing **{len(rules)}** rules from **{catalog}**")
+st.caption(f"Showing **{len(rules)}** rules from catalog: **{catalog}**")
 
 if not rules:
     st.info("No rules match the current filters.")

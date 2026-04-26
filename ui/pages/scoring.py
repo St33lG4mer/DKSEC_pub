@@ -85,6 +85,7 @@ if sev_filter:
     df = df[df["Severity"].isin(sev_filter)]
 df = df.sort_values("Score", ascending=False)
 
+st.subheader(f"Scores for **{catalog}** ({len(df)} rules)")
 st.caption(f"Scoring **{len(df)}** rules from **{catalog}**")
 if not has_alert_data:
     st.caption("💡 Run `dksec attack` to enable alert-based classification and scoring.")
