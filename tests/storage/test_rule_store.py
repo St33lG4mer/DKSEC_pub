@@ -74,3 +74,27 @@ def test_rule_store_list_catalogs(tmp_path):
 
     catalogs = store.list_catalogs()
     assert set(catalogs) == {"sigma", "elastic"}
+
+
+# --- save_raw / load_raw tests ---
+
+def test_save_raw_creates_file(tmp_path):
+    store = RuleStore(tmp_path)
+    raws = [{"id": "r1", "title": "Rule 1"}, {"id": "r2", "title": "Rule 2"}]
+    path = store.save_raw("sigma", raws)
+    assert path.exists()
+    assert path.name == "rules.json"
+
+
+def test_load_raw_returns_saved_data(tmp_path):
+    store = RuleStore(tmp_path)
+    raws = [{"id": "r1", "title": "Rule 1"}]
+    store.save_raw("sigma", raws)
+    loaded = store.load_raw("sigma")
+    assert loaded == raws
+
+
+def test_load_raw_returns_empty_when_missing(tmp_path):
+    store = RuleStore(tmp_path)
+    result = store.load_raw("nonexistent")
+    assert result == []

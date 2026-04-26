@@ -55,3 +55,32 @@ class RuleStore:
             d.name for d in sorted(self.base_dir.iterdir())
             if d.is_dir() and (d / "ast").exists() and any((d / "ast").glob("*.json"))
         ]
+
+    # --- raw rule storage (pre-parse, pre-translate) ---
+
+    def _raw_dir(self, catalog: str) -> Path:
+        d = self.base_dir / catalog / "raw"
+        d.mkdir(parents=True, exist_ok=True)
+        return d
+
+    def save_raw(self, catalog: str, raws: list[dict]) -> Path:
+        """
+        Persist raw rule dicts (as returned by adapter.load()) to
+        <base_dir>/<catalog>/raw/rules.json.
+        Overwrites any existing file for this catalog.
+        """
+        import json
+        path = self._raw_dir(catalog) / "rules.json"
+        path.write_text(json.dumps(raws, ensure_ascii=False, indent=2), encoding="utf-8")
+        return path
+
+    def load_raw(self, catalog: str) -> list[dict]:
+        """
+        Load raw rule dicts from <base_dir>/<catalog>/raw/rules.json.
+        Returns empty list if the file does not exist.
+        """
+        import json
+        path = self.base_dir / catalog / "raw" / "rules.json"
+        if not path.exists():
+            return []
+        return json.loads(path.read_text(encoding="utf-8"))
