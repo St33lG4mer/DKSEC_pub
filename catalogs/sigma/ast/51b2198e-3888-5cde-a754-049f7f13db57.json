@@ -4,7 +4,10 @@
   "name": "proc_creation_win_exploit_cve_2023_22518_confluence_tomcat_child_proc",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1059",
+    "attack.t1190"
+  ],
   "event_categories": [
     "any"
   ],

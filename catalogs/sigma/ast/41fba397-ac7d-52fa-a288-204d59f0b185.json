@@ -4,7 +4,10 @@
   "name": "net_connection_win_susp_azurefd_connection",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1102.002",
+    "attack.t1090.004"
+  ],
   "event_categories": [
     "network"
   ],

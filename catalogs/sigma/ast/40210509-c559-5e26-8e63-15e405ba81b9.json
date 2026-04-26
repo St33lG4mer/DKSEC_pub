@@ -4,7 +4,10 @@
   "name": "proc_creation_win_susp_execution_from_public_folder_as_parent",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1564",
+    "attack.t1059"
+  ],
   "event_categories": [
     "process"
   ],

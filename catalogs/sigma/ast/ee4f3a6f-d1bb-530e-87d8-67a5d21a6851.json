@@ -4,7 +4,11 @@
   "name": "win_security_susp_opened_encrypted_zip_filename",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1027",
+    "attack.t1105",
+    "attack.t1036"
+  ],
   "event_categories": [
     "builtin"
   ],

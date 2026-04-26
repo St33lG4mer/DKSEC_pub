@@ -4,7 +4,10 @@
   "name": "proc_creation_win_wermgr_susp_child_process",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1055",
+    "attack.t1036"
+  ],
   "event_categories": [
     "process"
   ],

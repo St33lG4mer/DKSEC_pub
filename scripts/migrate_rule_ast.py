@@ -10,11 +10,18 @@ source_path, metadata).
 from __future__ import annotations
 
 import json
+import re
 import shutil
+import sys
 import uuid
 from pathlib import Path
 
+import yaml
+
 ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(ROOT))
+
+from core.normalizer import normalize_elastic_mitre_tag
 
 # risk_score → severity mapping for Elastic rules
 def _risk_to_severity(risk: int) -> str:
@@ -27,24 +34,52 @@ def _risk_to_severity(risk: int) -> str:
     return "low"
 
 
-# Extract MITRE technique IDs from tags like "Tactic: TA0001" or "Technique: T1059"
 def _mitre_from_tags(tags: list[str]) -> list[str]:
-    techniques = []
+    seen: set[str] = set()
+    result: list[str] = []
     for tag in tags:
-        lower = tag.lower()
-        if "t1" in lower or "ta0" in lower:
-            # Pull out things that look like T1059.001 or TA0002
-            import re
-            hits = re.findall(r'(t\d{4}(?:\.\d{3})?|ta\d{4})', lower)
-            for h in hits:
-                key = f"attack.{h}"
-                if key not in techniques:
-                    techniques.append(key)
-    return techniques
+        val = normalize_elastic_mitre_tag(tag)
+        if val and val not in seen:
+            seen.add(val)
+            result.append(val)
+    return result
 
 
-def migrate_sigma(src_dir: Path, dst_dir: Path) -> int:
+_MITRE_TAG_RE = re.compile(r"^attack\.t\d", re.IGNORECASE)
+
+
+def _build_yaml_stem_index(sigma_rules_dir: Path) -> dict[str, Path]:
+    """Return a mapping of file stem → Path for all YAMLs under sigma_rules_dir."""
+    return {p.stem: p for p in sigma_rules_dir.rglob("*.yml")}
+
+
+def _mitre_from_yaml(yaml_path: Path) -> list[str]:
+    """Extract normalised MITRE technique tags from a Sigma YAML file."""
+    try:
+        data = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    tags = data.get("tags") if isinstance(data, dict) else None
+    if not isinstance(tags, list):
+        return []
+    seen: set[str] = set()
+    result: list[str] = []
+    for tag in tags:
+        if isinstance(tag, str) and _MITRE_TAG_RE.match(tag):
+            normalised = tag.lower()
+            if normalised not in seen:
+                seen.add(normalised)
+                result.append(normalised)
+    return result
+
+
+def migrate_sigma(src_dir: Path, dst_dir: Path, sigma_rules_dir: Path | None = None) -> int:
     dst_dir.mkdir(parents=True, exist_ok=True)
+
+    yaml_by_stem: dict[str, Path] = {}
+    if sigma_rules_dir is not None and sigma_rules_dir.is_dir():
+        yaml_by_stem = _build_yaml_stem_index(sigma_rules_dir)
+
     count = 0
     for src in src_dir.glob("*.json"):
         try:
@@ -54,6 +89,14 @@ def migrate_sigma(src_dir: Path, dst_dir: Path) -> int:
 
         name = raw.get("name") or src.stem
         rule_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"sigma:{src.stem}"))
+
+        # Resolve MITRE techniques: prefer YAML backfill, fall back to existing value
+        mitre: list[str] = []
+        yaml_path = yaml_by_stem.get(src.stem)
+        if yaml_path is not None:
+            mitre = _mitre_from_yaml(yaml_path)
+        if not mitre:
+            mitre = raw.get("mitre_techniques", [])
 
         # Normalise conditions — ensure raw_values is present
         conditions = []
@@ -74,7 +117,7 @@ def migrate_sigma(src_dir: Path, dst_dir: Path) -> int:
             "name": name,
             "description": raw.get("description", ""),
             "severity": raw.get("severity", "medium"),
-            "mitre_techniques": raw.get("mitre_techniques", []),
+            "mitre_techniques": mitre,
             "event_categories": [raw["category"]] if raw.get("category") else [],
             "conditions": conditions,
             "raw_query": raw.get("raw_query", ""),
@@ -152,7 +195,11 @@ if __name__ == "__main__":
         if ast_dir.exists():
             shutil.rmtree(ast_dir)
 
-    sigma_count = migrate_sigma(rule_ast / "sigma", catalogs / "sigma" / "ast")
+    sigma_count = migrate_sigma(
+        rule_ast / "sigma",
+        catalogs / "sigma" / "ast",
+        sigma_rules_dir=ROOT / "sigma_rules",
+    )
     elastic_count = migrate_elastic(rule_ast / "elastic", catalogs / "elastic" / "ast")
 
     print(f"Migrated {sigma_count} Sigma rules → catalogs/sigma/ast/")

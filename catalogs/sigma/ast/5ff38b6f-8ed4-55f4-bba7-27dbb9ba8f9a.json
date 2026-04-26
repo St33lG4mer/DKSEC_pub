@@ -4,7 +4,10 @@
   "name": "file_event_win_exchange_webshell_drop_suspicious",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1190",
+    "attack.t1505.003"
+  ],
   "event_categories": [
     "file"
   ],

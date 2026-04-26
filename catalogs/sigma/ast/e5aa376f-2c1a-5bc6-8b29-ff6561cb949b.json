@@ -4,7 +4,10 @@
   "name": "proc_creation_win_susp_hiding_malware_in_fonts_folder",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1211",
+    "attack.t1059"
+  ],
   "event_categories": [
     "process"
   ],

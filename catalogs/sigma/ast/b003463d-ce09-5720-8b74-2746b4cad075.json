@@ -4,7 +4,10 @@
   "name": "proc_creation_win_schtasks_schedule_via_masqueraded_xml_file",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1036.005",
+    "attack.t1053.005"
+  ],
   "event_categories": [
     "process"
   ],

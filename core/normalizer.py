@@ -98,3 +98,98 @@ SEV_COLORS: dict[str, str] = {
     "low": "#3fb950",
     "?": "#8b949e",
 }
+
+# ---------------------------------------------------------------------------
+# Multi-signal composite scorer
+# ---------------------------------------------------------------------------
+from core.ast_model import RuleAST  # noqa: E402 — after constants to avoid circular issues
+
+_SIG_VAL_STOP = frozenset({
+    "true", "false", "null", "none", "yes", "no", "and", "or", "not",
+    "high", "system", "medium", "low", "process", "file", "network",
+    "windows", "linux", "any", "all",
+})
+_REG_HIVES = re.compile(r'^(hklm|hkcu|hku|hkcr|hkcc)', re.I)
+_REG_PATHS = re.compile(r'\\(software|system|currentversion)\\', re.I)
+_SAFE_CHARS = re.compile(r'^[a-z0-9.\-_]+$')
+
+_NAME_PREFIX_STOP = frozenset({
+    "proc", "process", "create", "creation", "win", "lnx", "linux", "mac",
+    "osx", "aws", "gcp", "azure", "net", "network", "dns", "file", "reg",
+    "registry", "event", "log", "cmd", "ps", "powershell", "script",
+    "sysmon", "pipe", "image",
+})
+_NAME_STOP = frozenset({
+    "the", "and", "via", "for", "use", "not", "new", "add", "set",
+    "get", "run", "exe", "dll", "sys", "bin", "tmp", "var", "etc",
+})
+_NAME_SPLIT_RE = re.compile(r'[_\-.\s]+')
+
+
+def _extract_values_from_list(values: list[str], already_lower: bool = False) -> set[str]:
+    result: set[str] = set()
+    for raw in values:
+        v = raw if already_lower else raw.lower()
+        if v.endswith(".exe"):
+            # Keep only the filename, strip path separators
+            filename = v.replace("/", "\\").rsplit("\\", 1)[-1]
+            result.add(filename)
+        elif _REG_HIVES.match(v) or _REG_PATHS.search(v):
+            result.add(v)
+        else:
+            if (
+                len(v) >= 4
+                and _SAFE_CHARS.match(v)
+                and "*" not in v
+                and "?" not in v
+                and v not in _SIG_VAL_STOP
+            ):
+                result.add(v)
+    return result
+
+
+def extract_significant_values(rule: RuleAST) -> frozenset[str]:
+    """Extract semantically significant values from a rule's conditions."""
+    result: set[str] = set()
+    for cond in rule.conditions:
+        result.update(_extract_values_from_list(cond.values, already_lower=True))
+        result.update(_extract_values_from_list(cond.raw_values, already_lower=False))
+    return frozenset(result)
+
+
+def name_tokens(rule: RuleAST) -> frozenset[str]:
+    """Tokenize a rule name into meaningful words, stripping catalog-specific prefixes."""
+    parts = rule.name.split("_")
+    # Drop leading tokens that are catalog-specific prefixes
+    while parts and parts[0].lower() in _NAME_PREFIX_STOP:
+        parts.pop(0)
+    remaining = "_".join(parts)
+    tokens = _NAME_SPLIT_RE.split(remaining)
+    result: set[str] = set()
+    for tok in tokens:
+        t = tok.lower()
+        if len(t) < 3:
+            continue
+        if t.isdigit():
+            continue
+        if t in _NAME_STOP:
+            continue
+        result.add(t)
+    return frozenset(result)
+
+
+def composite_score(rule_a: RuleAST, rule_b: RuleAST) -> tuple[float, dict[str, float]]:
+    """
+    Compute a weighted composite similarity score between two rules.
+
+    Weights: value_score=0.50, name_score=0.30, mitre_score=0.20
+    """
+    value_score = jaccard(extract_significant_values(rule_a), extract_significant_values(rule_b))
+    name_score = jaccard(name_tokens(rule_a), name_tokens(rule_b))
+
+    mt_a = frozenset(rule_a.mitre_techniques)
+    mt_b = frozenset(rule_b.mitre_techniques)
+    mitre_score = jaccard(mt_a, mt_b)  # jaccard returns 0.0 when both empty
+
+    composite = 0.50 * value_score + 0.30 * name_score + 0.20 * mitre_score
+    return composite, {"value_score": value_score, "name_score": name_score, "mitre_score": mitre_score}

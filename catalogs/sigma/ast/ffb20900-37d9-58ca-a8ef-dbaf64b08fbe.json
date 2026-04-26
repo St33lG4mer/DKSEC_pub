@@ -4,7 +4,10 @@
   "name": "proc_creation_win_reg_query_registry",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1012",
+    "attack.t1007"
+  ],
   "event_categories": [
     "process"
   ],

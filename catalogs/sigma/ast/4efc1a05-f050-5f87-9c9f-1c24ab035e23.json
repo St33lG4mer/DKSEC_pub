@@ -4,7 +4,10 @@
   "name": "dns_query_win_devtunnels_communication",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1071.001",
+    "attack.t1572"
+  ],
   "event_categories": [
     "dns"
   ],

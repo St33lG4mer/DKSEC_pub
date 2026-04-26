@@ -4,7 +4,10 @@
   "name": "proc_creation_win_github_self_hosted_runner",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1102.002",
+    "attack.t1071"
+  ],
   "event_categories": [
     "process"
   ],

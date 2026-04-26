@@ -4,7 +4,10 @@
   "name": "net_connection_win_domain_azurewebsites",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1102",
+    "attack.t1102.001"
+  ],
   "event_categories": [
     "network"
   ],

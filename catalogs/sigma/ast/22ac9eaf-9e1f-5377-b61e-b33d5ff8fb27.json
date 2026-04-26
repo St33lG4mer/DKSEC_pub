@@ -4,7 +4,10 @@
   "name": "file_event_win_susp_startup_folder_persistence",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1204.002",
+    "attack.t1547.001"
+  ],
   "event_categories": [
     "file"
   ],

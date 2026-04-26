@@ -4,7 +4,10 @@
   "name": "proc_creation_win_lsass_process_clone",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1003",
+    "attack.t1003.001"
+  ],
   "event_categories": [
     "process"
   ],

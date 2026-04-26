@@ -4,7 +4,10 @@
   "name": "net_connection_win_domain_portmap",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1041",
+    "attack.t1090.002"
+  ],
   "event_categories": [
     "network"
   ],

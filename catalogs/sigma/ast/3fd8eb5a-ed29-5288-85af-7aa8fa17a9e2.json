@@ -4,7 +4,11 @@
   "name": "proc_creation_win_powershell_frombase64string",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1027",
+    "attack.t1140",
+    "attack.t1059.001"
+  ],
   "event_categories": [
     "process"
   ],

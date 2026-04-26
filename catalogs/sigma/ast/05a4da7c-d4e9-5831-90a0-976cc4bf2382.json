@@ -4,7 +4,11 @@
   "name": "proc_creation_win_susp_shell_spawn_susp_program",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1059.005",
+    "attack.t1059.001",
+    "attack.t1218"
+  ],
   "event_categories": [
     "process"
   ],

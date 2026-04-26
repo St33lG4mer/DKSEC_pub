@@ -4,7 +4,10 @@
   "name": "proc_creation_win_svchost_termserv_proc_spawn",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1190",
+    "attack.t1210"
+  ],
   "event_categories": [
     "process"
   ],

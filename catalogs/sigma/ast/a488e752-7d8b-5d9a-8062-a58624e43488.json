@@ -4,7 +4,10 @@
   "name": "proc_creation_win_rundll32_process_dump_via_comsvcs",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1036",
+    "attack.t1003.001"
+  ],
   "event_categories": [
     "process"
   ],

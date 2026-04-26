@@ -4,7 +4,10 @@
   "name": "registry_set_crashdump_disabled",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1564",
+    "attack.t1112"
+  ],
   "event_categories": [
     "registry"
   ],

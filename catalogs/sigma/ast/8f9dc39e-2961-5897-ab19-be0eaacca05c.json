@@ -4,7 +4,11 @@
   "name": "proc_creation_win_susp_registry_modification_of_ms_setting_protocol_handler",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1548.002",
+    "attack.t1546.001",
+    "attack.t1112"
+  ],
   "event_categories": [
     "process"
   ],

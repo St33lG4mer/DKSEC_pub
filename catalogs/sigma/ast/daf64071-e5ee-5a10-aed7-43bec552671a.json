@@ -4,7 +4,11 @@
   "name": "proc_creation_win_exploit_cve_2020_10189",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1190",
+    "attack.t1059.001",
+    "attack.t1059.003"
+  ],
   "event_categories": [
     "any"
   ],

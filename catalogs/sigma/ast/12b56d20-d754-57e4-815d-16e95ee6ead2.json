@@ -4,7 +4,10 @@
   "name": "proc_creation_win_powershell_base64_reflection_assembly_load_obfusc",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1059.001",
+    "attack.t1027"
+  ],
   "event_categories": [
     "process"
   ],

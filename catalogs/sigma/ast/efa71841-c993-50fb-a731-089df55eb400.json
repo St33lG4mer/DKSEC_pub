@@ -4,7 +4,14 @@
   "name": "win_audit_cve",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1203",
+    "attack.t1068",
+    "attack.t1211",
+    "attack.t1212",
+    "attack.t1210",
+    "attack.t1499.004"
+  ],
   "event_categories": [
     "builtin"
   ],

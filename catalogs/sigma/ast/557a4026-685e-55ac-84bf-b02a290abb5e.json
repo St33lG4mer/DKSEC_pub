@@ -4,7 +4,10 @@
   "name": "proc_creation_win_susp_local_system_owner_account_discovery",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1033",
+    "attack.t1087.001"
+  ],
   "event_categories": [
     "process"
   ],

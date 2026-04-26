@@ -4,7 +4,10 @@
   "name": "win_security_susp_local_anon_logon_created",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1136.001",
+    "attack.t1136.002"
+  ],
   "event_categories": [
     "builtin"
   ],

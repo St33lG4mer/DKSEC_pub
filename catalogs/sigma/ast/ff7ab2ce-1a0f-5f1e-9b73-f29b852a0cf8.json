@@ -4,7 +4,12 @@
   "name": "proc_creation_win_apt_turla_commands_critical",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1059",
+    "attack.t1021.002",
+    "attack.t1083",
+    "attack.t1135"
+  ],
   "event_categories": [
     "any"
   ],

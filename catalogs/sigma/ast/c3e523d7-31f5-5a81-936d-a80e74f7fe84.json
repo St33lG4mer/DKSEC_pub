@@ -4,7 +4,10 @@
   "name": "proc_creation_win_mpcmdrun_download_arbitrary_file",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1218",
+    "attack.t1105"
+  ],
   "event_categories": [
     "process"
   ],

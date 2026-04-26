@@ -4,7 +4,10 @@
   "name": "dns_query_win_regsvr32_dns_query",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1559.001",
+    "attack.t1218.010"
+  ],
   "event_categories": [
     "dns"
   ],

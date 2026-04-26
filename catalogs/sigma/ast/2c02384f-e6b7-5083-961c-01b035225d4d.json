@@ -4,7 +4,10 @@
   "name": "image_load_uac_bypass_via_dism",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1548.002",
+    "attack.t1574.001"
+  ],
   "event_categories": [
     "library"
   ],

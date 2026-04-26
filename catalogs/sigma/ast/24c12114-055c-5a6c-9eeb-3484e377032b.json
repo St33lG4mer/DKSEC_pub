@@ -4,7 +4,10 @@
   "name": "proc_creation_win_exploit_cve_2022_22954_vmware_workspace_one_rce",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1059.006",
+    "attack.t1190"
+  ],
   "event_categories": [
     "any"
   ],

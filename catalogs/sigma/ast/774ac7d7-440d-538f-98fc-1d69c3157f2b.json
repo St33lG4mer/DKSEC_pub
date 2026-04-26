@@ -4,7 +4,12 @@
   "name": "proc_creation_win_webshell_chopper",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1505.003",
+    "attack.t1018",
+    "attack.t1033",
+    "attack.t1087"
+  ],
   "event_categories": [
     "process"
   ],

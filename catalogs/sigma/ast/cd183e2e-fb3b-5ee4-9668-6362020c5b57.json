@@ -4,7 +4,10 @@
   "name": "proc_creation_win_logman_disable_eventlog",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1562.001",
+    "attack.t1070.001"
+  ],
   "event_categories": [
     "process"
   ],

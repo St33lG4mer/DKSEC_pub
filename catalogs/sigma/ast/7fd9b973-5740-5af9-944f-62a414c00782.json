@@ -4,7 +4,13 @@
   "name": "proc_creation_win_malware_wannacry",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1210",
+    "attack.t1083",
+    "attack.t1222.001",
+    "attack.t1486",
+    "attack.t1490"
+  ],
   "event_categories": [
     "any"
   ],

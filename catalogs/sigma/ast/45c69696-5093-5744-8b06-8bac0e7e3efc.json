@@ -4,7 +4,13 @@
   "name": "proc_creation_win_hktl_mimikatz_command_line",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1003.001",
+    "attack.t1003.002",
+    "attack.t1003.004",
+    "attack.t1003.005",
+    "attack.t1003.006"
+  ],
   "event_categories": [
     "process"
   ],

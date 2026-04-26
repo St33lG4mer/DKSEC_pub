@@ -4,7 +4,10 @@
   "name": "net_connection_win_dllhost_non_local_ip",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1218",
+    "attack.t1559.001"
+  ],
   "event_categories": [
     "network"
   ],

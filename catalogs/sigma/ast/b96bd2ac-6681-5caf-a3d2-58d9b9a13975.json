@@ -4,7 +4,10 @@
   "name": "registry_set_dns_over_https_enabled",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1140",
+    "attack.t1112"
+  ],
   "event_categories": [
     "registry"
   ],

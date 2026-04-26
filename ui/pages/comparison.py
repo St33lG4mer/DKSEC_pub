@@ -59,6 +59,9 @@ with st.sidebar:
         use_alerts = st.checkbox("Include alert data", value=True)
         if use_alerts:
             run_id = st.selectbox("Attack run", runs, index=len(runs) - 1)
+            _sidebar_alerts = result_store.load_alerts(run_id)
+            _sidebar_scenarios = len({a.get("scenario_id") for a in _sidebar_alerts if a.get("scenario_id")})
+            st.caption(f"Coverage Map: {_sidebar_scenarios} scenarios, {len(_sidebar_alerts):,} alerts")
 
 if catalog_a == catalog_b:
     st.error("Select two different catalogs.")
@@ -93,6 +96,21 @@ c3.metric("Overlaps", len(result.overlaps))
 c4.metric(f"Gaps (add to {catalog_b.title()})", len(result.unique_a))
 
 st.caption(f"Confidence: **{result.confidence}**")
+if result.confidence == "full":
+    st.success("✅ Full confidence — includes attack chain alert data")
+else:
+    st.info("🔬 Logic-only — run the Attack Chain to add empirical confirmation")
+
+if result.confidence == "full":
+    alert_confirmed = sum(1 for p in result.overlaps if p.alert_confirmed)
+    logic_only = len(result.overlaps) - alert_confirmed
+    ac1, ac2 = st.columns(2)
+    ac1.metric("Alert-confirmed overlaps", alert_confirmed)
+    ac2.metric("Logic-only overlaps", logic_only)
+else:
+    if not runs:
+        st.page_link("pages/attack_chain.py", label="→ Run Attack Chain", icon="⚔️")
+
 st.divider()
 
 # ── TAB LAYOUT ──────────────────────────────────────────────────────────────
@@ -237,6 +255,23 @@ with tab_overlaps:
                         st.markdown("**Conditions:**\n" + "\n".join(cond_lines))
                     q_b = pair.rule_b.translated_query or pair.rule_b.raw_query or "_None_"
                     st.code(q_b, language="sql")
+
+                st.divider()
+                s1, s2, s3, s4 = st.columns(4)
+                composite = getattr(pair, "jaccard_score", 0.0)
+                value_s   = getattr(pair, "value_score",   0.0)
+                name_s    = getattr(pair, "name_score",    0.0)
+                mitre_s   = getattr(pair, "mitre_score",   0.0)
+                s1.metric("🎯 Composite",   f"{round(composite * 100)}%")
+                s2.metric("🔬 Value Match", f"{round(value_s   * 100)}%")
+                s3.metric("📛 Name Match",  f"{round(name_s    * 100)}%")
+                s4.metric("🛡 MITRE",       f"{round(mitre_s   * 100)}%")
+                if composite >= 0.40:
+                    st.success("Strong match")
+                elif composite >= 0.25:
+                    st.info("Moderate match")
+                else:
+                    st.warning("Weak match")
 
                 if pair.alert_confirmed:
                     st.success("Alert-confirmed overlap: both rules fired on the same attack scenario.")

@@ -4,7 +4,10 @@
   "name": "proc_creation_win_susp_network_scan_loop",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1059",
+    "attack.t1018"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,10 @@
   "name": "proc_creation_win_lolbin_gather_network_info",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1615",
+    "attack.t1059.005"
+  ],
   "event_categories": [
     "process"
   ],

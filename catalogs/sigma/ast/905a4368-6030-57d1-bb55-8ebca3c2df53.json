@@ -4,7 +4,10 @@
   "name": "win_security_external_device",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1091",
+    "attack.t1200"
+  ],
   "event_categories": [
     "builtin"
   ],

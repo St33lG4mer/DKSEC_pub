@@ -4,7 +4,10 @@
   "name": "driver_load_win_vuln_drivers_names",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1543.003",
+    "attack.t1068"
+  ],
   "event_categories": [
     "driver"
   ],

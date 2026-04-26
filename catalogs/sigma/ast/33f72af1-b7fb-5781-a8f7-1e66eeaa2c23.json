@@ -4,7 +4,10 @@
   "name": "proc_creation_win_qemu_suspicious_execution",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1090",
+    "attack.t1572"
+  ],
   "event_categories": [
     "process"
   ],

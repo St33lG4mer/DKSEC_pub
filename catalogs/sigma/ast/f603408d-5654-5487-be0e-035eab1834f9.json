@@ -4,7 +4,11 @@
   "name": "proc_creation_win_bitsadmin_download_file_sharing_domains",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1197",
+    "attack.t1036.003",
+    "attack.t1105"
+  ],
   "event_categories": [
     "process"
   ],

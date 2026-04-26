@@ -4,7 +4,11 @@
   "name": "proc_creation_win_pua_advancedrun",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1564.003",
+    "attack.t1134.002",
+    "attack.t1059.003"
+  ],
   "event_categories": [
     "process"
   ],

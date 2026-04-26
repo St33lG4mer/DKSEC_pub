@@ -4,7 +4,10 @@
   "name": "proc_creation_win_powershell_encoding_patterns",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1027",
+    "attack.t1059.001"
+  ],
   "event_categories": [
     "process"
   ],

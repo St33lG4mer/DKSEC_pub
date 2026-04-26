@@ -4,7 +4,10 @@
   "name": "proc_creation_win_sc_service_tamper_for_persistence",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1543.003",
+    "attack.t1574.011"
+  ],
   "event_categories": [
     "process"
   ],

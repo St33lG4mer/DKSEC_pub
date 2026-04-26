@@ -4,7 +4,10 @@
   "name": "proc_creation_win_susp_shadow_copies_deletion",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1070",
+    "attack.t1490"
+  ],
   "event_categories": [
     "process"
   ],

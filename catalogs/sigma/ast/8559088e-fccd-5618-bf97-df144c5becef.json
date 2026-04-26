@@ -4,7 +4,11 @@
   "name": "proc_creation_win_conhost_headless_powershell",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1059.001",
+    "attack.t1059.003",
+    "attack.t1564.003"
+  ],
   "event_categories": [
     "process"
   ],

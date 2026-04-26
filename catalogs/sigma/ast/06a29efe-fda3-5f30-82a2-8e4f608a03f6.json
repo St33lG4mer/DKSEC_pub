@@ -4,7 +4,10 @@
   "name": "image_load_dll_rstrtmgr_suspicious_load",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1486",
+    "attack.t1562.001"
+  ],
   "event_categories": [
     "library"
   ],

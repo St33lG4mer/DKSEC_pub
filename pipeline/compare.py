@@ -13,6 +13,9 @@ class OverlapPair:
     rule_b: RuleAST
     jaccard_score: float
     alert_confirmed: bool = False
+    value_score: float = 0.0
+    name_score: float = 0.0
+    mitre_score: float = 0.0
 
     def to_dict(self) -> dict:
         return {
@@ -24,6 +27,9 @@ class OverlapPair:
             "rule_b_catalog": self.rule_b.catalog,
             "jaccard_score": self.jaccard_score,
             "alert_confirmed": self.alert_confirmed,
+            "value_score": self.value_score,
+            "name_score": self.name_score,
+            "mitre_score": self.mitre_score,
         }
 
 
@@ -49,31 +55,23 @@ class CompareResult:
 # compare_rules() implementation
 # ---------------------------------------------------------------------------
 
-from core.normalizer import extract_eql_tokens, jaccard
+from core.normalizer import composite_score
 
 
-def _tokens_for(rule: RuleAST) -> frozenset:
-    """Extract tokens. Prefer translated_query; fall back to raw_query."""
-    query = rule.translated_query if rule.translated_query is not None else rule.raw_query
-    return extract_eql_tokens(query)
-
-
-def _should_compare(rule_a: RuleAST, rule_b: RuleAST, tokens_a: frozenset, tokens_b: frozenset) -> bool:
-    """
-    Pre-filter: only compute Jaccard if rules share at least one MITRE technique
-    or their token sets have a non-empty intersection.
-    """
-    if rule_a.mitre_techniques and rule_b.mitre_techniques:
-        if set(rule_a.mitre_techniques) & set(rule_b.mitre_techniques):
-            return True
-    return bool(tokens_a & tokens_b)
+def _categories_compatible(rule_a: RuleAST, rule_b: RuleAST) -> bool:
+    """Return False only when both rules have non-empty categories with zero overlap."""
+    cats_a = set(rule_a.event_categories)
+    cats_b = set(rule_b.event_categories)
+    if not cats_a or not cats_b:
+        return True
+    return bool(cats_a & cats_b)
 
 
 def compare_rules(
     rules_a: list[RuleAST],
     rules_b: list[RuleAST],
     alerts: list[dict] | None = None,
-    threshold: float = 0.40,
+    threshold: float = 0.25,
 ) -> CompareResult:
     """
     Compare two rule sets and return overlaps + unique rules.
@@ -109,9 +107,6 @@ def compare_rules(
     catalog_a = rules_a[0].catalog
     catalog_b = rules_b[0].catalog
 
-    # Pre-compute tokens
-    tokens_a = {r.id: _tokens_for(r) for r in rules_a}
-    tokens_b = {r.id: _tokens_for(r) for r in rules_b}
     rules_b_by_id = {r.id: r for r in rules_b}
 
     # Build alert co-firing index: scenario_id → set of rule_ids that fired
@@ -128,19 +123,16 @@ def compare_rules(
     overlapped_b_ids: set[str] = set()
 
     for a in rules_a:
-        ta = tokens_a[a.id]
-
-        # Find best-matching rule_b for this rule_a
-        best_score = 0.0
+        best_composite = 0.0
+        best_signals: dict = {}
         best_b: RuleAST | None = None
         alert_confirmed_for_best = False
 
         for b in rules_b:
-            tb = tokens_b[b.id]
+            if not _categories_compatible(a, b):
+                continue
 
-            score = 0.0
-            if _should_compare(a, b, ta, tb):
-                score = jaccard(ta, tb)
+            comp, signals = composite_score(a, b)
 
             # Check alert co-firing
             alert_confirmed = False
@@ -152,23 +144,29 @@ def compare_rules(
 
             # Update best match: alert confirmation overrides logic score
             if alert_confirmed and not alert_confirmed_for_best:
-                best_score = score
+                best_composite = comp
+                best_signals = signals
                 best_b = b
                 alert_confirmed_for_best = True
-            elif alert_confirmed and alert_confirmed_for_best and score > best_score:
-                best_score = score
+            elif alert_confirmed and alert_confirmed_for_best and comp > best_composite:
+                best_composite = comp
+                best_signals = signals
                 best_b = b
-            elif not alert_confirmed_for_best and score > best_score:
-                best_score = score
+            elif not alert_confirmed_for_best and comp > best_composite:
+                best_composite = comp
+                best_signals = signals
                 best_b = b
 
-        if best_b is not None and (best_score >= threshold or alert_confirmed_for_best):
+        if best_b is not None and (best_composite >= threshold or alert_confirmed_for_best):
             overlap_pairs.append(
                 OverlapPair(
                     rule_a=a,
                     rule_b=best_b,
-                    jaccard_score=best_score,
+                    jaccard_score=best_composite,
                     alert_confirmed=alert_confirmed_for_best,
+                    value_score=best_signals.get("value_score", 0.0),
+                    name_score=best_signals.get("name_score", 0.0),
+                    mitre_score=best_signals.get("mitre_score", 0.0),
                 )
             )
             overlapped_a_ids.add(a.id)

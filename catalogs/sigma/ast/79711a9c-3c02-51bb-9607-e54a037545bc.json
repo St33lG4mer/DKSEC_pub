@@ -4,7 +4,11 @@
   "name": "proc_creation_win_malware_pikabot_combined_commands_execution",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1059.003",
+    "attack.t1105",
+    "attack.t1218"
+  ],
   "event_categories": [
     "any"
   ],

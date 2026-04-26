@@ -4,7 +4,14 @@
   "name": "file_event_win_bloodhound_collection",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1087.001",
+    "attack.t1087.002",
+    "attack.t1482",
+    "attack.t1069.001",
+    "attack.t1069.002",
+    "attack.t1059.001"
+  ],
   "event_categories": [
     "file"
   ],

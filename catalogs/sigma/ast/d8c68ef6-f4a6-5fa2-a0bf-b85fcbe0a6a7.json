@@ -4,7 +4,10 @@
   "name": "proc_creation_win_office_onenote_susp_child_processes",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1566",
+    "attack.t1566.001"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,11 @@
   "name": "proc_creation_win_dns_exfiltration_tools_execution",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1048.001",
+    "attack.t1071.004",
+    "attack.t1132.001"
+  ],
   "event_categories": [
     "process"
   ],

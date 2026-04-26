@@ -4,7 +4,10 @@
   "name": "proc_creation_win_susp_download_office_domain",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1105",
+    "attack.t1608"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,16 @@
   "name": "proc_creation_win_hktl_winpwn",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1046",
+    "attack.t1082",
+    "attack.t1106",
+    "attack.t1518",
+    "attack.t1548.002",
+    "attack.t1552.001",
+    "attack.t1555",
+    "attack.t1555.003"
+  ],
   "event_categories": [
     "process"
   ],

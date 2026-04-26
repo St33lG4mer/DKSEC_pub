@@ -4,7 +4,10 @@
   "name": "proc_creation_win_tscon_rdp_redirect",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1563.002",
+    "attack.t1021.001"
+  ],
   "event_categories": [
     "process"
   ],

@@ -4,7 +4,10 @@
   "name": "proc_creation_win_webshell_susp_process_spawned_from_webserver",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1505.003",
+    "attack.t1190"
+  ],
   "event_categories": [
     "process"
   ],

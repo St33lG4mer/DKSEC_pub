@@ -4,7 +4,10 @@
   "name": "win_system_invoke_obfuscation_via_use_mshta_services",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1027",
+    "attack.t1059.001"
+  ],
   "event_categories": [
     "builtin"
   ],

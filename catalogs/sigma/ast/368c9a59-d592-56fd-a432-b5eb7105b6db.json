@@ -4,7 +4,12 @@
   "name": "win_security_apt_oilrig_mar18",
   "description": "",
   "severity": "medium",
-  "mitre_techniques": [],
+  "mitre_techniques": [
+    "attack.t1053.005",
+    "attack.t1543.003",
+    "attack.t1112",
+    "attack.t1071.004"
+  ],
   "event_categories": [
     "any"
   ],
