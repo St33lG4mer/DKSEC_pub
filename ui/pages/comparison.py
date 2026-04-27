@@ -2,6 +2,7 @@
 """Comparison page — catalog picker + overlap/unique analysis + inline triage."""
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -10,15 +11,53 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import pandas as pd
 import streamlit as st
 
-from core.mitre_mapping import (
-    ALL_TACTICS,
-    count_rules_without_mitre_tactics,
-    rules_coverage_by_tactic,
-)
+from core import mitre_mapping as _mitre_mapping
 from core.theme import apply_theme
 from pipeline.compare import compare_rules
 from storage.result_store import ResultStore
 from storage.rule_store import RuleStore
+
+ALL_TACTICS = _mitre_mapping.ALL_TACTICS
+rules_coverage_by_tactic = _mitre_mapping.rules_coverage_by_tactic
+
+
+def _fallback_count_rules_without_mitre_tactics(rules: list[dict]) -> int:
+    """Compatibility fallback when older mitre_mapping modules are deployed."""
+    tactic_slugs = {t.lower().replace(" ", "-") for t in ALL_TACTICS}
+    technique_to_tactics = getattr(_mitre_mapping, "technique_to_tactics", None)
+
+    unmapped = 0
+    for rule in rules:
+        techniques = rule.get("mitre_techniques") or []
+        mapped = False
+
+        for raw in techniques:
+            if not isinstance(raw, str):
+                continue
+
+            cleaned = re.sub(r"^attack\.", "", raw.strip().lower())
+            cleaned = cleaned.replace("_", "-")
+            cleaned = re.sub(r"\s+", "-", cleaned)
+            cleaned = re.sub(r"-+", "-", cleaned)
+            if cleaned in tactic_slugs:
+                mapped = True
+                break
+
+            if callable(technique_to_tactics) and technique_to_tactics(raw):
+                mapped = True
+                break
+
+        if not mapped:
+            unmapped += 1
+
+    return unmapped
+
+
+count_rules_without_mitre_tactics = getattr(
+    _mitre_mapping,
+    "count_rules_without_mitre_tactics",
+    _fallback_count_rules_without_mitre_tactics,
+)
 
 _ROOT = Path(__file__).parent.parent.parent
 _CATALOGS_DIR = _ROOT / "catalogs"
