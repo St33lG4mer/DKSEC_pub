@@ -213,6 +213,10 @@ ALL_TACTICS: list[str] = [
     "Resource Development",
 ]
 
+_TACTIC_SLUG_TO_NAME: dict[str, str] = {
+    tactic.lower().replace(" ", "-"): tactic for tactic in ALL_TACTICS
+}
+
 
 def _normalise_technique_id(raw: str) -> str:
     """Convert any format to 'TXXXX' (no sub-technique suffix)."""
@@ -234,6 +238,48 @@ def technique_to_tactics(technique_id: str) -> list[str]:
     return list(_TECHNIQUE_TACTICS.get(normalised, []))
 
 
+def _normalise_tactic_tag(raw: str) -> str | None:
+    """Return canonical ATT&CK tactic name when raw looks like a tactic tag.
+
+    Accepts values like:
+      "attack.execution", "Execution", "command_and_control", "Command-and-Control".
+    Returns None for non-tactic values.
+    """
+    cleaned = raw.strip().lower()
+    cleaned = re.sub(r"^attack\.", "", cleaned)
+    cleaned = cleaned.replace("_", "-")
+    cleaned = re.sub(r"\s+", "-", cleaned)
+    cleaned = re.sub(r"-+", "-", cleaned)
+    return _TACTIC_SLUG_TO_NAME.get(cleaned)
+
+
+def rule_tactics(rule: dict) -> set[str]:
+    """Extract ATT&CK tactics covered by one rule.
+
+    Uses both technique IDs (Txxxx forms) and direct tactic tags.
+    """
+    techniques = rule.get("mitre_techniques") or []
+    covered_tactics: set[str] = set()
+
+    for raw in techniques:
+        if not isinstance(raw, str):
+            continue
+
+        tactic = _normalise_tactic_tag(raw)
+        if tactic:
+            covered_tactics.add(tactic)
+            continue
+
+        covered_tactics.update(technique_to_tactics(raw))
+
+    return covered_tactics
+
+
+def count_rules_without_mitre_tactics(rules: list[dict]) -> int:
+    """Count rules that do not resolve to any ATT&CK tactic."""
+    return sum(1 for rule in rules if not rule_tactics(rule))
+
+
 def rules_coverage_by_tactic(rules: list[dict]) -> dict[str, int]:
     """Count unique rules covering each ATT&CK tactic.
 
@@ -245,10 +291,7 @@ def rules_coverage_by_tactic(rules: list[dict]) -> dict[str, int]:
     counts: dict[str, int] = {tactic: 0 for tactic in ALL_TACTICS}
 
     for rule in rules:
-        techniques = rule.get("mitre_techniques") or []
-        covered_tactics: set[str] = set()
-        for tech in techniques:
-            covered_tactics.update(technique_to_tactics(tech))
+        covered_tactics = rule_tactics(rule)
         for tactic in covered_tactics:
             if tactic in counts:
                 counts[tactic] += 1

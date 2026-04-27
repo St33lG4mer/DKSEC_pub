@@ -2,7 +2,11 @@
 from __future__ import annotations
 
 import pytest
-from core.mitre_mapping import technique_to_tactics, rules_coverage_by_tactic
+from core.mitre_mapping import (
+    count_rules_without_mitre_tactics,
+    rules_coverage_by_tactic,
+    technique_to_tactics,
+)
 
 # Technique IDs may arrive as "T1059.001", "attack.t1059.001", or "t1059".
 
@@ -60,3 +64,21 @@ def test_all_tactics_present_in_coverage():
         "Reconnaissance", "Resource Development",
     }
     assert expected_tactics.issubset(set(cov.keys()))
+
+
+def test_rules_coverage_accepts_direct_tactic_tags():
+    rules = [{"mitre_techniques": ["attack.execution", "Command-and-Control"]}]
+    cov = rules_coverage_by_tactic(rules)
+    assert cov["Execution"] == 1
+    assert cov["Command and Control"] == 1
+
+
+def test_count_rules_without_mitre_tactics():
+    rules = [
+        {"mitre_techniques": ["attack.t1059.001"]},
+        {"mitre_techniques": ["attack.execution"]},
+        {"mitre_techniques": []},
+        {"mitre_techniques": ["custom.non_mitre_tag"]},
+        {},
+    ]
+    assert count_rules_without_mitre_tactics(rules) == 3

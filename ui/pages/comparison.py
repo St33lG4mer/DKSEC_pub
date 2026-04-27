@@ -10,7 +10,11 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import pandas as pd
 import streamlit as st
 
-from core.mitre_mapping import rules_coverage_by_tactic, ALL_TACTICS
+from core.mitre_mapping import (
+    ALL_TACTICS,
+    count_rules_without_mitre_tactics,
+    rules_coverage_by_tactic,
+)
 from core.theme import apply_theme
 from pipeline.compare import compare_rules
 from storage.result_store import ResultStore
@@ -76,14 +80,30 @@ if not rules_a or not rules_b:
 
 alerts = result_store.load_alerts(run_id) if run_id else None
 
-with st.spinner("Analysing coverage…"):
-    result = compare_rules(rules_a, rules_b, alerts=alerts, threshold=threshold)
+comparison_key = (
+    catalog_a,
+    catalog_b,
+    float(threshold),
+    run_id or "",
+    len(rules_a),
+    len(rules_b),
+    len(alerts or []),
+)
 
-# Persist results
-overlaps_dicts, unique_a_dicts = result.to_storage_dicts()
-result_store.save_overlaps(catalog_a, catalog_b, overlaps_dicts)
-result_store.save_unique(catalog_a, catalog_b, unique_a_dicts)
-result_store.save_unique(catalog_b, catalog_a, [r.to_dict() for r in result.unique_b])
+if st.session_state.get("cmp_cache_key") != comparison_key:
+    with st.spinner("Analysing coverage…"):
+        result = compare_rules(rules_a, rules_b, alerts=alerts, threshold=threshold)
+
+    # Persist only when a new comparison run is computed.
+    overlaps_dicts, unique_a_dicts = result.to_storage_dicts()
+    result_store.save_overlaps(catalog_a, catalog_b, overlaps_dicts)
+    result_store.save_unique(catalog_a, catalog_b, unique_a_dicts)
+    result_store.save_unique(catalog_b, catalog_a, [r.to_dict() for r in result.unique_b])
+
+    st.session_state["cmp_cache_key"] = comparison_key
+    st.session_state["cmp_cached_result"] = result
+else:
+    result = st.session_state["cmp_cached_result"]
 
 # Load existing decisions (persisted from previous sessions)
 decisions: dict[str, str] = result_store.load_decisions(catalog_a, catalog_b)
@@ -282,37 +302,94 @@ with tab_heatmap:
         f"Coverage of ATT&CK tactics in **{catalog_b}** (your SIEM). "
         "Green = well covered, Red = gaps."
     )
+    coverage_mode = st.radio(
+        "Coverage mode",
+        ["MITRE tactics", "Overall rule coverage"],
+        horizontal=True,
+        help="Use overall coverage when MITRE tags are sparse or missing.",
+    )
 
     all_b_dicts = [r.to_dict() for r in rules_b]
     gap_dicts = [r.to_dict() for r in result.unique_a]
 
     siem_coverage = rules_coverage_by_tactic(all_b_dicts)
     gap_coverage = rules_coverage_by_tactic(gap_dicts)
+    siem_unmapped = count_rules_without_mitre_tactics(all_b_dicts)
+    gap_unmapped = count_rules_without_mitre_tactics(gap_dicts)
 
     heatmap_rows = []
-    for tactic in ALL_TACTICS:
-        siem_count = siem_coverage.get(tactic, 0)
-        gap_count = gap_coverage.get(tactic, 0)
-        total = siem_count + gap_count
-        pct = int(100 * siem_count / total) if total > 0 else 0
+    if coverage_mode == "MITRE tactics":
+        for tactic in ALL_TACTICS:
+            siem_count = siem_coverage.get(tactic, 0)
+            gap_count = gap_coverage.get(tactic, 0)
+            total = siem_count + gap_count
+            # If neither side has MITRE tags for this tactic, mark as missing data.
+            pct = float(100 * siem_count / total) if total > 0 else float("nan")
+            heatmap_rows.append({
+                "Tactic": tactic,
+                f"{catalog_b.title()} rules": siem_count,
+                "Gaps (uncovered)": gap_count,
+                "Coverage %": pct,
+            })
+
+        unmapped_total = siem_unmapped + gap_unmapped
         heatmap_rows.append({
-            "Tactic": tactic,
-            f"{catalog_b.title()} rules": siem_count,
-            "Gaps (uncovered)": gap_count,
-            "Coverage %": pct,
+            "Tactic": "Unmapped (no MITRE mapping)",
+            f"{catalog_b.title()} rules": siem_unmapped,
+            "Gaps (uncovered)": gap_unmapped,
+            "Coverage %": float(100 * siem_unmapped / unmapped_total) if unmapped_total > 0 else float("nan"),
         })
+    else:
+        overall_siem = len(rules_b)
+        overall_gap = len(result.unique_a)
+        overall_total = overall_siem + overall_gap
+        mapped_siem = overall_siem - siem_unmapped
+        mapped_gap = overall_gap - gap_unmapped
+        mapped_total = mapped_siem + mapped_gap
+        unmapped_total = siem_unmapped + gap_unmapped
+
+        heatmap_rows.extend([
+            {
+                "Tactic": "Overall (all rules)",
+                f"{catalog_b.title()} rules": overall_siem,
+                "Gaps (uncovered)": overall_gap,
+                "Coverage %": float(100 * overall_siem / overall_total) if overall_total > 0 else float("nan"),
+            },
+            {
+                "Tactic": "Mapped to MITRE",
+                f"{catalog_b.title()} rules": mapped_siem,
+                "Gaps (uncovered)": mapped_gap,
+                "Coverage %": float(100 * mapped_siem / mapped_total) if mapped_total > 0 else float("nan"),
+            },
+            {
+                "Tactic": "Unmapped (no MITRE mapping)",
+                f"{catalog_b.title()} rules": siem_unmapped,
+                "Gaps (uncovered)": gap_unmapped,
+                "Coverage %": float(100 * siem_unmapped / unmapped_total) if unmapped_total > 0 else float("nan"),
+            },
+        ])
 
     df_heatmap = pd.DataFrame(heatmap_rows)
 
     st.dataframe(
         df_heatmap.style.background_gradient(
             subset=["Coverage %"], cmap="RdYlGn", vmin=0, vmax=100
-        ).format({"Coverage %": "{}%"}),
+        ).format({
+            "Coverage %": lambda v: "N/A" if pd.isna(v) else f"{int(round(v))}%"
+        }),
         width="stretch",
         hide_index=True,
     )
 
-    st.caption(
-        "Coverage % = (SIEM rules) / (SIEM rules + gap rules). "
-        "0% means the tactic is entirely uncovered in the SIEM."
-    )
+    if coverage_mode == "MITRE tactics":
+        st.caption(
+            "Coverage % = (SIEM rules) / (SIEM rules + gap rules). "
+            "0% means the tactic is entirely uncovered in the SIEM. "
+            "N/A means there was no MITRE-tagged data for that tactic in either ruleset. "
+            "The final row shows fallback coverage for rules that could not be mapped to any ATT&CK tactic."
+        )
+    else:
+        st.caption(
+            "Overall mode does not require MITRE tags. "
+            "It shows total rules coverage plus the mapped/unmapped split."
+        )
