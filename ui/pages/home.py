@@ -23,6 +23,14 @@ st.title("🏠 Overview")
 store = RuleStore(_CATALOGS_DIR)
 result_store = ResultStore(_OUTPUT_DIR)
 
+
+@st.cache_data(show_spinner=False)
+def _count_catalog_rules(catalogs_dir: str, catalog: str) -> int:
+    ast_dir = Path(catalogs_dir) / catalog / "ast"
+    if not ast_dir.exists():
+        return 0
+    return sum(1 for _ in ast_dir.glob("*.json"))
+
 catalogs = store.list_catalogs()
 if not catalogs:
     st.info(
@@ -36,9 +44,9 @@ st.caption(f"Loaded catalogs: **{', '.join(catalogs)}**")
 # Per-catalog metrics
 cols = st.columns(max(len(catalogs), 1))
 for i, cat in enumerate(catalogs):
-    rules = store.load_all(cat)
+    rule_count = _count_catalog_rules(str(_CATALOGS_DIR), cat)
     with cols[i]:
-        st.metric(f"📂 {cat.title()}", f"{len(rules):,}", "rules loaded")
+        st.metric(f"📂 {cat.title()}", f"{rule_count:,}", "rules loaded")
 
 st.divider()
 

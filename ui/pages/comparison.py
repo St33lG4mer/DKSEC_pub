@@ -68,9 +68,31 @@ st.title("📊 Comparison")
 
 store = RuleStore(_CATALOGS_DIR)
 result_store = ResultStore(_OUTPUT_DIR)
-catalogs = store.list_catalogs()
 
 _SIEM_CATALOGS = {"elastic", "sentinel", "splunk", "qradar", "chronicle"}
+
+
+@st.cache_data(show_spinner=False)
+def _cached_catalogs(catalogs_dir: str) -> list[str]:
+    return RuleStore(Path(catalogs_dir)).list_catalogs()
+
+
+@st.cache_data(show_spinner=False)
+def _cached_rules(catalogs_dir: str, catalog: str):
+    return RuleStore(Path(catalogs_dir)).load_all(catalog)
+
+
+@st.cache_data(show_spinner=False)
+def _cached_alert_runs(output_dir: str) -> list[str]:
+    return ResultStore(Path(output_dir)).list_alert_runs()
+
+
+@st.cache_data(show_spinner=False)
+def _cached_alerts(output_dir: str, run_id: str) -> list[dict]:
+    return ResultStore(Path(output_dir)).load_alerts(run_id)
+
+
+catalogs = _cached_catalogs(str(_CATALOGS_DIR))
 
 
 def _default_source(cats: list[str]) -> int:
@@ -97,12 +119,12 @@ with st.sidebar:
                               key="cmp_b", help="Your SIEM's existing ruleset (e.g. Elastic)")
     threshold = st.slider("Jaccard threshold", 0.05, 0.80, 0.40, 0.05)
     run_id = None
-    runs = result_store.list_alert_runs()
+    runs = _cached_alert_runs(str(_OUTPUT_DIR))
     if runs:
         use_alerts = st.checkbox("Include alert data", value=True)
         if use_alerts:
             run_id = st.selectbox("Attack run", runs, index=len(runs) - 1)
-            _sidebar_alerts = result_store.load_alerts(run_id)
+            _sidebar_alerts = _cached_alerts(str(_OUTPUT_DIR), run_id)
             _sidebar_scenarios = len({a.get("scenario_id") for a in _sidebar_alerts if a.get("scenario_id")})
             st.caption(f"Coverage Map: {_sidebar_scenarios} scenarios, {len(_sidebar_alerts):,} alerts")
 
@@ -110,14 +132,14 @@ if catalog_a == catalog_b:
     st.error("Select two different catalogs.")
     st.stop()
 
-rules_a = store.load_all(catalog_a)
-rules_b = store.load_all(catalog_b)
+rules_a = _cached_rules(str(_CATALOGS_DIR), catalog_a)
+rules_b = _cached_rules(str(_CATALOGS_DIR), catalog_b)
 
 if not rules_a or not rules_b:
     st.warning("One or both catalogs are empty. Run `dksec ingest` and `dksec translate` first.")
     st.stop()
 
-alerts = result_store.load_alerts(run_id) if run_id else None
+alerts = _cached_alerts(str(_OUTPUT_DIR), run_id) if run_id else None
 
 comparison_key = (
     catalog_a,
@@ -212,7 +234,33 @@ with tab_gaps:
         if not filtered:
             st.info("No rules match the current severity filter.")
         else:
-            for rule in filtered:
+            g1, g2 = st.columns([2, 1])
+            with g1:
+                gap_page_size = st.selectbox(
+                    "Rows per page",
+                    [25, 50, 100, 200],
+                    index=2,
+                    key="gap_page_size",
+                )
+            total_gap_pages = max(1, (len(filtered) + gap_page_size - 1) // gap_page_size)
+            with g2:
+                gap_page = st.number_input(
+                    "Page",
+                    min_value=1,
+                    max_value=total_gap_pages,
+                    value=1,
+                    step=1,
+                    key="gap_page_number",
+                )
+
+            gap_start = (int(gap_page) - 1) * gap_page_size
+            gap_end = gap_start + gap_page_size
+            visible_gaps = filtered[gap_start:gap_end]
+            st.caption(
+                f"Showing {gap_start + 1}-{min(gap_end, len(filtered))} of {len(filtered)} gap rules."
+            )
+
+            for rule in visible_gaps:
                 current_decision = decisions.get(rule.id, "UNDECIDED")
                 badge = {"ADD": "✅", "SKIP": "⏭️", "REVIEW": "🔍", "UNDECIDED": "❓"}.get(
                     current_decision, "❓"
@@ -274,8 +322,36 @@ with tab_overlaps:
         )
 
         sorted_overlaps = sorted(result.overlaps, key=lambda p: p.jaccard_score, reverse=True)
+        only_alert_confirmed = st.checkbox("Only alert-confirmed overlaps", value=False)
+        shown_overlaps = [p for p in sorted_overlaps if p.alert_confirmed] if only_alert_confirmed else sorted_overlaps
 
-        for pair in sorted_overlaps:
+        o1, o2 = st.columns([2, 1])
+        with o1:
+            overlap_page_size = st.selectbox(
+                "Rows per page",
+                [25, 50, 100, 200],
+                index=1,
+                key="overlap_page_size",
+            )
+        total_overlap_pages = max(1, (len(shown_overlaps) + overlap_page_size - 1) // overlap_page_size)
+        with o2:
+            overlap_page = st.number_input(
+                "Page",
+                min_value=1,
+                max_value=total_overlap_pages,
+                value=1,
+                step=1,
+                key="overlap_page_number",
+            )
+
+        overlap_start = (int(overlap_page) - 1) * overlap_page_size
+        overlap_end = overlap_start + overlap_page_size
+        visible_overlaps = shown_overlaps[overlap_start:overlap_end]
+        st.caption(
+            f"Showing {overlap_start + 1}-{min(overlap_end, len(shown_overlaps))} of {len(shown_overlaps)} overlaps."
+        )
+
+        for pair in visible_overlaps:
             alert_tag = " 🚨" if pair.alert_confirmed else ""
             with st.expander(
                 f"**{pair.rule_a.name}** vs **{pair.rule_b.name}** "
